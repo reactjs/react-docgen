@@ -1,0 +1,9 @@
+[ignore]
+.*dist/.*
+
+[include]
+
+[libs]
+flow/
+
+[options]
