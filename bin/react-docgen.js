@@ -114,7 +114,7 @@ function traverseDir(path, result, done) {
       try {
         result[filename] = parser.parse(content);
       } catch(error) {
-        writeError(error, path);
+        writeError(error, filename);
       }
       next();
     },

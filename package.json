@@ -27,11 +27,11 @@
     "async": "^0.9.0",
     "node-dir": "^0.1.6",
     "nomnom": "^1.8.1",
-    "recast": "^0.9.17"
+    "recast": "^0.10.x"
   },
   "devDependencies": {
-    "jest-cli": "^0.3.0",
-    "react-tools": "^0.12.2"
+    "jest-cli": "^0.4.0",
+    "react-tools": "^0.13.x"
   },
   "jest": {
     "scriptPreprocessor": "./tests/preprocessor",

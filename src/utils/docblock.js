@@ -31,8 +31,10 @@ function parseDocblock(str) {
  */
 function getDocblock(path: NodePath): ?string {
   if (path.node.comments) {
-    var comments = path.node.comments.leading.filter(function(comment) {
-      return comment.type === 'Block' && comment.value.indexOf('*\n') === 0;
+    var comments = path.node.comments.filter(function(comment) {
+      return comment.leading &&
+        comment.type === 'Block' &&
+        comment.value.indexOf('*\n') === 0;
     });
     if (comments.length > 0) {
       return parseDocblock(comments[comments.length - 1].value);
