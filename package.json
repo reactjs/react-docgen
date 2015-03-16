@@ -13,7 +13,7 @@
   "main": "dist/main.js",
   "scripts": {
     "watch": "jsx lib/ dist/ --harmony --strip-types -w",
-    "build": "rm -rf dist/ && jsx lib/ dist/ --harmony --strip-types --no-cache-dir",
+    "build": "rm -rf dist/ && jsx src/ dist/ --harmony --strip-types --no-cache-dir",
     "prepublish": "npm run build",
     "test": "jest"
   },
@@ -35,7 +35,7 @@
   },
   "jest": {
     "scriptPreprocessor": "./tests/preprocessor",
-    "testPathDirs": ["lib"],
+    "testPathDirs": ["src"],
     "unmockedModulePathPatterns": ["tests/utils"]
   }
 }

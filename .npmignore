@@ -1,4 +1,6 @@
-/lib
+/src
 /flow
+/tests
 preprocessor.js
 __tests__
+__mocks__
