@@ -52,7 +52,7 @@ var dir = require('node-dir');
 var fs = require('fs');
 var parser = require('../dist/main.js');
 
-var output = argv.o;
+var output = argv.out;
 var paths = argv.path;
 var extensions = new RegExp('\\.(?:' + argv.extension.join('|') + ')$');
 var ignoreDir = argv.ignoreDir;
@@ -73,8 +73,8 @@ function exitWithResult(result) {
   result = argv.pretty ?
     JSON.stringify(result, null, 2) :
     JSON.stringify(result);
-  if (argv.o) {
-    fs.writeFileSync(argv.o, result);
+  if (output) {
+    fs.writeFileSync(output, result);
   } else {
     process.stdout.write(result + '\n');
   }
