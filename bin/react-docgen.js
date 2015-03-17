@@ -53,7 +53,7 @@ var fs = require('fs');
 var parser = require('../dist/main.js');
 
 var output = argv.out;
-var paths = argv.path;
+var paths = argv.path || [];
 var extensions = new RegExp('\\.(?:' + argv.extension.join('|') + ')$');
 var ignoreDir = argv.ignoreDir;
 
@@ -79,25 +79,6 @@ function exitWithResult(result) {
     process.stdout.write(result + '\n');
   }
   process.exit(0);
-}
-
-/**
- * 1. No files passed, consume input stream
- */
-if (paths.length === 0) {
-  var source = '';
-  process.stdin.setEncoding('utf8');
-  process.stdin.resume();
-  var timer = setTimeout(function() {
-    process.stderr.write('Still waiting for std input...');
-  }, 5000);
-  process.stdin.on('data', function (chunk) {
-    clearTimeout(timer);
-    source += chunk;
-  });
-  process.stdin.on('end', function () {
-    exitWithResult(parser.parse(source));
-  });
 }
 
 function traverseDir(path, result, done) {
@@ -128,41 +109,64 @@ function traverseDir(path, result, done) {
 }
 
 /**
- * 2. Paths are passed.
+ * 1. No files passed, consume input stream
  */
-var result = Object.create(null);
-async.eachSeries(paths, function(path, done) {
-  fs.stat(path, function(error, stats) {
-    if (error) {
-      writeError(error, path);
-      done();
-      return;
-    }
-    if (stats.isDirectory()) {
-      traverseDir(path, result, done);
-    }
-    else {
-      try {
-        result[path] = parser.parse(fs.readFileSync(path));
-      } catch(error) {
-        writeError(error, path);
-      }
-      finally {
-        done();
-      }
+if (paths.length === 0) {
+  var source = '';
+  process.stdin.setEncoding('utf8');
+  process.stdin.resume();
+  var timer = setTimeout(function() {
+    process.stderr.write('Still waiting for std input...');
+  }, 5000);
+  process.stdin.on('data', function (chunk) {
+    clearTimeout(timer);
+    source += chunk;
+  });
+  process.stdin.on('end', function () {
+    try {
+      exitWithResult(parser.parse(source));
+    } catch(error) {
+      writeError(error);
     }
   });
-}, function() {
-  var resultsPaths = Object.keys(result);
-  if (resultsPaths.length === 0) {
-    // we must have gotten an error
-    process.exit(1);
-  }
-  if (paths.length === 1) { // a single path?
-    fs.stat(paths[0], function(error, stats) {
-      exitWithResult(stats.isDirectory() ? result : result[resultsPaths[0]]);
+} else {
+  /**
+   * 2. Paths are passed.
+   */
+  var result = Object.create(null);
+  async.eachSeries(paths, function(path, done) {
+    fs.stat(path, function(error, stats) {
+      if (error) {
+        writeError(error, path);
+        done();
+        return;
+      }
+      if (stats.isDirectory()) {
+        traverseDir(path, result, done);
+      }
+      else {
+        try {
+          result[path] = parser.parse(fs.readFileSync(path));
+        } catch(error) {
+          writeError(error, path);
+        }
+        finally {
+          done();
+        }
+      }
     });
-  } else {
-    exitWithResult(result);
-  }
-});
+  }, function() {
+    var resultsPaths = Object.keys(result);
+    if (resultsPaths.length === 0) {
+      // we must have gotten an error
+      process.exit(1);
+    }
+    if (paths.length === 1) { // a single path?
+      fs.stat(paths[0], function(error, stats) {
+        exitWithResult(stats.isDirectory() ? result : result[resultsPaths[0]]);
+      });
+    } else {
+      exitWithResult(result);
+    }
+  });
+}
