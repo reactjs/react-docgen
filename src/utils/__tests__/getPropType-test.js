@@ -12,7 +12,7 @@
 
 jest.autoMockOff();
 
-describe('getPropType', function() {
+describe('getPropType', () => {
   var utils;
   var getPropType;
 
@@ -20,12 +20,12 @@ describe('getPropType', function() {
     return utils.parse(src).get('body', 0, 'expression');
   }
 
-  beforeEach(function() {
+  beforeEach(() => {
     getPropType = require('../getPropType');
     utils = require('../../../tests/utils');
   });
 
-  it('detects simple prop types', function() {
+  it('detects simple prop types', () => {
     var simplePropTypes = [
       'array',
       'bool',
@@ -56,7 +56,7 @@ describe('getPropType', function() {
     );
   });
 
-  it('detects complex prop types', function() {
+  it('detects complex prop types', () => {
     expect(getPropType(parse('oneOf(["foo", "bar"])'))).toEqual({
       name: 'enum',
       value: [
@@ -123,7 +123,7 @@ describe('getPropType', function() {
     });
   });
 
-  it('resolves variables to their values', function() {
+  it('resolves variables to their values', () => {
     var src = [
       'var shape = {bar: PropTypes.string};',
       'PropTypes.shape(shape);',
@@ -138,7 +138,7 @@ describe('getPropType', function() {
     });
   });
 
-  it('detects custom validation functions', function() {
+  it('detects custom validation functions', () => {
     expect(getPropType(parse('(function() {})'))).toEqual({
       name: 'custom',
       raw: '(function() {})'

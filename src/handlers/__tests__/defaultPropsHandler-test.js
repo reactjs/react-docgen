@@ -13,7 +13,7 @@
 jest.autoMockOff();
 jest.mock('../../Documentation');
 
-describe('defaultPropsHandler', function() {
+describe('defaultPropsHandler', () => {
   var utils;
   var documentation;
   var defaultValueHandler;
@@ -22,13 +22,13 @@ describe('defaultPropsHandler', function() {
     return utils.parse(src).get('body', 0, 'expression');
   }
 
-  beforeEach(function() {
+  beforeEach(() => {
     utils = require('../../../tests/utils');
     documentation = new (require('../../Documentation'));
     defaultPropsHandler = require('../defaultPropsHandler');
   });
 
-  it ('should find prop default values that are literals', function() {
+  it ('should find prop default values that are literals', () => {
     var definition = parse([
       '({',
       '  getDefaultProps: function() {',

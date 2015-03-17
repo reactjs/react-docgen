@@ -12,7 +12,7 @@
 
 jest.autoMockOff();
 
-describe('React documentation parser', function() {
+describe('React documentation parser', () => {
   var findExportedReactCreateClass;
   var recast;
 
@@ -23,13 +23,13 @@ describe('React documentation parser', function() {
     );
   }
 
-  beforeEach(function() {
+  beforeEach(() => {
     findExportedReactCreateClass =
       require('../findExportedReactCreateClassCall');
     recast = require('recast');
   });
 
-  it('finds React.createClass', function() {
+  it('finds React.createClass', () => {
     var source = [
       'var React = require("React");',
       'var Component = React.createClass({});',
@@ -39,7 +39,7 @@ describe('React documentation parser', function() {
     expect(parse(source)).toBeDefined();
   });
 
-  it('finds React.createClass, independent of the var name', function() {
+  it('finds React.createClass, independent of the var name', () => {
     var source = [
       'var R = require("React");',
       'var Component = R.createClass({});',
@@ -49,7 +49,7 @@ describe('React documentation parser', function() {
     expect(parse(source)).toBeDefined();
   });
 
-  it('does not process X.createClass of other modules', function() {
+  it('does not process X.createClass of other modules', () => {
     var source = [
       'var R = require("NoReact");',
       'var Component = R.createClass({});',
@@ -59,7 +59,7 @@ describe('React documentation parser', function() {
     expect(parse(source)).toBeUndefined();
   });
 
-  it('finds assignments to exports', function() {
+  it('finds assignments to exports', () => {
     var source = [
       'var R = require("React");',
       'var Component = R.createClass({});',
@@ -70,7 +70,7 @@ describe('React documentation parser', function() {
     expect(parse(source)).toBeDefined();
   });
 
-  it('errors if multiple components are exported', function() {
+  it('errors if multiple components are exported', () => {
     var source = [
       'var R = require("React");',
       'var ComponentA = R.createClass({});',
@@ -84,7 +84,7 @@ describe('React documentation parser', function() {
     }).toThrow();
   });
 
-  it('accepts multiple definitions if only one is exported', function() {
+  it('accepts multiple definitions if only one is exported', () => {
     var source = [
       'var R = require("React");',
       'var ComponentA = R.createClass({});',
