@@ -65,6 +65,15 @@ describe('getPropType', function() {
       ]
     });
 
+    // line comments are ignored
+    expect(getPropType(parse('oneOf(["foo", // baz\n"bar"])'))).toEqual({
+      name: 'enum',
+      value: [
+        {value: '"foo"', computed: false},
+        {value: '"bar"', computed: false}
+      ]
+    });
+
     expect(getPropType(parse('oneOfType([number, bool])'))).toEqual({
       name: 'union',
       value: [

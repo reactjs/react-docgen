@@ -17,6 +17,7 @@ var Documentation = require('../Documentation');
 
 var getPropertyName = require('../utils/getPropertyName');
 var getPropertyValuePath = require('../utils/getPropertyValuePath');
+var printValue = require('../utils/printValue');
 var recast = require('recast');
 var resolveToValue = require('../utils/resolveToValue');
 var types = recast.types.namedTypes;
@@ -30,7 +31,7 @@ function getDefaultValue(path) {
   } else {
     path = resolveToValue(path);
     node = path.node;
-    defaultValue = recast.print(path).code;
+    defaultValue = printValue(path);
   }
   if (typeof defaultValue !== 'undefined') {
     return {

@@ -15,6 +15,7 @@
 
 var getMembers = require('./getMembers');
 var getPropertyName = require('./getPropertyName');
+var printValue = require('./printValue');
 var recast = require('recast');
 var resolveToValue = require('./resolveToValue');
 
@@ -23,7 +24,7 @@ var types = recast.types.namedTypes;
 function getEnumValues(path) {
   return path.get('elements').map(function(elementPath) {
     return {
-      value: recast.print(elementPath).code,
+      value: printValue(elementPath),
       computed: !types.Literal.check(elementPath.node)
     };
   });
@@ -33,7 +34,7 @@ function getPropTypeOneOf(argumentPath) {
   var type = {name: 'enum'};
   if (!types.ArrayExpression.check(argumentPath.node)) {
     type.computed = true;
-    type.value = recast.print(argumentPath).code;
+    type.value = printValue(argumentPath);
   } else {
     type.value = getEnumValues(argumentPath);
   }
@@ -44,7 +45,7 @@ function getPropTypeOneOfType(argumentPath) {
   var type = {name: 'union'};
   if (!types.ArrayExpression.check(argumentPath.node)) {
     type.computed = true;
-    type.value = recast.print(argumentPath).code;
+    type.value = printValue(argumentPath);
   } else {
     type.value = argumentPath.get('elements').map(getPropType);
   }
@@ -56,7 +57,7 @@ function getPropTypeArrayOf(argumentPath) {
   var subType = getPropType(argumentPath);
 
   if (subType.name === 'unknown') {
-    type.value = recast.print(argumentPath).code;
+    type.value = printValue(argumentPath);
     type.computed = true;
   } else {
     type.value = subType;
@@ -84,7 +85,7 @@ function getPropTypeShape(argumentPath) {
 function getPropTypeInstanceOf(argumentPath) {
   return {
     name: 'instanceOf',
-    value: recast.print(argumentPath).code
+    value: printValue(argumentPath)
   };
 }
 
@@ -144,7 +145,7 @@ function getPropType(path: NodePath): PropTypeDescriptor {
         propTypes.hasOwnProperty(node.callee.name)) {
       descriptor = propTypes[node.callee.name](path.get('arguments', 0));
     } else {
-      descriptor = {name: 'custom', raw: recast.print(path).code};
+      descriptor = {name: 'custom', raw: printValue(path)};
     }
   }
   return descriptor;

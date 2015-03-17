@@ -21,6 +21,7 @@ var getPropType = require('../utils/getPropType');
 var getPropertyName = require('../utils/getPropertyName');
 var getPropertyValuePath = require('../utils/getPropertyValuePath');
 var isReactModuleName = require('../utils/isReactModuleName');
+var printValue = require('../utils/printValue');
 var recast = require('recast');
 var resolveToModule = require('../utils/resolveToModule');
 var resolveToValue = require('../utils/resolveToValue');
@@ -76,7 +77,7 @@ function amendPropTypes(documentation, path) {
         var valuePath = propertyPath.get('value');
         var type = isPropTypesExpression(valuePath) ?
           getPropType(valuePath) :
-          {name: 'custom', raw: recast.print(valuePath).code};
+          {name: 'custom', raw: printValue(valuePath)};
 
         if (type) {
           propDescriptor.type = type;
