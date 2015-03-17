@@ -30,12 +30,16 @@
     "recast": "^0.10.x"
   },
   "devDependencies": {
+    "es6-promise": "^2.0.1",
     "jest-cli": "^0.4.0",
-    "react-tools": "^0.13.x"
+    "react-tools": "^0.13.x",
+    "rimraf": "^2.3.2",
+    "temp": "^0.8.1"
   },
   "jest": {
     "scriptPreprocessor": "./tests/preprocessor",
     "testPathDirs": [
+      "bin",
       "src"
     ],
     "unmockedModulePathPatterns": [
