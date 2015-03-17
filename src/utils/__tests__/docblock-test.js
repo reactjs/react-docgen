@@ -21,17 +21,17 @@ describe('docblock', function() {
       getDoclets = require('../docblock').getDoclets;
     });
 
-    it('extacts single line doclets', function() {
+    it('extracts single line doclets', function() {
       expect(getDoclets('@foo bar\n@bar baz'))
         .toEqual({foo: 'bar', bar: 'baz'});
     });
 
-    it('extacts multi line doclets', function() {
+    it('extracts multi line doclets', function() {
       expect(getDoclets('@foo bar\nbaz\n@bar baz'))
         .toEqual({foo: 'bar\nbaz', bar: 'baz'});
     });
 
-    it('extacts boolean doclets', function() {
+    it('extracts boolean doclets', function() {
       expect(getDoclets('@foo bar\nbaz\n@abc\n@bar baz'))
         .toEqual({foo: 'bar\nbaz', abc: true, bar: 'baz'});
     });
