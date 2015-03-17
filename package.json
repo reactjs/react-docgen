@@ -1,6 +1,6 @@
 {
   "name": "react-docgen",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A CLI and toolkit to extract information from React components for documentation generation.",
   "repository": {
     "type": "git",
@@ -35,7 +35,11 @@
   },
   "jest": {
     "scriptPreprocessor": "./tests/preprocessor",
-    "testPathDirs": ["src"],
-    "unmockedModulePathPatterns": ["tests/utils"]
+    "testPathDirs": [
+      "src"
+    ],
+    "unmockedModulePathPatterns": [
+      "tests/utils"
+    ]
   }
 }
