@@ -12,7 +12,7 @@
   },
   "main": "dist/main.js",
   "scripts": {
-    "watch": "jsx lib/ dist/ --harmony --strip-types -w",
+    "watch": "jsx src/ dist/ --harmony --strip-types -w",
     "build": "rm -rf dist/ && jsx src/ dist/ --harmony --strip-types --no-cache-dir",
     "prepublish": "npm run build",
     "test": "jest"
