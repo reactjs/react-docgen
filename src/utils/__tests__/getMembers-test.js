@@ -12,7 +12,7 @@
 
 jest.autoMockOff();
 
-describe('getMembers', function() {
+describe('getMembers', () => {
   var recast;
   var getMembers;
   var memberExpressionPath;
@@ -23,14 +23,14 @@ describe('getMembers', function() {
     );
   }
 
-  beforeEach(function() {
+  beforeEach(() => {
     getMembers = require('../getMembers');
     recast = require('recast');
     memberExpressionPath = parse('foo.bar(123)(456)[baz][42]');
   });
 
 
-  it('finds all "members" "inside" a MemberExpression', function() {
+  it('finds all "members" "inside" a MemberExpression', () => {
     var b = recast.types.builders;
     var members = getMembers(memberExpressionPath);
 

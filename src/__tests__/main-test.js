@@ -34,16 +34,16 @@ var source = [
   'module.exports = Component;'
 ].join('\n');
 
-describe('main', function() {
+describe('main', () => {
   var utils;
   var docgen;
 
-  beforeEach(function() {
+  beforeEach(() => {
     utils = require('../../tests/utils');
     docgen = require('../main');
   });
 
-  it('parses with default resolver/handlers', function() {
+  it('parses with default resolver/handlers', () => {
     var docs = docgen.parse(source);
     expect(docs).toEqual({
       description: 'Example component description',
@@ -63,7 +63,7 @@ describe('main', function() {
     });
   });
 
-  it('parses with custom handlers', function() {
+  it('parses with custom handlers', () => {
     var docs = docgen.parse(source, null, [
       docgen.handlers.componentDocblockHandler,
     ]);

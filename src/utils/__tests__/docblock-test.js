@@ -12,26 +12,26 @@
 
 jest.autoMockOff();
 
-describe('docblock', function() {
+describe('docblock', () => {
 
-  describe('getDoclets', function() {
+  describe('getDoclets', () => {
     var getDoclets;
 
-    beforeEach(function() {
+    beforeEach(() => {
       getDoclets = require('../docblock').getDoclets;
     });
 
-    it('extracts single line doclets', function() {
+    it('extracts single line doclets', () => {
       expect(getDoclets('@foo bar\n@bar baz'))
         .toEqual({foo: 'bar', bar: 'baz'});
     });
 
-    it('extracts multi line doclets', function() {
+    it('extracts multi line doclets', () => {
       expect(getDoclets('@foo bar\nbaz\n@bar baz'))
         .toEqual({foo: 'bar\nbaz', bar: 'baz'});
     });
 
-    it('extracts boolean doclets', function() {
+    it('extracts boolean doclets', () => {
       expect(getDoclets('@foo bar\nbaz\n@abc\n@bar baz'))
         .toEqual({foo: 'bar\nbaz', abc: true, bar: 'baz'});
     });

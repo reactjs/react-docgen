@@ -12,22 +12,22 @@
 
 jest.autoMockOff();
 
-describe('match', function() {
+describe('match', () => {
   var match;
 
-  beforeEach(function() {
+  beforeEach(() => {
     match = require('../match');
   });
 
-  it('matches with exact properties', function() {
+  it('matches with exact properties', () => {
     expect(match({foo: {bar: 42}}, {foo: {bar: 42}})).toBe(true);
   });
 
-  it('matches a subset of properties in the target', function() {
+  it('matches a subset of properties in the target', () => {
     expect(match({foo: {bar: 42, baz: "xyz"}}, {foo: {bar: 42}})).toBe(true);
   });
 
-  it('does not match if properties are different/missing', function() {
+  it('does not match if properties are different/missing', () => {
     expect(match(
       {foo: {bar: 42, baz: "xyz"}},
       {foo: {bar: 21, baz: "xyz"}}

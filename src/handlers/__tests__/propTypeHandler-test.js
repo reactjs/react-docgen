@@ -13,13 +13,13 @@
 jest.autoMockOff();
 jest.mock('../../Documentation');
 
-describe('propTypeHandler', function() {
+describe('propTypeHandler', () => {
   var utils;
   var getPropTypeMock;
   var documentation;
   var propTypeHandler;
 
-  beforeEach(function() {
+  beforeEach(() => {
     utils = require('../../../tests/utils');
     getPropTypeMock = jest.genMockFunction().mockImplementation(() => ({}));
     jest.setMock('../../utils/getPropType', getPropTypeMock);
@@ -38,7 +38,7 @@ describe('propTypeHandler', function() {
     );
   }
 
-  it('passes the correct argument to getPropType', function() {
+  it('passes the correct argument to getPropType', () => {
     var definition = parse(
       '({propTypes: {foo: PropTypes.bool, abc: PropTypes.xyz}})'
     );
@@ -52,7 +52,7 @@ describe('propTypeHandler', function() {
     expect(getPropTypeMock).toBeCalledWith(xyzPath);
   });
 
-  it('finds definitions via React.PropTypes', function() {
+  it('finds definitions via React.PropTypes', () => {
     var definition = parse([
       '({',
       '  propTypes: {',
@@ -76,7 +76,7 @@ describe('propTypeHandler', function() {
     });
   });
 
-  it('finds definitions via the ReactPropTypes module', function() {
+  it('finds definitions via the ReactPropTypes module', () => {
     var definition = parse([
       '({',
       '  propTypes: {',
@@ -95,7 +95,7 @@ describe('propTypeHandler', function() {
     });
   });
 
-  it('detects whether a prop is required', function() {
+  it('detects whether a prop is required', () => {
     var definition = parse([
       '({',
       '  propTypes: {',
@@ -119,7 +119,7 @@ describe('propTypeHandler', function() {
     });
   });
 
-  it('only considers definitions from React or ReactPropTypes', function() {
+  it('only considers definitions from React or ReactPropTypes', () => {
     var definition = parse([
       '({',
       '  propTypes: {',
@@ -145,7 +145,7 @@ describe('propTypeHandler', function() {
     });
   });
 
-  it('understands the spread operator', function() {
+  it('understands the spread operator', () => {
     var definition = parse([
       'var Foo = require("Foo.react");',
       'var props = {bar: PropTypes.bool};',
@@ -172,7 +172,7 @@ describe('propTypeHandler', function() {
     });
   });
 
-  it('resolves variables', function() {
+  it('resolves variables', () => {
     var definition = parse([
       'var props = {bar: PropTypes.bool};',
       '({',
@@ -189,7 +189,7 @@ describe('propTypeHandler', function() {
     });
   });
 
-  it('does not error if propTypes cannot be found', function() {
+  it('does not error if propTypes cannot be found', () => {
     var definition = parse([
       '({',
       '  fooBar: 42',

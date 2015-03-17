@@ -12,7 +12,7 @@
 
 jest.autoMockOff();
 
-describe('getPropertyValuePath', function() {
+describe('getPropertyValuePath', () => {
   var recast;
   var getPropertyValuePath;
 
@@ -22,18 +22,18 @@ describe('getPropertyValuePath', function() {
     );
   }
 
-  beforeEach(function() {
+  beforeEach(() => {
     getPropertyValuePath = require('../getPropertyValuePath');
     recast = require('recast');
   });
 
-  it('returns the value path if the property exists', function() {
+  it('returns the value path if the property exists', () => {
     var objectExpressionPath = parse('({foo: 21, bar: 42})').get('expression');
     expect(getPropertyValuePath(objectExpressionPath, 'bar'))
       .toBe(objectExpressionPath.get('properties', 1).get('value'));
   });
 
-  it('returns undefined if the property does not exist', function() {
+  it('returns undefined if the property does not exist', () => {
     var objectExpressionPath = parse('({foo: 21, bar: 42})').get('expression');
     expect(getPropertyValuePath(objectExpressionPath, 'baz'))
       .toBeUndefined();

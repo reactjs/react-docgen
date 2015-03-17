@@ -12,7 +12,7 @@
 
 jest.autoMockOff();
 
-describe('React documentation parser', function() {
+describe('React documentation parser', () => {
   var findAllReactCreateClassCalls;
   var recast;
 
@@ -23,13 +23,13 @@ describe('React documentation parser', function() {
     );
   }
 
-  beforeEach(function() {
+  beforeEach(() => {
     findAllReactCreateClassCalls = require('../findAllReactCreateClassCalls');
     recast = require('recast');
   });
 
 
-  it('finds React.createClass', function() {
+  it('finds React.createClass', () => {
     var source = [
       'var React = require("React");',
       'var Component = React.createClass({});',
@@ -43,7 +43,7 @@ describe('React documentation parser', function() {
     expect(result[0].node.type).toBe('ObjectExpression');
   });
 
-  it('finds React.createClass, independent of the var name', function() {
+  it('finds React.createClass, independent of the var name', () => {
     var source = [
       'var R = require("React");',
       'var Component = R.createClass({});',
@@ -55,7 +55,7 @@ describe('React documentation parser', function() {
     expect(result.length).toBe(1);
   });
 
-  it('does not process X.createClass of other modules', function() {
+  it('does not process X.createClass of other modules', () => {
     var source = [
       'var R = require("NoReact");',
       'var Component = R.createClass({});',
@@ -67,7 +67,7 @@ describe('React documentation parser', function() {
     expect(result.length).toBe(0);
   });
 
-  it('finds assignments to exports', function() {
+  it('finds assignments to exports', () => {
     var source = [
       'var R = require("React");',
       'var Component = R.createClass({});',
@@ -80,7 +80,7 @@ describe('React documentation parser', function() {
     expect(result.length).toBe(1);
   });
 
-  it('accepts multiple definitions', function() {
+  it('accepts multiple definitions', () => {
     var source = [
       'var R = require("React");',
       'var ComponentA = R.createClass({});',
