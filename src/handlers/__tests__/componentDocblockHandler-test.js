@@ -13,7 +13,7 @@
 jest.autoMockOff();
 jest.mock('../../Documentation');
 
-describe('componentDocblockHandler', function() {
+describe('componentDocblockHandler', () => {
   var utils;
   var documentation;
   var componentDocblockHandler;
@@ -31,13 +31,13 @@ describe('componentDocblockHandler', function() {
     );
   }
 
-  beforeEach(function() {
+  beforeEach(() => {
     utils = require('../../../tests/utils');
     documentation = new (require('../../Documentation'));
     componentDocblockHandler = require('../componentDocblockHandler');
   });
 
-  it('finds docblocks for component definitions', function() {
+  it('finds docblocks for component definitions', () => {
     var definition = parse([
       '/**',
       ' * Component description',
@@ -49,7 +49,7 @@ describe('componentDocblockHandler', function() {
     expect(documentation.description).toBe('Component description');
   });
 
-  it('ignores other types of comments', function() {
+  it('ignores other types of comments', () => {
     var definition = parse([
       '/*',
       ' * This is not a docblock',
@@ -69,7 +69,7 @@ describe('componentDocblockHandler', function() {
     expect(documentation.description).toBe('');
   });
 
-  it('only considers the docblock directly above the definition', function() {
+  it('only considers the docblock directly above the definition', () => {
     var definition = parse([
       '/**',
       ' * This is the wrong docblock',

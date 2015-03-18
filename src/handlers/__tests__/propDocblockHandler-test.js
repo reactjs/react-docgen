@@ -13,12 +13,12 @@
 jest.autoMockOff();
 jest.mock('../../Documentation');
 
-describe('propDocblockHandler', function() {
+describe('propDocblockHandler', () => {
   var utils;
   var documentation;
   var propDocblockHandler;
 
-  beforeEach(function() {
+  beforeEach(() => {
     utils = require('../../../tests/utils');
     documentation = new (require('../../Documentation'));
     propDocblockHandler = require('../propDocblockHandler');
@@ -33,7 +33,7 @@ describe('propDocblockHandler', function() {
     );
   }
 
-  it('finds docblocks for prop types', function() {
+  it('finds docblocks for prop types', () => {
     var definition = parse([
       '({',
       '  propTypes: {',
@@ -61,7 +61,7 @@ describe('propDocblockHandler', function() {
     });
   });
 
-  it('can handle multline comments', function() {
+  it('can handle multline comments', () => {
     var definition = parse([
       '({',
       '  propTypes: {',
@@ -85,7 +85,7 @@ describe('propDocblockHandler', function() {
     });
   });
 
-  it('ignores non-docblock comments', function() {
+  it('ignores non-docblock comments', () => {
     var definition = parse([
       '({',
       '  propTypes: {',
@@ -115,7 +115,7 @@ describe('propDocblockHandler', function() {
     });
   });
 
-  it('only considers the comment with the property below it', function() {
+  it('only considers the comment with the property below it', () => {
     var definition = parse([
       '({',
       '  propTypes: {',
@@ -139,7 +139,7 @@ describe('propDocblockHandler', function() {
     });
   });
 
-  it('understands and ignores the spread operator', function() {
+  it('understands and ignores the spread operator', () => {
     var definition = parse([
       '({',
       '  propTypes: {',
@@ -160,7 +160,7 @@ describe('propDocblockHandler', function() {
     });
   });
 
-  it('resolves variables', function() {
+  it('resolves variables', () => {
     var definition = parse([
       'var Props = {',
       '  /**',
@@ -181,7 +181,7 @@ describe('propDocblockHandler', function() {
     });
   });
 
-  it('does not error if propTypes cannot be found', function() {
+  it('does not error if propTypes cannot be found', () => {
     var definition = parse([
       '({',
       '  fooBar: 42',

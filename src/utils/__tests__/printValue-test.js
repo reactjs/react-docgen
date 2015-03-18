@@ -12,11 +12,11 @@
 
 jest.autoMockOff();
 
-describe('printValue', function() {
+describe('printValue', () => {
   var printValue;
   var utils;
 
-  beforeEach(function() {
+  beforeEach(() => {
     printValue = require('../printValue');
     utils = require('../../../tests/utils');
   });
@@ -25,12 +25,12 @@ describe('printValue', function() {
     return utils.parse(source).get('body', 0, 'expression');
   }
 
-  it('does not print leading comments', function() {
+  it('does not print leading comments', () => {
     expect(printValue(pathFromSource('//foo\nbar')))
       .toEqual('bar');
   });
 
-  it('does not print trailing comments', function() {
+  it('does not print trailing comments', () => {
     expect(printValue(pathFromSource('bar//foo')))
       .toEqual('bar');
   });

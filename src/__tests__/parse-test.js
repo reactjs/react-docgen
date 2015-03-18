@@ -12,11 +12,11 @@
 
 jest.autoMockOff();
 
-describe('parse', function() {
+describe('parse', () => {
   var utils;
   var parse;
 
-  beforeEach(function() {
+  beforeEach(() => {
     utils = require('../../tests/utils');
     parse = require('../parse');
   });
@@ -25,7 +25,7 @@ describe('parse', function() {
     return utils.parse(source).get('body', 0, 'expression');
   }
 
-  it('allows custom component definition resolvers', function() {
+  it('allows custom component definition resolvers', () => {
     var path = pathFromSource('({foo: "bar"})');
     var resolver = jest.genMockFunction().mockReturnValue(path);
     var handler = jest.genMockFunction();
@@ -35,7 +35,7 @@ describe('parse', function() {
     expect(handler.mock.calls[0][1]).toBe(path);
   });
 
-  it('errors if component definition is not found', function() {
+  it('errors if component definition is not found', () => {
     var resolver = jest.genMockFunction();
     expect(function() {
       parse('', resolver);
