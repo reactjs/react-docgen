@@ -93,7 +93,7 @@ describe('react-docgen CLI', () => {
   });
 
   pit('reads from stdin', () => {
-    return run(null, component).then(([stdout, stderr]) => {
+    return run([], component).then(([stdout, stderr]) => {
       expect(stdout.length > 0).toBe(true);
       expect(stderr.length).toBe(0);
     });
@@ -176,14 +176,14 @@ describe('react-docgen CLI', () => {
   });
 
   pit('writes to stdout', () => {
-    return run(null, component).then(([stdout, stderr]) => {
+    return run([], component).then(([stdout, stderr]) => {
       expect(stdout.length > 0).toBe(true);
       expect(stderr.length).toBe(0);
     });
   });
 
   pit('writes to stderr', () => {
-    return run(null, '{}').then(([stdout, stderr]) => {
+    return run([], '{}').then(([stdout, stderr]) => {
       expect(stderr.length > 0).toBe(true);
       expect(stdout.length).toBe(0);
     });
