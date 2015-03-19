@@ -22,6 +22,7 @@ var getPropertyName = require('../utils/getPropertyName');
 var getPropertyValuePath = require('../utils/getPropertyValuePath');
 var isReactModuleName = require('../utils/isReactModuleName');
 var printValue = require('../utils/printValue');
+var propTypeCompositionHandler = require('./propTypeCompositionHandler');
 var recast = require('recast');
 var resolveToModule = require('../utils/resolveToModule');
 var resolveToValue = require('../utils/resolveToValue');
@@ -67,7 +68,7 @@ function amendComposes(documentation, path) {
   }
 }
 
-function amendPropTypes(documentation, path) {
+function amendPropTypes(documentation, path, componentPath) {
   path.get('properties').each(function(propertyPath) {
     switch (propertyPath.node.type) {
       case types.Property.name:
@@ -91,8 +92,9 @@ function amendPropTypes(documentation, path) {
           case types.ObjectExpression.name: // normal object literal
             amendPropTypes(documentation, resolvedValuePath);
             break;
-          case types.MemberExpression.name:
-            amendComposes(documentation, resolvedValuePath);
+          default:
+            // for backwards compatibility
+            propTypeCompositionHandler(documentation, componentPath);
           break;
         }
         break;
@@ -106,17 +108,17 @@ function propTypeHandler(documentation: Documentation, path: NodePath) {
     return;
   }
   propTypesPath = resolveToValue(propTypesPath);
-  if (!propTypesPath || !types.ObjectExpression.check(propTypesPath.node)) {
+  if (!propTypesPath) {
+    return;
+  }
+  if (!types.ObjectExpression.check(propTypesPath.node)) {
+    // maybe composition
+    // for backwards compatibility
+    propTypeCompositionHandler(documentation, path);
     return;
   }
 
-  switch (propTypesPath.node.type) {
-    case types.ObjectExpression.name:
-      amendPropTypes(documentation, propTypesPath);
-      break;
-    case types.MemberExpression.name:
-      amendComposes(documentation, propTypesPath);
-  }
+  amendPropTypes(documentation, propTypesPath, path);
 }
 
 module.exports = propTypeHandler;

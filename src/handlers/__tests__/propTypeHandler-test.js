@@ -8,6 +8,8 @@
  *
  */
 
+/*global jest, describe, it, expect, beforeEach, afterEach*/
+
 "use strict";
 
 jest.autoMockOff();
@@ -143,6 +145,18 @@ describe('propTypeHandler', () => {
         required: false
       }
     });
+  });
+
+  it('understands assignment from module', () => {
+    var definition = parse([
+      'var Foo = require("Foo.react");',
+      '({',
+      '  propTypes: Foo.propTypes',
+      '})',
+    ].join('\n'));
+
+    propTypeHandler(documentation, definition);
+    expect(documentation.composes).toEqual(['Foo.react']);
   });
 
   it('understands the spread operator', () => {

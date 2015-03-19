@@ -13,4 +13,5 @@
 exports.componentDocblockHandler = require('./componentDocblockHandler');
 exports.defaultPropsHandler = require('./defaultPropsHandler');
 exports.propTypeHandler = require('./propTypeHandler');
+exports.propTypeCompositionHandler = require('./propTypeCompositionHandler');
 exports.propDocBlockHandler = require('./propDocBlockHandler');
