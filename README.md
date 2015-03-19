@@ -1,4 +1,4 @@
-# react-docgen
+# react-docgen [![Build Status](https://travis-ci.org/reactjs/react-docgen.svg?branch=master)](https://travis-ci.org/reactjs/react-docgen)
 
 `react-docgen` is a CLI and toolbox to help extracting information from React components, and generate documentation from it.
 
