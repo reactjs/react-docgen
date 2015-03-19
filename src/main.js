@@ -55,6 +55,7 @@ function defaultParse(
 
 module.exports = {
   parse: defaultParse,
+  defaultHandlers,
   handlers,
   resolver,
   utils
