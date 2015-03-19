@@ -13,15 +13,15 @@
 jest.autoMockOff();
 jest.mock('../../Documentation');
 
-describe('propDocblockHandler', () => {
+describe('propDocBlockHandler', () => {
   var utils;
   var documentation;
-  var propDocblockHandler;
+  var propDocBlockHandler;
 
   beforeEach(() => {
     utils = require('../../../tests/utils');
     documentation = new (require('../../Documentation'));
-    propDocblockHandler = require('../propDocblockHandler');
+    propDocBlockHandler = require('../propDocBlockHandler');
   });
 
   function parse(definition) {
@@ -50,7 +50,7 @@ describe('propDocblockHandler', () => {
       '})'
     ].join('\n'));
 
-    propDocblockHandler(documentation, definition);
+    propDocBlockHandler(documentation, definition);
     expect(documentation.descriptors).toEqual({
       foo: {
         description: 'Foo comment'
@@ -76,7 +76,7 @@ describe('propDocblockHandler', () => {
       '})'
     ].join('\n'));
 
-    propDocblockHandler(documentation, definition);
+    propDocBlockHandler(documentation, definition);
     expect(documentation.descriptors).toEqual({
       foo: {
         description:
@@ -104,7 +104,7 @@ describe('propDocblockHandler', () => {
       '})'
     ].join('\n'));
 
-    propDocblockHandler(documentation, definition);
+    propDocBlockHandler(documentation, definition);
     expect(documentation.descriptors).toEqual({
       foo: {
         description: 'Foo comment'
@@ -128,7 +128,7 @@ describe('propDocblockHandler', () => {
       '})'
     ].join('\n'));
 
-    propDocblockHandler(documentation, definition);
+    propDocBlockHandler(documentation, definition);
     expect(documentation.descriptors).toEqual({
       foo: {
         description: 'Foo comment'
@@ -152,7 +152,7 @@ describe('propDocblockHandler', () => {
       '})'
     ].join('\n'));
 
-    propDocblockHandler(documentation, definition);
+    propDocBlockHandler(documentation, definition);
     expect(documentation.descriptors).toEqual({
       foo: {
         description: 'Foo comment'
@@ -173,7 +173,7 @@ describe('propDocblockHandler', () => {
       '})'
     ].join('\n'));
 
-    propDocblockHandler(documentation, definition);
+    propDocBlockHandler(documentation, definition);
     expect(documentation.descriptors).toEqual({
       foo: {
         description: 'Foo comment'
@@ -189,7 +189,7 @@ describe('propDocblockHandler', () => {
     ].join('\n'));
 
     expect(function() {
-      propDocblockHandler(documentation, definition);
+      propDocBlockHandler(documentation, definition);
     }).not.toThrow();
   });
 });
