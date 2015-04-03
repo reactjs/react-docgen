@@ -60,6 +60,7 @@ describe('propTypeHandler', () => {
       '  propTypes: {',
       '    foo: PropTypes.bool,',
       '    bar: require("react").PropTypes.bool,',
+      '    baz: OtherPropTypes.bool,',
       '  }',
       '})',
     ].join('\n'));
@@ -72,6 +73,10 @@ describe('propTypeHandler', () => {
         required: false
       },
       bar: {
+        type: {},
+        required: false
+      },
+      baz: {
         type: {},
         required: false
       }

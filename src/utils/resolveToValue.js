@@ -13,7 +13,33 @@
  */
 "use strict";
 
-var types = require('recast').types.namedTypes;
+var {
+  NodePath,
+  builders,
+  namedTypes: types
+} = require('recast').types;
+
+function buildMemberExpressionFromPattern(path: NodePath): ?Node {
+  var node = path.node;
+  if (types.Property.check(node)) {
+    var objPath = buildMemberExpressionFromPattern(path.parent);
+    if (objPath) {
+      return new NodePath(
+        builders.memberExpression(
+          objPath.node,
+          node.key,
+          types.Literal.check(node.key)
+        ),
+        objPath
+      );
+    }
+  } else if (types.ObjectPattern.check(node)) {
+    return buildMemberExpressionFromPattern(path.parent);
+  } else if (types.VariableDeclarator.check(node)) {
+    return path.get('init');
+  }
+  return null;
+}
 
 /**
  * If the path is an identifier, it is resolved in the scope chain.
@@ -32,11 +58,22 @@ function resolveToValue(path: NodePath): NodePath {
     if (scope) {
       var bindings = scope.getBindings()[node.name];
       if (bindings.length > 0) {
-        var parentPath = scope.getBindings()[node.name][0].parent;
+        var resultPath = scope.getBindings()[node.name][0];
+        var parentPath = resultPath.parent;
         if (types.VariableDeclarator.check(parentPath.node)) {
-          parentPath = parentPath.get('init');
+          resultPath = parentPath.get('init');
+        } else if (types.Property.check(parentPath.node)) {
+          // must be inside a pattern
+          var memberExpressionPath = buildMemberExpressionFromPattern(
+            parentPath
+          );
+          if (memberExpressionPath) {
+            return memberExpressionPath;
+          }
         }
-        return resolveToValue(parentPath);
+        return resultPath.node !== path.node ?
+          resolveToValue(resultPath) :
+          path;
       }
     }
   }

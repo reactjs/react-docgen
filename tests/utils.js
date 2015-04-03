@@ -33,6 +33,7 @@ function parseWithTemplate(src, template) {
 var REACT_TEMPLATE = [
   'var React = require("React");',
   'var PropTypes = React.PropTypes;',
+  'var {PropTypes: OtherPropTypes} = require("React");',
   '%s;',
 ].join('\n');
 
