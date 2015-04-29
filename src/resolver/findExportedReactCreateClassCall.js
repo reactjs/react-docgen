@@ -17,6 +17,7 @@ var isExportsOrModuleAssignment =
   require('../utils/isExportsOrModuleAssignment');
 var isReactCreateClassCall = require('../utils/isReactCreateClassCall');
 var resolveToValue = require('../utils/resolveToValue');
+var resolveToCallExpression = require('../utils/resolveToCallExpression');
 
 var ERROR_MULTIPLE_DEFINITIONS =
   'Multiple exported component definitions found.';
@@ -47,6 +48,17 @@ function findExportedReactCreateClass(
     visitDoWhileStatement: ignore,
     visitForStatement: ignore,
     visitForInStatement: ignore,
+    visitExportDeclaration: function(path) {
+      path = resolveToCallExpression(path);
+      if (!isReactCreateClassCall(path)) {
+       return false
+      }
+      var resolvedPath = resolveToValue(path.get('arguments', 0));
+      if (types.ObjectExpression.check(resolvedPath.node)) {
+        definition = resolvedPath;
+      }
+      this.abort();
+    },
     visitAssignmentExpression: function(path) {
       // Ignore anything that is not `exports.X = ...;` or
       // `module.exports = ...;`
