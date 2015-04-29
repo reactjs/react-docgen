@@ -49,7 +49,13 @@ function buildMemberExpressionFromPattern(path: NodePath): ?Node {
  */
 function resolveToValue(path: NodePath): NodePath {
   var node = path.node;
-  if (types.AssignmentExpression.check(node)) {
+  if (types.VariableDeclaration.check(node)) {
+    return resolveToValue(path.get('declarations', 0))
+  } else if (types.VariableDeclarator.check(node)) {
+     if (node.init) {
+       return resolveToValue(path.get('init'));
+     }
+  } else if (types.AssignmentExpression.check(node)) {
     if (node.operator === '=') {
       return resolveToValue(node.get('right'));
     }

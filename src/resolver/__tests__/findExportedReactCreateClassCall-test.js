@@ -103,4 +103,31 @@ describe('React documentation parser', () => {
 
     expect(parse(source)).toBeDefined();
   });
+
+  it('finds React.createClass in default exported', () => {
+    var source = [
+      'var React = require("React");',
+      'var Component = React.createClass({});',
+      'export default Component'
+    ].join('\n');
+
+    expect(parse(source)).toBeDefined();
+
+    source = [
+      'var React = require("React");',
+      'export default React.createClass({});'
+    ].join('\n');
+
+    expect(parse(source)).toBeDefined();
+  });
+
+  it('finds React.createClass in variable exported', () => {
+    var source = [
+      'var React = require("React");',
+      'export var Component = React.createClass({});'
+    ].join('\n');
+
+    expect(parse(source)).toBeDefined();
+  });
+
 });
