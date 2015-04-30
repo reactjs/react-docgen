@@ -59,4 +59,19 @@ describe('resolveToModule', () => {
     ].join('\n'));
     expect(resolveToModule(path)).toBe('Foo');
   });
+
+  it('resolves ImportDefaultSpecifier', () => {
+    var path = parse([
+      'import foo from "Foo";',
+      'foo;'
+    ].join('\n'));
+    expect(resolveToModule(path)).toBe('Foo');
+
+    path = parse([
+      'import foo, {createElement} from "Foo";',
+      'foo;'
+    ].join('\n'));
+    expect(resolveToModule(path)).toBe('Foo');
+  });
+
 });

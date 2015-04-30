@@ -60,7 +60,9 @@ function resolveToValue(path: NodePath): NodePath {
       if (bindings.length > 0) {
         var resultPath = scope.getBindings()[node.name][0];
         var parentPath = resultPath.parent;
-        if (types.VariableDeclarator.check(parentPath.node)) {
+        if (types.ImportDefaultSpecifier.check(parentPath.node)){
+          return parentPath.parent;
+        } else if (types.VariableDeclarator.check(parentPath.node)) {
           resultPath = parentPath.get('init');
         } else if (types.Property.check(parentPath.node)) {
           // must be inside a pattern

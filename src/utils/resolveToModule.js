@@ -41,6 +41,9 @@ function resolveToModule(path: NodePath): ?string {
         return resolveToModule(valuePath);
       }
       break;
+    case types.ImportDeclaration.name:
+      return node.source.value;
+      break;
     case types.MemberExpression.name:
       while (path && types.MemberExpression.check(path.node)) {
         path = path.get('object');
