@@ -49,7 +49,13 @@ function buildMemberExpressionFromPattern(path: NodePath): ?Node {
  */
 function resolveToValue(path: NodePath): NodePath {
   var node = path.node;
-  if (types.AssignmentExpression.check(node)) {
+  if (types.VariableDeclaration.check(node)) {
+    return resolveToValue(path.get('declarations', 0))
+  } else if (types.VariableDeclarator.check(node)) {
+     if (node.init) {
+       return resolveToValue(path.get('init'));
+     }
+  } else if (types.AssignmentExpression.check(node)) {
     if (node.operator === '=') {
       return resolveToValue(node.get('right'));
     }
@@ -60,7 +66,9 @@ function resolveToValue(path: NodePath): NodePath {
       if (bindings.length > 0) {
         var resultPath = scope.getBindings()[node.name][0];
         var parentPath = resultPath.parent;
-        if (types.VariableDeclarator.check(parentPath.node)) {
+        if (types.ImportDefaultSpecifier.check(parentPath.node)){
+          return parentPath.parent;
+        } else if (types.VariableDeclarator.check(parentPath.node)) {
           resultPath = parentPath.get('init');
         } else if (types.Property.check(parentPath.node)) {
           // must be inside a pattern

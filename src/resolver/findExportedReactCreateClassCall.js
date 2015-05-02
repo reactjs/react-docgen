@@ -47,6 +47,17 @@ function findExportedReactCreateClass(
     visitDoWhileStatement: ignore,
     visitForStatement: ignore,
     visitForInStatement: ignore,
+    visitExportDeclaration: function(path) {
+      path = resolveToValue(path.get('declaration'));
+      if (!isReactCreateClassCall(path)) {
+       return false
+      }
+      var resolvedPath = resolveToValue(path.get('arguments', 0));
+      if (types.ObjectExpression.check(resolvedPath.node)) {
+        definition = resolvedPath;
+      }
+      this.abort();
+    },
     visitAssignmentExpression: function(path) {
       // Ignore anything that is not `exports.X = ...;` or
       // `module.exports = ...;`
