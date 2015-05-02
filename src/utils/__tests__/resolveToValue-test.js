@@ -86,4 +86,26 @@ describe('resolveToValue', () => {
       path.node
     )).toBe(true);
   });
+
+  it('resolves export variable declarator', () => {
+    var path = parse([
+      'export var Component = foo()'
+    ].join('\n'));
+
+    expect(
+      resolveToValue(path.parentPath.get('declaration')).node.callee.name
+    ).toBe('foo');
+  });
+
+  it('resolves export default declarator', () => {
+    var path = parse([
+      'var Component = foo();',
+      'export default Component;'
+    ].join('\n'));
+
+    expect(
+      resolveToValue(path.parentPath.get('declaration')).node.callee.name
+    ).toBe('foo');
+  });
+
 });
