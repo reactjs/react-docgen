@@ -87,25 +87,44 @@ describe('resolveToValue', () => {
     )).toBe(true);
   });
 
-  it('resolves export variable declarator', () => {
-    var path = parse([
-      'export var Component = foo()'
-    ].join('\n'));
+  it('resolves variable declarators to their init value', () => {
+    var path = utils.parse('var foo = 42;').get('body', 0, 'declarations', 0);
 
-    expect(
-      resolveToValue(path.parentPath.get('declaration')).node.callee.name
-    ).toBe('foo');
+    expect(astNodesAreEquivalent(
+      resolveToValue(path).node,
+      builders.literal(42)
+    )).toBe(true);
   });
 
-  it('resolves export default declarator', () => {
-    var path = parse([
-      'var Component = foo();',
-      'export default Component;'
-    ].join('\n'));
+  describe('ImportDeclaration', () => {
 
-    expect(
-      resolveToValue(path.parentPath.get('declaration')).node.callee.name
-    ).toBe('foo');
+    it('resolves default import references to the import declaration', () => {
+      var path = parse([
+        'import foo from "Foo"',
+        'foo;'
+      ].join('\n'));
+
+      expect(resolveToValue(path).node.type).toBe('ImportDeclaration');
+    });
+
+    it('resolves named import references to the import declaration', () => {
+      var path = parse([
+        'import {foo} from "Foo"',
+        'foo;'
+      ].join('\n'));
+
+      expect(resolveToValue(path).node.type).toBe('ImportDeclaration');
+    });
+
+    it('resolves aliased import references to the import declaration', () => {
+      var path = parse([
+        'import {foo as bar} from "Foo"',
+        'bar;'
+      ].join('\n'));
+
+      expect(resolveToValue(path).node.type).toBe('ImportDeclaration');
+    });
+
   });
 
 });

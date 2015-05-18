@@ -25,6 +25,33 @@ function ignore() {
   return false;
 }
 
+function resolveExportDeclaration(
+  path: NodePath,
+  types: Object
+): Array<NodePath> {
+  var definitions = [];
+  if (path.node.default) {
+    definitions.push(path.get('declaration'));
+  } else if (path.node.declaration) {
+    if (types.VariableDeclaration.check(path.node.declaration)) {
+      path.get('declaration', 'declarations').each(
+        declarator => definitions.push(declarator)
+      );
+    } else {
+      definitions.push(path.get('declaration'));
+    }
+  } else if (path.node.specifiers) {
+    path.get('specifiers').each(
+      specifier => definitions.push(specifier.get('id'))
+    );
+  }
+  return definitions
+    .map(definition => resolveToValue(definition))
+    .filter(path => path && isReactCreateClassCall(path))
+    .map(path => resolveToValue(path.get('arguments', 0)))
+    .filter(path => types.ObjectExpression.check(path.node));
+}
+
 /**
  * Given an AST, this function tries to find the object expression that is
  * passed to `React.createClass`, by resolving all references properly.
@@ -48,15 +75,16 @@ function findExportedReactCreateClass(
     visitForStatement: ignore,
     visitForInStatement: ignore,
     visitExportDeclaration: function(path) {
-      path = resolveToValue(path.get('declaration'));
-      if (!isReactCreateClassCall(path)) {
-       return false
+      var definitions = resolveExportDeclaration(path, types);
+      if (definitions.length === 0) {
+        return false;
       }
-      var resolvedPath = resolveToValue(path.get('arguments', 0));
-      if (types.ObjectExpression.check(resolvedPath.node)) {
-        definition = resolvedPath;
+      if (definitions.length > 1 || definition) {
+        // If a file exports multiple components, ... complain!
+        throw new Error(ERROR_MULTIPLE_DEFINITIONS);
       }
-      this.abort();
+      definition = definitions[0];
+      return false;
     },
     visitAssignmentExpression: function(path) {
       // Ignore anything that is not `exports.X = ...;` or

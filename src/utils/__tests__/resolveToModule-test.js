@@ -60,18 +60,37 @@ describe('resolveToModule', () => {
     expect(resolveToModule(path)).toBe('Foo');
   });
 
-  it('resolves ImportDefaultSpecifier', () => {
-    var path = parse([
-      'import foo from "Foo";',
-      'foo;'
-    ].join('\n'));
-    expect(resolveToModule(path)).toBe('Foo');
+  describe('ES6 import declarations', () => {
 
-    path = parse([
-      'import foo, {createElement} from "Foo";',
-      'foo;'
-    ].join('\n'));
-    expect(resolveToModule(path)).toBe('Foo');
+    it('resolves ImportDefaultSpecifier', () => {
+      var path = parse([
+        'import foo from "Foo";',
+        'foo;'
+      ].join('\n'));
+      expect(resolveToModule(path)).toBe('Foo');
+
+      path = parse([
+        'import foo, {createElement} from "Foo";',
+        'foo;'
+      ].join('\n'));
+      expect(resolveToModule(path)).toBe('Foo');
+    });
+
+    it('resolves ImportSpecifier', () => {
+      var path = parse([
+        'import {foo, bar} from "Foo";',
+        'bar;'
+      ].join('\n'));
+      expect(resolveToModule(path)).toBe('Foo');
+    });
+
+    it('resolves aliased ImportSpecifier', () => {
+      var path = parse([
+        'import {foo, bar as baz} from "Foo";',
+        'baz;'
+      ].join('\n'));
+      expect(resolveToModule(path)).toBe('Foo');
+    });
+
   });
-
 });
