@@ -29,7 +29,7 @@ describe('parse', () => {
     var path = pathFromSource('({foo: "bar"})');
     var resolver = jest.genMockFunction().mockReturnValue(path);
     var handler = jest.genMockFunction();
-    parse('', resolver, [handler]);
+    parse('//empty', resolver, [handler]);
 
     expect(resolver).toBeCalled();
     expect(handler.mock.calls[0][1]).toBe(path);
@@ -38,13 +38,13 @@ describe('parse', () => {
   it('errors if component definition is not found', () => {
     var resolver = jest.genMockFunction();
     expect(function() {
-      parse('', resolver);
+      parse('//empty', resolver);
     }).toThrow(parse.ERROR_MISSING_DEFINITION);
     expect(resolver).toBeCalled();
 
     handler = jest.genMockFunction().mockReturnValue([]);
     expect(function() {
-      parse('', resolver);
+      parse('//empty', resolver);
     }).toThrow(parse.ERROR_MISSING_DEFINITION);
     expect(resolver).toBeCalled();
   });

@@ -12,8 +12,8 @@
   },
   "main": "dist/main.js",
   "scripts": {
-    "watch": "jsx src/ dist/ --harmony --strip-types -w",
-    "build": "rm -rf dist/ && jsx src/ dist/ --harmony --strip-types --no-cache-dir",
+    "watch": "babel src/ --out-dir dist/ --watch",
+    "build": "rm -rf dist/ && babel src/ --out-dir dist/",
     "prepublish": "npm run build",
     "test": "jest"
   },
@@ -30,14 +30,16 @@
     "recast": "^0.10.x"
   },
   "devDependencies": {
+    "babel": "^5.6.23",
+    "babel-jest": "^5.3.0",
     "es6-promise": "^2.0.1",
     "jest-cli": "^0.4.0",
-    "react-tools": "^0.13.x",
     "rimraf": "^2.3.2",
     "temp": "^0.8.1"
   },
   "jest": {
-    "scriptPreprocessor": "./tests/preprocessor",
+    "scriptPreprocessor": "node_modules/babel-jest",
+    "preprocessCachingDisabled": true,
     "testPathDirs": [
       "bin",
       "src"
