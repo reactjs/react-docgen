@@ -63,6 +63,13 @@ function resolveToValue(path: NodePath): NodePath {
       return resolveToValue(node.get('right'));
     }
   } else if (types.Identifier.check(node)) {
+    if ((types.ClassDeclaration.check(path.parentPath.node) ||
+        types.ClassExpression.check(path.parentPath.node) ||
+        types.Function.check(path.parentPath.node)) &&
+        path.parentPath.get('id') === path) {
+      return path.parentPath;
+    }
+
     var scope = path.scope.lookup(node.name);
     if (scope) {
       var bindings = scope.getBindings()[node.name];

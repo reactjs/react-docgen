@@ -10,12 +10,9 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
-"use strict";
-
 jest.autoMockOff();
 
 describe('resolveToValue', () => {
-  var astNodesAreEquivalent;
   var builders;
   var utils;
   var resolveToValue;
@@ -27,7 +24,6 @@ describe('resolveToValue', () => {
 
   beforeEach(() => {
     var recast = require('recast');
-    astNodesAreEquivalent = recast.types.astNodesAreEquivalent;
     builders = recast.types.builders;
     resolveToValue = require('../resolveToValue');
     utils = require('../../../tests/utils');
@@ -36,23 +32,19 @@ describe('resolveToValue', () => {
   it('resolves simple variable declarations', () => {
     var path = parse([
       'var foo  = 42;',
-      'foo;'
+      'foo;',
     ].join('\n'));
-    expect(astNodesAreEquivalent(
-      resolveToValue(path).node,
-      builders.literal(42)
-    )).toBe(true);
+    expect(resolveToValue(path).node).toEqualASTNode(builders.literal(42));
   });
 
   it('resolves object destructuring', () => {
     var path = parse([
       'var {foo: {bar: baz}} = bar;',
-      'baz;'
+      'baz;',
     ].join('\n'));
 
     // Node should be equal to bar.foo.bar
-    expect(astNodesAreEquivalent(
-      resolveToValue(path).node,
+    expect(resolveToValue(path).node).toEqualASTNode(
       builders.memberExpression(
         builders.memberExpression(
           builders.identifier('bar'),
@@ -60,40 +52,49 @@ describe('resolveToValue', () => {
         ),
         builders.identifier('bar')
       )
-    )).toBe(true);
+    );
   });
 
   it('handles SpreadProperties properly', () => {
     var path = parse([
       'var {foo: {bar}, ...baz} = bar;',
-      'baz;'
+      'baz;',
     ].join('\n'));
 
-    expect(astNodesAreEquivalent(
-      resolveToValue(path).node,
-      path.node
-    )).toBe(true);
+    expect(resolveToValue(path).node).toEqualASTNode(path.node);
   });
 
   it('returns the original path if it cannot be resolved', () => {
     var path = parse([
       'function foo() {}',
-      'foo()'
+      'foo()',
     ].join('\n'));
 
-    expect(astNodesAreEquivalent(
-      resolveToValue(path).node,
-      path.node
-    )).toBe(true);
+    expect(resolveToValue(path).node).toEqualASTNode(path.node);
   });
 
   it('resolves variable declarators to their init value', () => {
     var path = utils.parse('var foo = 42;').get('body', 0, 'declarations', 0);
 
-    expect(astNodesAreEquivalent(
-      resolveToValue(path).node,
-      builders.literal(42)
-    )).toBe(true);
+    expect(resolveToValue(path).node).toEqualASTNode(builders.literal(42));
+  });
+
+  it('resolves to class declarations', () => {
+    var program = utils.parse(`
+      class Foo {}
+      Foo;
+    `);
+    expect(resolveToValue(program.get('body', 1, 'expression')).node.type)
+      .toBe('ClassDeclaration');
+  });
+
+  it('resolves to class function declaration', () => {
+    var program = utils.parse(`
+      function foo() {}
+      foo;
+    `);
+    expect(resolveToValue(program.get('body', 1, 'expression')).node.type)
+      .toBe('FunctionDeclaration');
   });
 
   describe('ImportDeclaration', () => {
@@ -101,7 +102,7 @@ describe('resolveToValue', () => {
     it('resolves default import references to the import declaration', () => {
       var path = parse([
         'import foo from "Foo"',
-        'foo;'
+        'foo;',
       ].join('\n'));
 
       expect(resolveToValue(path).node.type).toBe('ImportDeclaration');
@@ -110,7 +111,7 @@ describe('resolveToValue', () => {
     it('resolves named import references to the import declaration', () => {
       var path = parse([
         'import {foo} from "Foo"',
-        'foo;'
+        'foo;',
       ].join('\n'));
 
       expect(resolveToValue(path).node.type).toBe('ImportDeclaration');
@@ -119,7 +120,7 @@ describe('resolveToValue', () => {
     it('resolves aliased import references to the import declaration', () => {
       var path = parse([
         'import {foo as bar} from "Foo"',
-        'bar;'
+        'bar;',
       ].join('\n'));
 
       expect(resolveToValue(path).node.type).toBe('ImportDeclaration');
