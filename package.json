@@ -25,6 +25,7 @@
   "license": "BSD-3-Clause",
   "dependencies": {
     "async": "^0.9.0",
+    "babel-runtime": "^5.7.0",
     "node-dir": "^0.1.6",
     "nomnom": "^1.8.1",
     "recast": "^0.10.x"
@@ -38,14 +39,17 @@
     "temp": "^0.8.1"
   },
   "jest": {
-    "scriptPreprocessor": "node_modules/babel-jest",
     "preprocessCachingDisabled": true,
+    "scriptPreprocessor": "node_modules/babel-jest",
+    "setupTestFrameworkScriptFile": "tests/setupTestFramework.js",
     "testPathDirs": [
       "bin",
       "src"
     ],
     "unmockedModulePathPatterns": [
-      "tests/utils"
+      "tests/utils",
+      "recast",
+      "babel"
     ]
   }
 }

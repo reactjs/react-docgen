@@ -1,10 +1,8 @@
-"use strict";
-
 /**
  * Helper methods for tests.
  */
 
-var recast = require.requireActual('recast');
+import _recast from 'recast';
 
 function stringify(value) {
   if (Array.isArray(value)) {
@@ -16,35 +14,38 @@ function stringify(value) {
 /**
  * Returns a NodePath to the program node of the passed node
  */
-function parse(src) {
+export function parse(src, recast=_recast) {
   return new recast.types.NodePath(recast.parse(stringify(src)).program);
+}
+
+export function statement(src, recast=_recast) {
+  return parse(src, recast).get('body', 0);
+}
+
+export function expression(src, recast=_recast) {
+  return statement('(' + src + ')', recast).get('expression');
 }
 
 /**
  * Injects src into template by replacing the occurrence of %s.
  */
-function parseWithTemplate(src, template) {
+export function parseWithTemplate(src, template) {
   return parse(template.replace('%s', stringify(src)));
 }
 
 /**
  * Default template that simply defines React and PropTypes.
  */
-var REACT_TEMPLATE = [
+export var REACT_TEMPLATE = [
   'var React = require("React");',
   'var PropTypes = React.PropTypes;',
   'var {PropTypes: OtherPropTypes} = require("React");',
   '%s;',
 ].join('\n');
 
-var MODULE_TEMPLATE = [
+export var MODULE_TEMPLATE = [
   'var React = require("React");',
   'var PropTypes = React.PropTypes;',
   'var Component = React.createClass(%s);',
-  'module.exports = Component'
+  'module.exports = Component',
 ].join('\n');
-
-exports.parse = parse;
-exports.parseWithTemplate = parseWithTemplate;
-exports.REACT_TEMPLATE = REACT_TEMPLATE;
-exports.MODULE_TEMPLATE = MODULE_TEMPLATE;
