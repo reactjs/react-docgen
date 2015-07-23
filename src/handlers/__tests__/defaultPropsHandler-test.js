@@ -8,66 +8,99 @@
  *
  */
 
-"use strict";
+/*global jest, describe, beforeEach, it, expect*/
 
 jest.autoMockOff();
 jest.mock('../../Documentation');
 
 describe('defaultPropsHandler', () => {
-  var utils;
   var documentation;
-  var defaultValueHandler;
-
-  function parse(src) {
-    return utils.parse(src).get('body', 0, 'expression');
-  }
+  var defaultPropsHandler;
+  var parse;
 
   beforeEach(() => {
-    utils = require('../../../tests/utils');
+    ({parse} = require('../../../tests/utils'));
     documentation = new (require('../../Documentation'));
     defaultPropsHandler = require('../defaultPropsHandler');
   });
 
-  it ('should find prop default values that are literals', () => {
-    var definition = parse([
-      '({',
-      '  getDefaultProps: function() {',
-      '    return {',
-      '      foo: "bar",',
-      '      bar: 42,',
-      '      baz: ["foo", "bar"],',
-      '      abc: {xyz: abc.def, 123: 42}',
-      '    };',
-      '  }',
-      '});'
-    ].join('\n'));
-
+  function test(definition) {
     defaultPropsHandler(documentation, definition);
     expect(documentation.descriptors).toEqual({
       foo: {
         defaultValue: {
           value: '"bar"',
-          computed: false
-        }
+          computed: false,
+        },
       },
       bar: {
         defaultValue: {
           value: '42',
-          computed: false
-        }
+          computed: false,
+        },
       },
       baz: {
         defaultValue: {
           value: '["foo", "bar"]',
-          computed: false
-        }
+          computed: false,
+        },
       },
       abc: {
         defaultValue: {
           value: '{xyz: abc.def, 123: 42}',
-          computed: false
-        }
-      }
+          computed: false,
+        },
+      },
+    });
+  }
+
+  describe('ObjectExpression', () => {
+    it('should find prop default values that are literals', () => {
+      var src = `
+        ({
+          getDefaultProps: function() {
+            return {
+              foo: "bar",
+              bar: 42,
+              baz: ["foo", "bar"],
+              abc: {xyz: abc.def, 123: 42}
+            };
+          }
+        })
+      `;
+      test(parse(src).get('body', 0, 'expression'));
     });
   });
+
+  describe('ClassDeclaration with static defaultProps', () => {
+    it.only('should find prop default values that are literals', () => {
+      var src = `
+        class Foo {
+          static defaultProps = {
+            foo: "bar",
+            bar: 42,
+            baz: ["foo", "bar"],
+            abc: {xyz: abc.def, 123: 42}
+          };
+        }
+      `;
+      test(parse(src).get('body', 0));
+    });
+  });
+
+  describe('ClassExpression with static defaultProps', () => {
+    it('should find prop default values that are literals', () => {
+      var src = `
+        var Bar = class {
+          static defaultProps = {
+            foo: "bar",
+            bar: 42,
+            baz: ["foo", "bar"],
+            abc: {xyz: abc.def, 123: 42}
+          };
+      }`;
+      test(parse(src).get('body', 0, 'declarations', 0, 'init'));
+    });
+  });
+
 });

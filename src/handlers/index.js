@@ -1,17 +1,18 @@
 /*
- *  Copyright (c) 2015, Facebook, Inc.
- *  All rights reserved.
+ * Copyright (c) 2015, Facebook, Inc.
+ * All rights reserved.
  *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @flow
  *
  */
 
-"use strict";
 
-exports.componentDocblockHandler = require('./componentDocblockHandler');
-exports.defaultPropsHandler = require('./defaultPropsHandler');
-exports.propTypeHandler = require('./propTypeHandler');
-exports.propTypeCompositionHandler = require('./propTypeCompositionHandler');
-exports.propDocBlockHandler = require('./propDocBlockHandler');
+export {default as componentDocblockHandler} from './componentDocblockHandler';
+export {default as defaultPropsHandler} from './defaultPropsHandler';
+export {default as propTypeHandler} from './propTypeHandler';
+export {default as propTypeCompositionHandler} from './propTypeCompositionHandler';
+export {default as propDocBlockHandler} from './propDocBlockHandler';

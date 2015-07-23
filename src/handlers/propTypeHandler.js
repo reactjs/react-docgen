@@ -1,32 +1,30 @@
 /*
- *  Copyright (c) 2015, Facebook, Inc.
- *  All rights reserved.
+ * Copyright (c) 2015, Facebook, Inc.
+ * All rights reserved.
  *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
  *
- */
-
-/**
  * @flow
+ *
  */
-"use strict";
 
-var Documentation = require('../Documentation');
+import type Documentation from '../Documentation';
 
-var getMembers = require('../utils/getMembers');
-var getNameOrValue = require('../utils/getNameOrValue');
-var getPropType = require('../utils/getPropType');
-var getPropertyName = require('../utils/getPropertyName');
-var getPropertyValuePath = require('../utils/getPropertyValuePath');
-var isReactModuleName = require('../utils/isReactModuleName');
-var printValue = require('../utils/printValue');
-var propTypeCompositionHandler = require('./propTypeCompositionHandler');
-var recast = require('recast');
-var resolveToModule = require('../utils/resolveToModule');
-var resolveToValue = require('../utils/resolveToValue');
-var types = recast.types.namedTypes;
+import getMembers from '../utils/getMembers';
+import getNameOrValue from '../utils/getNameOrValue';
+import getPropType from '../utils/getPropType';
+import getPropertyName from '../utils/getPropertyName';
+import getMemberValuePath from '../utils/getMemberValuePath';
+import isReactModuleName from '../utils/isReactModuleName';
+import printValue from '../utils/printValue';
+import recast from 'recast';
+import resolveToModule from '../utils/resolveToModule';
+import resolveToValue from '../utils/resolveToValue';
+
+
+var {types: {namedTypes: types}} = recast;
 
 function isPropTypesExpression(path) {
   var moduleName = resolveToModule(path);
@@ -44,28 +42,6 @@ function isRequired(path) {
     member => !member.computed && member.path.node.name === 'isRequired' ||
       member.computed && member.path.node.value === 'isRequired'
   );
-}
-
-/**
- * Handles member expressions of the form
- *
- *  ComponentA.propTypes
- *
- * it resolves ComponentA to its module name and adds it to the "composes" entry
- * in the documentation.
- */
-function amendComposes(documentation, path) {
-  var node = path.node;
-  if (!types.MemberExpression.check(node) ||
-      getNameOrValue(path.get('property')) !== 'propTypes' ||
-      !types.Identifier.check(node.object)) {
-    return;
-  }
-
-  var moduleName = resolveToModule(path.get('object'));
-  if (moduleName) {
-    documentation.addComposes(moduleName);
-  }
 }
 
 function amendPropTypes(documentation, path, componentPath) {
@@ -92,18 +68,17 @@ function amendPropTypes(documentation, path, componentPath) {
           case types.ObjectExpression.name: // normal object literal
             amendPropTypes(documentation, resolvedValuePath);
             break;
-          default:
-            // for backwards compatibility
-            propTypeCompositionHandler(documentation, componentPath);
-          break;
         }
         break;
     }
   });
 }
 
-function propTypeHandler(documentation: Documentation, path: NodePath) {
-  var propTypesPath = getPropertyValuePath(path, 'propTypes');
+export default function propTypeHandler(
+  documentation: Documentation,
+  path: NodePath
+) {
+  var propTypesPath = getMemberValuePath(path, 'propTypes');
   if (!propTypesPath) {
     return;
   }
@@ -111,14 +86,5 @@ function propTypeHandler(documentation: Documentation, path: NodePath) {
   if (!propTypesPath) {
     return;
   }
-  if (!types.ObjectExpression.check(propTypesPath.node)) {
-    // maybe composition
-    // for backwards compatibility
-    propTypeCompositionHandler(documentation, path);
-    return;
-  }
-
   amendPropTypes(documentation, propTypesPath, path);
 }
-
-module.exports = propTypeHandler;

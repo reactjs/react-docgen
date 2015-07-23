@@ -8,77 +8,95 @@
  *
  */
 
-"use strict";
+/*global jest, describe, beforeEach, it, expect*/
 
 jest.autoMockOff();
 jest.mock('../../Documentation');
 
 describe('componentDocblockHandler', () => {
-  var utils;
+  var parse;
   var documentation;
   var componentDocblockHandler;
 
-  function parse(src) {
-    var programPath = utils.parse(src);
+  function lastStatement(src) {
+    var programPath = parse(src);
     return programPath.get(
       'body',
-      programPath.node.body.length - 1,
-      'declarations',
-      0,
-      'init',
-      'arguments',
-      0
+      programPath.node.body.length - 1
     );
   }
 
   beforeEach(() => {
-    utils = require('../../../tests/utils');
+    ({parse} = require('../../../tests/utils'));
     documentation = new (require('../../Documentation'));
     componentDocblockHandler = require('../componentDocblockHandler');
   });
 
-  it('finds docblocks for component definitions', () => {
-    var definition = parse([
-      '/**',
-      ' * Component description',
-      ' */',
-      'var Component = React.createClass({});',
-    ].join('\n'));
+  function test(definitionSrc, parse) { // eslint-disable-line no-shadow
+    it('finds docblocks for component definitions', () => {
+      var definition = parse(`
+        /**
+         * Component description
+         */
+        ${definitionSrc}
+      `);
 
-    componentDocblockHandler(documentation, definition);
-    expect(documentation.description).toBe('Component description');
+      componentDocblockHandler(documentation, definition);
+      expect(documentation.description).toBe('Component description');
+    });
+
+    it('ignores other types of comments', () => {
+      var definition = parse(`
+        /*
+         * This is not a docblock',
+         */
+        ${definitionSrc}
+      `);
+
+      componentDocblockHandler(documentation, definition);
+      expect(documentation.description).toBe('');
+
+      definition = parse(`
+        // Inline comment'
+        ${definitionSrc}
+      `);
+
+      componentDocblockHandler(documentation, definition);
+      expect(documentation.description).toBe('');
+    });
+
+    it('only considers the docblock directly above the definition', () => {
+      var definition = parse(`
+        /**
+         * This is the wrong docblock
+         */
+        var something_else = "foo";
+        ${definitionSrc}
+      `);
+
+      componentDocblockHandler(documentation, definition);
+      expect(documentation.description).toBe('');
+    });
+  }
+
+  describe('React.createClass', () => {
+    test(
+      'var Component = React.createClass({})',
+      src => lastStatement(src).get('declarations', 0, 'init', 'arguments', 0)
+    );
   });
 
-  it('ignores other types of comments', () => {
-    var definition = parse([
-      '/*',
-      ' * This is not a docblock',
-      ' */',
-      'var Component = React.createClass({});',
-    ].join('\n'));
-
-    componentDocblockHandler(documentation, definition);
-    expect(documentation.description).toBe('');
-
-    definition = parse([
-      '// Inline comment',
-      'var Component = React.createClass({});',
-    ].join('\n'));
-
-    componentDocblockHandler(documentation, definition);
-    expect(documentation.description).toBe('');
+  describe('ClassDeclaration', () => {
+    test(
+      'class Component {}',
+      src => lastStatement(src)
+    );
   });
 
-  it('only considers the docblock directly above the definition', () => {
-    var definition = parse([
-      '/**',
-      ' * This is the wrong docblock',
-      ' */',
-      'var something_else = "foo";',
-      'var Component = React.createClass({});',
-    ].join('\n'));
-
-    componentDocblockHandler(documentation, definition);
-    expect(documentation.description).toBe('');
+  describe('ClassExpression', () => {
+    test(
+      'var Compoent = class {};',
+      src => lastStatement(src).get('declarations', 0, 'init')
+    );
   });
 });

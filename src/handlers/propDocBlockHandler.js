@@ -1,28 +1,30 @@
 /*
- *  Copyright (c) 2015, Facebook, Inc.
- *  All rights reserved.
+ * Copyright (c) 2015, Facebook, Inc.
+ * All rights reserved.
  *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
  *
- */
-
-/**
  * @flow
+ *
  */
-"use strict";
 
-var Documentation = require('../Documentation');
+import type Documentation from '../Documentation';
 
-var getDocblock = require('../utils/docblock').getDocblock;
-var getPropertyName = require('../utils/getPropertyName');
-var getPropertyValuePath = require('../utils/getPropertyValuePath');
-var types = require('recast').types.namedTypes;
-var resolveToValue = require('../utils/resolveToValue');
+import {getDocblock} from '../utils/docblock';
+import getPropertyName from '../utils/getPropertyName';
+import getMemberValuePath from '../utils/getMemberValuePath';
+import recast from 'recast';
+import resolveToValue from '../utils/resolveToValue';
 
-function propDocBlockHandler(documentation: Documentation, path: NodePath) {
-  var propTypesPath = getPropertyValuePath(path, 'propTypes');
+var {types: {namedTypes: types}} = recast;
+
+export default function propDocBlockHandler(
+  documentation: Documentation,
+  path: NodePath
+) {
+  var propTypesPath = getMemberValuePath(path, 'propTypes');
   if (!propTypesPath) {
     return;
   }
@@ -41,5 +43,3 @@ function propDocBlockHandler(documentation: Documentation, path: NodePath) {
     }
   });
 }
-
-module.exports = propDocBlockHandler;

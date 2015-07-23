@@ -1,25 +1,23 @@
 /*
- *  Copyright (c) 2015, Facebook, Inc.
- *  All rights reserved.
+ * Copyright (c) 2015, Facebook, Inc.
+ * All rights reserved.
  *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
  *
- */
-
-/**
  * @flow
+ *
  */
-"use strict";
 
-var Documentation = require('../Documentation');
+import type Documentation from '../Documentation';
 
-var getPropertyValuePath = require('../utils/getPropertyValuePath');
-var recast = require('recast');
-var resolveToModule = require('../utils/resolveToModule');
-var resolveToValue = require('../utils/resolveToValue');
-var types = recast.types.namedTypes;
+import getMemberValuePath from '../utils/getMemberValuePath';
+import recast from 'recast';
+import resolveToModule from '../utils/resolveToModule';
+import resolveToValue from '../utils/resolveToValue';
+
+var {types: {namedTypes: types}} = recast;
 
 /**
  * It resolves the path to its module name and adds it to the "composes" entry
@@ -43,11 +41,11 @@ function processObjectExpression(documentation, path) {
   });
 }
 
-function propTypeCompositionHandler(
+export default function propTypeCompositionHandler(
   documentation: Documentation,
   path: NodePath
 ) {
-  var propTypesPath = getPropertyValuePath(path, 'propTypes');
+  var propTypesPath = getMemberValuePath(path, 'propTypes');
   if (!propTypesPath) {
     return;
   }
@@ -65,5 +63,3 @@ function propTypeCompositionHandler(
       break;
   }
 }
-
-module.exports = propTypeCompositionHandler;

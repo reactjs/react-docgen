@@ -10,7 +10,7 @@
  *
  */
 
-import handlers from './handlers';
+import * as handlers from './handlers';
 import parse from './parse';
 import resolver from './resolver';
 import utils from './utils';
