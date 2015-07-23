@@ -12,10 +12,10 @@
 
 import * as handlers from './handlers';
 import parse from './parse';
-import resolver from './resolver';
+import * as resolver from './resolver';
 import utils from './utils';
 
-const defaultResolver = resolver.findExportedReactCreateClassCall;
+const defaultResolver = resolver.findExportedComponentDefinition;
 const defaultHandlers = [
   handlers.propTypeHandler,
   handlers.propDocBlockHandler,

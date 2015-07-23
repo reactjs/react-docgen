@@ -63,8 +63,8 @@ describe('resolveExportDeclaration', () => {
 
     var specifiers = exp.get('specifiers');
     expect(resolved).toEqual([returnValue, returnValue, returnValue]);
-    expect(resolveToValue).toBeCalledWith(specifiers.get(0, 'id'));
-    expect(resolveToValue).toBeCalledWith(specifiers.get(1, 'id'));
-    expect(resolveToValue).toBeCalledWith(specifiers.get(2, 'id'));
+    expect(resolveToValue).toBeCalledWith(specifiers.get(0, 'local'));
+    expect(resolveToValue).toBeCalledWith(specifiers.get(1, 'local'));
+    expect(resolveToValue).toBeCalledWith(specifiers.get(2, 'local'));
   });
 });

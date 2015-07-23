@@ -6,11 +6,14 @@
  *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  *
+ * @flow
+ *
  */
 
-"use strict";
+import findAllComponentDefinitions from './findAllComponentDefinitions';
+import findExportedComponentDefinition from './findExportedComponentDefinition';
 
-exports.findAllReactCreateClassCalls =
-  require('./findAllReactCreateClassCalls');
-exports.findExportedReactCreateClassCall =
-  require('./findExportedReactCreateClassCall');
+export {
+  findAllComponentDefinitions,
+  findExportedComponentDefinition
+};

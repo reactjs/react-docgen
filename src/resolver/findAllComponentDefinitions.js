@@ -11,19 +11,22 @@
  */
 
 import isReactComponentClass from '../utils/isReactComponentClass';
+import isReactCreateClassCall from '../utils/isReactCreateClassCall';
 import normalizeClassDefinition from '../utils/normalizeClassDefinition';
+import resolveToValue from '../utils/resolveToValue';
 
 /**
  * Given an AST, this function tries to find all object expressions that are
  * passed to `React.createClass` calls, by resolving all references properly.
  */
-export default function findAllClassDefinitions(
+export default function findAllReactCreateClassCalls(
   ast: ASTNode,
   recast: Object
 ): Array<NodePath> {
+  var types = recast.types.namedTypes;
   var definitions = [];
 
-  function visitor(path) {
+  function classVisitor(path) {
     if (isReactComponentClass(path)) {
       normalizeClassDefinition(path);
       definitions.push(path);
@@ -32,8 +35,18 @@ export default function findAllClassDefinitions(
   }
 
   recast.visit(ast, {
-    visitClassExpression: visitor,
-    visitClassDeclaration: visitor,
+    visitClassExpression: classVisitor,
+    visitClassDeclaration: classVisitor,
+    visitCallExpression: function(path) {
+      if (!isReactCreateClassCall(path)) {
+        return false;
+      }
+      var resolvedPath = resolveToValue(path.get('arguments', 0));
+      if (types.ObjectExpression.check(resolvedPath.node)) {
+        definitions.push(resolvedPath);
+      }
+      return false;
+    },
   });
 
   return definitions;
