@@ -1,31 +1,31 @@
 /*
- *  Copyright (c) 2015, Facebook, Inc.
- *  All rights reserved.
+ * Copyright (c) 2015, Facebook, Inc.
+ * All rights reserved.
  *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
  *
- */
-
-/**
  * @flow
+ *
  */
-"use strict";
 
-var getMembers = require('./getMembers');
-var getPropertyName = require('./getPropertyName');
-var printValue = require('./printValue');
-var recast = require('recast');
-var resolveToValue = require('./resolveToValue');
+/*eslint no-use-before-define: 0*/
 
-var types = recast.types.namedTypes;
+
+import getMembers from './getMembers';
+import getPropertyName from './getPropertyName';
+import printValue from './printValue';
+import recast from 'recast';
+import resolveToValue from './resolveToValue';
+
+var {types: {namedTypes: types}} = recast;
 
 function getEnumValues(path) {
   return path.get('elements').map(function(elementPath) {
     return {
       value: printValue(elementPath),
-      computed: !types.Literal.check(elementPath.node)
+      computed: !types.Literal.check(elementPath.node),
     };
   });
 }
@@ -85,7 +85,7 @@ function getPropTypeShape(argumentPath) {
 function getPropTypeInstanceOf(argumentPath) {
   return {
     name: 'instanceOf',
-    value: printValue(argumentPath)
+    value: printValue(argumentPath),
   };
 }
 
@@ -98,7 +98,7 @@ var simplePropTypes = {
   string: 1,
   any: 1,
   element: 1,
-  node: 1
+  node: 1,
 };
 
 var propTypes = {
@@ -106,7 +106,7 @@ var propTypes = {
   oneOfType: getPropTypeOneOfType,
   instanceOf: getPropTypeInstanceOf,
   arrayOf: getPropTypeArrayOf,
-  shape: getPropTypeShape
+  shape: getPropTypeShape,
 };
 
 /**
@@ -117,7 +117,7 @@ var propTypes = {
  *
  * If there is no match, "custom" is returned.
  */
-function getPropType(path: NodePath): PropTypeDescriptor {
+export default function getPropType(path: NodePath): PropTypeDescriptor {
   var node = path.node;
   var descriptor;
   getMembers(path).some(member => {
@@ -150,5 +150,3 @@ function getPropType(path: NodePath): PropTypeDescriptor {
   }
   return descriptor;
 }
-
-module.exports = getPropType;

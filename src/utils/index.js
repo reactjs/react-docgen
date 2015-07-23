@@ -1,23 +1,35 @@
 /*
- *  Copyright (c) 2015, Facebook, Inc.
- *  All rights reserved.
+ * Copyright (c) 2015, Facebook, Inc.
+ * All rights reserved.
  *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @flow
  *
  */
 
-"use strict";
+import * as docblock from './docblock';
 
-exports.docblock = require('./docblock');
-exports.getMembers = require('./getMembers');
-exports.getPropType = require('./getPropType');
-exports.getPropertyName = require('./getPropertyName');
-exports.getPropertyValuePath = require('./getPropertyValuePath');
-exports.isExportsOrModuleAssignment = require('./isExportsOrModuleAssignment');
-exports.isReactCreateClassCall = require('./isReactCreateClassCall');
-exports.isReactModuleName = require('./isReactModuleName');
-exports.match = require('./match');
-exports.resolveToModule = require('./resolveToModule');
-exports.resolveToValue = require('./resolveToValue');
+export {
+  docblock,
+}
+export {default as getClassMemberValuePath} from './getClassMemberValuePath';
+export {default as getMemberExpressionRoot} from './getMemberExpressionRoot';
+export {default as getMembers} from './getMembers';
+export {default as getMemberValuePath} from './getMemberValuePath';
+export {default as getNameOrValue} from './getNameOrValue';
+export {default as getPropertName} from './getPropertyName';
+export {default as getPropertyValuePath} from './getPropertyValuePath';
+export {default as getPropType} from './getPropType';
+export {default as isExportsOrModuleAssignment} from './isExportsOrModuleAssignment';
+export {default as isReactComponentClass} from './isReactComponentClass.js';
+export {default as isReactCreateClassCall} from './isReactCreateClassCall';
+export {default as isReactModuleName} from './isReactModuleName';
+export {default as match} from './match';
+export {default as normalizeClassDefiniton} from './normalizeClassDefinition';
+export {default as printValue} from './printValue';
+export {default as resolveExportDeclaration} from './resolveExportDeclaration';
+export {default as resolveToModule} from './resolveToModule';
+export {default as resolveToValue} from './resolveToValue';

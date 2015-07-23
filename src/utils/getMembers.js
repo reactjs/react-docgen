@@ -1,26 +1,30 @@
 /*
- *  Copyright (c) 2015, Facebook, Inc.
- *  All rights reserved.
+ * Copyright (c) 2015, Facebook, Inc.
+ * All rights reserved.
  *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @flow
  *
  */
+
+/*eslint no-labels: 0*/
 
 /**
  * Helper methods for dealing with MemberExpressions (and CallExpressions).
- * @flow
  */
-"use strict";
 
-type MemberDescriptor = {
+type MemberDescriptor = { // eslint-disable-line no-undef
   path: NodePath;
   computed: boolean;
   argumentsPath?: ?NodePath;
 }
 
-var types = require('recast').types.namedTypes;
+import recast from 'recast';
+
+var {types: {namedTypes: types}} = recast;
 
 /**
  * Given a "nested" Member/CallExpression, e.g.
@@ -34,10 +38,10 @@ var types = require('recast').types.namedTypes;
  *   {path: NodePath<42>, arguments: null, computed: false}
  * ]
  */
-function getMembers(path: NodePath): Array<MemberExpression> {
+export default function getMembers(path: NodePath): Array<MemberExpression> {
   var result = [];
   var argumentsPath = null;
-  loop: while(true) {
+  loop: while(true) { // eslint-disable-line no-constant-condition
     switch (true) {
       case types.MemberExpression.check(path.node):
         result.push({

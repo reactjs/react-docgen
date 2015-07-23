@@ -13,7 +13,7 @@
 import * as handlers from './handlers';
 import parse from './parse';
 import * as resolver from './resolver';
-import utils from './utils';
+import * as utils from './utils';
 
 const defaultResolver = resolver.findExportedComponentDefinition;
 const defaultHandlers = [

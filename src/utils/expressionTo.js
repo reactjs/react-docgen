@@ -1,20 +1,21 @@
 /*
- *  Copyright (c) 2015, Facebook, Inc.
- *  All rights reserved.
+ * Copyright (c) 2015, Facebook, Inc.
+ * All rights reserved.
  *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
  *
- */
-
-/**
  * @flow
+ *
  */
-"use strict";
 
-var resolveToValue = require('./resolveToValue');
-var types = require('recast').types.namedTypes;
+/*eslint no-loop-func: 0, no-use-before-define: 0*/
+
+import resolveToValue from './resolveToValue';
+import recast from 'recast';
+
+var {types: {namedTypes: types}} = recast;
 
 /**
  * Splits a MemberExpression or CallExpression into parts.
@@ -76,5 +77,7 @@ function toString(path: NodePath): string {
   return toArray(path).join('.');
 }
 
-exports.String = toString;
-exports.Array = toArray;
+export {
+  toString as String,
+  toArray as Array,
+}

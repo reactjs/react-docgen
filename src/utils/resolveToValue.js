@@ -1,23 +1,24 @@
 /*
- *  Copyright (c) 2015, Facebook, Inc.
- *  All rights reserved.
+ * Copyright (c) 2015, Facebook, Inc.
+ * All rights reserved.
  *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @flow
  *
  */
 
-/**
- * @flow
- */
-"use strict";
+import recast from 'recast';
 
 var {
-  NodePath,
-  builders,
-  namedTypes: types
-} = require('recast').types;
+  types: {
+    NodePath,
+    builders,
+    namedTypes: types
+  }
+} = recast;
 
 function buildMemberExpressionFromPattern(path: NodePath): ?Node {
   var node = path.node;
@@ -47,7 +48,7 @@ function buildMemberExpressionFromPattern(path: NodePath): ?Node {
  *
  * Else the path itself is returned.
  */
-function resolveToValue(path: NodePath): NodePath {
+export default function resolveToValue(path: NodePath): NodePath {
   var node = path.node;
   if (types.VariableDeclarator.check(node)) {
      if (node.init) {
@@ -98,5 +99,3 @@ function resolveToValue(path: NodePath): NodePath {
   }
   return path;
 }
-
-module.exports = resolveToValue;
