@@ -21,7 +21,7 @@ function isRenderMethod(node) {
   return types.MethodDefinition.check(node) &&
     !node.computed &&
     !node.static &&
-    node.kind === '' &&
+    (node.kind === '' || node.kind === 'method') &&
     node.key.name === 'render';
 }
 

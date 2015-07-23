@@ -55,7 +55,7 @@ describe('getClassMemberValuePath', () => {
     });
   });
 
-  xdescribe('ClassProperty', () => {
+  describe('ClassProperty', () => {
     it('finds "normal" class properties', () => {
       var def = statement(`
         class Foo {

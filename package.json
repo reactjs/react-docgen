@@ -26,6 +26,7 @@
   "dependencies": {
     "async": "^0.9.0",
     "babel-runtime": "^5.7.0",
+    "babylon": "~5.8.3",
     "node-dir": "^0.1.6",
     "nomnom": "^1.8.1",
     "recast": "^0.10.x"
@@ -49,7 +50,8 @@
     "unmockedModulePathPatterns": [
       "tests/utils",
       "recast",
-      "babel"
+      "babel",
+      "babylon"
     ]
   }
 }

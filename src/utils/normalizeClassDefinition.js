@@ -30,7 +30,6 @@ var ignore = () => false;
  *
  * is converted to
  *
- * class
  * class MyComponent extends React.Component {
  *   // ...
  *   static propTypes = { ... };

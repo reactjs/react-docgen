@@ -1,25 +1,22 @@
 /*
- *  Copyright (c) 2015, Facebook, Inc.
- *  All rights reserved.
+ * Copyright (c) 2015, Facebook, Inc.
+ * All rights reserved.
  *
  *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @flow
  *
  */
 
-/**
- * @flow
- */
-"use strict";
+import handlers from './handlers';
+import parse from './parse';
+import resolver from './resolver';
+import utils from './utils';
 
-var handlers = require('./handlers');
-var parse = require('./parse');
-var resolver = require('./resolver');
-var utils = require('./utils');
-
-var defaultResolver = resolver.findExportedReactCreateClassCall;
-var defaultHandlers = [
+const defaultResolver = resolver.findExportedReactCreateClassCall;
+const defaultHandlers = [
   handlers.propTypeHandler,
   handlers.propDocBlockHandler,
   handlers.defaultPropsHandler,
@@ -38,11 +35,11 @@ var defaultHandlers = [
  * documentation (from docblocks), default prop values and component
  * documentation (from a docblock).
  */
-function defaultParse(
+function defaultParse( // eslint-disable-line no-unused-vars
   src: string,
   resolver?: ?Resolver,
   handlers?: ?Array<Handler>
-): (Array<Object>|Object) {
+): Array<Object>|Object {
   if (!resolver) {
     resolver = defaultResolver;
   }
@@ -53,8 +50,8 @@ function defaultParse(
   return parse(src, resolver, handlers);
 }
 
-module.exports = {
-  parse: defaultParse,
+export {
+  defaultParse as parse,
   defaultHandlers,
   handlers,
   resolver,

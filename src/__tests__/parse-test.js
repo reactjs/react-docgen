@@ -8,17 +8,18 @@
  *
  */
 
-"use strict";
+/*global jest, describe, beforeEach, it, expect*/
 
 jest.autoMockOff();
 
 describe('parse', () => {
   var utils;
-  var parse;
+  var parse, ERROR_MISSING_DEFINITION;
 
   beforeEach(() => {
     utils = require('../../tests/utils');
-    parse = require('../parse');
+    // ugly but necessary because ../parse has default and named exports
+    ({default: parse, ERROR_MISSING_DEFINITION} = require('../parse'));
   });
 
   function pathFromSource(source) {
@@ -37,15 +38,10 @@ describe('parse', () => {
 
   it('errors if component definition is not found', () => {
     var resolver = jest.genMockFunction();
-    expect(function() {
-      parse('//empty', resolver);
-    }).toThrow(parse.ERROR_MISSING_DEFINITION);
+    expect(() => parse('//empty', resolver)).toThrow(ERROR_MISSING_DEFINITION);
     expect(resolver).toBeCalled();
 
-    handler = jest.genMockFunction().mockReturnValue([]);
-    expect(function() {
-      parse('//empty', resolver);
-    }).toThrow(parse.ERROR_MISSING_DEFINITION);
+    expect(() => parse('//empty', resolver)).toThrow(ERROR_MISSING_DEFINITION);
     expect(resolver).toBeCalled();
   });
 

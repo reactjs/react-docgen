@@ -3,6 +3,7 @@
  */
 
 import _recast from 'recast';
+import babylon from '../src/babylon';
 
 function stringify(value) {
   if (Array.isArray(value)) {
@@ -15,7 +16,9 @@ function stringify(value) {
  * Returns a NodePath to the program node of the passed node
  */
 export function parse(src, recast=_recast) {
-  return new recast.types.NodePath(recast.parse(stringify(src)).program);
+  return new recast.types.NodePath(
+    recast.parse(stringify(src), {esprima: babylon}).program
+  );
 }
 
 export function statement(src, recast=_recast) {

@@ -33,7 +33,7 @@ function getDocblock(path: NodePath): ?string {
   if (path.node.comments) {
     var comments = path.node.comments.filter(function(comment) {
       return comment.leading &&
-        comment.type === 'Block' &&
+        comment.type === 'CommentBlock' &&
         comment.value.indexOf('*\n') === 0;
     });
     if (comments.length > 0) {

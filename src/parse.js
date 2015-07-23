@@ -1,23 +1,21 @@
 /*
- *  Copyright (c) 2015, Facebook, Inc.
- *  All rights reserved.
+ * Copyright (c) 2015, Facebook, Inc.
+ * All rights reserved.
  *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
  *
- */
-
-/**
  * @flow
+ *
  */
-"use strict";
 
-var Documentation = require('./Documentation');
+import Documentation from './Documentation';
 
-var recast = require('recast');
+import babylon from './babylon';
+import recast from 'recast';
 
-var ERROR_MISSING_DEFINITION = 'No suitable component definition found.';
+const ERROR_MISSING_DEFINITION = 'No suitable component definition found.';
 
 function executeHandlers(handlers, componentDefinitions) {
   return componentDefinitions.map(componentDefinition => {
@@ -47,12 +45,12 @@ function executeHandlers(handlers, componentDefinitions) {
  * an array of documentation objects. If `resolver` returns a single node
  * instead, `parse` will return a documentation object.
  */
-function parse(
+export default function parse(
   src: string,
   resolver: Resolver,
   handlers: Array<Handler>
-): (Array<Object>|Object) {
-  var ast = recast.parse(src);
+): Array<Object>|Object {
+  var ast = recast.parse(src, {esprima: babylon});
   var componentDefinitions = resolver(ast.program, recast);
   var isArray = Array.isArray(componentDefinitions);
 
@@ -65,5 +63,4 @@ function parse(
     executeHandlers(handlers, [componentDefinitions])[0];
 }
 
-module.exports = parse;
-exports.ERROR_MISSING_DEFINITION = ERROR_MISSING_DEFINITION;
+export {ERROR_MISSING_DEFINITION};
