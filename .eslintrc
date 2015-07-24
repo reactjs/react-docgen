@@ -2,7 +2,8 @@
   "parser": "babel-eslint",
   "rules": {
     "strict": 0,
-    "comma-dangle": [1, "always-multiline"]
+    "comma-dangle": [1, "always-multiline"],
+    "quotes": [2, "single", "avoid-escape"]
   },
   "env": {
     "node": true
