@@ -30,6 +30,16 @@ export default function componentDocblockHandler(
     path = path.parent;
   }
   if (path) {
+    // Class declarations are statements but can be part of default
+    // export declarations
+    if (types.ClassDeclaration.check(path.node) &&
+        types.ExportDefaultDeclaration.check(path.parentPath.node)) {
+      path = path.parentPath;
+    }
+    // If the parent is an export statement, we have to traverse one more up
+    if (types.ExportNamedDeclaration.check(path.parentPath.node)) {
+      path = path.parentPath;
+    }
     description = getDocblock(path);
   }
   if (description == null) {

@@ -95,8 +95,53 @@ describe('componentDocblockHandler', () => {
 
   describe('ClassExpression', () => {
     test(
-      'var Compoent = class {};',
+      'var Component = class {};',
       src => lastStatement(src).get('declarations', 0, 'init')
     );
+  });
+
+  describe('ES6 default exports', () => {
+
+    describe('Default React.createClass export', () => {
+      test(
+        'export default React.createClass({});',
+        src => lastStatement(src).get('declaration', 'arguments', 0)
+      );
+    });
+
+    describe('Default class declaration export', () => {
+      test(
+        'export default class Component {}',
+        src => lastStatement(src).get('declaration')
+      );
+    });
+
+    describe('Default class expression export', () => {
+      test(
+        'export default class {}',
+        src => lastStatement(src).get('declaration')
+      );
+    });
+
+  });
+
+  describe('ES6 named exports', () => {
+
+    describe('Named React.createClass export', () => {
+      test(
+        'export var Component = React.createClass({});',
+        src => lastStatement(src).get(
+          'declaration', 'declarations', '0', 'init', 'arguments', 0
+        )
+      );
+    });
+
+    describe('Named class declaration export', () => {
+      test(
+        'export class Component {}',
+        src => lastStatement(src).get('declaration')
+      );
+    });
+
   });
 });
