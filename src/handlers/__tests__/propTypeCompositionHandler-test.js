@@ -8,7 +8,7 @@
  *
  */
 
-/*global jest, describe, it, expect, beforeEach, afterEach*/
+/*global jest, describe, it, expect, beforeEach*/
 
 jest.autoMockOff();
 jest.mock('../../Documentation');

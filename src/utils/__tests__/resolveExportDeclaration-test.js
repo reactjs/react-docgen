@@ -10,7 +10,7 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
-import {expression, statement} from '../../../tests/utils';
+import {statement} from '../../../tests/utils';
 
 jest
   .dontMock('../resolveExportDeclaration');
@@ -44,14 +44,14 @@ describe('resolveExportDeclaration', () => {
     expect(resolveToValue).toBeCalledWith(declarations.get(0));
     expect(resolveToValue).toBeCalledWith(declarations.get(1));
 
-    var exp = statement('export function foo(){}');
-    var resolved = resolveExportDeclaration(exp);
+    exp = statement('export function foo(){}');
+    resolved = resolveExportDeclaration(exp);
 
     expect(resolved).toEqual([returnValue]);
     expect(resolveToValue).toBeCalledWith(exp.get('declaration'));
 
-    var exp = statement('export class Foo {}');
-    var resolved = resolveExportDeclaration(exp);
+    exp = statement('export class Foo {}');
+    resolved = resolveExportDeclaration(exp);
 
     expect(resolved).toEqual([returnValue]);
     expect(resolveToValue).toBeCalledWith(exp.get('declaration'));

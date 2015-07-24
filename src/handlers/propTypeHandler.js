@@ -13,7 +13,6 @@
 import type Documentation from '../Documentation';
 
 import getMembers from '../utils/getMembers';
-import getNameOrValue from '../utils/getNameOrValue';
 import getPropType from '../utils/getPropType';
 import getPropertyName from '../utils/getPropertyName';
 import getMemberValuePath from '../utils/getMemberValuePath';
@@ -44,7 +43,7 @@ function isRequired(path) {
   );
 }
 
-function amendPropTypes(documentation, path, componentPath) {
+function amendPropTypes(documentation, path) {
   path.get('properties').each(function(propertyPath) {
     switch (propertyPath.node.type) {
       case types.Property.name:
@@ -86,5 +85,5 @@ export default function propTypeHandler(
   if (!propTypesPath) {
     return;
   }
-  amendPropTypes(documentation, propTypesPath, path);
+  amendPropTypes(documentation, propTypesPath);
 }

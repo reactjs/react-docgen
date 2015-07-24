@@ -21,7 +21,7 @@ function Documentation() {
     },
     setDescription(descr) {
       this.description = descr;
-    }
+    },
   };
 }
 

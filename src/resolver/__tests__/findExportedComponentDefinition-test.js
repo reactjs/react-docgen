@@ -291,7 +291,7 @@ describe('findExportedComponentDefinition', () => {
           `;
           expect(() => parse(source)).toThrow();
 
-          var source = `
+          source = `
             import React from 'React';
             var Component = class extends React.Component {};
             export {Component};
@@ -428,7 +428,7 @@ describe('findExportedComponentDefinition', () => {
           `;
           expect(() => parse(source)).toThrow();
 
-          var source = `
+          source = `
             import React from 'React';
             export var ComponentA = class extends React.Component {};
             var ComponentB  = class extends React.Component {};

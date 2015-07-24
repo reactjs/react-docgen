@@ -118,7 +118,6 @@ var propTypes = {
  * If there is no match, "custom" is returned.
  */
 export default function getPropType(path: NodePath): PropTypeDescriptor {
-  var node = path.node;
   var descriptor;
   getMembers(path).some(member => {
     var node = member.path.node;
@@ -139,6 +138,7 @@ export default function getPropType(path: NodePath): PropTypeDescriptor {
     }
   });
   if (!descriptor) {
+    var node = path.node;
     if (types.Identifier.check(node) &&
         simplePropTypes.hasOwnProperty(node.name)) {
       descriptor = {name: node.name};

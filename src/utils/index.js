@@ -14,7 +14,8 @@ import * as docblock from './docblock';
 
 export {
   docblock,
-}
+};
+
 export {default as getClassMemberValuePath} from './getClassMemberValuePath';
 export {default as getMemberExpressionRoot} from './getMemberExpressionRoot';
 export {default as getMembers} from './getMembers';

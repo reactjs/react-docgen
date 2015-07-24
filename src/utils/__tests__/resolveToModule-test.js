@@ -10,8 +10,6 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
-"use strict";
-
 jest.autoMockOff();
 
 describe('resolveToModule', () => {
@@ -29,66 +27,66 @@ describe('resolveToModule', () => {
   });
 
   it('resolves identifiers', () => {
-    var path = parse([
-      'var foo = require("Foo");',
-      'foo;'
-    ].join('\n'));
+    var path = parse(`
+      var foo = require("Foo");
+      foo;
+    `);
     expect(resolveToModule(path)).toBe('Foo');
   });
 
   it('resolves function calls', () => {
-    var path = parse([
-      'var foo = require("Foo");',
-      'foo();'
-    ].join('\n'));
+    var path = parse(`
+      var foo = require("Foo");
+      foo();
+    `);
     expect(resolveToModule(path)).toBe('Foo');
   });
 
   it('resolves member expressions', () => {
-    var path = parse([
-      'var foo = require("Foo");',
-      'foo.bar().baz;'
-    ].join('\n'));
+    var path = parse(`
+      var foo = require("Foo");
+      foo.bar().baz;
+    `);
     expect(resolveToModule(path)).toBe('Foo');
   });
 
   it('understands destructuring', () => {
-    var path = parse([
-      'var {foo} = require("Foo");',
-      'foo;'
-    ].join('\n'));
+    var path = parse(`
+      var {foo} = require("Foo");
+      foo;
+    `);
     expect(resolveToModule(path)).toBe('Foo');
   });
 
   describe('ES6 import declarations', () => {
 
     it('resolves ImportDefaultSpecifier', () => {
-      var path = parse([
-        'import foo from "Foo";',
-        'foo;'
-      ].join('\n'));
+      var path = parse(`
+        import foo from "Foo";
+        foo;
+      `);
       expect(resolveToModule(path)).toBe('Foo');
 
-      path = parse([
-        'import foo, {createElement} from "Foo";',
-        'foo;'
-      ].join('\n'));
+      path = parse(`
+        import foo, {createElement} from "Foo";
+        foo;
+      `);
       expect(resolveToModule(path)).toBe('Foo');
     });
 
     it('resolves ImportSpecifier', () => {
-      var path = parse([
-        'import {foo, bar} from "Foo";',
-        'bar;'
-      ].join('\n'));
+      var path = parse(`
+        import {foo, bar} from "Foo";
+        bar;
+      `);
       expect(resolveToModule(path)).toBe('Foo');
     });
 
     it('resolves aliased ImportSpecifier', () => {
-      var path = parse([
-        'import {foo, bar as baz} from "Foo";',
-        'baz;'
-      ].join('\n'));
+      var path = parse(`
+        import {foo, bar as baz} from "Foo";
+        baz;
+      `);
       expect(resolveToModule(path)).toBe('Foo');
     });
 

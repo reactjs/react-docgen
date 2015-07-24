@@ -8,21 +8,17 @@
  *
  */
 
-"use strict";
+/*global jest, describe, beforeEach, it, expect*/
 
 jest.autoMockOff();
 
 describe('getPropType', () => {
-  var utils;
+  var expression, statement;
   var getPropType;
-
-  function parse(src) {
-    return utils.parse(src).get('body', 0, 'expression');
-  }
 
   beforeEach(() => {
     getPropType = require('../getPropType');
-    utils = require('../../../tests/utils');
+    ({expression, statement} = require('../../../tests/utils'));
   });
 
   it('detects simple prop types', () => {
@@ -39,114 +35,113 @@ describe('getPropType', () => {
     ];
 
     simplePropTypes.forEach(
-      type => expect(getPropType(parse('React.PropTypes.' + type)))
+      type => expect(getPropType(expression('React.PropTypes.' + type)))
         .toEqual({name: type})
     );
 
     // It doesn't actually matter what the MemberExpression is
     simplePropTypes.forEach(
-      type => expect(getPropType(parse('Foo.' + type + '.bar')))
+      type => expect(getPropType(expression('Foo.' + type + '.bar')))
         .toEqual({name: type})
     );
 
     // Doesn't even have to be a MemberExpression
     simplePropTypes.forEach(
-      type => expect(getPropType(parse(type)))
+      type => expect(getPropType(expression(type)))
         .toEqual({name: type})
     );
   });
 
   it('detects complex prop types', () => {
-    expect(getPropType(parse('oneOf(["foo", "bar"])'))).toEqual({
+    expect(getPropType(expression('oneOf(["foo", "bar"])'))).toEqual({
       name: 'enum',
       value: [
         {value: '"foo"', computed: false},
-        {value: '"bar"', computed: false}
-      ]
+        {value: '"bar"', computed: false},
+      ],
     });
 
     // line comments are ignored
-    expect(getPropType(parse('oneOf(["foo", // baz\n"bar"])'))).toEqual({
+    expect(getPropType(expression('oneOf(["foo", // baz\n"bar"])'))).toEqual({
       name: 'enum',
       value: [
         {value: '"foo"', computed: false},
-        {value: '"bar"', computed: false}
-      ]
+        {value: '"bar"', computed: false},
+      ],
     });
 
-    expect(getPropType(parse('oneOfType([number, bool])'))).toEqual({
+    expect(getPropType(expression('oneOfType([number, bool])'))).toEqual({
       name: 'union',
       value: [
         {name: 'number'},
-        {name: 'bool'}
-      ]
+        {name: 'bool'},
+      ],
     });
 
     // custom type
-    expect(getPropType(parse('oneOfType([foo])'))).toEqual({
+    expect(getPropType(expression('oneOfType([foo])'))).toEqual({
       name: 'union',
-      value: [{name: 'custom', raw: 'foo'}]
+      value: [{name: 'custom', raw: 'foo'}],
     });
 
     // custom type
-    expect(getPropType(parse('instanceOf(Foo)'))).toEqual({
+    expect(getPropType(expression('instanceOf(Foo)'))).toEqual({
       name: 'instanceOf',
-      value: 'Foo'
+      value: 'Foo',
     });
 
-    expect(getPropType(parse('arrayOf(string)'))).toEqual({
+    expect(getPropType(expression('arrayOf(string)'))).toEqual({
       name: 'arrayOf',
-      value: {name: 'string'}
+      value: {name: 'string'},
     });
 
-    expect(getPropType(parse('shape({foo: string, bar: bool})'))).toEqual({
+    expect(getPropType(expression('shape({foo: string, bar: bool})'))).toEqual({
       name: 'shape',
       value: {
         foo: {
-          name: 'string'
+          name: 'string',
         },
         bar: {
-          name: 'bool'
-        }
-      }
+          name: 'bool',
+        },
+      },
     });
 
     // custom
-    expect(getPropType(parse('shape({foo: xyz})'))).toEqual({
+    expect(getPropType(expression('shape({foo: xyz})'))).toEqual({
       name: 'shape',
       value: {
         foo: {
           name: 'custom',
-          raw: 'xyz'
-        }
-      }
+          raw: 'xyz',
+        },
+      },
     });
   });
 
   it('resolves variables to their values', () => {
-    var src = [
-      'var shape = {bar: PropTypes.string};',
-      'PropTypes.shape(shape);',
-    ].join('\n');
-    var propTypeExpression = utils.parse(src).get('body', 1, 'expression');
+    var propTypeExpression = statement(`
+      PropTypes.shape(shape);
+      var shape = {bar: PropTypes.string};
+    `).get('expression');
 
     expect(getPropType(propTypeExpression)).toEqual({
       name: 'shape',
       value: {
-        bar: {name: 'string'}
-      }
+        bar: {name: 'string'},
+      },
     });
   });
 
   it('detects custom validation functions', () => {
-    expect(getPropType(parse('(function() {})'))).toEqual({
+    expect(getPropType(expression('(function() {})'))).toEqual({
       name: 'custom',
-      raw: '(function() {})'
+      raw: '(function() {})',
     });
 
-    expect(getPropType(parse('() => {}'))).toEqual({
+    expect(getPropType(expression('() => {}'))).toEqual({
       name: 'custom',
-      raw: '() => {}'
+      raw: '() => {}',
     });
   });
 

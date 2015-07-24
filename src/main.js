@@ -37,8 +37,8 @@ var defaultHandlers = [
  */
 function defaultParse( // eslint-disable-line no-unused-vars
   src: string,
-  resolver?: ?Resolver,
-  handlers?: ?Array<Handler>
+  resolver?: ?Resolver, // eslint-disable-line no-shadow
+  handlers?: ?Array<Handler> // eslint-disable-line no-shadow
 ): Array<Object>|Object {
   if (!resolver) {
     resolver = defaultResolver;

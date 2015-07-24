@@ -6,12 +6,9 @@
  *  LICENSE file in the root directory of this source tree. An additional grant
  *  of patent rights can be found in the PATENTS file in the same directory.
  *
+ *  @flow
+ *
  */
-
-/**
- * @flow
- */
-"use strict";
 
 class Documentation {
   _props: Object;
@@ -49,7 +46,7 @@ class Documentation {
   toObject(): Object {
     var obj = {
       description: this._description,
-      props: this._props
+      props: this._props,
     };
 
     if (this._composes.length) {

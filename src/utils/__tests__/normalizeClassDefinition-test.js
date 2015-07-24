@@ -52,14 +52,14 @@ describe('normalizeClassDefinition', () => {
     expect(classProperty.value.value).toBe(42);
     expect(classProperty.static).toBe(true);
 
-    var classDefinition = parse(`
+    classDefinition = parse(`
       var Foo;
       Foo = class {};
       Foo.propTypes = 42;
     `).get('body', 1, 'expression', 'right');
 
     normalizeClassDefinition(classDefinition);
-    var {node: {body: {body: [classProperty]}}} = classDefinition;
+    ({node: {body: {body: [classProperty]}}} = classDefinition);
     expect(classProperty).toBeDefined();
   });
 

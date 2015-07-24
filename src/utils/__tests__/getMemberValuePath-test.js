@@ -8,7 +8,7 @@
  *
  */
 
-/*global jest, describe, xdescribe, beforeEach, it, expect*/
+/*global jest, describe, beforeEach, it, expect*/
 
 jest
   .dontMock('../getMemberValuePath.js');

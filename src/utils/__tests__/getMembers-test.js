@@ -8,30 +8,23 @@
  *
  */
 
-"use strict";
+/*global jest, describe, beforeEach, it, expect*/
 
 jest.autoMockOff();
 
 describe('getMembers', () => {
-  var recast;
+  var expression;
   var getMembers;
   var memberExpressionPath;
 
-  function parse(src) {
-    return new recast.types.NodePath(
-      recast.parse(src).program.body[0].expression
-    );
-  }
-
   beforeEach(() => {
     getMembers = require('../getMembers');
-    recast = require('recast');
-    memberExpressionPath = parse('foo.bar(123)(456)[baz][42]');
+    ({expression} = require('../../../tests/utils'));
+    memberExpressionPath = expression('foo.bar(123)(456)[baz][42]');
   });
 
 
   it('finds all "members" "inside" a MemberExpression', () => {
-    var b = recast.types.builders;
     var members = getMembers(memberExpressionPath);
 
     //bar(123)

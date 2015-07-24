@@ -80,4 +80,4 @@ function toString(path: NodePath): string {
 export {
   toString as String,
   toArray as Array,
-}
+};

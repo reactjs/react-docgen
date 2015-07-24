@@ -16,8 +16,8 @@ var {
   types: {
     NodePath,
     builders,
-    namedTypes: types
-  }
+    namedTypes: types,
+  },
 } = recast;
 
 function buildMemberExpressionFromPattern(path: NodePath): ?NodePath {

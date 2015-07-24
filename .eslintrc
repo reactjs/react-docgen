@@ -1,11 +1,20 @@
 {
   "parser": "babel-eslint",
   "rules": {
-    "strict": 0,
     "comma-dangle": [1, "always-multiline"],
-    "quotes": [2, "single", "avoid-escape"]
+    "no-underscore-dangle": 0,
+    "quotes": [2, "single", "avoid-escape"],
+    "strict": 0
   },
   "env": {
     "node": true
+  },
+  "globals": {
+    "ASTNode": true,
+    "Handler": true,
+    "NodePath": true,
+    "PropTypeDescriptor": true,
+    "PropDescriptor": true,
+    "Resolver": true
   }
 }
