@@ -23,6 +23,7 @@ describe('main', () => {
     it('parses with default resolver/handlers', () => {
       var docs = docgen.parse(source);
       expect(docs).toEqual({
+        displayName: 'ABC',
         description: 'Example component description',
         props: {
           foo: {
@@ -58,6 +59,7 @@ describe('main', () => {
        * Example component description
        */
       var Component = React.createClass({
+        displayName: 'ABC',
         propTypes: {
           /**
            * Example prop description
@@ -93,6 +95,7 @@ describe('main', () => {
       Component.defaultProps = {
         foo: true,
       };
+      Component.displayName = 'ABC';
     `);
   });
 

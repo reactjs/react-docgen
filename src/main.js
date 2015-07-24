@@ -21,6 +21,7 @@ var defaultHandlers = [
   handlers.propDocBlockHandler,
   handlers.defaultPropsHandler,
   handlers.componentDocblockHandler,
+  handlers.displayNameHandler,
 ];
 
 /**
