@@ -12,45 +12,51 @@
 
 class Documentation {
   _props: Object;
-  _description: string;
   _composes: Array<string>;
+  _data: Object;
 
   constructor() {
-    this._props = {};
-    this._description = '';
-    this._composes = [];
+    this._props = new Map();
+    this._composes = new Set();
+    this._data = new Map();
   }
 
   addComposes(moduleName: string) {
-    if (this._composes.indexOf(moduleName) === -1) {
-      this._composes.push(moduleName);
-    }
+    this._composes.add(moduleName);
   }
 
-  getDescription(): string {
-    return this._description;
+  set(key: string, value: any) {
+    this._data.set(key, value);
   }
 
-  setDescription(description: string): void {
-    this._description = description;
+  get(key: string) {
+    return this._data.get(key);
   }
 
   getPropDescriptor(propName: string): PropDescriptor {
-    var propDescriptor = this._props[propName];
+    var propDescriptor = this._props.get(propName);
     if (!propDescriptor) {
-      propDescriptor = this._props[propName] = {};
+      this._props.set(propName, propDescriptor = {});
     }
     return propDescriptor;
   }
 
   toObject(): Object {
-    var obj = {
-      description: this._description,
-      props: this._props,
-    };
+    var obj = {};
 
-    if (this._composes.length) {
-      obj.composes = this._composes;
+    for (var [key, value] of this._data) {
+      obj[key] = value;
+    }
+
+    if (this._props.size > 0) {
+      obj.props = {};
+      for (var [name, descriptor] of this._props) {
+        obj.props[name] = descriptor;
+      }
+    }
+
+    if (this._composes.size > 0) {
+      obj.composes = Array.from(this._composes);
     }
     return obj;
   }

@@ -53,5 +53,5 @@ export default function componentDocblockHandler(
       description = getDocblock(programPath);
     }
   }
-  documentation.setDescription(description || '');
+  documentation.set('description', description || '');
 }

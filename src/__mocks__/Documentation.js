@@ -10,7 +10,6 @@
 
 function Documentation() {
   return {
-    description: '',
     composes: [],
     descriptors: {},
     getPropDescriptor(name) {
@@ -19,8 +18,8 @@ function Documentation() {
     addComposes(name) {
       this.composes.push(name);
     },
-    setDescription(descr) {
-      this.description = descr;
+    set(key, value) {
+      this[key] = value;
     },
   };
 }

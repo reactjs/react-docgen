@@ -46,7 +46,6 @@ describe('main', () => {
       ]);
       expect(docs).toEqual({
         description: 'Example component description',
-        props: {},
       });
     });
   }

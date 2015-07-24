@@ -23,8 +23,8 @@ type PropDescriptor = {
 
 declare class Documentation {
   addComposes(moduleName: string): void;
-  getDescription(): string;
-  setDescription(description: string): void;
+  get(key: string): any;
+  set(key: string, value: any): void;
   getPropDescriptor(propName: string): PropDescriptor;
   toObject(): Object;
 }
