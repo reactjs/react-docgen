@@ -8,13 +8,14 @@
  *
  */
 
-/*global jest, describe, pit, expect, afterEach*/
+/*global jasmine, jest, describe, pit, expect, afterEach*/
 
-"use strict";
+// Increase default timeout (5000ms) for Travis
+jasmine.getEnv().defaultTimeoutInterval = 10000;
 
 jest.autoMockOff();
 
-var child_process = require('child_process');
+var child_process = require('child_process'); // eslint-disable-line camelcase
 var fs = require('fs');
 var path = require('path');
 var rimraf = require('rimraf');
@@ -23,7 +24,7 @@ require('es6-promise').polyfill();
 
 function run(args, stdin) {
   return new Promise(resolve => {
-    var docgen = child_process.spawn(
+    var docgen = child_process.spawn( // eslint-disable-line camelcase
       path.join(__dirname, '../react-docgen.js'),
       args
     );
@@ -68,7 +69,7 @@ describe('react-docgen CLI', () => {
       suffix = 'js';
     }
 
-    var componentPath = path.join(dir,  'Component.' + suffix);
+    var componentPath = path.join(dir, 'Component.' + suffix);
     var componentFile = fs.openSync(componentPath, 'w');
     fs.writeSync(componentFile, component.toString());
     fs.closeSync(componentFile);
@@ -110,7 +111,7 @@ describe('react-docgen CLI', () => {
   });
 
   pit('reads directories provided as command line arguments', () => {
-    var tempDir = createTempfiles();
+    tempDir = createTempfiles();
     return run([tempDir]).then(([stdout, stderr]) => {
       expect(stdout).toContain('Component');
       expect(stderr).toContain('NoComponent');
@@ -118,7 +119,7 @@ describe('react-docgen CLI', () => {
   });
 
   pit('considers js and jsx by default', () => {
-    var tempDir = createTempfiles();
+    tempDir = createTempfiles();
     createTempfiles('jsx');
     createTempfiles('foo');
     return run([tempDir]).then(([stdout, stderr]) => {
@@ -171,7 +172,7 @@ describe('react-docgen CLI', () => {
 
     return Promise.all([
         run(['--ignore=foo', tempDir]).then(verify),
-        run(['-i', 'foo', tempDir]).then(verify)
+        run(['-i', 'foo', tempDir]).then(verify),
     ]);
   });
 
@@ -193,14 +194,14 @@ describe('react-docgen CLI', () => {
     var outFile = temp.openSync();
     createTempfiles();
 
-    var verify = ([stdout, stderr]) => {
+    var verify = ([stdout]) => {
       expect(fs.readFileSync(outFile.path)).not.toBe('');
       expect(stdout).toBe('');
     };
 
     return Promise.all([
       run(['--out=' + outFile.path, tempDir]).then(verify),
-      run(['-o',  outFile.path, tempDir]).then(verify),
+      run(['-o', outFile.path, tempDir]).then(verify),
     ]);
   });
 
