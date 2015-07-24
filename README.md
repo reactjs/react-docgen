@@ -1,10 +1,10 @@
 # react-docgen [![Build Status](https://travis-ci.org/reactjs/react-docgen.svg?branch=master)](https://travis-ci.org/reactjs/react-docgen)
 
-`react-docgen` is a CLI and toolbox to help extracting information from React components, and generate documentation from it.
+`react-docgen` is a CLI and toolbox to help extracting information from [React][] components, and generate documentation from it.
 
-It uses [recast][] to parse the source into an AST and provides methods to process this AST to extract the desired information. The output / return value is a JSON blob / JavaScript object.
+It uses [recast][] and [babylon][] to parse the source into an AST and provides methods to process this AST to extract the desired information. The output / return value is a JSON blob / JavaScript object.
 
-It provides a default implementation for React components defined via `React.createClass`. These component definitions must follow certain guidelines in order to be analyzable (see below for more info).
+It provides a default implementation for React components defined via `React.createClass` or [ES2015 class definitions][classes]. These component definitions must follow certain guidelines in order to be analyzable (see below for more info).
 
 ## Install
 
@@ -36,7 +36,7 @@ Extract meta information from React components.
 If a directory is passed, it is recursively traversed.
 ```
 
-By default, `react-docgen` will look for the exported component created through `React.createClass` in each file. Have a look below for how to customize this behavior.
+By default, `react-docgen` will look for the exported component created through `React.createClass` or a class definition in each file. Have a look below for how to customize this behavior.
 
 Have a look at `example/` for an example of how to use the result to generate
 a markdown version of the documentation.
@@ -50,7 +50,7 @@ var reactDocs = require('react-docgen');
 var componentInfo = reactDocs.parse(src);
 ```
 
-As with the CLI, this will look for the exported component created through `React.createClass` in the provided source. The whole process of analyzing the source code is separated into two parts:
+As with the CLI, this will look for the exported component created through `React.createClass` or a class definition in the provided source. The whole process of analyzing the source code is separated into two parts:
 
 - Locating/finding the nodes in the AST which define the component
 - Extracting information from those nodes
@@ -68,32 +68,39 @@ As with the CLI, this will look for the exported component created through `Reac
 
 #### resolver
 
-The resolver's task is to extract those parts from the source code which the handlers can analyze. For example, the `findExportedReactCreateClassCall` resolver inspects the AST to find
+The resolver's task is to extract those parts from the source code which the handlers can analyze. For example, the `findExportedComponentDefinition` resolver inspects the AST to find
 
 ```js
 var Component = React.createClass(<def>);
 module.exports = Component;
+
+// or
+
+class Component extends React.Component {
+  // ...
+}
+module.exports = Component;
 ```
 
-and returns the ObjectExpression to which `<def>` resolves.
+and returns the ObjectExpression to which `<def>` resolves to, or the class declaration itself.
 
-`findAllReactCreateClassCalls` works similarly, but simply finds all `React.createClass` calls, not only the one that creates the exported component.
+`findAllComponentDefinitions` works similarly, but finds *all* `React.createClass` calls and class definitions, not only the one that is exported.
 
- This makes it easy, together with the utility methods created to analyze the AST, to introduce new or custom resolver methods. For example, a resolver could look for plain ObjectExpressions with a `render` method or `class Component extends React.Component` instead (**note:** a default resolver for `class` based react components is planned).
- 
+This makes it easy, together with the utility methods created to analyze the AST, to introduce new or custom resolver methods. For example, a resolver could look for plain ObjectExpressions with a `render` method.
+
 #### handlers
 
 Handlers do the actual work and extract the desired information from the result the resolver returned. Like the resolver, they try to delegate as much work as possible to the reusable utility functions.
 
-For example, while the `propTypesHandler` expects the prop types definition to be an ObjectExpression and be located inside an ObjectExpression under the property name `propTypes`, most of the work is actually performed by the `getPropType` utility function.
+For example, while the `propTypesHandler` expects the prop types definition to be an ObjectExpression and be available as `propTypes` in the component definition, most of the work is actually performed by the `getPropType` utility function.
 
 ## Guidelines for default resolvers and handlers
 
 - Modules have to export a single component, and only that component is
   analyzed.
-- The component definition must be an object literal.
-- `propTypes` must be an object literal or resolve to an object literal in the
-  same file.
+- When using `React.createClass`, the component definition (the value passed to it) must resolve to an object literal.
+- When using classes, the class must either `extend React.Component` *or* define a `render()` method.
+- `propTypes` must be an object literal or resolve to an object literal in the same file.
 - The `return` statement in `getDefaultProps` must contain an object literal.
 
 ## Example
@@ -192,8 +199,8 @@ The structure of the JSON blob / JavaScript object is as follows:
 
 ```
 {
-  "description": string
-  "props": {
+  ["description": string,]
+  ["props": {
     "<propName>": {
       "type": {
         "name": "<typeName>",
@@ -208,7 +215,7 @@ The structure of the JSON blob / JavaScript object is as follows:
       }]
     },
     ...
-  },
+  },]
   ["composes": <componentNames>]
 }
 ```
@@ -219,4 +226,7 @@ The structure of the JSON blob / JavaScript object is as follows:
 - `<typeValue>`: Some types accept parameters which define the type in more detail (such as `arrayOf`, `instanceOf`, `oneOf`, etc). Those are stored in `<typeValue>`. The data type of `<typeValue>` depends on the type definition.
 
 
+[react]: http://facebook.github.io/react/
 [recast]: https://github.com/benjamn/recast
+[babylon]: https://github.com/babel/babel/tree/master/packages/babylon
+[classes]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes
