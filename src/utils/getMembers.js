@@ -38,7 +38,7 @@ var {types: {namedTypes: types}} = recast;
  *   {path: NodePath<42>, arguments: null, computed: false}
  * ]
  */
-export default function getMembers(path: NodePath): Array<MemberExpression> {
+export default function getMembers(path: NodePath): Array<MemberDescriptor> {
   var result = [];
   var argumentsPath = null;
   loop: while(true) { // eslint-disable-line no-constant-condition
@@ -62,5 +62,3 @@ export default function getMembers(path: NodePath): Array<MemberExpression> {
   }
   return result.reverse();
 }
-
-module.exports = getMembers;

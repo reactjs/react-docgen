@@ -18,7 +18,7 @@ var {types: {namedTypes: types}} = recast;
 export default function getClassMemberValuePath(
   classDefinition: NodePath,
   memberName: string
-) {
+): ?NodePath {
   // Fortunately it seems like that all members of a class body, be it
   // ClassProperty or MethodDefinition, have the same structure: They have a
   // "key" and a "value"

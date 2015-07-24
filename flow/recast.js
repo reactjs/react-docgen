@@ -8,6 +8,8 @@
  *
  */
 
+/*eslint no-unused-vars: 0*/
+
 /**
  * A minimal set of declarations to make flow work with the recast API.
  */
@@ -16,17 +18,21 @@ type ASTNode = Object;
 
 declare class Scope {
   lookup(name: string): ?Scope;
-  getBindings(): Object<string, Array<NodePath>>;
+  getBindings(): {[key: string]: NodePath};
+  node: NodePath;
 }
 
 declare class NodePath {
+  value: (ASTNode|Array<ASTNode>);
   node: ASTNode;
   parent: NodePath;
+  parentPath: NodePath;
   scope: Scope;
 
-  get(...x: (string|number)): NodePath;
-  each(f: (p: NodePath) => void): void;
+  get(...x: Array<string|number>): NodePath;
+  each(f: (p: NodePath) => any): any;
   map<T>(f: (p: NodePath) => T): Array<T>;
+  filter(f: (p: NodePath) => bool): Array<NodePath>;
 }
 
 type Recast = {

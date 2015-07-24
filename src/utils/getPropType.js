@@ -128,12 +128,14 @@ export default function getPropType(path: NodePath): PropTypeDescriptor {
     } else if (types.Identifier.check(node) && !member.computed) {
       name = node.name;
     }
-    if (simplePropTypes.hasOwnProperty(name)) {
-      descriptor = {name};
-      return true;
-    } else if (propTypes.hasOwnProperty(name) && member.argumentsPath) {
-      descriptor = propTypes[name](member.argumentsPath.get(0));
-      return true;
+    if (name) {
+      if (simplePropTypes.hasOwnProperty(name)) {
+        descriptor = {name};
+        return true;
+      } else if (propTypes.hasOwnProperty(name) && member.argumentsPath) {
+        descriptor = propTypes[name](member.argumentsPath.get(0));
+        return true;
+      }
     }
   });
   if (!descriptor) {

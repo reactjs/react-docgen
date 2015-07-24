@@ -15,7 +15,7 @@ import Documentation from './Documentation';
 import babylon from './babylon';
 import recast from 'recast';
 
-const ERROR_MISSING_DEFINITION = 'No suitable component definition found.';
+var ERROR_MISSING_DEFINITION = 'No suitable component definition found.';
 
 function executeHandlers(handlers, componentDefinitions) {
   return componentDefinitions.map(componentDefinition => {

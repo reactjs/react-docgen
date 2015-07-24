@@ -13,9 +13,7 @@
  * Helper functions to work with docblock comments.
  */
 
-import recast from 'recast';
-
-const DOCLET_PATTERN = /^@(\w+)(?:$|\s((?:[^](?!^@\w))*))/gmi;
+var DOCLET_PATTERN = /^@(\w+)(?:$|\s((?:[^](?!^@\w))*))/gmi;
 
 function parseDocblock(str) {
   var lines = str.split('\n');

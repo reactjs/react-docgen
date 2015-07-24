@@ -32,4 +32,4 @@ declare class Documentation {
 
 type Handler = (documentation: Documentation, path: NodePath) => void;
 type Resolver =
-  (node: ASTNode, recast: Recast) => (NodePath|Array<NodePath>|void);
+  (node: ASTNode, recast: Recast) => (?NodePath|?Array<NodePath>);

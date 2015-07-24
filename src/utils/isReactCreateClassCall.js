@@ -30,5 +30,5 @@ export default function isReactCreateClassCall(path: NodePath): boolean {
     return false;
   }
   var module = resolveToModule(path.get('callee', 'object'));
-  return module && isReactModuleName(module);
+  return Boolean(module && isReactModuleName(module));
 }

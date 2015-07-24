@@ -15,8 +15,8 @@ import parse from './parse';
 import * as resolver from './resolver';
 import * as utils from './utils';
 
-const defaultResolver = resolver.findExportedComponentDefinition;
-const defaultHandlers = [
+var defaultResolver = resolver.findExportedComponentDefinition;
+var defaultHandlers = [
   handlers.propTypeHandler,
   handlers.propDocBlockHandler,
   handlers.defaultPropsHandler,

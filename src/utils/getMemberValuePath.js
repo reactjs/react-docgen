@@ -16,12 +16,12 @@ import recast from 'recast';
 
 var {types: {namedTypes: types}} = recast;
 
-const SYNONYMS = {
+var SYNONYMS = {
   getDefaultProps: 'defaultProps',
   defaultProps: 'getDefaultProps',
 };
 
-const LOOKUP_METHOD = {
+var LOOKUP_METHOD = {
   [types.ObjectExpression.name]: getPropertyValuePath,
   [types.ClassDeclaration.name]: getClassMemberValuePath,
   [types.ClassExpression.name]: getClassMemberValuePath,

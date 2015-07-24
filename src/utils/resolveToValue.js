@@ -20,7 +20,7 @@ var {
   }
 } = recast;
 
-function buildMemberExpressionFromPattern(path: NodePath): ?Node {
+function buildMemberExpressionFromPattern(path: NodePath): ?NodePath {
   var node = path.node;
   if (types.Property.check(node)) {
     var objPath = buildMemberExpressionFromPattern(path.parent);

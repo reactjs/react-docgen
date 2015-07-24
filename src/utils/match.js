@@ -15,7 +15,7 @@
  * is simply a (nested) object literal and it is traversed to see whether node
  * contains those (nested) properties with the provided values.
  */
-export default function match(node: ASTNOde, pattern: Object): boolean {
+export default function match(node: ASTNode, pattern: Object): boolean {
   if (!node) {
     return false;
   }
