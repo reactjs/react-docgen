@@ -16,10 +16,10 @@ jest
 describe('docblock', () => {
 
   describe('getDoclets', () => {
-    var getDoclets;
+    let getDoclets;
 
     beforeEach(() => {
-      getDoclets = require('../docblock').getDoclets;
+      ({getDoclets} = require('../docblock'));
     });
 
     it('extracts single line doclets', () => {
@@ -35,6 +35,44 @@ describe('docblock', () => {
     it('extracts boolean doclets', () => {
       expect(getDoclets('@foo bar\nbaz\n@abc\n@bar baz'))
         .toEqual({foo: 'bar\nbaz', abc: true, bar: 'baz'});
+    });
+  });
+
+  describe.only('getDocblock', () => {
+    let comment = ['This is a docblock.', 'This is the second line.'];
+    let source = [
+      '/**',
+      ` * ${comment[0]}`,
+      ` * ${comment[1]}`,
+      ' */',
+      'foo;',
+    ];
+
+    let getDocblock;
+    let statement;
+
+    beforeEach(() => {
+      ({getDocblock} = require('../docblock'));
+      ({statement} = require('../../../tests/utils'));
+    });
+
+    it('gets the closest docblock of the given node', () => {
+      let node = statement(source.join('\n'));
+      expect(getDocblock(node)).toEqual(comment.join('\n'));
+    });
+
+    let terminators = [
+      '\u000A',
+      '\u000D',
+      '\u2028',
+      '\u2029',
+      '\u000D\u000A',
+    ];
+    terminators.forEach(t => {
+      it('can handle ' + escape(t) + ' as line terminator', () => {
+          let node = statement(source.join(t));
+          expect(getDocblock(node)).toEqual(comment.join('\n'));
+      });
     });
   });
 

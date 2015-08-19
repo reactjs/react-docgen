@@ -29,7 +29,7 @@
     "babylon": "~5.8.3",
     "node-dir": "^0.1.6",
     "nomnom": "^1.8.1",
-    "recast": "^0.10.17"
+    "recast": "^0.10.31"
   },
   "devDependencies": {
     "babel": "^5.6.23",
