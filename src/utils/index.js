@@ -21,7 +21,7 @@ export {default as getMemberExpressionRoot} from './getMemberExpressionRoot';
 export {default as getMembers} from './getMembers';
 export {default as getMemberValuePath} from './getMemberValuePath';
 export {default as getNameOrValue} from './getNameOrValue';
-export {default as getPropertName} from './getPropertyName';
+export {default as getPropertyName} from './getPropertyName';
 export {default as getPropertyValuePath} from './getPropertyValuePath';
 export {default as getPropType} from './getPropType';
 export {default as isExportsOrModuleAssignment} from './isExportsOrModuleAssignment';
