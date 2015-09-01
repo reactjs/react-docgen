@@ -145,4 +145,30 @@ describe('getPropType', () => {
     });
   });
 
+  it('detects descriptions on nested types in shapes', () => {
+    expect(getPropType(expression(`shape({
+      /**
+       * test1
+       */
+      foo: string,
+      /**
+       * test2
+       */
+      bar: bool
+    })`)))
+    .toEqual({
+      name: 'shape',
+      value: {
+        foo: {
+          name: 'string',
+          description: 'test1',
+        },
+        bar: {
+          name: 'bool',
+          description: 'test2',
+        },
+      },
+    });
+  });
+
 });

@@ -13,6 +13,7 @@
 /*eslint no-use-before-define: 0*/
 
 
+import {getDocblock} from '../utils/docblock';
 import getMembers from './getMembers';
 import getPropertyName from './getPropertyName';
 import printValue from './printValue';
@@ -74,8 +75,12 @@ function getPropTypeShape(argumentPath) {
   if (types.ObjectExpression.check(argumentPath.node)) {
     type.value = {};
     argumentPath.get('properties').each(function(propertyPath) {
-      type.value[getPropertyName(propertyPath)] =
-        getPropType(propertyPath.get('value'));
+      var descriptor = getPropType(propertyPath.get('value'), true);
+      var docs = getDocblock(propertyPath);
+      if (docs) {
+        descriptor.description = docs;
+      }
+      type.value[getPropertyName(propertyPath)] = descriptor;
     });
   }
 
