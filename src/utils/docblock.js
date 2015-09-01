@@ -23,6 +23,8 @@ function parseDocblock(str) {
   return lines.join('\n').trim();
 }
 
+let DOCBLOCK_HEADER = /^\*\s/;
+
 /**
  * Given a path, this function returns the closest preceding docblock if it
  * exists.
@@ -32,7 +34,7 @@ export function getDocblock(path: NodePath): ?string {
     var comments = path.node.comments.filter(function(comment) {
       return comment.leading &&
         comment.type === 'CommentBlock' &&
-        comment.value.indexOf('*\n') === 0;
+        DOCBLOCK_HEADER.test(comment.value);
     });
     if (comments.length > 0) {
       return parseDocblock(comments[comments.length - 1].value);

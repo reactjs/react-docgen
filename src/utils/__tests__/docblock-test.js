@@ -74,6 +74,15 @@ describe('docblock', () => {
           expect(getDocblock(node)).toEqual(comment.join('\n'));
       });
     });
+
+    it('supports "short" docblocks', () => {
+      let source = [ // eslint-disable-line no-shadow
+        '/** bar */',
+        'foo;',
+      ];
+      let node = statement(source.join('\n'));
+      expect(getDocblock(node)).toEqual('bar');
+    });
   });
 
 });
