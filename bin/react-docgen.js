@@ -62,6 +62,9 @@ function writeError(msg, path) {
     process.stderr.write('Error with path "' + path + '": ');
   }
   process.stderr.write(msg + '\n');
+  if (msg instanceof Error) {
+    process.stderr.write(msg.stack + '\n');
+  }
 }
 
 function exitWithError(error) {

@@ -38,7 +38,7 @@ describe('docblock', () => {
     });
   });
 
-  describe.only('getDocblock', () => {
+  describe('getDocblock', () => {
     let comment = ['This is a docblock.', 'This is the second line.'];
     let source = [
       '/**',

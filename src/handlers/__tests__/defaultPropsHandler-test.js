@@ -73,7 +73,7 @@ describe('defaultPropsHandler', () => {
   });
 
   describe('ClassDeclaration with static defaultProps', () => {
-    it.only('should find prop default values that are literals', () => {
+    it('should find prop default values that are literals', () => {
       var src = `
         class Foo {
           static defaultProps = {
@@ -100,6 +100,30 @@ describe('defaultPropsHandler', () => {
           };
       }`;
       test(parse(src).get('body', 0, 'declarations', 0, 'init'));
+    });
+  });
+
+  it('should only consider Property nodes, not e.g. spread properties', () => {
+    var src = `
+      ({
+        getDefaultProps: function() {
+          return {
+            ...Foo.bar,
+            bar: 42,
+          };
+        }
+      })
+    `;
+    let definition = parse(src).get('body', 0, 'expression');
+    expect(() => defaultPropsHandler(documentation, definition))
+      .not.toThrow();
+    expect(documentation.descriptors).toEqual({
+      bar: {
+        defaultValue: {
+          value: '42',
+          computed: false,
+        },
+      },
     });
   });
 

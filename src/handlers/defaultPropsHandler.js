@@ -68,14 +68,16 @@ export default function defaultPropsHandler(
   }
 
   if (types.ObjectExpression.check(defaultPropsPath.node)) {
-    defaultPropsPath.get('properties').each(function(propertyPath) {
-      var propDescriptor = documentation.getPropDescriptor(
-        getPropertyName(propertyPath)
-      );
-      var defaultValue = getDefaultValue(propertyPath.get('value'));
-      if (defaultValue) {
-        propDescriptor.defaultValue = defaultValue;
-      }
-    });
+    defaultPropsPath.get('properties')
+      .filter(propertyPath => types.Property.check(propertyPath.node))
+      .forEach(function(propertyPath) {
+        var propDescriptor = documentation.getPropDescriptor(
+          getPropertyName(propertyPath)
+        );
+        var defaultValue = getDefaultValue(propertyPath.get('value'));
+        if (defaultValue) {
+          propDescriptor.defaultValue = defaultValue;
+        }
+      });
   }
 }
