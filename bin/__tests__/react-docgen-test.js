@@ -20,7 +20,6 @@ var fs = require('fs');
 var path = require('path');
 var rimraf = require('rimraf');
 var temp = require('temp');
-require('es6-promise').polyfill();
 
 function run(args, stdin) {
   return new Promise(resolve => {
