@@ -12,11 +12,11 @@
 
 import type Documentation from '../Documentation';
 
-import getMembers from '../utils/getMembers';
 import getPropType from '../utils/getPropType';
 import getPropertyName from '../utils/getPropertyName';
 import getMemberValuePath from '../utils/getMemberValuePath';
 import isReactModuleName from '../utils/isReactModuleName';
+import isRequiredPropType from '../utils/isRequiredPropType';
 import printValue from '../utils/printValue';
 import recast from 'recast';
 import resolveToModule from '../utils/resolveToModule';
@@ -31,16 +31,6 @@ function isPropTypesExpression(path) {
     return isReactModuleName(moduleName) || moduleName === 'ReactPropTypes';
   }
   return false;
-}
-
-/**
- * Returns true of the prop is required, according to its type defintion
- */
-function isRequired(path) {
-  return getMembers(path).some(
-    member => !member.computed && member.path.node.name === 'isRequired' ||
-      member.computed && member.path.node.value === 'isRequired'
-  );
 }
 
 function amendPropTypes(documentation, path) {
@@ -58,7 +48,7 @@ function amendPropTypes(documentation, path) {
         if (type) {
           propDescriptor.type = type;
           propDescriptor.required =
-            type.name !== 'custom' && isRequired(valuePath);
+            type.name !== 'custom' && isRequiredPropType(valuePath);
         }
         break;
       case types.SpreadProperty.name:

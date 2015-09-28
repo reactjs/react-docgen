@@ -100,9 +100,11 @@ describe('getPropType', () => {
       value: {
         foo: {
           name: 'string',
+          required: false,
         },
         bar: {
           name: 'bool',
+          required: false,
         },
       },
     });
@@ -114,6 +116,7 @@ describe('getPropType', () => {
         foo: {
           name: 'custom',
           raw: 'xyz',
+          required: false,
         },
       },
     });
@@ -128,7 +131,10 @@ describe('getPropType', () => {
     expect(getPropType(propTypeExpression)).toEqual({
       name: 'shape',
       value: {
-        bar: {name: 'string'},
+        bar: {
+          name: 'string',
+          required: false,
+        },
       },
     });
   });
@@ -162,10 +168,32 @@ describe('getPropType', () => {
         foo: {
           name: 'string',
           description: 'test1',
+          required: false,
         },
         bar: {
           name: 'bool',
           description: 'test2',
+          required: false,
+        },
+      },
+    });
+  });
+
+  it('detects required notations of nested types in shapes', () => {
+    expect(getPropType(expression(`shape({
+      foo: string.isRequired,
+      bar: bool
+    })`)))
+    .toEqual({
+      name: 'shape',
+      value: {
+        foo: {
+          name: 'string',
+          required: true,
+        },
+        bar: {
+          name: 'bool',
+          required: false,
         },
       },
     });

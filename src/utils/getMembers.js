@@ -38,7 +38,10 @@ var {types: {namedTypes: types}} = recast;
  *   {path: NodePath<42>, arguments: null, computed: false}
  * ]
  */
-export default function getMembers(path: NodePath): Array<MemberDescriptor> {
+export default function getMembers(
+  path: NodePath,
+  includeRoot: bool = false
+): Array<MemberDescriptor> {
   var result = [];
   var argumentsPath = null;
   loop: while(true) { // eslint-disable-line no-constant-condition
@@ -59,6 +62,13 @@ export default function getMembers(path: NodePath): Array<MemberDescriptor> {
       default:
         break loop;
     }
+  }
+  if (includeRoot && result.length > 0) {
+    result.push({
+      path,
+      computed: false,
+      argumentsPath,
+    });
   }
   return result.reverse();
 }

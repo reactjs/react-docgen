@@ -16,6 +16,7 @@
 import {getDocblock} from '../utils/docblock';
 import getMembers from './getMembers';
 import getPropertyName from './getPropertyName';
+import isRequiredPropType from '../utils/isRequiredPropType';
 import printValue from './printValue';
 import recast from 'recast';
 import resolveToValue from './resolveToValue';
@@ -75,11 +76,12 @@ function getPropTypeShape(argumentPath) {
   if (types.ObjectExpression.check(argumentPath.node)) {
     type.value = {};
     argumentPath.get('properties').each(function(propertyPath) {
-      var descriptor = getPropType(propertyPath.get('value'), true);
+      var descriptor = getPropType(propertyPath.get('value'));
       var docs = getDocblock(propertyPath);
       if (docs) {
         descriptor.description = docs;
       }
+      descriptor.required = isRequiredPropType(propertyPath.get('value'));
       type.value[getPropertyName(propertyPath)] = descriptor;
     });
   }
@@ -124,7 +126,7 @@ var propTypes = {
  */
 export default function getPropType(path: NodePath): PropTypeDescriptor {
   var descriptor;
-  getMembers(path).some(member => {
+  getMembers(path, true).some(member => {
     var node = member.path.node;
     var name;
     if (types.Literal.check(node)) {
