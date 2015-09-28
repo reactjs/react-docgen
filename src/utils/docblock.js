@@ -30,15 +30,22 @@ let DOCBLOCK_HEADER = /^\*\s/;
  * exists.
  */
 export function getDocblock(path: NodePath): ?string {
+  var comments = [];
   if (path.node.comments) {
-    var comments = path.node.comments.filter(function(comment) {
-      return comment.leading &&
+    comments = path.node.comments.filter(
+      comment => comment.leading &&
         comment.type === 'CommentBlock' &&
-        DOCBLOCK_HEADER.test(comment.value);
-    });
-    if (comments.length > 0) {
-      return parseDocblock(comments[comments.length - 1].value);
-    }
+        DOCBLOCK_HEADER.test(comment.value)
+    );
+  } else if (path.node.leadingComments) {
+    comments = path.node.leadingComments.filter(
+      comment => comment.type === 'CommentBlock' &&
+        DOCBLOCK_HEADER.test(comment.value)
+    );
+  }
+
+  if (comments.length > 0) {
+    return parseDocblock(comments[comments.length - 1].value);
   }
   return null;
 }

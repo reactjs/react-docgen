@@ -17,6 +17,12 @@ import {getDocblock} from '../utils/docblock';
 
 var {types: {namedTypes: types}} = recast;
 
+function isClassDefinition(nodePath) {
+  var node = nodePath.node;
+  return types.ClassDeclaration.check(node) ||
+    types.ClassExpression.check(node);
+}
+
 /**
  * Finds the nearest block comment before the component definition.
  */
@@ -26,30 +32,38 @@ export default function componentDocblockHandler(
 ) {
   var description = null;
   // Find parent statement (e.g. var Component = React.createClass(<path>);)
-  while (path && !types.Statement.check(path.node)) {
-    path = path.parent;
+  var searchPath = path;
+  while (searchPath && !types.Statement.check(searchPath.node)) {
+    searchPath = searchPath.parent;
   }
-  if (path) {
+  if (searchPath) {
     // Class declarations are statements but can be part of default
     // export declarations
-    if (types.ClassDeclaration.check(path.node) &&
-        types.ExportDefaultDeclaration.check(path.parentPath.node)) {
-      path = path.parentPath;
+    if (types.ClassDeclaration.check(searchPath.node) &&
+        types.ExportDefaultDeclaration.check(searchPath.parentPath.node)) {
+      searchPath = searchPath.parentPath;
     }
     // If the parent is an export statement, we have to traverse one more up
-    if (types.ExportNamedDeclaration.check(path.parentPath.node)) {
-      path = path.parentPath;
+    if (types.ExportNamedDeclaration.check(searchPath.parentPath.node)) {
+      searchPath = searchPath.parentPath;
     }
-    description = getDocblock(path);
+    description = getDocblock(searchPath);
+  }
+  if (description == null && isClassDefinition(path)) {
+    // If we have a class declaration or expression, then the comment might be
+    // attached to the first decorator instead.
+    if (path.node.decorators && path.node.decorators.length > 0) {
+      description = getDocblock(path.get('decorators', 0));
+    }
   }
   if (description == null) {
     // If this is the first statement in the module body, the comment is attached
     // to the program node
-    var programPath = path;
+    var programPath = searchPath;
     while (programPath && !types.Program.check(programPath.node)) {
       programPath = programPath.parent;
     }
-    if (programPath.get('body', 0) === path) {
+    if (programPath.get('body', 0) === searchPath) {
       description = getDocblock(programPath);
     }
   }

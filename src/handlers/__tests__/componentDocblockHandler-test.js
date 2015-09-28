@@ -35,6 +35,8 @@ describe('componentDocblockHandler', () => {
   function test(definitionSrc, parse) { // eslint-disable-line no-shadow
     it('finds docblocks for component definitions', () => {
       var definition = parse(`
+        import something from 'somewhere';
+
         /**
          * Component description
          */
@@ -47,6 +49,8 @@ describe('componentDocblockHandler', () => {
 
     it('ignores other types of comments', () => {
       var definition = parse(`
+        import something from 'somewhere';
+
         /*
          * This is not a docblock',
          */
@@ -67,6 +71,8 @@ describe('componentDocblockHandler', () => {
 
     it('only considers the docblock directly above the definition', () => {
       var definition = parse(`
+        import something from 'somewhere';
+
         /**
          * This is the wrong docblock
          */
@@ -79,6 +85,47 @@ describe('componentDocblockHandler', () => {
     });
   }
 
+  /**
+   * Decorates can only be assigned to class and therefore only make sense for
+   * class declarations and export declarations.
+   */
+  function testDecorators(definitionSrc, parse) { // eslint-disable-line no-shadow
+    describe('decorators', () => {
+      it('uses the docblock above the decorator if it\'s the only one', () => {
+        var definition = parse(`
+          import something from 'somewhere';
+          /**
+           * Component description
+           */
+          @Decorator1
+          @Decorator2
+          ${definitionSrc}
+        `);
+
+        componentDocblockHandler(documentation, definition);
+        expect(documentation.description).toBe('Component description');
+      });
+
+      it('uses the component docblock if present', () => {
+        var definition = parse(`
+          import something from 'somewhere';
+          /**
+           * Decorator description
+           */
+          @Decorator1
+          @Decorator2
+          /**
+           * Component description
+           */
+          ${definitionSrc}
+        `);
+
+        componentDocblockHandler(documentation, definition);
+        expect(documentation.description).toBe('Component description');
+      });
+    });
+  }
+
   describe('React.createClass', () => {
     test(
       'var Component = React.createClass({})',
@@ -88,6 +135,10 @@ describe('componentDocblockHandler', () => {
 
   describe('ClassDeclaration', () => {
     test(
+      'class Component {}',
+      src => lastStatement(src)
+    );
+    testDecorators(
       'class Component {}',
       src => lastStatement(src)
     );
@@ -114,10 +165,18 @@ describe('componentDocblockHandler', () => {
         'export default class Component {}',
         src => lastStatement(src).get('declaration')
       );
+      testDecorators(
+        'export default class Component {}',
+        src => lastStatement(src).get('declaration')
+      );
     });
 
     describe('Default class expression export', () => {
       test(
+        'export default class {}',
+        src => lastStatement(src).get('declaration')
+      );
+      testDecorators(
         'export default class {}',
         src => lastStatement(src).get('declaration')
       );
@@ -138,6 +197,10 @@ describe('componentDocblockHandler', () => {
 
     describe('Named class declaration export', () => {
       test(
+        'export class Component {}',
+        src => lastStatement(src).get('declaration')
+      );
+      testDecorators(
         'export class Component {}',
         src => lastStatement(src).get('declaration')
       );
