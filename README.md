@@ -16,7 +16,7 @@ npm install -g react-docgen
 
 ## CLI
 
-Installing the module adds a `react-docgen` executable which allows you do convert
+Installing the module adds a `react-docgen` executable which allows you to convert
 a single file, multiple files or an input stream. We are trying to make the
 executable as versatile as possible so that it can be integrated into many
 workflows.
@@ -63,8 +63,7 @@ As with the CLI, this will look for the exported component created through `Reac
 | -------------- | ------ | --------------- |
 | source       | string | The source text |
 | resolver     | function | A function of the form `(ast: ASTNode, recast: Object) => (NodePath|Array<NodePath>)`. Given an AST and a reference to recast, it returns an (array of) NodePath which represents the component definition. |
-| handlers    | Array\<function\> | An array of functions of the form `(documentation: Documentation, definition: NodePath) => void`. Each function is called with a `Documentation` object and a reference to the component definition as returned by `resolver`. Handlers extract relevant information from the definition and augment `documentation`.
-
+| handlers    | Array\<function\> | An array of functions of the form `(documentation: Documentation, definition: NodePath) => void`. Each function is called with a `Documentation` object and a reference to the component definition as returned by `resolver`. Handlers extract relevant information from the definition and augment `documentation`. |
 
 #### resolver
 
@@ -96,8 +95,7 @@ For example, while the `propTypesHandler` expects the prop types definition to b
 
 ## Guidelines for default resolvers and handlers
 
-- Modules have to export a single component, and only that component is
-  analyzed.
+- Modules have to export a single component, and only that component is analyzed.
 - When using `React.createClass`, the component definition (the value passed to it) must resolve to an object literal.
 - When using classes, the class must either `extend React.Component` *or* define a `render()` method.
 - `propTypes` must be an object literal or resolve to an object literal in the same file.
