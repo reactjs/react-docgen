@@ -12,6 +12,7 @@
 import isExportsOrModuleAssignment from '../utils/isExportsOrModuleAssignment';
 import isReactComponentClass from '../utils/isReactComponentClass';
 import isReactCreateClassCall from '../utils/isReactCreateClassCall';
+import isStatelessComponent from '../utils/isStatelessComponent';
 import normalizeClassDefinition from '../utils/normalizeClassDefinition';
 import resolveExportDeclaration from '../utils/resolveExportDeclaration';
 import resolveToValue from '../utils/resolveToValue';
@@ -24,7 +25,7 @@ function ignore() {
 }
 
 function isComponentDefinition(path) {
-  return isReactCreateClassCall(path) || isReactComponentClass(path);
+  return isReactCreateClassCall(path) || isReactComponentClass(path) || isStatelessComponent(path);
 }
 
 function resolveDefinition(definition, types) {
@@ -36,6 +37,8 @@ function resolveDefinition(definition, types) {
     }
   } else if(isReactComponentClass(definition)) {
     normalizeClassDefinition(definition);
+    return definition;
+  } else if (isStatelessComponent(definition)) {
     return definition;
   }
   return null;
@@ -51,7 +54,7 @@ function resolveDefinition(definition, types) {
  * If a definition is part of the following statements, it is considered to be
  * exported:
  *
- * modules.exports = Defintion;
+ * modules.exports = Definition;
  * exports.foo = Definition;
  * export default Definition;
  * export var Definition = ...;

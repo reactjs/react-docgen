@@ -149,4 +149,60 @@ describe('findAllComponentDefinitions', () => {
     });
   });
 
+  describe('stateless components', () => {
+
+    it('finds stateless components', () => {
+      var source = `
+        import React from 'React';
+        let ComponentA = () => <div />;
+        function ComponentB () { return React.createElement('div', null); }
+        const ComponentC = function(props) { return <div>{props.children}</div>; };
+        var Obj = {
+          component() { if (true) { return <div />; } }
+        };
+        const ComponentD = function(props) {
+          var result = <div>{props.children}</div>;
+          return result;
+        };
+        const ComponentE = function(props) {
+          var result = () => <div>{props.children}</div>;
+          return result();
+        };
+        const ComponentF = function(props) {
+          var helpers = {
+            comp() { return <div>{props.children}</div>; }
+          };
+          return helpers.comp();
+        };
+      `;
+
+      var result = parse(source);
+      expect(Array.isArray(result)).toBe(true);
+      expect(result.length).toBe(7);
+    });
+
+    it('finds React.createElement, independent of the var name', () => {
+      var source = `
+        import AlphaBetters from 'react';
+        function ComponentA () { return AlphaBetters.createElement('div', null); }
+        function ComponentB () { return 7; }
+      `;
+
+      var result = parse(source);
+      expect(Array.isArray(result)).toBe(true);
+      expect(result.length).toBe(1);
+    });
+
+    it('does not process X.createClass of other modules', () => {
+      var source = `
+        import R from 'FakeReact';
+        const ComponentA = () => R.createElement('div', null);
+      `;
+
+      var result = parse(source);
+      expect(Array.isArray(result)).toBe(true);
+      expect(result.length).toBe(0);
+    });
+  });
+
 });

@@ -13,10 +13,11 @@
 jest.autoMockOff();
 
 describe('main', () => {
-  var docgen;
+  var docgen, ERROR_MISSING_DEFINITION;
 
   beforeEach(() => {
     docgen = require('../main');
+    ({ERROR_MISSING_DEFINITION} = require('../parse'));
   });
 
   function test(source) {
@@ -99,4 +100,114 @@ describe('main', () => {
     `);
   });
 
+  describe('Stateless Component definition: ArrowFunctionExpression', () => {
+    test(`
+      import React, {PropTypes} from "React";
+
+      /**
+        * Example component description
+        */
+      let Component = props => <div />;
+      Component.displayName = 'ABC';
+      Component.defaultProps = {
+          foo: true
+      };
+
+      Component.propTypes = {
+        /**
+        * Example prop description
+        */
+        foo: PropTypes.bool
+      };
+
+      export default Component;
+    `);
+  });
+
+  describe('Stateless Component definition: FunctionDeclaration', () => {
+    test(`
+      import React, {PropTypes} from "React";
+
+      /**
+      * Example component description
+      */
+      function Component (props) {
+        return <div />;
+      }
+
+      Component.displayName = 'ABC';
+      Component.defaultProps = {
+          foo: true
+      };
+
+      Component.propTypes = {
+        /**
+        * Example prop description
+        */
+        foo: PropTypes.bool
+      };
+
+      export default Component;
+    `);
+  });
+
+  describe('Stateless Component definition: FunctionExpression', () => {
+    test(`
+      import React, {PropTypes} from "React";
+
+      /**
+      * Example component description
+      */
+      let Component = function(props) {
+        return React.createElement('div', null);
+      }
+
+      Component.displayName = 'ABC';
+      Component.defaultProps = {
+          foo: true
+      };
+
+      Component.propTypes = {
+        /**
+        * Example prop description
+        */
+        foo: PropTypes.bool
+      };
+
+      export default Component;
+    `);
+  });
+
+  describe('Stateless Component definition', () => {
+    it('is not so greedy', () => {
+      const source = `
+        import React, {PropTypes} from "React";
+
+        /**
+        * Example component description
+        */
+        let NotAComponent = function(props) {
+          let HiddenComponent = () => React.createElement('div', null);
+
+          return 7;
+        }
+
+        NotAComponent.displayName = 'ABC';
+        NotAComponent.defaultProps = {
+            foo: true
+        };
+
+        NotAComponent.propTypes = {
+          /**
+          * Example prop description
+          */
+          foo: PropTypes.bool
+        };
+
+        export default NotAComponent;
+      `;
+
+      expect(() => docgen.parse(source)).toThrow(ERROR_MISSING_DEFINITION);
+    });
+  });
 });
