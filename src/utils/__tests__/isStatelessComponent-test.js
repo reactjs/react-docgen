@@ -66,6 +66,29 @@ describe('isStatelessComponent', () => {
     });
   });
 
+  describe('Stateless Function Components inside module pattern', () => {
+    it('', () => {
+      var def = parse(`
+        var Foo = {
+          Bar() { return <div />; },
+          Baz: function() { return React.createElement('div'); },
+          ['hello']: function() { return React.createElement('div'); },
+          render() { return 7; }
+        }
+      `).get('body', 0).get('declarations', 0).get('init');
+
+      var bar = def.get('properties', 0);
+      var baz = def.get('properties', 1);
+      var hello = def.get('properties', 2);
+      var render = def.get('properties', 3);
+
+      expect(isStatelessComponent(bar)).toBe(true);
+      expect(isStatelessComponent(baz)).toBe(true);
+      expect(isStatelessComponent(hello)).toBe(true);
+      expect(isStatelessComponent(render)).toBe(false);
+    });
+  });
+
   describe('is not overzealous', () => {
     it('does not accept declarations with a render method', () => {
       var def = statement(`

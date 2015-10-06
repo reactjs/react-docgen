@@ -20,6 +20,7 @@ import resolveToValue from './resolveToValue';
 var {types: {namedTypes: types}} = recast;
 
 const validPossibleStatelessComponentTypes = [
+  'Property',
   'FunctionDeclaration',
   'FunctionExpression',
   // TODO: maybe include these variants for safety:
@@ -56,6 +57,12 @@ export default function isStatelessComponent(
 
   if (validPossibleStatelessComponentTypes.indexOf(node.type) === -1) {
     return false;
+  }
+
+  if (node.type === 'Property') {
+    if (isReactCreateClassCall(path.parent) || isReactComponentClass(path.parent)) {
+      return false;
+    }
   }
 
   if (containsJSXElementOrReactCreateElementCall(node)) {
