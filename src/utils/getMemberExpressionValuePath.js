@@ -33,9 +33,15 @@ function resolveName(path) {
     return path.get('id', 'name').value
   }
 
-  if (types.FunctionExpression.check(path.node)) {
-    console.log('TODO: handle FunctionExpression');
-    // return path.get('id', 'name').value
+  if (
+    types.FunctionExpression.check(path.node) ||
+    types.ArrowFunctionExpression.check(path.node)
+  ) {
+    if (!types.VariableDeclarator.check(path.parent.node)) {
+      return;
+    }
+
+    return path.parent.get('id', 'name').value;
   }
 
   throw new TypeError(
@@ -57,13 +63,14 @@ export default function getMemberExpressionValuePath(
   variableDefinition: NodePath,
   memberName: string
 ): ?NodePath {
-  if (typeof memberName === 'undefined') return;
-
-
   var localName = resolveName(variableDefinition);
   var program = getRoot(variableDefinition);
 
-  if (!localName) return;
+  if (!localName) {
+    // likely an immediately exported and therefore nameless/anonymous node
+    // passed in
+    return;
+  }
 
   var result;
   recast.visit(program, {

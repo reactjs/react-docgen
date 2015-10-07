@@ -184,6 +184,16 @@ describe('propTypeHandler', () => {
     );
   });
 
+  describe('stateless component', () => {
+    test(
+      propTypesSrc => template(`
+        var Component = (props) => <div />;
+        Component.propTypes = ${propTypesSrc};
+      `),
+      src => statement(src)
+    );
+  });
+
   it('does not error if propTypes cannot be found', () => {
     var definition = expression('{fooBar: 42}');
     expect(() => propTypeHandler(documentation, definition))
