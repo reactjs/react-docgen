@@ -13,10 +13,11 @@
 jest.autoMockOff();
 
 describe('main', () => {
-  var docgen;
+  var docgen, ERROR_MISSING_DEFINITION;
 
   beforeEach(() => {
     docgen = require('../main');
+    ({ERROR_MISSING_DEFINITION} = require('../parse'));
   });
 
   function test(source) {
@@ -175,5 +176,38 @@ describe('main', () => {
 
       export default Component;
     `);
+  });
+
+  describe('Stateless Component definition', () => {
+    it('is not so greedy', () => {
+      const source = `
+        import React, {PropTypes} from "React";
+
+        /**
+        * Example component description
+        */
+        let NotAComponent = function(props) {
+          let HiddenComponent = () => React.createElement('div', null);
+
+          return 7;
+        }
+
+        NotAComponent.displayName = 'ABC';
+        NotAComponent.defaultProps = {
+            foo: true
+        };
+
+        NotAComponent.propTypes = {
+          /**
+          * Example prop description
+          */
+          foo: PropTypes.bool
+        };
+
+        export default NotAComponent;
+      `;
+
+      expect(() => docgen.parse(source)).toThrow(ERROR_MISSING_DEFINITION);
+    });
   });
 });

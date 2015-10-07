@@ -24,29 +24,60 @@ const validPossibleStatelessComponentTypes = [
   'Property',
   'FunctionDeclaration',
   'FunctionExpression',
-  // TODO: maybe include these variants for safety:
-  // https://github.com/benjamn/ast-types/blob/master/def/es6.js#L31
-  // https://github.com/estree/estree/issues/2
-  // 'ArrowExpression', 'ArrowFunction'
   'ArrowFunctionExpression'
 ];
 
+
+function isJSXElementOrReactCreateElement(path) {
+  return (
+    path.node.type === 'JSXElement' ||
+    (path.node.type === 'CallExpression' && isReactCreateElementCall(path))
+  );
+}
+
 function containsJSXElementOrReactCreateElementCall(path) {
   var visited = false;
-  recast.visit(path, {
-    visitJSXElement(path) {
-      visited = true;
-      return false;
-    },
 
-    visitCallExpression(path) {
-      if (isReactCreateElementCall(path)) {
+  // early exit for ArrowFunctionExpressions
+  if (isJSXElementOrReactCreateElement(path.get('body'))) {
+    return true;
+  }
+
+  function isSameBlockScope(p) {
+    var block = p;
+    var passedAnIf = false;
+    do {
+      block = block.parent;
+      if (/^If|^Else/.test(block.parent.node.type)) {
+        passedAnIf = true;
+        block = block.parent;
+      }
+    } while (
+      !types.BlockStatement.check(block.node) &&
+      /Function|Property/.test(block.parent.parent.node.type) &&
+      !/^If|^Else/.test(block.parent.node.type)
+    );
+
+    // special case properties
+    if (types.Property.check(path.node)) {
+      return block.node === path.get('value', 'body').node;
+    }
+
+    return block.node === path.get('body').node;
+  }
+
+  recast.visit(path, {
+    visitReturnStatement(returnPath) {
+      var type = returnPath.get('argument').node.type;
+      if (
+        isJSXElementOrReactCreateElement(returnPath.get('argument')) &&
+        isSameBlockScope(returnPath)
+      ) {
         visited = true;
         return false;
       }
-
-      this.traverse(path);
-    }
+      this.traverse(returnPath);
+    },
   });
 
   return visited;

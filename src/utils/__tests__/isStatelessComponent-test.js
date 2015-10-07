@@ -128,6 +128,22 @@ describe('isStatelessComponent', () => {
           }
         });
       `);
+
+      expect(isStatelessComponent(def)).toBe(false);
+    });
+
+    it('does not mark containing functions as StatelessComponents', () => {
+      var def = parse(`
+        var React = require('react');
+        function Foo (props) {
+          function Bar() {
+            return React.createElement("div", props);
+          }
+
+          return {Bar}
+        }
+      `).get('body', 1);
+
       expect(isStatelessComponent(def)).toBe(false);
     });
   });
