@@ -10,6 +10,7 @@
  *
  */
 
+import getMemberExpressionValuePath from './getMemberExpressionValuePath';
 import getClassMemberValuePath from './getClassMemberValuePath';
 import getPropertyValuePath from './getPropertyValuePath';
 import recast from 'recast';
@@ -22,6 +23,7 @@ var SYNONYMS = {
 };
 
 var LOOKUP_METHOD = {
+  [types.VariableDeclaration.name]: getMemberExpressionValuePath,
   [types.ObjectExpression.name]: getPropertyValuePath,
   [types.ClassDeclaration.name]: getClassMemberValuePath,
   [types.ClassExpression.name]: getClassMemberValuePath,
@@ -30,7 +32,8 @@ var LOOKUP_METHOD = {
 function isSupportedDefinitionType({node}) {
   return types.ObjectExpression.check(node) ||
     types.ClassDeclaration.check(node) ||
-    types.ClassExpression.check(node);
+    types.ClassExpression.check(node) ||
+    types.VariableDeclaration.check(node);
 }
 
 /**
@@ -53,7 +56,8 @@ export default function getMemberValuePath(
   if (!isSupportedDefinitionType(componentDefinition)) {
     throw new TypeError(
       'Got unsupported definition type. Definition must either be an ' +
-      'ObjectExpression, ClassDeclaration or ClassExpression. Got "' +
+      'ObjectExpression, ClassDeclaration, ClassExpression, or a ' +
+      'VariableDeclaration. Got "' +
       componentDefinition.node.type + '" instead.'
     );
   }
