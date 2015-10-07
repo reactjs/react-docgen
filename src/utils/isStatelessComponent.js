@@ -12,6 +12,7 @@
 import isReactModuleName from './isReactModuleName';
 import isReactComponentClass from './isReactComponentClass';
 import isReactCreateClassCall from './isReactCreateClassCall';
+import isReactCreateElementCall from './isReactCreateElementCall';
 import match from './match';
 import recast from 'recast';
 import resolveToModule from './resolveToModule';
@@ -30,19 +31,23 @@ const validPossibleStatelessComponentTypes = [
   'ArrowFunctionExpression'
 ];
 
-function containsJSXElementOrReactCreateElementCall(node) {
+function containsJSXElementOrReactCreateElementCall(path) {
   var visited = false;
-  recast.visit(node, {
+  recast.visit(path, {
     visitJSXElement(path) {
       visited = true;
-      this.traverse(path);
+      return false;
     },
 
     visitCallExpression(path) {
-      visited = true;
+      if (isReactCreateElementCall(path)) {
+        visited = true;
+        return false;
+      }
+
       this.traverse(path);
     }
-  })
+  });
 
   return visited;
 }
@@ -65,8 +70,7 @@ export default function isStatelessComponent(
     }
   }
 
-  if (containsJSXElementOrReactCreateElementCall(node)) {
-
+  if (containsJSXElementOrReactCreateElementCall(path)) {
     return true;
   }
 

@@ -12,6 +12,7 @@
 import isExportsOrModuleAssignment from '../utils/isExportsOrModuleAssignment';
 import isReactComponentClass from '../utils/isReactComponentClass';
 import isReactCreateClassCall from '../utils/isReactCreateClassCall';
+import isStatelessComponent from '../utils/isStatelessComponent';
 import normalizeClassDefinition from '../utils/normalizeClassDefinition';
 import resolveExportDeclaration from '../utils/resolveExportDeclaration';
 import resolveToValue from '../utils/resolveToValue';
@@ -79,7 +80,11 @@ export default function findExportedComponentDefinition(
   }
 
   recast.visit(ast, {
-    visitFunctionDeclaration: ignore,
+    visitFunctionDeclaration: function(path) {
+      if (isStatelessComponent(path)) {
+        definition = resolveDefinition(path, types);
+      }
+    },
     visitFunctionExpression: ignore,
     visitClassDeclaration: ignore,
     visitClassExpression: ignore,

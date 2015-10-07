@@ -12,6 +12,7 @@
 
 import isReactComponentClass from '../utils/isReactComponentClass';
 import isReactCreateClassCall from '../utils/isReactCreateClassCall';
+import isStatelessComponent from '../utils/isStatelessComponent';
 import normalizeClassDefinition from '../utils/normalizeClassDefinition';
 import resolveToValue from '../utils/resolveToValue';
 
@@ -34,7 +35,19 @@ export default function findAllReactCreateClassCalls(
     return false;
   }
 
+  function statelessVisitor(path) {
+    if (isStatelessComponent(path)) {
+      // TODO: normalizeStatelessDefinition to pick up propTypes
+      definitions.push(path);
+    }
+    return false;
+  }
+
   recast.visit(ast, {
+    visitFunctionDeclaration: statelessVisitor,
+    visitFunctionExpression: statelessVisitor,
+    visitProperty: statelessVisitor,
+    visitArrowFunctionExpression: statelessVisitor,
     visitClassExpression: classVisitor,
     visitClassDeclaration: classVisitor,
     visitCallExpression: function(path) {
