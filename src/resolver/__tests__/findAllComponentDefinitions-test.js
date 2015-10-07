@@ -160,11 +160,15 @@ describe('findAllComponentDefinitions', () => {
         var Obj = {
           component() { if (true) { return <div />; } }
         };
+        const ComponentD = function(props) {
+          var result = <div>{props.children}</div>;
+          return result;
+        };
       `;
 
       var result = parse(source);
       expect(Array.isArray(result)).toBe(true);
-      expect(result.length).toBe(4);
+      expect(result.length).toBe(5);
     });
 
     it('finds React.createElement, independent of the var name', () => {

@@ -68,9 +68,9 @@ function containsJSXElementOrReactCreateElementCall(path) {
 
   recast.visit(path, {
     visitReturnStatement(returnPath) {
-      var type = returnPath.get('argument').node.type;
+      var resolvedPath = resolveToValue(returnPath.get('argument'));
       if (
-        isJSXElementOrReactCreateElement(returnPath.get('argument')) &&
+        isJSXElementOrReactCreateElement(resolvedPath) &&
         isSameBlockScope(returnPath)
       ) {
         visited = true;
