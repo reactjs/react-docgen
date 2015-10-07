@@ -35,7 +35,7 @@ function isJSXElementOrReactCreateElement(path) {
   );
 }
 
-function containsJSXElementOrReactCreateElementCall(path) {
+function returnsJSXElementOrReactCreateElementCall(path) {
   var visited = false;
 
   // early exit for ArrowFunctionExpressions
@@ -68,7 +68,7 @@ function containsJSXElementOrReactCreateElementCall(path) {
 
   recast.visit(path, {
     visitReturnStatement(returnPath) {
-      var resolvedPath = resolveToValue(returnPath.get('argument'));
+      const resolvedPath = resolveToValue(returnPath.get('argument'));
       if (
         isJSXElementOrReactCreateElement(resolvedPath) &&
         isSameBlockScope(returnPath)
@@ -76,6 +76,15 @@ function containsJSXElementOrReactCreateElementCall(path) {
         visited = true;
         return false;
       }
+
+      if (resolvedPath.node.type === 'CallExpression') {
+        let calleeValue = resolveToValue(resolvedPath.get('callee'))
+        if (returnsJSXElementOrReactCreateElementCall(calleeValue)) {
+          visited = true;
+          return false;
+        }
+      }
+
       this.traverse(returnPath);
     },
   });
@@ -101,7 +110,7 @@ export default function isStatelessComponent(
     }
   }
 
-  if (containsJSXElementOrReactCreateElementCall(path)) {
+  if (returnsJSXElementOrReactCreateElementCall(path)) {
     return true;
   }
 

@@ -164,11 +164,15 @@ describe('findAllComponentDefinitions', () => {
           var result = <div>{props.children}</div>;
           return result;
         };
+        const ComponentE = function(props) {
+          var result = () => <div>{props.children}</div>;
+          return result();
+        };
       `;
 
       var result = parse(source);
       expect(Array.isArray(result)).toBe(true);
-      expect(result.length).toBe(5);
+      expect(result.length).toBe(6);
     });
 
     it('finds React.createElement, independent of the var name', () => {
