@@ -46,7 +46,6 @@ export default function findAllReactCreateClassCalls(
   recast.visit(ast, {
     visitFunctionDeclaration: statelessVisitor,
     visitFunctionExpression: statelessVisitor,
-    visitProperty: statelessVisitor,
     visitArrowFunctionExpression: statelessVisitor,
     visitClassExpression: classVisitor,
     visitClassDeclaration: classVisitor,
