@@ -99,4 +99,81 @@ describe('main', () => {
     `);
   });
 
+  describe('Stateless Component definition: ArrowFunctionExpression', () => {
+    test(`
+      import React, {PropTypes} from "React";
+
+      /**
+        * Example component description
+        */
+      let Component = props => <div />;
+      Component.displayName = 'ABC';
+      Component.defaultProps = {
+          foo: true
+      };
+
+      Component.propTypes = {
+        /**
+        * Example prop description
+        */
+        foo: PropTypes.bool
+      };
+
+      export default Component;
+    `);
+  });
+
+  describe('Stateless Component definition: FunctionDeclaration', () => {
+    test(`
+      import React, {PropTypes} from "React";
+
+      /**
+      * Example component description
+      */
+      function Component (props) {
+        return <div />;
+      }
+
+      Component.displayName = 'ABC';
+      Component.defaultProps = {
+          foo: true
+      };
+
+      Component.propTypes = {
+        /**
+        * Example prop description
+        */
+        foo: PropTypes.bool
+      };
+
+      export default Component;
+    `);
+  });
+
+  describe('Stateless Component definition: FunctionExpression', () => {
+    test(`
+      import React, {PropTypes} from "React";
+
+      /**
+      * Example component description
+      */
+      let Component = function(props) {
+        return React.createElement('div', null);
+      }
+
+      Component.displayName = 'ABC';
+      Component.defaultProps = {
+          foo: true
+      };
+
+      Component.propTypes = {
+        /**
+        * Example prop description
+        */
+        foo: PropTypes.bool
+      };
+
+      export default Component;
+    `);
+  });
 });
