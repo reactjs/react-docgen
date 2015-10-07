@@ -9,6 +9,7 @@
  * @flow
  */
 
+import getPropertyValuePath from './getPropertyValuePath';
 import isReactModuleName from './isReactModuleName';
 import isReactComponentClass from './isReactComponentClass';
 import isReactCreateClassCall from './isReactCreateClassCall';
@@ -26,7 +27,6 @@ const validPossibleStatelessComponentTypes = [
   'FunctionExpression',
   'ArrowFunctionExpression'
 ];
-
 
 function isJSXElementOrReactCreateElement(path) {
   return (
@@ -82,6 +82,20 @@ function returnsJSXElementOrReactCreateElementCall(path) {
         if (returnsJSXElementOrReactCreateElementCall(calleeValue)) {
           visited = true;
           return false;
+        }
+
+        if (calleeValue.node.type === 'MemberExpression') {
+          let resolvedValue = resolveToValue(calleeValue.get('object'));
+          if (types.ObjectExpression.check(resolvedValue.node)) {
+            var resolvedMemberExpression = getPropertyValuePath(
+              resolvedValue,
+              calleeValue.get('property').node.name
+            )
+            if (returnsJSXElementOrReactCreateElementCall(resolvedMemberExpression)) {
+              visited = true;
+              return false;
+            }
+          }
         }
       }
 
