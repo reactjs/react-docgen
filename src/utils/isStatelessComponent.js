@@ -21,6 +21,8 @@ import resolveToValue from './resolveToValue';
 
 var {types: {namedTypes: types}} = recast;
 
+const reNonLexicalBlocks = /^If|^Else|^Switch/;
+
 const validPossibleStatelessComponentTypes = [
   'Property',
   'FunctionDeclaration',
@@ -36,7 +38,7 @@ function isJSXElementOrReactCreateElement(path) {
 }
 
 function returnsJSXElementOrReactCreateElementCall(path) {
-  var visited = false;
+  let visited = false;
 
   // early exit for ArrowFunctionExpressions
   if (isJSXElementOrReactCreateElement(path.get('body'))) {
@@ -44,18 +46,17 @@ function returnsJSXElementOrReactCreateElementCall(path) {
   }
 
   function isSameBlockScope(p) {
-    var block = p;
-    var passedAnIf = false;
+    let block = p;
     do {
       block = block.parent;
-      if (/^If|^Else/.test(block.parent.node.type)) {
-        passedAnIf = true;
+      // jump over non-lexical blocks
+      if (reNonLexicalBlocks.test(block.parent.node.type)) {
         block = block.parent;
       }
     } while (
       !types.BlockStatement.check(block.node) &&
       /Function|Property/.test(block.parent.parent.node.type) &&
-      !/^If|^Else/.test(block.parent.node.type)
+      !reNonLexicalBlocks.test(block.parent.node.type)
     );
 
     // special case properties
@@ -79,22 +80,40 @@ function returnsJSXElementOrReactCreateElementCall(path) {
 
       if (resolvedPath.node.type === 'CallExpression') {
         let calleeValue = resolveToValue(resolvedPath.get('callee'))
+
         if (returnsJSXElementOrReactCreateElementCall(calleeValue)) {
           visited = true;
           return false;
         }
 
+        let resolvedValue;
+
+        let namesToResolve = [calleeValue.get('property').node.name];
+
         if (calleeValue.node.type === 'MemberExpression') {
-          let resolvedValue = resolveToValue(calleeValue.get('object'));
-          if (types.ObjectExpression.check(resolvedValue.node)) {
-            var resolvedMemberExpression = getPropertyValuePath(
-              resolvedValue,
-              calleeValue.get('property').node.name
-            )
-            if (returnsJSXElementOrReactCreateElementCall(resolvedMemberExpression)) {
-              visited = true;
-              return false;
-            }
+          if (calleeValue.get('object').node.type === 'Identifier') {
+            resolvedValue = resolveToValue(calleeValue.get('object'));
+          }
+          else {
+            while (calleeValue.get('object').node.type !== 'Identifier') {
+              calleeValue = calleeValue.get('object');
+              namesToResolve.unshift(calleeValue.get('property').node.name);
+            };
+
+            resolvedValue = resolveToValue(calleeValue.get('object'));
+          }
+        }
+
+        if (types.ObjectExpression.check(resolvedValue.node)) {
+          var resolvedMemberExpression = namesToResolve
+            .reduce((result, name) =>
+              getPropertyValuePath(result, name),
+              resolvedValue
+            );
+
+          if (returnsJSXElementOrReactCreateElementCall(resolvedMemberExpression)) {
+            visited = true;
+            return false;
           }
         }
       }

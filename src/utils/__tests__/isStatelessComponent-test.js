@@ -147,5 +147,67 @@ describe('isStatelessComponent', () => {
       expect(isStatelessComponent(def)).toBe(false);
     });
   });
+
+  describe('resolving return values', () => {
+    function test(desc, code) {
+      it(desc, () => {
+        var def = parse(code).get('body', 1);
+
+        expect(isStatelessComponent(def)).toBe(true);
+      });
+    }
+
+    test('handles simple resolves', `
+      var React = require('react');
+      function Foo (props) {
+        function bar() {
+          return React.createElement("div", props);
+        }
+
+        return bar();
+      }
+    `);
+
+    test('handles reference resolves', `
+      var React = require('react');
+      function Foo (props) {
+        var result = bar();
+
+        return result;
+
+        function bar() {
+          return <div />;
+        }
+      }
+    `);
+
+    test('handles shallow member call expression resolves', `
+      var React = require('react');
+      function Foo (props) {
+        var shallow = {
+          shallowMember() {
+            return <div />;
+          }
+        };
+
+        return shallow.shallowMember();
+      }
+    `);
+
+    test('handles deep member call expression resolves', `
+      var React = require('react');
+      function Foo (props) {
+        var obj = {
+          deep: {
+            member() {
+              return <div />;
+            }
+          }
+        };
+
+        return obj.deep.member();
+      }
+    `);
+  });
 });
 
