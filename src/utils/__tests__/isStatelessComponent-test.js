@@ -208,6 +208,46 @@ describe('isStatelessComponent', () => {
         return obj.deep.member();
       }
     `);
+
+    test('handles external reference member call expression resolves', `
+      var React = require('react');
+      function Foo (props) {
+        var member = () => <div />;
+        var obj = {
+          deep: {
+            member: member
+          }
+        };
+
+        return obj.deep.member();
+      }
+    `);
+
+    test('handles external reference member call expression resolves', `
+      var React = require('react');
+      function Foo (props) {
+        var member = () => <div />;
+        var obj = {
+          deep: {
+            member: member
+          }
+        };
+
+        return obj.deep.member();
+      }
+    `);
+
+    test('handles all sorts of JavaScript things', `
+      var React = require('react');
+      function Foo (props) {
+        var external = {
+          member: () => <div />
+        };
+        var obj = {external};
+
+        return obj.external.member();
+      }
+    `);
   });
 });
 

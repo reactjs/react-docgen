@@ -88,7 +88,7 @@ function returnsJSXElementOrReactCreateElementCall(path) {
 
         let resolvedValue;
 
-        let namesToResolve = [calleeValue.get('property').node.name];
+        let namesToResolve = [calleeValue.get('property')];
 
         if (calleeValue.node.type === 'MemberExpression') {
           if (calleeValue.get('object').node.type === 'Identifier') {
@@ -97,7 +97,7 @@ function returnsJSXElementOrReactCreateElementCall(path) {
           else {
             while (calleeValue.get('object').node.type !== 'Identifier') {
               calleeValue = calleeValue.get('object');
-              namesToResolve.unshift(calleeValue.get('property').node.name);
+              namesToResolve.unshift(calleeValue.get('property'));
             };
 
             resolvedValue = resolveToValue(calleeValue.get('object'));
@@ -106,10 +106,13 @@ function returnsJSXElementOrReactCreateElementCall(path) {
 
         if (types.ObjectExpression.check(resolvedValue.node)) {
           var resolvedMemberExpression = namesToResolve
-            .reduce((result, name) =>
-              getPropertyValuePath(result, name),
-              resolvedValue
-            );
+            .reduce((result, path) => {
+              var result = getPropertyValuePath(result, path.node.name);
+              if (types.Identifier.check(result.node)) {
+                return resolveToValue(result);
+              }
+              return result;
+            }, resolvedValue);
 
           if (returnsJSXElementOrReactCreateElementCall(resolvedMemberExpression)) {
             visited = true;
