@@ -24,6 +24,8 @@ var options = {
     'es7.exportExtensions': true,
     'es7.trailingFunctionCommas': true,
     'es7.objectRestSpread': true,
+    'es7.doExpressions': true,
+    'es7.functionBind': true,
   },
   plugins: { jsx: true, flow: true },
 };
