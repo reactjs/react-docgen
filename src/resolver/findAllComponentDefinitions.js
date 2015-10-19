@@ -37,7 +37,6 @@ export default function findAllReactCreateClassCalls(
 
   function statelessVisitor(path) {
     if (isStatelessComponent(path)) {
-      // TODO: normalizeStatelessDefinition to pick up propTypes
       definitions.push(path);
     }
     return false;
