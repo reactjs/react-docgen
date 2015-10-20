@@ -18,6 +18,7 @@ import * as utils from './utils';
 var defaultResolver = resolver.findExportedComponentDefinition;
 var defaultHandlers = [
   handlers.propTypeHandler,
+  handlers.propTypeCompositionHandler,
   handlers.propDocBlockHandler,
   handlers.defaultPropsHandler,
   handlers.componentDocblockHandler,
