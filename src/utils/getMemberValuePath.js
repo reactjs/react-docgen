@@ -10,6 +10,7 @@
  *
  */
 
+import getMemberExpressionValuePath from './getMemberExpressionValuePath';
 import getClassMemberValuePath from './getClassMemberValuePath';
 import getPropertyValuePath from './getPropertyValuePath';
 import recast from 'recast';
@@ -22,6 +23,10 @@ var SYNONYMS = {
 };
 
 var LOOKUP_METHOD = {
+  [types.ArrowFunctionExpression.name]: getMemberExpressionValuePath,
+  [types.FunctionExpression.name]: getMemberExpressionValuePath,
+  [types.FunctionDeclaration.name]: getMemberExpressionValuePath,
+  [types.VariableDeclaration.name]: getMemberExpressionValuePath,
   [types.ObjectExpression.name]: getPropertyValuePath,
   [types.ClassDeclaration.name]: getClassMemberValuePath,
   [types.ClassExpression.name]: getClassMemberValuePath,
@@ -30,7 +35,13 @@ var LOOKUP_METHOD = {
 function isSupportedDefinitionType({node}) {
   return types.ObjectExpression.check(node) ||
     types.ClassDeclaration.check(node) ||
-    types.ClassExpression.check(node);
+    types.ClassExpression.check(node) ||
+
+    // potential stateless function component
+    types.VariableDeclaration.check(node) ||
+    types.ArrowFunctionExpression.check(node) ||
+    types.FunctionDeclaration.check(node) ||
+    types.FunctionExpression.check(node);
 }
 
 /**
@@ -52,9 +63,11 @@ export default function getMemberValuePath(
 ): ?NodePath {
   if (!isSupportedDefinitionType(componentDefinition)) {
     throw new TypeError(
-      'Got unsupported definition type. Definition must either be an ' +
-      'ObjectExpression, ClassDeclaration or ClassExpression. Got "' +
-      componentDefinition.node.type + '" instead.'
+      'Got unsupported definition type. Definition must be one of ' +
+      'ObjectExpression, ClassDeclaration, ClassExpression,' +
+      'VariableDeclaration, ArrowFunctionExpression, FunctionExpression, or ' +
+      'FunctionDeclaration. Got "' + componentDefinition.node.type + '"' +
+      'instead.'
     );
   }
 

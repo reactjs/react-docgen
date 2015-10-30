@@ -106,6 +106,40 @@ describe('findExportedComponentDefinition', () => {
       });
     });
 
+    describe('stateless components', () => {
+
+      it('finds stateless component with JSX', () => {
+        var source = `
+          var React = require("React");
+          var Component = () => <div />;
+          module.exports = Component;
+        `;
+
+        expect(parse(source)).toBeDefined();
+      });
+
+      it('finds stateless components with React.createElement, independent of the var name', () => {
+        var source = `
+          var R = require("React");
+          var Component = () => R.createElement('div', {});
+          module.exports = Component;
+        `;
+
+        expect(parse(source)).toBeDefined();
+      });
+
+      it('does not process X.createElement of other modules', () => {
+        var source = `
+          var R = require("NoReact");
+          var Component = () => R.createElement({});
+          module.exports = Component;
+        `;
+
+        expect(parse(source)).toBeUndefined();
+      });
+
+    });
+
     describe('module.exports = <C>; / exports.foo = <C>;', () => {
 
       describe('React.createClass', () => {
@@ -449,6 +483,75 @@ describe('findExportedComponentDefinition', () => {
         });
       });
 
+      describe.only('stateless components', () => {
+
+        it('finds named exports', () => {
+          var source = `
+            import React from 'React';
+            export var somethingElse = 42,
+              Component = () => <div />;
+          `;
+          var result = parse(source);
+          expect(result).toBeDefined();
+          expect(result.node.type).toBe('ArrowFunctionExpression');
+
+          source = `
+            import React from 'React';
+            export let Component = () => <div />,
+              somethingElse = 42;
+          `;
+          result = parse(source);
+          expect(result).toBeDefined();
+          expect(result.node.type).toBe('ArrowFunctionExpression');
+
+          source = `
+            import React from 'React';
+            export const something = 21,
+              Component = () => <div />,
+              somethingElse = 42;
+          `;
+          result = parse(source);
+          expect(result).toBeDefined();
+          expect(result.node.type).toBe('ArrowFunctionExpression');
+
+          source = `
+            import React from 'React';
+            export var somethingElse = function() {};
+            export let Component = () => <div />
+          `;
+          result = parse(source);
+          expect(result).toBeDefined();
+          expect(result.node.type).toBe('ArrowFunctionExpression');
+        });
+
+        it('errors if multiple components are exported', () => {
+          var source = `
+            import React from 'React';
+            export var ComponentA = () => <div />
+            export var ComponentB = () => <div />
+          `;
+          expect(() => parse(source)).toThrow();
+
+          source = `
+            import React from 'React';
+            export var ComponentA = () => <div />
+            var ComponentB  = () => <div />
+            export {ComponentB};
+          `;
+          expect(() => parse(source)).toThrow();
+        });
+
+        it('accepts multiple definitions if only one is exported', () => {
+          var source = `
+            import React from 'React';
+            var ComponentA  = class extends React.Component {}
+            export var ComponentB = function() { return <div />; };
+          `;
+          var result = parse(source);
+          expect(result).toBeDefined();
+          expect(result.node.type).toBe('FunctionExpression');
+        });
+      });
     });
 
     describe('export {<C>};', () => {
@@ -566,6 +669,65 @@ describe('findExportedComponentDefinition', () => {
 
       });
 
+      describe('stateless components', () => {
+
+        it('finds exported specifiers', () => {
+          var source = `
+            import React from 'React';
+            var foo = 42;
+            function Component = () { return <div />; }
+            export {foo, Component};
+          `;
+          var result = parse(source);
+          expect(result).toBeDefined();
+          expect(result.node.type).toBe('ClassExpression');
+
+          source = `
+            import React from 'React';
+            var foo = 42;
+            var Component = () => <div />;
+            export {Component, foo};
+          `;
+          result = parse(source);
+          expect(result).toBeDefined();
+          expect(result.node.type).toBe('ClassExpression');
+
+          source = `
+            import React from 'React';
+            var foo = 42;
+            var baz = 21;
+            var Component = function () { return <div />; }
+            export {foo, Component as bar, baz};
+          `;
+          result = parse(source);
+          expect(result).toBeDefined();
+          expect(result.node.type).toBe('ClassExpression');
+        });
+
+        it('errors if multiple components are exported', () => {
+          var source = `
+            import React from 'React';
+            var ComponentA = () => <div />;
+            function ComponentB() { return <div />; }
+            export {ComponentA as foo, ComponentB};
+          `;
+
+          expect(() => parse(source)).toThrow();
+        });
+
+        it('accepts multiple definitions if only one is exported', () => {
+          var source = `
+            import React from 'React';
+            var ComponentA = () => <div />;
+            var ComponentB = () => <div />;
+            export {ComponentA};
+          `;
+          var result = parse(source);
+          expect(result).toBeDefined();
+          expect(result.node.type).toBe('ArrowFunctionExpression');
+        });
+
+      });
     });
 
     // Only applies to classes
