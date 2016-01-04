@@ -101,12 +101,14 @@ function returnsJSXElementOrReactCreateElementCall(path) {
           }
         }
 
-        if (types.ObjectExpression.check(resolvedValue.node)) {
+        if (resolvedValue && types.ObjectExpression.check(resolvedValue.node)) {
           var resolvedMemberExpression = namesToResolve
             .reduce((result, path) => { // eslint-disable-line no-shadow
-              result = getPropertyValuePath(result, path.node.name);
-              if (types.Identifier.check(result.node)) {
-                return resolveToValue(result);
+              if (result) {
+                result = getPropertyValuePath(result, path.node.name);
+                if (result && types.Identifier.check(result.node)) {
+                  return resolveToValue(result);
+                }
               }
               return result;
             }, resolvedValue);

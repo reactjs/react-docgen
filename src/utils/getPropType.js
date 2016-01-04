@@ -33,7 +33,7 @@ function getEnumValues(path) {
 }
 
 function getPropTypeOneOf(argumentPath) {
-  var type = {name: 'enum'};
+  var type: PropTypeDescriptor = {name: 'enum'};
   if (!types.ArrayExpression.check(argumentPath.node)) {
     type.computed = true;
     type.value = printValue(argumentPath);
@@ -44,7 +44,7 @@ function getPropTypeOneOf(argumentPath) {
 }
 
 function getPropTypeOneOfType(argumentPath) {
-  var type = {name: 'union'};
+  var type: PropTypeDescriptor = {name: 'union'};
   if (!types.ArrayExpression.check(argumentPath.node)) {
     type.computed = true;
     type.value = printValue(argumentPath);
@@ -55,7 +55,7 @@ function getPropTypeOneOfType(argumentPath) {
 }
 
 function getPropTypeArrayOf(argumentPath) {
-  var type = {name: 'arrayOf'};
+  var type: PropTypeDescriptor = {name: 'arrayOf'};
   var subType = getPropType(argumentPath);
 
   if (subType.name === 'unknown') {
@@ -68,22 +68,24 @@ function getPropTypeArrayOf(argumentPath) {
 }
 
 function getPropTypeShape(argumentPath) {
-  var type: {name: string; value: any;} = {name: 'shape', value: 'unkown'};
+  var type: PropTypeDescriptor = {name: 'shape', value: 'unkown'};
   if (!types.ObjectExpression.check(argumentPath.node)) {
     argumentPath = resolveToValue(argumentPath);
   }
 
   if (types.ObjectExpression.check(argumentPath.node)) {
-    type.value = {};
+    var value = {};
     argumentPath.get('properties').each(function(propertyPath) {
-      var descriptor = getPropType(propertyPath.get('value'));
+      var descriptor: PropDescriptor | PropTypeDescriptor =
+        getPropType(propertyPath.get('value'));
       var docs = getDocblock(propertyPath);
       if (docs) {
         descriptor.description = docs;
       }
       descriptor.required = isRequiredPropType(propertyPath.get('value'));
-      type.value[getPropertyName(propertyPath)] = descriptor;
+      value[getPropertyName(propertyPath)] = descriptor;
     });
+    type.value = value;
   }
 
   return type;

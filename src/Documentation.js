@@ -12,7 +12,7 @@
 
 class Documentation {
   _props: Object;
-  _composes: Array<string>;
+  _composes: Set<string>;
   _data: Object;
 
   constructor() {
@@ -29,7 +29,7 @@ class Documentation {
     this._data.set(key, value);
   }
 
-  get(key: string) {
+  get(key: string): any {
     return this._data.get(key);
   }
 

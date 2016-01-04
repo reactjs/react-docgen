@@ -8,10 +8,17 @@
  *
  */
 
+import type Documentation from '../src/Documentation';
+
 type PropTypeDescriptor = {
   name: string;
   value?: any;
   raw?: string;
+  computed?: boolean;
+  // These are only needed for shape types.
+  // Consider consolidating PropTypeDescriptor and PropDescriptor
+  description?: string;
+  required?: boolean;
 };
 
 type PropDescriptor = {
@@ -20,15 +27,6 @@ type PropDescriptor = {
   defaultValue?: any;
   description?: string;
 };
-
-declare class Documentation {
-  addComposes(moduleName: string): void;
-  get(key: string): any;
-  set(key: string, value: any): void;
-  getPropDescriptor(propName: string): PropDescriptor;
-  toObject(): Object;
-}
-
 
 type Handler = (documentation: Documentation, path: NodePath) => void;
 type Resolver =

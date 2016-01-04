@@ -52,15 +52,17 @@ export default function parse(
 ): Array<Object>|Object {
   var ast = recast.parse(src, {esprima: babylon});
   var componentDefinitions = resolver(ast.program, recast);
-  var isArray = Array.isArray(componentDefinitions);
 
-  if (!componentDefinitions || (isArray && componentDefinitions.length === 0)) {
-    throw new Error(ERROR_MISSING_DEFINITION);
+  if (Array.isArray(componentDefinitions)) {
+    if (componentDefinitions.length === 0) {
+      throw new Error(ERROR_MISSING_DEFINITION);
+    }
+    return executeHandlers(handlers, componentDefinitions);
+  } else if (componentDefinitions) {
+    return executeHandlers(handlers, [(componentDefinitions: NodePath)])[0];
   }
 
-  return isArray ?
-    executeHandlers(handlers, componentDefinitions) :
-    executeHandlers(handlers, [componentDefinitions])[0];
+  throw new Error(ERROR_MISSING_DEFINITION);
 }
 
 export {ERROR_MISSING_DEFINITION};
