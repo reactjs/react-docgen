@@ -56,21 +56,25 @@ describe('main', () => {
     test(`
       var React = require("React");
       var PropTypes = React.PropTypes;
+
+      var defaultProps = {
+        foo: true,
+      };
+      var propTypes =  {
+        /**
+         * Example prop description
+         */
+        foo: PropTypes.bool
+      };
+
       /**
        * Example component description
        */
       var Component = React.createClass({
         displayName: 'ABC',
-        propTypes: {
-          /**
-           * Example prop description
-           */
-          foo: PropTypes.bool
-        },
+        propTypes,
         getDefaultProps: function() {
-          return {
-            foo: true
-          };
+          return defaultProps;
         }
       });
       module.exports = Component
@@ -79,23 +83,27 @@ describe('main', () => {
 
   describe('Class definition', () => {
     test(`
-      var React = require("React");
-      var PropTypes = React.PropTypes;
+      const React = require("React");
+      const PropTypes = React.PropTypes;
+
+      const defaultProps = {
+        foo: true,
+      };
+      const propTypes =  {
+        /**
+         * Example prop description
+         */
+        foo: PropTypes.bool
+      };
+
       /**
        * Example component description
        */
       export default class Component extends React.Component {
-        static propTypes = {
-          /**
-           * Example prop description
-           */
-          foo: PropTypes.bool
-        };
+        static propTypes = propTypes;
         // ...
       }
-      Component.defaultProps = {
-        foo: true,
-      };
+      Component.defaultProps = defaultProps;
       Component.displayName = 'ABC';
     `);
   });
@@ -104,21 +112,23 @@ describe('main', () => {
     test(`
       import React, {PropTypes} from "React";
 
+      const defaultProps = {
+        foo: true,
+      };
+      const propTypes =  {
+        /**
+         * Example prop description
+         */
+        foo: PropTypes.bool
+      };
+
       /**
         * Example component description
         */
       let Component = props => <div />;
       Component.displayName = 'ABC';
-      Component.defaultProps = {
-          foo: true
-      };
-
-      Component.propTypes = {
-        /**
-        * Example prop description
-        */
-        foo: PropTypes.bool
-      };
+      Component.defaultProps = defaultProps;
+      Component.propTypes = propTypes;
 
       export default Component;
     `);
@@ -128,6 +138,16 @@ describe('main', () => {
     test(`
       import React, {PropTypes} from "React";
 
+      const defaultProps = {
+        foo: true,
+      };
+      const propTypes =  {
+        /**
+         * Example prop description
+         */
+        foo: PropTypes.bool
+      };
+
       /**
       * Example component description
       */
@@ -136,16 +156,8 @@ describe('main', () => {
       }
 
       Component.displayName = 'ABC';
-      Component.defaultProps = {
-          foo: true
-      };
-
-      Component.propTypes = {
-        /**
-        * Example prop description
-        */
-        foo: PropTypes.bool
-      };
+      Component.defaultProps = defaultProps;
+      Component.propTypes = propTypes;
 
       export default Component;
     `);
@@ -155,6 +167,16 @@ describe('main', () => {
     test(`
       import React, {PropTypes} from "React";
 
+      const defaultProps = {
+        foo: true,
+      };
+      const propTypes =  {
+        /**
+         * Example prop description
+         */
+        foo: PropTypes.bool
+      };
+
       /**
       * Example component description
       */
@@ -163,16 +185,8 @@ describe('main', () => {
       }
 
       Component.displayName = 'ABC';
-      Component.defaultProps = {
-          foo: true
-      };
-
-      Component.propTypes = {
-        /**
-        * Example prop description
-        */
-        foo: PropTypes.bool
-      };
+      Component.defaultProps = defaultProps;
+      Component.propTypes = propTypes;
 
       export default Component;
     `);

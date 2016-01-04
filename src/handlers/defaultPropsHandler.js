@@ -52,6 +52,11 @@ export default function defaultPropsHandler(
     return;
   }
 
+  defaultPropsPath = resolveToValue(defaultPropsPath);
+  if (!defaultPropsPath) {
+    return;
+  }
+
   if (types.FunctionExpression.check(defaultPropsPath.node)) {
     // Find the value that is returned from the function and process it if it is
     // an object literal.
