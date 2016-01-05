@@ -9,6 +9,8 @@
  *
  */
 
+/*eslint no-process-exit: 0*/
+
 var argv = require('nomnom')
   .script('react-docgen')
   .help(
@@ -20,30 +22,35 @@ var argv = require('nomnom')
       position: 0,
       help: 'A component file or directory. If no path is provided it reads from stdin.',
       metavar: 'PATH',
-      list: true
+      list: true,
     },
     out: {
       abbr: 'o',
       help: 'store extracted information in FILE',
-      metavar: 'FILE'
+      metavar: 'FILE',
     },
     pretty: {
       help: 'pretty print JSON',
-      flag: true
+      flag: true,
     },
     extension: {
       abbr: 'x',
       help: 'File extensions to consider. Repeat to define multiple extensions. Default:',
       list: true,
-      default: ['js', 'jsx']
+      default: ['js', 'jsx'],
     },
     ignoreDir: {
       abbr: 'i',
       full: 'ignore',
       help: 'Folders to ignore. Default:',
       list: true,
-      default: ['node_modules', '__tests__']
-    }
+      default: ['node_modules', '__tests__'],
+    },
+    resolver: {
+      help: 'Resolver name (findAllComponentDefinitions, findExportedComponentDefinition) or path to a module that exports a resolver.',
+      metavar: 'RESOLVER',
+      default: 'findExportedComponentDefinition',
+    },
   })
   .parse();
 
@@ -51,15 +58,34 @@ var async = require('async');
 var dir = require('node-dir');
 var fs = require('fs');
 var parser = require('../dist/main.js');
+var path = require('path');
 
 var output = argv.out;
 var paths = argv.path || [];
 var extensions = new RegExp('\\.(?:' + argv.extension.join('|') + ')$');
 var ignoreDir = argv.ignoreDir;
+var resolver;
 
-function writeError(msg, path) {
+if (argv.resolver) {
+  switch(argv.resolver) {
+    case 'findAllComponentDefinitions':
+      resolver = require('../dist/resolver/findAllComponentDefinitions');
+      break;
+    case 'findExportedComponentDefinition':
+      resolver = require('../dist/resolver/findExportedComponentDefinition');
+      break;
+    default: // treat value as module path
+      resolver = require(path.resolve(process.cwd(), argv.resolver));
+  }
+}
+
+function parse(source) {
+  return parser.parse(source, resolver);
+}
+
+function writeError(msg, filePath) {
   if (path) {
-    process.stderr.write('Error with path "' + path + '": ');
+    process.stderr.write('Error with path "' + filePath + '": ');
   }
   process.stderr.write(msg + '\n');
   if (msg instanceof Error) {
@@ -84,19 +110,19 @@ function exitWithResult(result) {
   process.exit(0);
 }
 
-function traverseDir(path, result, done) {
+function traverseDir(filePath, result, done) {
   dir.readFiles(
-    path,
+    filePath,
     {
       match: extensions,
-      excludeDir: ignoreDir
+      excludeDir: ignoreDir,
     },
     function(error, content, filename, next) {
       if (error) {
         exitWithError(error);
       }
       try {
-        result[filename] = parser.parse(content);
+        result[filename] = parse(content);
       } catch(error) {
         writeError(error, filename);
       }
@@ -127,7 +153,7 @@ if (paths.length === 0) {
   });
   process.stdin.on('end', function () {
     try {
-      exitWithResult(parser.parse(source));
+      exitWithResult(parse(source));
     } catch(error) {
       writeError(error);
     }
@@ -137,21 +163,21 @@ if (paths.length === 0) {
    * 2. Paths are passed.
    */
   var result = Object.create(null);
-  async.eachSeries(paths, function(path, done) {
-    fs.stat(path, function(error, stats) {
+  async.eachSeries(paths, function(filePath, done) {
+    fs.stat(filePath, function(error, stats) {
       if (error) {
-        writeError(error, path);
+        writeError(error, filePath);
         done();
         return;
       }
       if (stats.isDirectory()) {
-        traverseDir(path, result, done);
+        traverseDir(filePath, result, done);
       }
       else {
         try {
-          result[path] = parser.parse(fs.readFileSync(path));
+          result[filePath] = parse(fs.readFileSync(filePath));
         } catch(error) {
-          writeError(error, path);
+          writeError(error, filePath);
         }
         finally {
           done();

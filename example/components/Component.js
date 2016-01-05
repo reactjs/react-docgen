@@ -5,6 +5,8 @@ var Foo = require('Foo');
  * General component description.
  */
 var Component = React.createClass({
+  displayName: 'Component',
+
   propTypes: {
     ...Foo.propTypes,
     /**

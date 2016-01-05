@@ -4,7 +4,10 @@
 
 It uses [recast][] and [babylon][] to parse the source into an AST and provides methods to process this AST to extract the desired information. The output / return value is a JSON blob / JavaScript object.
 
-It provides a default implementation for React components defined via `React.createClass` or [ES2015 class definitions][classes]. These component definitions must follow certain guidelines in order to be analyzable (see below for more info).
+It provides a default implementation for React components defined via 
+`React.createClass`, [ES2015 class definitions][classes] or functions 
+(stateless components). These component definitions must follow certain 
+guidelines in order to be analyzable (see below for more info).
 
 ## Install
 
@@ -31,15 +34,22 @@ Options:
    --pretty              pretty print JSON
    -x, --extension       File extensions to consider. Repeat to define multiple extensions. Default:  [js,jsx]
    -i, --ignore          Folders to ignore. Default:  [node_modules,__tests__]
+   --resolver RESOLVER   Resolver name (findAllComponentDefinitions, findExportedComponentDefinition) or
+      path to a module that exports a resolver.  [findExportedComponentDefinition]
 
 Extract meta information from React components.
 If a directory is passed, it is recursively traversed.
 ```
 
-By default, `react-docgen` will look for the exported component created through `React.createClass` or a class definition in each file. Have a look below for how to customize this behavior.
+By default, `react-docgen` will look for the exported component created through 
+`React.createClass`, a class definition or a function (stateless component) in 
+each file. You can change that behavior with the `--resolver` option, which 
+either expects the name of a built-in resolver or a path to JavaScript module 
+exporting a resolver function. Have a look below for [more information about 
+resolvers](#resolver).
 
-Have a look at `example/` for an example of how to use the result to generate
-a markdown version of the documentation.
+Have a look at `example/` for an example of how to use the result to generate a
+markdown version of the documentation.
 
 ## API
 

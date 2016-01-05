@@ -46,6 +46,9 @@
       "bin",
       "src"
     ],
+    "testPathIgnorePatterns": [
+      "/bin/__tests__/example/"
+    ],
     "unmockedModulePathPatterns": [
       "node_modules",
       "tests/utils",

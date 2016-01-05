@@ -204,4 +204,44 @@ describe('react-docgen CLI', () => {
     ]);
   });
 
+  describe('--resolver', () => {
+    pit('accepts the names of built in resolvers', () => {
+      return Promise.all([
+        // No option passed: same as --resolver=findExportedComponentDefinition
+        run([
+          path.join(__dirname, '../../example/components/Component.js'),
+        ]).then(([stdout]) => {
+          expect(stdout).toContain('Component');
+        }),
+
+        run([
+          '--resolver=findExportedComponentDefinition',
+          path.join(__dirname, '../../example/components/Component.js'),
+        ]).then(([stdout]) => {
+          expect(stdout).toContain('Component');
+        }),
+
+        run([
+          '--resolver=findAllComponentDefinitions',
+          path.join(__dirname, './example/MultipleComponents.js'),
+        ]).then(([stdout]) => {
+          expect(stdout).toContain('ComponentA');
+          expect(stdout).toContain('ComponentB');
+        }),
+      ]);
+    });
+
+    pit('accepts a path to a resolver function', () => {
+      return Promise.all([
+        run([
+          '--resolver='+path.join(__dirname, './example/customResolver.js'),
+          path.join(__dirname, '../../example/components/Component.js'),
+        ]).then(([stdout, stderr]) => {
+          console.log(stderr);
+          expect(stdout).toContain('Custom');
+        }),
+      ]);
+    });
+  });
+
 });
