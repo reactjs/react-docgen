@@ -18,7 +18,9 @@ type ASTNode = Object;
 
 declare class Scope {
   lookup(name: string): ?Scope;
-  getBindings(): {[key: string]: NodePath};
+  lookupType(name: string): ?Scope;
+  getBindings(): {[key: string]: Array<NodePath>};
+  getTypes(): {[key: string]: Array<NodePath>};
   node: NodePath;
 }
 

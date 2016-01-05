@@ -12,11 +12,10 @@
 
 import type Documentation from '../Documentation';
 
-import {getDocblock} from '../utils/docblock';
-import getPropertyName from '../utils/getPropertyName';
 import getMemberValuePath from '../utils/getMemberValuePath';
 import recast from 'recast';
 import resolveToValue from '../utils/resolveToValue';
+import setPropDescription from '../utils/setPropDescription';
 
 var {types: {namedTypes: types}} = recast;
 
@@ -33,13 +32,10 @@ export default function propDocBlockHandler(
     return;
   }
 
-  propTypesPath.get('properties').each(function(propertyPath) {
+  propTypesPath.get('properties').each(propertyPath => {
     // we only support documentation of actual properties, not spread
     if (types.Property.check(propertyPath.node)) {
-      var propDescriptor = documentation.getPropDescriptor(
-        getPropertyName(propertyPath)
-      );
-      propDescriptor.description = getDocblock(propertyPath) || '';
+      setPropDescription(documentation, propertyPath);
     }
   });
 }

@@ -11,21 +11,43 @@
 import type Documentation from '../src/Documentation';
 
 type PropTypeDescriptor = {
-  name: string;
-  value?: any;
-  raw?: string;
-  computed?: boolean;
+  name: string,
+  value?: any,
+  raw?: string,
+  computed?: boolean,
   // These are only needed for shape types.
   // Consider consolidating PropTypeDescriptor and PropDescriptor
-  description?: string;
-  required?: boolean;
+  description?: string,
+  required?: boolean,
+};
+
+type flowObjectSignatureType = {
+  properties: Array<{ key: string | FlowTypeDescriptor, value: FlowTypeDescriptor }>,
+  constructor?: FlowTypeDescriptor
+};
+
+type flowFunctionSignatureType = {
+  arguments: Array<{ name: string, type: FlowTypeDescriptor }>,
+  return: FlowTypeDescriptor
+};
+
+type FlowTypeDescriptor = {
+  name: string,
+  value?: string,
+  required?: boolean,
+  nullable?: boolean,
+  raw?: string,
+  elements?: Array<FlowTypeDescriptor>,
+  type?: 'object' | 'function',
+  signature?: flowObjectSignatureType | flowFunctionSignatureType,
 };
 
 type PropDescriptor = {
-  type?: PropTypeDescriptor;
-  required?: boolean;
-  defaultValue?: any;
-  description?: string;
+  type?: PropTypeDescriptor,
+  flowType?: FlowTypeDescriptor,
+  required?: boolean,
+  defaultValue?: any,
+  description?: string,
 };
 
 type Handler = (documentation: Documentation, path: NodePath) => void;

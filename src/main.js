@@ -20,6 +20,8 @@ var defaultHandlers = [
   handlers.propTypeHandler,
   handlers.propTypeCompositionHandler,
   handlers.propDocBlockHandler,
+  handlers.flowTypeHandler,
+  handlers.flowTypeDocBlockHandler,
   handlers.defaultPropsHandler,
   handlers.componentDocblockHandler,
   handlers.displayNameHandler,
@@ -57,5 +59,5 @@ export {
   defaultHandlers,
   handlers,
   resolver,
-  utils
+  utils,
 };
