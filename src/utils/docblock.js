@@ -31,15 +31,15 @@ let DOCBLOCK_HEADER = /^\*\s/;
  */
 export function getDocblock(path: NodePath): ?string {
   var comments = [];
-  if (path.node.comments) {
+  if (path.node.leadingComments) {
+    comments = path.node.leadingComments.filter(
+      comment => comment.type === 'CommentBlock' &&
+        DOCBLOCK_HEADER.test(comment.value)
+    );
+  } else if (path.node.comments) {
     comments = path.node.comments.filter(
       comment => comment.leading &&
         comment.type === 'CommentBlock' &&
-        DOCBLOCK_HEADER.test(comment.value)
-    );
-  } else if (path.node.leadingComments) {
-    comments = path.node.leadingComments.filter(
-      comment => comment.type === 'CommentBlock' &&
         DOCBLOCK_HEADER.test(comment.value)
     );
   }
