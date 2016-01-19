@@ -151,6 +151,21 @@ describe('componentDocblockHandler', () => {
     );
   });
 
+  describe('Stateless functions', () => {
+    test(
+      'function Component() {}',
+      src => lastStatement(src)
+    );
+    test(
+      'var Component = function () {};',
+      src => lastStatement(src).get('declarations', 0, 'init')
+    );
+    test(
+      'var Component = () => {}',
+      src => lastStatement(src).get('declarations', 0, 'init')
+    );
+  });
+
   describe('ES6 default exports', () => {
 
     describe('Default React.createClass export', () => {
@@ -182,6 +197,31 @@ describe('componentDocblockHandler', () => {
       );
     });
 
+    describe('Default stateless function export', () => {
+
+      describe('named function', () => {
+        test(
+          'export default function Component() {}',
+          src => lastStatement(src).get('declaration')
+        );
+      });
+
+      describe('anonymous function', () => {
+        test(
+          'export default function() {}',
+          src => lastStatement(src).get('declaration')
+        );
+      });
+
+      describe('arrow function', () => {
+        test(
+          'export default () => {}',
+          src => lastStatement(src).get('declaration')
+        );
+      });
+
+    });
+
   });
 
   describe('ES6 named exports', () => {
@@ -204,6 +244,31 @@ describe('componentDocblockHandler', () => {
         'export class Component {}',
         src => lastStatement(src).get('declaration')
       );
+    });
+
+    describe('Named stateless function', () => {
+
+      describe('named function', () => {
+        test(
+          'export function Component() {}',
+          src => lastStatement(src).get('declaration')
+        );
+      });
+
+      describe('anonymous function', () => {
+        test(
+          'export var Component = function() {}',
+          src => lastStatement(src).get('declaration')
+        );
+      });
+
+      describe('arrow function', () => {
+        test(
+          'export var Component = () => {}',
+          src => lastStatement(src).get('declaration')
+        );
+      });
+
     });
 
   });
