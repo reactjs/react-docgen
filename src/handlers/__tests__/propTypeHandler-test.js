@@ -202,5 +202,20 @@ describe('propTypeHandler', () => {
     definition = statement('class Foo {}');
     expect(() => propTypeHandler(documentation, definition))
       .not.toThrow();
+
+    definition = statement('function Foo() {}');
+    expect(() => propTypeHandler(documentation, definition))
+      .not.toThrow();
+
+    definition = expression('() => {}');
+    expect(() => propTypeHandler(documentation, definition))
+      .not.toThrow();
+  });
+
+  // This case is handled by propTypeCompositionHandler
+  it('does not error if propTypes is a member expression', () => {
+    var definition = expression('{propTypes: Foo.propTypes}');
+    expect(() => propTypeHandler(documentation, definition))
+      .not.toThrow();
   });
 });

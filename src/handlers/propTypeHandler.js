@@ -34,6 +34,10 @@ function isPropTypesExpression(path) {
 }
 
 function amendPropTypes(documentation, path) {
+  if (!types.ObjectExpression.check(path.node)) {
+    return;
+  }
+
   path.get('properties').each(function(propertyPath) {
     switch (propertyPath.node.type) {
       case types.Property.name:
