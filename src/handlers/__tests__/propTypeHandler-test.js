@@ -164,6 +164,26 @@ describe('propTypeHandler', () => {
       });
     });
 
+    it('finds descriptions', () => {
+      var definition = parse(getSrc(`
+        {
+          /**
+           * This is a description for foo.
+           */
+          foo: PropTypes.bool,
+        }
+      `));
+
+      propTypeHandler(documentation, definition);
+      expect(documentation.descriptors).toEqual({
+        foo: {
+          type: {},
+          required: false,
+          description: 'This is a description for foo.',
+        },
+      });
+    });
+
   }
 
   describe('React.createClass', () => {
