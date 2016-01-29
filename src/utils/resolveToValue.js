@@ -42,6 +42,34 @@ function buildMemberExpressionFromPattern(path: NodePath): ?NodePath {
   return null;
 }
 
+function findScopePath(paths: Array<NodePath>, path: NodePath): ?NodePath {
+  if (paths.length < 1) {
+    return;
+  }
+  let resultPath = paths[0];
+  const parentPath = resultPath.parent;
+
+  if (types.ImportDefaultSpecifier.check(parentPath.node) ||
+    types.ImportSpecifier.check(parentPath.node) ||
+    types.VariableDeclarator.check(parentPath.node) ||
+    types.TypeAlias.check(parentPath.node)
+  ) {
+    resultPath = parentPath;
+  } else if (types.Property.check(parentPath.node)) {
+    // must be inside a pattern
+    const memberExpressionPath = buildMemberExpressionFromPattern(
+      parentPath
+    );
+    if (memberExpressionPath) {
+      return memberExpressionPath;
+    }
+  }
+
+  if (resultPath.node !== path.node) {
+    return resolveToValue(resultPath);
+  }
+}
+
 /**
  * If the path is an identifier, it is resolved in the scope chain.
  * If it is an assignment expression, it resolves to the right hand side.
@@ -71,31 +99,20 @@ export default function resolveToValue(path: NodePath): NodePath {
       return path.parentPath;
     }
 
-    var scope = path.scope.lookup(node.name);
+    let scope = path.scope.lookup(node.name);
+    let resolvedPath: ?NodePath;
     if (scope) {
-      var bindings = scope.getBindings()[node.name];
-      if (bindings.length > 0) {
-        var resultPath = scope.getBindings()[node.name][0];
-        var parentPath = resultPath.parent;
-        if (types.ImportDefaultSpecifier.check(parentPath.node) ||
-            types.ImportSpecifier.check(parentPath.node) ||
-            types.VariableDeclarator.check(parentPath.node)
-        ) {
-          resultPath = parentPath;
-        } else if (types.Property.check(parentPath.node)) {
-          // must be inside a pattern
-          var memberExpressionPath = buildMemberExpressionFromPattern(
-            parentPath
-          );
-          if (memberExpressionPath) {
-            return memberExpressionPath;
-          }
-        }
-        return resultPath.node !== path.node ?
-          resolveToValue(resultPath) :
-          path;
+      const bindings = scope.getBindings()[node.name];
+      resolvedPath = findScopePath(bindings, path);
+    } else {
+      scope = path.scope.lookupType(node.name);
+      if (scope) {
+        const types = scope.getTypes()[node.name];
+        resolvedPath = findScopePath(types, path);
       }
     }
+    return resolvedPath || path;
   }
+
   return path;
 }

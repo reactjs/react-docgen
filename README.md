@@ -4,9 +4,9 @@
 
 It uses [recast][] and [babylon][] to parse the source into an AST and provides methods to process this AST to extract the desired information. The output / return value is a JSON blob / JavaScript object.
 
-It provides a default implementation for React components defined via 
-`React.createClass`, [ES2015 class definitions][classes] or functions 
-(stateless components). These component definitions must follow certain 
+It provides a default implementation for React components defined via
+`React.createClass`, [ES2015 class definitions][classes] or functions
+(stateless components). These component definitions must follow certain
 guidelines in order to be analyzable (see below for more info).
 
 ## Install
@@ -41,11 +41,11 @@ Extract meta information from React components.
 If a directory is passed, it is recursively traversed.
 ```
 
-By default, `react-docgen` will look for the exported component created through 
-`React.createClass`, a class definition or a function (stateless component) in 
-each file. You can change that behavior with the `--resolver` option, which 
-either expects the name of a built-in resolver or a path to JavaScript module 
-exporting a resolver function. Have a look below for [more information about 
+By default, `react-docgen` will look for the exported component created through
+`React.createClass`, a class definition or a function (stateless component) in
+each file. You can change that behavior with the `--resolver` option, which
+either expects the name of a built-in resolver or a path to JavaScript module
+exporting a resolver function. Have a look below for [more information about
 resolvers](#resolver).
 
 Have a look at `example/` for an example of how to use the result to generate a
@@ -111,7 +111,9 @@ For example, while the `propTypesHandler` expects the prop types definition to b
 - `propTypes` must be an object literal or resolve to an object literal in the same file.
 - The `return` statement in `getDefaultProps` must contain an object literal.
 
-## Example
+## PropTypes
+
+### Example
 
 For the following component
 
@@ -156,7 +158,7 @@ module.exports = Component;
 
 we are getting this output:
 
-```
+```json
 {
   "props": {
     "foo": {
@@ -201,6 +203,131 @@ we are getting this output:
 }
 ```
 
+## Flow Type support
+
+If you are using [flow][flow] then react-docgen can also extract the flow type annotations. As flow has a way more advanced and fine granular type system, the returned types from react-docgen are different in comparison when using `React.PropTypes`.
+
+> **Note**: react-docgen will not be able to grab the type definition if the type is imported or declared in a different file.
+
+### Example
+
+For the following component
+
+```js
+import React, { Component } from 'react';
+
+type Props = {
+  /** Description of prop "foo". */
+  primitive: number,
+  /** Description of prop "bar". */
+  literalsAndUnion: 'string' | 'otherstring' | number,
+  arr: Array<any>,
+  func?: (value: string) => void,
+  obj?: { subvalue: ?boolean },
+};
+
+/**
+ * General component description.
+ */
+export default class MyComponent extends Component<void, Props, void> {
+
+  props: Props;
+
+  render(): ?ReactElement {
+    // ...
+  }
+}
+```
+
+we are getting this output:
+
+```json
+{
+  "description":"General component description.",
+  "props":{
+    "primitive":{
+      "flowType":{ "name":"number" },
+      "required":true,
+      "description":"Description of prop \"foo\"."
+    },
+    "literalsAndUnion":{
+      "flowType":{
+        "name":"union",
+        "raw":"'string' | 'otherstring' | number",
+        "elements":[
+          { "name":"literal", "value":"'string'" },
+          { "name":"literal", "value":"'otherstring'" },
+          { "name":"number" }
+        ]
+      },
+      "required":true,
+      "description":"Description of prop \"bar\"."
+    },
+    "arr":{
+      "flowType":{
+        "name":"Array",
+        "elements":[
+          { "name":"any" }
+        ],
+        "raw":"Array<any>"
+      },
+      "required":true
+    },
+    "func":{
+      "flowType":{
+        "name":"signature",
+        "type":"function",
+        "raw":"(value: string) => void",
+        "signature":{
+          "arguments":[
+            { "name":"value", "type":{ "name":"string" } }
+          ],
+          "return":{ "name":"void" }
+        }
+      },
+      "required":false
+    },
+    "obj":{
+      "flowType":{
+        "name":"signature",
+        "type":"object",
+        "raw":"{ subvalue: ?boolean }",
+        "signature":{
+          "properties":[
+            {
+              "key":"subvalue",
+              "value":{
+                "name":"boolean",
+                "nullable":true,
+                "required":true
+              }
+            }
+          ]
+        }
+      },
+      "required":false
+    }
+  }
+}
+```
+
+### Types
+
+Here is a list of all the available types and its result structure.
+
+Name  | Examples | Result
+------------- | ------------- | -------------
+Simple  | ```let x: string;```<br />```let x: number;```<br />```let x: boolean;```<br />```let x: any;```<br />```let x: void;```<br />```let x: Object;```<br />```let x: String;```<br />```let x: MyClass;``` | ```{ "name": "<type>" }```
+Literals  | ```let x: 'foo';```<br />```let x: 1;```<br />```let x: true;``` | ```{ "name": "literal", "value": "<rawvalue>" }```
+Typed Classes  | ```let x: Array<foo>;```<br />```let x: Class<foo>;```<br />```let x: MyClass<bar>;``` | ```{ "name": "<type>", "elements": [{ <element-type> }, ...] }```
+Object Signature  | ```let x: { foo: string, bar?: mixed };```<br />```let x: { [key: string]: string, foo: number };``` | ```{ "name": "signature", "type": "object", "raw": "<raw-signature>", "signature": { "properties": [{ "key": "<property-name>"|{ <property-key-type> }, "value": { <property-type>, "required": <true/false> } }, ...] } }```
+Function Signature  | ```let x: (x: string) => void;``` | ```{ "name": "signature", "type": "function", "raw": "<raw-signature>", "signature": { "arguments": [{ "name": "<argument-name>", "type": { <argument-type> } }, ...], "return": { <return-type> } } }```
+Callable-Object/Function-Object Signature | ```let x: { (x: string): void, prop: string };``` | ```{ "name": "signature", "type": "object", "raw": "<raw-signature>", "signature": { "properties": [{ "key": "<property-name>"|{ <property-key-type> }, "value": { <property-type>, "required": <true/false> } }, ...], "constructor": { <function-signature> } } }```
+Tuple | ```let x: [foo, "value", number];``` | ```{ "name": "tuple", "raw": "<raw-signature>", "elements": [{ <element-type> }, ...] }```
+Union | ```let x: number | string;``` | ```{ "name": "union", "raw": "<raw-signature>", "elements": [{ <element-type> }, ...] }```
+Intersect | ```let x: number & string;``` | ```{ "name": "intersect", "raw": "<raw-signature>", "elements": [{ <element-type> }, ...] }```
+Nullable modifier | ```let x: ?number;``` | ```{ "name": "number", "nullable": true }```
+
 ## Result data structure
 
 The structure of the JSON blob / JavaScript object is as follows:
@@ -215,10 +342,11 @@ The structure of the JSON blob / JavaScript object is as follows:
         ["value": <typeValue>]
         ["raw": string]
       },
+      "flowType": <flowType>,
       "required": boolean,
       "description": string,
       ["defaultValue": {
-        "value": number | string,
+        "value": string,
         "computed": boolean
       }]
     },
@@ -232,9 +360,11 @@ The structure of the JSON blob / JavaScript object is as follows:
 - `<propName>`:  For each prop that was found, there will be an entry in `props` under the same name.
 - `<typeName>`: The name of the type, which is usually corresponds to the function name in `React.PropTypes`. However, for types define with `oneOf`, we use `"enum"`  and for `oneOfType` we use `"union"`. If a custom function is provided or the type cannot be resolved to anything of `React.PropTypes`, we use `"custom"`.
 - `<typeValue>`: Some types accept parameters which define the type in more detail (such as `arrayOf`, `instanceOf`, `oneOf`, etc). Those are stored in `<typeValue>`. The data type of `<typeValue>` depends on the type definition.
+- `<flowType>`: If using flow type this property contains the parsed flow type as can be seen in the table above.
 
 
 [react]: http://facebook.github.io/react/
+[flow]: http://flowtype.org/
 [recast]: https://github.com/benjamn/recast
 [babylon]: https://github.com/babel/babel/tree/master/packages/babylon
 [classes]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes

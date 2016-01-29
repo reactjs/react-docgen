@@ -15,5 +15,5 @@ import findExportedComponentDefinition from './findExportedComponentDefinition';
 
 export {
   findAllComponentDefinitions,
-  findExportedComponentDefinition
+  findExportedComponentDefinition,
 };

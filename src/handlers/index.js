@@ -17,3 +17,5 @@ export {default as propTypeHandler} from './propTypeHandler';
 export {default as propTypeCompositionHandler} from './propTypeCompositionHandler';
 export {default as propDocBlockHandler} from './propDocBlockHandler';
 export {default as displayNameHandler} from './displayNameHandler';
+export {default as flowTypeHandler} from './flowTypeHandler';
+export {default as flowTypeDocBlockHandler} from './flowTypeDocBlockHandler';

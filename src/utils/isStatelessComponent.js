@@ -128,7 +128,7 @@ function returnsJSXElementOrReactCreateElementCall(path) {
 }
 
 /**
- * Returns `true` if the path represents a function which returns a JSXElment
+ * Returns `true` if the path represents a function which returns a JSXElement
  */
 export default function isStatelessComponent(
   path: NodePath
