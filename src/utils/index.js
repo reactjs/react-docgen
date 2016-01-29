@@ -17,17 +17,21 @@ export {
 };
 
 export {default as getClassMemberValuePath} from './getClassMemberValuePath';
+export {default as getFlowType} from './getFlowType';
+export {default as getFlowTypeFromReactComponent} from './getFlowTypeFromReactComponent';
 export {default as getMemberExpressionRoot} from './getMemberExpressionRoot';
-export {default as getMembers} from './getMembers';
 export {default as getMemberValuePath} from './getMemberValuePath';
+export {default as getMembers} from './getMembers';
 export {default as getNameOrValue} from './getNameOrValue';
 export {default as getPropertyName} from './getPropertyName';
 export {default as getPropertyValuePath} from './getPropertyValuePath';
 export {default as getPropType} from './getPropType';
+export {default as getTypeAnnotation} from './getTypeAnnotation';
 export {default as isExportsOrModuleAssignment} from './isExportsOrModuleAssignment';
 export {default as isReactComponentClass} from './isReactComponentClass.js';
 export {default as isReactCreateClassCall} from './isReactCreateClassCall';
 export {default as isReactModuleName} from './isReactModuleName';
+export {default as isStatelessComponent} from './isStatelessComponent';
 export {default as match} from './match';
 export {default as normalizeClassDefiniton} from './normalizeClassDefinition';
 export {default as printValue} from './printValue';
