@@ -26,7 +26,7 @@ export default function displayNameHandler(
 
   if (displayNamePath) {
     displayNamePath = resolveToValue(displayNamePath);
-    if (!types.Literal.check(displayNamePath.node)) {
+    if (!displayNamePath || !types.Literal.check(displayNamePath.node)) {
       return;
     }
     displayNamePath = displayNamePath.node.value
