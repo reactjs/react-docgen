@@ -88,10 +88,23 @@ describe('defaultPropsHandler', () => {
     var definition = expression('({displayName: "FooBar"})');
     displayNameHandler(documentation, definition);
     expect(documentation.displayName).toBe('FooBar');
-
     definition = statement(`
       class Foo {
 
+      }
+    `);
+    displayNameHandler(documentation, definition);
+    expect(documentation.displayName).toBe('Foo');
+  });
+
+  it('infers the displayName with stateless functional component', () => {
+    var definition = expression('({displayName: "FooBar"})');
+    displayNameHandler(documentation, definition);
+    expect(documentation.displayName).toBe('FooBar');
+
+    definition = statement(`
+      var Foo = () => {
+        return <div>JSX</div>
       }
     `);
     displayNameHandler(documentation, definition);

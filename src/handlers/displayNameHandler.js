@@ -31,7 +31,7 @@ export default function displayNameHandler(
     }
     displayNamePath = displayNamePath.node.value
   } else if (!displayNamePath) {
-    displayNamePath = path.node.id.name;
+    displayNamePath = path.node.id ? path.node.id.name : path.node.declarations[0].id.name;
   }
 
   documentation.set('displayName', displayNamePath);
