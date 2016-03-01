@@ -83,4 +83,18 @@ describe('defaultPropsHandler', () => {
     expect(() => displayNameHandler(documentation, definition)).not.toThrow();
     expect(documentation.displayName).not.toBeDefined();
   });
+
+  it('infers the displayName with es6 class', () => {
+    var definition = expression('({displayName: "FooBar"})');
+    displayNameHandler(documentation, definition);
+    expect(documentation.displayName).toBe('FooBar');
+
+    definition = statement(`
+      class Foo {
+
+      }
+    `);
+    displayNameHandler(documentation, definition);
+    expect(documentation.displayName).toBe('Foo');
+  });
 });

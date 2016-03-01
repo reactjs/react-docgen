@@ -23,12 +23,16 @@ export default function displayNameHandler(
   path: NodePath
 ) {
   var displayNamePath = getMemberValuePath(path, 'displayName');
-  if (!displayNamePath) {
-    return;
+
+  if (displayNamePath) {
+    displayNamePath = resolveToValue(displayNamePath);
+    if (!types.Literal.check(displayNamePath.node)) {
+      return;
+    }
+    displayNamePath = displayNamePath.node.value
+  } else if (!displayNamePath) {
+    displayNamePath = path.node.id.name;
   }
-  displayNamePath = resolveToValue(displayNamePath);
-  if (!displayNamePath || !types.Literal.check(displayNamePath.node)) {
-    return;
-  }
-  documentation.set('displayName', displayNamePath.node.value);
+
+  documentation.set('displayName', displayNamePath);
 }
