@@ -13,6 +13,7 @@
 import type Documentation from '../Documentation';
 
 import getMemberValuePath from '../utils/getMemberValuePath';
+import { resolveName } from '../utils/getMemberExpressionValuePath';
 import recast from 'recast';
 import resolveToValue from '../utils/resolveToValue';
 
@@ -30,8 +31,12 @@ export default function displayNameHandler(
       return;
     }
     displayNamePath = displayNamePath.node.value
-  } else if (!displayNamePath) {
-    displayNamePath = path.node.id ? path.node.id.name : path.node.declarations[0].id.name;
+  } else if (!displayNamePath && path.node.id) {
+    displayNamePath = path.node.id.name;
+  } else if (!displayNamePath && resolveName(path)){
+    displayNamePath = resolveName(path)
+  } else {
+    return
   }
 
   documentation.set('displayName', displayNamePath);

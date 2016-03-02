@@ -15,7 +15,7 @@ import recast from 'recast';
 
 var {types: {namedTypes: types}} = recast;
 
-function resolveName(path) {
+export function resolveName(path) {
   if (types.VariableDeclaration.check(path.node)) {
     var declarations = path.get('declarations');
     if (declarations.value.length && declarations.value.length !== 1) {
