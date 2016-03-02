@@ -9,6 +9,8 @@
  */
 
 /*global jest, describe, beforeEach, it, expect*/
+var os = require('os');
+var EOL = os.EOL;
 
 jest
   .dontMock('../docblock');
@@ -57,8 +59,8 @@ describe('docblock', () => {
     });
 
     it('gets the closest docblock of the given node', () => {
-      let node = statement(source.join('\n'));
-      expect(getDocblock(node)).toEqual(comment.join('\n'));
+      let node = statement(source.join(EOL));
+      expect(getDocblock(node)).toEqual(comment.join(EOL));
     });
 
     let terminators = [
@@ -71,7 +73,7 @@ describe('docblock', () => {
     terminators.forEach(t => {
       it('can handle ' + escape(t) + ' as line terminator', () => {
           let node = statement(source.join(t));
-          expect(getDocblock(node)).toEqual(comment.join('\n'));
+          expect(getDocblock(node)).toEqual(comment.join(EOL));
       });
     });
 
@@ -80,7 +82,7 @@ describe('docblock', () => {
         '/** bar */',
         'foo;',
       ];
-      let node = statement(source.join('\n'));
+      let node = statement(source.join(EOL));
       expect(getDocblock(node)).toEqual('bar');
     });
   });

@@ -15,15 +15,15 @@ jasmine.getEnv().defaultTimeoutInterval = 10000;
 
 jest.autoMockOff();
 
-var child_process = require('child_process'); // eslint-disable-line camelcase
 var fs = require('fs');
 var path = require('path');
 var rimraf = require('rimraf');
 var temp = require('temp');
+var spawn = require('cross-spawn-async');
 
 function run(args, stdin) {
   return new Promise(resolve => {
-    var docgen = child_process.spawn( // eslint-disable-line camelcase
+    var docgen = spawn( // eslint-disable-line camelcase
       path.join(__dirname, '../react-docgen.js'),
       args
     );
