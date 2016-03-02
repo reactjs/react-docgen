@@ -13,7 +13,7 @@
 import type Documentation from '../Documentation';
 
 import getMemberValuePath from '../utils/getMemberValuePath';
-import { resolveName } from '../utils/getMemberExpressionValuePath';
+import resolveName from '../utils/resolveName';
 import recast from 'recast';
 import resolveToValue from '../utils/resolveToValue';
 
