@@ -71,12 +71,19 @@ describe('defaultPropsHandler', () => {
   });
 
   it('infers the displayName with es6 class', () => {
-    var definition = expression('({displayName: "FooBar"})');
+    var definition = statement(`
+      class Foo {}
+    `);
     displayNameHandler(documentation, definition);
-    expect(documentation.displayName).toBe('FooBar');
-    definition = statement(`
-      class Foo {
+    expect(documentation.displayName).toBe('Foo');
+  });
 
+  it('infers the displayName with extended es6 class', () => {
+    var definition = statement(`
+      class Foo extends Component {
+        render(){
+          return null
+        }
       }
     `);
     displayNameHandler(documentation, definition);
@@ -84,14 +91,24 @@ describe('defaultPropsHandler', () => {
   });
 
   it('infers the displayName with stateless functional component', () => {
-    var definition = expression('({displayName: "FooBar"})');
-    displayNameHandler(documentation, definition);
-    expect(documentation.displayName).toBe('FooBar');
-
-    definition = statement(`
+    var definition = statement(`
       var Foo = () => {
         return <div>JSX</div>
       }
+    `);
+    displayNameHandler(documentation, definition);
+    expect(documentation.displayName).toBe('Foo');
+  });
+
+  it('infers the displayName from Function Expression', () => {
+    var definition = expression('(function Foo() {})');
+    displayNameHandler(documentation, definition);
+    expect(documentation.displayName).toBe('Foo');
+  });
+
+  it('infers the displayName with named export', () => {
+    var definition = statement(`
+      export var Foo = function() {}
     `);
     displayNameHandler(documentation, definition);
     expect(documentation.displayName).toBe('Foo');
