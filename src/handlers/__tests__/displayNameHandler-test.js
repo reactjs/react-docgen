@@ -118,7 +118,7 @@ describe('defaultPropsHandler with ES6 Exports', () => {
       }
     `);
     displayNameHandler(documentation, definition);
-    expect(documentation.displayName).toBe('Foo');
+    expect(documentation.displayName).toBe('BarFoo');
   });
 
   it('resolves identifiers', () => {
