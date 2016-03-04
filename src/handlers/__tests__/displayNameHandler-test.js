@@ -99,6 +99,15 @@ describe('defaultPropsHandler', () => {
     displayNameHandler(documentation, definition);
     expect(documentation.displayName).toBe('Foo');
   });
+
+  it('infers the displayName with function expression', () => {
+    var definition = statement(`
+      (function FooBar() {})
+    `);
+    displayNameHandler(documentation, definition);
+    expect(documentation.displayName).toBe('FooBar');
+  });
+
 });
 
 describe('defaultPropsHandler with ES6 Exports', () => {
@@ -111,6 +120,7 @@ describe('defaultPropsHandler with ES6 Exports', () => {
     documentation = new (require('../../Documentation'));
     displayNameHandler = require('../displayNameHandler');
   });
+
   it('extracts the displayName', () => {
     var definition = statement(`
       export class Foo {
@@ -171,4 +181,44 @@ describe('defaultPropsHandler with ES6 Exports', () => {
     displayNameHandler(documentation, definition);
     expect(documentation.displayName).toBe('Foo');
   });
+
+  it('infers the displayName with stateless function expression', () => {
+    var definition = statement(`
+      export function Qux() {}
+    `);
+    displayNameHandler(documentation, definition);
+    expect(documentation.displayName).toBe('Qux');
+  });
+
 });
+
+describe('defaultPropsHandler with commonJS Exports', () => {
+  var documentation;
+  var displayNameHandler;
+  var expression, statement;
+
+  beforeEach(() => {
+    ({expression, statement} = require('../../../tests/utils'));
+    documentation = new (require('../../Documentation'));
+    displayNameHandler = require('../displayNameHandler');
+  });
+
+  it('infers the displayName with stateless functional component', () => {
+    var definition = statement(`
+      exports.Baz = () => {
+        return <div>JSX</div>
+      }
+    `);
+    displayNameHandler(documentation, definition);
+    expect(documentation.displayName).toBe('Baz');
+  });
+
+  it('infers the displayName with function declaration', () => {
+    var definition = statement(`
+      exports.BazBar = function () {}
+    `);
+    displayNameHandler(documentation, definition);
+    expect(documentation.displayName).toBe('BazBar');
+  });
+});
+

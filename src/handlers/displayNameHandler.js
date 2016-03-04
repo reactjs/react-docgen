@@ -42,22 +42,36 @@ export default function displayNameHandler(
   documentation: Documentation,
   path: NodePath
 ) {
-  var displayNamePath;
+  var displayName;
 
-  if (!types.ExportNamedDeclaration.check(path.node) && !isExportsOrModuleAssignment(path)) {
-    displayNamePath = getOrInferDisplayName(path);
-  } else {
+    //If not immediately exported via ES6 or CommonJS exports or an ExpressionStatement
+  if (!types.ExportNamedDeclaration.check(path.node) && !isExportsOrModuleAssignment(path) && !types.ExpressionStatement.check(path.node)) {
+    displayName = getOrInferDisplayName(path);
 
+    //ES6 Exports
+  } else if (types.ExportNamedDeclaration.check(path.node)) {
     var declarationPath;
     var declaration = path.node.declaration;
 
-    if (declaration.type === types.ClassDeclaration.name) {
+    if (
+        declaration.type === types.ClassDeclaration.name ||
+        declaration.type === types.FunctionDeclaration.name ||
+        declaration.type === types.FunctionExpression.name
+      ) {
       declarationPath = resolveExportDeclaration(path)[0];
+
     } else if (declaration.type === types.VariableDeclaration.name) {
+
       declarationPath = resolveExportDeclaration(path)[0].parentPath.parentPath.parentPath;
     }
+    displayName = getOrInferDisplayName(declarationPath);
 
-    displayNamePath = getOrInferDisplayName(declarationPath);
+    //CommonJS export.X
+  } else if (isExportsOrModuleAssignment(path)) {
+    displayName = resolveToValue(path).get('expression', 'left', 'property', 'name').value;
+
+  } else if (types.ExpressionStatement.check(path.node)) {
+    displayName = resolveToValue(path).get('expression').value.id.name
   }
-  documentation.set('displayName', displayNamePath);
+  documentation.set('displayName', displayName);
 }
