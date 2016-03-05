@@ -13,7 +13,7 @@
 jest.autoMockOff();
 jest.mock('../../Documentation');
 
-describe('defaultPropsHandler', () => {
+describe('displayNameHandler', () => {
   var documentation;
   var displayNameHandler;
   var expression, statement;
@@ -154,10 +154,10 @@ describe('defaultPropsHandler with ES6 Exports', () => {
 
   it('infers the displayName with es6 class', () => {
     var definition = statement(`
-      export class Foo {}
+      export class Baz {}
     `);
     displayNameHandler(documentation, definition);
-    expect(documentation.displayName).toBe('Foo');
+    expect(documentation.displayName).toBe('Baz');
   });
 
   it('infers the displayName with extended es6 class', () => {
@@ -172,22 +172,28 @@ describe('defaultPropsHandler with ES6 Exports', () => {
     expect(documentation.displayName).toBe('Foo');
   });
 
-  it('infers the displayName with stateless functional component', () => {
+  it('infers the displayName with arrow function declaration', () => {
     var definition = statement(`
-      export var Foo = () => {
-        return <div>JSX</div>
-      }
+      export var Bar = () => {}
     `);
     displayNameHandler(documentation, definition);
-    expect(documentation.displayName).toBe('Foo');
+    expect(documentation.displayName).toBe('Bar');
   });
 
-  it('infers the displayName with stateless function expression', () => {
+  it('infers the displayName with function expression', () => {
     var definition = statement(`
       export function Qux() {}
     `);
     displayNameHandler(documentation, definition);
     expect(documentation.displayName).toBe('Qux');
+  });
+
+  it('infers the displayName with function declaration', () => {
+    var definition = statement(`
+      export const Foo = function() {}
+    `);
+    displayNameHandler(documentation, definition);
+    expect(documentation.displayName).toBe('Foo');
   });
 
 });

@@ -16,7 +16,6 @@ import getMemberValuePath from '../utils/getMemberValuePath';
 import resolveName from '../utils/resolveName';
 import recast from 'recast';
 import resolveToValue from '../utils/resolveToValue';
-import resolveToModule from '../utils/resolveToModule';
 import isExportsOrModuleAssignment from '../utils/isExportsOrModuleAssignment';
 import resolveExportDeclaration from '../utils/resolveExportDeclaration'
 
@@ -64,14 +63,15 @@ export default function displayNameHandler(
 
       declarationPath = resolveExportDeclaration(path)[0].parentPath.parentPath.parentPath;
     }
+
     displayName = getOrInferDisplayName(declarationPath);
 
     //CommonJS export.X
   } else if (isExportsOrModuleAssignment(path)) {
     displayName = resolveToValue(path).get('expression', 'left', 'property', 'name').value;
 
-  } else if (types.ExpressionStatement.check(path.node)) {
-    displayName = resolveToValue(path).get('expression').value.id.name
+  } else if (types.ExpressionStatement.check(path.node) && path.node.expression.id) {
+    displayName = path.node.expression.id.name;
   }
   documentation.set('displayName', displayName);
 }
