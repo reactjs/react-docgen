@@ -110,7 +110,7 @@ describe('displayNameHandler', () => {
 
 });
 
-describe('defaultPropsHandler with ES6 Exports', () => {
+describe('displayNameHandler with ES6 Exports', () => {
   var documentation;
   var displayNameHandler;
   var expression, statement;
@@ -198,7 +198,7 @@ describe('defaultPropsHandler with ES6 Exports', () => {
 
 });
 
-describe('defaultPropsHandler with commonJS Exports', () => {
+describe('displayNameHandler with CommonJS Exports', () => {
   var documentation;
   var displayNameHandler;
   var expression, statement;
