@@ -10,6 +10,9 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
+var os = require('os');
+var EOL = os.EOL;
+
 jest.autoMockOff();
 jest.mock('../../Documentation');
 
@@ -67,7 +70,7 @@ describe('propDocBlockHandler', () => {
       expect(documentation.descriptors).toEqual({
         foo: {
           description:
-            'Foo comment with\nmany lines!\n\neven with empty lines in between',
+            'Foo comment with'+EOL+'many lines!'+EOL+'\neven with empty lines in between',
         },
       });
     });
