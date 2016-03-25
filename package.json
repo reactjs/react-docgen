@@ -27,6 +27,7 @@
     "async": "^1.4.2",
     "babel-runtime": "~5.8.25",
     "babylon": "~5.8.3",
+    "doctrine": "^1.2.0",
     "node-dir": "^0.1.10",
     "nomnom": "^1.8.1",
     "recast": "^0.10.41"

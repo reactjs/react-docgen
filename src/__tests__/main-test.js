@@ -26,6 +26,7 @@ describe('main', () => {
       expect(docs).toEqual({
         displayName: 'ABC',
         description: 'Example component description',
+        methods: [],
         props: {
           foo: {
             type: {

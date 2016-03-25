@@ -25,6 +25,7 @@ var defaultHandlers = [
   handlers.defaultPropsHandler,
   handlers.componentDocblockHandler,
   handlers.displayNameHandler,
+  handlers.componentMethodsHandler,
 ];
 
 /**
