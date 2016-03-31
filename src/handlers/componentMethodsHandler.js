@@ -35,6 +35,10 @@ function getMethodsDoc(methodPaths) {
   return methods;
 }
 
+function isFunctionExpression(path) {
+  return types.FunctionExpression.check(path.get('value').node)
+}
+
 /**
  * Extract all flow types for the methods of a react component. Doesn't
  * return any react specific lifecycle methods.
@@ -44,29 +48,24 @@ export default function componentMethodsHandler(
   path: NodePath
 ) {
   // Extract all methods from the class or object.
-  let methodPaths;
+  let methodPaths = [];
   if (isReactComponentClass(path)) {
     methodPaths = path
       .get('body', 'body')
       .filter(p => types.MethodDefinition.check(p.node) && p.node.kind !== 'constructor');
   } else if (types.ObjectExpression.check(path.node)) {
-    const properties = path.get('properties');
+    methodPaths = path.get('properties').filter(isFunctionExpression);
 
     // Add the statics object properties.
     const statics = getMemberValuePath(path, 'statics');
     if (statics) {
       statics.get('properties').each(p => {
-        p.node.static = true;
-        properties.push(p.node);
+        if (isFunctionExpression(p)) {
+          p.node.static = true;
+          methodPaths.push(p);
+        }
       });
     }
-
-    methodPaths = properties.filter(p => types.FunctionExpression.check(p.get('value').node));
-  }
-
-  if (!methodPaths) {
-    documentation.set('methods', []);
-    return;
   }
 
   const methods = getMethodsDoc(methodPaths);
