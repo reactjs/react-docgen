@@ -31,17 +31,16 @@ describe('getMethodDocumentation', () => {
       const method = def.get('body', 'body', 0);
       expect(getMethodDocumentation(method)).toEqual({
         name: 'hello',
-        description: null,
-        visibility: 'public',
+        docblock: null,
         modifiers: [],
-        return: null,
+        returns: null,
         params: [],
       });
     });
   });
 
-  describe('description', () => {
-    it('extracts the method description in jsdoc', () => {
+  describe('docblock', () => {
+    it('extracts the method docblock', () => {
       const def = statement(`
         class Foo {
           /**
@@ -53,10 +52,9 @@ describe('getMethodDocumentation', () => {
       const method = def.get('body', 'body', 0);
       expect(getMethodDocumentation(method)).toEqual({
         name: 'foo',
-        description: 'Don\'t use this!',
-        visibility: 'public',
+        docblock: 'Don\'t use this!',
         modifiers: [],
-        return: null,
+        returns: null,
         params: [],
       });
     });
@@ -67,10 +65,9 @@ describe('getMethodDocumentation', () => {
     function methodParametersDoc(params) {
       return {
         name: 'foo',
-        description: null,
-        visibility: 'public',
+        docblock: null,
         modifiers: [],
-        return: null,
+        returns: null,
         params,
       };
     }
@@ -85,114 +82,9 @@ describe('getMethodDocumentation', () => {
       expect(getMethodDocumentation(method)).toEqual(
         methodParametersDoc([{
           name: 'bar',
-          description: null,
           type: {name: 'number'},
         }])
       );
-    });
-
-    it('extracts jsdoc description', () => {
-      const def = statement(`
-        class Foo {
-          /**
-           * @param bar test
-           */
-          foo(bar) {}
-        }
-      `);
-      const method = def.get('body', 'body', 0);
-      expect(getMethodDocumentation(method)).toEqual(
-        methodParametersDoc([{
-          name: 'bar',
-          description: 'test',
-          type: null,
-        }])
-      );
-    });
-
-    it('works with complex parameters', () => {
-      const def = statement(`
-        class Foo {
-          /**
-           * @param bar test
-           * @param hello bar
-           * @param test hello
-           */
-          foo(bar: number, test: boolean, hello) {}
-        }
-      `);
-      const method = def.get('body', 'body', 0);
-      expect(getMethodDocumentation(method)).toEqual(
-        methodParametersDoc([{
-          name: 'bar',
-          description: 'test',
-          type: {name: 'number'},
-        }, {
-          name: 'test',
-          description: 'hello',
-          type: {name: 'boolean'},
-        }, {
-          name: 'hello',
-          description: 'bar',
-          type: null,
-        }])
-      );
-    });
-
-    describe('visibility', () => {
-
-      function methodVisibilityDoc(visibility) {
-        return {
-          name: 'foo',
-          description: null,
-          visibility,
-          modifiers: [],
-          return: null,
-          params: [],
-        };
-      }
-
-      it('extracts visibility from jsdoc @access', () => {
-        const def = statement(`
-          class Foo {
-            /**
-             * @access private
-             */
-            foo() {}
-          }
-        `);
-        const method = def.get('body', 'body', 0);
-        expect(getMethodDocumentation(method)).toEqual(
-          methodVisibilityDoc('private')
-        );
-      });
-
-      it('extracts visibility from jsdoc @private', () => {
-        const def = statement(`
-          class Foo {
-            /**
-             * @private
-             */
-            foo() {}
-          }
-        `);
-        const method = def.get('body', 'body', 0);
-        expect(getMethodDocumentation(method)).toEqual(
-          methodVisibilityDoc('private')
-        );
-      });
-
-      it('returns public if no jsdoc', () => {
-        const def = statement(`
-          class Foo {
-            foo() {}
-          }
-        `);
-        const method = def.get('body', 'body', 0);
-        expect(getMethodDocumentation(method)).toEqual(
-          methodVisibilityDoc('public')
-        );
-      });
     });
 
     describe('modifiers', () => {
@@ -200,10 +92,9 @@ describe('getMethodDocumentation', () => {
       function methodModifiersDoc(modifiers) {
         return {
           name: 'foo',
-          description: null,
-          visibility: 'public',
+          docblock: null,
           modifiers,
-          return: null,
+          returns: null,
           params: [],
         };
       }
@@ -269,15 +160,14 @@ describe('getMethodDocumentation', () => {
       });
     });
 
-    describe('return', () => {
+    describe('returns', () => {
 
       function methodReturnDoc(returnValue) {
         return {
           name: 'foo',
-          description: null,
-          visibility: 'public',
+          docblock: null,
           modifiers: [],
-          return: returnValue,
+          returns: returnValue,
           params: [],
         };
       }
@@ -303,26 +193,7 @@ describe('getMethodDocumentation', () => {
         const method = def.get('body', 'body', 0);
         expect(getMethodDocumentation(method)).toEqual(
           methodReturnDoc({
-            description: null,
             type: {name: 'number'},
-          })
-        );
-      });
-
-      it('extracts description from jsdoc', () => {
-        const def = statement(`
-          class Foo {
-            /**
-             * @returns nothing
-             */
-            foo () {}
-          }
-        `);
-        const method = def.get('body', 'body', 0);
-        expect(getMethodDocumentation(method)).toEqual(
-          methodReturnDoc({
-            description: 'nothing',
-            type: null,
           })
         );
       });

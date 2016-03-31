@@ -26,6 +26,7 @@ var defaultHandlers = [
   handlers.componentDocblockHandler,
   handlers.displayNameHandler,
   handlers.componentMethodsHandler,
+  handlers.componentMethodsJsDocHandler,
 ];
 
 /**

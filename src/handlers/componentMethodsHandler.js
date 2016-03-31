@@ -36,8 +36,8 @@ function getMethodsDoc(methodPaths) {
 }
 
 /**
- * Extract all flow types and information from jsdoc for the methods of a
- * react component. Doesn't return any react specific lifecycle methods.
+ * Extract all flow types for the methods of a react component. Doesn't
+ * return any react specific lifecycle methods.
  */
 export default function componentMethodsHandler(
   documentation: Documentation,

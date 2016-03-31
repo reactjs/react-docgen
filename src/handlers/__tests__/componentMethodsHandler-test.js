@@ -28,24 +28,20 @@ describe('componentMethodsHandler', () => {
     componentMethodsHandler(documentation, definition);
     expect(documentation.methods).toEqual([{
       name: 'foo',
-      description: 'The foo method',
-      visibility: 'protected',
+      docblock: 'The foo method',
       modifiers: [],
-      return: {
-        description: 'The number',
+      returns: {
         type: {name: 'number'},
       },
       params: [{
         name: 'bar',
-        description: 'The bar param',
         type: {name: 'number'},
       }],
     }, {
       name: 'bar',
-      description: 'Static function',
-      visibility: 'public',
+      docblock: 'Static function',
       modifiers: ['static'],
-      return: null,
+      returns: null,
       params: [],
     }]);
   }
@@ -55,9 +51,6 @@ describe('componentMethodsHandler', () => {
       ({
         /**
          * The foo method
-         * @protected
-         * @param bar The bar param
-         * @returns The number
          */
         foo(bar: number): number {
           return bar;
@@ -86,9 +79,6 @@ describe('componentMethodsHandler', () => {
       class Test {
         /**
          * The foo method
-         * @protected
-         * @param bar The bar param
-         * @returns The number
          */
         foo(bar: number): number {
           return bar;

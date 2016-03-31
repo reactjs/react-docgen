@@ -9,28 +9,26 @@
  * @flow
  */
 
+import {getDocblock} from './docblock';
 import getFlowType from './getFlowType';
-import getMethodJSDoc from './getMethodJSDoc';
 import getPropertyName from './getPropertyName';
 import getTypeAnnotation from './getTypeAnnotation';
 
 type MethodParameter = {
   name: string;
-  description?: ?string;
   type?: ?FlowTypeDescriptor;
 };
+
 type MethodReturn = {
-  description: ?string;
   type: ?FlowTypeDescriptor;
 };
 
 type MethodDocumentation = {
   name: string;
-  description: ?string;
+  docblock: ?string;
   modifiers: Array<string>;
-  visibility: string;
   params: Array<MethodParameter>;
-  return: ?MethodReturn;
+  returns: ?MethodReturn;
 };
 
 function getMethodParamsDoc(methodPath, jsDoc) {
@@ -47,76 +45,27 @@ function getMethodParamsDoc(methodPath, jsDoc) {
 
     const param = {
       name: paramPath.node.name,
-      description: null,
       type,
     };
 
     params.push(param);
   });
 
-  // Add jsdoc @param descriptions.
-  if (jsDoc) {
-    jsDoc.tags
-      .filter(tag => tag.title === 'param')
-      .forEach(tag => {
-        const param = params.find(p => p.name === tag.name);
-        if (param) {
-          param.description = tag.description;
-        }
-      });
-  }
-
   return params;
 }
 
+// Extract flow return type.
 function getMethodReturnDoc(methodPath, jsDoc) {
   const functionExpression = methodPath.get('value');
 
-  let type = null;
-  let description = null;
-
-  // Extract flow return type.
   if (functionExpression.node.returnType) {
     const returnType = getTypeAnnotation(functionExpression.get('returnType'));
     if (returnType) {
-      type = getFlowType(returnType);
+      return {type: getFlowType(returnType)};
     }
   }
 
-  // Add jsdoc @return description.
-  if (jsDoc) {
-    const returnTag = jsDoc.tags.find(tag => tag.title === 'returns');
-    if (returnTag) {
-      description = returnTag.description;
-    }
-  }
-
-  if (type || description) {
-    return {
-      type,
-      description,
-    };
-  }
   return null;
-}
-
-function getMethodVisibility(jsDoc) {
-  if (jsDoc) {
-    for (const tag of jsDoc.tags) {
-      switch (tag.title) {
-        case 'private':
-        case 'public':
-        case 'protected':
-          return tag.title;
-        case 'access':
-          return tag.access;
-        default:
-          break;
-      }
-    }
-  }
-
-  return 'public';
 }
 
 function getMethodModifiers(methodPath) {
@@ -139,14 +88,13 @@ function getMethodModifiers(methodPath) {
 
 export default function getMethodDocumentation(methodPath: NodePath): MethodDocumentation {
   const name = getPropertyName(methodPath);
-  const jsDoc = getMethodJSDoc(methodPath);
+  const docblock = getDocblock(methodPath);
 
   return {
     name,
-    description: jsDoc && jsDoc.description || null,
+    docblock,
     modifiers: getMethodModifiers(methodPath),
-    visibility: getMethodVisibility(jsDoc),
-    params: getMethodParamsDoc(methodPath, jsDoc),
-    return: getMethodReturnDoc(methodPath, jsDoc),
+    params: getMethodParamsDoc(methodPath),
+    returns: getMethodReturnDoc(methodPath),
   };
 }
