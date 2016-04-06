@@ -35,6 +35,7 @@ declare class NodePath {
   each(f: (p: NodePath) => any): any;
   map<T>(f: (p: NodePath) => T): Array<T>;
   filter(f: (p: NodePath) => bool): Array<NodePath>;
+  push(node: ASTNode): void;
 }
 
 type Recast = {
