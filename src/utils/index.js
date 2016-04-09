@@ -24,6 +24,7 @@ export {default as getMembers} from './getMembers';
 export {default as getMemberValuePath} from './getMemberValuePath';
 export {default as getMethodDocumentation} from './getMethodDocumentation';
 export {default as getNameOrValue} from './getNameOrValue';
+export {default as getParameterName} from './getParameterName';
 export {default as getPropertyName} from './getPropertyName';
 export {default as getPropertyValuePath} from './getPropertyValuePath';
 export {default as getPropType} from './getPropType';
