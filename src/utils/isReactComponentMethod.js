@@ -16,17 +16,18 @@ import getPropertyName from './getPropertyName';
 const {types: {namedTypes: types}} = recast;
 
 const componentMethods = [
-  'render',
-  'getInitialState',
-  'getDefaultProps',
-  'getChildContext',
-  'componentWillMount',
   'componentDidMount',
-  'componentWillReceiveProps',
-  'shouldComponentUpdate',
-  'componentWillUpdate',
+  'componentDidReceiveProps',
   'componentDidUpdate',
+  'componentWillMount',
+  'componentWillReceiveProps',
   'componentWillUnmount',
+  'componentWillUpdate',
+  'getChildContext',
+  'getDefaultProps',
+  'getInitialState',
+  'render',
+  'shouldComponentUpdate',
 ];
 
 /**

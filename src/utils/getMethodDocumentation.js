@@ -11,6 +11,7 @@
 
 import {getDocblock} from './docblock';
 import getFlowType from './getFlowType';
+import getParameterName from './getParameterName';
 import getPropertyName from './getPropertyName';
 import getTypeAnnotation from './getTypeAnnotation';
 
@@ -44,7 +45,7 @@ function getMethodParamsDoc(methodPath, jsDoc) {
     }
 
     const param = {
-      name: paramPath.node.name,
+      name: getParameterName(paramPath),
       type,
     };
 
