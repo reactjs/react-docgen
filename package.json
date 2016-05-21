@@ -12,9 +12,11 @@
   },
   "main": "dist/main.js",
   "scripts": {
+    "lint": "eslint src/",
     "watch": "babel src/ --out-dir dist/ --watch",
     "build": "rm -rf dist/ && babel src/ --out-dir dist/ --ignore __tests__,__mocks__",
     "prepublish": "npm run build",
+    "preversion": "npm run lint",
     "test": "jest"
   },
   "keywords": [
@@ -34,11 +36,13 @@
   },
   "devDependencies": {
     "babel": "^5.6.23",
+    "babel-eslint": "^6.0.4",
     "babel-jest": "^5.3.0",
+    "cross-spawn-async": "^2.1.9",
+    "eslint": "^2.10.2",
     "jest-cli": "^0.8.0",
     "rimraf": "^2.3.2",
-    "temp": "^0.8.1",
-    "cross-spawn-async": "^2.1.9"
+    "temp": "^0.8.1"
   },
   "jest": {
     "preprocessCachingDisabled": true,
