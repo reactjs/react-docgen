@@ -136,19 +136,19 @@ describe('flowTypeHandler', () => {
   describe('TypeAlias', () => {
     describe('class definition', () => {
       test(
-        propTypesSrc => statement(template(`class Foo extends Component<void, Props, void> {}`, propTypesSrc))
+        propTypesSrc => statement(template('class Foo extends Component<void, Props, void> {}', propTypesSrc))
       );
     });
 
     describe('class definition with inline props', () => {
       test(
-          propTypesSrc => statement(template(`class Foo extends Component { props: Props; }`, propTypesSrc))
+          propTypesSrc => statement(template('class Foo extends Component { props: Props; }', propTypesSrc))
       );
     });
 
     describe('stateless component', () => {
       test(
-        propTypesSrc => statement(template(`(props: Props) => <div />;`, propTypesSrc)).get('expression')
+        propTypesSrc => statement(template('(props: Props) => <div />;', propTypesSrc)).get('expression')
       );
     });
   });
