@@ -167,6 +167,47 @@ describe('flowTypeHandler', () => {
       .not.toThrow();
   });
 
+  it('supports intersection proptypes', () => {
+    var definition = statement(`
+      (props: Props) => <div />;
+     
+      var React = require('React');
+      import type Imported from 'something';
+  
+      type Props = Imported & { foo: 'bar' };
+    `).get('expression');
+
+
+    flowTypeHandler(documentation, definition);
+
+    expect(documentation.descriptors).toEqual({
+      foo: {
+        flowType: {},
+        required: true,
+      },
+    });
+  });
+
+  it('supports union proptypes', () => {
+    var definition = statement(`
+      (props: Props) => <div />;
+      
+      var React = require('React');
+      import type Imported from 'something';
+
+      type Props = Imported | { foo: 'bar' };
+    `).get('expression');
+
+    flowTypeHandler(documentation, definition);
+
+    expect(documentation.descriptors).toEqual({
+      foo: {
+        flowType: {},
+        required: true,
+      },
+    });
+  });
+
   describe('does not error for unreachable type', () => {
     function test(code) {
       var definition = statement(code).get('expression');

@@ -16,6 +16,28 @@ import getFlowType from '../utils/getFlowType';
 import getPropertyName from '../utils/getPropertyName';
 import getFlowTypeFromReactComponent from '../utils/getFlowTypeFromReactComponent';
 
+function setPropDescriptor(documentation: Documentation, path: NodePath): void {
+  const propDescriptor = documentation.getPropDescriptor(getPropertyName(path));
+  const type = getFlowType(path.get('value'));
+
+  if (type) {
+    propDescriptor.flowType = type;
+    propDescriptor.required = !path.node.optional;
+  }
+}
+
+function findAndSetTypes(documentation: Documentation, path: NodePath): void {
+  if (path.node.properties) {
+    path.get('properties').each(
+      propertyPath => setPropDescriptor(documentation, propertyPath)
+    );
+  } else if (path.node.types) {
+    path.get('types').each(
+      typesPath => findAndSetTypes(documentation, typesPath)
+    );
+  }
+}
+
 /**
  * This handler tries to find flow Type annotated react components and extract
  * its types to the documentation. It also extracts docblock comments which are
@@ -28,16 +50,5 @@ export default function flowTypeHandler(documentation: Documentation, path: Node
     return;
   }
 
-  flowTypesPath.get('properties').each(propertyPath => {
-    const propDescriptor = documentation.getPropDescriptor(
-      getPropertyName(propertyPath)
-    );
-    const valuePath = propertyPath.get('value');
-    const type = getFlowType(valuePath);
-
-    if (type) {
-      propDescriptor.flowType = type;
-      propDescriptor.required = !propertyPath.node.optional;
-    }
-  });
+  findAndSetTypes(documentation, flowTypesPath);
 }
