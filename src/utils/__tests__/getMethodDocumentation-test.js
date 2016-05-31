@@ -10,14 +10,14 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
-jest.autoMockOff();
+jest.disableAutomock();
 
 describe('getMethodDocumentation', () => {
   let getMethodDocumentation;
   let expression, statement;
 
   beforeEach(() => {
-    getMethodDocumentation = require('../getMethodDocumentation');
+    getMethodDocumentation = require('../getMethodDocumentation').default;
     ({expression, statement} = require('../../../tests/utils'));
   });
 

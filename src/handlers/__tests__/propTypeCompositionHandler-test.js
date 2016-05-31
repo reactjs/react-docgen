@@ -10,7 +10,7 @@
 
 /*global jest, describe, it, expect, beforeEach*/
 
-jest.autoMockOff();
+jest.disableAutomock();
 jest.mock('../../Documentation');
 
 describe('propTypeCompositionHandler', () => {
@@ -26,7 +26,7 @@ describe('propTypeCompositionHandler', () => {
     jest.mock('../../utils/getPropType');
 
     documentation = new (require('../../Documentation'))();
-    propTypeCompositionHandler = require('../propTypeCompositionHandler');
+    propTypeCompositionHandler = require('../propTypeCompositionHandler').default;
   });
 
   function test(getSrc, parse) {

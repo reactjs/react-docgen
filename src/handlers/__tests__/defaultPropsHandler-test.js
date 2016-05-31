@@ -10,7 +10,7 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
-jest.autoMockOff();
+jest.disableAutomock();
 jest.mock('../../Documentation');
 
 describe('defaultPropsHandler', () => {
@@ -21,7 +21,7 @@ describe('defaultPropsHandler', () => {
   beforeEach(() => {
     ({parse} = require('../../../tests/utils'));
     documentation = new (require('../../Documentation'));
-    defaultPropsHandler = require('../defaultPropsHandler');
+    defaultPropsHandler = require('../defaultPropsHandler').default;
   });
 
   function test(definition) {

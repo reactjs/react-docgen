@@ -57,7 +57,7 @@ var argv = require('nomnom')
 var async = require('async');
 var dir = require('node-dir');
 var fs = require('fs');
-var parser = require('../dist/main.js');
+var parser = require('../dist/main');
 var path = require('path');
 
 var output = argv.out;
@@ -69,10 +69,10 @@ var resolver;
 if (argv.resolver) {
   switch(argv.resolver) {
     case 'findAllComponentDefinitions':
-      resolver = require('../dist/resolver/findAllComponentDefinitions');
+      resolver = require('../dist/resolver/findAllComponentDefinitions').default;
       break;
     case 'findExportedComponentDefinition':
-      resolver = require('../dist/resolver/findExportedComponentDefinition');
+      resolver = require('../dist/resolver/findExportedComponentDefinition').default;
       break;
     default: // treat value as module path
       resolver = require(path.resolve(process.cwd(), argv.resolver));

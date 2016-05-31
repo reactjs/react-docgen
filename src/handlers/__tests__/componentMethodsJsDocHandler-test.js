@@ -10,7 +10,7 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
-jest.autoMockOff();
+jest.disableAutomock();
 
 describe('componentMethodsHandler', () => {
   let documentation;
@@ -18,7 +18,7 @@ describe('componentMethodsHandler', () => {
 
   beforeEach(() => {
     documentation = new (require('../../Documentation'));
-    componentMethodsJsDocHandler = require('../componentMethodsJsDocHandler');
+    componentMethodsJsDocHandler = require('../componentMethodsJsDocHandler').default;
   });
 
   it('stays the same when no docblock is present', () => {

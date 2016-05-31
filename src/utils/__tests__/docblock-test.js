@@ -12,8 +12,7 @@
 var os = require('os');
 var EOL = os.EOL;
 
-jest
-  .dontMock('../docblock');
+jest.unmock('../docblock');
 
 describe('docblock', () => {
 

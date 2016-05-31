@@ -10,14 +10,14 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
-jest.autoMockOff();
+jest.disableAutomock();
 
 describe('getTypeAnnotation', () => {
   var expression, statement;
   var getTypeAnnotation;
 
   beforeEach(() => {
-    getTypeAnnotation = require('../getTypeAnnotation');
+    getTypeAnnotation = require('../getTypeAnnotation').default;
     ({expression, statement} = require('../../../tests/utils'));
   });
 

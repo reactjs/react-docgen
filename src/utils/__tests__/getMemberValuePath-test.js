@@ -10,8 +10,7 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
-jest
-  .dontMock('../getMemberValuePath.js');
+jest.unmock('../getMemberValuePath');
 
 describe('getMemberValuePath', () => {
   var getMemberValuePath;
@@ -19,11 +18,11 @@ describe('getMemberValuePath', () => {
 
   beforeEach(() => {
     ({expression, statement} = require('../../../tests/utils'));
-    getMemberValuePath = require('../getMemberValuePath');
+    getMemberValuePath = require('../getMemberValuePath').default;
   });
 
   it('handles ObjectExpresisons', () => {
-    var getPropertyValuePath = require('../getPropertyValuePath');
+    var getPropertyValuePath = require('../getPropertyValuePath').default;
     var path = expression('{}');
 
     getMemberValuePath(path, 'foo');
@@ -31,7 +30,7 @@ describe('getMemberValuePath', () => {
   });
 
   it('handles ClassDeclarations', () => {
-    var getClassMemberValuePath = require('../getClassMemberValuePath');
+    var getClassMemberValuePath = require('../getClassMemberValuePath').default;
     var path = statement('class Foo {}');
 
     getMemberValuePath(path, 'foo');
@@ -39,7 +38,7 @@ describe('getMemberValuePath', () => {
   });
 
   it('handles ClassExpressions', () => {
-    var getClassMemberValuePath = require('../getClassMemberValuePath');
+    var getClassMemberValuePath = require('../getClassMemberValuePath').default;
     var path = expression('class {}');
 
     getMemberValuePath(path, 'foo');
@@ -47,8 +46,8 @@ describe('getMemberValuePath', () => {
   });
 
   it('tries synonyms', () => {
-    var getPropertyValuePath = require('../getPropertyValuePath');
-    var getClassMemberValuePath = require('../getClassMemberValuePath');
+    var getPropertyValuePath = require('../getPropertyValuePath').default;
+    var getClassMemberValuePath = require('../getClassMemberValuePath').default;
     var path = expression('{}');
 
     getMemberValuePath(path, 'defaultProps');
@@ -63,8 +62,8 @@ describe('getMemberValuePath', () => {
   });
 
   it('returns the result of getPropertyValuePath and getClassMemberValuePath', () => {
-    var getPropertyValuePath = require('../getPropertyValuePath');
-    var getClassMemberValuePath = require('../getClassMemberValuePath');
+    var getPropertyValuePath = require('../getPropertyValuePath').default;
+    var getClassMemberValuePath = require('../getClassMemberValuePath').default;
     getPropertyValuePath.mockReturnValue(42);
     getClassMemberValuePath.mockReturnValue(21);
     var path = expression('{}');

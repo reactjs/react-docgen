@@ -10,7 +10,7 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
-jest.autoMockOff();
+jest.disableAutomock();
 
 describe('isExportsOrModuleAssignment', () => {
   var recast;
@@ -23,7 +23,7 @@ describe('isExportsOrModuleAssignment', () => {
   }
 
   beforeEach(() => {
-    isExportsOrModuleAssignment = require('../isExportsOrModuleAssignment');
+    isExportsOrModuleAssignment = require('../isExportsOrModuleAssignment').default;
     recast = require('recast');
   });
 

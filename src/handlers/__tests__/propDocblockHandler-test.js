@@ -13,7 +13,7 @@
 var os = require('os');
 var EOL = os.EOL;
 
-jest.autoMockOff();
+jest.disableAutomock();
 jest.mock('../../Documentation');
 
 describe('propDocBlockHandler', () => {
@@ -24,7 +24,7 @@ describe('propDocBlockHandler', () => {
   beforeEach(() => {
     ({expression, statement} = require('../../../tests/utils'));
     documentation = new (require('../../Documentation'));
-    propDocBlockHandler = require('../propDocBlockHandler');
+    propDocBlockHandler = require('../propDocBlockHandler').default;
   });
 
   function test(getSrc, parse) {

@@ -10,14 +10,14 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
-jest.autoMockOff();
+jest.disableAutomock();
 
 describe('isRequiredPropType', () => {
   var expression;
   var isRequiredPropType;
 
   beforeEach(() => {
-    isRequiredPropType = require('../isRequiredPropType');
+    isRequiredPropType = require('../isRequiredPropType').default;
     ({expression} = require('../../../tests/utils'));
   });
 

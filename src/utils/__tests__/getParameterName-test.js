@@ -10,14 +10,14 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
-jest.autoMockOff();
+jest.disableAutomock();
 
 describe('getParameterName', () => {
   let getParameterName;
   let expression;
 
   beforeEach(() => {
-    getParameterName = require('../getParameterName');
+    getParameterName = require('../getParameterName').default;
     ({expression} = require('../../../tests/utils'));
   });
 
