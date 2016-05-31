@@ -10,7 +10,7 @@
 
 /*global jest, describe, it, expect, beforeEach*/
 
-jest.autoMockOff();
+jest.disableAutomock();
 jest.mock('../../Documentation');
 
 describe('flowTypeDocBlockHandler', () => {
@@ -26,7 +26,7 @@ describe('flowTypeDocBlockHandler', () => {
     jest.mock('../../utils/getFlowType');
 
     documentation = new (require('../../Documentation'));
-    flowTypeDocBlockHandler = require('../flowTypeDocBlockHandler');
+    flowTypeDocBlockHandler = require('../flowTypeDocBlockHandler').default;
   });
 
   function template(src, typeObject) {

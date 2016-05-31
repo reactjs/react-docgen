@@ -10,7 +10,7 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
-jest.autoMockOff();
+jest.disableAutomock();
 jest.mock('../../Documentation');
 
 describe('componentDocblockHandler', () => {
@@ -29,7 +29,7 @@ describe('componentDocblockHandler', () => {
   beforeEach(() => {
     ({parse} = require('../../../tests/utils'));
     documentation = new (require('../../Documentation'));
-    componentDocblockHandler = require('../componentDocblockHandler');
+    componentDocblockHandler = require('../componentDocblockHandler').default;
   });
 
   function test(definitionSrc, parse) { // eslint-disable-line no-shadow

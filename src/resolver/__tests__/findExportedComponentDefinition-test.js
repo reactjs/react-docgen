@@ -10,7 +10,7 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
-jest.autoMockOff();
+jest.disableAutomock();
 
 describe('findExportedComponentDefinition', () => {
   var findExportedComponentDefinition;
@@ -26,7 +26,7 @@ describe('findExportedComponentDefinition', () => {
 
   beforeEach(() => {
     findExportedComponentDefinition =
-      require('../findExportedComponentDefinition');
+      require('../findExportedComponentDefinition').default;
     utils = require('../../../tests/utils');
     recast = require('recast');
   });

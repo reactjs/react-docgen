@@ -10,7 +10,7 @@
 
 /*global jest, describe, it, expect, beforeEach*/
 
-jest.autoMockOff();
+jest.disableAutomock();
 jest.mock('../../Documentation');
 
 describe('propTypeHandler', () => {
@@ -26,7 +26,7 @@ describe('propTypeHandler', () => {
     jest.mock('../../utils/getPropType');
 
     documentation = new (require('../../Documentation'));
-    propTypeHandler = require('../propTypeHandler');
+    propTypeHandler = require('../propTypeHandler').default;
   });
 
   function template(src) {

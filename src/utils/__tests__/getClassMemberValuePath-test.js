@@ -10,14 +10,14 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
-jest.autoMockOff();
+jest.disableAutomock();
 
 describe('getClassMemberValuePath', () => {
   var getClassMemberValuePath;
   var statement;
 
   beforeEach(() => {
-    getClassMemberValuePath = require('../getClassMemberValuePath');
+    getClassMemberValuePath = require('../getClassMemberValuePath').default;
     ({statement} = require('../../../tests/utils'));
   });
 

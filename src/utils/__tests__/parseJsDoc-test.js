@@ -10,13 +10,13 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
-jest.autoMockOff();
+jest.disableAutomock();
 
 describe('parseJsDoc', () => {
   let parseJsDoc;
 
   beforeEach(() => {
-    parseJsDoc = require('../parseJsDoc');
+    parseJsDoc = require('../parseJsDoc').default;
   });
 
   describe('description', () => {

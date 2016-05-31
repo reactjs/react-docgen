@@ -11,14 +11,14 @@
 /*global jest, describe, beforeEach, it, expect*/
 
 
-jest.autoMockOff();
+jest.disableAutomock();
 
 describe('isStatelessComponent', () => {
   var isStatelessComponent;
   var statement, parse;
 
   beforeEach(() => {
-    isStatelessComponent = require('../isStatelessComponent');
+    isStatelessComponent = require('../isStatelessComponent').default;
     ({statement, parse} = require('../../../tests/utils'));
   });
 

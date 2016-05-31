@@ -10,7 +10,7 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
-jest.autoMockOff();
+jest.disableAutomock();
 
 describe('getPropertyValuePath', () => {
   var recast;
@@ -23,7 +23,7 @@ describe('getPropertyValuePath', () => {
   }
 
   beforeEach(() => {
-    getPropertyValuePath = require('../getPropertyValuePath');
+    getPropertyValuePath = require('../getPropertyValuePath').default;
     recast = require('recast');
   });
 

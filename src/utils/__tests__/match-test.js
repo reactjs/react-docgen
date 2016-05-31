@@ -10,13 +10,13 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
-jest.autoMockOff();
+jest.disableAutomock();
 
 describe('match', () => {
   var match;
 
   beforeEach(() => {
-    match = require('../match');
+    match = require('../match').default;
   });
 
   it('matches with exact properties', () => {

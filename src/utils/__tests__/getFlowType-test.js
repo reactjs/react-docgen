@@ -8,16 +8,16 @@
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
+/* global jest, describe, beforeEach, it, expect */
 
-jest.autoMockOff();
+jest.disableAutomock();
 
 describe('getFlowType', () => {
   var expression, statement;
   var getFlowType;
 
   beforeEach(() => {
-    getFlowType = require('../getFlowType');
+    getFlowType = require('../getFlowType').default;
     ({expression, statement} = require('../../../tests/utils'));
   });
 

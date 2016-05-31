@@ -10,10 +10,9 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
-import {statement} from '../../../tests/utils';
+import { statement } from '../../../tests/utils';
 
-jest
-  .dontMock('../resolveExportDeclaration');
+jest.unmock('../resolveExportDeclaration');
 
 
 describe('resolveExportDeclaration', () => {
@@ -22,9 +21,9 @@ describe('resolveExportDeclaration', () => {
   var resolveExportDeclaration;
 
   beforeEach(() => {
-    resolveToValue = require('../resolveToValue');
+    resolveToValue = require('../resolveToValue').default;
     resolveToValue.mockReturnValue(returnValue);
-    resolveExportDeclaration = require('../resolveExportDeclaration');
+    resolveExportDeclaration = require('../resolveExportDeclaration').default;
   });
 
   it('resolves default exports', () => {

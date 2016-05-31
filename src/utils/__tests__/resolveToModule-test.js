@@ -10,7 +10,7 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
-jest.autoMockOff();
+jest.disableAutomock();
 
 describe('resolveToModule', () => {
   var utils;
@@ -22,7 +22,7 @@ describe('resolveToModule', () => {
   }
 
   beforeEach(() => {
-    resolveToModule = require('../resolveToModule');
+    resolveToModule = require('../resolveToModule').default;
     utils = require('../../../tests/utils');
   });
 
