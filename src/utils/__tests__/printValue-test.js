@@ -10,14 +10,14 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
-jest.autoMockOff();
+jest.disableAutomock();
 
 describe('printValue', () => {
   var printValue;
   var utils;
 
   beforeEach(() => {
-    printValue = require('../printValue');
+    printValue = require('../printValue').default;
     utils = require('../../../tests/utils');
   });
 

@@ -10,7 +10,7 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
-jest.autoMockOff();
+jest.disableAutomock();
 
 describe('findAllComponentDefinitions', () => {
   var findAllComponentDefinitions;
@@ -25,7 +25,7 @@ describe('findAllComponentDefinitions', () => {
   }
 
   beforeEach(() => {
-    findAllComponentDefinitions = require('../findAllComponentDefinitions');
+    findAllComponentDefinitions = require('../findAllComponentDefinitions').default;
     utils = require('../../../tests/utils');
     recast = require('recast');
   });

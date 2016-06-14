@@ -10,7 +10,7 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
-jest.autoMockOff();
+jest.disableAutomock();
 jest.mock('../../Documentation');
 
 describe('componentMethodsHandler', () => {
@@ -21,7 +21,7 @@ describe('componentMethodsHandler', () => {
   beforeEach(() => {
     ({parse} = require('../../../tests/utils'));
     documentation = new (require('../../Documentation'));
-    componentMethodsHandler = require('../componentMethodsHandler');
+    componentMethodsHandler = require('../componentMethodsHandler').default;
   });
 
   function test(definition) {
