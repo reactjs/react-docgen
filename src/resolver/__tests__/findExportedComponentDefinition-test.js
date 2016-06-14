@@ -483,7 +483,7 @@ describe('findExportedComponentDefinition', () => {
         });
       });
 
-      describe.only('stateless components', () => {
+      describe('stateless components', () => {
 
         it('finds named exports', () => {
           var source = `
@@ -675,12 +675,12 @@ describe('findExportedComponentDefinition', () => {
           var source = `
             import React from 'React';
             var foo = 42;
-            function Component = () { return <div />; }
+            function Component() { return <div />; }
             export {foo, Component};
           `;
           var result = parse(source);
           expect(result).toBeDefined();
-          expect(result.node.type).toBe('ClassExpression');
+          expect(result.node.type).toBe('FunctionDeclaration');
 
           source = `
             import React from 'React';
@@ -690,7 +690,7 @@ describe('findExportedComponentDefinition', () => {
           `;
           result = parse(source);
           expect(result).toBeDefined();
-          expect(result.node.type).toBe('ClassExpression');
+          expect(result.node.type).toBe('ArrowFunctionExpression');
 
           source = `
             import React from 'React';
@@ -701,7 +701,7 @@ describe('findExportedComponentDefinition', () => {
           `;
           result = parse(source);
           expect(result).toBeDefined();
-          expect(result.node.type).toBe('ClassExpression');
+          expect(result.node.type).toBe('FunctionExpression');
         });
 
         it('errors if multiple components are exported', () => {
