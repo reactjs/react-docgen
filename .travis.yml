@@ -6,4 +6,4 @@ node_js:
   - stable
 script:
   - npm run lint
-  - npm run test
+  - npm test -- --no-cache
