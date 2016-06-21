@@ -14,10 +14,14 @@ import getFlowType from './getFlowType';
 import getParameterName from './getParameterName';
 import getPropertyName from './getPropertyName';
 import getTypeAnnotation from './getTypeAnnotation';
+import recast from 'recast';
+
+const { types: { namedTypes: types } } = recast;
 
 type MethodParameter = {
   name: string;
   type?: ?FlowTypeDescriptor;
+  optional?: boolean;
 };
 
 type MethodReturn = {
@@ -42,10 +46,14 @@ function getMethodParamsDoc(methodPath, jsDoc) {
     const typePath = getTypeAnnotation(paramPath);
     if (typePath) {
       type = getFlowType(typePath);
+      if (types.GenericTypeAnnotation.check(typePath.node)) {
+        type.alias = typePath.node.id.name;
+      }
     }
 
     const param = {
       name: getParameterName(paramPath),
+      optional: paramPath.node.optional,
       type,
     };
 
