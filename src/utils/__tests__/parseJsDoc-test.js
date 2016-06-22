@@ -64,6 +64,22 @@ describe('parseJsDoc', () => {
       });
     });
 
+    it('extracts jsdoc optional', () => {
+      const docblock = `
+        @param {string=} bar
+      `;
+      expect(parseJsDoc(docblock)).toEqual({
+        description: null,
+        returns: null,
+        params: [{
+          name: 'bar',
+          type: {name: 'string'},
+          description: null,
+          optional: true,
+        }],
+      });
+    });
+
     describe('returns', () => {
 
       it('returns null if return is not documented', () => {
