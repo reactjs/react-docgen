@@ -17,6 +17,7 @@ type JsDoc = {
     name: string;
     description: ?string;
     type: ?{name: string};
+    optional?: boolean;
   }];
   returns: ?{
     description: ?string;
@@ -28,7 +29,14 @@ function getType(tag) {
   if (!tag.type) {
     return null;
   }
-  return {name: tag.type.name};
+  return {name: tag.type.name ? tag.type.name : tag.type.expression.name};
+}
+
+function getOptional(tag) {
+  if (tag.type && tag.type.type && tag.type.type === 'OptionalType') {
+    return true;
+  }
+  return;
 }
 
 // Add jsdoc @return description.
@@ -57,6 +65,7 @@ function getParamsJsDoc(jsDoc) {
         name: tag.name,
         description: tag.description,
         type: getType(tag),
+        optional: getOptional(tag),
       };
     });
 }
