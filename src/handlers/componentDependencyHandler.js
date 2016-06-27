@@ -16,6 +16,9 @@ function amendDependencies(documentation, path) {
   var moduleName = resolveToModule(path);
   if (moduleName) {
     documentation.addDependencies(moduleName);
+  } else {
+    //  Naive tags like div
+    documentation.addDependencies(path.get('value').value);
   }
 }
 
@@ -25,19 +28,24 @@ export default function componentDependencyHandler(
 ) {
   var renderPath = getMemberValuePath(path, 'render');
 
-  //  Arrow functions
+  //  Function components
   if (!renderPath) {
-      renderPath = path;
+    renderPath = path;
   }
 
   recast.visit(renderPath, {
     visitIdentifier: function(path) {
-      if (path.value.name !== 'createElement') {
-        return false;
+      var componentPath;
+      if (path.get('type').value === 'JSXIdentifier') {
+        componentPath = path.get('name');
+      } else if (path.get('name').value === 'createElement') {
+        //  Get first argument in React.createElement
+        componentPath = path.parentPath.parentPath.get('arguments').get(0);
       }
 
-      const componentPath = path.parentPath.parentPath.get('arguments').get(0);
-      amendDependencies(documentation, componentPath);
+      if (componentPath) {
+        amendDependencies(documentation, componentPath);
+      }
 
       return false;
     },

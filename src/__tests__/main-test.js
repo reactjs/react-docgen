@@ -40,6 +40,7 @@ describe('main', () => {
             required: false,
           },
         },
+        dependencies: ['div'],
       });
     });
 
@@ -76,6 +77,9 @@ describe('main', () => {
         propTypes,
         getDefaultProps: function() {
           return defaultProps;
+        },
+        render: function() {
+          return <div />
         }
       });
       module.exports = Component
@@ -103,6 +107,9 @@ describe('main', () => {
       export default class Component extends React.Component {
         static propTypes = propTypes;
         // ...
+        render () {
+          return <div />
+        }
       }
       Component.defaultProps = defaultProps;
       Component.displayName = 'ABC';

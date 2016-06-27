@@ -36,6 +36,7 @@ export default function resolveToModule(path: NodePath): ?string {
       }
       return resolveToModule(path.get('callee'));
     case types.Identifier.name:
+    case types.JSXIdentifier.name:
       var valuePath = resolveToValue(path);
       if (valuePath !== path) {
         return resolveToModule(valuePath);

@@ -53,7 +53,8 @@ describe('componentDependencyHandler', () => {
       var definition = parse(renderSrc);
 
       componentDependencyHandler(documentation, definition);
-      expect(documentation.dependencies).toEqual(['SubComponentx', 'SubComponenty']);
+      expect(documentation.dependencies).toEqual(['SubComponentx',
+        'SubComponenty']);
     });
 
     it('extracts dependencies with nested array components', () => {
@@ -70,7 +71,8 @@ describe('componentDependencyHandler', () => {
       var definition = parse(renderSrc);
 
       componentDependencyHandler(documentation, definition);
-      expect(documentation.dependencies).toEqual(['SubComponentx', 'SubComponenty', 'SubComponentz']);
+      expect(documentation.dependencies).toEqual(['SubComponentx',
+        'SubComponenty', 'SubComponentz']);
     });
 
     it('extracts dependencies with multi-level nested components', () => {
@@ -86,7 +88,8 @@ describe('componentDependencyHandler', () => {
       var definition = parse(renderSrc);
 
       componentDependencyHandler(documentation, definition);
-      expect(documentation.dependencies).toEqual(['SubComponentx', 'SubComponenty', 'SubComponentz']);
+      expect(documentation.dependencies).toEqual(['SubComponentx',
+      'SubComponenty', 'SubComponentz']);
     });
 
     it('extracts dependencies with duplicated components', () => {
@@ -103,7 +106,8 @@ describe('componentDependencyHandler', () => {
       var definition = parse(renderSrc);
 
       componentDependencyHandler(documentation, definition);
-      expect(documentation.dependencies).toEqual(['SubComponentx', 'SubComponenty']);
+      expect(documentation.dependencies).toEqual(['SubComponentx',
+        'SubComponenty']);
     });
 
     it('extracts only react components', () => {
@@ -117,6 +121,26 @@ describe('componentDependencyHandler', () => {
 
       componentDependencyHandler(documentation, definition);
       expect(documentation.dependencies).toEqual(['SubComponentx']);
+    });
+
+    it('extracts for jsx', () => {
+      var renderSrc = getSrc(`
+        const SubComponent = SubComponentx;
+        return (
+          <SubComponent>
+            <SubComponenty>
+              <SubComponentz />
+            </SubComponenty>
+          </SubComponent>
+        )
+      `);
+
+      documentation = new (require('../../Documentation'))();
+      var definition = parse(renderSrc);
+
+      componentDependencyHandler(documentation, definition);
+      expect(documentation.dependencies).toEqual(['SubComponentx',
+        'SubComponenty', 'SubComponentz']);
     });
   }
 
