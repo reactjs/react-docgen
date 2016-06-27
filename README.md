@@ -352,7 +352,8 @@ The structure of the JSON blob / JavaScript object is as follows:
     },
     ...
   },]
-  ["composes": <componentNames>]
+  ["composes": <componentNames>],
+  ["dependencies": <componentNames>]
 }
 ```
 (`[...]` means the property may not exist if such information was not found in the component definition)

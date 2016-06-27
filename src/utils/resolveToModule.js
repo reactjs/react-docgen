@@ -51,4 +51,5 @@ export default function resolveToModule(path: NodePath): ?string {
         return resolveToModule(path);
       }
   }
+  return node.name;
 }
