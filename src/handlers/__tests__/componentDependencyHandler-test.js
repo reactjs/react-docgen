@@ -105,6 +105,19 @@ describe('componentDependencyHandler', () => {
       componentDependencyHandler(documentation, definition);
       expect(documentation.dependencies).toEqual(['SubComponentx', 'SubComponenty']);
     });
+
+    it('extracts only react components', () => {
+      var renderSrc = getSrc(`
+        var randomVar = getRandomVar(random);
+        return React.createElement(SubComponentx);
+      `);
+
+      documentation = new (require('../../Documentation'))();
+      var definition = parse(renderSrc);
+
+      componentDependencyHandler(documentation, definition);
+      expect(documentation.dependencies).toEqual(['SubComponentx']);
+    });
   }
 
   describe('React.createClass', () => {
