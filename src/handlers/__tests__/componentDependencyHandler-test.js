@@ -142,6 +142,21 @@ describe('componentDependencyHandler', () => {
       expect(documentation.dependencies).toEqual(['SubComponentx',
         'SubComponenty', 'SubComponentz']);
     });
+
+    it('does not extract other identifiers', () => {
+      var renderSrc = getSrc(`
+        const somethingElse = true;
+        return (
+          <SubComponent />
+        )
+      `);
+
+      documentation = new (require('../../Documentation'))();
+      var definition = parse(renderSrc);
+
+      componentDependencyHandler(documentation, definition);
+      expect(documentation.dependencies).toEqual(['SubComponent']);
+    });
   }
 
   describe('React.createClass', () => {
