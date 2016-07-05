@@ -64,6 +64,21 @@ describe('parseJsDoc', () => {
       });
     });
 
+    it('extracts jsdoc union type param', () => {
+      const docblock = `
+        @param {string|Object} bar
+      `;
+      expect(parseJsDoc(docblock)).toEqual({
+        description: null,
+        returns: null,
+        params: [{
+          name: 'bar',
+          type: {name: 'string|Object'},
+          description: null,
+        }],
+      });
+    });
+
     it('extracts jsdoc optional', () => {
       const docblock = `
         @param {string=} bar
@@ -101,6 +116,20 @@ describe('parseJsDoc', () => {
           description: null,
           returns: {
             type: {name: 'string'},
+            description: null,
+          },
+          params: [],
+        });
+      });
+
+      it('extracts jsdoc all types', () => {
+        const docblock = `
+          @returns {*}
+        `;
+        expect(parseJsDoc(docblock)).toEqual({
+          description: null,
+          returns: {
+            type: {name: '*'},
             description: null,
           },
           params: [],
