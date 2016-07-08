@@ -51,7 +51,50 @@ export default (path: NodePath): ?NodePath  => {
   if (typePath && types.GenericTypeAnnotation.check(typePath.node)) {
     typePath = resolveToValue(typePath.get('id'));
     if (
-      !typePath || 
+      !typePath ||
+      types.Identifier.check(typePath.node) ||
+      isUnreachableFlowType(typePath)
+    ) {
+      return;
+    }
+
+    typePath = typePath.get('right');
+  }
+
+  return typePath;
+}
+
+export function applyToFlowTypeProperties(
+  path: NodePath,
+  callback: (propertyPath: NodePath) => void
+) {
+  if (path.node.properties) {
+    path.get('properties').each(
+      propertyPath => callback(propertyPath)
+    );
+  } else if (path.node.type == 'IntersectionTypeAnnotation') {
+    path.get('types').each(
+      typesPath => applyToFlowTypeProperties(typesPath, callback)
+    );
+  } else if (path.node.type == 'UnionTypeAnnotation') {
+    // The react-docgen output format does not currently allow
+    // for the expression of union types
+    throw new TypeError("react-docgen doesn't support Props of union types");
+  } else {
+    let typePath = resolveGenericTypeAnnotation(path);
+    if (typePath) {
+      applyToFlowTypeProperties(typePath, callback);
+    }
+  }
+}
+
+function resolveGenericTypeAnnotation(path: NodePath): ?NodePath {
+  // If the node doesn't have types or properties, try to get the type.
+  let typePath: ?NodePath;
+  if (path && types.GenericTypeAnnotation.check(path.node)) {
+    typePath = resolveToValue(path.get('id'));
+    if (
+      !typePath ||
       types.Identifier.check(typePath.node) ||
       isUnreachableFlowType(typePath)
     ) {
