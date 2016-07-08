@@ -127,6 +127,52 @@ describe('flowTypeDocBlockHandler', () => {
       .not.toThrow();
   });
 
+  it('supports intersection proptypes', () => {
+    var definition = statement(`
+      (props: Props) => <div />;
+
+      var React = require('React');
+      import type Imported from 'something';
+
+      type BarProps = {
+        /** bar description */
+        bar: 'barValue'
+      }
+
+      type Props = Imported & BarProps & {
+        /** foo description */
+        foo: 'fooValue'
+      };
+    `).get('expression');
+
+    flowTypeDocBlockHandler(documentation, definition);
+
+    expect(documentation.descriptors).toEqual({
+      foo: {
+        description: 'foo description',
+      },
+      bar: {
+        description: 'bar description',
+      },
+    });
+
+    it('does not support union proptypes', () => {
+      var definition = statement(`
+        (props: Props) => <div />;
+
+        var React = require('React');
+        import type Imported from 'something';
+
+        type Other = { bar: 'barValue' };
+        type Props = Imported | Other | { foo: 'fooValue' };
+      `).get('expression');
+
+      expect(() => flowTypeDocBlockHandler(documentation, definition))
+        .toThrowError(TypeError, "react-docgen doesn't support Props of union types");
+    });
+  });
+
+
   describe('does not error for unreachable type', () => {
     function test(code) {
       var definition = statement(code).get('expression');
