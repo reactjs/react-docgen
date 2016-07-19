@@ -73,7 +73,7 @@ describe('parseJsDoc', () => {
         returns: null,
         params: [{
           name: 'bar',
-          type: {name: 'string|Object'},
+          type: {name: 'union', value: ['string', 'Object']},
           description: null,
         }],
       });

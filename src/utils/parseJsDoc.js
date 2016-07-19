@@ -30,9 +30,9 @@ function getType(tag) {
     return null;
   } else if (tag.type.type === 'UnionType') {
     // union type
-    return {name: tag.type.elements.map(function (element) {
+    return {name: 'union', value: tag.type.elements.map(function (element) {
       return element.name;
-    }).join('|')};
+    })};
   } else if (tag.type.type === 'AllLiteral') {
     // return {*}
     return {name: '*'};
