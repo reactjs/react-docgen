@@ -27,8 +27,12 @@ function getDefaultValue(path) {
     defaultValue = node.raw;
   } else {
     path = resolveToValue(path);
-    node = path.node;
-    defaultValue = printValue(path);
+    if (types.ImportDeclaration.check(path.node)) {
+      defaultValue = node.name;
+    } else {
+      node = path.node;
+      defaultValue = printValue(path);
+    }
   }
   if (typeof defaultValue !== 'undefined') {
     return {
