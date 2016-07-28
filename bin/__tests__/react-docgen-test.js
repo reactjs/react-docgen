@@ -8,22 +8,23 @@
  *
  */
 
-/*global jasmine, jest, describe, pit, expect, afterEach*/
+/*global jasmine, jest, describe, it, expect, afterEach*/
 
-// Increase default timeout (5000ms) for Travis
-jasmine.getEnv().defaultTimeoutInterval = 10000;
+const TEST_TIMEOUT = 120000;
 
-jest.autoMockOff();
+jasmine.DEFAULT_TIMEOUT_INTERVAL = TEST_TIMEOUT;
 
-var child_process = require('child_process'); // eslint-disable-line camelcase
+jest.disableAutomock();
+
 var fs = require('fs');
 var path = require('path');
 var rimraf = require('rimraf');
 var temp = require('temp');
+var spawn = require('cross-spawn');
 
 function run(args, stdin) {
   return new Promise(resolve => {
-    var docgen = child_process.spawn( // eslint-disable-line camelcase
+    var docgen = spawn( // eslint-disable-line camelcase
       path.join(__dirname, '../react-docgen.js'),
       args
     );
@@ -32,6 +33,7 @@ function run(args, stdin) {
     docgen.stdout.on('data', data => stdout += data);
     docgen.stderr.on('data', data => stderr += data);
     docgen.on('close', () => resolve([stdout, stderr]));
+    docgen.on('error', (e) => { throw e; });
     if (stdin) {
       docgen.stdin.write(stdin);
     }
@@ -88,18 +90,18 @@ describe('react-docgen CLI', () => {
       rimraf.sync(tempDir);
     }
     tempDir = null;
-    tempComponents.length = 0;
-    tempNoComponents.length = 0;
+    tempComponents = [];
+    tempNoComponents = [];
   });
 
-  pit('reads from stdin', () => {
+  it('reads from stdin', () => {
     return run([], component).then(([stdout, stderr]) => {
       expect(stdout.length > 0).toBe(true);
       expect(stderr.length).toBe(0);
     });
-  });
+  }, TEST_TIMEOUT);
 
-  pit('reads files provided as command line arguments', () => {
+  it('reads files provided as command line arguments', () => {
     createTempfiles();
     return run(tempComponents.concat(tempNoComponents)).then(
       ([stdout, stderr]) => {
@@ -107,18 +109,18 @@ describe('react-docgen CLI', () => {
         expect(stderr).toContain('NoComponent');
       }
     );
-  });
+  }, TEST_TIMEOUT);
 
-  pit('reads directories provided as command line arguments', () => {
-    tempDir = createTempfiles();
+  it('reads directories provided as command line arguments', () => {
+    createTempfiles();
     return run([tempDir]).then(([stdout, stderr]) => {
       expect(stdout).toContain('Component');
       expect(stderr).toContain('NoComponent');
     });
-  });
+  }, TEST_TIMEOUT);
 
-  pit('considers js and jsx by default', () => {
-    tempDir = createTempfiles();
+  it('considers js and jsx by default', () => {
+    createTempfiles();
     createTempfiles('jsx');
     createTempfiles('foo');
     return run([tempDir]).then(([stdout, stderr]) => {
@@ -130,9 +132,9 @@ describe('react-docgen CLI', () => {
       expect(stderr).toContain('NoComponent.jsx');
       expect(stderr).not.toContain('NoComponent.foo');
     });
-  });
+  }, TEST_TIMEOUT);
 
-  pit('considers files with the specified extension', () => {
+  it('considers files with the specified extension', () => {
     createTempfiles('foo');
     createTempfiles('bar');
 
@@ -144,14 +146,13 @@ describe('react-docgen CLI', () => {
       expect(stderr).toContain('NoComponent.bar');
     };
 
-
     return Promise.all([
       run(['--extension=foo', '--extension=bar', tempDir]).then(verify),
       run(['-x', 'foo', '-x', 'bar', tempDir]).then(verify),
     ]);
-  });
+  }, TEST_TIMEOUT);
 
-  pit('ignores files in node_modules and __tests__ by default', () => {
+  it('ignores files in node_modules and __tests__ by default', () => {
     createTempfiles(null, 'node_modules');
     createTempfiles(null, '__tests__');
 
@@ -159,9 +160,9 @@ describe('react-docgen CLI', () => {
       expect(stdout).toBe('');
       expect(stderr).toBe('');
     });
-  });
+  }, TEST_TIMEOUT);
 
-  pit('ignores specified folders', () => {
+  it('ignores specified folders', () => {
     createTempfiles(null, 'foo');
 
     var verify = ([stdout, stderr]) => {
@@ -173,23 +174,23 @@ describe('react-docgen CLI', () => {
         run(['--ignore=foo', tempDir]).then(verify),
         run(['-i', 'foo', tempDir]).then(verify),
     ]);
-  });
+  }, TEST_TIMEOUT);
 
-  pit('writes to stdout', () => {
+  it('writes to stdout', () => {
     return run([], component).then(([stdout, stderr]) => {
       expect(stdout.length > 0).toBe(true);
       expect(stderr.length).toBe(0);
     });
-  });
+  }, TEST_TIMEOUT);
 
-  pit('writes to stderr', () => {
+  it('writes to stderr', () => {
     return run([], '{}').then(([stdout, stderr]) => {
       expect(stderr.length > 0).toBe(true);
       expect(stdout.length).toBe(0);
     });
-  });
+  }, TEST_TIMEOUT);
 
-  pit('writes to a file if provided', function() {
+  it('writes to a file if provided', () => {
     var outFile = temp.openSync();
     createTempfiles();
 
@@ -202,10 +203,10 @@ describe('react-docgen CLI', () => {
       run(['--out=' + outFile.path, tempDir]).then(verify),
       run(['-o', outFile.path, tempDir]).then(verify),
     ]);
-  });
+  }, TEST_TIMEOUT);
 
   describe('--resolver', () => {
-    pit('accepts the names of built in resolvers', () => {
+    it('accepts the names of built in resolvers', () => {
       return Promise.all([
         // No option passed: same as --resolver=findExportedComponentDefinition
         run([
@@ -229,9 +230,9 @@ describe('react-docgen CLI', () => {
           expect(stdout).toContain('ComponentB');
         }),
       ]);
-    });
+    }, TEST_TIMEOUT);
 
-    pit('accepts a path to a resolver function', () => {
+    it('accepts a path to a resolver function', () => {
       return Promise.all([
         run([
           '--resolver='+path.join(__dirname, './example/customResolver.js'),
@@ -241,7 +242,7 @@ describe('react-docgen CLI', () => {
           expect(stdout).toContain('Custom');
         }),
       ]);
-    });
+    }, TEST_TIMEOUT);
   });
 
 });

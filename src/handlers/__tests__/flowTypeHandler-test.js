@@ -10,7 +10,7 @@
 
 /*global jest, describe, it, expect, beforeEach*/
 
-jest.autoMockOff();
+jest.disableAutomock();
 jest.mock('../../Documentation');
 
 describe('flowTypeHandler', () => {
@@ -26,7 +26,7 @@ describe('flowTypeHandler', () => {
     jest.mock('../../utils/getFlowType');
 
     documentation = new (require('../../Documentation'));
-    flowTypeHandler = require('../flowTypeHandler');
+    flowTypeHandler = require('../flowTypeHandler').default;
   });
 
   function template(src, typeObject) {
@@ -136,19 +136,19 @@ describe('flowTypeHandler', () => {
   describe('TypeAlias', () => {
     describe('class definition', () => {
       test(
-        propTypesSrc => statement(template(`class Foo extends Component<void, Props, void> {}`, propTypesSrc))
+        propTypesSrc => statement(template('class Foo extends Component<void, Props, void> {}', propTypesSrc))
       );
     });
 
     describe('class definition with inline props', () => {
       test(
-          propTypesSrc => statement(template(`class Foo extends Component { props: Props; }`, propTypesSrc))
+          propTypesSrc => statement(template('class Foo extends Component { props: Props; }', propTypesSrc))
       );
     });
 
     describe('stateless component', () => {
       test(
-        propTypesSrc => statement(template(`(props: Props) => <div />;`, propTypesSrc)).get('expression')
+        propTypesSrc => statement(template('(props: Props) => <div />;', propTypesSrc)).get('expression')
       );
     });
   });
@@ -165,6 +165,47 @@ describe('flowTypeHandler', () => {
     definition = statement('() => <div />');
     expect(() => flowTypeHandler(documentation, definition))
       .not.toThrow();
+  });
+
+  it('supports intersection proptypes', () => {
+    var definition = statement(`
+      (props: Props) => <div />;
+     
+      var React = require('React');
+      import type Imported from 'something';
+  
+      type Props = Imported & { foo: 'bar' };
+    `).get('expression');
+
+
+    flowTypeHandler(documentation, definition);
+
+    expect(documentation.descriptors).toEqual({
+      foo: {
+        flowType: {},
+        required: true,
+      },
+    });
+  });
+
+  it('supports union proptypes', () => {
+    var definition = statement(`
+      (props: Props) => <div />;
+      
+      var React = require('React');
+      import type Imported from 'something';
+
+      type Props = Imported | { foo: 'bar' };
+    `).get('expression');
+
+    flowTypeHandler(documentation, definition);
+
+    expect(documentation.descriptors).toEqual({
+      foo: {
+        flowType: {},
+        required: true,
+      },
+    });
   });
 
   describe('does not error for unreachable type', () => {

@@ -10,7 +10,7 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
-jest.autoMockOff();
+jest.disableAutomock();
 
 describe('getMembers', () => {
   var expression;
@@ -18,11 +18,10 @@ describe('getMembers', () => {
   var memberExpressionPath;
 
   beforeEach(() => {
-    getMembers = require('../getMembers');
+    getMembers = require('../getMembers').default;
     ({expression} = require('../../../tests/utils'));
     memberExpressionPath = expression('foo.bar(123)(456)[baz][42]');
   });
-
 
   it('finds all "members" "inside" a MemberExpression', () => {
     var members = getMembers(memberExpressionPath);

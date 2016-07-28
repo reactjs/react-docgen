@@ -11,10 +11,11 @@
   },
   "globals": {
     "ASTNode": true,
+    "FlowTypeDescriptor": true,
     "Handler": true,
     "NodePath": true,
-    "PropTypeDescriptor": true,
     "PropDescriptor": true,
+    "PropTypeDescriptor": true,
     "Resolver": true
   }
 }

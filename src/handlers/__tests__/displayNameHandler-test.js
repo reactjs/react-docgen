@@ -10,7 +10,7 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
-jest.autoMockOff();
+jest.disableAutomock();
 jest.mock('../../Documentation');
 
 describe('displayNameHandler', () => {
@@ -21,7 +21,7 @@ describe('displayNameHandler', () => {
   beforeEach(() => {
     ({expression, statement} = require('../../../tests/utils'));
     documentation = new (require('../../Documentation'));
-    displayNameHandler = require('../displayNameHandler');
+    displayNameHandler = require('../displayNameHandler').default;
   });
 
   it('extracts the displayName', () => {

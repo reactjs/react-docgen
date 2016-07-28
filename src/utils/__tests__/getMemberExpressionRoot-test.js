@@ -12,10 +12,9 @@
 
 import {expression} from '../../../tests/utils';
 
-jest
-  .dontMock('../getMemberExpressionRoot');
+jest.unmock('../getMemberExpressionRoot');
 
-var getMemberExpressionRoot = require('../getMemberExpressionRoot');
+var getMemberExpressionRoot = require('../getMemberExpressionRoot').default;
 
 describe('getMemberExpressionRoot', () => {
   it('returns the root of a member expression', () => {

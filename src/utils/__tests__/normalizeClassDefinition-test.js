@@ -11,9 +11,9 @@
 /*global jest, describe, beforeEach, it, expect*/
 
 jest
-  .dontMock('../normalizeClassDefinition')
-  .dontMock('../getMemberExpressionRoot')
-  .dontMock('../getMembers');
+  .unmock('../normalizeClassDefinition')
+  .unmock('../getMemberExpressionRoot')
+  .unmock('../getMembers');
 
 
 describe('normalizeClassDefinition', () => {
@@ -22,7 +22,7 @@ describe('normalizeClassDefinition', () => {
 
   beforeEach(() => {
     ({parse} = require('../../../tests/utils'));
-    normalizeClassDefinition = require('../normalizeClassDefinition');
+    normalizeClassDefinition = require('../normalizeClassDefinition').default;
   });
 
   it('finds assignments to class declarations', () => {

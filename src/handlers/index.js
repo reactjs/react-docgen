@@ -12,6 +12,8 @@
 
 
 export {default as componentDocblockHandler} from './componentDocblockHandler';
+export {default as componentMethodsHandler} from './componentMethodsHandler';
+export {default as componentMethodsJsDocHandler} from './componentMethodsJsDocHandler';
 export {default as defaultPropsHandler} from './defaultPropsHandler';
 export {default as propTypeHandler} from './propTypeHandler';
 export {default as propTypeCompositionHandler} from './propTypeCompositionHandler';

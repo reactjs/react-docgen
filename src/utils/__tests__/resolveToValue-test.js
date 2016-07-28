@@ -10,7 +10,7 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
-jest.autoMockOff();
+jest.disableAutomock();
 
 describe('resolveToValue', () => {
   var builders;
@@ -25,7 +25,7 @@ describe('resolveToValue', () => {
   beforeEach(() => {
     var recast = require('recast');
     builders = recast.types.builders;
-    resolveToValue = require('../resolveToValue');
+    resolveToValue = require('../resolveToValue').default;
     utils = require('../../../tests/utils');
   });
 

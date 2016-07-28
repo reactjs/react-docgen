@@ -10,7 +10,7 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
-jest.autoMockOff();
+jest.disableAutomock();
 
 describe('main', () => {
   var docgen, ERROR_MISSING_DEFINITION;
@@ -26,6 +26,7 @@ describe('main', () => {
       expect(docs).toEqual({
         displayName: 'ABC',
         description: 'Example component description',
+        methods: [],
         props: {
           foo: {
             type: {
@@ -221,7 +222,7 @@ describe('main', () => {
         export default NotAComponent;
       `;
 
-      expect(() => docgen.parse(source)).toThrow(ERROR_MISSING_DEFINITION);
+      expect(() => docgen.parse(source)).toThrowError(ERROR_MISSING_DEFINITION);
     });
   });
 });

@@ -11,14 +11,14 @@
 /*global jest, describe, beforeEach, it, expect*/
 
 
-jest.autoMockOff();
+jest.disableAutomock();
 
 describe('isReactComponentClass', () => {
   var isReactComponentClass;
   var expression, statement, parse;
 
   beforeEach(() => {
-    isReactComponentClass = require('../isReactComponentClass');
+    isReactComponentClass = require('../isReactComponentClass').default;
     ({expression, statement, parse} = require('../../../tests/utils'));
   });
 

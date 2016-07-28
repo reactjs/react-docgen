@@ -10,7 +10,7 @@
 
 /*global jest, describe, it, expect, beforeEach*/
 
-jest.autoMockOff();
+jest.disableAutomock();
 jest.mock('../../Documentation');
 
 describe('flowTypeDocBlockHandler', () => {
@@ -26,7 +26,7 @@ describe('flowTypeDocBlockHandler', () => {
     jest.mock('../../utils/getFlowType');
 
     documentation = new (require('../../Documentation'));
-    flowTypeDocBlockHandler = require('../flowTypeDocBlockHandler');
+    flowTypeDocBlockHandler = require('../flowTypeDocBlockHandler').default;
   });
 
   function template(src, typeObject) {
@@ -96,19 +96,19 @@ describe('flowTypeDocBlockHandler', () => {
   describe('TypeAlias', () => {
     describe('class definition', () => {
       test(
-        propTypesSrc => statement(template(`class Foo extends Component<void, Props, void> {}`, propTypesSrc))
+        propTypesSrc => statement(template('class Foo extends Component<void, Props, void> {}', propTypesSrc))
       );
     });
 
     describe('class definition with inline props', () => {
       test(
-          propTypesSrc => statement(template(`class Foo extends Component { props: Props; }`, propTypesSrc))
+          propTypesSrc => statement(template('class Foo extends Component { props: Props; }', propTypesSrc))
       );
     });
 
     describe('stateless component', () => {
       test(
-        propTypesSrc => statement(template(`(props: Props) => <div />;`, propTypesSrc)).get('expression')
+        propTypesSrc => statement(template('(props: Props) => <div />;', propTypesSrc)).get('expression')
       );
     });
   });

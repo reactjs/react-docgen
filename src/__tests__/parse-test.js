@@ -10,7 +10,7 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
-jest.autoMockOff();
+jest.disableAutomock();
 
 describe('parse', () => {
   var utils;
@@ -28,8 +28,8 @@ describe('parse', () => {
 
   it('allows custom component definition resolvers', () => {
     var path = pathFromSource('({foo: "bar"})');
-    var resolver = jest.genMockFunction().mockReturnValue(path);
-    var handler = jest.genMockFunction();
+    var resolver = jest.fn(() => path);
+    var handler = jest.fn();
     parse('//empty', resolver, [handler]);
 
     expect(resolver).toBeCalled();
@@ -37,11 +37,11 @@ describe('parse', () => {
   });
 
   it('errors if component definition is not found', () => {
-    var resolver = jest.genMockFunction();
-    expect(() => parse('//empty', resolver)).toThrow(ERROR_MISSING_DEFINITION);
+    var resolver = jest.fn();
+    expect(() => parse('//empty', resolver)).toThrowError(ERROR_MISSING_DEFINITION);
     expect(resolver).toBeCalled();
 
-    expect(() => parse('//empty', resolver)).toThrow(ERROR_MISSING_DEFINITION);
+    expect(() => parse('//empty', resolver)).toThrowError(ERROR_MISSING_DEFINITION);
     expect(resolver).toBeCalled();
   });
 
