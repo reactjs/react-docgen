@@ -118,7 +118,7 @@ describe('displayNameHandler with ES6 Exports', () => {
   beforeEach(() => {
     ({expression, statement} = require('../../../tests/utils'));
     documentation = new (require('../../Documentation'));
-    displayNameHandler = require('../displayNameHandler');
+    displayNameHandler = require('../displayNameHandler').default;
   });
 
   it('extracts the displayName', () => {
@@ -206,7 +206,7 @@ describe('displayNameHandler with CommonJS Exports', () => {
   beforeEach(() => {
     ({expression, statement} = require('../../../tests/utils'));
     documentation = new (require('../../Documentation'));
-    displayNameHandler = require('../displayNameHandler');
+    displayNameHandler = require('../displayNameHandler').default;
   });
 
   it('infers the displayName with stateless functional component', () => {
