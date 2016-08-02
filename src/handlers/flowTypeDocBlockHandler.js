@@ -13,6 +13,7 @@
 import type Documentation from '../Documentation';
 import setPropDescription from '../utils/setPropDescription';
 import getFlowTypeFromReactComponent from '../utils/getFlowTypeFromReactComponent';
+import findFlowTypeProps from '../utils/findFlowTypeProps';
 
 /**
  * This handler tries to find flow Type annotated react components and extract
@@ -26,5 +27,5 @@ export default function flowTypeDocBlockHandler(documentation: Documentation, pa
     return;
   }
 
-  flowTypesPath.get('properties').each(propertyPath => setPropDescription(documentation, propertyPath));
+  findFlowTypeProps(documentation, flowTypesPath, setPropDescription);
 }
