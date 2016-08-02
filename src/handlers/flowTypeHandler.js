@@ -15,6 +15,7 @@ import type Documentation from '../Documentation';
 import getFlowType from '../utils/getFlowType';
 import getPropertyName from '../utils/getPropertyName';
 import getFlowTypeFromReactComponent from '../utils/getFlowTypeFromReactComponent';
+import findFlowTypeProps from '../utils/findFlowTypeProps';
 
 function setPropDescriptor(documentation: Documentation, path: NodePath): void {
   const propDescriptor = documentation.getPropDescriptor(getPropertyName(path));
@@ -23,18 +24,6 @@ function setPropDescriptor(documentation: Documentation, path: NodePath): void {
   if (type) {
     propDescriptor.flowType = type;
     propDescriptor.required = !path.node.optional;
-  }
-}
-
-function findAndSetTypes(documentation: Documentation, path: NodePath): void {
-  if (path.node.properties) {
-    path.get('properties').each(
-      propertyPath => setPropDescriptor(documentation, propertyPath)
-    );
-  } else if (path.node.types) {
-    path.get('types').each(
-      typesPath => findAndSetTypes(documentation, typesPath)
-    );
   }
 }
 
@@ -50,5 +39,5 @@ export default function flowTypeHandler(documentation: Documentation, path: Node
     return;
   }
 
-  findAndSetTypes(documentation, flowTypesPath);
+  findFlowTypeProps(documentation, flowTypesPath, setPropDescriptor);
 }

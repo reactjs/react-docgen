@@ -128,13 +128,13 @@ describe('flowTypeDocBlockHandler', () => {
   });
 
   describe('does not error for unreachable type', () => {
-    function test(code) {
+    function test(code, expected = {}) {
       var definition = statement(code).get('expression');
 
       expect(() => flowTypeDocBlockHandler(documentation, definition))
         .not.toThrow();
 
-      expect(documentation.descriptors).toEqual({});
+      expect(documentation.descriptors).toEqual(expected);
     }
 
     it('required', () => {
@@ -164,6 +164,36 @@ describe('flowTypeDocBlockHandler', () => {
         var Component = React.Component;
 
         import type Props from 'something';
+      `);
+    });
+
+    it('intersection type', () => {
+      test(`
+        (props: Props) => <div />;
+        var React = require('React');
+        var Component = React.Component;
+
+        type Props = { a: string } & { b: string };
+      `, { a: { description: ''}, b: { description: ''} });
+    });
+
+    it('union type', () => {
+      test(`
+        (props: Props) => <div />;
+        var React = require('React');
+        var Component = React.Component;
+
+        type Props = { a: string } | { b: string };
+      `, { a: { description: ''}, b: { description: ''} });
+    });
+
+    it('invalid type', () => {
+      test(`
+        (props: Props) => <div />;
+        var React = require('React');
+        var Component = React.Component;
+
+        type Props = string;
       `);
     });
 
