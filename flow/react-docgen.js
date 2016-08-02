@@ -33,6 +33,7 @@ type flowFunctionSignatureType = {
 
 type FlowTypeDescriptor = {
   name: string,
+  alias?: string,
   value?: string,
   required?: boolean,
   nullable?: boolean,
