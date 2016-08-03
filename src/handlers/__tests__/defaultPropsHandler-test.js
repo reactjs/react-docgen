@@ -148,4 +148,30 @@ describe('defaultPropsHandler', () => {
     });
   });
 
+  describe('Functional components with default params', () => {
+    it('should find default props that are literals', () => {
+      var src = `
+        ({
+          foo = "bar",
+          bar = 42,
+          baz = ["foo", "bar"],
+          abc = {xyz: abc.def, 123: 42}
+        }) => <div />
+      `;
+      test(parse(src).get('body', 0, 'expression'));
+    });
+
+    it('should override with defaultProps if available', () => {
+      var src = `
+        var Foo = ({
+          foo = "bar",
+          bar = 42,
+          baz = ["foo", "bar"],
+          abc = 'test'
+        }) => <div />
+        Foo.defaultProps = { abc: {xyz: abc.def, 123: 42} };
+      `;
+      test(parse(src).get('body', 0, 'declarations', 0, 'init'));
+    })
+  });
 });
