@@ -122,14 +122,14 @@ describe('parseJsDoc', () => {
         });
       });
 
-      it('extracts jsdoc all types', () => {
+      it('extracts jsdoc mixed types', () => {
         const docblock = `
           @returns {*}
         `;
         expect(parseJsDoc(docblock)).toEqual({
           description: null,
           returns: {
-            type: {name: '*'},
+            type: {name: 'mixed'},
             description: null,
           },
           params: [],

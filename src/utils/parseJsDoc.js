@@ -35,7 +35,7 @@ function getType(tag) {
     })};
   } else if (tag.type.type === 'AllLiteral') {
     // return {*}
-    return {name: '*'};
+    return {name: 'mixed'};
   }
   return {name: tag.type.name ? tag.type.name : tag.type.expression.name};
 }
