@@ -21,7 +21,7 @@ import isStatelessComponent from '../utils/isStatelessComponent';
 
 var {types: {namedTypes: types, visit}} = recast;
 
-function getDefaultValue(path) {
+function getDefaultValue(path: NodePath) {
   var node = path.node;
   var defaultValue;
   if (types.Literal.check(node)) {
@@ -49,11 +49,11 @@ function getDefaultValue(path) {
   }
 }
 
-function getStatelessPropsPath(componentDefinition) {
+function getStatelessPropsPath(componentDefinition): NodePath {
   return resolveToValue(componentDefinition).get('params', 0);
 }
 
-function getDefaultPropsPath(componentDefinition) {
+function getDefaultPropsPath(componentDefinition: NodePath): ?NodePath {
   var defaultPropsPath = getMemberValuePath(
     componentDefinition,
     'defaultProps'
@@ -84,7 +84,10 @@ function getDefaultPropsPath(componentDefinition) {
   return defaultPropsPath;
 }
 
-function getDefaultValuesFromProps(properties, documentation) {
+function getDefaultValuesFromProps(
+  properties: NodePath,
+  documentation: Documentation
+) {
   properties
     .filter(propertyPath => types.Property.check(propertyPath.node))
     .forEach(function(propertyPath) {
