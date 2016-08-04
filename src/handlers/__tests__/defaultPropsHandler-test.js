@@ -172,6 +172,18 @@ describe('defaultPropsHandler', () => {
         Foo.defaultProps = { abc: {xyz: abc.def, 123: 42} };
       `;
       test(parse(src).get('body', 0, 'declarations', 0, 'init'));
-    })
+    });
+
+    it('should work with aliases', () => {
+      var src = `
+        ({
+          foo = "bar",
+          bar = 42,
+          baz = ["foo", "bar"],
+          abc: defg = {xyz: abc.def, 123: 42}
+        }) => <div />
+      `;
+      test(parse(src).get('body', 0, 'expression'));
+    });
   });
 });
