@@ -90,5 +90,13 @@ describe('resolveToModule', () => {
       expect(resolveToModule(path)).toBe('Foo');
     });
 
+    it('resolves ImportNamespaceSpecifier', () => {
+      var path = parse(`
+        import * as foo from "Foo";
+        foo;
+      `);
+      expect(resolveToModule(path)).toBe('Foo');
+    });
+
   });
 });

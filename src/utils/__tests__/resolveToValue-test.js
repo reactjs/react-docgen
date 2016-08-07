@@ -126,6 +126,15 @@ describe('resolveToValue', () => {
       expect(resolveToValue(path).node.type).toBe('ImportDeclaration');
     });
 
+    it('resolves namespace import references to the import declaration', () => {
+      var path = parse([
+        'import * as bar from "Foo"',
+        'bar;',
+      ].join('\n'));
+
+      expect(resolveToValue(path).node.type).toBe('ImportDeclaration');
+    });
+
   });
 
 });
