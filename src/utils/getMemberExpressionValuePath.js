@@ -11,6 +11,7 @@
  */
 
 import getNameOrValue from './getNameOrValue';
+import { String as toString } from './expressionTo';
 import recast from 'recast';
 
 var {types: {namedTypes: types}} = recast;
@@ -82,7 +83,8 @@ export default function getMemberExpressionValuePath(
 
       if (
         (!memberPath.node.computed || types.Literal.check(memberPath.node.property)) &&
-        getNameOrValue(memberPath.get('property')) === memberName
+        getNameOrValue(memberPath.get('property')) === memberName &&
+        toString(memberPath.get('object')) === localName
       ) {
         result = path.get('right');
         return false;
