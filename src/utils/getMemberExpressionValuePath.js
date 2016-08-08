@@ -38,11 +38,26 @@ function resolveName(path) {
     types.FunctionExpression.check(path.node) ||
     types.ArrowFunctionExpression.check(path.node)
   ) {
-    if (!types.VariableDeclarator.check(path.parent.node)) {
-      return; // eslint-disable-line consistent-return
+    if (types.VariableDeclarator.check(path.parent.node)) {
+      return getNameOrValue(path.parent.get('id'));
     }
 
-    return path.parent.get('id', 'name').value;
+    if (
+      types.AssignmentExpression.check(path.parent.node) &&
+      types.MemberExpression.check(path.parent.get('left').node)
+    ) {
+      return toString(path.parent.get('left'));
+    }
+
+    return; // eslint-disable-line consistent-return
+  }
+
+  if (
+    types.ExpressionStatement.check(path.node) &&
+    types.AssignmentExpression.check(path.node.expression) &&
+    types.MemberExpression.check(path.node.expression.left)
+  ) {
+    return toString(path.get('expression', 'left'));
   }
 
   throw new TypeError(
@@ -58,6 +73,10 @@ function getRoot(node) {
     root = root.parent;
   }
   return root;
+}
+
+function removeModuleExports(object) {
+  return toString(object).replace(/^(?:module\.)?exports./, '');
 }
 
 export default function getMemberExpressionValuePath(
@@ -84,7 +103,10 @@ export default function getMemberExpressionValuePath(
       if (
         (!memberPath.node.computed || types.Literal.check(memberPath.node.property)) &&
         getNameOrValue(memberPath.get('property')) === memberName &&
-        toString(memberPath.get('object')) === localName
+        (
+          toString(memberPath.get('object')) === localName ||
+          removeModuleExports(memberPath.get('object')) === localName
+        )
       ) {
         result = path.get('right');
         return false;

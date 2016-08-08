@@ -53,6 +53,48 @@ describe('getMemberExpressionValuePath', () => {
         .toBe(def.parent.get('body', 1, 'expression', 'right'));
     });
 
+    it('finds nested property definitions', () => {
+      var def = statement(`
+        module.exports.Foo = () => {};
+        module.exports.Foo.propTypes = {};
+      `);
+
+      expect(getMemberExpressionValuePath(def, 'propTypes'))
+        .toBe(def.parent.get('body', 1, 'expression', 'right'));
+    });
+
+    it('finds the correct nested property definitions', () => {
+      var def = statement(`
+        module.exports.Foo = () => {};
+        module.exports.Foo.propTypes = {};
+        exports.Foo.propTypes = {};
+      `);
+
+      expect(getMemberExpressionValuePath(def, 'propTypes'))
+        .toBe(def.parent.get('body', 1, 'expression', 'right'));
+    });
+
+    it('finds property definitions that are part of a commonJS export', () => {
+      var def = statement(`
+        function Foo () {}
+        module.exports.Foo.propTypes = {};
+        exports.Bar.propTypes = {};
+      `);
+
+      expect(getMemberExpressionValuePath(def, 'propTypes'))
+        .toBe(def.parent.get('body', 1, 'expression', 'right'));
+    });
+
+    it('ignores property definitions that don\'t belong to the object', () => {
+      var def = statement(`
+        function Foo () {}
+        module.bar.Foo.propTypes = {};
+        exports.Bar.propTypes = {};
+      `);
+
+      expect(getMemberExpressionValuePath(def, 'propTypes')).not.toBeDefined();
+    });
+
     it('ignores computed property definitions with expression', () => {
       var def = statement(`
         var Foo = function Bar() {};
