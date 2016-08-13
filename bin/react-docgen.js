@@ -44,7 +44,7 @@ var argv = require('nomnom')
       full: 'exclude',
       help: 'Filename pattern to exclude. Default:',
       list: true,
-      default: ['index.js'],
+      default: [],
     },
     ignoreDir: {
       abbr: 'i',
