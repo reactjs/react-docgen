@@ -13,12 +13,12 @@
 jest.disableAutomock();
 
 describe('getTypeAnnotation', () => {
-  var expression, statement;
+  var expression;
   var getTypeAnnotation;
 
   beforeEach(() => {
     getTypeAnnotation = require('../getTypeAnnotation').default;
-    ({expression, statement} = require('../../../tests/utils'));
+    ({expression} = require('../../../tests/utils'));
   });
 
   it('detects simple type', () => {

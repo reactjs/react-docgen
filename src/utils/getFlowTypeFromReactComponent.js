@@ -10,7 +10,6 @@
  *
  */
 
-import getPropertyName from './getPropertyName';
 import getTypeAnnotation from '../utils/getTypeAnnotation';
 import getMemberValuePath from '../utils/getMemberValuePath';
 import isReactComponentClass from '../utils/isReactComponentClass';

@@ -14,11 +14,11 @@ jest.disableAutomock();
 
 describe('getMethodDocumentation', () => {
   let getMethodDocumentation;
-  let expression, statement;
+  let statement;
 
   beforeEach(() => {
     getMethodDocumentation = require('../getMethodDocumentation').default;
-    ({expression, statement} = require('../../../tests/utils'));
+    ({ statement } = require('../../../tests/utils'));
   });
 
   describe('name', () => {

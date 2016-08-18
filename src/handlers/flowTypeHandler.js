@@ -17,13 +17,6 @@ import getPropertyName from '../utils/getPropertyName';
 import getFlowTypeFromReactComponent, {
   applyToFlowTypeProperties,
 }  from '../utils/getFlowTypeFromReactComponent';
-import isUnreachableFlowType from '../utils/isUnreachableFlowType';
-import recast from 'recast';
-import resolveToValue from '../utils/resolveToValue';
-import { getDocblock } from '../utils/docblock';
-
-
-var {types: {namedTypes: types}} = recast;
 
 function setPropDescriptor(documentation: Documentation, path: NodePath): void {
   const propDescriptor = documentation.getPropDescriptor(getPropertyName(path));

@@ -36,7 +36,7 @@ type MethodDocumentation = {
   returns: ?MethodReturn;
 };
 
-function getMethodParamsDoc(methodPath, jsDoc) {
+function getMethodParamsDoc(methodPath) {
   const params = [];
   const functionExpression = methodPath.get('value');
 
@@ -64,7 +64,7 @@ function getMethodParamsDoc(methodPath, jsDoc) {
 }
 
 // Extract flow return type.
-function getMethodReturnDoc(methodPath, jsDoc) {
+function getMethodReturnDoc(methodPath) {
   const functionExpression = methodPath.get('value');
 
   if (functionExpression.node.returnType) {
