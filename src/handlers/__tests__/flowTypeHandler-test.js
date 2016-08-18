@@ -170,13 +170,12 @@ describe('flowTypeHandler', () => {
   it('supports intersection proptypes', () => {
     var definition = statement(`
       (props: Props) => <div />;
-     
+
       var React = require('React');
       import type Imported from 'something';
-  
+
       type Props = Imported & { foo: 'bar' };
     `).get('expression');
-
 
     flowTypeHandler(documentation, definition);
 
@@ -188,24 +187,21 @@ describe('flowTypeHandler', () => {
     });
   });
 
-  it('supports union proptypes', () => {
+  it('does not support union proptypes', () => {
     var definition = statement(`
       (props: Props) => <div />;
-      
+
       var React = require('React');
       import type Imported from 'something';
 
-      type Props = Imported | { foo: 'bar' };
+      type Other = { bar: 'barValue' };
+      type Props = Imported | Other | { foo: 'fooValue' };
     `).get('expression');
 
-    flowTypeHandler(documentation, definition);
+    expect(() => flowTypeHandler(documentation, definition))
+      .not.toThrow();
 
-    expect(documentation.descriptors).toEqual({
-      foo: {
-        flowType: {},
-        required: true,
-      },
-    });
+    expect(documentation.descriptors).toEqual({});
   });
 
   describe('does not error for unreachable type', () => {
