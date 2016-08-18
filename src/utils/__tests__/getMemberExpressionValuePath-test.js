@@ -32,6 +32,17 @@ describe('getMemberExpressionValuePath', () => {
         .toBe(def.parent.get('body', 1, 'expression', 'right'));
     });
 
+    it('takes the correct property definitions', () => {
+      var def = statement(`
+        var Foo = () => {};
+        Foo.propTypes = {};
+        Bar.propTypes = { unrelated: true };
+      `);
+
+      expect(getMemberExpressionValuePath(def, 'propTypes'))
+        .toBe(def.parent.get('body', 1, 'expression', 'right'));
+    });
+
     it('finds computed property definitions with literal keys', () => {
       var def = statement(`
         function Foo () {}
