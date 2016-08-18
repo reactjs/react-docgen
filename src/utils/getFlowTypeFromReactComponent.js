@@ -71,15 +71,13 @@ export function applyToFlowTypeProperties(
     path.get('properties').each(
       propertyPath => callback(propertyPath)
     );
-  } else if (path.node.type == 'IntersectionTypeAnnotation') {
+  } else if (path.node.type === 'IntersectionTypeAnnotation') {
     path.get('types').each(
       typesPath => applyToFlowTypeProperties(typesPath, callback)
     );
-  } else if (path.node.type == 'UnionTypeAnnotation') {
+  } else if (path.node.type !== 'UnionTypeAnnotation') {
     // The react-docgen output format does not currently allow
     // for the expression of union types
-    throw new TypeError("react-docgen doesn't support Props of union types");
-  } else {
     let typePath = resolveGenericTypeAnnotation(path);
     if (typePath) {
       applyToFlowTypeProperties(typePath, callback);

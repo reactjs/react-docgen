@@ -199,7 +199,9 @@ describe('flowTypeHandler', () => {
     `).get('expression');
 
     expect(() => flowTypeHandler(documentation, definition))
-      .toThrowError(TypeError, "react-docgen doesn't support Props of union types");
+      .not.toThrow();
+
+    expect(documentation.descriptors).toEqual({});
   });
 
   describe('does not error for unreachable type', () => {
