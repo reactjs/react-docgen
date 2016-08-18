@@ -155,9 +155,10 @@ describe('flowTypeDocBlockHandler', () => {
         description: 'bar description',
       },
     });
+  });
 
-    it('does not support union proptypes', () => {
-      var definition = statement(`
+  it('does not support union proptypes', () => {
+    var definition = statement(`
         (props: Props) => <div />;
 
         var React = require('React');
@@ -167,11 +168,11 @@ describe('flowTypeDocBlockHandler', () => {
         type Props = Imported | Other | { foo: 'fooValue' };
       `).get('expression');
 
-      expect(() => flowTypeDocBlockHandler(documentation, definition))
-        .toThrowError(TypeError, "react-docgen doesn't support Props of union types");
-    });
-  });
+    expect(() => flowTypeDocBlockHandler(documentation, definition))
+      .not.toThrow();
 
+    expect(documentation.descriptors).toEqual({});
+  });
 
   describe('does not error for unreachable type', () => {
     function test(code) {
