@@ -39,6 +39,13 @@ var argv = require('nomnom')
       list: true,
       default: ['js', 'jsx'],
     },
+    excludePatterns: {
+      abbr: 'e',
+      full: 'exclude',
+      help: 'Filename pattern to exclude. Default:',
+      list: true,
+      default: [],
+    },
     ignoreDir: {
       abbr: 'i',
       full: 'ignore',
@@ -64,6 +71,7 @@ var output = argv.out;
 var paths = argv.path || [];
 var extensions = new RegExp('\\.(?:' + argv.extension.join('|') + ')$');
 var ignoreDir = argv.ignoreDir;
+var excludePatterns = argv.excludePatterns;
 var resolver;
 
 if (argv.resolver) {
@@ -115,7 +123,8 @@ function traverseDir(filePath, result, done) {
     filePath,
     {
       match: extensions,
-      excludeDir: ignoreDir,
+      exclude:excludePatterns,
+      excludeDir: ignoreDir
     },
     function(error, content, filename, next) {
       if (error) {
