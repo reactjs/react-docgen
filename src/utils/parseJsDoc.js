@@ -28,6 +28,14 @@ type JsDoc = {
 function getType(tag) {
   if (!tag.type) {
     return null;
+  } else if (tag.type.type === 'UnionType') {
+    // union type
+    return {name: 'union', value: tag.type.elements.map(function (element) {
+      return element.name;
+    })};
+  } else if (tag.type.type === 'AllLiteral') {
+    // return {*}
+    return {name: 'mixed'};
   }
   return {name: tag.type.name ? tag.type.name : tag.type.expression.name};
 }
