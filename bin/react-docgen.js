@@ -75,15 +75,26 @@ var excludePatterns = argv.excludePatterns;
 var resolver;
 
 if (argv.resolver) {
-  switch(argv.resolver) {
-    case 'findAllComponentDefinitions':
-      resolver = require('../dist/resolver/findAllComponentDefinitions').default;
-      break;
-    case 'findExportedComponentDefinition':
-      resolver = require('../dist/resolver/findExportedComponentDefinition').default;
-      break;
-    default: // treat value as module path
-      resolver = require(path.resolve(process.cwd(), argv.resolver));
+  try {
+    // Look for built-in resolver
+    resolver = require(`../dist/resolver/${argv.resolver}`).default;
+  } catch(e) {
+    if (e.code !== 'MODULE_NOT_FOUND') {
+      throw e;
+    }
+    const resolverPath = path.resolve(process.cwd(), argv.resolver);
+    try {
+      // Look for local resolver
+      resolver = require(resolverPath);
+    } catch (e) {
+      if (e.code !== 'MODULE_NOT_FOUND') {
+        throw e;
+      }
+      exitWithError(
+        `Unknown resolver: "${argv.resolver}" is neither a built-in resolver ` +
+        `nor can it be found locally ("${resolverPath}")`
+      );
+    }
   }
 }
 
@@ -92,7 +103,7 @@ function parse(source) {
 }
 
 function writeError(msg, filePath) {
-  if (path) {
+  if (filePath) {
     process.stderr.write('Error with path "' + filePath + '": ');
   }
   process.stderr.write(msg + '\n');
