@@ -37,6 +37,7 @@ export {default as isReactModuleName} from './isReactModuleName';
 export {default as isStatelessComponent} from './isStatelessComponent';
 export {default as match} from './match';
 export {default as normalizeClassDefinition} from './normalizeClassDefinition';
+export {default as normalizeClassDefiniton} from './normalizeClassDefinition'; // backward compatibility
 export {default as printValue} from './printValue';
 export {default as resolveExportDeclaration} from './resolveExportDeclaration';
 export {default as resolveToModule} from './resolveToModule';
