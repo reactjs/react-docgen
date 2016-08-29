@@ -12,13 +12,12 @@ var {types: {namedTypes: types}} = recast;
  * It resolves the path to its module name and adds it to the "dependencies" entry
  * in the documentation.
  */
-function amendDependencies(documentation, path) {
-  var moduleName = resolveToModule(path);
-  if (moduleName) {
+function amendDependencies(documentation, path, variableDeclarations, jsx) {
+  var moduleName = resolveToModule(path) || path.value
+  //  If module is a declaration, ignore them
+  //  If path is jsx, assume module is jsx
+  if (!variableDeclarations[moduleName] && jsx[path.value]) {
     documentation.addDependencies(moduleName);
-  } else {
-    //  Naive tags like div
-    documentation.addDependencies(path.get('value').value);
   }
 }
 
@@ -26,28 +25,36 @@ export default function componentDependencyHandler(
   documentation: Documentation,
   path: NodePath
 ) {
-  var renderPath = getMemberValuePath(path, 'render');
-
-  //  Function components
-  if (!renderPath) {
-    renderPath = path;
-  }
-
-  recast.visit(renderPath, {
+  let identifiers = []
+  let jsx = {}
+  let variableDeclarations = {}
+  recast.visit(path.parentPath.parentPath, {
+    visitNode: function(path) {
+      if (path.get('type').value === 'VariableDeclaration') {
+        path.get('declarations').value.forEach(node => {
+          variableDeclarations[node.id.name] = true
+        })
+      }
+      this.traverse(path)
+    },
     visitIdentifier: function(path) {
       var componentPath;
       if (path.get('type').value === 'JSXIdentifier') {
         componentPath = path.get('name');
+        jsx[componentPath.value] = true
       } else if (path.get('name').value === 'createElement') {
         //  Get first argument in React.createElement
         componentPath = path.parentPath.parentPath.get('arguments').get(0);
+        jsx[componentPath.value] = true
+      } else if (path.get('type').value === 'Identifier') {
+        componentPath = path.get('name');
       }
 
       if (componentPath) {
-        amendDependencies(documentation, componentPath);
+        identifiers.push(componentPath);
       }
-
-      return false;
+      this.traverse(path)
     },
   });
+  identifiers.forEach(path => amendDependencies(documentation, path, variableDeclarations, jsx))
 }

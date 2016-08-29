@@ -188,6 +188,86 @@ describe('componentDependencyHandler', () => {
     );
   });
 
+  describe('Sub-rendering methods', () => {
+    const parse = src => statement(src)
+
+    it('handles external methods', () => {
+      const renderSrc = `
+        const Sub = () => <SubComponentx />
+        const Sub2 = () => <SubComponenty />
+        const Component = () => {
+          return <Sub><Sub2 /><div /></Sub>
+        }
+      `
+
+      documentation = new (require('../../Documentation'))();
+      var definition = parse(renderSrc);
+
+      componentDependencyHandler(documentation, definition);
+      expect(documentation.dependencies).toEqual(['SubComponentx', 'SubComponenty', 'div'])
+    });
+
+    it('handles variable declarations', () => {
+      const renderSrc = `
+        const SubComponentx = SubComponentz
+        const getX = () => <SubComponentx />
+        const Component = () => {
+          return getX()
+        }
+      `
+
+      documentation = new (require('../../Documentation'))();
+      var definition = parse(renderSrc);
+
+      componentDependencyHandler(documentation, definition);
+      expect(documentation.dependencies).toEqual(['SubComponentz']);
+    })
+
+    it('handles class methods', () => {
+      const renderSrc = `
+        class Component {
+          renderSub () {
+            return <SubComponent />
+          }
+          render() {
+            return this.renderSub()
+          }
+        }
+      `
+
+      documentation = new (require('../../Documentation'))();
+      var definition = parse(renderSrc);
+
+      componentDependencyHandler(documentation, definition);
+      expect(documentation.dependencies).toEqual(['SubComponent']);
+    });
+
+    it('handles nested methods', () => {
+      const renderSrc = `
+        class Component {
+          renderSubz () {
+            return <div />
+          }
+          renderSuby () {
+            return <SubComponenty>{this.renderSubz()}</SubComponenty>
+          }
+          renderSub () {
+            return <SubComponentx>{this.renderSuby()}</SubComponentx>
+          }
+          render() {
+            return this.renderSub()
+          }
+        }
+      `
+
+      documentation = new (require('../../Documentation'))();
+      var definition = parse(renderSrc);
+
+      componentDependencyHandler(documentation, definition);
+      expect(documentation.dependencies).toEqual(['div', 'SubComponenty', 'SubComponentx']);
+    });
+  });
+
   it('does not error if there are no dependencies', () => {
     var definition = expression('{ render: function(){ return null } }');
     expect(() => componentDependencyHandler(documentation, definition))
