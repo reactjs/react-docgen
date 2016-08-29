@@ -209,6 +209,8 @@ describe('componentDependencyHandler', () => {
 
     it('handles variable declarations', () => {
       const renderSrc = `
+        const x = 1
+        const y = x
         const SubComponentx = SubComponentz
         const getX = () => <SubComponentx />
         const Component = () => {
@@ -221,6 +223,23 @@ describe('componentDependencyHandler', () => {
 
       componentDependencyHandler(documentation, definition);
       expect(documentation.dependencies).toEqual(['SubComponentz']);
+    })
+
+    it('ignore non-jsx variables', () => {
+      const renderSrc = `
+        const x = 1
+        const y = x
+        const SubComponentx = SubComponenty
+        const Component = () => {
+          return <SubComponentx />
+        }
+      `
+
+      documentation = new (require('../../Documentation'))();
+      var definition = parse(renderSrc);
+
+      componentDependencyHandler(documentation, definition);
+      expect(documentation.dependencies).toEqual(['SubComponenty']);
     })
 
     it('handles class methods', () => {

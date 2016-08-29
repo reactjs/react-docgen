@@ -13,11 +13,21 @@ var {types: {namedTypes: types}} = recast;
  * in the documentation.
  */
 function amendDependencies(documentation, path, variableDeclarations, jsx) {
-  var moduleName = resolveToModule(path) || path.value
+
+  let value = path.value
+
+  var moduleName = resolveToModule(path)
   //  If module is a declaration, ignore them
   //  If path is jsx, assume module is jsx
-  if (!variableDeclarations[moduleName] && jsx[path.value]) {
-    documentation.addDependencies(moduleName);
+  if (moduleName) {
+    if (!variableDeclarations[moduleName] && jsx[value]) {
+      documentation.addDependencies(moduleName);
+    }
+  } else {
+    //  Native tags
+    if (typeof value !== 'string' && value.value) {
+      documentation.addDependencies(value.value);
+    }
   }
 }
 
