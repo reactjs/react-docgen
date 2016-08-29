@@ -18,16 +18,11 @@ class Documentation {
   constructor() {
     this._props = new Map();
     this._composes = new Set();
-    this._dependencies = new Set();
     this._data = new Map();
   }
 
   addComposes(moduleName: string) {
     this._composes.add(moduleName);
-  }
-
-  addDependencies(moduleName: string) {
-    this._dependencies.add(moduleName);
   }
 
   set(key: string, value: any) {
@@ -63,11 +58,6 @@ class Documentation {
     if (this._composes.size > 0) {
       obj.composes = Array.from(this._composes);
     }
-
-    if (this._dependencies.size > 0) {
-      obj.dependencies = Array.from(this._dependencies);
-    }
-
     return obj;
   }
 }

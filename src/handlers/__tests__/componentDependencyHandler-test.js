@@ -212,7 +212,7 @@ describe('componentDependencyHandler', () => {
         const x = 1
         const y = x
         const SubComponentx = SubComponentz
-        const getX = () => <SubComponentx />
+        const getX = () => <SubComponentx z='1' a={<div />} />
         const Component = () => {
           return getX()
         }
@@ -222,7 +222,7 @@ describe('componentDependencyHandler', () => {
       var definition = parse(renderSrc);
 
       componentDependencyHandler(documentation, definition);
-      expect(documentation.dependencies).toEqual(['SubComponentz']);
+      expect(documentation.dependencies).toEqual(['SubComponentz', 'div']);
     })
 
     it('ignore non-jsx variables', () => {
