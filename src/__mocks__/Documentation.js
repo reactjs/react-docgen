@@ -11,18 +11,12 @@
 function Documentation() {
   return {
     composes: [],
-    dependencies: [],
     descriptors: {},
     getPropDescriptor(name) {
       return this.descriptors[name] || (this.descriptors[name] = {});
     },
     addComposes(name) {
       this.composes.push(name);
-    },
-    addDependencies(name) {
-      if (this.dependencies.indexOf(name) === -1) {
-        this.dependencies.push(name);
-      }
     },
     set(key, value) {
       this[key] = value;
