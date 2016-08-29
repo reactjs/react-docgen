@@ -86,6 +86,27 @@ describe('defaultPropsHandler', () => {
       `;
       test(parse(src).get('body', 0));
     });
+
+    it('should find prop default values that are imported variables', () => {
+      var src = `
+        import ImportedComponent from './ImportedComponent';
+
+        class Foo {
+          static defaultProps = {
+            foo: ImportedComponent,
+          };
+        }
+      `;
+      defaultPropsHandler(documentation, parse(src).get('body', 1));
+      expect(documentation.descriptors).toEqual({
+        foo: {
+          defaultValue: {
+            value: 'ImportedComponent',
+            computed: true,
+          },
+        },
+      });
+    });
   });
 
   describe('ClassExpression with static defaultProps', () => {

@@ -33,6 +33,7 @@ Options:
    -o FILE, --out FILE   store extracted information in FILE
    --pretty              pretty print JSON
    -x, --extension       File extensions to consider. Repeat to define multiple extensions. Default:  [js,jsx]
+   -e, --exclude         Filename pattern to exclude. Default:  []
    -i, --ignore          Folders to ignore. Default:  [node_modules,__tests__]
    --resolver RESOLVER   Resolver name (findAllComponentDefinitions, findExportedComponentDefinition) or
       path to a module that exports a resolver.  [findExportedComponentDefinition]

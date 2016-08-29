@@ -4,10 +4,13 @@
     "comma-dangle": [1, "always-multiline"],
     "no-underscore-dangle": 0,
     "quotes": [2, "single", "avoid-escape"],
-    "strict": 0
+    "strict": 0,
+    "no-unused-vars": 2,
+    "no-undef": 2
   },
   "env": {
-    "node": true
+    "node": true,
+    "es6": true
   },
   "globals": {
     "ASTNode": true,

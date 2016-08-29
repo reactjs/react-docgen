@@ -15,7 +15,6 @@ import getMemberValuePath from '../utils/getMemberValuePath';
 import getMethodDocumentation from '../utils/getMethodDocumentation';
 import isReactComponentClass from '../utils/isReactComponentClass';
 import isReactComponentMethod from '../utils/isReactComponentMethod';
-import isReactCreateClassCall from '../utils/isReactCreateClassCall';
 
 import type Documentation from '../Documentation';
 

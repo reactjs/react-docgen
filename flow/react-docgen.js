@@ -33,6 +33,7 @@ type flowFunctionSignatureType = {
 
 type FlowTypeDescriptor = {
   name: string,
+  alias?: string,
   value?: string,
   required?: boolean,
   nullable?: boolean,
@@ -40,6 +41,7 @@ type FlowTypeDescriptor = {
   elements?: Array<FlowTypeDescriptor>,
   type?: 'object' | 'function',
   signature?: flowObjectSignatureType | flowFunctionSignatureType,
+  alias?: string,
 };
 
 type PropDescriptor = {
