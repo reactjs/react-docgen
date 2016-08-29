@@ -22,33 +22,42 @@ var {types: {namedTypes: types}} = recast;
  * this function tries to find the name of module from which the "root value"
  * was imported.
  */
-export default function resolveToModule(path: NodePath): ?string {
+export default function resolveToIdentifier(path: NodePath, name: String): ?string {
+  name = name || path.value.name
   var node = path.node;
   switch (node.type) {
     case types.VariableDeclarator.name:
       if (node.init) {
-        return resolveToModule(path.get('init'));
+        return resolveToIdentifier(path.get('init'), name);
       }
       break;
     case types.CallExpression.name:
       if (match(node.callee, {type: types.Identifier.name, name: 'require'})) {
-        return node.arguments[0].value;
+        if (path.parentPath.value.id) {
+          return path.parentPath.value.id.name
+        }
+        if (path.parentPath.value.property) {
+          return path.parentPath.value.property.name
+        }
       }
-      return resolveToModule(path.get('callee'));
+      return resolveToIdentifier(path.get('callee'), name);
     case types.Identifier.name:
+    case types.JSXIdentifier.name:
       var valuePath = resolveToValue(path);
       if (valuePath !== path) {
-        return resolveToModule(valuePath);
+        return resolveToIdentifier(valuePath, name);
       }
       break;
     case types.ImportDeclaration.name:
-      return node.source.value;
+      const specifier = node.specifiers.find(specifier => specifier.local.name === name) || node.specifiers[0]
+      return (specifier.imported || specifier.local).name;
     case types.MemberExpression.name:
       while (path && types.MemberExpression.check(path.node)) {
         path = path.get('object');
       }
       if (path) {
-        return resolveToModule(path);
+        return resolveToIdentifier(path, name);
       }
   }
+  return node.name;
 }

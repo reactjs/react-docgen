@@ -209,6 +209,7 @@ describe('componentDependencyHandler', () => {
 
     it('handles variable declarations', () => {
       const renderSrc = `
+        import SubComponentz from '../SubComponentz/SubComponentz'
         const x = 1
         const y = x
         const SubComponentx = SubComponentz

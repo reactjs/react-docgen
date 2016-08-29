@@ -2,7 +2,7 @@
 import type Documentation from '../Documentation';
 
 import recast from 'recast';
-import resolveToModule from '../utils/resolveToModule';
+import resolveToIdentifier from '../utils/resolveToIdentifier';
 
 var {types: {namedTypes: types}} = recast;
 
@@ -16,7 +16,7 @@ function addDependencies(documentation, paths, variableDeclarations, jsx) {
     .map(path => {
       let value = path.value
 
-      var moduleName = resolveToModule(path)
+      var moduleName = resolveToIdentifier(path)
       //  If module is a declaration, ignore them
       //  If path is jsx, assume module is jsx
       if (moduleName) {
