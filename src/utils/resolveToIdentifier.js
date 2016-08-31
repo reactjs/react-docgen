@@ -49,7 +49,10 @@ export default function resolveToIdentifier(path: NodePath, name: String): ?stri
       }
       break;
     case types.ImportDeclaration.name:
-      const specifier = node.specifiers.find(specifier => specifier.local.name === name) || node.specifiers[0]
+      let specifier = node.specifiers.find(specifier => specifier.local.name === name)
+      if (specifier === -1) {
+        specifier = node.specifiers[0]
+      }
       return (specifier.imported || specifier.local).name;
     case types.MemberExpression.name:
       while (path && types.MemberExpression.check(path.node)) {
