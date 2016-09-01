@@ -47,7 +47,7 @@
     "babel-preset-stage-1": "^6.5.0",
     "cross-spawn": "^4.0.0",
     "eslint": "^3.2.2",
-    "flow-bin": "^0.30.0",
+    "flow-bin": "^0.31.0",
     "jest-cli": "^14.1.0",
     "rimraf": "^2.3.2",
     "temp": "^0.8.1"
