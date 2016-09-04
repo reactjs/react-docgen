@@ -122,20 +122,124 @@ describe('getPropType', () => {
     });
   });
 
-  it('resolves variables to their values', () => {
-    var propTypeExpression = statement(`
-      PropTypes.shape(shape);
-      var shape = {bar: PropTypes.string};
-    `).get('expression');
+  describe('resolve identifier to their values', () => {
+    it('resolves variables to their values', () => {
+      var propTypeExpression = statement(`
+        PropTypes.shape(shape);
+        var shape = {bar: PropTypes.string};
+      `).get('expression');
 
-    expect(getPropType(propTypeExpression)).toEqual({
-      name: 'shape',
-      value: {
-        bar: {
-          name: 'string',
-          required: false,
+      expect(getPropType(propTypeExpression)).toEqual({
+        name: 'shape',
+        value: {
+          bar: {
+            name: 'string',
+            required: false,
+          },
         },
-      },
+      });
+    });
+
+    it('resolves simple identifier to their initialization value', () => {
+      var propTypeIdentifier = statement(`
+        PropTypes.oneOf(TYPES);
+        var TYPES = ["foo", "bar"];
+      `).get('expression');
+
+      expect(getPropType(propTypeIdentifier)).toEqual({
+        name: 'enum',
+        value: [
+          {value: '"foo"', computed: false},
+          {value: '"bar"', computed: false},
+        ],
+      });
+
+      var identifierInsideArray = statement(`
+        PropTypes.oneOf([FOO, BAR]);
+        var FOO = "foo";
+        var BAR = "bar";
+      `).get('expression');
+
+      expect(getPropType(identifierInsideArray)).toEqual({
+        name: 'enum',
+        value: [
+          {value: '"foo"', computed: false},
+          {value: '"bar"', computed: false},
+        ],
+      });
+
+    });
+
+    it('resolves memberExpressions', () => {
+      var propTypeExpression = statement(`
+        PropTypes.oneOf([TYPES.FOO, TYPES.BAR]);
+        var TYPES = { FOO: "foo", BAR: "bar" };
+      `).get('expression');
+
+      expect(getPropType(propTypeExpression)).toEqual({
+        name: 'enum',
+        value: [
+          {value: '"foo"', computed: false},
+          {value: '"bar"', computed: false},
+        ],
+      });
+    });
+
+    it('correctly resolves SpreadElements in arrays', () => {
+      var propTypeExpression = statement(`
+        PropTypes.oneOf([...TYPES]);
+        var TYPES = ["foo", "bar"];
+      `).get('expression');
+
+      expect(getPropType(propTypeExpression)).toEqual({
+        name: 'enum',
+        value: [
+          {value: '"foo"', computed: false},
+          {value: '"bar"', computed: false},
+        ],
+      });
+    });
+
+    it('correctly resolves nested SpreadElements in arrays', () => {
+      var propTypeExpression = statement(`
+        PropTypes.oneOf([...TYPES]);
+        var TYPES = ["foo", ...TYPES2];
+        var TYPES2 = ["bar"];
+      `).get('expression');
+
+      expect(getPropType(propTypeExpression)).toEqual({
+        name: 'enum',
+        value: [
+          {value: '"foo"', computed: false},
+          {value: '"bar"', computed: false},
+        ],
+      });
+    });
+
+    it('does not resolve computed values', () => {
+      var propTypeExpression = statement(`
+        PropTypes.oneOf(Object.keys(TYPES));
+        var TYPES = { FOO: "foo", BAR: "bar" };
+      `).get('expression');
+
+      expect(getPropType(propTypeExpression)).toEqual({
+        name: 'enum',
+        value: 'Object.keys(TYPES)',
+        computed: true,
+      });
+    });
+
+    it('does not resolve external values', () => {
+      var propTypeExpression = statement(`
+        PropTypes.oneOf(TYPES);
+        import { TYPES } from './foo';
+      `).get('expression');
+
+      expect(getPropType(propTypeExpression)).toEqual({
+        name: 'enum',
+        value: 'TYPES',
+        computed: true,
+      });
     });
   });
 
