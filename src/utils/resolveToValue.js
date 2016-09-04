@@ -11,6 +11,9 @@
  */
 
 import recast from 'recast';
+import getMemberExpressionRoot from './getMemberExpressionRoot';
+import getPropertyValuePath from './getPropertyValuePath';
+import {Array as toArray} from './expressionTo';
 import {traverseShallow} from './traverse';
 
 var {
@@ -105,6 +108,7 @@ function findLastAssignedValue(scope, name) {
 /**
  * If the path is an identifier, it is resolved in the scope chain.
  * If it is an assignment expression, it resolves to the right hand side.
+ * If it is a member expression it is resolved to it's initialization value.
  *
  * Else the path itself is returned.
  */
@@ -114,6 +118,18 @@ export default function resolveToValue(path: NodePath): NodePath {
      if (node.init) {
        return resolveToValue(path.get('init'));
      }
+  } else if (types.MemberExpression.check(node)) {
+    const resolved = resolveToValue(getMemberExpressionRoot(path));
+    if (types.ObjectExpression.check(resolved.node)) {
+      const memberParts = toArray(path).slice(1);
+      const init = memberParts.reduce((propertyPath, propertyName) => {
+        propertyPath = resolveToValue(propertyPath);
+        return types.ObjectExpression.check(propertyPath.node) ?
+          getPropertyValuePath(propertyPath, propertyName) :
+          null;
+      }, resolved);
+      return init ? resolveToValue(init) : path;
+    }
   } else if (
     types.ImportDefaultSpecifier.check(node) ||
     types.ImportNamespaceSpecifier.check(node) ||

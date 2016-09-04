@@ -143,4 +143,62 @@ describe('resolveToValue', () => {
 
   });
 
+  describe('MemberExpression', () => {
+
+    it('resolves a MemberExpression to it\'s init value', () => {
+      var path = parse([
+        'var foo = { bar: 1 };',
+        'foo.bar;',
+      ].join('\n'));
+
+      expect(resolveToValue(path).node).toEqualASTNode(builders.literal(1));
+    });
+
+    it('resolves a MemberExpression in the scope chain', () => {
+      var path = parse([
+        'var foo = 1;',
+        'var bar = { baz: foo };',
+        'bar.baz;',
+      ].join('\n'));
+
+      expect(resolveToValue(path).node).toEqualASTNode(builders.literal(1));
+    });
+
+    it('resolves a nested MemberExpression in the scope chain', () => {
+      var path = parse([
+        'var foo = { bar: 1 };',
+        'var bar = { baz: foo.bar };',
+        'bar.baz;',
+      ].join('\n'));
+
+      expect(resolveToValue(path).node).toEqualASTNode(builders.literal(1));
+    });
+
+    it('returns the last resolvable MemberExpression', () => {
+      var path = parse([
+        'import foo from "bar";',
+        'var bar = { baz: foo.bar };',
+        'bar.baz;',
+      ].join('\n'));
+
+      expect(resolveToValue(path).node).toEqualASTNode(
+        builders.memberExpression(
+          builders.identifier('foo'),
+          builders.identifier('bar')
+        )
+      );
+    });
+
+    it('returns the path itself if it can not resolve it any further', () => {
+      var path = parse([
+        'var foo = {};',
+        'foo.bar = 1;',
+        'foo.bar;',
+      ].join('\n'));
+
+      expect(resolveToValue(path).node).toEqualASTNode(path.node);
+    });
+
+  });
+
 });
