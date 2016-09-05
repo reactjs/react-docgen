@@ -108,6 +108,7 @@ var simplePropTypes = {
   any: 1,
   element: 1,
   node: 1,
+  symbol: 1,
 };
 
 var propTypes = {
