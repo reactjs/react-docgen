@@ -45,6 +45,52 @@ describe('findExportedComponentDefinition', () => {
         expect(parse(source)).toBeDefined();
       });
 
+      it('finds React.createClass with hoc', () => {
+        var source = `
+          var React = require("React");
+          var Component = React.createClass({});
+          module.exports = hoc(Component);
+        `;
+
+        expect(parse(source)).toBeDefined();
+      });
+
+      it('finds React.createClass with hoc and args', () => {
+        var source = `
+          var React = require("React");
+          var Component = React.createClass({});
+          module.exports = hoc(arg1, arg2)(Component);
+        `;
+
+        expect(parse(source)).toBeDefined();
+      });
+
+      it('finds React.createClass with two hocs', () => {
+        var source = `
+          var React = require("React");
+          var Component = React.createClass({});
+          module.exports = hoc2(arg2b, arg2b)(
+            hoc1(arg1a, arg2a)(Component)
+          );
+        `;
+
+        expect(parse(source)).toBeDefined();
+      });
+
+      it('finds React.createClass with three hocs', () => {
+        var source = `
+          var React = require("React");
+          var Component = React.createClass({});
+          module.exports = hoc3(arg3a, arg3b)(
+            hoc2(arg2b, arg2b)(
+              hoc1(arg1a, arg2a)(Component)
+            )
+          );
+        `;
+
+        expect(parse(source)).toBeDefined();
+      });
+
       it('finds React.createClass, independent of the var name', () => {
         var source = `
           var R = require("React");
@@ -313,6 +359,46 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           result = parse(source);
+          expect(result).toBeDefined();
+          expect(result.node.type).toBe('ClassDeclaration');
+        });
+
+
+        it('finds default export with hoc', () => {
+          var source = `
+            import React from 'React';
+            class Component extends React.Component {}
+            export default hoc(Component);
+          `;
+
+          var result = parse(source);
+          expect(result).toBeDefined();
+          expect(result.node.type).toBe('ClassDeclaration');
+
+        });
+
+        it('finds default export with hoc and args', () => {
+          var source = `
+            import React from 'React';
+            class Component extends React.Component {}
+            export default hoc(arg1, arg2)(Component);
+          `;
+
+          var result = parse(source);
+          expect(result).toBeDefined();
+          expect(result.node.type).toBe('ClassDeclaration');
+        });
+
+        it('finds default export with two hocs', () => {
+          var source = `
+            import React from 'React';
+            class Component extends React.Component {}
+            export default hoc2(arg2b, arg2b)(
+              hoc1(arg1a, arg2a)(Component)
+            );
+          `;
+
+          var result = parse(source);
           expect(result).toBeDefined();
           expect(result.node.type).toBe('ClassDeclaration');
         });

@@ -181,6 +181,23 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(actual[1].node).toBe(expectedB.node);
         });
 
+        it('finds multiple exported components with hocs', () => {
+          var parsed = parse(`
+            var R = require("React");
+            var ComponentA = R.createClass({});
+            var ComponentB = R.createClass({});
+            exports.ComponentA = hoc(ComponentA);
+            exports.ComponentB = hoc(ComponentB);
+          `);
+          var actual = findComponents(parsed);
+          var expectedA = parsed.get('body', 1, 'declarations', 0, 'init', 'arguments', 0);
+          var expectedB = parsed.get('body', 2, 'declarations', 0, 'init', 'arguments', 0);
+
+          expect(actual.length).toBe(2);
+          expect(actual[0].node).toBe(expectedA.node);
+          expect(actual[1].node).toBe(expectedB.node);
+        });
+
         it('finds only exported components', () => {
           var parsed = parse(`
             var R = require("React");
@@ -700,6 +717,18 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(actual.length).toBe(2);
         });
 
+        it('finds multiple components with hocs', () => {
+          var parsed = parse(`
+            var R = require("React");
+            var ComponentA = hoc(R.createClass({}));
+            var ComponentB = hoc(R.createClass({}));
+            export {ComponentA as foo, ComponentB};
+          `);
+          var actual = findComponents(parsed);
+
+          expect(actual.length).toBe(2);
+        });
+
         it('finds only exported components', () => {
           var parsed = parse(`
             var R = require("React");
@@ -768,6 +797,20 @@ describe('findAllExportedComponentDefinitions', () => {
             var ComponentA = class extends React.Component {};
             var ComponentB = class extends React.Component {};
             export {ComponentA as foo, ComponentB};
+          `);
+          var actual = findComponents(parsed);
+
+          expect(actual.length).toBe(2);
+        });
+
+        it('finds multiple components with hocs', () => {
+          var parsed = parse(`
+            import React from 'React';
+            class ComponentA extends React.Component {};
+            class ComponentB extends React.Component {};
+            var WrappedA = hoc(ComponentA);
+            var WrappedB = hoc(ComponentB);
+            export {WrappedA, WrappedB};
           `);
           var actual = findComponents(parsed);
 

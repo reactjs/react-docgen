@@ -16,6 +16,7 @@ import isStatelessComponent from '../utils/isStatelessComponent';
 import normalizeClassDefinition from '../utils/normalizeClassDefinition';
 import resolveExportDeclaration from '../utils/resolveExportDeclaration';
 import resolveToValue from '../utils/resolveToValue';
+import resolveHOC from '../utils/resolveHOC';
 
 function ignore() {
   return false;
@@ -65,7 +66,17 @@ export default function findExportedComponentDefinitions(
 
   function exportDeclaration(path) {
     var definitions: Array<?NodePath> = resolveExportDeclaration(path, types)
-      .filter(isComponentDefinition)
+      .reduce((acc, definition) => {
+        if (isComponentDefinition(definition)) {
+          acc.push(definition);
+        } else {
+          var resolved = resolveToValue(resolveHOC(definition));
+          if (isComponentDefinition(resolved)) {
+            acc.push(resolved);
+          }
+        }
+        return acc;
+      }, [])
       .map((definition) => resolveDefinition(definition, types));
 
     if (definitions.length === 0) {
@@ -107,7 +118,10 @@ export default function findExportedComponentDefinitions(
       // expression, something like React.createClass
       path = resolveToValue(path.get('right'));
       if (!isComponentDefinition(path)) {
-        return false;
+        path = resolveToValue(resolveHOC(path));
+        if (!isComponentDefinition(path)) {
+          return false;
+        }
       }
       const definition = resolveDefinition(path, types);
       if (definition && components.indexOf(definition) === -1) {
