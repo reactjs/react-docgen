@@ -16,6 +16,7 @@ import isStatelessComponent from '../utils/isStatelessComponent';
 import normalizeClassDefinition from '../utils/normalizeClassDefinition';
 import resolveExportDeclaration from '../utils/resolveExportDeclaration';
 import resolveToValue from '../utils/resolveToValue';
+import resolveHOC from '../utils/resolveHOC';
 
 var ERROR_MULTIPLE_DEFINITIONS =
   'Multiple exported component definitions found.';
@@ -35,7 +36,7 @@ function resolveDefinition(definition, types) {
     if (types.ObjectExpression.check(resolvedPath.node)) {
       return resolvedPath;
     }
-  } else if(isReactComponentClass(definition)) {
+  } else if (isReactComponentClass(definition)) {
     normalizeClassDefinition(definition);
     return definition;
   } else if (isStatelessComponent(definition)) {
@@ -68,7 +69,17 @@ export default function findExportedComponentDefinition(
 
   function exportDeclaration(path) {
     var definitions = resolveExportDeclaration(path, types)
-      .filter(isComponentDefinition);
+      .reduce((acc, definition) => {
+        if (isComponentDefinition(definition)) {
+          acc.push(definition);
+        } else {
+          var resolved = resolveToValue(resolveHOC(definition));
+          if (isComponentDefinition(resolved)) {
+            acc.push(resolved);
+          }
+        }
+        return acc;
+      }, []);
 
     if (definitions.length === 0) {
       return false;
@@ -109,7 +120,10 @@ export default function findExportedComponentDefinition(
       // expression, something like React.createClass
       path = resolveToValue(path.get('right'));
       if (!isComponentDefinition(path)) {
-        return false;
+        path = resolveToValue(resolveHOC(path));
+        if (!isComponentDefinition(path)) {
+          return false;
+        }
       }
       if (definition) {
         // If a file exports multiple components, ... complain!
