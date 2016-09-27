@@ -104,6 +104,10 @@ function returnsJSXElementOrReactCreateElementCall(path) {
         if (resolvedValue && types.ObjectExpression.check(resolvedValue.node)) {
           var resolvedMemberExpression = namesToResolve
             .reduce((result, path) => { // eslint-disable-line no-shadow
+              if (!path) {
+                return result;
+              }
+
               if (result) {
                 result = getPropertyValuePath(result, path.node.name);
                 if (result && types.Identifier.check(result.node)) {
@@ -113,7 +117,10 @@ function returnsJSXElementOrReactCreateElementCall(path) {
               return result;
             }, resolvedValue);
 
-          if (returnsJSXElementOrReactCreateElementCall(resolvedMemberExpression)) {
+          if (
+            !resolvedMemberExpression ||
+            returnsJSXElementOrReactCreateElementCall(resolvedMemberExpression)
+          ) {
             visited = true;
             return false;
           }
