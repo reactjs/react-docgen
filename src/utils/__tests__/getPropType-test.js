@@ -32,6 +32,7 @@ describe('getPropType', () => {
       'any',
       'element',
       'node',
+      'symbol',
     ];
 
     simplePropTypes.forEach(
