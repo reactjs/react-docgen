@@ -24,21 +24,44 @@ import resolveToValue from './resolveToValue';
 var {types: {namedTypes: types}} = recast;
 
 function getEnumValues(path) {
-  return path.get('elements').map(function(elementPath) {
-    return {
-      value: printValue(elementPath),
-      computed: !types.Literal.check(elementPath.node),
-    };
+  const values = [];
+
+  path.get('elements').each(function(elementPath) {
+    if (types.SpreadElement.check(elementPath.node)) {
+      const value = resolveToValue(elementPath.get('argument'));
+
+      if (types.ArrayExpression.check(value.node)) {
+        // if the SpreadElement resolved to an Array, add all their elements too
+        return values.push(...getEnumValues(value));
+      } else {
+        // otherwise we'll just print the SpreadElement itself
+        return values.push({
+          value: printValue(elementPath),
+          computed: !types.Literal.check(elementPath.node),
+        });
+      }
+    }
+
+    // try to resolve the array element to it's value
+    const value = resolveToValue(elementPath);
+    return values.push({
+      value: printValue(value),
+      computed: !types.Literal.check(value.node),
+    });
   });
+
+  return values;
 }
 
 function getPropTypeOneOf(argumentPath) {
   var type: PropTypeDescriptor = {name: 'enum'};
-  if (!types.ArrayExpression.check(argumentPath.node)) {
+  const value = resolveToValue(argumentPath);
+  if (!types.ArrayExpression.check(value.node)) {
+    // could not easily resolve to an Array, let's print the original value
     type.computed = true;
     type.value = printValue(argumentPath);
   } else {
-    type.value = getEnumValues(argumentPath);
+    type.value = getEnumValues(value);
   }
   return type;
 }
