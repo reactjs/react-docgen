@@ -10,20 +10,18 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
+jest.mock('../resolveToValue');
+
 import { statement } from '../../../tests/utils';
 
-jest.unmock('../resolveExportDeclaration');
-
+import resolveToValue from '../resolveToValue';
+import resolveExportDeclaration from '../resolveExportDeclaration';
 
 describe('resolveExportDeclaration', () => {
   var returnValue = {};
-  var resolveToValue;
-  var resolveExportDeclaration;
 
   beforeEach(() => {
-    resolveToValue = require('../resolveToValue').default;
     resolveToValue.mockReturnValue(returnValue);
-    resolveExportDeclaration = require('../resolveExportDeclaration').default;
   });
 
   it('resolves default exports', () => {

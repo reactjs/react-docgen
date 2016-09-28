@@ -8,20 +8,17 @@
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
-var os = require('os');
-var EOL = os.EOL;
+/*global describe, it, expect*/
+import os from 'os';
+import {statement} from '../../../tests/utils';
 
-jest.unmock('../docblock');
+import {getDoclets, getDocblock} from '../docblock';
+
+const EOL = os.EOL;
 
 describe('docblock', () => {
 
   describe('getDoclets', () => {
-    let getDoclets;
-
-    beforeEach(() => {
-      ({getDoclets} = require('../docblock'));
-    });
 
     it('extracts single line doclets', () => {
       expect(getDoclets('@foo bar\n@bar baz'))
@@ -37,6 +34,7 @@ describe('docblock', () => {
       expect(getDoclets('@foo bar\nbaz\n@abc\n@bar baz'))
         .toEqual({foo: 'bar\nbaz', abc: true, bar: 'baz'});
     });
+
   });
 
   describe('getDocblock', () => {
@@ -48,14 +46,6 @@ describe('docblock', () => {
       ' */',
       'foo;',
     ];
-
-    let getDocblock;
-    let statement;
-
-    beforeEach(() => {
-      ({getDocblock} = require('../docblock'));
-      ({statement} = require('../../../tests/utils'));
-    });
 
     it('gets the closest docblock of the given node', () => {
       let node = statement(source.join(EOL));

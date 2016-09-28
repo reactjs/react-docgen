@@ -10,23 +10,20 @@
 
 /*global jest, describe, it, expect, beforeEach*/
 
-jest.disableAutomock();
 jest.mock('../../Documentation');
+jest.mock('../../utils/getPropType', () => jest.fn(() => ({})));
+
+import {statement, expression} from '../../../tests/utils';
+import Documentation from '../../Documentation';
+import propTypeHandler from '../propTypeHandler';
 
 describe('propTypeHandler', () => {
-  var statement, expression;
   var getPropTypeMock;
   var documentation;
-  var propTypeHandler;
 
   beforeEach(() => {
-    ({statement, expression} = require('../../../tests/utils'));
-    getPropTypeMock = jest.genMockFunction().mockImplementation(() => ({}));
-    jest.setMock('../../utils/getPropType', getPropTypeMock);
-    jest.mock('../../utils/getPropType');
-
-    documentation = new (require('../../Documentation'));
-    propTypeHandler = require('../propTypeHandler').default;
+    getPropTypeMock = require('../../utils/getPropType');
+    documentation = new Documentation();
   });
 
   function template(src) {
