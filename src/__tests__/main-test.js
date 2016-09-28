@@ -8,17 +8,15 @@
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
+/*global describe, it, expect*/
 
-jest.disableAutomock();
+import fs from 'fs';
+import path from 'path';
+
+import * as docgen from '../main';
+import {ERROR_MISSING_DEFINITION} from '../parse';
 
 describe('main', () => {
-  var docgen, ERROR_MISSING_DEFINITION;
-
-  beforeEach(() => {
-    docgen = require('../main');
-    ({ERROR_MISSING_DEFINITION} = require('../parse'));
-  });
 
   function test(source) {
     it('parses with default resolver/handlers', () => {
@@ -224,5 +222,18 @@ describe('main', () => {
 
       expect(() => docgen.parse(source)).toThrowError(ERROR_MISSING_DEFINITION);
     });
+  });
+
+  describe('fixtures', () => {
+    const fixturePath = path.join(__dirname, 'fixtures');
+    const fileNames = fs.readdirSync(fixturePath);
+    for (let i = 0; i < fileNames.length; i++) {
+      const fileContent = fs.readFileSync(path.join(fixturePath, fileNames[i]));
+
+      it(`processes component "${fileNames[i]}" without errors`, () => {
+        expect(() => docgen.parse(fileContent)).not.toThrowError();
+        expect(docgen.parse(fileContent)).toMatchSnapshot();
+      });
+    }
   });
 });

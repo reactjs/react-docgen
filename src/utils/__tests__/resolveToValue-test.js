@@ -91,6 +91,18 @@ describe('resolveToValue', () => {
       .toBe('FunctionDeclaration');
   });
 
+  describe('assignments', () => {
+    it('resolves to assigned values', () => {
+      var path = parse([
+        'var foo;',
+        'foo = 42;',
+        'foo;',
+      ].join('\n'));
+
+      expect(resolveToValue(path).node).toEqualASTNode(builders.literal(42));
+    });
+  });
+
   describe('ImportDeclaration', () => {
 
     it('resolves default import references to the import declaration', () => {
