@@ -58,8 +58,6 @@
       "bin",
       "src"
     ],
-    "testPathIgnorePatterns": [
-      "/bin/__tests__/example/"
-    ]
+    "testRegex": "/__tests__/.*-test\\.js$"
   }
 }

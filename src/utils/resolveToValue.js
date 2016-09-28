@@ -11,6 +11,7 @@
  */
 
 import recast from 'recast';
+import {traverseShallow} from './traverse';
 
 var {
   types: {
@@ -72,6 +73,36 @@ function findScopePath(paths: Array<NodePath>, path: NodePath): ?NodePath {
 }
 
 /**
+ * Tries to find the last value assigned to `name` in the scope created by
+ * `scope`. We are not descending into any statements (blocks).
+ */
+function findLastAssignedValue(scope, name) {
+  let results = [];
+
+  traverseShallow(scope.path.node, {
+    visitAssignmentExpression: function(path) {
+      const node = path.node;
+      // Skip anything that is not an assignment to a variable with the
+      // passed name.
+      if (
+        !types.Identifier.check(node.left) ||
+        node.left.name !== name ||
+        node.operator !== '='
+      ) {
+        return this.traverse(path);
+      }
+      results.push(path.get('right'));
+      return false;
+    },
+  });
+
+  if (results.length === 0) {
+    return null;
+  }
+  return resolveToValue(results.pop());
+}
+
+/**
  * If the path is an identifier, it is resolved in the scope chain.
  * If it is an assignment expression, it resolves to the right hand side.
  *
@@ -91,7 +122,7 @@ export default function resolveToValue(path: NodePath): NodePath {
     return path.parentPath;
   } else if (types.AssignmentExpression.check(node)) {
     if (node.operator === '=') {
-      return resolveToValue(node.get('right'));
+      return resolveToValue(path.get('right'));
     }
   } else if (types.Identifier.check(node)) {
     if ((types.ClassDeclaration.check(path.parentPath.node) ||
@@ -104,8 +135,14 @@ export default function resolveToValue(path: NodePath): NodePath {
     let scope = path.scope.lookup(node.name);
     let resolvedPath: ?NodePath;
     if (scope) {
-      const bindings = scope.getBindings()[node.name];
-      resolvedPath = findScopePath(bindings, path);
+      // The variable may be assigned a different value after initialization.
+      // We are first trying to find all assignments to the variable in the
+      // block where it is defined (i.e. we are not traversing into statements)
+      resolvedPath = findLastAssignedValue(scope, node.name);
+      if (!resolvedPath) {
+        const bindings = scope.getBindings()[node.name];
+        resolvedPath = findScopePath(bindings, path);
+      }
     } else {
       scope = path.scope.lookupType(node.name);
       if (scope) {
