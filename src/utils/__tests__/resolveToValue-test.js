@@ -8,26 +8,20 @@
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
+/*global describe, it, expect*/
 
-jest.disableAutomock();
+import recast from 'recast';
+
+const builders = recast.types.builders;
+import resolveToValue from  '../resolveToValue';
+import * as utils from '../../../tests/utils';
 
 describe('resolveToValue', () => {
-  var builders;
-  var utils;
-  var resolveToValue;
 
   function parse(src) {
     var root = utils.parse(src);
     return root.get('body', root.node.body.length - 1, 'expression');
   }
-
-  beforeEach(() => {
-    var recast = require('recast');
-    builders = recast.types.builders;
-    resolveToValue = require('../resolveToValue').default;
-    utils = require('../../../tests/utils');
-  });
 
   it('resolves simple variable declarations', () => {
     var path = parse([

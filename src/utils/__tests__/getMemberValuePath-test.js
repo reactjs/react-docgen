@@ -8,21 +8,20 @@
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
+/*global jest, describe, it, expect*/
 
-jest.unmock('../getMemberValuePath');
+jest.mock('../getPropertyValuePath');
+jest.mock('../getClassMemberValuePath');
+
+import {expression, statement} from '../../../tests/utils';
+
+import getPropertyValuePath from '../getPropertyValuePath';
+import getClassMemberValuePath from '../getClassMemberValuePath';
+import getMemberValuePath from '../getMemberValuePath';
 
 describe('getMemberValuePath', () => {
-  var getMemberValuePath;
-  var expression, statement;
-
-  beforeEach(() => {
-    ({expression, statement} = require('../../../tests/utils'));
-    getMemberValuePath = require('../getMemberValuePath').default;
-  });
 
   it('handles ObjectExpresisons', () => {
-    var getPropertyValuePath = require('../getPropertyValuePath').default;
     var path = expression('{}');
 
     getMemberValuePath(path, 'foo');
@@ -30,7 +29,6 @@ describe('getMemberValuePath', () => {
   });
 
   it('handles ClassDeclarations', () => {
-    var getClassMemberValuePath = require('../getClassMemberValuePath').default;
     var path = statement('class Foo {}');
 
     getMemberValuePath(path, 'foo');
@@ -38,7 +36,6 @@ describe('getMemberValuePath', () => {
   });
 
   it('handles ClassExpressions', () => {
-    var getClassMemberValuePath = require('../getClassMemberValuePath').default;
     var path = expression('class {}');
 
     getMemberValuePath(path, 'foo');
@@ -46,8 +43,6 @@ describe('getMemberValuePath', () => {
   });
 
   it('tries synonyms', () => {
-    var getPropertyValuePath = require('../getPropertyValuePath').default;
-    var getClassMemberValuePath = require('../getClassMemberValuePath').default;
     var path = expression('{}');
 
     getMemberValuePath(path, 'defaultProps');
@@ -62,8 +57,6 @@ describe('getMemberValuePath', () => {
   });
 
   it('returns the result of getPropertyValuePath and getClassMemberValuePath', () => {
-    var getPropertyValuePath = require('../getPropertyValuePath').default;
-    var getClassMemberValuePath = require('../getClassMemberValuePath').default;
     getPropertyValuePath.mockReturnValue(42);
     getClassMemberValuePath.mockReturnValue(21);
     var path = expression('{}');
@@ -74,4 +67,5 @@ describe('getMemberValuePath', () => {
 
     expect(getMemberValuePath(path, 'defaultProps')).toBe(21);
   });
+
 });

@@ -8,17 +8,16 @@
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
+/*global describe, beforeEach, it, expect*/
 
-jest.disableAutomock();
+import Documentation from '../../Documentation';
+import componentMethodsJsDocHandler from '../componentMethodsJsDocHandler';
 
 describe('componentMethodsHandler', () => {
   let documentation;
-  let componentMethodsJsDocHandler;
 
   beforeEach(() => {
-    documentation = new (require('../../Documentation'));
-    componentMethodsJsDocHandler = require('../componentMethodsJsDocHandler').default;
+    documentation = new Documentation();
   });
 
   it('stays the same when no docblock is present', () => {

@@ -8,27 +8,20 @@
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
+/*global describe, it, expect*/
 
-jest.disableAutomock();
+import recast from 'recast';
+import * as utils from '../../../tests/utils';
+import findAllComponentDefinitions from '../findAllComponentDefinitions';
 
 describe('findAllComponentDefinitions', () => {
-  var findAllComponentDefinitions;
-  var recast;
-  var utils;
 
   function parse(source) {
     return findAllComponentDefinitions(
-      utils.parse(source),
+      utils.parse(source, recast),
       recast
     );
   }
-
-  beforeEach(() => {
-    findAllComponentDefinitions = require('../findAllComponentDefinitions').default;
-    utils = require('../../../tests/utils');
-    recast = require('recast');
-  });
 
   describe('React.createClass', () => {
 

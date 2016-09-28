@@ -8,13 +8,14 @@
  *
  */
 
-/*global jasmine, jest, describe, it, expect, afterEach*/
+/*global jasmine, describe, it, expect, afterEach*/
+
+// NOTE: This test spawns a subprocesses that load the files from dist/, not
+// src/. Before running this test run `npm run build` or `npm run watch`.
 
 const TEST_TIMEOUT = 120000;
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = TEST_TIMEOUT;
-
-jest.disableAutomock();
 
 var fs = require('fs');
 var path = require('path');
@@ -96,8 +97,8 @@ describe('react-docgen CLI', () => {
 
   it('reads from stdin', () => {
     return run([], component).then(([stdout, stderr]) => {
-      expect(stdout.length > 0).toBe(true);
-      expect(stderr.length).toBe(0);
+      expect(stdout).not.toBe('');
+      expect(stderr).toBe('');
     });
   }, TEST_TIMEOUT);
 
@@ -238,7 +239,6 @@ describe('react-docgen CLI', () => {
           '--resolver='+path.join(__dirname, './example/customResolver.js'),
           path.join(__dirname, '../../example/components/Component.js'),
         ]).then(([stdout, stderr]) => {
-          console.log(stderr);
           expect(stdout).toContain('Custom');
         }),
       ]);

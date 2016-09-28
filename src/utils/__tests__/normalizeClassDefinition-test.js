@@ -8,13 +8,7 @@
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
-
-jest
-  .unmock('../normalizeClassDefinition')
-  .unmock('../getMemberExpressionRoot')
-  .unmock('../getMembers');
-
+/*global describe, beforeEach, it, expect*/
 
 describe('normalizeClassDefinition', () => {
   var parse;
