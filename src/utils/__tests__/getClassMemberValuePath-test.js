@@ -55,6 +55,29 @@ describe('getClassMemberValuePath', () => {
     });
   });
 
+  describe('Getters and Setters', () => {
+    it('finds getters', () => {
+      var def = statement(`
+        class Foo {
+          get foo() {}
+        }
+      `);
+
+      expect(getClassMemberValuePath(def, 'foo'))
+        .toBe(def.get('body', 'body', 0, 'value'));
+    });
+
+    it('ignores setters', () => {
+      var def = statement(`
+        class Foo {
+          set foo(val) {}
+        }
+      `);
+
+      expect(getClassMemberValuePath(def, 'foo')).not.toBeDefined();
+    });
+  });
+
   describe('ClassProperty', () => {
     it('finds "normal" class properties', () => {
       var def = statement(`

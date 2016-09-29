@@ -25,7 +25,8 @@ export default function getClassMemberValuePath(
   return classDefinition.get('body', 'body')
     .filter(memberPath => (
       (!memberPath.node.computed || types.Literal.check(memberPath.node.key)) &&
-      getNameOrValue(memberPath.get('key')) === memberName
+      getNameOrValue(memberPath.get('key')) === memberName &&
+      memberPath.node.kind !== 'set'
     ))
     .map(memberPath => memberPath.get('value'))[0];
 }

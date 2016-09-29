@@ -5,3 +5,38 @@ Object {
   "methods": Array []
 }
 `;
+
+exports[`main fixtures processes component "component_2.js" without errors 1`] = `
+Object {
+  "description": "",
+  "displayName": "button",
+  "methods": Array [
+    Object {
+      "docblock": null,
+      "modifiers": Array [
+        "static"
+      ],
+      "name": "displayName",
+      "params": Array [],
+      "returns": null
+    },
+    Object {
+      "docblock": null,
+      "modifiers": Array [
+        "static"
+      ],
+      "name": "defaultProps",
+      "params": Array [],
+      "returns": null
+    }
+  ],
+  "props": Object {
+    "type": Object {
+      "defaultValue": Object {
+        "computed": false,
+        "value": "\"primary\""
+      }
+    }
+  }
+}
+`;

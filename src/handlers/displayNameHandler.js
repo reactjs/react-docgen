@@ -15,18 +15,31 @@ import type Documentation from '../Documentation';
 import getMemberValuePath from '../utils/getMemberValuePath';
 import recast from 'recast';
 import resolveToValue from '../utils/resolveToValue';
+import {traverseShallow} from '../utils/traverse';
 
-var {types: {namedTypes: types}} = recast;
+const {types: {namedTypes: types}} = recast;
 
 export default function displayNameHandler(
   documentation: Documentation,
   path: NodePath
 ) {
-  var displayNamePath = getMemberValuePath(path, 'displayName');
+  let displayNamePath = getMemberValuePath(path, 'displayName');
   if (!displayNamePath) {
     return;
   }
   displayNamePath = resolveToValue(displayNamePath);
+
+  // If display name is defined as a getter we get a function expression as
+  // value. In that case we try to determine the value from the return
+  // statement.
+  if (types.FunctionExpression.check(displayNamePath.node)) {
+    traverseShallow(displayNamePath.get('body'), {
+      visitReturnStatement: path => {
+        displayNamePath = resolveToValue(path.get('argument'));
+        return false;
+      },
+    });
+  }
   if (!displayNamePath || !types.Literal.check(displayNamePath.node)) {
     return;
   }

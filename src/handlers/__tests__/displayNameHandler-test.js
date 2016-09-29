@@ -70,17 +70,33 @@ describe('defaultPropsHandler', () => {
     expect(documentation.displayName).not.toBeDefined();
   });
 
-  it('ignores non-literal names', () => {
-    var definition = expression('({displayName: foo.bar})');
-    expect(() => displayNameHandler(documentation, definition)).not.toThrow();
-    expect(documentation.displayName).not.toBeDefined();
+  describe('ClassDeclaration displayName getter', () => {
 
-    definition = statement(`
-      class Foo {
-        static displayName = foo.bar;
-      }
-    `);
-    expect(() => displayNameHandler(documentation, definition)).not.toThrow();
-    expect(documentation.displayName).not.toBeDefined();
+    it('considers class methods', () => {
+      const definition = statement(`
+        class Foo {
+          static get displayName() {
+            return 'foo';
+          }
+        }
+      `);
+      expect(() => displayNameHandler(documentation, definition)).not.toThrow();
+      expect(documentation.displayName).toBe('foo');
+    });
+
+    it('resolves variables in class methods', () => {
+      const definition = statement(`
+        class Foo {
+          static get displayName() {
+            return abc;
+          }
+        }
+        const abc = 'bar';
+      `);
+      expect(() => displayNameHandler(documentation, definition)).not.toThrow();
+      expect(documentation.displayName).toBe('bar');
+    });
+
   });
+
 });

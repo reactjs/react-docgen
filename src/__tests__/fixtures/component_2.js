@@ -8,15 +8,16 @@
  *
  */
 
-var Component, React;
+import React from 'react';
 
-React = require('react');
+export class Button extends React.Component {
+  static get displayName() {
+    return "button";
+  }
 
-/**
- * The is a component to test the document generation
- */
-Component = React.createClass({
-    displayName: 'Component',
-});
-
-module.exports = Component;
+  static get defaultProps() {
+    return {
+      type: "primary",
+    };
+  }
+}
