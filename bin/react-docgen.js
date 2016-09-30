@@ -9,8 +9,6 @@
  *
  */
 
-/*eslint no-process-exit: 0*/
-
 var argv = require('nomnom')
   .script('react-docgen')
   .help(
@@ -90,10 +88,11 @@ if (argv.resolver) {
       if (e.code !== 'MODULE_NOT_FOUND') {
         throw e;
       }
-      exitWithError(
+      writeError(
         `Unknown resolver: "${argv.resolver}" is neither a built-in resolver ` +
         `nor can it be found locally ("${resolverPath}")`
       );
+      process.exitCode = 1;
     }
   }
 }
@@ -112,12 +111,7 @@ function writeError(msg, filePath) {
   }
 }
 
-function exitWithError(error) {
-  writeError(error);
-  exit(1);
-}
-
-function exitWithResult(result) {
+function writeResult(result) {
   result = argv.pretty ?
     JSON.stringify(result, null, 2) :
     JSON.stringify(result);
@@ -126,7 +120,6 @@ function exitWithResult(result) {
   } else {
     process.stdout.write(result + '\n');
   }
-  exit(0);
 }
 
 function traverseDir(filePath, result, done) {
@@ -139,7 +132,7 @@ function traverseDir(filePath, result, done) {
     },
     function(error, content, filename, next) {
       if (error) {
-        exitWithError(error);
+        throw error;
       }
       try {
         result[filename] = parse(content);
@@ -150,92 +143,78 @@ function traverseDir(filePath, result, done) {
     },
     function(error) {
       if (error) {
-        writeError(error);
+        throw error;
       }
       done();
     }
   );
 }
 
-function exit(code) {
-  // flush output for Node.js Windows pipe bug
-  // https://github.com/joyent/node/issues/6247 is just one bug example
-  // https://github.com/visionmedia/mocha/issues/333 has a good discussion
-  function done() {
-    if (!(draining--)) process.exit(code);
-  }
-
-  var draining = 0;
-  var streams = [process.stdout, process.stderr];
-
-  streams.forEach(function(stream){
-    // submit empty write request and wait for completion
-    draining += 1;
-    stream.write('', done);
-  });
-
-  done();
-}
-
-/**
- * 1. No files passed, consume input stream
- */
-if (paths.length === 0) {
-  var source = '';
-  process.stdin.setEncoding('utf8');
-  process.stdin.resume();
-  var timer = setTimeout(function() {
-    process.stderr.write('Still waiting for std input...');
-  }, 5000);
-  process.stdin.on('data', function (chunk) {
-    clearTimeout(timer);
-    source += chunk;
-  });
-  process.stdin.on('end', function () {
-    try {
-      exitWithResult(parse(source));
-    } catch(error) {
-      writeError(error);
-    }
-  });
-} else {
+if (process.exitCode !== 1) {
   /**
-   * 2. Paths are passed.
+   * 1. No files passed, consume input stream
    */
-  var result = Object.create(null);
-  async.eachSeries(paths, function(filePath, done) {
-    fs.stat(filePath, function(error, stats) {
-      if (error) {
-        writeError(error, filePath);
-        done();
-        return;
-      }
-      if (stats.isDirectory()) {
-        traverseDir(filePath, result, done);
-      }
-      else {
-        try {
-          result[filePath] = parse(fs.readFileSync(filePath));
-        } catch(error) {
-          writeError(error, filePath);
-        }
-        finally {
-          done();
-        }
+  if (paths.length === 0) {
+    var source = '';
+    process.stdin.setEncoding('utf8');
+    process.stdin.resume();
+    var timer = setTimeout(function() {
+      process.stderr.write('Still waiting for std input...');
+    }, 5000);
+    process.stdin.on('data', function (chunk) {
+      clearTimeout(timer);
+      source += chunk;
+    });
+    process.stdin.on('end', function () {
+      try {
+        writeResult(parse(source));
+      } catch(error) {
+        writeError(error);
       }
     });
-  }, function() {
-    var resultsPaths = Object.keys(result);
-    if (resultsPaths.length === 0) {
-      // we must have gotten an error
-      exit(1);
-    }
-    if (paths.length === 1) { // a single path?
-      fs.stat(paths[0], function(error, stats) {
-        exitWithResult(stats.isDirectory() ? result : result[resultsPaths[0]]);
+  } else {
+    /**
+     * 2. Paths are passed.
+     */
+    var result = Object.create(null);
+    async.eachSeries(paths, function(filePath, done) {
+      fs.stat(filePath, function(error, stats) {
+        if (error) {
+          writeError(error, filePath);
+          done();
+          return;
+        }
+        if (stats.isDirectory()) {
+          try {
+            traverseDir(filePath, result, done);
+          } catch(error) {
+            writeError(error);
+            done();
+          }
+        }
+        else {
+          try {
+            result[filePath] = parse(fs.readFileSync(filePath));
+          } catch(error) {
+            writeError(error, filePath);
+          }
+          finally {
+            done();
+          }
+        }
       });
-    } else {
-      exitWithResult(result);
-    }
-  });
+    }, function() {
+      var resultsPaths = Object.keys(result);
+      if (resultsPaths.length === 0) {
+        // we must have gotten an error
+        process.exitCode = 1;
+      } else if (paths.length === 1) { // a single path?
+        fs.stat(paths[0], function(error, stats) {
+          writeResult(stats.isDirectory() ? result : result[resultsPaths[0]]);
+        });
+      } else {
+        writeResult(result);
+      }
+    });
+  }
 }
