@@ -39,7 +39,7 @@
   "devDependencies": {
     "babel-cli": "^6.9.0",
     "babel-eslint": "^6.0.4",
-    "babel-jest": "^15.0.0",
+    "babel-jest": "^16.0.0",
     "babel-plugin-syntax-flow": "^6.8.0",
     "babel-plugin-transform-flow-strip-types": "^6.8.0",
     "babel-plugin-transform-runtime": "^6.9.0",
@@ -48,6 +48,7 @@
     "cross-spawn": "^4.0.0",
     "eslint": "^3.2.2",
     "flow-bin": "^0.31.0",
+    "jest": "^16.0.1",
     "jest-cli": "^15.1.1",
     "rimraf": "^2.3.2",
     "temp": "^0.8.1"
