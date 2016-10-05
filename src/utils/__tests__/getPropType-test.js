@@ -85,7 +85,6 @@ describe('getPropType', () => {
       value: [{name: 'custom', raw: 'foo'}],
     });
 
-    // custom type
     expect(getPropType(expression('instanceOf(Foo)'))).toEqual({
       name: 'instanceOf',
       value: 'Foo',
@@ -93,6 +92,11 @@ describe('getPropType', () => {
 
     expect(getPropType(expression('arrayOf(string)'))).toEqual({
       name: 'arrayOf',
+      value: {name: 'string'},
+    });
+
+    expect(getPropType(expression('objectOf(string)'))).toEqual({
+      name: 'objectOf',
       value: {name: 'string'},
     });
 

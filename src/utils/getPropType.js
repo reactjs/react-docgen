@@ -67,6 +67,19 @@ function getPropTypeArrayOf(argumentPath) {
   return type;
 }
 
+function getPropTypeObjectOf(argumentPath) {
+  var type: PropTypeDescriptor = {name: 'objectOf'};
+  var subType = getPropType(argumentPath);
+
+  if (subType.name === 'unknown') {
+    type.value = printValue(argumentPath);
+    type.computed = true;
+  } else {
+    type.value = subType;
+  }
+  return type;
+}
+
 function getPropTypeShape(argumentPath) {
   var type: PropTypeDescriptor = {name: 'shape', value: 'unknown'};
   if (!types.ObjectExpression.check(argumentPath.node)) {
@@ -116,6 +129,7 @@ var propTypes = {
   oneOfType: getPropTypeOneOfType,
   instanceOf: getPropTypeInstanceOf,
   arrayOf: getPropTypeArrayOf,
+  objectOf: getPropTypeObjectOf,
   shape: getPropTypeShape,
 };
 
