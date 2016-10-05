@@ -15,7 +15,7 @@ jest.mock('../../utils/getPropType', () => jest.fn(() => ({})));
 
 import {statement, expression} from '../../../tests/utils';
 import Documentation from '../../Documentation';
-import propTypeHandler from '../propTypeHandler';
+import {propTypeHandler} from '../propTypeHandler';
 
 describe('propTypeHandler', () => {
   var getPropTypeMock;
