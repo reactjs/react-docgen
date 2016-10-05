@@ -40,3 +40,19 @@ Object {
   }
 }
 `;
+
+exports[`main fixtures processes component "component_3.js" without errors 1`] = `
+Object {
+  "description": "",
+  "methods": Array [],
+  "props": Object {
+    "style": Object {
+      "description": "",
+      "required": false,
+      "type": Object {
+        "name": "object"
+      }
+    }
+  }
+}
+`;
