@@ -12,11 +12,15 @@
 
 class Documentation {
   _props: Object;
+  _context: Object;
+  _childContext: Object;
   _composes: Set<string>;
   _data: Object;
 
   constructor() {
     this._props = new Map();
+    this._context = new Map();
+    this._childContext = new Map();
     this._composes = new Set();
     this._data = new Map();
   }
@@ -41,6 +45,22 @@ class Documentation {
     return propDescriptor;
   }
 
+  getContextDescriptor(propName: string): PropDescriptor {
+    var propDescriptor = this._context.get(propName);
+    if (!propDescriptor) {
+      this._context.set(propName, propDescriptor = {});
+    }
+    return propDescriptor;
+  }
+
+  getChildContextDescriptor(propName: string): PropDescriptor {
+    var propDescriptor = this._childContext.get(propName);
+    if (!propDescriptor) {
+      this._childContext.set(propName, propDescriptor = {});
+    }
+    return propDescriptor;
+  }
+
   toObject(): Object {
     var obj = {};
 
@@ -54,6 +74,20 @@ class Documentation {
         if (Object.keys(descriptor).length > 0) {
           obj.props[name] = descriptor;
         }
+      }
+    }
+
+    if (this._context.size > 0) {
+      obj.context = {};
+      for (var [name, descriptor] of this._context) {
+        obj.context[name] = descriptor;
+      }
+    }
+
+    if (this._childContext.size > 0) {
+      obj.childContext = {};
+      for (var [name, descriptor] of this._childContext) {
+        obj.childContext[name] = descriptor;
       }
     }
 
