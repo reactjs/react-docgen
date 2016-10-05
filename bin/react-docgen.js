@@ -71,6 +71,7 @@ var extensions = new RegExp('\\.(?:' + argv.extension.join('|') + ')$');
 var ignoreDir = argv.ignoreDir;
 var excludePatterns = argv.excludePatterns;
 var resolver;
+var errorMessage;
 
 if (argv.resolver) {
   try {
@@ -88,11 +89,11 @@ if (argv.resolver) {
       if (e.code !== 'MODULE_NOT_FOUND') {
         throw e;
       }
-      writeError(
+      // Will exit with this error message
+      errorMessage = (
         `Unknown resolver: "${argv.resolver}" is neither a built-in resolver ` +
         `nor can it be found locally ("${resolverPath}")`
       );
-      process.exitCode = 1;
     }
   }
 }
@@ -150,71 +151,75 @@ function traverseDir(filePath, result, done) {
   );
 }
 
-if (process.exitCode !== 1) {
+/**
+ * 1. An error occurred, so exit
+ */
+if (errorMessage) {
+  writeError(errorMessage);
+  process.exitCode = 1;
+} else if (paths.length === 0) {
   /**
-   * 1. No files passed, consume input stream
+   * 2. No files passed, consume input stream
    */
-  if (paths.length === 0) {
-    var source = '';
-    process.stdin.setEncoding('utf8');
-    process.stdin.resume();
-    var timer = setTimeout(function() {
-      process.stderr.write('Still waiting for std input...');
-    }, 5000);
-    process.stdin.on('data', function (chunk) {
-      clearTimeout(timer);
-      source += chunk;
-    });
-    process.stdin.on('end', function () {
-      try {
-        writeResult(parse(source));
-      } catch(error) {
-        writeError(error);
+  var source = '';
+  process.stdin.setEncoding('utf8');
+  process.stdin.resume();
+  var timer = setTimeout(function() {
+    process.stderr.write('Still waiting for std input...');
+  }, 5000);
+  process.stdin.on('data', function (chunk) {
+    clearTimeout(timer);
+    source += chunk;
+  });
+  process.stdin.on('end', function () {
+    try {
+      writeResult(parse(source));
+    } catch(error) {
+      writeError(error);
+    }
+  });
+} else {
+  /**
+   * 3. Paths are passed
+   */
+  var result = Object.create(null);
+  async.eachSeries(paths, function(filePath, done) {
+    fs.stat(filePath, function(error, stats) {
+      if (error) {
+        writeError(error, filePath);
+        done();
+        return;
       }
-    });
-  } else {
-    /**
-     * 2. Paths are passed.
-     */
-    var result = Object.create(null);
-    async.eachSeries(paths, function(filePath, done) {
-      fs.stat(filePath, function(error, stats) {
-        if (error) {
-          writeError(error, filePath);
+      if (stats.isDirectory()) {
+        try {
+          traverseDir(filePath, result, done);
+        } catch(error) {
+          writeError(error);
           done();
-          return;
         }
-        if (stats.isDirectory()) {
-          try {
-            traverseDir(filePath, result, done);
-          } catch(error) {
-            writeError(error);
-            done();
-          }
+      }
+      else {
+        try {
+          result[filePath] = parse(fs.readFileSync(filePath));
+        } catch(error) {
+          writeError(error, filePath);
         }
-        else {
-          try {
-            result[filePath] = parse(fs.readFileSync(filePath));
-          } catch(error) {
-            writeError(error, filePath);
-          }
-          finally {
-            done();
-          }
+        finally {
+          done();
         }
-      });
-    }, function() {
-      var resultsPaths = Object.keys(result);
-      if (resultsPaths.length === 0) {
-        // we must have gotten an error
-        process.exitCode = 1;
-      } else if (paths.length === 1) { // a single path?
-        fs.stat(paths[0], function(error, stats) {
-          writeResult(stats.isDirectory() ? result : result[resultsPaths[0]]);
-        });
-      } else {
-        writeResult(result);
       }
     });
-  }
+  }, function() {
+    var resultsPaths = Object.keys(result);
+    if (resultsPaths.length === 0) {
+      // we must have gotten an error
+      process.exitCode = 1;
+    } else if (paths.length === 1) { // a single path?
+      fs.stat(paths[0], function(error, stats) {
+        writeResult(stats.isDirectory() ? result : result[resultsPaths[0]]);
+      });
+    } else {
+      writeResult(result);
+    }
+  });
 }
