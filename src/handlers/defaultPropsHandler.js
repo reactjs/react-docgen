@@ -17,16 +17,21 @@ import getMemberValuePath from '../utils/getMemberValuePath';
 import printValue from '../utils/printValue';
 import recast from 'recast';
 import resolveToValue from '../utils/resolveToValue';
+import isStatelessComponent from '../utils/isStatelessComponent';
 
 var {types: {namedTypes: types, visit}} = recast;
 
-function getDefaultValue(path) {
+function getDefaultValue(path: NodePath) {
   var node = path.node;
   var defaultValue;
   if (types.Literal.check(node)) {
     defaultValue = node.raw;
   } else {
-    path = resolveToValue(path);
+    if (types.AssignmentPattern.check(path.node)) {
+      path = resolveToValue(path.get('right'));
+    } else {
+      path = resolveToValue(path);
+    }
     if (types.ImportDeclaration.check(path.node)) {
       defaultValue = node.name;
     } else {
@@ -44,10 +49,11 @@ function getDefaultValue(path) {
   }
 }
 
-export default function defaultPropsHandler(
-  documentation: Documentation,
-  componentDefinition: NodePath
-) {
+function getStatelessPropsPath(componentDefinition): NodePath {
+  return resolveToValue(componentDefinition).get('params', 0);
+}
+
+function getDefaultPropsPath(componentDefinition: NodePath): ?NodePath {
   var defaultPropsPath = getMemberValuePath(
     componentDefinition,
     'defaultProps'
@@ -75,18 +81,41 @@ export default function defaultPropsHandler(
       },
     });
   }
+  return defaultPropsPath;
+}
 
-  if (types.ObjectExpression.check(defaultPropsPath.node)) {
-    defaultPropsPath.get('properties')
-      .filter(propertyPath => types.Property.check(propertyPath.node))
-      .forEach(function(propertyPath) {
-        var propDescriptor = documentation.getPropDescriptor(
-          getPropertyName(propertyPath)
-        );
-        var defaultValue = getDefaultValue(propertyPath.get('value'));
-        if (defaultValue) {
-          propDescriptor.defaultValue = defaultValue;
-        }
-      });
+function getDefaultValuesFromProps(
+  properties: NodePath,
+  documentation: Documentation
+) {
+  properties
+    .filter(propertyPath => types.Property.check(propertyPath.node))
+    .forEach(function(propertyPath) {
+      var propDescriptor = documentation.getPropDescriptor(
+        getPropertyName(propertyPath)
+      );
+      var defaultValue = getDefaultValue(propertyPath.get('value'));
+      if (defaultValue) {
+        propDescriptor.defaultValue = defaultValue;
+      }
+    });
+}
+
+export default function defaultPropsHandler(
+  documentation: Documentation,
+  componentDefinition: NodePath
+) {
+
+  var statelessProps = null;
+  var defaultPropsPath = getDefaultPropsPath(componentDefinition);
+  if (isStatelessComponent(componentDefinition)) {
+    statelessProps = getStatelessPropsPath(componentDefinition);
+  }
+
+  if (statelessProps && types.ObjectPattern.check(statelessProps.node)) {
+    getDefaultValuesFromProps(statelessProps.get('properties'), documentation);
+  }
+  if (defaultPropsPath && types.ObjectExpression.check(defaultPropsPath.node)) {
+    getDefaultValuesFromProps(defaultPropsPath.get('properties'), documentation);
   }
 }
