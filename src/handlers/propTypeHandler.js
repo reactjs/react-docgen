@@ -33,7 +33,7 @@ function isPropTypesExpression(path) {
   return false;
 }
 
-function amendPropTypes(documentation, path) {
+function amendPropTypes(getDescriptor, path) {
   if (!types.ObjectExpression.check(path.node)) {
     return;
   }
@@ -41,7 +41,7 @@ function amendPropTypes(documentation, path) {
   path.get('properties').each(function(propertyPath) {
     switch (propertyPath.node.type) {
       case types.Property.name:
-        var propDescriptor = documentation.getPropDescriptor(
+        var propDescriptor = getDescriptor(
           getPropertyName(propertyPath)
         );
         var valuePath = propertyPath.get('value');
@@ -59,7 +59,7 @@ function amendPropTypes(documentation, path) {
         var resolvedValuePath = resolveToValue(propertyPath.get('argument'));
         switch (resolvedValuePath.node.type) {
           case types.ObjectExpression.name: // normal object literal
-            amendPropTypes(documentation, resolvedValuePath);
+            amendPropTypes(getDescriptor, resolvedValuePath);
             break;
         }
         break;
@@ -67,17 +67,34 @@ function amendPropTypes(documentation, path) {
   });
 }
 
-export default function propTypeHandler(
-  documentation: Documentation,
-  path: NodePath
-) {
-  var propTypesPath = getMemberValuePath(path, 'propTypes');
-  if (!propTypesPath) {
-    return;
+export function getPropTypeHandler(propName: string) {
+  return function (
+    documentation: Documentation,
+    path: NodePath
+  ) {
+    var propTypesPath = getMemberValuePath(path, propName);
+    if (!propTypesPath) {
+      return;
+    }
+    propTypesPath = resolveToValue(propTypesPath);
+    if (!propTypesPath) {
+      return;
+    }
+    let getDescriptor;
+    switch(propName) {
+      case 'childContextTypes':
+        getDescriptor = documentation.getChildContextDescriptor;
+        break;
+      case 'contextTypes':
+        getDescriptor = documentation.getContextDescriptor;
+        break;
+      default:
+        getDescriptor = documentation.getPropDescriptor;
+    }
+    amendPropTypes(getDescriptor.bind(documentation), propTypesPath);
   }
-  propTypesPath = resolveToValue(propTypesPath);
-  if (!propTypesPath) {
-    return;
-  }
-  amendPropTypes(documentation, propTypesPath);
 }
+
+export const propTypeHandler = getPropTypeHandler('propTypes')
+export const contextTypeHandler = getPropTypeHandler('contextTypes')
+export const childContextTypeHandler = getPropTypeHandler('childContextTypes')
