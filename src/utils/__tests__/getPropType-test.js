@@ -125,6 +125,13 @@ describe('getPropType', () => {
         },
       },
     });
+
+    // computed
+    expect(getPropType(expression('shape(Child.propTypes)'))).toEqual({
+      name: 'shape',
+      value: 'Child.propTypes',
+      computed: true,
+    });
   });
 
   it('resolves variables to their values', () => {

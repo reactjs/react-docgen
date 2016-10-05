@@ -56,3 +56,28 @@ Object {
   }
 }
 `;
+
+exports[`main fixtures processes component "component_4.js" without errors 1`] = `
+Object {
+  "description": "",
+  "methods": Array [],
+  "props": Object {
+    "child": Object {
+      "description": "",
+      "required": true,
+      "type": Object {
+        "computed": true,
+        "name": "shape",
+        "value": "Child.propTypes"
+      }
+    },
+    "something": Object {
+      "description": "",
+      "required": true,
+      "type": Object {
+        "name": "string"
+      }
+    }
+  }
+}
+`;

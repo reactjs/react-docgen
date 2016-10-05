@@ -81,7 +81,7 @@ function getPropTypeObjectOf(argumentPath) {
 }
 
 function getPropTypeShape(argumentPath) {
-  var type: PropTypeDescriptor = {name: 'shape', value: 'unknown'};
+  var type: PropTypeDescriptor = {name: 'shape'};
   if (!types.ObjectExpression.check(argumentPath.node)) {
     argumentPath = resolveToValue(argumentPath);
   }
@@ -99,6 +99,11 @@ function getPropTypeShape(argumentPath) {
       value[getPropertyName(propertyPath)] = descriptor;
     });
     type.value = value;
+  }
+
+  if (!type.value) {
+    type.value = printValue(argumentPath);
+    type.computed = true;
   }
 
   return type;
