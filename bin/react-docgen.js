@@ -9,8 +9,6 @@
  *
  */
 
-/*eslint no-process-exit: 0*/
-
 var argv = require('nomnom')
   .script('react-docgen')
   .help(
@@ -73,6 +71,7 @@ var extensions = new RegExp('\\.(?:' + argv.extension.join('|') + ')$');
 var ignoreDir = argv.ignoreDir;
 var excludePatterns = argv.excludePatterns;
 var resolver;
+var errorMessage;
 
 if (argv.resolver) {
   try {
@@ -90,7 +89,8 @@ if (argv.resolver) {
       if (e.code !== 'MODULE_NOT_FOUND') {
         throw e;
       }
-      exitWithError(
+      // Will exit with this error message
+      errorMessage = (
         `Unknown resolver: "${argv.resolver}" is neither a built-in resolver ` +
         `nor can it be found locally ("${resolverPath}")`
       );
@@ -112,12 +112,7 @@ function writeError(msg, filePath) {
   }
 }
 
-function exitWithError(error) {
-  writeError(error);
-  process.exit(1);
-}
-
-function exitWithResult(result) {
+function writeResult(result) {
   result = argv.pretty ?
     JSON.stringify(result, null, 2) :
     JSON.stringify(result);
@@ -126,7 +121,6 @@ function exitWithResult(result) {
   } else {
     process.stdout.write(result + '\n');
   }
-  process.exit(0);
 }
 
 function traverseDir(filePath, result, done) {
@@ -139,7 +133,7 @@ function traverseDir(filePath, result, done) {
     },
     function(error, content, filename, next) {
       if (error) {
-        exitWithError(error);
+        throw error;
       }
       try {
         result[filename] = parse(content);
@@ -150,7 +144,7 @@ function traverseDir(filePath, result, done) {
     },
     function(error) {
       if (error) {
-        writeError(error);
+        throw error;
       }
       done();
     }
@@ -158,9 +152,15 @@ function traverseDir(filePath, result, done) {
 }
 
 /**
- * 1. No files passed, consume input stream
+ * 1. An error occurred, so exit
  */
-if (paths.length === 0) {
+if (errorMessage) {
+  writeError(errorMessage);
+  process.exitCode = 1;
+} else if (paths.length === 0) {
+  /**
+   * 2. No files passed, consume input stream
+   */
   var source = '';
   process.stdin.setEncoding('utf8');
   process.stdin.resume();
@@ -173,14 +173,14 @@ if (paths.length === 0) {
   });
   process.stdin.on('end', function () {
     try {
-      exitWithResult(parse(source));
+      writeResult(parse(source));
     } catch(error) {
       writeError(error);
     }
   });
 } else {
   /**
-   * 2. Paths are passed.
+   * 3. Paths are passed
    */
   var result = Object.create(null);
   async.eachSeries(paths, function(filePath, done) {
@@ -191,7 +191,12 @@ if (paths.length === 0) {
         return;
       }
       if (stats.isDirectory()) {
-        traverseDir(filePath, result, done);
+        try {
+          traverseDir(filePath, result, done);
+        } catch(error) {
+          writeError(error);
+          done();
+        }
       }
       else {
         try {
@@ -208,14 +213,13 @@ if (paths.length === 0) {
     var resultsPaths = Object.keys(result);
     if (resultsPaths.length === 0) {
       // we must have gotten an error
-      process.exit(1);
-    }
-    if (paths.length === 1) { // a single path?
+      process.exitCode = 1;
+    } else if (paths.length === 1) { // a single path?
       fs.stat(paths[0], function(error, stats) {
-        exitWithResult(stats.isDirectory() ? result : result[resultsPaths[0]]);
+        writeResult(stats.isDirectory() ? result : result[resultsPaths[0]]);
       });
     } else {
-      exitWithResult(result);
+      writeResult(result);
     }
   });
 }
