@@ -2,7 +2,7 @@ exports[`main fixtures processes component "component_1.js" without errors 1`] =
 Object {
   "description": "The is a component to test the document generation",
   "displayName": "Component",
-  "methods": Array []
+  "methods": Array [],
 }
 `;
 
@@ -14,30 +14,30 @@ Object {
     Object {
       "docblock": null,
       "modifiers": Array [
-        "static"
+        "static",
       ],
       "name": "displayName",
       "params": Array [],
-      "returns": null
+      "returns": null,
     },
     Object {
       "docblock": null,
       "modifiers": Array [
-        "static"
+        "static",
       ],
       "name": "defaultProps",
       "params": Array [],
-      "returns": null
-    }
+      "returns": null,
+    },
   ],
   "props": Object {
     "type": Object {
       "defaultValue": Object {
         "computed": false,
-        "value": "\"primary\""
-      }
-    }
-  }
+        "value": "\"primary\"",
+      },
+    },
+  },
 }
 `;
 
@@ -50,10 +50,10 @@ Object {
       "description": "",
       "required": false,
       "type": Object {
-        "name": "object"
-      }
-    }
-  }
+        "name": "object",
+      },
+    },
+  },
 }
 `;
 
@@ -68,16 +68,16 @@ Object {
       "type": Object {
         "computed": true,
         "name": "shape",
-        "value": "Child.propTypes"
-      }
+        "value": "Child.propTypes",
+      },
     },
     "something": Object {
       "description": "",
       "required": true,
       "type": Object {
-        "name": "string"
-      }
-    }
-  }
+        "name": "string",
+      },
+    },
+  },
 }
 `;

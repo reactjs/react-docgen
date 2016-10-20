@@ -13,12 +13,12 @@ import doctrine from 'doctrine';
 
 type JsDoc = {
   description: ?string;
-  params: [{
+  params: Array<{
     name: string;
     description: ?string;
     type: ?{name: string};
     optional?: boolean;
-  }];
+  }>;
   returns: ?{
     description: ?string;
     type: ?{name: string};
