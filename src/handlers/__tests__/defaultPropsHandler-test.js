@@ -185,5 +185,33 @@ describe('defaultPropsHandler', () => {
       `;
       test(parse(src).get('body', 0, 'expression'));
     });
+
+    it('should find prop default values that are imported variables', () => {
+      var src = `
+        import ImportedComponent from './ImportedComponent';
+
+        ({
+          foo = ImportedComponent,
+        }) => <div />
+      `;
+      defaultPropsHandler(documentation, parse(src).get('body', 1, 'expression'));
+
+      expect(documentation.descriptors).toEqual({
+        foo: {
+          defaultValue: {
+            value: 'ImportedComponent',
+            computed: true,
+          },
+        },
+      });
+    });
+
+    it('should work with no defaults', () => {
+      var src = `
+        ({ foo }) => <div />
+      `;
+      defaultPropsHandler(documentation, parse(src).get('body', 0, 'expression'));
+      expect(documentation.descriptors).toEqual({});
+    });
   });
 });
