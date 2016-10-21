@@ -91,6 +91,7 @@ function getDefaultValuesFromProps(
 ) {
   properties
     .filter(propertyPath => types.Property.check(propertyPath.node))
+    // Don't evaluate property if component is functional and the node is not an AssignmentPattern
     .filter(propertyPath => !isStatelessComponent || types.AssignmentPattern.check(propertyPath.get('value').node))
     .forEach(function(propertyPath) {
       var propDescriptor = documentation.getPropDescriptor(
