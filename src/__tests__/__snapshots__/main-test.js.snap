@@ -81,3 +81,37 @@ Object {
   },
 }
 `;
+
+exports[`main fixtures processes component "component_5.js" without errors 1`] = `
+Object {
+  "description": "",
+  "methods": Array [],
+  "props": Object {
+    "children": Object {
+      "description": "",
+      "required": true,
+      "type": Object {
+        "name": "string",
+      },
+    },
+    "onClick": Object {
+      "description": "",
+      "required": false,
+      "type": Object {
+        "name": "func",
+      },
+    },
+    "style": Object {
+      "defaultValue": Object {
+        "computed": false,
+        "value": "{}",
+      },
+      "description": "",
+      "required": false,
+      "type": Object {
+        "name": "object",
+      },
+    },
+  },
+}
+`;
