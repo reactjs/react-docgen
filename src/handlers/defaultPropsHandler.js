@@ -86,15 +86,19 @@ function getDefaultPropsPath(componentDefinition: NodePath): ?NodePath {
 
 function getDefaultValuesFromProps(
   properties: NodePath,
-  documentation: Documentation
+  documentation: Documentation,
+  isStatelessComponent: boolean,
 ) {
   properties
     .filter(propertyPath => types.Property.check(propertyPath.node))
+    // Don't evaluate property if component is functional and the node is not an AssignmentPattern
+    .filter(propertyPath => !isStatelessComponent || types.AssignmentPattern.check(propertyPath.get('value').node))
     .forEach(function(propertyPath) {
       var propDescriptor = documentation.getPropDescriptor(
         getPropertyName(propertyPath)
       );
-      var defaultValue = getDefaultValue(propertyPath.get('value'));
+      var value = isStatelessComponent ? propertyPath.get('value', 'right') : propertyPath.get('value');
+      var defaultValue = getDefaultValue(value, isStatelessComponent);
       if (defaultValue) {
         propDescriptor.defaultValue = defaultValue;
       }
@@ -105,17 +109,17 @@ export default function defaultPropsHandler(
   documentation: Documentation,
   componentDefinition: NodePath
 ) {
-
   var statelessProps = null;
   var defaultPropsPath = getDefaultPropsPath(componentDefinition);
   if (isStatelessComponent(componentDefinition)) {
     statelessProps = getStatelessPropsPath(componentDefinition);
   }
 
+  // Do both statelessProps and defaultProps if both are available so defaultProps can override
   if (statelessProps && types.ObjectPattern.check(statelessProps.node)) {
-    getDefaultValuesFromProps(statelessProps.get('properties'), documentation);
+    getDefaultValuesFromProps(statelessProps.get('properties'), documentation, true);
   }
   if (defaultPropsPath && types.ObjectExpression.check(defaultPropsPath.node)) {
-    getDefaultValuesFromProps(defaultPropsPath.get('properties'), documentation);
+    getDefaultValuesFromProps(defaultPropsPath.get('properties'), documentation, false);
   }
 }
