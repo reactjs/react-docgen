@@ -41,9 +41,8 @@ function getType(tag) {
     // return {*}
     res =  {name: 'mixed'};
   }
+  res = res || {name: tag.name || tag.expression.name};
   if (tag.expression) {
-    // return {*}
-    res = res || {name: tag.name};
     Object.assign(res, getType(tag.expression));
   }
   return res;
@@ -57,7 +56,7 @@ function getOptional(tag) {
 }
 
 function getRest(tag) {
-    return (tag.type && tag.type.expression && tag.type.expression.type && tag.type.expression.type === 'RestType')
+    return (tag.type && tag.type.expression && tag.type.expression.type && tag.type.expression.type === 'RestType') || undefined;
 }
 
 // Add jsdoc @return description.

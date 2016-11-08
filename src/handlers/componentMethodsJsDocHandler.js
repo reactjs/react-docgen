@@ -44,9 +44,10 @@ export default function componentMethodsJsDocHandler(
     }
 
     const jsDoc = parseJsDoc(method.docblock);
+
     const returns = merge(jsDoc.returns, method.returns);
     const params = method.params.map(param => {
-      const jsDocParam = jsDoc.params.find(p => p.name === param.name || param.name === '...' + p.name);
+      const jsDocParam = jsDoc.params.find(p => p.name === param.name || param.name === '...'+p.name);
       return merge(jsDocParam, param);
     });
 
