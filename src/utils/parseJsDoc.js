@@ -16,12 +16,13 @@ type JsDoc = {
   params: Array<{
     name: string;
     description: ?string;
-    type: ?{name: string};
+    type: ?{name: string; value?: Array<string>;};
     optional?: boolean;
+    rest?:boolean;
   }>;
   returns: ?{
     description: ?string;
-    type: ?{name: string};
+    type: ?{name: string; value?: Array<string>;};
   };
 };
 
@@ -29,7 +30,7 @@ function getType(tag) {
   var res = null;
   if (!tag.type) {
     return null;
-  } else if (typeof tag.type === "object"){
+  } else if (typeof tag.type === 'object'){
     res = getType(tag.type);
   } else if (tag.type === 'UnionType') {
     // union type
@@ -42,10 +43,10 @@ function getType(tag) {
   }
   if (tag.expression) {
     // return {*}
-    res = res || {};
+    res = res || {name: tag.name};
     Object.assign(res, getType(tag.expression));
   }
-  return res || {name: tag.name};
+  return res;
 }
 
 function getOptional(tag) {
@@ -86,7 +87,7 @@ function getParamsJsDoc(jsDoc) {
         description: tag.description,
         type: getType(tag),
         optional: getOptional(tag),
-        rest: getRest(tag)
+        rest: getRest(tag),
       };
     });
 }
