@@ -94,6 +94,9 @@ function returnsJSXElementOrReactCreateElementCall(path) {
           else {
             while (calleeValue.get('object').node.type !== 'Identifier') {
               calleeValue = calleeValue.get('object');
+              if (calleeValue.node.type === 'ArrayExpression') {
+                break;
+              }
               namesToResolve.unshift(calleeValue.get('property'));
             }
 
