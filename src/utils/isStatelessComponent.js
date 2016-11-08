@@ -88,15 +88,14 @@ function returnsJSXElementOrReactCreateElementCall(path) {
         let namesToResolve = [calleeValue.get('property')];
 
         if (calleeValue.node.type === 'MemberExpression') {
-          if (calleeValue.get('object').node.type === 'Identifier') {
+          const calleeType = calleeValue.get('object').node.type;
+          if (calleeType === 'Identifier') {
             resolvedValue = resolveToValue(calleeValue.get('object'));
           }
-          else {
+          // prevent infinite loop with array literals
+          else if (calleeType !== 'ArrayExpression') {
             while (calleeValue.get('object').node.type !== 'Identifier') {
               calleeValue = calleeValue.get('object');
-              if (calleeValue.node.type === 'ArrayExpression') {
-                break;
-              }
               namesToResolve.unshift(calleeValue.get('property'));
             }
 
