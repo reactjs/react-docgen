@@ -153,9 +153,10 @@ describe('react-docgen CLI', () => {
     ]);
   }, TEST_TIMEOUT);
 
-  it('ignores files in node_modules and __tests__ by default', () => {
+  it('ignores files in node_modules, __tests__ and __mocks__ by default', () => {
     createTempfiles(null, 'node_modules');
     createTempfiles(null, '__tests__');
+    createTempfiles(null, '__mocks__');
 
     return run([tempDir]).then(([stdout, stderr]) => {
       expect(stdout).toBe('');

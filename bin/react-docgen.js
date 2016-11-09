@@ -49,7 +49,7 @@ var argv = require('nomnom')
       full: 'ignore',
       help: 'Folders to ignore. Default:',
       list: true,
-      default: ['node_modules', '__tests__'],
+      default: ['node_modules', '__tests__', '__mocks__'],
     },
     resolver: {
       help: 'Resolver name (findAllComponentDefinitions, findExportedComponentDefinition) or path to a module that exports a resolver.',
