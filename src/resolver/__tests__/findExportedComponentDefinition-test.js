@@ -470,7 +470,7 @@ describe('findExportedComponentDefinition', () => {
 
           source = `
             var R = require("React");
-            export var ComponentA = R.createClass({}),
+            export var ComponentA = R.createClass({});
             var ComponentB = R.createClass({});
             export {ComponentB};
           `;
@@ -665,7 +665,7 @@ describe('findExportedComponentDefinition', () => {
         it('errors if multiple components are exported', () => {
           var source = `
             var R = require("React");
-            var ComponentA = R.createClass({}),
+            var ComponentA = R.createClass({});
             var ComponentB = R.createClass({});
             export {ComponentA as foo, ComponentB};
           `;
