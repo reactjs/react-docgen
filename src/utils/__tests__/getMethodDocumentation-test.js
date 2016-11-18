@@ -82,6 +82,7 @@ describe('getMethodDocumentation', () => {
       expect(getMethodDocumentation(method)).toEqual(
         methodParametersDoc([{
           name: 'bar',
+          optional: false,
           type: {name: 'number'},
         }])
       );

@@ -12,7 +12,7 @@
 
 import Documentation from './Documentation';
 
-import babylon from './babylon';
+import flow from './flow-parser';
 import recast from 'recast';
 
 var ERROR_MISSING_DEFINITION = 'No suitable component definition found.';
@@ -50,8 +50,8 @@ export default function parse(
   resolver: Resolver,
   handlers: Array<Handler>
 ): Array<Object>|Object {
-  var ast = recast.parse(src, {esprima: babylon});
-  var componentDefinitions = resolver(ast.program, recast);
+  var ast = recast.parse(src, {esprima: flow});
+  var componentDefinitions = resolver(ast, recast);
 
   if (Array.isArray(componentDefinitions)) {
     if (componentDefinitions.length === 0) {

@@ -30,8 +30,9 @@
   "dependencies": {
     "async": "^1.4.2",
     "babel-runtime": "^6.9.2",
-    "babylon": "~5.8.3",
     "doctrine": "^1.2.0",
+    "flow-bin": "^0.35.0",
+    "flow-parser": "^0.35.0",
     "node-dir": "^0.1.10",
     "nomnom": "^1.8.1",
     "recast": "^0.11.5"

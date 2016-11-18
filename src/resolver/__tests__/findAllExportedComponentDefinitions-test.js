@@ -822,16 +822,14 @@ describe('findAllExportedComponentDefinitions', () => {
         });
 
         it('finds exported components only once', () => {
-          var parsed = parse(`
-            import React from 'React';
-            var ComponentA = class extends React.Component {};
-            var ComponentB = class extends React.Component {};
-            export {ComponentA, ComponentA};
-          `);
-          var actual = findComponents(parsed);
-
-          expect(actual.length).toBe(1);
-          expect(actual[0].node.type).toBe('ClassExpression');
+          expect(() => {
+            parse(`
+              import React from 'React';
+              var ComponentA = class extends React.Component {};
+              var ComponentB = class extends React.Component {};
+              export {ComponentA, ComponentA};
+            `)
+          }).toThrow();
         });
       });
 
@@ -899,16 +897,14 @@ describe('findAllExportedComponentDefinitions', () => {
         });
 
         it('finds exported components only once', () => {
-          var parsed = parse(`
-            import React from 'React';
-            var ComponentA = () => <div />;
-            var ComponentB = () => <div />;
-            export {ComponentA, ComponentA};
-          `);
-          var actual = findComponents(parsed);
-
-          expect(actual.length).toBe(1);
-          expect(actual[0].node.type).toBe('ArrowFunctionExpression');
+          expect(() => {
+            parse(`
+              import React from 'React';
+              var ComponentA = () => <div />;
+              var ComponentB = () => <div />;
+              export {ComponentA, ComponentA};
+            `)
+          }).toThrow();
         });
       });
     });
