@@ -27,6 +27,15 @@ const validPossibleStatelessComponentTypes = [
   'ArrowFunctionExpression',
 ];
 
+function isValidCalleeType(type) {
+  return [
+    'Identifier',
+    'CallExpression',
+    'ArrayExpression',
+    'Literal'
+  ].indexOf(type) < 0;
+}
+
 function isJSXElementOrReactCreateElement(path) {
   return (
     path.node.type === 'JSXElement' ||
@@ -92,7 +101,7 @@ function returnsJSXElementOrReactCreateElementCall(path) {
             resolvedValue = resolveToValue(calleeValue.get('object'));
           }
           else {
-            while (calleeValue.get('object').node.type !== 'Identifier') {
+            while (isValidCalleeType(calleeValue.get('object').node.type)) {
               calleeValue = calleeValue.get('object');
               namesToResolve.unshift(calleeValue.get('property'));
             }

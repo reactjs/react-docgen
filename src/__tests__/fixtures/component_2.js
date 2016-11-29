@@ -21,3 +21,11 @@ export class Button extends React.Component {
     };
   }
 }
+
+export function foo() {
+  return [].join();
+}
+
+export function chained() {
+  return foo.bar().join();
+}
