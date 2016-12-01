@@ -32,6 +32,7 @@ function isValidCalleeType(type) {
     'Identifier',
     'CallExpression',
     'ArrayExpression',
+    'TemplateLiteral'
     'Literal'
   ].indexOf(type) < 0;
 }
