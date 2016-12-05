@@ -29,3 +29,7 @@ export function foo() {
 export function chained() {
   return foo.bar().join();
 }
+
+export function templateLiteral() {
+  return `foo bar`.split(' ');
+}
