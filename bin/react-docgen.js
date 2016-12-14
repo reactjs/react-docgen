@@ -9,55 +9,45 @@
  *
  */
 
-var argv = require('nomnom')
-  .script('react-docgen')
-  .help(
-    'Extract meta information from React components.\n' +
-    'If a directory is passed, it is recursively traversed.'
-  )
-  .options({
-    path: {
-      position: 0,
-      help: 'A component file or directory. If no path is provided it reads from stdin.',
-      metavar: 'PATH',
-      list: true,
-    },
-    out: {
-      abbr: 'o',
-      help: 'store extracted information in FILE',
-      metavar: 'FILE',
-    },
-    pretty: {
-      help: 'pretty print JSON',
-      flag: true,
-    },
-    extension: {
-      abbr: 'x',
-      help: 'File extensions to consider. Repeat to define multiple extensions. Default:',
-      list: true,
-      default: ['js', 'jsx'],
-    },
-    excludePatterns: {
-      abbr: 'e',
-      full: 'exclude',
-      help: 'Filename pattern to exclude. Default:',
-      list: true,
-      default: [],
-    },
-    ignoreDir: {
-      abbr: 'i',
-      full: 'ignore',
-      help: 'Folders to ignore. Default:',
-      list: true,
-      default: ['node_modules', '__tests__', '__mocks__'],
-    },
-    resolver: {
-      help: 'Resolver name (findAllComponentDefinitions, findExportedComponentDefinition) or path to a module that exports a resolver.',
-      metavar: 'RESOLVER',
-      default: 'findExportedComponentDefinition',
-    },
-  })
-  .parse();
+var argv = require('commander');
+
+function collect(val, memo) {
+  memo.push(val);
+  return memo;
+}
+
+argv
+    .option(
+        '--path <PATH>',
+        'A component file or directory. If no path is provided, it reads from stdin.', collect, [])
+    .option(
+        '-o, --out <FILE>',
+        'Store extracted information in the FILE')
+    .option(
+        '--pretty',
+        'pretty print JSON')
+    .option(
+        '-x, --extension <EXTENSION>',
+        'File extensions to consider. Repeat to define multiple extensions. Default: js, jsx',
+        collect,
+        ['js', 'jsx'])
+    .option(
+        '-e, --exclude <PATH>',
+        'Filename pattern to exclude.',
+        collect,
+        [])
+    .option(
+        '-i, --ignore <PATH>',
+        'Folders to ignore',
+        collect,
+        ['node_modules', '__tests__', '__mocks__'])
+    .option(
+        '--resolver <RESOLVER>',
+        'Resolver name (findAllComponentDefinitions, findExportedComponentDefinition) or path to a module that exports a resolver.',
+        'findExportedComponentDefinition')
+    .arguments('[FILES]');
+
+argv.parse(process.argv);
 
 var async = require('async');
 var dir = require('node-dir');
@@ -66,10 +56,10 @@ var parser = require('../dist/main');
 var path = require('path');
 
 var output = argv.out;
-var paths = argv.path || [];
+var paths = argv.args || [];
 var extensions = new RegExp('\\.(?:' + argv.extension.join('|') + ')$');
-var ignoreDir = argv.ignoreDir;
-var excludePatterns = argv.excludePatterns;
+var ignoreDir = argv.ignore;
+var excludePatterns = argv.exclude;
 var resolver;
 var errorMessage;
 
