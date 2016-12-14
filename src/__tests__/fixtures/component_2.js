@@ -33,3 +33,11 @@ export function chained() {
 export function templateLiteral() {
   return `foo bar`.split(' ');
 }
+
+export default function withThis() {
+  return this.foo();
+}
+
+export default function withNestedMemberExpressions() {
+  return this.blub.blob.foo();
+}
