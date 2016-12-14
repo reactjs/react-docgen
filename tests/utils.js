@@ -3,7 +3,7 @@
  */
 
 import _recast from 'recast';
-import babylon from '../src/babylon';
+import flow from '../src/flow-parser';
 
 function stringify(value) {
   if (Array.isArray(value)) {
@@ -17,7 +17,7 @@ function stringify(value) {
  */
 export function parse(src, recast=_recast) {
   return new recast.types.NodePath(
-    recast.parse(stringify(src), {esprima: babylon}).program
+    recast.parse(stringify(src), {esprima: flow}).program
   );
 }
 

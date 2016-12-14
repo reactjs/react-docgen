@@ -35,6 +35,7 @@ describe('componentMethodsHandler', () => {
       },
       params: [{
         name: 'bar',
+        optional: false,
         type: {name: 'number'},
       }],
     }, {

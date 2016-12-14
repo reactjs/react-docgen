@@ -26,6 +26,7 @@ declare class Scope {
 
 declare class NodePath {
   value: (ASTNode|Array<ASTNode>);
+  name: number,
   node: ASTNode;
   parent: NodePath;
   parentPath: NodePath;

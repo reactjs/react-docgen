@@ -25,23 +25,37 @@ function parseDocblock(str) {
 
 let DOCBLOCK_HEADER = /^\*\s/;
 
+function filterDocblockComments(comments) {
+  return comments.filter(
+    comment => (
+      comment.type === 'Block' &&
+      DOCBLOCK_HEADER.test(comment.value)
+    )
+  );
+}
+
 /**
  * Given a path, this function returns the closest preceding docblock if it
  * exists.
  */
 export function getDocblock(path: NodePath): ?string {
   var comments = [];
-  if (path.node.leadingComments) {
-    comments = path.node.leadingComments.filter(
-      comment => comment.type === 'CommentBlock' &&
-        DOCBLOCK_HEADER.test(comment.value)
-    );
-  } else if (path.node.comments) {
-    comments = path.node.comments.filter(
-      comment => comment.leading &&
-        comment.type === 'CommentBlock' &&
-        DOCBLOCK_HEADER.test(comment.value)
-    );
+  if (path.node.comments) {
+    comments = filterDocblockComments(path.node.comments)
+      .filter(comment => comment.leading);
+  }
+
+  if (comments.length > 0) {
+    return parseDocblock(comments[comments.length - 1].value);
+  }
+  return null;
+}
+
+export function getTrailingDocblock(path: NodePath): ?string {
+  var comments = [];
+  if (path.node.comments) {
+    comments = filterDocblockComments(path.node.comments)
+      .filter(comment => comment.trailing);
   }
 
   if (comments.length > 0) {
