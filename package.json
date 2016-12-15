@@ -31,9 +31,9 @@
     "async": "^1.4.2",
     "babel-runtime": "^6.9.2",
     "babylon": "~5.8.3",
+    "commander": "^2.9.0",
     "doctrine": "^2.0.0",
     "node-dir": "^0.1.10",
-    "nomnom": "^1.8.1",
     "recast": "^0.11.5"
   },
   "devDependencies": {
