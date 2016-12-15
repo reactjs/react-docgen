@@ -16,6 +16,10 @@ function collect(val, memo) {
   return memo;
 }
 
+var defaultExtensions = ['js', 'jsx'];
+var defaultExclude = [];
+var defaultIgnore = ['node_modules', '__tests__', '__mocks__'];
+
 argv
     .usage('[path...] [options]')
     .description(
@@ -29,22 +33,23 @@ argv
         'pretty print JSON')
     .option(
         '-x, --extension <extension>',
-        'File extensions to consider. Repeat to define multiple extensions. Default: js, jsx',
+        'File extensions to consider. Repeat to define multiple extensions. Default: ' + JSON.stringify(defaultExtensions),
         collect,
         ['js', 'jsx'])
     .option(
         '-e, --exclude <path>',
-        'Filename pattern to exclude.',
+        'Filename pattern to exclude. Default: ' + JSON.stringify(defaultExclude),
         collect,
         [])
     .option(
         '-i, --ignore <path>',
-        'Folders to ignore',
+        'Folders to ignore. Default: ' + JSON.stringify(defaultIgnore),
         collect,
         ['node_modules', '__tests__', '__mocks__'])
     .option(
         '--resolver <resolver>',
-        'Resolver name (findAllComponentDefinitions, findExportedComponentDefinition) or path to a module that exports a resolver.',
+        'Resolver name (findAllComponentDefinitions, findExportedComponentDefinition) or path to a module that exports ' +
+        'a resolver. Default: findExportedComponentDefinition',
         'findExportedComponentDefinition')
     .arguments('<path>');
 
