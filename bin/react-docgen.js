@@ -17,35 +17,36 @@ function collect(val, memo) {
 }
 
 argv
+    .usage('[path...] [options]')
+    .description(
+        'Extract meta information from React components.\n' +
+        '  If a directory is passed, it is recursively traversed.')
     .option(
-        '--path <PATH>',
-        'A component file or directory. If no path is provided, it reads from stdin.', collect, [])
-    .option(
-        '-o, --out <FILE>',
+        '-o, --out <file>',
         'Store extracted information in the FILE')
     .option(
         '--pretty',
         'pretty print JSON')
     .option(
-        '-x, --extension <EXTENSION>',
+        '-x, --extension <extension>',
         'File extensions to consider. Repeat to define multiple extensions. Default: js, jsx',
         collect,
         ['js', 'jsx'])
     .option(
-        '-e, --exclude <PATH>',
+        '-e, --exclude <path>',
         'Filename pattern to exclude.',
         collect,
         [])
     .option(
-        '-i, --ignore <PATH>',
+        '-i, --ignore <path>',
         'Folders to ignore',
         collect,
         ['node_modules', '__tests__', '__mocks__'])
     .option(
-        '--resolver <RESOLVER>',
+        '--resolver <resolver>',
         'Resolver name (findAllComponentDefinitions, findExportedComponentDefinition) or path to a module that exports a resolver.',
         'findExportedComponentDefinition')
-    .arguments('[FILES]');
+    .arguments('<path>');
 
 argv.parse(process.argv);
 
