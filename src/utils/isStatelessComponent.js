@@ -28,16 +28,6 @@ const validPossibleStatelessComponentTypes = [
   'ArrowFunctionExpression',
 ];
 
-function isValidCalleeType(type) {
-  return [
-    'Identifier',
-    'CallExpression',
-    'ArrayExpression',
-    'TemplateLiteral',
-    'Literal'
-  ].indexOf(type) < 0;
-}
-
 function isJSXElementOrReactCreateElement(path) {
   return (
     path.node.type === 'JSXElement' ||
@@ -102,12 +92,11 @@ function returnsJSXElementOrReactCreateElementCall(path) {
         if (calleeValue.node.type === 'MemberExpression') {
           if (calleeValue.get('object').node.type === 'Identifier') {
             resolvedValue = resolveToValue(calleeValue.get('object'));
-          }
-          else {
-            while (isValidCalleeType(calleeValue.get('object').node.type)) {
+          } else if (types.MemberExpression.check(calleeValue.node)) {
+            do {
               calleeValue = calleeValue.get('object');
               namesToResolve.unshift(calleeValue.get('property'));
-            }
+            } while (types.MemberExpression.check(calleeValue.node));
 
             resolvedValue = resolveToValue(calleeValue.get('object'));
           }
