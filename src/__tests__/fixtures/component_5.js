@@ -1,5 +1,7 @@
 import React from 'react';
 
+const RANDOM_VALUE = 2 ** 2;
+
 const Button = ({ children, onClick, style = {} }) => (
   <button
     style={{ }}
