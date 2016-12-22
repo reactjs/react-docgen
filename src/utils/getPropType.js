@@ -112,6 +112,11 @@ function getPropTypeShape(argumentPath) {
   if (types.ObjectExpression.check(argumentPath.node)) {
     var value = {};
     argumentPath.get('properties').each(function(propertyPath) {
+      if (propertyPath.get('type').value === types.SpreadProperty.name) {
+        // It is impossible to resolve a name for a spreadproperty
+        return;
+      }
+
       var descriptor: PropDescriptor | PropTypeDescriptor =
         getPropType(propertyPath.get('value'));
       var docs = getDocblock(propertyPath);

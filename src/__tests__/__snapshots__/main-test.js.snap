@@ -71,6 +71,19 @@ Object {
         "value": "Child.propTypes",
       },
     },
+    "extendedChild": Object {
+      "description": "",
+      "required": true,
+      "type": Object {
+        "name": "shape",
+        "value": Object {
+          "adopted": Object {
+            "name": "bool",
+            "required": true,
+          },
+        },
+      },
+    },
     "something": Object {
       "description": "",
       "required": true,

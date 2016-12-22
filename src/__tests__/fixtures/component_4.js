@@ -19,8 +19,12 @@ var pt = React.PropTypes;
 class Parent extends React.Component {
   static propTypes = {
     something: pt.string.isRequired,
-    child: pt.shape(Child.propTypes).isRequired
-  }
+    child: pt.shape(Child.propTypes).isRequired,
+    extendedChild: pt.shape({
+      ...Child.propTypes,
+      adopted: pt.bool.isRequired
+    }).isRequired
+  };
 }
 
 export default Parent;
