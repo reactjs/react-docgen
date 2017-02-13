@@ -55,7 +55,7 @@ export function getDocblock(path: NodePath): ?string {
  * and their "content" as values.
  */
 export function getDoclets(str: string): Object {
-  var doclets = Object.create(null);
+  var doclets = {};
   var match = DOCLET_PATTERN.exec(str);
 
   for (; match; match = DOCLET_PATTERN.exec(str)) {
