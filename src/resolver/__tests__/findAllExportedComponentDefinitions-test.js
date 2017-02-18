@@ -826,7 +826,7 @@ describe('findAllExportedComponentDefinitions', () => {
             import React from 'React';
             var ComponentA = class extends React.Component {};
             var ComponentB = class extends React.Component {};
-            export {ComponentA, ComponentA};
+            export {ComponentA as foo, ComponentA as bar};
           `);
           var actual = findComponents(parsed);
 
@@ -903,7 +903,7 @@ describe('findAllExportedComponentDefinitions', () => {
             import React from 'React';
             var ComponentA = () => <div />;
             var ComponentB = () => <div />;
-            export {ComponentA, ComponentA};
+            export {ComponentA as foo, ComponentA as bar};
           `);
           var actual = findComponents(parsed);
 
