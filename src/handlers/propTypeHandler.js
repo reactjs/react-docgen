@@ -55,7 +55,8 @@ function amendPropTypes(documentation, path) {
             type.name !== 'custom' && isRequiredPropType(valuePath);
         }
         break;
-      case types.SpreadProperty.name:
+      case types.SpreadProperty.name: // bc for older estree version
+      case types.SpreadElement.name:
         var resolvedValuePath = resolveToValue(propertyPath.get('argument'));
         switch (resolvedValuePath.node.type) {
           case types.ObjectExpression.name: // normal object literal
