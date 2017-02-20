@@ -34,7 +34,7 @@ export function templateLiteral() {
   return `foo bar`.split(' ');
 }
 
-export default function withThis() {
+export function withThis() {
   return this.foo();
 }
 
