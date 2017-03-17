@@ -68,6 +68,11 @@ var ignoreDir = argv.ignore;
 var excludePatterns = argv.exclude;
 var resolver;
 var errorMessage;
+var regexRegex = /\/(.*)\/([igymu]{0,5})/;
+if (excludePatterns && excludePatterns.length === 1 && regexRegex.test(excludePatterns[0])){
+  var match = excludePatterns[0].match(regexRegex);
+    excludePatterns = new RegExp(match[1], match[2]);
+}
 
 if (argv.resolver) {
   try {
