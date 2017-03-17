@@ -1,6 +1,6 @@
 {
   "name": "react-docgen",
-  "version": "3.0.0-beta1",
+  "version": "3.0.0-beta2",
   "description": "A CLI and toolkit to extract information from React components for documentation generation.",
   "repository": {
     "type": "git",
