@@ -69,6 +69,11 @@ var excludePatterns = argv.exclude;
 var resolver;
 var errorMessage;
 
+var match;
+if (excludePatterns && excludePatterns.length === 1 && (match = excludePatterns[0].match(/^\/(.*)\/([gimuy]{0,5})$/))){
+    excludePatterns = new RegExp(match[1], match[2]);
+}
+
 if (argv.resolver) {
   try {
     // Look for built-in resolver

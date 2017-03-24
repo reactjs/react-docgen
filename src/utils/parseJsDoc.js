@@ -16,28 +16,36 @@ type JsDoc = {
   params: Array<{
     name: string;
     description: ?string;
-    type: ?{name: string};
+    type: ?{name: string; value?: Array<string>;};
     optional?: boolean;
+    rest?:boolean;
   }>;
   returns: ?{
     description: ?string;
-    type: ?{name: string};
+    type: ?{name: string; value?: Array<string>;};
   };
 };
 
 function getType(tag) {
+  var res = null;
   if (!tag.type) {
     return null;
-  } else if (tag.type.type === 'UnionType') {
+  } else if (typeof tag.type === 'object'){
+    res = getType(tag.type);
+  } else if (tag.type === 'UnionType') {
     // union type
-    return {name: 'union', value: tag.type.elements.map(function (element) {
+    res = {name: 'union', value: tag.elements.map(function (element) {
       return element.name;
     })};
-  } else if (tag.type.type === 'AllLiteral') {
+  } else if (tag.type === 'AllLiteral') {
     // return {*}
-    return {name: 'mixed'};
+    res =  {name: 'mixed'};
   }
-  return {name: tag.type.name ? tag.type.name : tag.type.expression.name};
+  res = res || {name: tag.name || tag.expression.name};
+  if (tag.expression) {
+    Object.assign(res, getType(tag.expression));
+  }
+  return res;
 }
 
 function getOptional(tag) {
@@ -45,6 +53,10 @@ function getOptional(tag) {
     return true;
   }
   return;
+}
+
+function getRest(tag) {
+    return (tag.type && tag.type.expression && tag.type.expression.type && tag.type.expression.type === 'RestType') || undefined;
 }
 
 // Add jsdoc @return description.
@@ -74,13 +86,13 @@ function getParamsJsDoc(jsDoc) {
         description: tag.description,
         type: getType(tag),
         optional: getOptional(tag),
+        rest: getRest(tag),
       };
     });
 }
 
 export default function parseJsDoc(docblock: string): JsDoc {
-  const jsDoc = doctrine.parse(docblock);
-
+  const jsDoc = doctrine.parse(docblock,{sloppy:true});
   return {
     description: jsDoc.description || null,
     params: getParamsJsDoc(jsDoc),
