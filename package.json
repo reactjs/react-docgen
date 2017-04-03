@@ -17,7 +17,7 @@
     "lint": "eslint src/",
     "watch": "babel src/ --out-dir dist/ --watch",
     "build": "rimraf dist/ && babel src/ --out-dir dist/ --ignore __tests__,__mocks__",
-    "install": "npm run build",
+    "postinstall": "npm run build",
     "prepublish": "npm run build",
     "preversion": "npm run lint",
     "test": "jest"
