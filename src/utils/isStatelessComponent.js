@@ -14,6 +14,7 @@ import isReactComponentClass from './isReactComponentClass';
 import isReactCreateClassCall from './isReactCreateClassCall';
 import isReactCreateElementCall from './isReactCreateElementCall';
 import isReactCloneElementCall from './isReactCloneElementCall';
+import isReactChildrenElementCall from './isReactChildrenElementCall';
 import recast from 'recast';
 import resolveToValue from './resolveToValue';
 
@@ -32,7 +33,8 @@ function isJSXElementOrReactCreateElement(path) {
   return (
     path.node.type === 'JSXElement' ||
     (path.node.type === 'CallExpression' && isReactCreateElementCall(path)) ||
-    (path.node.type === 'CallExpression' && isReactCloneElementCall(path))
+    (path.node.type === 'CallExpression' && isReactCloneElementCall(path)) ||
+    (path.node.type === 'CallExpression' && isReactChildrenElementCall(path))
   );
 }
 

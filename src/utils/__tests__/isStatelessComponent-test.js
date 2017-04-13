@@ -99,6 +99,34 @@ describe('isStatelessComponent', () => {
     });
   });
 
+  describe('Stateless Function Components with React.Children.only', () => {
+    it('accepts simple arrow function components', () => {
+      var def = parse(`
+        var React = require('react');
+        var Foo = ({ children }) => React.Children.only(children, null);
+      `).get('body', 1).get('declarations', [0]).get('init');
+
+      expect(isStatelessComponent(def)).toBe(true);
+    });
+
+    it('accepts simple function expressions components', () => {
+      var def = parse(`
+        var React = require('react');
+        let Foo = function({ children }) { return React.Children.only(children, null); };
+      `).get('body', 1).get('declarations', [0]).get('init');
+
+      expect(isStatelessComponent(def)).toBe(true);
+    });
+
+    it('accepts simple function declaration components', () => {
+      var def = parse(`
+        var React = require('react');
+        function Foo ({ children }) { return React.Children.only(children, null); }
+      `).get('body', 1);
+      expect(isStatelessComponent(def)).toBe(true);
+    });
+  });
+
   describe('Stateless Function Components inside module pattern', () => {
     it('', () => {
       var def = parse(`
