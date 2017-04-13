@@ -731,13 +731,13 @@ babel-types@^6.15.0, babel-types@^6.18.0, babel-types@^6.19.0, babel-types@^6.22
     lodash "^4.2.0"
     to-fast-properties "^1.0.1"
 
-babylon@7.0.0-beta.4:
-  version "7.0.0-beta.4"
-  resolved "https://registry.yarnpkg.com/babylon/-/babylon-7.0.0-beta.4.tgz#82db799d2667f61bbaf34456dbfa91c37613459d"
-
 babylon@^6.11.0, babylon@^6.13.0, babylon@^6.15.0:
   version "6.16.1"
   resolved "https://registry.yarnpkg.com/babylon/-/babylon-6.16.1.tgz#30c5a22f481978a9e7f8cdfdf496b11d94b404d3"
+
+babylon@v7.0.0-beta.8:
+  version "7.0.0-beta.8"
+  resolved "https://registry.yarnpkg.com/babylon/-/babylon-7.0.0-beta.8.tgz#2bdc5ae366041442c27e068cce6f0d7c06ea9949"
 
 balanced-match@^0.4.1:
   version "0.4.2"
