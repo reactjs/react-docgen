@@ -12,6 +12,7 @@
 
 import type Documentation from '../Documentation';
 
+import {getDocblock} from '../utils/docblock';
 import getPropType from '../utils/getPropType';
 import getPropertyName from '../utils/getPropertyName';
 import getMemberValuePath from '../utils/getMemberValuePath';
@@ -53,6 +54,11 @@ function amendPropTypes(documentation, path) {
           propDescriptor.type = type;
           propDescriptor.required =
             type.name !== 'custom' && isRequiredPropType(valuePath);
+
+          var description = getDocblock(propertyPath);
+          if (description) {
+            propDescriptor.description = description;
+          }
         }
         break;
       case types.SpreadProperty.name:
