@@ -162,3 +162,11 @@ Object {
   },
 }
 `;
+
+exports[`main fixtures processes component "component_7.js" without errors 1`] = `
+Object {
+  "description": "The is a component to test the document generation",
+  "displayName": "Component",
+  "methods": Array [],
+}
+`;

@@ -49,7 +49,7 @@ function isReactCreateClassCallModular(path: NodePath): boolean {
   if (!match(path.node, {type: 'CallExpression'})) {
     return false;
   }
-  var module = resolveToModule(path.get('callee', 'object'));
+  var module = resolveToModule(path);
   return Boolean(module && module === 'create-react-class');
 }
 
