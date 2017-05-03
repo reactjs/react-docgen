@@ -49,7 +49,7 @@ describe('resolveToValue', () => {
     );
   });
 
-  it('handles SpreadProperties properly', () => {
+  it('handles SpreadPElements properly', () => {
     var path = parse([
       'var {foo: {bar}, ...baz} = bar;',
       'baz;',
