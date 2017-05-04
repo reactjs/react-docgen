@@ -214,6 +214,16 @@ describe('flowTypeDocBlockHandler', () => {
       `);
     });
 
+    it('non-object', () => {
+      test(`
+        (props: Props) => <div />;
+        var React = require('React');
+        var Component = React.Component;
+
+        type Props = {a: number} & {b: number};
+      `);
+    });
+
     it('not in scope', () => {
       test(`
         (props: Props) => <div />;

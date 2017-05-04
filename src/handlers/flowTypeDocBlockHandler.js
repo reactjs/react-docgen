@@ -24,7 +24,7 @@ import getFlowTypeFromReactComponent, {
 export default function flowTypeDocBlockHandler(documentation: Documentation, path: NodePath) {
   const flowTypesPath = getFlowTypeFromReactComponent(path);
 
-  if (!flowTypesPath) {
+  if (!flowTypesPath || !flowTypesPath.node.properties) {
     return;
   }
 
