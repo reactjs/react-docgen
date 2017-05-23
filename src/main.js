@@ -56,8 +56,8 @@ function defaultParse( // eslint-disable-line no-unused-vars
   return parse(src, resolver, handlers);
 }
 
-export {
-  defaultParse as parse,
+export default {
+  parse: defaultParse,
   defaultHandlers,
   handlers,
   resolver,
