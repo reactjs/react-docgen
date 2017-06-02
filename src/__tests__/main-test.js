@@ -162,6 +162,36 @@ describe('main', () => {
     `);
   });
 
+  describe('Stateless Component definition: FunctionDeclarationEvaluation', () => {
+    test(`
+      import React, {PropTypes} from "React";
+
+      const defaultProps = {
+        foo: true
+      };
+      
+      const propTypes = {
+        /**
+         * Example prop description
+         */
+        foo: PropTypes.bool
+      };
+
+      /**
+       * Example component description
+       */
+      function Component (props) {
+        return <div />;
+      }
+
+      Component.displayName = 'ABC';
+      Component.propTypes = propTypes;
+      Component.defaultProps = defaultProps;
+
+      export default Component;
+    `);
+  });
+
   describe('Stateless Component definition: FunctionExpression', () => {
     test(`
       import React, {PropTypes} from "React";
