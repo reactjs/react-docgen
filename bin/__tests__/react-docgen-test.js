@@ -239,10 +239,38 @@ describe('react-docgen CLI', () => {
         run([
           '--resolver='+path.join(__dirname, './example/customResolver.js'),
           path.join(__dirname, '../../example/components/Component.js'),
-        ]).then(([stdout, stderr]) => {
+        ]).then(([stdout]) => {
           expect(stdout).toContain('Custom');
         }),
       ]);
+    }, TEST_TIMEOUT);
+  });
+
+  describe('--exclude/-e', () => {
+    it('ignores files by name', () => {
+      createTempfiles(null, 'foo');
+      createTempfiles(null, 'bar');
+
+      var verify = ([stdout, stderr]) => {
+        expect(stdout).toBe('');
+        expect(stderr).toBe('');
+      };
+
+      return run(
+        ['--exclude=Component.js', '--exclude=NoComponent.js', tempDir]
+      ).then(verify);
+    }, TEST_TIMEOUT);
+
+    it('ignores files by regex', () => {
+      createTempfiles(null, 'foo');
+      createTempfiles(null, 'bar');
+
+      var verify = ([stdout, stderr]) => {
+        expect(stdout).toBe('');
+        expect(stderr).toBe('');
+      };
+
+      return run(['--exclude=/.*Component\\.js/', tempDir]).then(verify);
     }, TEST_TIMEOUT);
   });
 

@@ -38,7 +38,7 @@ argv
         ['js', 'jsx'])
     .option(
         '-e, --exclude <path>',
-        'Filename pattern to exclude. Default: ' + JSON.stringify(defaultExclude),
+        'Filename or regex to exclude. Default: ' + JSON.stringify(defaultExclude),
         collect,
         [])
     .option(
@@ -130,7 +130,7 @@ function traverseDir(filePath, result, done) {
     {
       match: extensions,
       exclude:excludePatterns,
-      excludeDir: ignoreDir
+      excludeDir: ignoreDir,
     },
     function(error, content, filename, next) {
       if (error) {
