@@ -367,5 +367,5 @@ The structure of the JSON blob / JavaScript object is as follows:
 [react]: http://facebook.github.io/react/
 [flow]: http://flowtype.org/
 [recast]: https://github.com/benjamn/recast
-[babylon]: https://github.com/babel/babel/tree/master/packages/babylon
+[babylon]: https://github.com/babel/babylon
 [classes]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes
