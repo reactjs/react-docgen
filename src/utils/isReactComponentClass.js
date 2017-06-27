@@ -18,10 +18,11 @@ import resolveToValue from './resolveToValue';
 var {types: {namedTypes: types}} = recast;
 
 function isRenderMethod(node) {
-  return types.MethodDefinition.check(node) &&
+  var isProperty = node.type === 'ClassProperty';
+  return (types.MethodDefinition.check(node) || isProperty) &&
     !node.computed &&
     !node.static &&
-    (node.kind === '' || node.kind === 'method') &&
+    (node.kind === '' || node.kind === 'method' || isProperty) &&
     node.key.name === 'render';
 }
 
