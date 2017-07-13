@@ -36,6 +36,7 @@ function isSupportedDefinitionType({node}) {
   return types.ObjectExpression.check(node) ||
     types.ClassDeclaration.check(node) ||
     types.ClassExpression.check(node) ||
+    types.TaggedTemplateExpression.check(node) ||
 
     // potential stateless function component
     types.VariableDeclaration.check(node) ||
@@ -71,7 +72,9 @@ export default function getMemberValuePath(
     );
   }
 
-  var lookupMethod = LOOKUP_METHOD[componentDefinition.node.type];
+  var lookupMethod = LOOKUP_METHOD[componentDefinition.node.type]
+    || getMemberExpressionValuePath;
+
   var result = lookupMethod(componentDefinition, memberName);
   if (!result && SYNONYMS[memberName]) {
     return lookupMethod(componentDefinition, SYNONYMS[memberName]);
