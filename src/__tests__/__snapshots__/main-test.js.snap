@@ -1,3 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`main fixtures processes component "component_1.js" without errors 1`] = `
 Object {
   "description": "The is a component to test the document generation",
@@ -34,7 +36,7 @@ Object {
     "type": Object {
       "defaultValue": Object {
         "computed": false,
-        "value": "\"primary\"",
+        "value": "\\"primary\\"",
       },
     },
   },
@@ -218,7 +220,7 @@ Object {
 @returns {Object} currentTime
    @returns {int} currentTime.hour
    @returns {int} currentTime.minutes
-   @returns {string} currentTime.ampm \"am\" or \"pm\"
+   @returns {string} currentTime.ampm \\"am\\" or \\"pm\\"
    @returns {string} currentTime.dayOfWeek
    @returns {string} currentTime.month
    @returns {int} currentTime.date",
@@ -243,9 +245,9 @@ Object {
   ],
   "props": Object {
     "title": Object {
-      "description": "A text display current\'s user identity,
- \"Nobody\" if no one is detected in the background,
- \"Hi, ..name\" if an user is detected",
+      "description": "A text display current's user identity,
+ \\"Nobody\\" if no one is detected in the background,
+ \\"Hi, ..name\\" if an user is detected",
       "required": false,
       "type": Object {
         "name": "string",
