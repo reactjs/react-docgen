@@ -192,6 +192,13 @@ Object {
 }
 `;
 
+exports[`main fixtures processes component "component_9.js" without errors 1`] = `
+Object {
+  "description": "Should be recognized as component.",
+  "methods": Array [],
+}
+`;
+
 exports[`main fixtures processes component "component_10.js" without errors 1`] = `
 Object {
   "description": "React component that display current time at current location.",
