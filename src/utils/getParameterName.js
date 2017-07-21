@@ -22,6 +22,7 @@ export default function getParameterName(parameterPath: NodePath): string {
     case types.AssignmentPattern.name:
       return getParameterName(parameterPath.get('left'));
     case types.ObjectPattern.name:
+    case types.ArrayPattern.name:
       return printValue(parameterPath);
     case types.RestElement.name:
       return '...' + getParameterName(parameterPath.get('argument'));

@@ -170,3 +170,24 @@ Object {
   "methods": Array [],
 }
 `;
+
+exports[`main fixtures processes component "component_8.js" without errors 1`] = `
+Object {
+  "description": "",
+  "methods": Array [
+    Object {
+      "docblock": null,
+      "modifiers": Array [],
+      "name": "onChangeSlider",
+      "params": Array [
+        Object {
+          "name": "[min, max]",
+          "optional": undefined,
+          "type": null,
+        },
+      ],
+      "returns": null,
+    },
+  ],
+}
+`;

@@ -39,10 +39,15 @@ describe('getParameterName', () => {
     expect(getParameterName(param)).toEqual('a');
   });
 
-  it('returns the raw object representation for a parameter with destructuring', () => {
+  it('returns the raw representation for a parameter with object destructuring', () => {
     const def = expression('function({a}) {}');
     const param = def.get('params', 0);
     expect(getParameterName(param)).toEqual('{a}');
+  });
+  it('returns the raw representation for a parameter with array destructuring', () => {
+    const def = expression('function([a]) {}');
+    const param = def.get('params', 0);
+    expect(getParameterName(param)).toEqual('[a]');
   });
 
   it('throws when passed an invalid path', () => {
