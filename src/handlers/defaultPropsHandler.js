@@ -94,11 +94,14 @@ function getDefaultValuesFromProps(
     // Don't evaluate property if component is functional and the node is not an AssignmentPattern
     .filter(propertyPath => !isStatelessComponent || types.AssignmentPattern.check(propertyPath.get('value').node))
     .forEach(function(propertyPath) {
-      var propDescriptor = documentation.getPropDescriptor(
+      const propDescriptor = documentation.getPropDescriptor(
         getPropertyName(propertyPath)
       );
-      var value = isStatelessComponent ? propertyPath.get('value', 'right') : propertyPath.get('value');
-      var defaultValue = getDefaultValue(value, isStatelessComponent);
+      const defaultValue = getDefaultValue(
+        isStatelessComponent ?
+          propertyPath.get('value', 'right') :
+          propertyPath.get('value')
+      );
       if (defaultValue) {
         propDescriptor.defaultValue = defaultValue;
       }
