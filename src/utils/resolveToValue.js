@@ -121,14 +121,17 @@ export default function resolveToValue(path: NodePath): NodePath {
   } else if (types.MemberExpression.check(node)) {
     const resolved = resolveToValue(getMemberExpressionRoot(path));
     if (types.ObjectExpression.check(resolved.node)) {
-      const memberParts = toArray(path).slice(1);
-      const init = memberParts.reduce((propertyPath, propertyName) => {
+      let propertyPath = resolved;
+      for (const propertyName of toArray(path).slice(1)) {
+        if (propertyPath && types.ObjectExpression.check(propertyPath.node)) {
+          propertyPath = getPropertyValuePath(propertyPath, propertyName);
+        }
+        if (!propertyPath) {
+          return path;
+        }
         propertyPath = resolveToValue(propertyPath);
-        return types.ObjectExpression.check(propertyPath.node) ?
-          getPropertyValuePath(propertyPath, propertyName) :
-          null;
-      }, resolved);
-      return init ? resolveToValue(init) : path;
+      }
+      return propertyPath;
     }
   } else if (
     types.ImportDefaultSpecifier.check(node) ||
