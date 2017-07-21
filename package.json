@@ -34,26 +34,26 @@
     "commander": "^2.9.0",
     "doctrine": "^2.0.0",
     "node-dir": "^0.1.10",
-    "recast": "^0.11.5"
+    "recast": "^0.12.6"
   },
   "devDependencies": {
     "babel-cli": "^6.9.0",
     "babel-eslint": "^7.0.0",
-    "babel-jest": "^18.0.0",
+    "babel-jest": "^20.0.3",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-plugin-transform-runtime": "^6.9.0",
     "babel-preset-env": "^1.1.8",
     "babel-preset-flow": "^6.23.0",
     "cross-spawn": "^5.0.0",
-    "eslint": "^3.2.2",
-    "flow-bin": "^0.39.0",
-    "jest": "^18.1.0",
+    "eslint": "^4.3.0",
+    "flow-bin": "^0.50.0",
+    "jest": "^20.0.4",
     "rimraf": "^2.3.2",
     "temp": "^0.8.1"
   },
   "jest": {
     "setupTestFrameworkScriptFile": "<rootDir>/tests/setupTestFramework.js",
-    "testPathDirs": [
+    "roots": [
       "bin",
       "src"
     ],
