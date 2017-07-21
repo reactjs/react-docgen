@@ -30,7 +30,7 @@
   "dependencies": {
     "async": "^2.1.4",
     "babel-runtime": "^6.9.2",
-    "babylon": "v7.0.0-beta.8",
+    "babylon": "v7.0.0-beta.14",
     "commander": "^2.9.0",
     "doctrine": "^2.0.0",
     "node-dir": "^0.1.10",
