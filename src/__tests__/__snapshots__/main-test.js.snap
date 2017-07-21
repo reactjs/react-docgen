@@ -191,3 +191,59 @@ Object {
   ],
 }
 `;
+
+exports[`main fixtures processes component "component_10.js" without errors 1`] = `
+Object {
+  "description": "React component that display current time at current location.",
+  "methods": Array [
+    Object {
+      "description": "Update clock state with new time",
+      "docblock": "Update clock state with new time",
+      "modifiers": Array [],
+      "name": "updateClock",
+      "params": Array [],
+      "returns": null,
+    },
+    Object {
+      "description": "Parse current Date object",
+      "docblock": "Parse current Date object
+
+@returns {Object} currentTime
+   @returns {int} currentTime.hour
+   @returns {int} currentTime.minutes
+   @returns {string} currentTime.ampm \"am\" or \"pm\"
+   @returns {string} currentTime.dayOfWeek
+   @returns {string} currentTime.month
+   @returns {int} currentTime.date",
+      "modifiers": Array [],
+      "name": "getTime",
+      "params": Array [],
+      "returns": Object {
+        "description": "currentTime",
+        "type": Object {
+          "name": "Object",
+        },
+      },
+    },
+    Object {
+      "description": "Update current clock for every 1 second",
+      "docblock": "Update current clock for every 1 second",
+      "modifiers": Array [],
+      "name": "setTimer",
+      "params": Array [],
+      "returns": null,
+    },
+  ],
+  "props": Object {
+    "title": Object {
+      "description": "A text display current\'s user identity,
+ \"Nobody\" if no one is detected in the background,
+ \"Hi, ..name\" if an user is detected",
+      "required": false,
+      "type": Object {
+        "name": "string",
+      },
+    },
+  },
+}
+`;

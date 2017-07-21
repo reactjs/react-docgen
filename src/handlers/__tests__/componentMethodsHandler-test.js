@@ -26,24 +26,39 @@ describe('componentMethodsHandler', () => {
 
   function test(definition) {
     componentMethodsHandler(documentation, definition);
-    expect(documentation.methods).toEqual([{
-      name: 'foo',
-      docblock: 'The foo method',
-      modifiers: [],
-      returns: {
-        type: {name: 'number'},
+    expect(documentation.methods).toEqual([
+      {
+        name: 'foo',
+        docblock: 'The foo method',
+        modifiers: [],
+        returns: {
+          type: {name: 'number'},
+        },
+        params: [{
+          name: 'bar',
+          type: {name: 'number'},
+        }],
       },
-      params: [{
+      {
+        name: 'baz',
+        docblock: '"arrow function method"',
+        modifiers: [],
+        returns: {
+          type: {name: 'string'},
+        },
+        params: [{
+          name: 'foo',
+          type: {name: 'string'},
+        }],
+      },
+      {
         name: 'bar',
-        type: {name: 'number'},
-      }],
-    }, {
-      name: 'bar',
-      docblock: 'Static function',
-      modifiers: ['static'],
-      returns: null,
-      params: [],
-    }]);
+        docblock: 'Static function',
+        modifiers: ['static'],
+        returns: null,
+        params: [],
+      },
+    ]);
   }
 
   it('extracts the documentation for an ObjectExpression', () => {
@@ -55,6 +70,10 @@ describe('componentMethodsHandler', () => {
         foo(bar: number): number {
           return bar;
         },
+        /**
+         * "arrow function method"
+         */
+        baz: (foo: string): string => {},
         statics: {
           /**
            * Static function
@@ -83,6 +102,11 @@ describe('componentMethodsHandler', () => {
         foo(bar: number): number {
           return bar;
         }
+
+        /**
+         * "arrow function method"
+         */
+        baz = (foo: string): string => {};
 
         /**
          * Static function

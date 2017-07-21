@@ -20,22 +20,28 @@ import type Documentation from '../Documentation';
 
 const {types: {namedTypes: types}} = recast;
 
-function getMethodsDoc(methodPaths) {
-  const methods = [];
+/**
+ * The following values/constructs are considered methods:
+ *
+ * - Method declarations in classes (except "constructor" and React lifecycle
+ *   methods
+ * - Public class fields in classes whose value are a functions
+ * - Object properties whose values are functions
+ */
+function isMethod(path) {
+  const isProbablyMethod =
+    (types.MethodDefinition.check(path.node) &&
+     path.node.kind !== 'constructor'
+    ) ||
+    (types.ClassProperty.check(path.node) &&
+     types.Function.check(path.get('value').node)
+    ) ||
+    (types.Property.check(path.node) &&
+     types.Function.check(path.get('value').node)
+    )
+    ;
 
-  methodPaths.forEach((methodPath) => {
-    if (isReactComponentMethod(methodPath)) {
-      return;
-    }
-
-    methods.push(getMethodDocumentation(methodPath));
-  });
-
-  return methods;
-}
-
-function isFunctionExpression(path) {
-  return types.FunctionExpression.check(path.get('value').node)
+  return isProbablyMethod && !isReactComponentMethod(path);
 }
 
 /**
@@ -49,17 +55,15 @@ export default function componentMethodsHandler(
   // Extract all methods from the class or object.
   let methodPaths = [];
   if (isReactComponentClass(path)) {
-    methodPaths = path
-      .get('body', 'body')
-      .filter(p => types.MethodDefinition.check(p.node) && p.node.kind !== 'constructor');
+    methodPaths = path.get('body', 'body').filter(isMethod);
   } else if (types.ObjectExpression.check(path.node)) {
-    methodPaths = path.get('properties').filter(isFunctionExpression);
+    methodPaths = path.get('properties').filter(isMethod);
 
     // Add the statics object properties.
     const statics = getMemberValuePath(path, 'statics');
     if (statics) {
       statics.get('properties').each(p => {
-        if (isFunctionExpression(p)) {
+        if (isMethod(p)) {
           p.node.static = true;
           methodPaths.push(p);
         }
@@ -67,6 +71,5 @@ export default function componentMethodsHandler(
     }
   }
 
-  const methods = getMethodsDoc(methodPaths);
-  documentation.set('methods', methods);
+  documentation.set('methods', methodPaths.map(getMethodDocumentation));
 }
