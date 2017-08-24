@@ -1,25 +1,33 @@
-/*global jasmine*/
+/* eslint-env jest */
 
-var recast = require('recast');
+const recast = require('recast');
+const diff = require('jest-diff');
+const utils = require('jest-matcher-utils');
 
-var matchers = {
-  toEqualASTNode: function () {
+const matchers = {
+  toEqualASTNode: function (received, expected) {
+    if (!expected || typeof expected !== 'object') {
+      throw new Error(
+        'Expected value must be an object representing an AST node.\n' +
+        'Got ' + expected + '(' + typeof expected + ') instead.'
+      );
+    }
+
     return {
-      compare: function (actual, expected) {
-        if (!expected || typeof expected !== 'object') {
-          throw new Error(
-            'Expected value must be an object representing an AST node.\n' +
-            'Got ' + expected + '(' + typeof expected + ') instead.'
-          );
-        }
+      pass: recast.types.astNodesAreEquivalent(received, expected),
+      message: () => {
+        const diffString = diff(expected, received);
 
-        return {pass: recast.types.astNodesAreEquivalent(actual, expected)};
-      }
+        return (
+          'Expected value to be (using ast-types):\n' +
+          `  ${utils.printExpected(expected)}\n` +
+          'Received:\n' +
+          `  ${utils.printReceived(received)}` +
+          (diffString ? `\n\nDifference:\n\n${diffString}` : '')
+        );
+      },
     };
-  }
+  },
 };
 
-
-jasmine.getEnv().beforeEach(function() {
-  jasmine.addMatchers(matchers);
-});
+expect.extend(matchers);
