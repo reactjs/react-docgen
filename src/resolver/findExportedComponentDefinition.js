@@ -84,11 +84,11 @@ export default function findExportedComponentDefinition(
     if (definitions.length === 0) {
       return false;
     }
-    if (definitions.length > 1 || definition) {
-      // If a file exports multiple components, ... complain!
-      throw new Error(ERROR_MULTIPLE_DEFINITIONS);
+
+    definition = definitions.map(def => resolveDefinition(def, types));
+    if (definition.length === 1) {
+      definition = definition.pop();
     }
-    definition = resolveDefinition(definitions[0], types);
     return false;
   }
 
@@ -124,10 +124,6 @@ export default function findExportedComponentDefinition(
         if (!isComponentDefinition(path)) {
           return false;
         }
-      }
-      if (definition) {
-        // If a file exports multiple components, ... complain!
-        throw new Error(ERROR_MULTIPLE_DEFINITIONS);
       }
       definition = resolveDefinition(path, types);
       return false;
