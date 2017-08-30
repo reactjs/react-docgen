@@ -18,9 +18,6 @@ import resolveExportDeclaration from '../utils/resolveExportDeclaration';
 import resolveToValue from '../utils/resolveToValue';
 import resolveHOC from '../utils/resolveHOC';
 
-var ERROR_MULTIPLE_DEFINITIONS =
-  'Multiple exported component definitions found.';
-
 function ignore() {
   return false;
 }
