@@ -12,7 +12,8 @@
   },
   "files": [
     "bin",
-    "dist"
+    "dist",
+    "PATENTS"
   ],
   "main": "dist/main.js",
   "scripts": {
