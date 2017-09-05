@@ -134,9 +134,21 @@ describe('flowTypeHandler', () => {
   }
 
   describe('TypeAlias', () => {
-    describe('class definition', () => {
+    describe('class definition for flow <0.53', () => {
       test(
         propTypesSrc => statement(template('class Foo extends Component<void, Props, void> {}', propTypesSrc))
+      );
+    });
+
+    describe('class definition for flow >=0.53 without State', () => {
+      test(
+        propTypesSrc => statement(template('class Foo extends Component<Props> {}', propTypesSrc))
+      );
+    });
+
+    describe('class definition for flow >=0.53 with State', () => {
+      test(
+        propTypesSrc => statement(template('class Foo extends Component<Props, State> {}', propTypesSrc))
       );
     });
 

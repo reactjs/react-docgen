@@ -10,6 +10,10 @@
   "bin": {
     "react-docgen": "bin/react-docgen.js"
   },
+  "files":[
+    "bin",
+    "dist"
+  ],
   "main": "dist/main.js",
   "scripts": {
     "check": "npm run lint && npm run flow && npm test",
@@ -46,8 +50,10 @@
     "babel-preset-flow": "^6.23.0",
     "cross-spawn": "^5.0.0",
     "eslint": "^4.3.0",
-    "flow-bin": "^0.50.0",
+    "flow-bin": "^0.53.1",
     "jest": "^20.0.4",
+    "jest-diff": "^20.0.3",
+    "jest-matcher-utils": "^20.0.3",
     "rimraf": "^2.3.2",
     "temp": "^0.8.1"
   },

@@ -20,6 +20,7 @@ import isRequiredPropType from '../utils/isRequiredPropType';
 import printValue from './printValue';
 import recast from 'recast';
 import resolveToValue from './resolveToValue';
+import resolveObjectKeysToArray from './resolveObjectKeysToArray';
 
 var {types: {namedTypes: types}} = recast;
 
@@ -54,12 +55,17 @@ function getEnumValues(path) {
 }
 
 function getPropTypeOneOf(argumentPath) {
-  var type: PropTypeDescriptor = {name: 'enum'};
-  const value = resolveToValue(argumentPath);
+  const type: PropTypeDescriptor = {name: 'enum'};
+  let value = resolveToValue(argumentPath);
   if (!types.ArrayExpression.check(value.node)) {
-    // could not easily resolve to an Array, let's print the original value
-    type.computed = true;
-    type.value = printValue(argumentPath);
+    value = resolveObjectKeysToArray(value);
+    if (value) {
+      type.value = getEnumValues(value);
+    } else {
+      // could not easily resolve to an Array, let's print the original value
+      type.computed = true;
+      type.value = printValue(argumentPath);
+    }
   } else {
     type.value = getEnumValues(value);
   }

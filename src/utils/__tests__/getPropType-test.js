@@ -236,8 +236,10 @@ describe('getPropType', () => {
 
       expect(getPropType(propTypeExpression)).toEqual({
         name: 'enum',
-        value: 'Object.keys(TYPES)',
-        computed: true,
+        value: [
+          {value: '"FOO"', computed: false},
+          {value: '"BAR"', computed: false},
+        ],
       });
     });
 
