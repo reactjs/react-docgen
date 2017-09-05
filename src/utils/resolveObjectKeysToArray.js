@@ -15,6 +15,7 @@ import resolveToValue from './resolveToValue';
 
 var {
   types: {
+    ASTNode,
     NodePath,
     builders,
     namedTypes: types,
@@ -31,7 +32,7 @@ function isObjectKeysCall(node: ASTNode): bool {
     node.callee.property.name === 'keys';
 }
 
-function resolveObjectExpressionToArray(objectExpression: NodePath): ?NodePath {
+function resolveObjectExpressionToNameArray(objectExpression: NodePath): ?Array<string> {
   if (
     types.ObjectExpression.check(objectExpression.value) &&
     objectExpression.value.properties.every(
@@ -50,13 +51,14 @@ function resolveObjectExpressionToArray(objectExpression: NodePath): ?NodePath {
       if (error) return;
       const prop = propPath.value;
 
-      if (prop.kind === 'set') return;
-
       if (types.Property.check(prop)) {
-        values.push(builders.literal(prop.key.name || prop.key.value));
+        // Key is either Identifier or Literal
+        const name = prop.key.name || prop.key.value;
+
+        values.push(name);
       } else if (types.SpreadProperty.check(prop)) {
         const spreadObject = resolveToValue(propPath.get('argument'));
-        const spreadValues = resolveObjectExpressionToArray(spreadObject);
+        const spreadValues = resolveObjectExpressionToNameArray(spreadObject);
         if (!spreadValues) {
           error = true;
           return;
@@ -88,10 +90,14 @@ export default function resolveObjectKeysToArray(path: NodePath): ?NodePath {
 
   if (isObjectKeysCall(node)) {
     const objectExpression = resolveToValue(path.get('arguments').get(0));
-    const values = resolveObjectExpressionToArray(objectExpression);
+    const values = resolveObjectExpressionToNameArray(objectExpression);
 
     if (values) {
-      return new NodePath(builders.arrayExpression(values));
+      const nodes = values
+        .filter((value, index, array) => array.indexOf(value) === index)
+        .map(value => builders.literal(value))
+
+      return new NodePath(builders.arrayExpression(nodes));
     }
   }
 

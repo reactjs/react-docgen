@@ -89,7 +89,7 @@ describe('resolveObjectKeysToArray', () => {
     );
   });
 
-  it('ignores setters', () => {
+  it('resolves Object.keys when using setters', () => {
     var path = parse([
       'var foo = { boo: 1, foo: 2, set bar(e) {} };',
       'Object.keys(foo);',
@@ -97,7 +97,34 @@ describe('resolveObjectKeysToArray', () => {
 
     expect(resolveObjectKeysToArray(path).node).toEqualASTNode(
       builders.arrayExpression(
-        [builders.literal('boo'), builders.literal('foo')]
+        [builders.literal('boo'), builders.literal('foo'), builders.literal('bar')]
+      )
+    );
+  });
+
+  it('resolves Object.keys but ignores duplicates', () => {
+    var path = parse([
+      'var bar = { doo: 4, doo: 5 }',
+      'var foo = { boo: 1, foo: 2, doo: 1, ...bar };',
+      'Object.keys(foo);',
+    ].join('\n'));
+
+    expect(resolveObjectKeysToArray(path).node).toEqualASTNode(
+      builders.arrayExpression(
+        [builders.literal('boo'), builders.literal('foo'), builders.literal('doo')]
+      )
+    );
+  });
+
+  it('resolves Object.keys but ignores duplicates with getter and setter', () => {
+    var path = parse([
+      'var foo = { get x() {}, set x(a) {} };',
+      'Object.keys(foo);',
+    ].join('\n'));
+
+    expect(resolveObjectKeysToArray(path).node).toEqualASTNode(
+      builders.arrayExpression(
+        [builders.literal('x')]
       )
     );
   });
