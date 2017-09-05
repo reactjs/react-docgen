@@ -32,7 +32,12 @@ export default (path: NodePath): ?NodePath  => {
     const superTypes = path.get('superTypeParameters');
 
     if (superTypes.value) {
-      typePath = superTypes.get('params').get(1);
+      const params = superTypes.get('params');
+      if (params.value.length === 3) {
+        typePath = params.get(1);
+      } else {
+       typePath = params.get(0);
+      }
     } else {
       const propsMemberPath = getMemberValuePath(path, 'props');
       if (!propsMemberPath) {
