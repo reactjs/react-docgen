@@ -12,12 +12,14 @@
 
 jest.mock('../getPropertyValuePath');
 jest.mock('../getClassMemberValuePath');
+jest.mock('../getMemberExpressionValuePath');
 
 import {expression, statement} from '../../../tests/utils';
 
 import getPropertyValuePath from '../getPropertyValuePath';
 import getClassMemberValuePath from '../getClassMemberValuePath';
 import getMemberValuePath from '../getMemberValuePath';
+import getMemberExpressionValuePath from '../getMemberExpressionValuePath';
 
 describe('getMemberValuePath', () => {
 
@@ -33,6 +35,13 @@ describe('getMemberValuePath', () => {
 
     getMemberValuePath(path, 'foo');
     expect(getClassMemberValuePath).toBeCalledWith(path, 'foo');
+  });
+
+  it('handles TaggedTemplateLiterals', () => {
+    var path = expression('foo``');
+
+    getMemberValuePath(path, 'foo');
+    expect(getMemberExpressionValuePath).toBeCalledWith(path, 'foo');
   });
 
   it('handles ClassExpressions', () => {
