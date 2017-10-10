@@ -62,6 +62,7 @@ Object {
 exports[`main fixtures processes component "component_4.js" without errors 1`] = `
 Object {
   "description": "",
+  "displayName": "Parent",
   "methods": Array [],
   "props": Object {
     "child": Object {
@@ -176,6 +177,7 @@ Object {
 exports[`main fixtures processes component "component_8.js" without errors 1`] = `
 Object {
   "description": "",
+  "displayName": "Parent",
   "methods": Array [
     Object {
       "docblock": null,
@@ -197,6 +199,7 @@ Object {
 exports[`main fixtures processes component "component_9.js" without errors 1`] = `
 Object {
   "description": "Should be recognized as component.",
+  "displayName": "ExampleComponent",
   "methods": Array [],
 }
 `;
@@ -204,6 +207,7 @@ Object {
 exports[`main fixtures processes component "component_10.js" without errors 1`] = `
 Object {
   "description": "React component that display current time at current location.",
+  "displayName": "Clock",
   "methods": Array [
     Object {
       "description": "Update clock state with new time",

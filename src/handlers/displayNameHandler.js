@@ -13,6 +13,7 @@
 import type Documentation from '../Documentation';
 
 import getMemberValuePath from '../utils/getMemberValuePath';
+import getNameOrValue from '../utils/getNameOrValue';
 import recast from 'recast';
 import resolveToValue from '../utils/resolveToValue';
 import {traverseShallow} from '../utils/traverse';
@@ -25,6 +26,14 @@ export default function displayNameHandler(
 ) {
   let displayNamePath = getMemberValuePath(path, 'displayName');
   if (!displayNamePath) {
+    // Function and class declarations need special treatment. The name of the
+    // function / class is the displayName
+    if (
+      types.ClassDeclaration.check(path.node) ||
+      types.FunctionDeclaration.check(path.node)
+    ) {
+      documentation.set('displayName', getNameOrValue(path.get('id')));
+    }
     return;
   }
   displayNamePath = resolveToValue(displayNamePath);

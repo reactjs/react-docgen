@@ -70,9 +70,28 @@ describe('defaultPropsHandler', () => {
     expect(documentation.displayName).not.toBeDefined();
   });
 
-  describe('ClassDeclaration displayName getter', () => {
+  describe('ClassDeclaration', () => {
 
-    it('considers class methods', () => {
+    it('considers the class name', () => {
+      const definition = statement(`
+        class Foo {
+        }
+      `);
+      expect(() => displayNameHandler(documentation, definition)).not.toThrow();
+      expect(documentation.displayName).toBe('Foo');
+    });
+
+    it('considers a static displayName class property', () => {
+      const definition = statement(`
+        class Foo {
+          static displayName = 'foo';
+        }
+      `);
+      expect(() => displayNameHandler(documentation, definition)).not.toThrow();
+      expect(documentation.displayName).toBe('foo');
+    });
+
+    it('considers static displayName getter', () => {
       const definition = statement(`
         class Foo {
           static get displayName() {
@@ -84,7 +103,7 @@ describe('defaultPropsHandler', () => {
       expect(documentation.displayName).toBe('foo');
     });
 
-    it('resolves variables in class methods', () => {
+    it('resolves variables in displayName getter', () => {
       const definition = statement(`
         class Foo {
           static get displayName() {
