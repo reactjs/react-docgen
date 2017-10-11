@@ -10,19 +10,26 @@
  *
  */
 
-import getMemberExpressionValuePath from './getMemberExpressionValuePath';
 import getClassMemberValuePath from './getClassMemberValuePath';
+import getMemberExpressionValuePath from './getMemberExpressionValuePath';
 import getPropertyValuePath from './getPropertyValuePath';
+import resolveFunctionDefinitionToReturnValue from '../utils/resolveFunctionDefinitionToReturnValue';
 import recast from 'recast';
 
-var {types: {namedTypes: types}} = recast;
+const {types: {namedTypes: types}} = recast;
 
-var SYNONYMS = {
+const SYNONYMS = {
   getDefaultProps: 'defaultProps',
   defaultProps: 'getDefaultProps',
 };
 
-var LOOKUP_METHOD = {
+const POSTPROCESS_MEMBERS = {
+  propTypes: path => types.Function.check(path.node) ?
+    resolveFunctionDefinitionToReturnValue(path) :
+    path,
+};
+
+const LOOKUP_METHOD = {
   [types.ArrowFunctionExpression.name]: getMemberExpressionValuePath,
   [types.FunctionExpression.name]: getMemberExpressionValuePath,
   [types.FunctionDeclaration.name]: getMemberExpressionValuePath,
@@ -83,11 +90,15 @@ export default function getMemberValuePath(
     );
   }
 
-  var lookupMethod = LOOKUP_METHOD[componentDefinition.node.type]
+  const lookupMethod = LOOKUP_METHOD[componentDefinition.node.type]
     || getMemberExpressionValuePath;
-  var result = lookupMethod(componentDefinition, memberName);
+  let result = lookupMethod(componentDefinition, memberName);
   if (!result && SYNONYMS[memberName]) {
-    return lookupMethod(componentDefinition, SYNONYMS[memberName]);
+    result = lookupMethod(componentDefinition, SYNONYMS[memberName]);
   }
+  if (result && POSTPROCESS_MEMBERS[memberName]) {
+    result = POSTPROCESS_MEMBERS[memberName](result);
+  }
+
   return result;
 }

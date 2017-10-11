@@ -29,8 +29,8 @@ describe('propDocBlockHandler', () => {
 
   function test(getSrc, parse) {
     it('finds docblocks for prop types', () => {
-      var definition = parse(getSrc(`
-        {
+      var definition = parse(getSrc(
+        `{
           /**
            * Foo comment
            */
@@ -39,8 +39,8 @@ describe('propDocBlockHandler', () => {
            * Bar comment
            */
           bar: Prop.bool,
-        }
-     `));
+        }`
+     ));
 
       propDocBlockHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
@@ -54,8 +54,8 @@ describe('propDocBlockHandler', () => {
     });
 
     it('can handle multline comments', () => {
-      var definition = parse(getSrc(`
-        {
+      var definition = parse(getSrc(
+        `{
           /**
            * Foo comment with
            * many lines!
@@ -63,8 +63,8 @@ describe('propDocBlockHandler', () => {
            * even with empty lines in between
            */
           foo: Prop.bool,
-        }
-      `));
+        }`
+      ));
 
       propDocBlockHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
@@ -76,8 +76,8 @@ describe('propDocBlockHandler', () => {
     });
 
     it('ignores non-docblock comments', () => {
-      var definition = parse(getSrc(`
-        {
+      var definition = parse(getSrc(
+        `{
           /**
            * Foo comment
            */
@@ -88,8 +88,8 @@ describe('propDocBlockHandler', () => {
            */
           /* This is not a doc comment */
           bar: Prop.bool,
-        }
-      `));
+        }`
+      ));
 
       propDocBlockHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
@@ -103,15 +103,15 @@ describe('propDocBlockHandler', () => {
     });
 
     it('only considers the comment with the property below it', () => {
-      var definition = parse(getSrc(`
-        {
+      var definition = parse(getSrc(
+        `{
           /**
            * Foo comment
            */
           foo: Prop.bool,
           bar: Prop.bool,
-        }
-      `));
+        }`
+      ));
 
       propDocBlockHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
@@ -125,15 +125,15 @@ describe('propDocBlockHandler', () => {
     });
 
     it('understands and ignores the spread operator', () => {
-      var definition = parse(getSrc(`
-        {
+      var definition = parse(getSrc(
+        `{
           ...Foo.propTypes,
           /**
            * Foo comment
            */
           foo: Prop.bool,
-        }
-      `));
+        }`
+      ));
 
       propDocBlockHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
@@ -171,14 +171,29 @@ describe('propDocBlockHandler', () => {
   });
 
   describe('ClassDefinition', () => {
-    test(
-      propTypesSrc => `
-        class Foo{
-          static propTypes = ${propTypesSrc};
-        }
-      `,
-      src => statement(src)
-    );
+    describe('class property', () => {
+      test(
+        propTypesSrc => `
+          class Foo{
+            static propTypes = ${propTypesSrc};
+          }
+        `,
+        src => statement(src)
+      );
+    });
+
+    describe('static getter', () => {
+      test(
+        propTypesSrc => `
+          class Foo{
+            static get propTypes() {
+              return ${propTypesSrc};
+            }
+          }
+        `,
+        src => statement(src)
+      );
+    });
   });
 
   it('does not error if propTypes cannot be found', () => {

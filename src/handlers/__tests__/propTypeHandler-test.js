@@ -37,12 +37,11 @@ describe('propTypeHandler', () => {
 
   function test(getSrc, parse) {
     it('passes the correct argument to getPropType', () => {
-      var propTypesSrc = `
-        {
+      var propTypesSrc =
+        `{
           foo: PropTypes.bool,
           abc: PropTypes.xyz,
-        }
-      `;
+        }`;
       var definition = parse(getSrc(propTypesSrc));
       var propTypesAST = expression(propTypesSrc);
 
@@ -58,13 +57,13 @@ describe('propTypeHandler', () => {
     });
 
     it('finds definitions via React.PropTypes', () => {
-      var definition = parse(getSrc(`
-        {
+      var definition = parse(getSrc(
+        `{
           foo: PropTypes.bool,
           bar: require("react").PropTypes.bool,
           baz: OtherPropTypes.bool,
-        }
-      `));
+        }`
+      ));
 
       propTypeHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
@@ -84,11 +83,11 @@ describe('propTypeHandler', () => {
     });
 
     it('finds definitions via the ReactPropTypes module', () => {
-      var definition = parse(getSrc(`
-        {
+      var definition = parse(getSrc(
+        `{
           foo: require("ReactPropTypes").bool,
-        }
-      `));
+        }`
+      ));
 
       propTypeHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
@@ -100,13 +99,13 @@ describe('propTypeHandler', () => {
     });
 
     it('detects whether a prop is required', () => {
-      var definition = parse(getSrc(`
-        {
+      var definition = parse(getSrc(
+        `{
           simple_prop: PropTypes.array.isRequired,
           complex_prop:
             PropTypes.oneOfType([PropTypes.number, PropTypes.bool]).isRequired,
-        }
-      `));
+        }`
+      ));
 
       propTypeHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
@@ -122,12 +121,12 @@ describe('propTypeHandler', () => {
     });
 
     it('only considers definitions from React or ReactPropTypes', () => {
-      var definition = parse(getSrc(`
-        {
+      var definition = parse(getSrc(
+        `{
           custom_propA: PropTypes.bool,
           custom_propB: Prop.bool.isRequired,
-        }
-      `));
+        }`
+      ));
 
       propTypeHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
@@ -171,14 +170,29 @@ describe('propTypeHandler', () => {
   });
 
   describe('class definition', () => {
-    test(
-      propTypesSrc => template(`
-        class Component {
-          static propTypes = ${propTypesSrc};
-        }
-      `),
-      src => statement(src)
-    );
+    describe('class property', () => {
+      test(
+        propTypesSrc => template(`
+          class Component {
+            static propTypes = ${propTypesSrc};
+          }
+        `),
+        src => statement(src)
+      );
+    });
+
+    describe('static getter', () => {
+      test(
+        propTypesSrc => template(`
+          class Component {
+            static get propTypes() {
+              return ${propTypesSrc};
+            }
+          }
+        `),
+        src => statement(src)
+      );
+    });
   });
 
   describe('stateless component', () => {

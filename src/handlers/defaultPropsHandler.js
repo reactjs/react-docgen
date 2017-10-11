@@ -17,9 +17,10 @@ import getMemberValuePath from '../utils/getMemberValuePath';
 import printValue from '../utils/printValue';
 import recast from 'recast';
 import resolveToValue from '../utils/resolveToValue';
+import resolveFunctionDefinitionToReturnValue from '../utils/resolveFunctionDefinitionToReturnValue';
 import isStatelessComponent from '../utils/isStatelessComponent';
 
-var {types: {namedTypes: types, visit}} = recast;
+var {types: {namedTypes: types}} = recast;
 
 function getDefaultValue(path: NodePath) {
   var node = path.node;
@@ -70,16 +71,10 @@ function getDefaultPropsPath(componentDefinition: NodePath): ?NodePath {
   if (types.FunctionExpression.check(defaultPropsPath.node)) {
     // Find the value that is returned from the function and process it if it is
     // an object literal.
-    visit(defaultPropsPath.get('body'), {
-      visitFunction: () => false,
-      visitReturnStatement: function(path) {
-        var resolvedPath = resolveToValue(path.get('argument'));
-        if (types.ObjectExpression.check(resolvedPath.node)) {
-          defaultPropsPath = resolvedPath;
-        }
-        return false;
-      },
-    });
+    const returnValue = resolveFunctionDefinitionToReturnValue(defaultPropsPath);
+    if (returnValue && types.ObjectExpression.check(returnValue.node)) {
+      defaultPropsPath = returnValue;
+    }
   }
   return defaultPropsPath;
 }
