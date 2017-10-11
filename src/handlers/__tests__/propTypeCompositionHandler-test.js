@@ -50,12 +50,12 @@ describe('propTypeCompositionHandler', () => {
     });
 
     it('understands the spread operator', () => {
-      var definitionSrc = getSrc(`
-        {
+      var definitionSrc = getSrc(
+        `{
           ...Foo.propTypes,
           ...SharedProps,
-        }
-      `);
+        }`
+      );
       var definition = parse(`
         ${definitionSrc}
         var Foo = require("Foo.react");
@@ -76,14 +76,29 @@ describe('propTypeCompositionHandler', () => {
   });
 
   describe('class definition', () => {
-    test(
-      propTypesSrc => `
-        class Component {
-          static propTypes = ${propTypesSrc};
-        }
-      `,
-      src => statement(src)
-    );
+    describe('class properties', () => {
+      test(
+        propTypesSrc => `
+          class Component {
+            static propTypes = ${propTypesSrc};
+          }
+        `,
+        src => statement(src)
+      );
+    });
+
+    describe('static getter', () => {
+      test(
+        propTypesSrc => `
+          class Component {
+            static get propTypes() {
+              return ${propTypesSrc};
+            }
+          }
+        `,
+        src => statement(src)
+      );
+    });
   });
 
   it('does not error if propTypes cannot be found', () => {
