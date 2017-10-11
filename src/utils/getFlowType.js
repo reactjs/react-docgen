@@ -148,7 +148,7 @@ function handleFunctionTypeAnnotation(path: NodePath) {
     if (!typeAnnotation) return null;
 
     type.signature.arguments.push({
-      name: getPropertyName(param.get('name')),
+      name: param.node.name ? param.node.name.name : '',
       type: getFlowType(typeAnnotation),
     });
   });
