@@ -224,6 +224,7 @@ type Props = {
   literalsAndUnion: 'string' | 'otherstring' | number,
   arr: Array<any>,
   func?: (value: string) => void,
+  noParameterName?: string => void,
   obj?: { subvalue: ?boolean },
 };
 
@@ -282,6 +283,20 @@ we are getting this output:
         "signature":{
           "arguments":[
             { "name":"value", "type":{ "name":"string" } }
+          ],
+          "return":{ "name":"void" }
+        }
+      },
+      "required":false
+    },
+    "noParameterName":{
+      "flowType":{
+        "name":"signature",
+        "type":"function",
+        "raw":"string => void",
+        "signature":{
+          "arguments":[
+            { "name":"", "type":{ "name":"string" } }
           ],
           "return":{ "name":"void" }
         }
