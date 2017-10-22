@@ -95,11 +95,7 @@ function resolveGenericTypeAnnotation(path: NodePath): ?NodePath {
   let typePath: ?NodePath;
   if (path && types.GenericTypeAnnotation.check(path.node)) {
     typePath = resolveToValue(path.get('id'));
-    if (
-      !typePath ||
-      types.Identifier.check(typePath.node) ||
-      isUnreachableFlowType(typePath)
-    ) {
+    if (isUnreachableFlowType(typePath)) {
       return;
     }
 
