@@ -35,6 +35,7 @@ var options = {
     'optionalCatchBinding',
     'throwExpressions',
     'pipelineOperator',
+    'nullishCoalescingOperator',
   ],
 };
 
