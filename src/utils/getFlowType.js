@@ -17,7 +17,6 @@ import printValue from './printValue';
 import recast from 'recast';
 import getTypeAnnotation from '../utils/getTypeAnnotation';
 import resolveToValue from '../utils/resolveToValue';
-import isUnreachableFlowType from '../utils/isUnreachableFlowType';
 
 const { types: { namedTypes: types } } = recast;
 
