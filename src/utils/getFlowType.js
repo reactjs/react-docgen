@@ -17,6 +17,7 @@ import printValue from './printValue';
 import recast from 'recast';
 import getTypeAnnotation from '../utils/getTypeAnnotation';
 import resolveToValue from '../utils/resolveToValue';
+import { resolveObjectExpressionToNameArray } from '../utils/resolveObjectKeysToArray';
 
 const { types: { namedTypes: types } } = recast;
 
@@ -54,7 +55,32 @@ function getFlowTypeWithRequirements(path: NodePath): FlowTypeDescriptor {
   return type;
 }
 
+function handleKeysHelper(path: NodePath) {
+  let value = path.get('typeParameters', 'params', 0);
+  if (types.TypeofTypeAnnotation.check(value.node)) {
+    value = value.get('argument', 'id');
+  } else {
+    value = value.get('id');
+  }
+  const resolvedPath = resolveToValue(value);
+  if (resolvedPath && types.ObjectExpression.check(resolvedPath.node)) {
+    const keys = resolveObjectExpressionToNameArray(resolvedPath, true);
+
+    if (keys) {
+      return {
+        name: 'union',
+        raw: printValue(path),
+        elements: keys.map(value => ({ name: 'literal', value })),
+      };
+    }
+  }
+}
+
 function handleGenericTypeAnnotation(path: NodePath) {
+  if (path.node.id.name === '$Keys' && path.node.typeParameters) {
+    return handleKeysHelper(path);
+  }
+
   let type;
   if (types.QualifiedTypeIdentifier.check(path.node.id)) {
     type = handleQualifiedTypeIdentifier(path.get('id'));
