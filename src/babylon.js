@@ -34,6 +34,7 @@ var options = {
     'bigInt',
     'optionalCatchBinding',
     'throwExpressions',
+    'pipelineOperator',
   ],
 };
 
