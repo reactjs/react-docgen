@@ -32,7 +32,7 @@ function isObjectKeysCall(node: ASTNode): bool {
     node.callee.property.name === 'keys';
 }
 
-function resolveObjectExpressionToNameArray(objectExpression: NodePath): ?Array<string> {
+export function resolveObjectExpressionToNameArray(objectExpression: NodePath, raw: boolean = false): ?Array<string> {
   if (
     types.ObjectExpression.check(objectExpression.value) &&
     objectExpression.value.properties.every(
@@ -53,7 +53,7 @@ function resolveObjectExpressionToNameArray(objectExpression: NodePath): ?Array<
 
       if (types.Property.check(prop)) {
         // Key is either Identifier or Literal
-        const name = prop.key.name || prop.key.value;
+        const name = prop.key.name || (raw ? prop.key.raw : prop.key.value);
 
         values.push(name);
       } else if (types.SpreadProperty.check(prop) || types.SpreadElement.check(prop)) {

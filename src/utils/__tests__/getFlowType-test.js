@@ -216,4 +216,87 @@ describe('getFlowType', () => {
 
     expect(getFlowType(typePath)).toEqual({ name: 'string' });
   });
+
+  it('handles typeof types', () => {
+    var typePath = statement(`
+      var x: typeof MyType = {};
+
+      type MyType = { a: string, b: ?xyz };
+    `).get('declarations', 0).get('id').get('typeAnnotation').get('typeAnnotation');
+
+    expect(getFlowType(typePath)).toEqual({name: 'signature', type: 'object', signature: {
+      properties: [
+        { key: 'a', value: { name: 'string', required: true } },
+        { key: 'b', value: { name: 'xyz', nullable: true, required: true } },
+      ],
+    }, raw: '{ a: string, b: ?xyz }'});
+  });
+
+  describe('React types', () => {
+    function test(type, expected) {
+      var typePath = statement(`
+        var x: ${type} = 2;
+
+        type Props = { x: string };
+      `).get('declarations', 0).get('id').get('typeAnnotation').get('typeAnnotation');
+
+      expect(getFlowType(typePath)).toEqual({ ...expected, name: type.replace('.', '').replace(/<.+>/, ''), raw: type });
+    }
+
+    const types = {
+      'React.Node': {},
+      'React.Key': {},
+      'React.ElementType': {},
+      'React.ChildrenArray<string>': { 'elements': [{ 'name': 'string' } ] },
+      'React.Element<any>': { 'elements': [{ 'name': 'any' } ] },
+      'React.Ref<typeof Component>': { 'elements': [{ 'name': 'Component' } ] },
+      'React.ElementProps<Component>': { 'elements': [{ 'name': 'Component' } ] },
+      'React.ElementRef<Component>': { 'elements': [{ 'name': 'Component' } ] },
+      'React.ComponentType<Props>': {
+        'elements': [{
+          'name': 'signature',
+          'raw': '{ x: string }',
+          'signature': {
+            'properties': [{ 'key': 'x', 'value': { 'name': 'string', 'required': true } }],
+          },
+          'type': 'object',
+        }],
+      },
+      'React.StatelessFunctionalComponent<Props2>': { 'elements': [{ 'name': 'Props2' } ] },
+    };
+
+    Object.keys(types).forEach(type => {
+      it(type, () => test(type, types[type]));
+    });
+  });
+
+  it('resolves $Keys to union', () => {
+    var typePath = statement(`
+      var x: $Keys<typeof CONTENTS> = 2;
+      const CONTENTS = {
+        'apple': '🍎',
+        'banana': '🍌',
+      };
+    `).get('declarations', 0).get('id').get('typeAnnotation').get('typeAnnotation');
+
+    expect(getFlowType(typePath)).toEqual({name: 'union', elements: [
+      { name: 'literal', value: "'apple'" },
+      { name: 'literal', value: "'banana'" },
+    ], raw: '$Keys<typeof CONTENTS>'});
+  });
+
+  it('resolves $Keys without typeof to union', () => {
+    var typePath = statement(`
+      var x: $Keys<CONTENTS> = 2;
+      const CONTENTS = {
+        'apple': '🍎',
+        'banana': '🍌',
+      };
+    `).get('declarations', 0).get('id').get('typeAnnotation').get('typeAnnotation');
+
+    expect(getFlowType(typePath)).toEqual({name: 'union', elements: [
+      { name: 'literal', value: "'apple'" },
+      { name: 'literal', value: "'banana'" },
+    ], raw: '$Keys<CONTENTS>'});
+  });
 });
