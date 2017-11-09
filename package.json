@@ -17,14 +17,13 @@
   ],
   "main": "dist/main.js",
   "scripts": {
-    "check": "npm run lint && npm run flow && npm test",
-    "flow": "flow",
-    "lint": "eslint src/",
-    "watch": "babel src/ --out-dir dist/ --watch",
     "build": "rimraf dist/ && babel src/ --out-dir dist/ --ignore __tests__,__mocks__",
-    "prepublish": "npm run build",
-    "preversion": "npm run lint",
-    "test": "jest"
+    "lint": "eslint src/ bin/",
+    "prepublish": "yarn run build",
+    "preversion": "yarn run lint",
+    "test": "jest",
+    "test:ci": "yarn lint && yarn flow && yarn test --runInBand",
+    "watch": "yarn build --watch"
   },
   "keywords": [
     "react",
@@ -42,12 +41,13 @@
     "recast": "^0.12.6"
   },
   "devDependencies": {
-    "babel-cli": "^6.9.0",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
     "babel-eslint": "^7.0.0",
     "babel-jest": "^21.2.0",
-    "babel-plugin-transform-object-rest-spread": "^6.23.0",
-    "babel-plugin-transform-runtime": "^6.9.0",
-    "babel-preset-env": "^1.1.8",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.6.1",
     "babel-preset-flow": "^6.23.0",
     "cross-spawn": "^5.0.0",
     "eslint": "^4.3.0",

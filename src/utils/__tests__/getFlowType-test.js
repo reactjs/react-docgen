@@ -239,7 +239,7 @@ describe('getFlowType', () => {
             'properties': [{ 'key': 'x', 'value': { 'name': 'string', 'required': true } }],
           },
           'type': 'object',
-        }]
+        }],
       },
       'React.StatelessFunctionalComponent<Props2>': { 'elements': [{ 'name': 'Props2' } ] },
     };
