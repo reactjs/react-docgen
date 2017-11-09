@@ -17,14 +17,13 @@
   ],
   "main": "dist/main.js",
   "scripts": {
-    "check": "npm run lint && npm run flow && npm test",
-    "flow": "flow",
-    "lint": "eslint src/",
-    "watch": "babel src/ --out-dir dist/ --watch",
     "build": "rimraf dist/ && babel src/ --out-dir dist/ --ignore __tests__,__mocks__",
-    "prepublish": "npm run build",
-    "preversion": "npm run lint",
-    "test": "jest"
+    "lint": "eslint src/ bin/",
+    "prepublish": "yarn run build",
+    "preversion": "yarn run lint",
+    "test": "jest",
+    "test:ci": "yarn lint && yarn flow && yarn test --runInBand",
+    "watch": "yarn build --watch"
   },
   "keywords": [
     "react",

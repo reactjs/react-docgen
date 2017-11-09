@@ -1,12 +1,13 @@
 {
   "parser": "babel-eslint",
+  "extends": "eslint:recommended",
   "rules": {
-    "comma-dangle": [1, "always-multiline"],
+    "comma-dangle": ["error", "always-multiline"],
     "no-underscore-dangle": 0,
-    "quotes": [2, "single", "avoid-escape"],
+    "quotes": ["error", "single", "avoid-escape"],
     "strict": 0,
-    "no-unused-vars": 2,
-    "no-undef": 2
+    "no-unused-vars": "error",
+    "no-undef": "error"
   },
   "env": {
     "node": true,

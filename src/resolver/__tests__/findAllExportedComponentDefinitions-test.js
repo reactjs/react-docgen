@@ -202,13 +202,13 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(actual.length).toBe(1);
           expect(actual[0].node).toBe(expected.node);
 
-          var parsed = parse(`
+          parsed = parse(`
             var R = require("React");
             var ComponentA = R.createClass({});
             var ComponentB = R.createClass({});
             module.exports = ComponentB;
           `);
-          var actual = findComponents(parsed);
+          actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
         });
@@ -270,13 +270,13 @@ describe('findAllExportedComponentDefinitions', () => {
 
           expect(actual.length).toBe(1);
 
-          var parsed = parse(`
+          parsed = parse(`
             var R = require("React");
             class ComponentA extends R.Component {}
             class ComponentB extends R.Component {}
             module.exports = ComponentB;
           `);
-          var actual = findComponents(parsed);
+          actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
         });
@@ -314,11 +314,11 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(actual.length).toBe(1);
           expect(actual[0].node).toBe(expected.node);
 
-          var parsed = parse(`
+          parsed = parse(`
             var React = require("React");
             export default React.createClass({});
           `);
-          var actual = findComponents(parsed);
+          actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
         });
@@ -337,13 +337,13 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(actual[0].node).toBe(expectedA.node);
           expect(actual[1].node).toBe(expectedB.node);
 
-          var parsed = parse(`
+          parsed = parse(`
             import React, { createElement } from "React"
             var Component = React.createClass({})
             export {Component};
             export default React.createClass({});
           `);
-          var actual = findComponents(parsed);
+          actual = findComponents(parsed);
 
           expect(actual.length).toBe(2);
         });
@@ -374,11 +374,11 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(actual.length).toBe(1);
           expect(actual[0].node).toBe(expected.node);
 
-          var parsed = parse(`
+          parsed = parse(`
             import React from 'React';
             export default class Component extends React.Component {};
           `);
-          var actual = findComponents(parsed);
+          actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
         });
@@ -397,13 +397,13 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(actual[0].node).toBe(expectedA.node);
           expect(actual[1].node).toBe(expectedB.node);
 
-          var parsed = parse(`
+          parsed = parse(`
             import React from 'React';
             var Component = class extends React.Component {};
             export {Component};
             export default class ComponentB extends React.Component{};
           `);
-          var actual = findComponents(parsed);
+          actual = findComponents(parsed);
 
           expect(actual.length).toBe(2);
         });
@@ -436,30 +436,30 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(actual.length).toBe(1);
           expect(actual[0].node).toBe(expected.node);
 
-          var parsed = parse(`
+          parsed = parse(`
             var React = require("React");
             export let Component = React.createClass({}), somethingElse = 42;
           `);
-          var actual = findComponents(parsed);
+          actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
 
-          var parsed = parse(`
+          parsed = parse(`
             var React = require("React");
             export const something = 21,
              Component = React.createClass({}),
              somethingElse = 42;
           `);
-          var actual = findComponents(parsed);
+          actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
 
-          var parsed = parse(`
+          parsed = parse(`
             var React = require("React");
             export var somethingElse = function() {};
             export let Component = React.createClass({});
           `);
-          var actual = findComponents(parsed);
+          actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
         });
@@ -474,13 +474,13 @@ describe('findAllExportedComponentDefinitions', () => {
 
           expect(actual.length).toBe(2);
 
-          var parsed = parse(`
+          parsed = parse(`
             var R = require("React");
             export var ComponentA = R.createClass({});
             var ComponentB = R.createClass({});
             export {ComponentB};
           `);
-          var actual = findComponents(parsed);
+          actual = findComponents(parsed);
 
           expect(actual.length).toBe(2);
         });
@@ -511,33 +511,33 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(actual.length).toBe(1);
           expect(actual[0].node).toBe(expected.node);
 
-          var parsed = parse(`
+          parsed = parse(`
             import React from 'React';
             export let Component = class extends React.Component {},
               somethingElse = 42;
           `);
-          var actual = findComponents(parsed);
+          actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
           expect(actual[0].node.type).toBe('ClassExpression');
 
-          var parsed = parse(`
+          parsed = parse(`
             import React from 'React';
             export const something = 21,
               Component = class extends React.Component {},
               somethingElse = 42;
           `);
-          var actual = findComponents(parsed);
+          actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
           expect(actual[0].node.type).toBe('ClassExpression');
 
-          var parsed = parse(`
+          parsed = parse(`
             import React from 'React';
             export var somethingElse = function() {};
             export let Component  = class extends React.Component {};
           `);
-          var actual = findComponents(parsed);
+          actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
           expect(actual[0].node.type).toBe('ClassExpression');
@@ -553,13 +553,13 @@ describe('findAllExportedComponentDefinitions', () => {
 
           expect(actual.length).toBe(2);
 
-          var parsed = parse(`
+          parsed = parse(`
             import React from 'React';
             export var ComponentA = class extends React.Component {};
             var ComponentB  = class extends React.Component {};
             export {ComponentB};
           `);
-          var actual = findComponents(parsed);
+          actual = findComponents(parsed);
 
           expect(actual.length).toBe(2);
         });
@@ -590,33 +590,33 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(actual.length).toBe(1);
           expect(actual[0].node.type).toBe('ArrowFunctionExpression');
 
-          var parsed = parse(`
+          parsed = parse(`
             import React from 'React';
             export let Component = () => <div />,
               somethingElse = 42;
           `);
-          var actual = findComponents(parsed);
+          actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
           expect(actual[0].node.type).toBe('ArrowFunctionExpression');
 
-          var parsed = parse(`
+          parsed = parse(`
             import React from 'React';
             export const something = 21,
               Component = () => <div />,
               somethingElse = 42;
           `);
-          var actual = findComponents(parsed);
+          actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
           expect(actual[0].node.type).toBe('ArrowFunctionExpression');
 
-          var parsed = parse(`
+          parsed = parse(`
             import React from 'React';
             export var somethingElse = function() {};
             export let Component = () => <div />
           `);
-          var actual = findComponents(parsed);
+          actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
           expect(actual[0].node.type).toBe('ArrowFunctionExpression');
@@ -632,13 +632,13 @@ describe('findAllExportedComponentDefinitions', () => {
 
           expect(actual.length).toBe(2);
 
-          var parsed = parse(`
+          parsed = parse(`
             import React from 'React';
             export var ComponentA = () => <div />
             var ComponentB  = () => <div />
             export {ComponentB};
           `);
-          var actual = findComponents(parsed);
+          actual = findComponents(parsed);
 
           expect(actual.length).toBe(2);
         });
@@ -674,24 +674,24 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(actual.length).toBe(1);
           expect(actual[0].node).toBe(expected.node);
 
-          var parsed = parse(`
+          parsed = parse(`
             import React from "React"
             var React = require("React");
             var Component = React.createClass({});
             export {Component, foo}
           `);
-          var actual = findComponents(parsed);
+          actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
 
-          var parsed = parse(`
+          parsed = parse(`
             import React, { createElement } from "React"
             var foo = 42;
             var baz = 21;
             var Component = React.createClass({});
             export {foo, Component as bar, baz}
           `);
-          var actual = findComponents(parsed);
+          actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
         });
@@ -758,25 +758,25 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(actual.length).toBe(1);
           expect(actual[0].node.type).toBe('ClassExpression');
 
-          var parsed = parse(`
+          parsed = parse(`
             import React from 'React';
             var foo = 42;
             var Component = class extends React.Component {};
             export {Component, foo};
           `);
-          var actual = findComponents(parsed);
+          actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
           expect(actual[0].node.type).toBe('ClassExpression');
 
-          var parsed = parse(`
+          parsed = parse(`
             import React from 'React';
             var foo = 42;
             var baz = 21;
             var Component = class extends React.Component {};
             export {foo, Component as bar, baz};
           `);
-          var actual = findComponents(parsed);
+          actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
           expect(actual[0].node.type).toBe('ClassExpression');
@@ -849,25 +849,25 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(actual.length).toBe(1);
           expect(actual[0].node.type).toBe('FunctionDeclaration');
 
-          var parsed = parse(`
+          parsed = parse(`
             import React from 'React';
             var foo = 42;
             var Component = () => <div />;
             export {Component, foo};
           `);
-          var actual = findComponents(parsed);
+          actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
           expect(actual[0].node.type).toBe('ArrowFunctionExpression');
 
-          var parsed = parse(`
+          parsed = parse(`
             import React from 'React';
             var foo = 42;
             var baz = 21;
             var Component = function () { return <div />; }
             export {foo, Component as bar, baz};
           `);
-          var actual = findComponents(parsed);
+          actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
           expect(actual[0].node.type).toBe('FunctionExpression');
