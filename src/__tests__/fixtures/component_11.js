@@ -35,6 +35,11 @@ export type Props = {
    */
   elevation: number,
   /**
+   * Useful to customize the rows per page label. Invoked with a `{ from, to, count, page }`
+   * object.
+   */
+  labelRowsPerPage: Node,
+  /**
    * Transition component.
    */
   transition: ComponentType<*>,
@@ -42,6 +47,7 @@ export type Props = {
 
 class Paper extends React.Component<ProvidedProps & Props> {
   static defaultProps = {
+    labelRowsPerPage: ('Rows per page:': Node),
     component: ('div': ElementType),
     elevation: 2,
   };

@@ -306,6 +306,18 @@ It's accepting values between 0 and 24 inclusive.",
       },
       "required": false,
     },
+    "labelRowsPerPage": Object {
+      "defaultValue": Object {
+        "computed": false,
+        "value": "'Rows per page:'",
+      },
+      "description": "Useful to customize the rows per page label. Invoked with a \`{ from, to, count, page }\`
+object.",
+      "flowType": Object {
+        "name": "Node",
+      },
+      "required": false,
+    },
     "transition": Object {
       "description": "Transition component.",
       "flowType": Object {
