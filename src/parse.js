@@ -14,6 +14,7 @@ import Documentation from './Documentation';
 
 import babylon from './babylon';
 import recast from 'recast';
+import postProcessDocumentation from './utils/postProcessDocumentation';
 
 var ERROR_MISSING_DEFINITION = 'No suitable component definition found.';
 
@@ -21,7 +22,7 @@ function executeHandlers(handlers, componentDefinitions) {
   return componentDefinitions.map(componentDefinition => {
     var documentation = new Documentation();
     handlers.forEach(handler => handler(documentation, componentDefinition));
-    return documentation.toObject();
+    return postProcessDocumentation(documentation.toObject());
   });
 }
 
