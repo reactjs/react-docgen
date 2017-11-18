@@ -10,6 +10,13 @@
  *
  */
 
+export type DocumentationObject = {
+  props?: Object,
+  context?: Object,
+  childContext?: Object,
+  composes?: Array<string>,
+};
+
 class Documentation {
   _props: Object;
   _context: Object;
@@ -61,8 +68,8 @@ class Documentation {
     return propDescriptor;
   }
 
-  toObject(): Object {
-    const obj = {};
+  toObject(): DocumentationObject {
+    const obj: DocumentationObject = {};
 
     for (const [key, value] of this._data) {
       obj[key] = value;

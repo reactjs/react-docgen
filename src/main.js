@@ -15,6 +15,7 @@ import parse from './parse';
 import * as AllResolver from './resolver';
 import * as utils from './utils';
 import type { Options } from './babelParser';
+import type { DocumentationObject } from './Documentation';
 
 const defaultResolver = AllResolver.findExportedComponentDefinition;
 const defaultHandlers = [
@@ -48,7 +49,7 @@ function defaultParse(
   resolver?: ?Resolver,
   handlers?: ?Array<Handler>,
   options?: Options = {},
-): Array<Object> | Object {
+): Array<DocumentationObject> | DocumentationObject {
   if (!resolver) {
     resolver = defaultResolver;
   }

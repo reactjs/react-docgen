@@ -334,26 +334,197 @@ Object {
 exports[`main fixtures processes component "component_12.js" without errors 1`] = `
 Object {
   "description": "",
-  "displayName": "Foo",
+  "displayName": "Paper",
   "methods": Array [],
   "props": Object {
-    "prop1": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "string",
-      },
-      "required": true,
-    },
-    "prop2": Object {
+    "anchorOrigin": Object {
       "defaultValue": Object {
         "computed": false,
-        "value": "'bar'",
+        "value": "{
+  vertical: 'top',
+  horizontal: 'left',
+}",
       },
-      "description": "",
+      "description": "This is the point on the anchor where the popover's
+\`anchorEl\` will attach to. This is not used when the
+anchorReference is 'anchorPosition'.
+
+Options:
+vertical: [top, center, bottom];
+horizontal: [left, center, right].",
       "flowType": Object {
-        "name": "string",
+        "name": "signature",
+        "raw": "{
+  horizontal: 'left' | 'center' | 'right' | number,
+  vertical: 'top' | 'center' | 'bottom' | number,
+}",
+        "signature": Object {
+          "properties": Array [
+            Object {
+              "key": "horizontal",
+              "value": Object {
+                "elements": Array [
+                  Object {
+                    "name": "literal",
+                    "value": "'left'",
+                  },
+                  Object {
+                    "name": "literal",
+                    "value": "'center'",
+                  },
+                  Object {
+                    "name": "literal",
+                    "value": "'right'",
+                  },
+                  Object {
+                    "name": "number",
+                  },
+                ],
+                "name": "union",
+                "raw": "'left' | 'center' | 'right' | number",
+                "required": true,
+              },
+            },
+            Object {
+              "key": "vertical",
+              "value": Object {
+                "elements": Array [
+                  Object {
+                    "name": "literal",
+                    "value": "'top'",
+                  },
+                  Object {
+                    "name": "literal",
+                    "value": "'center'",
+                  },
+                  Object {
+                    "name": "literal",
+                    "value": "'bottom'",
+                  },
+                  Object {
+                    "name": "number",
+                  },
+                ],
+                "name": "union",
+                "raw": "'top' | 'center' | 'bottom' | number",
+                "required": true,
+              },
+            },
+          ],
+        },
+        "type": "object",
       },
       "required": false,
+    },
+    "children": Object {
+      "description": "@ignore",
+      "flowType": Object {
+        "name": "Node",
+      },
+      "required": false,
+    },
+    "classes": Object {
+      "description": "Useful to extend the style applied to components.",
+      "flowType": Object {
+        "name": "Object",
+      },
+      "required": false,
+    },
+    "component": Object {
+      "defaultValue": Object {
+        "computed": false,
+        "value": "'div'",
+      },
+      "description": "The component used for the root node.
+This currently has to be flow cast in defaultProps as of flow 0.59.0",
+      "flowType": Object {
+        "name": "ElementType",
+      },
+      "required": false,
+    },
+    "elevation": Object {
+      "defaultValue": Object {
+        "computed": false,
+        "value": "2",
+      },
+      "description": "Shadow depth, corresponds to \`dp\` in the spec.
+It's accepting values between 0 and 24 inclusive.",
+      "flowType": Object {
+        "name": "number",
+      },
+      "required": false,
+    },
+    "labelRowsPerPage": Object {
+      "defaultValue": Object {
+        "computed": false,
+        "value": "'Rows per page:'",
+      },
+      "description": "Useful to customize the rows per page label. Invoked with a \`{ from, to, count, page }\`
+object.",
+      "flowType": Object {
+        "name": "Node",
+      },
+      "required": false,
+    },
+    "timeout": Object {
+      "defaultValue": Object {
+        "computed": false,
+        "value": "300",
+      },
+      "description": "The duration for the transition, in milliseconds.
+You may specify a single timeout for all transitions, or individually with an object.
+
+Set to 'auto' to automatically calculate transition time based on height.",
+      "flowType": Object {
+        "elements": Array [
+          Object {
+            "name": "number",
+          },
+          Object {
+            "name": "signature",
+            "raw": "{ enter?: number, exit?: number }",
+            "signature": Object {
+              "properties": Array [
+                Object {
+                  "key": "enter",
+                  "value": Object {
+                    "name": "number",
+                    "required": false,
+                  },
+                },
+                Object {
+                  "key": "exit",
+                  "value": Object {
+                    "name": "number",
+                    "required": false,
+                  },
+                },
+              ],
+            },
+            "type": "object",
+          },
+          Object {
+            "name": "literal",
+            "value": "'auto'",
+          },
+        ],
+        "name": "union",
+        "raw": "number | { enter?: number, exit?: number } | 'auto'",
+      },
+      "required": false,
+    },
+    "transition": Object {
+      "description": "Transition component.",
+      "flowType": Object {
+        "elements": Array [
+          Object {
+            "name": "unknown",
+          },
+        ],
+        "name": "ComponentType",
+        "raw": "ComponentType<*>",
+      },
+      "required": true,
     },
   },
 }

@@ -6,7 +6,10 @@
  * LICENSE file in the root directory of this source tree. An additional grant
  * of patent rights can be found in the PATENTS file in the same directory.
  *
+ * @flow
  */
+
+import type { DocumentationObject } from '../Documentation';
 
 function postProcessProps(props) {
   // props with default values should not be required
@@ -19,7 +22,7 @@ function postProcessProps(props) {
   });
 }
 
-export default function(documentation) {
+export default function(documentation: DocumentationObject) {
   const props = documentation.props;
 
   if (props) {

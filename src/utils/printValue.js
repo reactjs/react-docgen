@@ -19,5 +19,6 @@ export default function printValue(path: NodePath): string {
   if (path.node.comments) {
     path.node.comments.length = 0;
   }
+
   return recast.print(path).code;
 }

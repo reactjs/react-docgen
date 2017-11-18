@@ -7,10 +7,9 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  *
  * @flow
- *
  */
 
-import Documentation from './Documentation';
+import Documentation, { type DocumentationObject } from './Documentation';
 import postProcessDocumentation from './utils/postProcessDocumentation';
 
 import buildParser, { type Options } from './babelParser';
@@ -18,12 +17,17 @@ import recast from 'recast';
 
 const ERROR_MISSING_DEFINITION = 'No suitable component definition found.';
 
-function executeHandlers(handlers, componentDefinitions) {
-  return componentDefinitions.map(componentDefinition => {
-    const documentation = new Documentation();
-    handlers.forEach(handler => handler(documentation, componentDefinition));
-    return postProcessDocumentation(documentation.toObject());
-  });
+function executeHandlers(
+  handlers: Array<Handler>,
+  componentDefinitions: Array<NodePath>,
+): Array<DocumentationObject> {
+  return componentDefinitions.map(
+    (componentDefinition): DocumentationObject => {
+      const documentation = new Documentation();
+      handlers.forEach(handler => handler(documentation, componentDefinition));
+      return postProcessDocumentation(documentation.toObject());
+    },
+  );
 }
 
 /**
@@ -51,7 +55,7 @@ export default function parse(
   resolver: Resolver,
   handlers: Array<Handler>,
   options: Options,
-): Array<Object> | Object {
+): Array<DocumentationObject> | DocumentationObject {
   const ast = recast.parse(src, { parser: buildParser(options) });
   const componentDefinitions = resolver(ast.program, recast);
 
