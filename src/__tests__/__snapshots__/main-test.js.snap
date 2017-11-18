@@ -285,7 +285,7 @@ Object {
     "component": Object {
       "defaultValue": Object {
         "computed": false,
-        "value": "'div': ElementType",
+        "value": "'div'",
       },
       "description": "The component used for the root node.
 This currently has to be flow cast in defaultProps as of flow 0.59.0",
