@@ -9,8 +9,6 @@
  * @flow
  */
 
-import Documentation from '../Documentation';
-
 function postProcessProps(props) {
   // props with default values should not be required
   Object.keys(props).forEach(prop => {
@@ -18,6 +16,11 @@ function postProcessProps(props) {
 
     if (propInfo.defaultValue) {
       propInfo.required = false;
+
+      // check and remove any flow type cast
+      propInfo.defaultValue.value = propInfo.defaultValue.value.includes(':') ?
+        propInfo.defaultValue.value.split(':')[0] :
+        propInfo.defaultValue.value
     }
   });
 }
