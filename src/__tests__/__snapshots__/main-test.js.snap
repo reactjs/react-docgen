@@ -38,6 +38,7 @@ Object {
         "computed": false,
         "value": "\\"primary\\"",
       },
+      "required": false,
     },
   },
 }
@@ -256,6 +257,67 @@ Object {
       "type": Object {
         "name": "string",
       },
+    },
+  },
+}
+`;
+
+exports[`main fixtures processes component "component_11.js" without errors 1`] = `
+Object {
+  "description": "",
+  "displayName": "Paper",
+  "methods": Array [],
+  "props": Object {
+    "children": Object {
+      "description": "@ignore",
+      "flowType": Object {
+        "name": "Node",
+      },
+      "required": false,
+    },
+    "classes": Object {
+      "description": "Useful to extend the style applied to components.",
+      "flowType": Object {
+        "name": "Object",
+      },
+      "required": false,
+    },
+    "component": Object {
+      "defaultValue": Object {
+        "computed": false,
+        "value": "'div': ElementType",
+      },
+      "description": "The component used for the root node.
+This currently has to be flow cast in defaultProps as of flow 0.59.0",
+      "flowType": Object {
+        "name": "ElementType",
+      },
+      "required": false,
+    },
+    "elevation": Object {
+      "defaultValue": Object {
+        "computed": false,
+        "value": "2",
+      },
+      "description": "Shadow depth, corresponds to \`dp\` in the spec.
+It's accepting values between 0 and 24 inclusive.",
+      "flowType": Object {
+        "name": "number",
+      },
+      "required": false,
+    },
+    "transition": Object {
+      "description": "Transition component.",
+      "flowType": Object {
+        "elements": Array [
+          Object {
+            "name": "unknown",
+          },
+        ],
+        "name": "ComponentType",
+        "raw": "ComponentType<*>",
+      },
+      "required": true,
     },
   },
 }
