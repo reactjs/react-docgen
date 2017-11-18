@@ -24,6 +24,10 @@ var {types: {namedTypes: types}} = recast;
 
 function getDefaultValue(path: NodePath) {
   var node = path.node;
+  if(types.TypeCastExpression.check(node)) {
+    node = node.expression;
+  }
+
   var defaultValue;
   if (types.Literal.check(node)) {
     defaultValue = node.raw;

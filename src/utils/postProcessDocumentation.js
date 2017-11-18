@@ -16,11 +16,6 @@ function postProcessProps(props) {
 
     if (propInfo.defaultValue) {
       propInfo.required = false;
-
-      // Check and remove any flow type cast.  Use last `:` in case description has `:` in it.
-      propInfo.defaultValue.value = propInfo.defaultValue.value.includes(':') ?
-        propInfo.defaultValue.value.slice(0, propInfo.defaultValue.value.lastIndexOf(':')) :
-        propInfo.defaultValue.value
     }
   });
 }

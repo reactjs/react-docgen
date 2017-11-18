@@ -268,6 +268,85 @@ Object {
   "displayName": "Paper",
   "methods": Array [],
   "props": Object {
+    "anchorOrigin": Object {
+      "defaultValue": Object {
+        "computed": false,
+        "value": "{
+  vertical: 'top',
+  horizontal: 'left',
+}",
+      },
+      "description": "This is the point on the anchor where the popover's
+\`anchorEl\` will attach to. This is not used when the
+anchorReference is 'anchorPosition'.
+
+Options:
+vertical: [top, center, bottom];
+horizontal: [left, center, right].",
+      "flowType": Object {
+        "name": "signature",
+        "raw": "{
+  horizontal: 'left' | 'center' | 'right' | number,
+  vertical: 'top' | 'center' | 'bottom' | number,
+}",
+        "signature": Object {
+          "properties": Array [
+            Object {
+              "key": "horizontal",
+              "value": Object {
+                "elements": Array [
+                  Object {
+                    "name": "literal",
+                    "value": "'left'",
+                  },
+                  Object {
+                    "name": "literal",
+                    "value": "'center'",
+                  },
+                  Object {
+                    "name": "literal",
+                    "value": "'right'",
+                  },
+                  Object {
+                    "name": "number",
+                  },
+                ],
+                "name": "union",
+                "raw": "'left' | 'center' | 'right' | number",
+                "required": true,
+              },
+            },
+            Object {
+              "key": "vertical",
+              "value": Object {
+                "elements": Array [
+                  Object {
+                    "name": "literal",
+                    "value": "'top'",
+                  },
+                  Object {
+                    "name": "literal",
+                    "value": "'center'",
+                  },
+                  Object {
+                    "name": "literal",
+                    "value": "'bottom'",
+                  },
+                  Object {
+                    "name": "number",
+                  },
+                ],
+                "name": "union",
+                "raw": "'top' | 'center' | 'bottom' | number",
+                "required": true,
+              },
+            },
+          ],
+        },
+        "type": "object",
+      },
+      "required": false,
+    },
     "children": Object {
       "description": "@ignore",
       "flowType": Object {
