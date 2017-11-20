@@ -16,6 +16,12 @@ export type Origin = {
   vertical: 'top' | 'center' | 'bottom' | number,
 };
 
+export const duration = {
+  standard: 300,
+};
+
+export type TransitionDuration = number | { enter?: number, exit?: number } | 'auto';
+
 export type Props = {
   /**
    * Other base element props.
@@ -58,18 +64,27 @@ export type Props = {
    * Transition component.
    */
   transition: ComponentType<*>,
+  /**
+   * The duration for the transition, in milliseconds.
+   * You may specify a single timeout for all transitions, or individually with an object.
+   *
+   * Set to 'auto' to automatically calculate transition time based on height.
+   */
+  timeout: TransitionDuration,
 };
 
 class Paper extends React.Component<ProvidedProps & Props> {
   static defaultProps = {
-    anchorOrigin: {
+    anchorOrigin: ({
       vertical: 'top',
       horizontal: 'left',
-    },
+    }: Origin),
     labelRowsPerPage: ('Rows per page:': Node),
     component: ('div': ElementType),
     component: 'div',
     elevation: 2,
+    timeout: (duration.standard: TransitionDuration),
+    //timeout: duration.standard,
   };
 
   render() {
