@@ -12,6 +12,8 @@
 
 import recast from 'recast';
 
+var {types: {namedTypes: types}} = recast;
+
 /**
  * Prints the given path without leading or trailing comments.
  */
@@ -19,5 +21,10 @@ export default function printValue(path: NodePath): string {
   if (path.node.comments) {
     path.node.comments.length = 0;
   }
-  return recast.print(path).code;
+
+  if(types.TypeCastExpression.check(path.node)) {
+    return recast.print(path.node.expression).code
+  } else {
+    return recast.print(path).code;
+  }
 }
