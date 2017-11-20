@@ -272,8 +272,8 @@ Object {
       "defaultValue": Object {
         "computed": false,
         "value": "{
-  vertical: 'top',
-  horizontal: 'left',
+ vertical: 'top',
+ horizontal: 'left'
 }",
       },
       "description": "This is the point on the anchor where the popover's
@@ -394,6 +394,53 @@ It's accepting values between 0 and 24 inclusive.",
 object.",
       "flowType": Object {
         "name": "Node",
+      },
+      "required": false,
+    },
+    "timeout": Object {
+      "defaultValue": Object {
+        "computed": false,
+        "value": "duration.standard",
+      },
+      "description": "The duration for the transition, in milliseconds.
+You may specify a single timeout for all transitions, or individually with an object.
+
+Set to 'auto' to automatically calculate transition time based on height.",
+      "flowType": Object {
+        "elements": Array [
+          Object {
+            "name": "number",
+          },
+          Object {
+            "name": "signature",
+            "raw": "{ enter?: number, exit?: number }",
+            "signature": Object {
+              "properties": Array [
+                Object {
+                  "key": "enter",
+                  "value": Object {
+                    "name": "number",
+                    "required": false,
+                  },
+                },
+                Object {
+                  "key": "exit",
+                  "value": Object {
+                    "name": "number",
+                    "required": false,
+                  },
+                },
+              ],
+            },
+            "type": "object",
+          },
+          Object {
+            "name": "literal",
+            "value": "'auto'",
+          },
+        ],
+        "name": "union",
+        "raw": "number | { enter?: number, exit?: number } | 'auto'",
       },
       "required": false,
     },
