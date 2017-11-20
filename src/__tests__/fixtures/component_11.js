@@ -84,7 +84,6 @@ class Paper extends React.Component<ProvidedProps & Props> {
     component: 'div',
     elevation: 2,
     timeout: (duration.standard: TransitionDuration),
-    //timeout: duration.standard,
   };
 
   render() {
