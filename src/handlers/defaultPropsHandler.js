@@ -24,20 +24,16 @@ var {types: {namedTypes: types}} = recast;
 
 function getDefaultValue(path: NodePath) {
   var node = path.node;
-  if(types.TypeCastExpression.check(node)) {
-    node = node.expression;
-  }
-
   var defaultValue;
   if (types.Literal.check(node)) {
     defaultValue = node.raw;
   } else {
-    if (types.AssignmentPattern.check(path.node)) {
+    if (types.AssignmentPattern.check(node)) {
       path = resolveToValue(path.get('right'));
     } else {
       path = resolveToValue(path);
     }
-    if (types.ImportDeclaration.check(path.node)) {
+    if (types.ImportDeclaration.check(node)) {
       defaultValue = node.name;
     } else {
       node = path.node;
