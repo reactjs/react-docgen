@@ -28,12 +28,12 @@ function getDefaultValue(path: NodePath) {
   if (types.Literal.check(node)) {
     defaultValue = node.raw;
   } else {
-    if (types.AssignmentPattern.check(node)) {
+    if (types.AssignmentPattern.check(path.node)) {
       path = resolveToValue(path.get('right'));
     } else {
       path = resolveToValue(path);
     }
-    if (types.ImportDeclaration.check(node)) {
+    if (types.ImportDeclaration.check(path.node)) {
       defaultValue = node.name;
     } else {
       node = path.node;
