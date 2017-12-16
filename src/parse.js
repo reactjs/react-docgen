@@ -50,7 +50,11 @@ export default function parse(
   resolver: Resolver,
   handlers: Array<Handler>
 ): Array<Object>|Object {
-  var ast = recast.parse(src, {esprima: babylon});
+  let ast = babylon.parse(src, {
+   sourceType: 'module'
+  });
+  ast._docgenOriginalFileSource = src;
+  ast = recast.types.builders.file(ast, null);
   var componentDefinitions = resolver(ast.program, recast);
 
   if (Array.isArray(componentDefinitions)) {
