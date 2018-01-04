@@ -215,9 +215,9 @@ assert-plus@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/assert-plus/-/assert-plus-0.2.0.tgz#d74e1b87e7affc0db8aadb7021f3fe48101ab234"
 
-ast-types@0.9.14:
-  version "0.9.14"
-  resolved "https://registry.yarnpkg.com/ast-types/-/ast-types-0.9.14.tgz#d34ba5dffb9d15a44351fd2a9d82e4ab2838b5ba"
+ast-types@0.10.1:
+  version "0.10.1"
+  resolved "https://registry.yarnpkg.com/ast-types/-/ast-types-0.10.1.tgz#f52fca9715579a14f841d67d7f8d25432ab6a3dd"
 
 astral-regex@^1.0.0:
   version "1.0.0"
@@ -1045,7 +1045,7 @@ convert-source-map@^1.4.0, convert-source-map@^1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/convert-source-map/-/convert-source-map-1.5.0.tgz#9acd70851c6d5dfdd93d9282e5edf94a03ff46b5"
 
-core-js@^2.4.0, core-js@^2.4.1, core-js@^2.5.0:
+core-js@^2.4.0, core-js@^2.5.0:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.5.1.tgz#ae6874dc66937789b80754ff5428df66819ca50b"
 
@@ -2793,12 +2793,11 @@ readdirp@^2.0.0:
     readable-stream "^2.0.2"
     set-immediate-shim "^1.0.1"
 
-recast@^0.12.6:
-  version "0.12.8"
-  resolved "https://registry.yarnpkg.com/recast/-/recast-0.12.8.tgz#bb5dc9501dfa0cd075686e1daf9d67797cc5499f"
+recast@^0.13.0:
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/recast/-/recast-0.13.0.tgz#a343a394a37d24668d700f88ed04b8d2c314d40d"
   dependencies:
-    ast-types "0.9.14"
-    core-js "^2.4.1"
+    ast-types "0.10.1"
     esprima "~4.0.0"
     private "~0.1.5"
     source-map "~0.6.1"
