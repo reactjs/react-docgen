@@ -260,3 +260,27 @@ Object {
   },
 }
 `;
+
+exports[`main fixtures processes component "component_11.js" without errors 1`] = `
+Object {
+  "description": "",
+  "displayName": "MyComponent",
+  "methods": Array [],
+  "props": Object {
+    "prop1": Object {
+      "description": "The first prop",
+      "flowType": Object {
+        "name": "string",
+      },
+      "required": true,
+    },
+    "prop2": Object {
+      "description": "The second, covariant prop",
+      "flowType": Object {
+        "name": "number",
+      },
+      "required": true,
+    },
+  },
+}
+`;
