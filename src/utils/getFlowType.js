@@ -111,7 +111,7 @@ function handleObjectTypeAnnotation(path: NodePath) {
     name: 'signature',
     type: 'object',
     raw: printValue(path),
-    signature: { properties: [] },
+    signature: { inheritedProperties: [], properties: [] },
   };
 
   path.get('callProperties').each(param => {
@@ -126,11 +126,27 @@ function handleObjectTypeAnnotation(path: NodePath) {
   });
 
   path.get('properties').each(param => {
-    type.signature.properties.push({
+    const isObjectTypeSpread = types.ObjectTypeSpreadProperty.check(param.node);
+    if (isObjectTypeSpread) {
+      const propertyType = {
+        name: getPropertyName(param),
+        value: getFlowType(param.get('argument')),
+      };
+
+      type.signature.inheritedProperties.push(propertyType);
+    } else {
+      const propertyType = {
         key: getPropertyName(param),
         value: getFlowTypeWithRequirements(param.get('value')),
-    });
+      };
+
+      type.signature.properties.push(propertyType);
+    }
   });
+
+  if (type.signature.inheritedProperties.length === 0) {
+    delete type.signature.inheritedProperties;
+  }
 
   return type;
 }
@@ -216,7 +232,6 @@ function handleQualifiedTypeIdentifier(path: NodePath) {
 export default function getFlowType(path: NodePath): FlowTypeDescriptor {
   const node = path.node;
   let type: ?FlowTypeDescriptor;
-
   if (types.Type.check(node)) {
     if (node.type in flowTypes) {
       type = { name: flowTypes[node.type] };

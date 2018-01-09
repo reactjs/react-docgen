@@ -232,6 +232,39 @@ describe('getFlowType', () => {
     }, raw: '{ a: string, b: ?xyz }'});
   });
 
+  it('handles ObjectTypeSpreadProperty', () => {
+    var typePath = statement(`
+      var x: { ...OtherProps, ...MyType, a: string };
+
+      type MyType = { myString: string };
+    `).get('declarations', 0).get('id').get('typeAnnotation').get('typeAnnotation');
+
+    expect(getFlowType(typePath)).toEqual({
+      name: 'signature',
+      type: 'object',
+      signature: {
+        inheritedProperties: [
+          { name: 'OtherProps', value: { name: 'OtherProps' } },
+          { name: 'MyType',
+            value: {
+              name: 'signature',
+              type: 'object',
+              signature: {
+                properties: [
+                  { key: 'myString', value: { name: 'string', required: true } },
+                ],
+              },
+              raw: '{ myString: string }',
+            },
+          },
+        ],
+        properties: [
+          { key: 'a', value: { name: 'string', required: true } },
+        ],
+      },
+      raw: '{ ...OtherProps, ...MyType, a: string }'});
+  });
+
   describe('React types', () => {
     function test(type, expected) {
       var typePath = statement(`

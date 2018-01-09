@@ -40,6 +40,6 @@ export default function flowTypeHandler(documentation: Documentation, path: Node
   }
 
   applyToFlowTypeProperties(flowTypesPath, propertyPath => {
-      setPropDescriptor(documentation, propertyPath)
+    setPropDescriptor(documentation, propertyPath)
   });
 }
