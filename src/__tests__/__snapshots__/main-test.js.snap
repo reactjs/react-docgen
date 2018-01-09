@@ -267,6 +267,35 @@ Object {
   "displayName": "MyComponent",
   "methods": Array [],
   "props": Object {
+    "OtherComponentProps": Object {
+      "description": "Spread props from another file",
+      "flowType": Object {
+        "name": "OtherComponentProps",
+      },
+      "inherited": true,
+    },
+    "OtherLocalProps": Object {
+      "description": "Spread props defined locally",
+      "flowType": Object {
+        "name": "signature",
+        "raw": "{|
+  fooProp: string,
+|}",
+        "signature": Object {
+          "properties": Array [
+            Object {
+              "key": "fooProp",
+              "value": Object {
+                "name": "string",
+                "required": true,
+              },
+            },
+          ],
+        },
+        "type": "object",
+      },
+      "inherited": true,
+    },
     "prop1": Object {
       "description": "The first prop",
       "flowType": Object {

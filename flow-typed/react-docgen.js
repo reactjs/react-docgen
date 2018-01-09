@@ -50,6 +50,7 @@ type PropDescriptor = {
   required?: boolean,
   defaultValue?: any,
   description?: string,
+  inherited?: boolean, // Used for ObjectTypeSpreadProperty
 };
 
 type Handler = (documentation: Documentation, path: NodePath) => void;

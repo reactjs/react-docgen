@@ -9,6 +9,7 @@
  * @flow
  *
  */
+import recast from 'recast';
 
 import type Documentation from '../Documentation';
 
@@ -18,12 +19,21 @@ import getFlowTypeFromReactComponent, {
   applyToFlowTypeProperties,
 }  from '../utils/getFlowTypeFromReactComponent';
 
+const {types: {namedTypes: types}} = recast;
 function setPropDescriptor(documentation: Documentation, path: NodePath): void {
-  const propDescriptor = documentation.getPropDescriptor(getPropertyName(path));
-  const type = getFlowType(path.get('value'));
+  let propDescriptor = documentation.getPropDescriptor(getPropertyName(path));
+  let type;
+
+  if (types.ObjectTypeSpreadProperty.check(path.node)) {
+    type = getFlowType(path.get('argument'));
+    propDescriptor.inherited = true;
+  } else if (types.ObjectTypeProperty.check(path.node)) {
+    type = getFlowType(path.get('value'));
+    propDescriptor.required = !path.node.optional;
+  }
+
   if (type) {
     propDescriptor.flowType = type;
-    propDescriptor.required = !path.node.optional;
   }
 }
 

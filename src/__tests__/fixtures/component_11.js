@@ -14,7 +14,23 @@
 
 import React from 'react';
 
+import { OtherComponentProps } from 'NonExistentFile';
+
+type OtherLocalProps = {|
+  fooProp: string,
+|}
+
 type Props = {|
+  /**
+   * Spread props defined locally
+   */
+  ...OtherLocalProps,
+
+  /**
+   * Spread props from another file
+   */
+  ...OtherComponentProps,
+
   /**
    * The first prop
    */
