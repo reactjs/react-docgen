@@ -17,6 +17,9 @@ import React from 'react';
 import { OtherComponentProps as OtherProps } from 'NonExistentFile';
 
 type OtherLocalProps = {|
+   /**
+   * fooProp is spread in from a locally resolved type
+   */
   fooProp?: string,
 |}
 

@@ -19,30 +19,32 @@ import getPropertyName from '../utils/getPropertyName';
 import getFlowTypeFromReactComponent, {
   applyToFlowTypeProperties,
 }  from '../utils/getFlowTypeFromReactComponent';
+import resolveToValue from '../utils/resolveToValue';
 
 const {types: {namedTypes: types}} = recast;
 function setPropDescriptor(documentation: Documentation, path: NodePath): void {
-  let propDescriptor = documentation.getPropDescriptor(getPropertyName(path));
-  let type;
-
   if (types.ObjectTypeSpreadProperty.check(path.node)) {
-    type = getFlowType(path.get('argument'));
-    if (type.signature) {
-      propDescriptor.required = !path.node.optional;
+    const name = path.get('argument').get('id').get('name');
+    const resolvedPath = resolveToValue(name);
+
+    if (resolvedPath && types.TypeAlias.check(resolvedPath.node)) {
+      const right = resolvedPath.get('right');
+      applyToFlowTypeProperties(right, propertyPath => {
+        setPropDescriptor(documentation, propertyPath)
+      });
     } else {
-      documentation.addComposes(type.name);
-      return;
+      documentation.addComposes(name.value);
     }
   } else if (types.ObjectTypeProperty.check(path.node)) {
-    type = getFlowType(path.get('value'));
+    let type = getFlowType(path.get('value'));
+    let propDescriptor = documentation.getPropDescriptor(getPropertyName(path));
     propDescriptor.required = !path.node.optional;
-  }
-
-  if (type) {
     propDescriptor.flowType = type;
-  }
 
-  setPropDescription(documentation, path);
+    // We are doing this to not need to duplicate the logic for checking for
+    // imported types that are spread in to props.
+    setPropDescription(documentation, path);
+  }
 }
 
 /**
@@ -58,6 +60,6 @@ export default function flowTypeHandler(documentation: Documentation, path: Node
   }
 
   applyToFlowTypeProperties(flowTypesPath, propertyPath => {
-      setPropDescriptor(documentation, propertyPath)
+    setPropDescriptor(documentation, propertyPath)
   });
 }

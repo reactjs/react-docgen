@@ -270,27 +270,12 @@ Object {
   "displayName": "MyComponent",
   "methods": Array [],
   "props": Object {
-    "OtherLocalProps": Object {
-      "description": "Spread props defined locally",
+    "fooProp": Object {
+      "description": "fooProp is spread in from a locally resolved type",
       "flowType": Object {
-        "name": "signature",
-        "raw": "{|
-  fooProp?: string,
-|}",
-        "signature": Object {
-          "properties": Array [
-            Object {
-              "key": "fooProp",
-              "value": Object {
-                "name": "string",
-                "required": false,
-              },
-            },
-          ],
-        },
-        "type": "object",
+        "name": "string",
       },
-      "required": true,
+      "required": false,
     },
     "prop1": Object {
       "description": "The first prop",
