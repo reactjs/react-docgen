@@ -41,7 +41,8 @@ function setPropDescriptor(documentation: Documentation, path: NodePath): void {
     propDescriptor.required = !path.node.optional;
     propDescriptor.flowType = type;
 
-    // We are doing this to not need to duplicate the logic for checking for
+    // We are doing this here instead of in a different handler
+    // to not need to duplicate the logic for checking for
     // imported types that are spread in to props.
     setPropDescription(documentation, path);
   }
