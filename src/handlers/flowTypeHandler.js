@@ -14,12 +14,12 @@ import recast from 'recast';
 import type Documentation from '../Documentation';
 
 import getFlowType from '../utils/getFlowType';
-import setPropDescription from '../utils/setPropDescription';
 import getPropertyName from '../utils/getPropertyName';
 import getFlowTypeFromReactComponent, {
   applyToFlowTypeProperties,
 }  from '../utils/getFlowTypeFromReactComponent';
 import resolveToValue from '../utils/resolveToValue';
+import setPropDescription from '../utils/setPropDescription';
 
 const {types: {namedTypes: types}} = recast;
 function setPropDescriptor(documentation: Documentation, path: NodePath): void {
