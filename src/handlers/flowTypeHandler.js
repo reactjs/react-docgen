@@ -33,7 +33,7 @@ function setPropDescriptor(documentation: Documentation, path: NodePath): void {
         setPropDescriptor(documentation, propertyPath)
       });
     } else {
-      documentation.addComposes(name.value);
+      documentation.addComposes(name.node.name);
     }
   } else if (types.ObjectTypeProperty.check(path.node)) {
     let type = getFlowType(path.get('value'));
