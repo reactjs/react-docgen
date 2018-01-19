@@ -21,7 +21,6 @@ var defaultHandlers = [
   handlers.propTypeCompositionHandler,
   handlers.propDocBlockHandler,
   handlers.flowTypeHandler,
-  handlers.flowTypeDocBlockHandler,
   handlers.defaultPropsHandler,
   handlers.componentDocblockHandler,
   handlers.displayNameHandler,

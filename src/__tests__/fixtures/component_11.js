@@ -14,10 +14,10 @@
 
 import React from 'react';
 
-import { OtherComponentProps } from 'NonExistentFile';
+import { OtherComponentProps as OtherProps } from 'NonExistentFile';
 
 type OtherLocalProps = {|
-  fooProp: string,
+  fooProp?: string,
 |}
 
 type Props = {|
@@ -29,7 +29,7 @@ type Props = {|
   /**
    * Spread props from another file
    */
-  ...OtherComponentProps,
+  ...OtherProps,
 
   /**
    * The first prop

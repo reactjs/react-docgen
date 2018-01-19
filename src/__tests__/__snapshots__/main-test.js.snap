@@ -263,23 +263,19 @@ Object {
 
 exports[`main fixtures processes component "component_11.js" without errors 1`] = `
 Object {
+  "composes": Array [
+    "OtherProps",
+  ],
   "description": "",
   "displayName": "MyComponent",
   "methods": Array [],
   "props": Object {
-    "OtherComponentProps": Object {
-      "description": "Spread props from another file",
-      "flowType": Object {
-        "name": "OtherComponentProps",
-      },
-      "inherited": true,
-    },
     "OtherLocalProps": Object {
       "description": "Spread props defined locally",
       "flowType": Object {
         "name": "signature",
         "raw": "{|
-  fooProp: string,
+  fooProp?: string,
 |}",
         "signature": Object {
           "properties": Array [
@@ -287,14 +283,14 @@ Object {
               "key": "fooProp",
               "value": Object {
                 "name": "string",
-                "required": true,
+                "required": false,
               },
             },
           ],
         },
         "type": "object",
       },
-      "inherited": true,
+      "required": true,
     },
     "prop1": Object {
       "description": "The first prop",

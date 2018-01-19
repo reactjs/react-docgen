@@ -14,6 +14,7 @@ import recast from 'recast';
 import type Documentation from '../Documentation';
 
 import getFlowType from '../utils/getFlowType';
+import setPropDescription from '../utils/setPropDescription';
 import getPropertyName from '../utils/getPropertyName';
 import getFlowTypeFromReactComponent, {
   applyToFlowTypeProperties,
@@ -26,7 +27,12 @@ function setPropDescriptor(documentation: Documentation, path: NodePath): void {
 
   if (types.ObjectTypeSpreadProperty.check(path.node)) {
     type = getFlowType(path.get('argument'));
-    propDescriptor.inherited = true;
+    if (type.signature) {
+      propDescriptor.required = !path.node.optional;
+    } else {
+      documentation.addComposes(type.name);
+      return;
+    }
   } else if (types.ObjectTypeProperty.check(path.node)) {
     type = getFlowType(path.get('value'));
     propDescriptor.required = !path.node.optional;
@@ -35,6 +41,8 @@ function setPropDescriptor(documentation: Documentation, path: NodePath): void {
   if (type) {
     propDescriptor.flowType = type;
   }
+
+  setPropDescription(documentation, path);
 }
 
 /**
