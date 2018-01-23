@@ -51,7 +51,9 @@ class Documentation {
     if (this._props.size > 0) {
       obj.props = {};
       for (var [name, descriptor] of this._props) {
-        obj.props[name] = descriptor;
+        if (Object.keys(descriptor).length > 0) {
+          obj.props[name] = descriptor;
+        }
       }
     }
 

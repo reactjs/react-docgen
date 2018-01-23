@@ -56,14 +56,17 @@ describe('flowTypeHandler', () => {
         foo: {
           flowType: {},
           required: true,
+          description: '',
         },
         bar: {
           flowType: {},
           required: true,
+          description: '',
         },
         hal: {
           flowType: {},
           required: true,
+          description: '',
         },
         });
     });
@@ -83,10 +86,12 @@ describe('flowTypeHandler', () => {
         foo: {
           flowType: {},
           required: true,
+          description: '',
         },
         bar: {
           flowType: {},
           required: false,
+          description: '',
         },
       });
     });
@@ -106,10 +111,12 @@ describe('flowTypeHandler', () => {
         foo: {
           flowType: {},
           required: true,
+          description: '',
         },
         bar: {
           flowType: {},
           required: true,
+          description: '',
         },
       });
     });
@@ -128,6 +135,7 @@ describe('flowTypeHandler', () => {
         foo: {
           flowType: {},
           required: true,
+          description: '',
         },
       });
     });
@@ -195,6 +203,7 @@ describe('flowTypeHandler', () => {
       foo: {
         flowType: {},
         required: true,
+        description: '',
       },
     });
   });
