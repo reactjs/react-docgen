@@ -20,8 +20,6 @@ import resolveToValue from './resolveToValue';
 
 var {types: {namedTypes: types}} = recast;
 
-const reNonLexicalBlocks = /^If|^Else|^Switch/;
-
 const validPossibleStatelessComponentTypes = [
   'Property',
   'FunctionDeclaration',
@@ -29,7 +27,7 @@ const validPossibleStatelessComponentTypes = [
   'ArrowFunctionExpression',
 ];
 
-function isJSXElementOrReactCreateElement(path) {
+function isJSXElementOrReactCall(path) {
   return (
     path.node.type === 'JSXElement' ||
     (path.node.type === 'CallExpression' && isReactCreateElementCall(path)) ||
@@ -38,96 +36,114 @@ function isJSXElementOrReactCreateElement(path) {
   );
 }
 
-function returnsJSXElementOrReactCreateElementCall(path) {
-  let visited = false;
-
-  // early exit for ArrowFunctionExpressions
-  if (isJSXElementOrReactCreateElement(path.get('body'))) {
+function resolvesToJSXElementOrReactCall(path) {
+  // Is the path is already a JSX element or a call to one of the React.* functions
+  if (isJSXElementOrReactCall(path)) {
     return true;
   }
 
-  function isSameBlockScope(p) {
-    let block = p;
-    do {
-      block = block.parent;
-      // jump over non-lexical blocks
-      if (reNonLexicalBlocks.test(block.parent.node.type)) {
-        block = block.parent;
-      }
-    } while (
-      !types.BlockStatement.check(block.node) &&
-      /Function|Property/.test(block.parent.parent.node.type) &&
-      !reNonLexicalBlocks.test(block.parent.node.type)
-    );
+  const resolvedPath = resolveToValue(path);
 
-    // special case properties
-    if (types.Property.check(path.node)) {
-      return block.node === path.get('value', 'body').node;
+  // If the path points to a conditional expression, then we need to look only at
+  // the two possible paths
+  if (resolvedPath.node.type === 'ConditionalExpression') {
+    return resolvesToJSXElementOrReactCall(resolvedPath.get('consequent')) ||
+      resolvesToJSXElementOrReactCall(resolvedPath.get('alternate'));
+  }
+
+  // If the path points to a logical expression (AND, OR, ...), then we need to look only at
+  // the two possible paths
+  if (resolvedPath.node.type === 'LogicalExpression') {
+    return resolvesToJSXElementOrReactCall(resolvedPath.get('left')) ||
+      resolvesToJSXElementOrReactCall(resolvedPath.get('right'));
+  }
+
+  // Is the resolved path is already a JSX element or a call to one of the React.* functions
+  // Only do this if the resolvedPath actually resolved something as otherwise we did this check already
+  if (resolvedPath !== path && isJSXElementOrReactCall(resolvedPath)) {
+    return true;
+  }
+
+  // If we have a call expression, lets try to follow it
+  if (resolvedPath.node.type === 'CallExpression') {
+
+    let calleeValue = resolveToValue(resolvedPath.get('callee'));
+
+    if (returnsJSXElementOrReactCall(calleeValue)) {
+      return true;
     }
 
-    return block.node === path.get('body').node;
+    let resolvedValue;
+
+    let namesToResolve = [calleeValue.get('property')];
+
+    if (calleeValue.node.type === 'MemberExpression') {
+      if (calleeValue.get('object').node.type === 'Identifier') {
+        resolvedValue = resolveToValue(calleeValue.get('object'));
+      } else if (types.MemberExpression.check(calleeValue.node)) {
+        do {
+          calleeValue = calleeValue.get('object');
+          namesToResolve.unshift(calleeValue.get('property'));
+        } while (types.MemberExpression.check(calleeValue.node));
+
+        resolvedValue = resolveToValue(calleeValue.get('object'));
+      }
+    }
+
+    if (resolvedValue && types.ObjectExpression.check(resolvedValue.node)) {
+      var resolvedMemberExpression = namesToResolve
+        .reduce((result, path) => { // eslint-disable-line no-shadow
+          if (!path) {
+            return result;
+          }
+
+          if (result) {
+            result = getPropertyValuePath(result, path.node.name);
+            if (result && types.Identifier.check(result.node)) {
+              return resolveToValue(result);
+            }
+          }
+          return result;
+        }, resolvedValue);
+
+      if (
+        !resolvedMemberExpression ||
+        returnsJSXElementOrReactCall(resolvedMemberExpression)
+      ) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
+function returnsJSXElementOrReactCall(path) {
+  let visited = false;
+
+  // early exit for ArrowFunctionExpressions
+  if (
+    path.node.type === 'ArrowFunctionExpression' &&
+    path.get('body').node.type !== 'BlockStatement' &&
+    resolvesToJSXElementOrReactCall(path.get('body'))
+  ) {
+    return true;
+  }
+
+  let scope = path.scope;
+  // If we get a property we want the function scope it holds and not its outer scope
+  if (path.node.type === 'Property') {
+    scope = path.get('value').scope;
   }
 
   recast.visit(path, {
     visitReturnStatement(returnPath) {
-      const resolvedPath = resolveToValue(returnPath.get('argument'));
-      if (
-        isJSXElementOrReactCreateElement(resolvedPath) &&
-        isSameBlockScope(returnPath)
-      ) {
+      // Only check return statements which are part of the checked function scope
+      if (returnPath.scope !== scope) return false;
+
+      if (resolvesToJSXElementOrReactCall(returnPath.get('argument'))) {
         visited = true;
         return false;
-      }
-
-      if (resolvedPath.node.type === 'CallExpression') {
-        let calleeValue = resolveToValue(resolvedPath.get('callee'));
-
-        if (returnsJSXElementOrReactCreateElementCall(calleeValue)) {
-          visited = true;
-          return false;
-        }
-
-        let resolvedValue;
-
-        let namesToResolve = [calleeValue.get('property')];
-
-        if (calleeValue.node.type === 'MemberExpression') {
-          if (calleeValue.get('object').node.type === 'Identifier') {
-            resolvedValue = resolveToValue(calleeValue.get('object'));
-          } else if (types.MemberExpression.check(calleeValue.node)) {
-            do {
-              calleeValue = calleeValue.get('object');
-              namesToResolve.unshift(calleeValue.get('property'));
-            } while (types.MemberExpression.check(calleeValue.node));
-
-            resolvedValue = resolveToValue(calleeValue.get('object'));
-          }
-        }
-
-        if (resolvedValue && types.ObjectExpression.check(resolvedValue.node)) {
-          var resolvedMemberExpression = namesToResolve
-            .reduce((result, path) => { // eslint-disable-line no-shadow
-              if (!path) {
-                return result;
-              }
-
-              if (result) {
-                result = getPropertyValuePath(result, path.node.name);
-                if (result && types.Identifier.check(result.node)) {
-                  return resolveToValue(result);
-                }
-              }
-              return result;
-            }, resolvedValue);
-
-          if (
-            !resolvedMemberExpression ||
-            returnsJSXElementOrReactCreateElementCall(resolvedMemberExpression)
-          ) {
-            visited = true;
-            return false;
-          }
-        }
       }
 
       this.traverse(returnPath);
@@ -155,7 +171,7 @@ export default function isStatelessComponent(
     }
   }
 
-  if (returnsJSXElementOrReactCreateElementCall(path)) {
+  if (returnsJSXElementOrReactCall(path)) {
     return true;
   }
 

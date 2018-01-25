@@ -22,107 +22,120 @@ describe('isStatelessComponent', () => {
     ({statement, parse} = require('../../../tests/utils'));
   });
 
-  describe('Stateless Function Components with JSX', () => {
-    it('accepts simple arrow function components', () => {
-      var def = parse(
-        'var Foo = () => <div />'
-      ).get('body', 0).get('declarations', [0]).get('init');
-      expect(isStatelessComponent(def)).toBe(true);
-    });
+  const componentIdentifiers = {
+    'JSX': '<div />',
+    'React.createElement': 'React.createElement("div", null)',
+    'React.cloneElement': 'React.cloneElement(children, null)',
+    'React.Children.only()': 'React.Children.only(children, null)',
+  };
 
-    it('accepts simple function expressions components', () => {
-      var def = parse(
-        'let Foo = function() { return <div />; };'
-      ).get('body', 0).get('declarations', [0]).get('init');
-      expect(isStatelessComponent(def)).toBe(true);
-    });
+  const componentStyle = {
+    'ArrowExpression': [
+      (name, expr) => `var ${name} = () => (${expr});`,
+      ['declarations', 0, 'init'],
+    ],
+    'ArrowBlock': [
+      (name, expr) => `var ${name} = () => { return (${expr}); };`,
+      ['declarations', 0, 'init'],
+    ],
+    'FunctionExpression': [
+      (name, expr) => `var ${name} = function () { return (${expr}); }`,
+      ['declarations', 0, 'init'],
+    ],
+    'FunctionDeclaration': [
+      (name, expr) => `function ${name} () { return (${expr}); }`,
+      [],
+    ],
+  };
 
-    it('accepts simple function declaration components', () => {
-      var def = parse('function Foo () { return <div /> }').get('body', 0);
-      expect(isStatelessComponent(def)).toBe(true);
+  const modifiers = {
+    'default': (expr) => expr,
+    'conditional consequent': (expr) => `x ? ${expr} : null`,
+    'conditional alternate': (expr) => `x ? null : ${expr}`,
+    'OR left': (expr) => `${expr} || null`,
+    'AND right': (expr) => `x && ${expr}`,
+  };
+
+  const cases = {
+    'no reference': [
+      (expr, componentFactory) => `
+        var React = require('react');
+        ${componentFactory('Foo', expr)}
+      `,
+      ['body', 1],
+    ],
+    'with Identifier reference': [
+      (expr, componentFactory) => `
+        var React = require('react');
+        var jsx = (${expr});
+        ${componentFactory('Foo', 'jsx')}
+      `,
+      ['body', 2],
+    ],
+  };
+
+  Object.keys(componentStyle).forEach((name) => {
+    cases[`with ${name} reference`] = [
+      (expr, componentFactory) => `
+        var React = require('react');
+        ${componentStyle[name][0]('jsx', expr)}
+        ${componentFactory('Foo', 'jsx()')}
+      `,
+      ['body', 2],
+    ]
+  });
+
+  const negativeModifiers = {
+    'nested ArrowExpression': (expr) => `() => ${expr}`,
+    'nested ArrowBlock': (expr) => `() => { return ${expr} }`,
+    'nested FunctionExpression': (expr) => `function () { return ${expr} }`,
+  };
+
+  Object.keys(cases).forEach((name) => {
+    const [caseFactory, caseSelector] = cases[name];
+
+    describe(name, () => {
+      Object.keys(componentIdentifiers).forEach((componentIdentifierName) => {
+
+        const returnExpr = componentIdentifiers[componentIdentifierName];
+        describe(componentIdentifierName, () => {
+          Object.keys(componentStyle).forEach((componentName) => {
+            const [componentFactory, componentSelector] = componentStyle[componentName];
+            describe(componentName, () => {
+
+              Object.keys(modifiers).forEach((modifierName) => {
+                const modifierFactory = modifiers[modifierName];
+
+                it(modifierName, () => {
+                  const code = caseFactory(modifierFactory(returnExpr), componentFactory);
+                  const def = parse(code).get(...caseSelector, ...componentSelector);
+                  expect(isStatelessComponent(def)).toBe(true);
+                });
+              });
+
+              Object.keys(negativeModifiers).forEach((modifierName) => {
+                const modifierFactory = negativeModifiers[modifierName];
+
+                it(modifierName, () => {
+                  const code = caseFactory(modifierFactory(returnExpr), componentFactory);
+                  const def = parse(code).get(...caseSelector, ...componentSelector);
+                  expect(isStatelessComponent(def)).toBe(false);
+                });
+              });
+            });
+          });
+        });
+      });
     });
   });
 
   describe('Stateless Function Components with React.createElement', () => {
-    it('accepts simple arrow function components', () => {
+    it('accepts different name than React', () => {
       var def = parse(`
         var AlphaBetters = require('react');
         var Foo = () => AlphaBetters.createElement("div", null);
       `).get('body', 1).get('declarations', [0]).get('init');
 
-      expect(isStatelessComponent(def)).toBe(true);
-    });
-
-    it('accepts simple function expressions components', () => {
-      var def = parse(`
-        var React = require('react');
-        let Foo = function() { return React.createElement("div", null); };
-      `).get('body', 1).get('declarations', [0]).get('init');
-
-      expect(isStatelessComponent(def)).toBe(true);
-    });
-
-    it('accepts simple function declaration components', () => {
-      var def = parse(`
-        var React = require('react');
-        function Foo () { return React.createElement("div", null); }
-      `).get('body', 1);
-      expect(isStatelessComponent(def)).toBe(true);
-    });
-  });
-
-  describe('Stateless Function Components with React.cloneElement', () => {
-    it('accepts simple arrow function components', () => {
-      var def = parse(`
-        var AlphaBetters = require('react');
-        var Foo = ({ children }) => AlphaBetters.cloneElement(children, null);
-      `).get('body', 1).get('declarations', [0]).get('init');
-
-      expect(isStatelessComponent(def)).toBe(true);
-    });
-
-    it('accepts simple function expressions components', () => {
-      var def = parse(`
-        var React = require('react');
-        let Foo = function({ children }) { return React.cloneElement(children, null); };
-      `).get('body', 1).get('declarations', [0]).get('init');
-
-      expect(isStatelessComponent(def)).toBe(true);
-    });
-
-    it('accepts simple function declaration components', () => {
-      var def = parse(`
-        var React = require('react');
-        function Foo ({ children }) { return React.cloneElement(children, null); }
-      `).get('body', 1);
-      expect(isStatelessComponent(def)).toBe(true);
-    });
-  });
-
-  describe('Stateless Function Components with React.Children.only', () => {
-    it('accepts simple arrow function components', () => {
-      var def = parse(`
-        var React = require('react');
-        var Foo = ({ children }) => React.Children.only(children, null);
-      `).get('body', 1).get('declarations', [0]).get('init');
-
-      expect(isStatelessComponent(def)).toBe(true);
-    });
-
-    it('accepts simple function expressions components', () => {
-      var def = parse(`
-        var React = require('react');
-        let Foo = function({ children }) { return React.Children.only(children, null); };
-      `).get('body', 1).get('declarations', [0]).get('init');
-
-      expect(isStatelessComponent(def)).toBe(true);
-    });
-
-    it('accepts simple function declaration components', () => {
-      var def = parse(`
-        var React = require('react');
-        function Foo ({ children }) { return React.Children.only(children, null); }
-      `).get('body', 1);
       expect(isStatelessComponent(def)).toBe(true);
     });
   });
@@ -190,21 +203,6 @@ describe('isStatelessComponent', () => {
 
       expect(isStatelessComponent(def)).toBe(false);
     });
-
-    it('does not mark containing functions as StatelessComponents', () => {
-      var def = parse(`
-        var React = require('react');
-        function Foo (props) {
-          function Bar() {
-            return React.createElement("div", props);
-          }
-
-          return {Bar}
-        }
-      `).get('body', 1);
-
-      expect(isStatelessComponent(def)).toBe(false);
-    });
   });
 
   describe('resolving return values', () => {
@@ -215,6 +213,18 @@ describe('isStatelessComponent', () => {
         expect(isStatelessComponent(def)).toBe(true);
       });
     }
+
+    it('does not see ifs as separate block', () => {
+      var def = statement(`
+        function Foo (props) {
+          if (x) {
+            return <div />;
+          }
+        }
+      `);
+
+      expect(isStatelessComponent(def)).toBe(true);
+    });
 
     test('handles simple resolves', `
       var React = require('react');
@@ -261,20 +271,6 @@ describe('isStatelessComponent', () => {
             member() {
               return <div />;
             }
-          }
-        };
-
-        return obj.deep.member();
-      }
-    `);
-
-    test('handles external reference member call expression resolves', `
-      var React = require('react');
-      function Foo (props) {
-        var member = () => <div />;
-        var obj = {
-          deep: {
-            member: member
           }
         };
 
