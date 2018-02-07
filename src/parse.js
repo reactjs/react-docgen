@@ -11,6 +11,7 @@
  */
 
 import Documentation from './Documentation';
+import postProcessDocumentation from './utils/postProcessDocumentation';
 
 import babylon from './babylon';
 import recast from 'recast';
@@ -21,7 +22,7 @@ function executeHandlers(handlers, componentDefinitions) {
   return componentDefinitions.map(componentDefinition => {
     var documentation = new Documentation();
     handlers.forEach(handler => handler(documentation, componentDefinition));
-    return documentation.toObject();
+    return postProcessDocumentation(documentation.toObject());
   });
 }
 

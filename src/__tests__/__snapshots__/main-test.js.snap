@@ -38,6 +38,7 @@ Object {
         "computed": false,
         "value": "\\"primary\\"",
       },
+      "required": false,
     },
   },
 }
@@ -256,6 +257,34 @@ Object {
       "type": Object {
         "name": "string",
       },
+    },
+  },
+}
+`;
+
+exports[`main fixtures processes component "component_11.js" without errors 1`] = `
+Object {
+  "description": "",
+  "displayName": "Foo",
+  "methods": Array [],
+  "props": Object {
+    "prop1": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "string",
+      },
+      "required": true,
+    },
+    "prop2": Object {
+      "defaultValue": Object {
+        "computed": false,
+        "value": "'bar'",
+      },
+      "description": "",
+      "flowType": Object {
+        "name": "string",
+      },
+      "required": false,
     },
   },
 }
