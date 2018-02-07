@@ -19,8 +19,8 @@
   "scripts": {
     "build": "rimraf dist/ && babel src/ --out-dir dist/ --ignore __tests__,__mocks__",
     "lint": "eslint src/ bin/",
-    "prepublish": "yarn run build",
-    "preversion": "yarn run lint",
+    "prepublish": "yarn build",
+    "preversion": "yarn lint",
     "test": "jest",
     "test:ci": "yarn lint && yarn flow && yarn test --runInBand",
     "watch": "yarn build --watch"
