@@ -115,7 +115,68 @@ describe('defaultPropsHandler', () => {
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('bar');
     });
-
   });
 
+  describe('FunctionDeclaration', () => {
+    it('considers the function name', () => {
+      const definition = statement('function Foo () {}');
+      expect(() => displayNameHandler(documentation, definition)).not.toThrow();
+      expect(documentation.displayName).toBe('Foo');
+    });
+
+    it('considers a static displayName object property', () => {
+      const definition = statement(`
+        function Foo () {}
+        Foo.displayName = 'Bar';
+      `);
+      expect(() => displayNameHandler(documentation, definition)).not.toThrow();
+      expect(documentation.displayName).toBe('Bar');
+    });
+  });
+
+  describe('FunctionExpression', () => {
+    it('considers the variable name', () => {
+      const definition = statement('var Foo = function () {};').get('declarations', 0, 'init');
+      expect(() => displayNameHandler(documentation, definition)).not.toThrow();
+      expect(documentation.displayName).toBe('Foo');
+    });
+
+    it('considers the variable name on assign', () => {
+      const definition = statement('Foo = function () {};').get('expression', 'right');
+      expect(() => displayNameHandler(documentation, definition)).not.toThrow();
+      expect(documentation.displayName).toBe('Foo');
+    });
+
+    it('considers a static displayName object property over variable name', () => {
+      const definition = statement(`
+        var Foo = function () {};
+        Foo.displayName = 'Bar';
+      `);
+      expect(() => displayNameHandler(documentation, definition)).not.toThrow();
+      expect(documentation.displayName).toBe('Bar');
+    });
+  });
+
+  describe('ArrowFunctionExpression', () => {
+    it('considers the variable name', () => {
+      const definition = statement('var Foo = () => {};').get('declarations', 0, 'init');
+      expect(() => displayNameHandler(documentation, definition)).not.toThrow();
+      expect(documentation.displayName).toBe('Foo');
+    });
+
+    it('considers the variable name on assign', () => {
+      const definition = statement('Foo = () => {};').get('expression', 'right');
+      expect(() => displayNameHandler(documentation, definition)).not.toThrow();
+      expect(documentation.displayName).toBe('Foo');
+    });
+
+    it('considers a static displayName object property over variable name', () => {
+      const definition = statement(`
+        var Foo = () => {};
+        Foo.displayName = 'Bar';
+      `);
+      expect(() => displayNameHandler(documentation, definition)).not.toThrow();
+      expect(documentation.displayName).toBe('Bar');
+    });
+  });
 });
