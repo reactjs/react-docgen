@@ -68,6 +68,11 @@ describe('getFlowType', () => {
     expect(getFlowType(typePath)).toEqual({ name: 'xyz', nullable: true });
   });
 
+  it('detects array type shorthand', () => {
+    var typePath = expression('x: number[]').get('typeAnnotation').get('typeAnnotation');
+    expect(getFlowType(typePath)).toEqual({ name: 'Array', elements: [{ name: 'number' }], raw: 'number[]' });
+  });
+
   it('detects array type', () => {
     var typePath = expression('x: Array<number>').get('typeAnnotation').get('typeAnnotation');
     expect(getFlowType(typePath)).toEqual({ name: 'Array', elements: [{ name: 'number' }], raw: 'Array<number>' });
