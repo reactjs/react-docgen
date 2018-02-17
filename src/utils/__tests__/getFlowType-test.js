@@ -63,9 +63,20 @@ describe('getFlowType', () => {
     var typePath = expression('x: xyz').get('typeAnnotation').get('typeAnnotation');
     expect(getFlowType(typePath)).toEqual({ name: 'xyz' });
   });
+
   it('detects external nullable type', () => {
     var typePath = expression('x: ?xyz').get('typeAnnotation').get('typeAnnotation');
     expect(getFlowType(typePath)).toEqual({ name: 'xyz', nullable: true });
+  });
+
+  it('detects array type shorthand optional', () => {
+    var typePath = expression('x: ?number[]').get('typeAnnotation').get('typeAnnotation');
+    expect(getFlowType(typePath)).toEqual({ name: 'Array', elements: [{ name: 'number' }], raw: 'number[]', nullable: true });
+  });
+
+  it('detects array type shorthand optional type', () => {
+    var typePath = expression('x: (?number)[]').get('typeAnnotation').get('typeAnnotation');
+    expect(getFlowType(typePath)).toEqual({ name: 'Array', elements: [{ name: 'number', nullable: true }], raw: 'number[]' });
   });
 
   it('detects array type shorthand', () => {
