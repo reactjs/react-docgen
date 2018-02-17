@@ -283,4 +283,95 @@ describe('getFlowType', () => {
       { name: 'literal', value: "'banana'" },
     ], raw: '$Keys<CONTENTS>'});
   });
+
+  it('handles multiple references to one type', () => {
+    var typePath = statement(`
+      let action: { a: Action, b: Action };
+      type Action = {};
+    `).get('declarations', 0).get('id').get('typeAnnotation').get('typeAnnotation');
+
+    expect(getFlowType(typePath)).toEqual({name: 'signature', type: 'object', signature: {
+      properties: [
+        {
+          key: 'a',
+          value: {
+            name: 'signature',
+            type: 'object',
+            required: true,
+            raw: '{}',
+            signature: { properties: [] },
+          },
+        },
+        {
+          key: 'b',
+          value: {
+            name: 'signature',
+            type: 'object',
+            required: true,
+            raw: '{}',
+            signature: { properties: [] },
+          },
+        },
+      ],
+    }, raw: '{ a: Action, b: Action }'});
+  });
+
+  it('handles self-referencing type cycles', () => {
+    var typePath = statement(`
+      let action: Action;
+      type Action = { subAction: Action };
+    `).get('declarations', 0).get('id').get('typeAnnotation').get('typeAnnotation');
+
+    expect(getFlowType(typePath)).toEqual({name: 'signature', type: 'object', signature: {
+      properties: [
+        { key: 'subAction', value: { name: 'Action', required: true } },
+      ],
+    }, raw: '{ subAction: Action }'});
+  });
+
+  it('handles long type cycles', () => {
+    var typePath = statement(`
+      let action: Action;
+      type Action = { subAction: SubAction };
+      type SubAction = { subAction: SubSubAction };
+      type SubSubAction = { subAction: SubSubSubAction };
+      type SubSubSubAction = { rootAction: Action };
+    `).get('declarations', 0).get('id').get('typeAnnotation').get('typeAnnotation');
+
+    expect(getFlowType(typePath)).toEqual({name: 'signature', type: 'object', signature: {
+      properties: [
+        {
+          key: 'subAction',
+          value: {
+            name: 'signature', type: 'object', required: true, signature: {
+              properties: [
+                {
+                  key: 'subAction',
+                  value: {
+                    name: 'signature', type: 'object', required: true, signature: {
+                      properties: [
+                        {
+                          key: 'subAction',
+                          value: {
+                            name: 'signature', type: 'object', required: true, signature: {
+                              properties: [
+                                {
+                                  key: 'rootAction',
+                                  value: { name: 'Action', required: true },
+                                },
+                              ],
+                            }, raw: '{ rootAction: Action }',
+                          },
+                        },
+                      ],
+                    }, raw: '{ subAction: SubSubSubAction }',
+                  },
+                },
+              ],
+            }, raw: '{ subAction: SubSubAction }',
+          },
+        },
+      ],
+    }, raw: '{ subAction: SubAction }'});
+  });
 });
