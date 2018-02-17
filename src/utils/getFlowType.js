@@ -49,7 +49,7 @@ const namedTypes = {
 };
 
 function getFlowTypeWithRequirements(path: NodePath): FlowTypeDescriptor {
-  const type = getFlowType(path);
+  const type = getFlowTypeWithResolvedTypes(path);
 
   type.required = !path.parentPath.node.optional;
 
@@ -80,7 +80,7 @@ function handleKeysHelper(path: NodePath) {
 function handleArrayTypeAnnotation(path: NodePath) {
   return {
     name: 'Array',
-    elements: [getFlowType(path.get('elementType'))],
+    elements: [getFlowTypeWithResolvedTypes(path.get('elementType'))],
     raw: printValue(path),
   };
 }
@@ -102,13 +102,13 @@ function handleGenericTypeAnnotation(path: NodePath) {
 
     type = {
       ...type,
-      elements: params.map(param => getFlowType(param)),
+      elements: params.map(param => getFlowTypeWithResolvedTypes(param)),
       raw: printValue(path),
     };
   } else {
     let resolvedPath = resolveToValue(path.get('id'));
     if (resolvedPath && resolvedPath.node.right) {
-      type = getFlowType(resolvedPath.get('right'));
+      type = getFlowTypeWithResolvedTypes(resolvedPath.get('right'));
     }
   }
 
@@ -124,12 +124,12 @@ function handleObjectTypeAnnotation(path: NodePath) {
   };
 
   path.get('callProperties').each(param => {
-    type.signature.constructor = getFlowType(param.get('value'));
+    type.signature.constructor = getFlowTypeWithResolvedTypes(param.get('value'));
   });
 
   path.get('indexers').each(param => {
     type.signature.properties.push({
-      key: getFlowType(param.get('key')),
+      key: getFlowTypeWithResolvedTypes(param.get('key')),
       value: getFlowTypeWithRequirements(param.get('value')),
     });
   });
@@ -148,7 +148,7 @@ function handleUnionTypeAnnotation(path: NodePath) {
   return {
     name: 'union',
     raw: printValue(path),
-    elements: path.get('types').map(subType => getFlowType(subType)),
+    elements: path.get('types').map(subType => getFlowTypeWithResolvedTypes(subType)),
   };
 }
 
@@ -156,7 +156,7 @@ function handleIntersectionTypeAnnotation(path: NodePath) {
   return {
     name: 'intersection',
     raw: printValue(path),
-    elements: path.get('types').map(subType => getFlowType(subType)),
+    elements: path.get('types').map(subType => getFlowTypeWithResolvedTypes(subType)),
   };
 }
 
@@ -165,7 +165,7 @@ function handleNullableTypeAnnotation(path: NodePath) {
 
   if (!typeAnnotation) return null;
 
-  const type = getFlowType(typeAnnotation);
+  const type = getFlowTypeWithResolvedTypes(typeAnnotation);
   type.nullable = true;
 
   return type;
@@ -178,7 +178,7 @@ function handleFunctionTypeAnnotation(path: NodePath) {
     raw: printValue(path),
     signature: {
       arguments: [],
-      return: getFlowType(path.get('returnType')),
+      return: getFlowTypeWithResolvedTypes(path.get('returnType')),
     },
   };
 
@@ -188,7 +188,7 @@ function handleFunctionTypeAnnotation(path: NodePath) {
 
     type.signature.arguments.push({
       name: param.node.name ? param.node.name.name : '',
-      type: getFlowType(typeAnnotation),
+      type: getFlowTypeWithResolvedTypes(typeAnnotation),
     });
   });
 
@@ -199,14 +199,14 @@ function handleTupleTypeAnnotation(path: NodePath) {
   const type = { name: 'tuple', raw: printValue(path), elements: [] };
 
   path.get('types').each(param => {
-    type.elements.push(getFlowType(param));
+    type.elements.push(getFlowTypeWithResolvedTypes(param));
   });
 
   return type;
 }
 
 function handleTypeofTypeAnnotation(path: NodePath) {
-  return getFlowType(path.get('argument'));
+  return getFlowTypeWithResolvedTypes(path.get('argument'));
 }
 
 function handleQualifiedTypeIdentifier(path: NodePath) {
@@ -215,16 +215,27 @@ function handleQualifiedTypeIdentifier(path: NodePath) {
   return { name: `React${path.node.id.name}`, raw: printValue(path) };
 }
 
-/**
- * Tries to identify the flow type by inspecting the path for known
- * flow type names. This method doesn't check whether the found type is actually
- * existing. It simply assumes that a match is always valid.
- *
- * If there is no match, "unknown" is returned.
- */
-export default function getFlowType(path: NodePath): FlowTypeDescriptor {
+let visitedTypes = {};
+
+function getFlowTypeWithResolvedTypes(path: NodePath): FlowTypeDescriptor {
   const node = path.node;
   let type: ?FlowTypeDescriptor;
+
+  const isTypeAlias = types.TypeAlias.check(path.parentPath.node);
+  // When we see a typealias mark it as visited so that the next
+  // call of this function does not run into an endless loop
+  if (isTypeAlias) {
+    if (visitedTypes[path.parentPath.node.id.name] === true) {
+      // if we are currently visiting this node then just return the name
+      // as we are starting to endless loop
+      return { name: path.parentPath.node.id.name };
+    } else if (typeof visitedTypes[path.parentPath.node.id.name] === 'object') {
+      // if we already resolved the type simple return it
+      return visitedTypes[path.parentPath.node.id.name];
+    }
+    // mark the type as visited
+    visitedTypes[path.parentPath.node.id.name] = true;
+  }
 
   if (types.Type.check(node)) {
     if (node.type in flowTypes) {
@@ -236,9 +247,26 @@ export default function getFlowType(path: NodePath): FlowTypeDescriptor {
     }
   }
 
+  if (isTypeAlias) {
+    // mark the type as unvisited so that further calls can resolve the type again
+    visitedTypes[path.parentPath.node.id.name] = type;
+  }
+
   if (!type) {
     type = { name: 'unknown' };
   }
 
   return type;
+}
+
+/**
+ * Tries to identify the flow type by inspecting the path for known
+ * flow type names. This method doesn't check whether the found type is actually
+ * existing. It simply assumes that a match is always valid.
+ *
+ * If there is no match, "unknown" is returned.
+ */
+export default function getFlowType(path: NodePath): FlowTypeDescriptor {
+  visitedTypes = {};
+  return getFlowTypeWithResolvedTypes(path);
 }
