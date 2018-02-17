@@ -33,6 +33,15 @@ export default function displayNameHandler(
       types.FunctionDeclaration.check(path.node)
     ) {
       documentation.set('displayName', getNameOrValue(path.get('id')));
+    } else if (
+      types.ArrowFunctionExpression.check(path.node) ||
+      types.FunctionExpression.check(path.node)
+    ) {
+      if (types.VariableDeclarator.check(path.parentPath.node)) {
+        documentation.set('displayName', getNameOrValue(path.parentPath.get('id')));
+      } else if (types.AssignmentExpression.check(path.parentPath.node)) {
+        documentation.set('displayName', getNameOrValue(path.parentPath.get('left')));
+      }
     }
     return;
   }

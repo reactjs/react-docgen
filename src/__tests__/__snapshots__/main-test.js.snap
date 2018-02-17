@@ -47,6 +47,7 @@ Object {
 exports[`main fixtures processes component "component_3.js" without errors 1`] = `
 Object {
   "description": "",
+  "displayName": "Test",
   "methods": Array [],
   "props": Object {
     "style": Object {
@@ -102,6 +103,7 @@ Object {
 exports[`main fixtures processes component "component_5.js" without errors 1`] = `
 Object {
   "description": "",
+  "displayName": "Button",
   "methods": Array [],
   "props": Object {
     "children": Object {
@@ -136,6 +138,7 @@ Object {
 exports[`main fixtures processes component "component_6.js" without errors 1`] = `
 Object {
   "description": "",
+  "displayName": "Button",
   "methods": Array [],
   "props": Object {
     "children": Object {
