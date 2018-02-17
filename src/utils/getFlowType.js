@@ -37,6 +37,7 @@ const flowLiteralTypes = {
 };
 
 const namedTypes = {
+  ArrayTypeAnnotation: handleArrayTypeAnnotation,
   GenericTypeAnnotation: handleGenericTypeAnnotation,
   ObjectTypeAnnotation: handleObjectTypeAnnotation,
   UnionTypeAnnotation: handleUnionTypeAnnotation,
@@ -74,6 +75,14 @@ function handleKeysHelper(path: NodePath) {
       };
     }
   }
+}
+
+function handleArrayTypeAnnotation(path: NodePath) {
+  return {
+    name: 'Array',
+    elements: [getFlowType(path.get('elementType'))],
+    raw: printValue(path),
+  };
 }
 
 function handleGenericTypeAnnotation(path: NodePath) {
