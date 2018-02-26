@@ -19,7 +19,7 @@ import getNameOrValue from './getNameOrValue';
  */
 export default function getPropertyName(propertyPath: NodePath): string {
   if (propertyPath.node.computed) {
-    throw new TypeError('Propery name must be an Identifier or a Literal');
+    throw new TypeError('Property name must be an Identifier or a Literal');
   }
 
   return getNameOrValue(propertyPath.get('key'), false);
