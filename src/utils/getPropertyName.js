@@ -24,7 +24,7 @@ export default function getPropertyName(propertyPath: NodePath): string {
   if (types.ObjectTypeSpreadProperty.check(propertyPath.node)) {
     return getNameOrValue(propertyPath.get('argument').get('id'), false);
   } else if (propertyPath.node.computed) {
-    throw new TypeError('Propery name must be an Identifier or a Literal');
+    throw new TypeError('Property name must be an Identifier or a Literal');
   }
 
   return getNameOrValue(propertyPath.get('key'), false);
