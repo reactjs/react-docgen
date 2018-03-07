@@ -70,24 +70,26 @@ class Documentation {
 
     if (this._props.size > 0) {
       obj.props = {};
-      for (var [name, descriptor] of this._props) {
-        if (Object.keys(descriptor).length > 0) {
-          obj.props[name] = descriptor;
+      for (var [propName, propDescriptor] of this._props) {
+        if (Object.keys(propDescriptor).length > 0) {
+          obj.props[propName] = propDescriptor;
         }
       }
     }
 
     if (this._context.size > 0) {
       obj.context = {};
-      for (var [name, descriptor] of this._context) {
-        obj.context[name] = descriptor;
+      for (var [contextName, contextDescriptor] of this._context) {
+        if (Object.keys(contextDescriptor).length > 0) {
+          obj.context[contextName] = contextDescriptor;
+        }
       }
     }
 
     if (this._childContext.size > 0) {
       obj.childContext = {};
-      for (var [name, descriptor] of this._childContext) {
-        obj.childContext[name] = descriptor;
+      for (var [childContextName, childContextDescriptor] of this._childContext) {
+        obj.childContext[childContextName] = childContextDescriptor;
       }
     }
 

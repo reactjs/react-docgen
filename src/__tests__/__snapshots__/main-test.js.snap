@@ -102,6 +102,22 @@ Object {
 
 exports[`main fixtures processes component "component_5.js" without errors 1`] = `
 Object {
+  "childContext": Object {
+    "color": Object {
+      "required": false,
+      "type": Object {
+        "name": "string",
+      },
+    },
+  },
+  "context": Object {
+    "config": Object {
+      "required": false,
+      "type": Object {
+        "name": "object",
+      },
+    },
+  },
   "description": "",
   "displayName": "Button",
   "methods": Array [],
@@ -137,6 +153,22 @@ Object {
 
 exports[`main fixtures processes component "component_6.js" without errors 1`] = `
 Object {
+  "childContext": Object {
+    "color": Object {
+      "required": false,
+      "type": Object {
+        "name": "string",
+      },
+    },
+  },
+  "context": Object {
+    "config": Object {
+      "required": false,
+      "type": Object {
+        "name": "object",
+      },
+    },
+  },
   "description": "",
   "displayName": "Button",
   "methods": Array [],

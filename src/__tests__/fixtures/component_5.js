@@ -15,4 +15,12 @@ Button.propTypes = {
   style: React.PropTypes.object,
 };
 
+Button.childContextTypes = {
+  color: React.PropTypes.string,
+};
+
+Button.contextTypes = {
+  config: React.PropTypes.object,
+};
+
 export default Button;

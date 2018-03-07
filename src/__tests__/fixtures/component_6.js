@@ -16,4 +16,11 @@ Button.propTypes = {
   style: PropTypes.object,
 };
 
+Button.childContextTypes = {
+  color: PropTypes.string,
+};
+
+Button.contextTypes = {
+  config: PropTypes.object,
+};
 export default Button;
