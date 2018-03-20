@@ -196,6 +196,7 @@ export default function getPropType(path: NodePath): PropTypeDescriptor {
         return true;
       } else if (propTypes.hasOwnProperty(name) && member.argumentsPath) {
         descriptor = propTypes[name](member.argumentsPath.get(0));
+        descriptor.required = isRequiredPropType(path);
         return true;
       }
     }
@@ -209,6 +210,7 @@ export default function getPropType(path: NodePath): PropTypeDescriptor {
         types.Identifier.check(node.callee) &&
         propTypes.hasOwnProperty(node.callee.name)) {
       descriptor = propTypes[node.callee.name](path.get('arguments', 0));
+      descriptor.required = isRequiredPropType(path);
     } else {
       descriptor = {name: 'custom', raw: printValue(path)};
     }

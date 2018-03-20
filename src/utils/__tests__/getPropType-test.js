@@ -56,6 +56,7 @@ describe('getPropType', () => {
   it('detects complex prop types', () => {
     expect(getPropType(expression('oneOf(["foo", "bar"])'))).toEqual({
       name: 'enum',
+      required: false,
       value: [
         {value: '"foo"', computed: false},
         {value: '"bar"', computed: false},
@@ -65,6 +66,7 @@ describe('getPropType', () => {
     // line comments are ignored
     expect(getPropType(expression('oneOf(["foo", // baz\n"bar"])'))).toEqual({
       name: 'enum',
+      required: false,
       value: [
         {value: '"foo"', computed: false},
         {value: '"bar"', computed: false},
@@ -73,6 +75,7 @@ describe('getPropType', () => {
 
     expect(getPropType(expression('oneOfType([number, bool])'))).toEqual({
       name: 'union',
+      required: false,
       value: [
         {name: 'number'},
         {name: 'bool'},
@@ -82,26 +85,31 @@ describe('getPropType', () => {
     // custom type
     expect(getPropType(expression('oneOfType([foo])'))).toEqual({
       name: 'union',
+      required: false,
       value: [{name: 'custom', raw: 'foo'}],
     });
 
     expect(getPropType(expression('instanceOf(Foo)'))).toEqual({
       name: 'instanceOf',
+      required: false,
       value: 'Foo',
     });
 
     expect(getPropType(expression('arrayOf(string)'))).toEqual({
       name: 'arrayOf',
+      required: false,
       value: {name: 'string'},
     });
 
     expect(getPropType(expression('objectOf(string)'))).toEqual({
       name: 'objectOf',
+      required: false,
       value: {name: 'string'},
     });
 
     expect(getPropType(expression('shape({foo: string, bar: bool})'))).toEqual({
       name: 'shape',
+      required: false,
       value: {
         foo: {
           name: 'string',
@@ -117,6 +125,7 @@ describe('getPropType', () => {
     // custom
     expect(getPropType(expression('shape({foo: xyz})'))).toEqual({
       name: 'shape',
+      required: false,
       value: {
         foo: {
           name: 'custom',
@@ -129,6 +138,7 @@ describe('getPropType', () => {
     // computed
     expect(getPropType(expression('shape(Child.propTypes)'))).toEqual({
       name: 'shape',
+      required: false,
       value: 'Child.propTypes',
       computed: true,
     });
@@ -143,6 +153,7 @@ describe('getPropType', () => {
 
       expect(getPropType(propTypeExpression)).toEqual({
         name: 'shape',
+        required: false,
         value: {
           bar: {
             name: 'string',
@@ -160,6 +171,7 @@ describe('getPropType', () => {
 
       expect(getPropType(propTypeIdentifier)).toEqual({
         name: 'enum',
+        required: false,
         value: [
           {value: '"foo"', computed: false},
           {value: '"bar"', computed: false},
@@ -174,6 +186,7 @@ describe('getPropType', () => {
 
       expect(getPropType(identifierInsideArray)).toEqual({
         name: 'enum',
+        required: false,
         value: [
           {value: '"foo"', computed: false},
           {value: '"bar"', computed: false},
@@ -190,6 +203,7 @@ describe('getPropType', () => {
 
       expect(getPropType(propTypeExpression)).toEqual({
         name: 'enum',
+        required: false,
         value: [
           {value: '"foo"', computed: false},
           {value: '"bar"', computed: false},
@@ -205,6 +219,7 @@ describe('getPropType', () => {
 
       expect(getPropType(propTypeExpression)).toEqual({
         name: 'enum',
+        required: false,
         value: [
           {value: '"foo"', computed: false},
           {value: '"bar"', computed: false},
@@ -221,6 +236,7 @@ describe('getPropType', () => {
 
       expect(getPropType(propTypeExpression)).toEqual({
         name: 'enum',
+        required: false,
         value: [
           {value: '"foo"', computed: false},
           {value: '"bar"', computed: false},
@@ -236,6 +252,7 @@ describe('getPropType', () => {
 
       expect(getPropType(propTypeExpression)).toEqual({
         name: 'enum',
+        required: false,
         value: [
           {value: '"FOO"', computed: false},
           {value: '"BAR"', computed: false},
@@ -251,6 +268,7 @@ describe('getPropType', () => {
 
       expect(getPropType(propTypeExpression)).toEqual({
         name: 'enum',
+        required: false,
         value: 'TYPES',
         computed: true,
       });
@@ -282,6 +300,7 @@ describe('getPropType', () => {
     })`)))
     .toEqual({
       name: 'shape',
+      required: false,
       value: {
         foo: {
           name: 'string',
@@ -297,6 +316,76 @@ describe('getPropType', () => {
     });
   });
 
+  it('detects required enums and shapes', () => {
+
+    // Deep required
+    expect(getPropType(expression(`shape({
+      /**
+       * test1
+       */
+      foo: string.isRequired,
+      /**
+       * test2
+       */
+      bar: bool
+    })`)))
+    .toEqual({
+      name: 'shape',
+      required: false,
+      value: {
+        foo: {
+          name: 'string',
+          description: 'test1',
+          required: true,
+        },
+        bar: {
+          name: 'bool',
+          description: 'test2',
+          required: false,
+        },
+      },
+    });
+
+    // Parent required
+    expect(getPropType(expression(`shape({
+      /**
+       * test1
+       */
+      foo: string.isRequired,
+      /**
+       * test2
+       */
+      bar: bool
+    }).isRequired`)))
+    .toEqual({
+      name: 'shape',
+      required: true,
+      value: {
+        foo: {
+          name: 'string',
+          description: 'test1',
+          required: true,
+        },
+        bar: {
+          name: 'bool',
+          description: 'test2',
+          required: false,
+        },
+      },
+    });
+
+    // Enum required
+    expect(getPropType(expression('oneOf(["foo", "bar"]).isRequired')))
+    .toEqual({
+      name: 'enum',
+      required: true,
+      value: [
+        {value: '"foo"', computed: false},
+        {value: '"bar"', computed: false},
+      ],
+    });
+  });
+
   it('detects required notations of nested types in shapes', () => {
     expect(getPropType(expression(`shape({
       foo: string.isRequired,
@@ -304,6 +393,7 @@ describe('getPropType', () => {
     })`)))
     .toEqual({
       name: 'shape',
+      required: false,
       value: {
         foo: {
           name: 'string',

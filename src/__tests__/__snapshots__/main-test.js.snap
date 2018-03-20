@@ -73,6 +73,7 @@ Object {
       "type": Object {
         "computed": true,
         "name": "shape",
+        "required": true,
         "value": "Child.propTypes",
       },
     },
@@ -81,6 +82,7 @@ Object {
       "required": true,
       "type": Object {
         "name": "shape",
+        "required": true,
         "value": Object {
           "adopted": Object {
             "name": "bool",
