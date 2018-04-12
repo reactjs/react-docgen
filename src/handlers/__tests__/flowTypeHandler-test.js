@@ -139,6 +139,30 @@ describe('flowTypeHandler', () => {
         },
       });
     });
+
+    describe('special generic type annotations', () => {
+      ['$ReadOnly', '$Exact'].forEach(annotation => {
+        it(`unwraps ${annotation}<...>`, () => {
+          var flowTypesSrc = `
+            ${annotation}<{
+              foo: string | number,
+            }>
+          `;
+
+          var definition = getSrc(flowTypesSrc);
+
+          flowTypeHandler(documentation, definition);
+
+          expect(documentation.descriptors).toEqual({
+            foo: {
+              flowType: {},
+              required: true,
+              description: '',
+            },
+          });
+        });
+      });
+    });
   }
 
   describe('TypeAlias', () => {
