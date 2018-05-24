@@ -29,7 +29,7 @@ export default class ParseStream extends Transform {
     // Handle regular expression syntax passed for exclude
     let exclude = opts.exclude;
     if (exclude && exclude.length === 1 && regexRegex.test(exclude[0])) {
-      const match = excludePatterns[0].match(regexRegex);
+      const match = exclude[0].match(regexRegex);
       exclude = new RegExp(match[1], match[2]);
     }
 

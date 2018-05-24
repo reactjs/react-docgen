@@ -105,22 +105,25 @@ const parser = new ParseStream({
  * 1. No files passed, consume input stream
  */
 if (!Array.isArray(argv.args) || !argv.args.length) {
-  // var source = '';
-  // process.stdin.setEncoding('utf8');
-  // process.stdin.resume();
-  // var timer = setTimeout(function() {
-  //   process.stderr.write('Still waiting for std input...');
-  // }, 5000);
-  // process.stdin.on('data', function (chunk) {
-  //   clearTimeout(timer);
-  //   source += chunk;
-  // });
-  // process.stdin.on('end', function () {
-  //   try {
-  //     writeResult(parse(source));
-  //   } catch(error) {
-  //     writeError(error);
-  //   }
-  // });
+  let source = '';
+
+  process.stdin.setEncoding('utf8');
+  process.stdin.resume();
+
+  const timer = setTimeout(function() {
+    process.stderr.write('Still waiting for std input...');
+  }, 5000);
+  process.stdin.on('data', function (chunk) {
+    clearTimeout(timer);
+    source += chunk;
+  });
+
+  process.stdin.on('end', function () {
+    try {
+      writeResult(parser.parse(source));
+    } catch(error) {
+      writeWarning({ error });
+    }
+  });
 }
 
