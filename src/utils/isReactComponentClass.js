@@ -44,6 +44,26 @@ export default function isReactComponentClass(
     return true;
   }
 
+  // check for @extends React.Component in docblock
+  if (path.parentPath.value && path.parentPath.value) {
+    var classDeclaration;
+    if (Array.isArray(path.parentPath.value)) {
+      var matches = path.parentPath.value.filter(function(declaration) { return declaration.type === 'ClassDeclaration' });
+      if (matches[0]) {
+        classDeclaration = matches[0];
+      }
+    } else {
+      classDeclaration = path.parentPath.value;
+    }
+    
+    if (classDeclaration.leadingComments && classDeclaration.leadingComments.length > 0) {
+      var matchedComments = classDeclaration.leadingComments.filter(function(comment) { return comment.value.match(/(@extends React.Component)/) });
+      if (matchedComments.length > 0) {
+        return true;
+      }
+    }
+  }
+
   // extends ReactComponent?
   if (!node.superClass) {
     return false;
