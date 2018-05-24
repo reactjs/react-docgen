@@ -45,8 +45,8 @@ export default function isReactComponentClass(
   }
 
   // check for @extends React.Component in docblock
-  if (path.parentPath.value && path.parentPath.value) {
-    var classDeclaration = {};
+  if (path.parentPath && path.parentPath.value) {
+    var classDeclaration;
     if (Array.isArray(path.parentPath.value)) {
       var matches = path.parentPath.value.filter(function(declaration) { return declaration.type === 'ClassDeclaration' });
       if (matches[0]) {
@@ -56,11 +56,13 @@ export default function isReactComponentClass(
       classDeclaration = path.parentPath.value;
     }
     
-    if (classDeclaration.leadingComments && classDeclaration.leadingComments.length > 0) {
-      var matchedComments = classDeclaration.leadingComments.filter(function(comment) { return comment.value.match(/(@extends React.Component)/) });
-      if (matchedComments.length > 0) {
-        return true;
-      }
+    if (classDeclaration &&
+      classDeclaration.leadingComments &&
+      classDeclaration.leadingComments.length &&
+      classDeclaration.leadingComments.some(function (comment) {
+      return /@extends\s+React\.Component/.test(comment.value);
+      })) {
+      return true;
     }
   }
 
