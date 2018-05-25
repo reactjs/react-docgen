@@ -58,9 +58,8 @@ export default function isReactComponentClass(
     
     if (classDeclaration &&
       classDeclaration.leadingComments &&
-      classDeclaration.leadingComments.length &&
       classDeclaration.leadingComments.some(function (comment) {
-      return /@extends\s+React\.Component/.test(comment.value);
+        return /@extends\s+React\.Component/.test(comment.value);
       })) {
       return true;
     }
