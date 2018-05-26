@@ -46,15 +46,9 @@ export default function isReactComponentClass(
 
   // check for @extends React.Component in docblock
   if (path.parentPath && path.parentPath.value) {
-    var classDeclaration;
-    if (Array.isArray(path.parentPath.value)) {
-      var matches = path.parentPath.value.filter(function(declaration) { return declaration.type === 'ClassDeclaration' });
-      if (matches[0]) {
-        classDeclaration = matches[0];
-      }
-    } else {
-      classDeclaration = path.parentPath.value;
-    }
+    var classDeclaration = Array.isArray(path.parentPath.value)
+      ? path.parentPath.value.find(function(declaration) { return declaration.type === 'ClassDeclaration' })
+      : path.parentPath.value;
     
     if (classDeclaration &&
       classDeclaration.leadingComments &&
