@@ -67,7 +67,7 @@ function amendPropTypes(getDescriptor, path) {
   });
 }
 
-export function getPropTypeHandler(propName: string) {
+function getPropTypeHandler(propName: string) {
   return function (
     documentation: Documentation,
     path: NodePath
