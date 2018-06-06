@@ -42,6 +42,9 @@ argv
         collect,
         [])
     .option(
+        '--legacy-decorators',
+        'Enable parsing of legacy decorators proposal. By default only the new decorators syntax will be parsable.')
+    .option(
         '-i, --ignore <path>',
         'Folders to ignore. Default: ' + JSON.stringify(defaultIgnore),
         collect,
@@ -100,7 +103,7 @@ if (argv.resolver) {
 }
 
 function parse(source) {
-  return parser.parse(source, resolver);
+  return parser.parse(source, resolver, null, { legacyDecorators: argv.legacyDecorators });
 }
 
 function writeError(msg, filePath) {
