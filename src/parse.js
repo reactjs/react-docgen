@@ -13,7 +13,7 @@
 import Documentation from './Documentation';
 import postProcessDocumentation from './utils/postProcessDocumentation';
 
-import babylon from './babylon';
+import parser from './babelParser';
 import recast from 'recast';
 
 var ERROR_MISSING_DEFINITION = 'No suitable component definition found.';
@@ -51,7 +51,7 @@ export default function parse(
   resolver: Resolver,
   handlers: Array<Handler>
 ): Array<Object>|Object {
-  var ast = recast.parse(src, {esprima: babylon});
+  var ast = recast.parse(src, {esprima: parser});
   var componentDefinitions = resolver(ast.program, recast);
 
   if (Array.isArray(componentDefinitions)) {

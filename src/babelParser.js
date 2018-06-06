@@ -8,7 +8,7 @@
  *
  */
 
-var babylon = require('babylon');
+var parser = require('@babel/parser');
 
 var options = {
   sourceType: 'module',
@@ -23,7 +23,8 @@ var options = {
     'classProperties',
     'classPrivateProperties',
     'classPrivateMethods',
-    'exportExtensions',
+    'exportDefaultFrom',
+    'exportNamespaceFrom',
     'asyncGenerators',
     'functionBind',
     'functionSent',
@@ -41,7 +42,7 @@ var options = {
 
 export default {
   parse(src) {
-    var file = babylon.parse(src, options);
+    var file = parser.parse(src, options);
     file.program.comments = file.comments;
     return file.program;
   },
