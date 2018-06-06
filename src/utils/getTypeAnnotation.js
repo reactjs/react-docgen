@@ -27,7 +27,7 @@ export default function getTypeAnnotation(path: NodePath): ?NodePath {
   let resultPath: NodePath = path;
   do {
     resultPath = resultPath.get('typeAnnotation');
-  } while (hasTypeAnnotation(resultPath) && !types.Type.check(resultPath.node));
+  } while (hasTypeAnnotation(resultPath) && !types.FlowType.check(resultPath.node));
 
   return resultPath;
 }

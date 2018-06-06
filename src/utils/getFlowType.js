@@ -237,7 +237,7 @@ function getFlowTypeWithResolvedTypes(path: NodePath): FlowTypeDescriptor {
     visitedTypes[path.parentPath.node.id.name] = true;
   }
 
-  if (types.Type.check(node)) {
+  if (types.FlowType.check(node)) {
     if (node.type in flowTypes) {
       type = { name: flowTypes[node.type] };
     } else if (node.type in flowLiteralTypes) {

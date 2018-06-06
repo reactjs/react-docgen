@@ -21,7 +21,7 @@ describe('flowTypeHandler', () => {
 
   beforeEach(() => {
     ({statement, expression} = require('../../../tests/utils'));
-    getFlowTypeMock = jest.genMockFunction().mockImplementation(() => ({}));
+    getFlowTypeMock = jest.fn(() => ({}));
     jest.setMock('../../utils/getFlowType', getFlowTypeMock);
     jest.mock('../../utils/getFlowType');
 

@@ -21,7 +21,7 @@ describe('propTypeCompositionHandler', () => {
 
   beforeEach(() => {
     ({statement, expression} = require('../../../tests/utils'));
-    getPropTypeMock = jest.genMockFunction().mockImplementation(() => ({}));
+    getPropTypeMock = jest.fn(() => ({}));
     jest.setMock('../../utils/getPropType', getPropTypeMock);
     jest.mock('../../utils/getPropType');
 
