@@ -1,16 +1,18 @@
 /*
- *  Copyright (c) 2015, Facebook, Inc.
- *  All rights reserved.
+ * Copyright (c) 2015, Facebook, Inc.
+ * All rights reserved.
  *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ * @flow
  *
  */
 
 var parser = require('@babel/parser');
 
-var options = {
+var babelParserOptions = {
   sourceType: 'module',
   strictMode: false,
   plugins: [
@@ -19,7 +21,6 @@ var options = {
     'estree',
     'doExpressions',
     'objectRestSpread',
-    'decorators',
     'classProperties',
     'classPrivateProperties',
     'classPrivateMethods',
@@ -40,10 +41,29 @@ var options = {
   ],
 };
 
-export default {
-  parse(src) {
-    var file = parser.parse(src, options);
-    file.program.comments = file.comments;
-    return file.program;
-  },
+export type Options = {
+  legacyDecorators ?: boolean,
 };
+
+function buildOptions(options?: Options = {}) {
+  const parserOptions = { ...babelParserOptions, plugins: [...babelParserOptions.plugins] };
+  if (options.legacyDecorators) {
+    parserOptions.plugins.push('decorators-legacy');
+  } else {
+    parserOptions.plugins.push('decorators');
+  }
+
+  return parserOptions;
+}
+
+export default function buildParse(options: Options) {
+  const parserOptions = buildOptions(options);
+
+  return {
+    parse(src: string) {
+      var file = parser.parse(src, parserOptions);
+      file.program.comments = file.comments;
+      return file.program;
+    },
+  };
+}

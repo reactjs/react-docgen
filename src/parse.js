@@ -13,7 +13,7 @@
 import Documentation from './Documentation';
 import postProcessDocumentation from './utils/postProcessDocumentation';
 
-import parser from './babelParser';
+import buildParser, { type Options } from './babelParser';
 import recast from 'recast';
 
 var ERROR_MISSING_DEFINITION = 'No suitable component definition found.';
@@ -49,9 +49,10 @@ function executeHandlers(handlers, componentDefinitions) {
 export default function parse(
   src: string,
   resolver: Resolver,
-  handlers: Array<Handler>
+  handlers: Array<Handler>,
+  options: Options
 ): Array<Object>|Object {
-  var ast = recast.parse(src, {esprima: parser});
+  var ast = recast.parse(src, { parser: buildParser(options) });
   var componentDefinitions = resolver(ast.program, recast);
 
   if (Array.isArray(componentDefinitions)) {

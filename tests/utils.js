@@ -3,7 +3,7 @@
  */
 
 import _recast from 'recast';
-import parser from '../src/babelParser';
+import buildParser from '../src/babelParser';
 
 function stringify(value) {
   if (Array.isArray(value)) {
@@ -15,9 +15,9 @@ function stringify(value) {
 /**
  * Returns a NodePath to the program node of the passed node
  */
-export function parse(src, recast=_recast) {
+export function parse(src, recast = _recast, options = {}) {
   return new recast.types.NodePath(
-    recast.parse(stringify(src), {esprima: parser}).program
+    recast.parse(stringify(src), { parser: buildParser(options) }).program
   );
 }
 
