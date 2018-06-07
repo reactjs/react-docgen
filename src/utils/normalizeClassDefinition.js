@@ -40,7 +40,10 @@ export default function normalizeClassDefinition(
 ): void {
   var variableName;
   if (types.ClassDeclaration.check(classDefinition.node)) {
-    variableName = classDefinition.node.id.name;
+    // Class declarations don't have an id, e.g.: `export default class extends React.Component {}`
+    if (classDefinition.node.id) {    
+      variableName = classDefinition.node.id.name;
+    }
   } else if (types.ClassExpression.check(classDefinition.node)) {
     var {parentPath} = classDefinition;
     while (parentPath.node !== classDefinition.scope.node &&
