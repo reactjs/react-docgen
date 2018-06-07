@@ -33,6 +33,21 @@ describe('normalizeClassDefinition', () => {
     expect(classProperty.static).toBe(true);
   });
 
+  it('should not fail on classes without ids', () => {
+    var classDefinition = parse(`
+      export default class extends React.Component {
+        static propTypes = 42;
+      }
+    `).get('body', 0, 'declaration')
+
+    normalizeClassDefinition(classDefinition);
+    var {node: {body: {body: [classProperty]}}} = classDefinition;
+    expect(classProperty).toBeDefined();
+    expect(classProperty.key.name).toBe('propTypes');
+    expect(classProperty.value.value).toBe(42);
+    expect(classProperty.static).toBe(true);
+  });
+
   it('finds assignments to class expressions', () => {
     var classDefinition = parse(`
       var Foo = class {};
