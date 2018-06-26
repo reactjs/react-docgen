@@ -119,10 +119,7 @@ function getPropTypeShape(argumentPath) {
   if (types.ObjectExpression.check(argumentPath.node)) {
     const value = {};
     argumentPath.get('properties').each(function(propertyPath) {
-      if (
-        propertyPath.get('type').value === types.SpreadProperty.name || // bc for older estree version
-        propertyPath.get('type').value === types.SpreadElement.name
-      ) {
+      if (propertyPath.get('type').value === types.SpreadElement.name) {
         // It is impossible to resolve a name for a spread element
         return;
       }

@@ -55,7 +55,6 @@ function amendPropTypes(getDescriptor, path) {
         }
         break;
       }
-      case types.SpreadProperty.name: // bc for older estree version
       case types.SpreadElement.name: {
         const resolvedValuePath = resolveToValue(propertyPath.get('argument'));
         switch (resolvedValuePath.node.type) {

@@ -35,7 +35,6 @@ function amendComposes(documentation, path) {
 function processObjectExpression(documentation, path) {
   path.get('properties').each(function(propertyPath) {
     switch (propertyPath.node.type) {
-      case types.SpreadProperty.name: // bc for older estree version
       case types.SpreadElement.name:
         amendComposes(
           documentation,
