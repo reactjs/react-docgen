@@ -29,9 +29,14 @@ let DOCBLOCK_HEADER = /^\*\s/;
  * Given a path, this function returns the closest preceding docblock if it
  * exists.
  */
-export function getDocblock(path: NodePath): ?string {
+export function getDocblock(path: NodePath, trailing: boolean = false): ?string {
   var comments = [];
-  if (path.node.leadingComments) {
+  if (trailing && path.node.trailingComments) {
+    comments = path.node.trailingComments.filter(
+      comment => comment.type === 'CommentBlock' &&
+        DOCBLOCK_HEADER.test(comment.value)
+    );
+  } else if (path.node.leadingComments) {
     comments = path.node.leadingComments.filter(
       comment => comment.type === 'CommentBlock' &&
         DOCBLOCK_HEADER.test(comment.value)

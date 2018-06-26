@@ -36,7 +36,8 @@ function resolveName(path) {
 
   if (
     types.FunctionExpression.check(path.node) ||
-    types.ArrowFunctionExpression.check(path.node)
+    types.ArrowFunctionExpression.check(path.node) ||
+    types.TaggedTemplateExpression.check(path.node)
   ) {
     if (!types.VariableDeclarator.check(path.parent.node)) {
       return; // eslint-disable-line consistent-return

@@ -21,7 +21,7 @@ describe('flowTypeHandler', () => {
 
   beforeEach(() => {
     ({statement, expression} = require('../../../tests/utils'));
-    getFlowTypeMock = jest.genMockFunction().mockImplementation(() => ({}));
+    getFlowTypeMock = jest.fn(() => ({}));
     jest.setMock('../../utils/getFlowType', getFlowTypeMock);
     jest.mock('../../utils/getFlowType');
 
@@ -56,14 +56,17 @@ describe('flowTypeHandler', () => {
         foo: {
           flowType: {},
           required: true,
+          description: '',
         },
         bar: {
           flowType: {},
           required: true,
+          description: '',
         },
         hal: {
           flowType: {},
           required: true,
+          description: '',
         },
         });
     });
@@ -83,10 +86,12 @@ describe('flowTypeHandler', () => {
         foo: {
           flowType: {},
           required: true,
+          description: '',
         },
         bar: {
           flowType: {},
           required: false,
+          description: '',
         },
       });
     });
@@ -106,10 +111,12 @@ describe('flowTypeHandler', () => {
         foo: {
           flowType: {},
           required: true,
+          description: '',
         },
         bar: {
           flowType: {},
           required: true,
+          description: '',
         },
       });
     });
@@ -128,7 +135,32 @@ describe('flowTypeHandler', () => {
         foo: {
           flowType: {},
           required: true,
+          description: '',
         },
+      });
+    });
+
+    describe('special generic type annotations', () => {
+      ['$ReadOnly', '$Exact'].forEach(annotation => {
+        it(`unwraps ${annotation}<...>`, () => {
+          var flowTypesSrc = `
+            ${annotation}<{
+              foo: string | number,
+            }>
+          `;
+
+          var definition = getSrc(flowTypesSrc);
+
+          flowTypeHandler(documentation, definition);
+
+          expect(documentation.descriptors).toEqual({
+            foo: {
+              flowType: {},
+              required: true,
+              description: '',
+            },
+          });
+        });
       });
     });
   }
@@ -195,6 +227,7 @@ describe('flowTypeHandler', () => {
       foo: {
         flowType: {},
         required: true,
+        description: '',
       },
     });
   });

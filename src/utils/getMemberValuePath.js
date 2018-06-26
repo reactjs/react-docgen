@@ -44,6 +44,18 @@ function isSupportedDefinitionType({node}) {
     types.ClassDeclaration.check(node) ||
     types.ClassExpression.check(node) ||
 
+   /**
+    * Adds support for libraries such as
+    * [styled components]{@link https://github.com/styled-components} that use
+    * TaggedTemplateExpression's to generate components.
+    *
+    * While react-docgen's built-in resolvers do not support resolving
+    * TaggedTemplateExpression definitiona, third-party resolvers (such as
+    * https://github.com/Jmeyering/react-docgen-annotation-resolver) could be
+    * used to add these definitions.
+    */
+    types.TaggedTemplateExpression.check(node) ||
+
     // potential stateless function component
     types.VariableDeclaration.check(node) ||
     types.ArrowFunctionExpression.check(node) ||
@@ -72,13 +84,14 @@ export default function getMemberValuePath(
     throw new TypeError(
       'Got unsupported definition type. Definition must be one of ' +
       'ObjectExpression, ClassDeclaration, ClassExpression,' +
-      'VariableDeclaration, ArrowFunctionExpression, FunctionExpression, or ' +
-      'FunctionDeclaration. Got "' + componentDefinition.node.type + '"' +
-      'instead.'
+      'VariableDeclaration, ArrowFunctionExpression, FunctionExpression, ' +
+      'TaggedTemplateExpression or FunctionDeclaration. Got "' +
+      componentDefinition.node.type + '"' + 'instead.'
     );
   }
 
-  const lookupMethod = LOOKUP_METHOD[componentDefinition.node.type];
+  const lookupMethod = LOOKUP_METHOD[componentDefinition.node.type]
+    || getMemberExpressionValuePath;
   let result = lookupMethod(componentDefinition, memberName);
   if (!result && SYNONYMS[memberName]) {
     result = lookupMethod(componentDefinition, SYNONYMS[memberName]);

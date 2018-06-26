@@ -155,6 +155,27 @@ describe('getFlowType', () => {
     }, raw: '(p1: number, p2: ?string) => boolean'});
   });
 
+
+  it('detects function signature types without parameter names', () => {
+    var typePath = expression('x: (number, ?string) => boolean').get('typeAnnotation').get('typeAnnotation');
+    expect(getFlowType(typePath)).toEqual({name: 'signature', type: 'function', signature: {
+      arguments: [
+        { name: '', type: { name: 'number' }},
+        { name: '', type: { name: 'string', nullable: true }},
+      ],
+      return: { name: 'boolean' },
+    }, raw: '(number, ?string) => boolean'});
+  });
+
+  it('detects function signature type with single parmeter without name', () => {
+    var typePath = expression('x: string => boolean').get('typeAnnotation').get('typeAnnotation');
+    expect(getFlowType(typePath)).toEqual({name: 'signature', type: 'function', signature: {
+      arguments: [
+        { name: '', type: { name: 'string' }},
+      ],
+      return: { name: 'boolean' },
+    }, raw: 'string => boolean'});
+  });
   it('detects callable signature type', () => {
     var typePath = expression('x: { (str: string): string, token: string }').get('typeAnnotation').get('typeAnnotation');
     expect(getFlowType(typePath)).toEqual({name: 'signature', type: 'object', signature: {

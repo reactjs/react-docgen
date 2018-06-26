@@ -42,7 +42,7 @@ export function resolveObjectExpressionToNameArray(objectExpression: NodePath, r
           (types.Identifier.check(prop.key) && !prop.computed) ||
           types.Literal.check(prop.key)
         ) ||
-        types.SpreadProperty.check(prop)
+        (types.SpreadProperty.check(prop) || types.SpreadElement.check(prop))
     )
   ) {
     let values = [];
@@ -56,7 +56,7 @@ export function resolveObjectExpressionToNameArray(objectExpression: NodePath, r
         const name = prop.key.name || (raw ? prop.key.raw : prop.key.value);
 
         values.push(name);
-      } else if (types.SpreadProperty.check(prop)) {
+      } else if (types.SpreadProperty.check(prop) || types.SpreadElement.check(prop)) {
         const spreadObject = resolveToValue(propPath.get('argument'));
         const spreadValues = resolveObjectExpressionToNameArray(spreadObject);
         if (!spreadValues) {

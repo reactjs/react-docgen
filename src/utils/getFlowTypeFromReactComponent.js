@@ -18,7 +18,9 @@ import isUnreachableFlowType from '../utils/isUnreachableFlowType';
 import recast from 'recast';
 import resolveToValue from '../utils/resolveToValue';
 
-var {types: {namedTypes: types}} = recast;
+const {types: {namedTypes: types}} = recast;
+
+const supportedUtilityTypes = new Set(['$Exact', '$ReadOnly']);
 
 /**
  * Given an React component (stateless or class) tries to find the
@@ -52,7 +54,9 @@ export default (path: NodePath): ?NodePath  => {
     typePath = getTypeAnnotation(param);
   }
 
-  if (typePath && types.GenericTypeAnnotation.check(typePath.node)) {
+  if (typePath && isSupportedUtilityType(typePath)) {
+    typePath = unwrapUtilityType(typePath);
+  } else if (typePath && types.GenericTypeAnnotation.check(typePath.node)) {
     typePath = resolveToValue(typePath.get('id'));
     if (
       !typePath ||
@@ -93,7 +97,9 @@ export function applyToFlowTypeProperties(
 function resolveGenericTypeAnnotation(path: NodePath): ?NodePath {
   // If the node doesn't have types or properties, try to get the type.
   let typePath: ?NodePath;
-  if (path && types.GenericTypeAnnotation.check(path.node)) {
+  if (path && isSupportedUtilityType(path)) {
+    typePath = unwrapUtilityType(path);
+  } else if(path && types.GenericTypeAnnotation.check(path.node)) {
     typePath = resolveToValue(path.get('id'));
     if (isUnreachableFlowType(typePath)) {
       return;
@@ -103,4 +109,26 @@ function resolveGenericTypeAnnotation(path: NodePath): ?NodePath {
   }
 
   return typePath;
+}
+
+/**
+ * See `supportedUtilityTypes` for which types are supported and
+ * https://flow.org/en/docs/types/utilities/ for which types are available.
+ */
+function isSupportedUtilityType (path: NodePath): boolean {
+  if (types.GenericTypeAnnotation.check(path.node)) {
+    const idPath = path.get('id');
+    return Boolean(idPath) &&
+      supportedUtilityTypes.has(idPath.node.name);
+  }
+  return false;
+}
+
+/**
+ * Unwraps well known utility types. For example:
+ *
+ *   $ReadOnly<T> => T
+ */
+function unwrapUtilityType(path: NodePath): ?NodePath {
+  return path.get('typeParameters', 'params', 0);
 }

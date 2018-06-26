@@ -71,14 +71,18 @@ class Documentation {
     if (this._props.size > 0) {
       obj.props = {};
       for (var [propName, propDescriptor] of this._props) {
-        obj.props[propName] = propDescriptor;
+        if (Object.keys(propDescriptor).length > 0) {
+          obj.props[propName] = propDescriptor;
+        }
       }
     }
 
     if (this._context.size > 0) {
       obj.context = {};
       for (var [contextName, contextDescriptor] of this._context) {
-        obj.context[contextName] = contextDescriptor;
+        if (Object.keys(contextDescriptor).length > 0) {
+          obj.context[contextName] = contextDescriptor;
+        }
       }
     }
 

@@ -14,6 +14,7 @@ import * as handlers from './handlers';
 import parse from './parse';
 import * as resolver from './resolver';
 import * as utils from './utils';
+import type { Options } from './babelParser';
 
 var defaultResolver = resolver.findExportedComponentDefinition;
 var defaultHandlers = [
@@ -23,7 +24,6 @@ var defaultHandlers = [
   handlers.propTypeCompositionHandler,
   handlers.propDocBlockHandler,
   handlers.flowTypeHandler,
-  handlers.flowTypeDocBlockHandler,
   handlers.defaultPropsHandler,
   handlers.componentDocblockHandler,
   handlers.displayNameHandler,
@@ -46,7 +46,8 @@ var defaultHandlers = [
 function defaultParse( // eslint-disable-line no-unused-vars
   src: string,
   resolver?: ?Resolver, // eslint-disable-line no-shadow
-  handlers?: ?Array<Handler> // eslint-disable-line no-shadow
+  handlers?: ?Array<Handler>, // eslint-disable-line no-shadow
+  options ?: Options = {}
 ): Array<Object>|Object {
   if (!resolver) {
     resolver = defaultResolver;
@@ -55,7 +56,7 @@ function defaultParse( // eslint-disable-line no-unused-vars
     handlers = defaultHandlers;
   }
 
-  return parse(src, resolver, handlers);
+  return parse(src, resolver, handlers, options);
 }
 
 export {

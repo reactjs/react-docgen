@@ -10,7 +10,10 @@
  *
  */
 
+import recast from 'recast';
 import getNameOrValue from './getNameOrValue';
+
+const {types: {namedTypes: types}} = recast;
 
 /**
  * In an ObjectExpression, the name of a property can either be an identifier
@@ -18,7 +21,9 @@ import getNameOrValue from './getNameOrValue';
  * returns the value of the literal or name of the identifier.
  */
 export default function getPropertyName(propertyPath: NodePath): string {
-  if (propertyPath.node.computed) {
+  if (types.ObjectTypeSpreadProperty.check(propertyPath.node)) {
+    return getNameOrValue(propertyPath.get('argument').get('id'), false);
+  } else if (propertyPath.node.computed) {
     throw new TypeError('Property name must be an Identifier or a Literal');
   }
 

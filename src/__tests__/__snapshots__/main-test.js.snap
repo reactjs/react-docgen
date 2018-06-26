@@ -299,6 +299,40 @@ Object {
 
 exports[`main fixtures processes component "component_11.js" without errors 1`] = `
 Object {
+  "composes": Array [
+    "OtherProps",
+  ],
+  "description": "",
+  "displayName": "MyComponent",
+  "methods": Array [],
+  "props": Object {
+    "fooProp": Object {
+      "description": "fooProp is spread in from a locally resolved type",
+      "flowType": Object {
+        "name": "string",
+      },
+      "required": false,
+    },
+    "prop1": Object {
+      "description": "The first prop",
+      "flowType": Object {
+        "name": "string",
+      },
+      "required": true,
+    },
+    "prop2": Object {
+      "description": "The second, covariant prop",
+      "flowType": Object {
+        "name": "number",
+      },
+      "required": true,
+    },
+  },
+}
+`;
+
+exports[`main fixtures processes component "component_12.js" without errors 1`] = `
+Object {
   "description": "",
   "displayName": "Foo",
   "methods": Array [],

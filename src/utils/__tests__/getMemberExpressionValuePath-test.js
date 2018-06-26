@@ -62,4 +62,15 @@ describe('getMemberExpressionValuePath', () => {
       expect(getMemberExpressionValuePath(def, 'imComputed')).not.toBeDefined();
     });
   });
+  describe('TaggedTemplateLiteral', () => {
+    it('finds "normal" property definitions', () => {
+      var def = statement(`
+        var Foo = foo\`bar\`
+        Foo.propTypes = {};
+      `);
+
+      expect(getMemberExpressionValuePath(def, 'propTypes'))
+        .toBe(def.parent.get('body', 1, 'expression', 'right'));
+      });
+  });
 });

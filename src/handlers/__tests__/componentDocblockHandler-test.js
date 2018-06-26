@@ -89,7 +89,7 @@ describe('componentDocblockHandler', () => {
    * Decorates can only be assigned to class and therefore only make sense for
    * class declarations and export declarations.
    */
-  function testDecorators(definitionSrc, parse) { // eslint-disable-line no-shadow
+  function testDecorators(classSrc, parse, exportSrc = '') { // eslint-disable-line no-shadow
     describe('decorators', () => {
       it('uses the docblock above the decorator if it\'s the only one', () => {
         var definition = parse(`
@@ -97,9 +97,10 @@ describe('componentDocblockHandler', () => {
           /**
            * Component description
            */
+          ${exportSrc}
           @Decorator1
           @Decorator2
-          ${definitionSrc}
+          ${classSrc}
         `);
 
         componentDocblockHandler(documentation, definition);
@@ -109,15 +110,17 @@ describe('componentDocblockHandler', () => {
       it('uses the component docblock if present', () => {
         var definition = parse(`
           import something from 'somewhere';
+
+          ${exportSrc}
           /**
-           * Decorator description
-           */
+          * Decorator description
+          */
           @Decorator1
           @Decorator2
           /**
            * Component description
            */
-          ${definitionSrc}
+          ${classSrc}
         `);
 
         componentDocblockHandler(documentation, definition);
@@ -181,8 +184,9 @@ describe('componentDocblockHandler', () => {
         src => lastStatement(src).get('declaration')
       );
       testDecorators(
-        'export default class Component {}',
-        src => lastStatement(src).get('declaration')
+        'class Component {}',
+        src => lastStatement(src).get('declaration'),
+        'export default'
       );
     });
 
@@ -192,8 +196,9 @@ describe('componentDocblockHandler', () => {
         src => lastStatement(src).get('declaration')
       );
       testDecorators(
-        'export default class {}',
-        src => lastStatement(src).get('declaration')
+        'class {}',
+        src => lastStatement(src).get('declaration'),
+        'export default'
       );
     });
 
@@ -241,8 +246,9 @@ describe('componentDocblockHandler', () => {
         src => lastStatement(src).get('declaration')
       );
       testDecorators(
-        'export class Component {}',
-        src => lastStatement(src).get('declaration')
+        'class Component {}',
+        src => lastStatement(src).get('declaration'),
+        'export'
       );
     });
 
