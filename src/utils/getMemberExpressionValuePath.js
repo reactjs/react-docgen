@@ -14,7 +14,9 @@ import getNameOrValue from './getNameOrValue';
 import { String as toString } from './expressionTo';
 import recast from 'recast';
 
-var {types: {namedTypes: types}} = recast;
+var {
+  types: { namedTypes: types },
+} = recast;
 
 function resolveName(path) {
   if (types.VariableDeclaration.check(path.node)) {
@@ -22,8 +24,9 @@ function resolveName(path) {
     if (declarations.value.length && declarations.value.length !== 1) {
       throw new TypeError(
         'Got unsupported VariableDeclaration. VariableDeclaration must only ' +
-        'have a single VariableDeclarator. Got ' + declarations.value.length +
-        ' declarations.'
+          'have a single VariableDeclarator. Got ' +
+          declarations.value.length +
+          ' declarations.',
       );
     }
     var value = declarations.get(0, 'id', 'name').value;
@@ -48,8 +51,9 @@ function resolveName(path) {
 
   throw new TypeError(
     'Attempted to resolveName for an unsupported path. resolveName accepts a ' +
-    'VariableDeclaration, FunctionDeclaration, or FunctionExpression. Got "' +
-    path.node.type + '".'
+      'VariableDeclaration, FunctionDeclaration, or FunctionExpression. Got "' +
+      path.node.type +
+      '".',
   );
 }
 
@@ -63,7 +67,7 @@ function getRoot(node) {
 
 export default function getMemberExpressionValuePath(
   variableDefinition: NodePath,
-  memberName: string
+  memberName: string,
 ): ?NodePath {
   var localName = resolveName(variableDefinition);
   var program = getRoot(variableDefinition);
@@ -83,7 +87,8 @@ export default function getMemberExpressionValuePath(
       }
 
       if (
-        (!memberPath.node.computed || types.Literal.check(memberPath.node.property)) &&
+        (!memberPath.node.computed ||
+          types.Literal.check(memberPath.node.property)) &&
         getNameOrValue(memberPath.get('property')) === memberName &&
         toString(memberPath.get('object')) === localName
       ) {

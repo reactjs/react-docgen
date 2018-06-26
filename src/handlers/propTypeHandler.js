@@ -22,8 +22,9 @@ import recast from 'recast';
 import resolveToModule from '../utils/resolveToModule';
 import resolveToValue from '../utils/resolveToValue';
 
-
-var {types: {namedTypes: types}} = recast;
+var {
+  types: { namedTypes: types },
+} = recast;
 
 function isPropTypesExpression(path) {
   var moduleName = resolveToModule(path);
@@ -41,13 +42,11 @@ function amendPropTypes(getDescriptor, path) {
   path.get('properties').each(function(propertyPath) {
     switch (propertyPath.node.type) {
       case types.Property.name:
-        var propDescriptor = getDescriptor(
-          getPropertyName(propertyPath)
-        );
+        var propDescriptor = getDescriptor(getPropertyName(propertyPath));
         var valuePath = propertyPath.get('value');
-        var type = isPropTypesExpression(valuePath) ?
-          getPropType(valuePath) :
-          {name: 'custom', raw: printValue(valuePath)};
+        var type = isPropTypesExpression(valuePath)
+          ? getPropType(valuePath)
+          : { name: 'custom', raw: printValue(valuePath) };
 
         if (type) {
           propDescriptor.type = type;
@@ -69,10 +68,7 @@ function amendPropTypes(getDescriptor, path) {
 }
 
 function getPropTypeHandler(propName: string) {
-  return function (
-    documentation: Documentation,
-    path: NodePath
-  ) {
+  return function(documentation: Documentation, path: NodePath) {
     var propTypesPath = getMemberValuePath(path, propName);
     if (!propTypesPath) {
       return;
@@ -82,7 +78,7 @@ function getPropTypeHandler(propName: string) {
       return;
     }
     let getDescriptor;
-    switch(propName) {
+    switch (propName) {
       case 'childContextTypes':
         getDescriptor = documentation.getChildContextDescriptor;
         break;
@@ -93,9 +89,9 @@ function getPropTypeHandler(propName: string) {
         getDescriptor = documentation.getPropDescriptor;
     }
     amendPropTypes(getDescriptor.bind(documentation), propTypesPath);
-  }
+  };
 }
 
-export const propTypeHandler = getPropTypeHandler('propTypes')
-export const contextTypeHandler = getPropTypeHandler('contextTypes')
-export const childContextTypeHandler = getPropTypeHandler('childContextTypes')
+export const propTypeHandler = getPropTypeHandler('propTypes');
+export const contextTypeHandler = getPropTypeHandler('contextTypes');
+export const childContextTypeHandler = getPropTypeHandler('childContextTypes');

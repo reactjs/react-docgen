@@ -17,8 +17,9 @@ describe('getMemberExpressionValuePath', () => {
   var statement;
 
   beforeEach(() => {
-    getMemberExpressionValuePath = require('../getMemberExpressionValuePath').default;
-    ({statement} = require('../../../tests/utils'));
+    getMemberExpressionValuePath = require('../getMemberExpressionValuePath')
+      .default;
+    ({ statement } = require('../../../tests/utils'));
   });
 
   describe('MethodExpression', () => {
@@ -28,8 +29,9 @@ describe('getMemberExpressionValuePath', () => {
         Foo.propTypes = {};
       `);
 
-      expect(getMemberExpressionValuePath(def, 'propTypes'))
-        .toBe(def.parent.get('body', 1, 'expression', 'right'));
+      expect(getMemberExpressionValuePath(def, 'propTypes')).toBe(
+        def.parent.get('body', 1, 'expression', 'right'),
+      );
     });
 
     it('takes the correct property definitions', () => {
@@ -39,8 +41,9 @@ describe('getMemberExpressionValuePath', () => {
         Bar.propTypes = { unrelated: true };
       `);
 
-      expect(getMemberExpressionValuePath(def, 'propTypes'))
-        .toBe(def.parent.get('body', 1, 'expression', 'right'));
+      expect(getMemberExpressionValuePath(def, 'propTypes')).toBe(
+        def.parent.get('body', 1, 'expression', 'right'),
+      );
     });
 
     it('finds computed property definitions with literal keys', () => {
@@ -49,8 +52,9 @@ describe('getMemberExpressionValuePath', () => {
         Foo['render'] = () => {};
       `);
 
-      expect(getMemberExpressionValuePath(def, 'render'))
-        .toBe(def.parent.get('body', 1, 'expression', 'right'));
+      expect(getMemberExpressionValuePath(def, 'render')).toBe(
+        def.parent.get('body', 1, 'expression', 'right'),
+      );
     });
 
     it('ignores computed property definitions with expression', () => {
@@ -69,8 +73,9 @@ describe('getMemberExpressionValuePath', () => {
         Foo.propTypes = {};
       `);
 
-      expect(getMemberExpressionValuePath(def, 'propTypes'))
-        .toBe(def.parent.get('body', 1, 'expression', 'right'));
-      });
+      expect(getMemberExpressionValuePath(def, 'propTypes')).toBe(
+        def.parent.get('body', 1, 'expression', 'right'),
+      );
+    });
   });
 });

@@ -15,7 +15,9 @@ import match from './match';
 import recast from 'recast';
 import resolveToModule from './resolveToModule';
 
-var {types: {namedTypes: types}} = recast;
+var {
+  types: { namedTypes: types },
+} = recast;
 
 /**
  * Returns true if the expression is a function call of the form
@@ -26,7 +28,7 @@ export default function isReactCloneElementCall(path: NodePath): boolean {
     path = path.get('expression');
   }
 
-  if (!match(path.node, {callee: {property: {name: 'cloneElement'}}})) {
+  if (!match(path.node, { callee: { property: { name: 'cloneElement' } } })) {
     return false;
   }
   var module = resolveToModule(path.get('callee', 'object'));

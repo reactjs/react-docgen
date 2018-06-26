@@ -23,7 +23,11 @@ function ignore() {
 }
 
 function isComponentDefinition(path) {
-  return isReactCreateClassCall(path) || isReactComponentClass(path) || isStatelessComponent(path);
+  return (
+    isReactCreateClassCall(path) ||
+    isReactComponentClass(path) ||
+    isStatelessComponent(path)
+  );
 }
 
 function resolveDefinition(definition, types): ?NodePath {
@@ -33,7 +37,7 @@ function resolveDefinition(definition, types): ?NodePath {
     if (types.ObjectExpression.check(resolvedPath.node)) {
       return resolvedPath;
     }
-  } else if(isReactComponentClass(definition)) {
+  } else if (isReactComponentClass(definition)) {
     normalizeClassDefinition(definition);
     return definition;
   } else if (isStatelessComponent(definition)) {
@@ -59,7 +63,7 @@ function resolveDefinition(definition, types): ?NodePath {
  */
 export default function findExportedComponentDefinitions(
   ast: ASTNode,
-  recast: Object
+  recast: Object,
 ): Array<NodePath> {
   var types = recast.types.namedTypes;
   var components: Array<NodePath> = [];
@@ -77,12 +81,12 @@ export default function findExportedComponentDefinitions(
         }
         return acc;
       }, [])
-      .map((definition) => resolveDefinition(definition, types));
+      .map(definition => resolveDefinition(definition, types));
 
     if (definitions.length === 0) {
       return false;
     }
-    definitions.forEach((definition) => {
+    definitions.forEach(definition => {
       if (definition && components.indexOf(definition) === -1) {
         components.push(definition);
       }

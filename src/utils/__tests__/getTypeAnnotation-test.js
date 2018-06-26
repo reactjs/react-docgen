@@ -18,13 +18,15 @@ describe('getTypeAnnotation', () => {
 
   beforeEach(() => {
     getTypeAnnotation = require('../getTypeAnnotation').default;
-    ({expression} = require('../../../tests/utils'));
+    ({ expression } = require('../../../tests/utils'));
   });
 
   it('detects simple type', () => {
     var path = expression('x: xyz');
 
-    expect(getTypeAnnotation(path)).toEqual(path.get('typeAnnotation').get('typeAnnotation'));
+    expect(getTypeAnnotation(path)).toEqual(
+      path.get('typeAnnotation').get('typeAnnotation'),
+    );
   });
 
   it('does not fail if no type', () => {
@@ -36,7 +38,8 @@ describe('getTypeAnnotation', () => {
   it('stops at first nested type', () => {
     var path = expression('x: ?xyz');
 
-    expect(getTypeAnnotation(path)).toEqual(path.get('typeAnnotation').get('typeAnnotation'));
+    expect(getTypeAnnotation(path)).toEqual(
+      path.get('typeAnnotation').get('typeAnnotation'),
+    );
   });
-
 });

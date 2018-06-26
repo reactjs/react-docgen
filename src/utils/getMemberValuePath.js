@@ -16,7 +16,9 @@ import getPropertyValuePath from './getPropertyValuePath';
 import resolveFunctionDefinitionToReturnValue from '../utils/resolveFunctionDefinitionToReturnValue';
 import recast from 'recast';
 
-const {types: {namedTypes: types}} = recast;
+const {
+  types: { namedTypes: types },
+} = recast;
 
 const SYNONYMS = {
   getDefaultProps: 'defaultProps',
@@ -24,9 +26,10 @@ const SYNONYMS = {
 };
 
 const POSTPROCESS_MEMBERS = {
-  propTypes: path => types.Function.check(path.node) ?
-    resolveFunctionDefinitionToReturnValue(path) :
-    path,
+  propTypes: path =>
+    types.Function.check(path.node)
+      ? resolveFunctionDefinitionToReturnValue(path)
+      : path,
 };
 
 const LOOKUP_METHOD = {
@@ -39,28 +42,28 @@ const LOOKUP_METHOD = {
   [types.ClassExpression.name]: getClassMemberValuePath,
 };
 
-function isSupportedDefinitionType({node}) {
-  return types.ObjectExpression.check(node) ||
+function isSupportedDefinitionType({ node }) {
+  return (
+    types.ObjectExpression.check(node) ||
     types.ClassDeclaration.check(node) ||
     types.ClassExpression.check(node) ||
-
-   /**
-    * Adds support for libraries such as
-    * [styled components]{@link https://github.com/styled-components} that use
-    * TaggedTemplateExpression's to generate components.
-    *
-    * While react-docgen's built-in resolvers do not support resolving
-    * TaggedTemplateExpression definitiona, third-party resolvers (such as
-    * https://github.com/Jmeyering/react-docgen-annotation-resolver) could be
-    * used to add these definitions.
-    */
+    /**
+     * Adds support for libraries such as
+     * [styled components]{@link https://github.com/styled-components} that use
+     * TaggedTemplateExpression's to generate components.
+     *
+     * While react-docgen's built-in resolvers do not support resolving
+     * TaggedTemplateExpression definitiona, third-party resolvers (such as
+     * https://github.com/Jmeyering/react-docgen-annotation-resolver) could be
+     * used to add these definitions.
+     */
     types.TaggedTemplateExpression.check(node) ||
-
     // potential stateless function component
     types.VariableDeclaration.check(node) ||
     types.ArrowFunctionExpression.check(node) ||
     types.FunctionDeclaration.check(node) ||
-    types.FunctionExpression.check(node);
+    types.FunctionExpression.check(node)
+  );
 }
 
 /**
@@ -78,20 +81,23 @@ function isSupportedDefinitionType({node}) {
  */
 export default function getMemberValuePath(
   componentDefinition: NodePath,
-  memberName: string
+  memberName: string,
 ): ?NodePath {
   if (!isSupportedDefinitionType(componentDefinition)) {
     throw new TypeError(
       'Got unsupported definition type. Definition must be one of ' +
-      'ObjectExpression, ClassDeclaration, ClassExpression,' +
-      'VariableDeclaration, ArrowFunctionExpression, FunctionExpression, ' +
-      'TaggedTemplateExpression or FunctionDeclaration. Got "' +
-      componentDefinition.node.type + '"' + 'instead.'
+        'ObjectExpression, ClassDeclaration, ClassExpression,' +
+        'VariableDeclaration, ArrowFunctionExpression, FunctionExpression, ' +
+        'TaggedTemplateExpression or FunctionDeclaration. Got "' +
+        componentDefinition.node.type +
+        '"' +
+        'instead.',
     );
   }
 
-  const lookupMethod = LOOKUP_METHOD[componentDefinition.node.type]
-    || getMemberExpressionValuePath;
+  const lookupMethod =
+    LOOKUP_METHOD[componentDefinition.node.type] ||
+    getMemberExpressionValuePath;
   let result = lookupMethod(componentDefinition, memberName);
   if (!result && SYNONYMS[memberName]) {
     result = lookupMethod(componentDefinition, SYNONYMS[memberName]);

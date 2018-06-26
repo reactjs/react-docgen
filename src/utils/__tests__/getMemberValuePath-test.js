@@ -14,7 +14,7 @@ jest.mock('../getPropertyValuePath');
 jest.mock('../getClassMemberValuePath');
 jest.mock('../getMemberExpressionValuePath');
 
-import {expression, statement} from '../../../tests/utils';
+import { expression, statement } from '../../../tests/utils';
 
 import getPropertyValuePath from '../getPropertyValuePath';
 import getClassMemberValuePath from '../getClassMemberValuePath';
@@ -22,7 +22,6 @@ import getMemberValuePath from '../getMemberValuePath';
 import getMemberExpressionValuePath from '../getMemberExpressionValuePath';
 
 describe('getMemberValuePath', () => {
-
   it('handles ObjectExpresisons', () => {
     var path = expression('{}');
 
@@ -76,5 +75,4 @@ describe('getMemberValuePath', () => {
 
     expect(getMemberValuePath(path, 'defaultProps')).toBe(21);
   });
-
 });

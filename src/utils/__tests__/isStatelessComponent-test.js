@@ -10,7 +10,6 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
-
 jest.disableAutomock();
 
 describe('isStatelessComponent', () => {
@@ -19,41 +18,41 @@ describe('isStatelessComponent', () => {
 
   beforeEach(() => {
     isStatelessComponent = require('../isStatelessComponent').default;
-    ({statement, parse} = require('../../../tests/utils'));
+    ({ statement, parse } = require('../../../tests/utils'));
   });
 
   const componentIdentifiers = {
-    'JSX': '<div />',
+    JSX: '<div />',
     'React.createElement': 'React.createElement("div", null)',
     'React.cloneElement': 'React.cloneElement(children, null)',
     'React.Children.only()': 'React.Children.only(children, null)',
   };
 
   const componentStyle = {
-    'ArrowExpression': [
+    ArrowExpression: [
       (name, expr) => `var ${name} = () => (${expr});`,
       ['declarations', 0, 'init'],
     ],
-    'ArrowBlock': [
+    ArrowBlock: [
       (name, expr) => `var ${name} = () => { return (${expr}); };`,
       ['declarations', 0, 'init'],
     ],
-    'FunctionExpression': [
+    FunctionExpression: [
       (name, expr) => `var ${name} = function () { return (${expr}); }`,
       ['declarations', 0, 'init'],
     ],
-    'FunctionDeclaration': [
+    FunctionDeclaration: [
       (name, expr) => `function ${name} () { return (${expr}); }`,
       [],
     ],
   };
 
   const modifiers = {
-    'default': (expr) => expr,
-    'conditional consequent': (expr) => `x ? ${expr} : null`,
-    'conditional alternate': (expr) => `x ? null : ${expr}`,
-    'OR left': (expr) => `${expr} || null`,
-    'AND right': (expr) => `x && ${expr}`,
+    default: expr => expr,
+    'conditional consequent': expr => `x ? ${expr} : null`,
+    'conditional alternate': expr => `x ? null : ${expr}`,
+    'OR left': expr => `${expr} || null`,
+    'AND right': expr => `x && ${expr}`,
   };
 
   const cases = {
@@ -74,7 +73,7 @@ describe('isStatelessComponent', () => {
     ],
   };
 
-  Object.keys(componentStyle).forEach((name) => {
+  Object.keys(componentStyle).forEach(name => {
     cases[`with ${name} reference`] = [
       (expr, componentFactory) => `
         var React = require('react');
@@ -82,43 +81,55 @@ describe('isStatelessComponent', () => {
         ${componentFactory('Foo', 'jsx()')}
       `,
       ['body', 2],
-    ]
+    ];
   });
 
   const negativeModifiers = {
-    'nested ArrowExpression': (expr) => `() => ${expr}`,
-    'nested ArrowBlock': (expr) => `() => { return ${expr} }`,
-    'nested FunctionExpression': (expr) => `function () { return ${expr} }`,
+    'nested ArrowExpression': expr => `() => ${expr}`,
+    'nested ArrowBlock': expr => `() => { return ${expr} }`,
+    'nested FunctionExpression': expr => `function () { return ${expr} }`,
   };
 
-  Object.keys(cases).forEach((name) => {
+  Object.keys(cases).forEach(name => {
     const [caseFactory, caseSelector] = cases[name];
 
     describe(name, () => {
-      Object.keys(componentIdentifiers).forEach((componentIdentifierName) => {
-
+      Object.keys(componentIdentifiers).forEach(componentIdentifierName => {
         const returnExpr = componentIdentifiers[componentIdentifierName];
         describe(componentIdentifierName, () => {
-          Object.keys(componentStyle).forEach((componentName) => {
-            const [componentFactory, componentSelector] = componentStyle[componentName];
+          Object.keys(componentStyle).forEach(componentName => {
+            const [componentFactory, componentSelector] = componentStyle[
+              componentName
+            ];
             describe(componentName, () => {
-
-              Object.keys(modifiers).forEach((modifierName) => {
+              Object.keys(modifiers).forEach(modifierName => {
                 const modifierFactory = modifiers[modifierName];
 
                 it(modifierName, () => {
-                  const code = caseFactory(modifierFactory(returnExpr), componentFactory);
-                  const def = parse(code).get(...caseSelector, ...componentSelector);
+                  const code = caseFactory(
+                    modifierFactory(returnExpr),
+                    componentFactory,
+                  );
+                  const def = parse(code).get(
+                    ...caseSelector,
+                    ...componentSelector,
+                  );
                   expect(isStatelessComponent(def)).toBe(true);
                 });
               });
 
-              Object.keys(negativeModifiers).forEach((modifierName) => {
+              Object.keys(negativeModifiers).forEach(modifierName => {
                 const modifierFactory = negativeModifiers[modifierName];
 
                 it(modifierName, () => {
-                  const code = caseFactory(modifierFactory(returnExpr), componentFactory);
-                  const def = parse(code).get(...caseSelector, ...componentSelector);
+                  const code = caseFactory(
+                    modifierFactory(returnExpr),
+                    componentFactory,
+                  );
+                  const def = parse(code).get(
+                    ...caseSelector,
+                    ...componentSelector,
+                  );
                   expect(isStatelessComponent(def)).toBe(false);
                 });
               });
@@ -134,7 +145,10 @@ describe('isStatelessComponent', () => {
       var def = parse(`
         var AlphaBetters = require('react');
         var Foo = () => AlphaBetters.createElement("div", null);
-      `).get('body', 1).get('declarations', [0]).get('init');
+      `)
+        .get('body', 1)
+        .get('declarations', [0])
+        .get('init');
 
       expect(isStatelessComponent(def)).toBe(true);
     });
@@ -151,7 +165,10 @@ describe('isStatelessComponent', () => {
           render() { return 7; },
           world: function({ children }) { return React.cloneElement(children, {}); },
         }
-      `).get('body', 1).get('declarations', 0).get('init');
+      `)
+        .get('body', 1)
+        .get('declarations', 0)
+        .get('init');
 
       var bar = def.get('properties', 0);
       var baz = def.get('properties', 1);
@@ -226,7 +243,9 @@ describe('isStatelessComponent', () => {
       expect(isStatelessComponent(def)).toBe(true);
     });
 
-    test('handles simple resolves', `
+    test(
+      'handles simple resolves',
+      `
       var React = require('react');
       function Foo (props) {
         function bar() {
@@ -235,9 +254,12 @@ describe('isStatelessComponent', () => {
 
         return bar();
       }
-    `);
+    `,
+    );
 
-    test('handles reference resolves', `
+    test(
+      'handles reference resolves',
+      `
       var React = require('react');
       function Foo (props) {
         var result = bar();
@@ -248,9 +270,12 @@ describe('isStatelessComponent', () => {
           return <div />;
         }
       }
-    `);
+    `,
+    );
 
-    test('handles shallow member call expression resolves', `
+    test(
+      'handles shallow member call expression resolves',
+      `
       var React = require('react');
       function Foo (props) {
         var shallow = {
@@ -261,9 +286,12 @@ describe('isStatelessComponent', () => {
 
         return shallow.shallowMember();
       }
-    `);
+    `,
+    );
 
-    test('handles deep member call expression resolves', `
+    test(
+      'handles deep member call expression resolves',
+      `
       var React = require('react');
       function Foo (props) {
         var obj = {
@@ -276,9 +304,12 @@ describe('isStatelessComponent', () => {
 
         return obj.deep.member();
       }
-    `);
+    `,
+    );
 
-    test('handles external reference member call expression resolves', `
+    test(
+      'handles external reference member call expression resolves',
+      `
       var React = require('react');
       function Foo (props) {
         var member = () => <div />;
@@ -290,9 +321,12 @@ describe('isStatelessComponent', () => {
 
         return obj.deep.member();
       }
-    `);
+    `,
+    );
 
-    test('handles all sorts of JavaScript things', `
+    test(
+      'handles all sorts of JavaScript things',
+      `
       var React = require('react');
       function Foo (props) {
         var external = {
@@ -302,6 +336,7 @@ describe('isStatelessComponent', () => {
 
         return obj.external.member();
       }
-    `);
+    `,
+    );
   });
 });

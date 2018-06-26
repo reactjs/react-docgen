@@ -18,9 +18,8 @@ describe('isRequiredPropType', () => {
 
   beforeEach(() => {
     isRequiredPropType = require('../isRequiredPropType').default;
-    ({expression} = require('../../../tests/utils'));
+    ({ expression } = require('../../../tests/utils'));
   });
-
 
   it('considers isRequired', () => {
     expect(isRequiredPropType(expression('foo.bar.isRequired'))).toEqual(true);
@@ -28,16 +27,17 @@ describe('isRequiredPropType', () => {
   });
 
   it('considers ["isRequired"]', () => {
-    expect(isRequiredPropType(expression('foo.bar["isRequired"]')))
-      .toEqual(true);
-    expect(isRequiredPropType(expression('foo["isRequired"].bar')))
-      .toEqual(true);
+    expect(isRequiredPropType(expression('foo.bar["isRequired"]'))).toEqual(
+      true,
+    );
+    expect(isRequiredPropType(expression('foo["isRequired"].bar'))).toEqual(
+      true,
+    );
   });
 
   it('ignores variables', () => {
-    expect(isRequiredPropType(expression('foo.bar[isRequired]')))
-      .toEqual(false);
+    expect(isRequiredPropType(expression('foo.bar[isRequired]'))).toEqual(
+      false,
+    );
   });
-
 });
-

@@ -20,12 +20,12 @@ describe('flowTypeHandler', () => {
   var flowTypeHandler;
 
   beforeEach(() => {
-    ({statement, expression} = require('../../../tests/utils'));
+    ({ statement, expression } = require('../../../tests/utils'));
     getFlowTypeMock = jest.fn(() => ({}));
     jest.setMock('../../utils/getFlowType', getFlowTypeMock);
     jest.mock('../../utils/getFlowType');
 
-    documentation = new (require('../../Documentation'));
+    documentation = new (require('../../Documentation'))();
     flowTypeHandler = require('../flowTypeHandler').default;
   });
 
@@ -68,7 +68,7 @@ describe('flowTypeHandler', () => {
           required: true,
           description: '',
         },
-        });
+      });
     });
 
     it('detects whether a prop is required', () => {
@@ -167,48 +167,64 @@ describe('flowTypeHandler', () => {
 
   describe('TypeAlias', () => {
     describe('class definition for flow <0.53', () => {
-      test(
-        propTypesSrc => statement(template('class Foo extends Component<void, Props, void> {}', propTypesSrc))
+      test(propTypesSrc =>
+        statement(
+          template(
+            'class Foo extends Component<void, Props, void> {}',
+            propTypesSrc,
+          ),
+        ),
       );
     });
 
     describe('class definition for flow >=0.53 without State', () => {
-      test(
-        propTypesSrc => statement(template('class Foo extends Component<Props> {}', propTypesSrc))
+      test(propTypesSrc =>
+        statement(
+          template('class Foo extends Component<Props> {}', propTypesSrc),
+        ),
       );
     });
 
     describe('class definition for flow >=0.53 with State', () => {
-      test(
-        propTypesSrc => statement(template('class Foo extends Component<Props, State> {}', propTypesSrc))
+      test(propTypesSrc =>
+        statement(
+          template(
+            'class Foo extends Component<Props, State> {}',
+            propTypesSrc,
+          ),
+        ),
       );
     });
 
     describe('class definition with inline props', () => {
-      test(
-          propTypesSrc => statement(template('class Foo extends Component { props: Props; }', propTypesSrc))
+      test(propTypesSrc =>
+        statement(
+          template(
+            'class Foo extends Component { props: Props; }',
+            propTypesSrc,
+          ),
+        ),
       );
     });
 
     describe('stateless component', () => {
-      test(
-        propTypesSrc => statement(template('(props: Props) => <div />;', propTypesSrc)).get('expression')
+      test(propTypesSrc =>
+        statement(template('(props: Props) => <div />;', propTypesSrc)).get(
+          'expression',
+        ),
       );
     });
   });
 
   it('does not error if flowTypes cannot be found', () => {
     var definition = expression('{fooBar: 42}');
-    expect(() => flowTypeHandler(documentation, definition))
-      .not.toThrow();
+    expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
 
     definition = statement('class Foo extends Component {}');
-    expect(() => flowTypeHandler(documentation, definition))
-      .not.toThrow();
+    expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
 
     definition = statement('() => <div />');
-    expect(() => flowTypeHandler(documentation, definition))
-      .not.toThrow();
+    expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
   });
 
   it('supports intersection proptypes', () => {
@@ -243,8 +259,7 @@ describe('flowTypeHandler', () => {
       type Props = Imported | Other | { foo: 'fooValue' };
     `).get('expression');
 
-    expect(() => flowTypeHandler(documentation, definition))
-      .not.toThrow();
+    expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
 
     expect(documentation.descriptors).toEqual({});
   });
@@ -253,8 +268,7 @@ describe('flowTypeHandler', () => {
     function test(code) {
       var definition = statement(code).get('expression');
 
-      expect(() => flowTypeHandler(documentation, definition))
-        .not.toThrow();
+      expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
 
       expect(documentation.descriptors).toEqual({});
     }

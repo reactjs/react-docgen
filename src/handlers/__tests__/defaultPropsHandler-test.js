@@ -19,8 +19,8 @@ describe('defaultPropsHandler', () => {
   var parse;
 
   beforeEach(() => {
-    ({parse} = require('../../../tests/utils'));
-    documentation = new (require('../../Documentation'));
+    ({ parse } = require('../../../tests/utils'));
+    documentation = new (require('../../Documentation'))();
     defaultPropsHandler = require('../defaultPropsHandler').default;
   });
 
@@ -136,8 +136,7 @@ describe('defaultPropsHandler', () => {
       })
     `;
     let definition = parse(src).get('body', 0, 'expression');
-    expect(() => defaultPropsHandler(documentation, definition))
-      .not.toThrow();
+    expect(() => defaultPropsHandler(documentation, definition)).not.toThrow();
     expect(documentation.descriptors).toEqual({
       bar: {
         defaultValue: {
@@ -194,7 +193,10 @@ describe('defaultPropsHandler', () => {
           foo = ImportedComponent,
         }) => <div />
       `;
-      defaultPropsHandler(documentation, parse(src).get('body', 1, 'expression'));
+      defaultPropsHandler(
+        documentation,
+        parse(src).get('body', 1, 'expression'),
+      );
 
       expect(documentation.descriptors).toEqual({
         foo: {
@@ -210,7 +212,10 @@ describe('defaultPropsHandler', () => {
       var src = `
         ({ foo }) => <div />
       `;
-      defaultPropsHandler(documentation, parse(src).get('body', 0, 'expression'));
+      defaultPropsHandler(
+        documentation,
+        parse(src).get('body', 0, 'expression'),
+      );
       expect(documentation.descriptors).toEqual({});
     });
   });

@@ -12,29 +12,33 @@
 import recast from 'recast';
 import resolveToValue from './resolveToValue';
 
-var {types: {namedTypes: _types}} = recast; //eslint-disable-line no-unused-vars
+var {
+  types: { namedTypes: _types },
+} = recast; //eslint-disable-line no-unused-vars
 
 export default function resolveExportDeclaration(
   path: NodePath,
-  types: Object = _types
+  types: Object = _types,
 ): Array<NodePath> {
   var definitions = [];
   if (path.node.default) {
     definitions.push(path.get('declaration'));
   } else if (path.node.declaration) {
     if (types.VariableDeclaration.check(path.node.declaration)) {
-      path.get('declaration', 'declarations').each(
-        declarator => definitions.push(declarator)
-      );
+      path
+        .get('declaration', 'declarations')
+        .each(declarator => definitions.push(declarator));
     } else {
       definitions.push(path.get('declaration'));
     }
   } else if (path.node.specifiers) {
-    path.get('specifiers').each(
-      specifier => definitions.push(
-        specifier.node.id ? specifier.get('id') : specifier.get('local')
-      )
-    );
+    path
+      .get('specifiers')
+      .each(specifier =>
+        definitions.push(
+          specifier.node.id ? specifier.get('id') : specifier.get('local'),
+        ),
+      );
   }
   return definitions.map(definition => resolveToValue(definition));
 }

@@ -18,7 +18,7 @@ describe('getClassMemberValuePath', () => {
 
   beforeEach(() => {
     getClassMemberValuePath = require('../getClassMemberValuePath').default;
-    ({statement} = require('../../../tests/utils'));
+    ({ statement } = require('../../../tests/utils'));
   });
 
   describe('MethodDefinitions', () => {
@@ -29,8 +29,9 @@ describe('getClassMemberValuePath', () => {
         }
       `);
 
-      expect(getClassMemberValuePath(def, 'render'))
-        .toBe(def.get('body', 'body', 0, 'value'));
+      expect(getClassMemberValuePath(def, 'render')).toBe(
+        def.get('body', 'body', 0, 'value'),
+      );
     });
 
     it('finds computed method definitions with literal keys', () => {
@@ -40,8 +41,9 @@ describe('getClassMemberValuePath', () => {
         }
       `);
 
-      expect(getClassMemberValuePath(def, 'render'))
-        .toBe(def.get('body', 'body', 0, 'value'));
+      expect(getClassMemberValuePath(def, 'render')).toBe(
+        def.get('body', 'body', 0, 'value'),
+      );
     });
 
     it('ignores computed method definitions with expression', () => {
@@ -63,8 +65,9 @@ describe('getClassMemberValuePath', () => {
         }
       `);
 
-      expect(getClassMemberValuePath(def, 'foo'))
-        .toBe(def.get('body', 'body', 0, 'value'));
+      expect(getClassMemberValuePath(def, 'foo')).toBe(
+        def.get('body', 'body', 0, 'value'),
+      );
     });
 
     it('ignores setters', () => {
@@ -86,8 +89,9 @@ describe('getClassMemberValuePath', () => {
         }
       `);
 
-      expect(getClassMemberValuePath(def, 'foo'))
-        .toBe(def.get('body', 'body', 0, 'value'));
+      expect(getClassMemberValuePath(def, 'foo')).toBe(
+        def.get('body', 'body', 0, 'value'),
+      );
     });
   });
 });

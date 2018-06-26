@@ -26,13 +26,10 @@ describe('printValue', () => {
   }
 
   it('does not print leading comments', () => {
-    expect(printValue(pathFromSource('//foo\nbar')))
-      .toEqual('bar');
+    expect(printValue(pathFromSource('//foo\nbar'))).toEqual('bar');
   });
 
   it('does not print trailing comments', () => {
-    expect(printValue(pathFromSource('bar//foo')))
-      .toEqual('bar');
+    expect(printValue(pathFromSource('bar//foo'))).toEqual('bar');
   });
-
 });

@@ -18,7 +18,9 @@ import isUnreachableFlowType from '../utils/isUnreachableFlowType';
 import recast from 'recast';
 import resolveToValue from '../utils/resolveToValue';
 
-const {types: {namedTypes: types}} = recast;
+const {
+  types: { namedTypes: types },
+} = recast;
 
 const supportedUtilityTypes = new Set(['$Exact', '$ReadOnly']);
 
@@ -27,7 +29,7 @@ const supportedUtilityTypes = new Set(['$Exact', '$ReadOnly']);
  * flow type for the props. If not found or not one of the supported
  * component types returns null.
  */
-export default (path: NodePath): ?NodePath  => {
+export default (path: NodePath): ?NodePath => {
   let typePath: ?NodePath;
 
   if (isReactComponentClass(path)) {
@@ -38,7 +40,7 @@ export default (path: NodePath): ?NodePath  => {
       if (params.value.length === 3) {
         typePath = params.get(1);
       } else {
-       typePath = params.get(0);
+        typePath = params.get(0);
       }
     } else {
       const propsMemberPath = getMemberValuePath(path, 'props');
@@ -70,20 +72,18 @@ export default (path: NodePath): ?NodePath  => {
   }
 
   return typePath;
-}
+};
 
 export function applyToFlowTypeProperties(
   path: NodePath,
-  callback: (propertyPath: NodePath) => void
+  callback: (propertyPath: NodePath) => void,
 ) {
   if (path.node.properties) {
-    path.get('properties').each(
-      propertyPath => callback(propertyPath)
-    );
+    path.get('properties').each(propertyPath => callback(propertyPath));
   } else if (path.node.type === 'IntersectionTypeAnnotation') {
-    path.get('types').each(
-      typesPath => applyToFlowTypeProperties(typesPath, callback)
-    );
+    path
+      .get('types')
+      .each(typesPath => applyToFlowTypeProperties(typesPath, callback));
   } else if (path.node.type !== 'UnionTypeAnnotation') {
     // The react-docgen output format does not currently allow
     // for the expression of union types
@@ -99,7 +99,7 @@ function resolveGenericTypeAnnotation(path: NodePath): ?NodePath {
   let typePath: ?NodePath;
   if (path && isSupportedUtilityType(path)) {
     typePath = unwrapUtilityType(path);
-  } else if(path && types.GenericTypeAnnotation.check(path.node)) {
+  } else if (path && types.GenericTypeAnnotation.check(path.node)) {
     typePath = resolveToValue(path.get('id'));
     if (isUnreachableFlowType(typePath)) {
       return;
@@ -115,11 +115,10 @@ function resolveGenericTypeAnnotation(path: NodePath): ?NodePath {
  * See `supportedUtilityTypes` for which types are supported and
  * https://flow.org/en/docs/types/utilities/ for which types are available.
  */
-function isSupportedUtilityType (path: NodePath): boolean {
+function isSupportedUtilityType(path: NodePath): boolean {
   if (types.GenericTypeAnnotation.check(path.node)) {
     const idPath = path.get('id');
-    return Boolean(idPath) &&
-      supportedUtilityTypes.has(idPath.node.name);
+    return Boolean(idPath) && supportedUtilityTypes.has(idPath.node.name);
   }
   return false;
 }

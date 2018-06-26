@@ -40,7 +40,7 @@ class Documentation {
   getPropDescriptor(propName: string): PropDescriptor {
     var propDescriptor = this._props.get(propName);
     if (!propDescriptor) {
-      this._props.set(propName, propDescriptor = {});
+      this._props.set(propName, (propDescriptor = {}));
     }
     return propDescriptor;
   }
@@ -48,7 +48,7 @@ class Documentation {
   getContextDescriptor(propName: string): PropDescriptor {
     var propDescriptor = this._context.get(propName);
     if (!propDescriptor) {
-      this._context.set(propName, propDescriptor = {});
+      this._context.set(propName, (propDescriptor = {}));
     }
     return propDescriptor;
   }
@@ -56,7 +56,7 @@ class Documentation {
   getChildContextDescriptor(propName: string): PropDescriptor {
     var propDescriptor = this._childContext.get(propName);
     if (!propDescriptor) {
-      this._childContext.set(propName, propDescriptor = {});
+      this._childContext.set(propName, (propDescriptor = {}));
     }
     return propDescriptor;
   }
@@ -88,7 +88,8 @@ class Documentation {
 
     if (this._childContext.size > 0) {
       obj.childContext = {};
-      for (var [childContextName, childContextDescriptor] of this._childContext) {
+      for (var [childContextName, childContextDescriptor] of this
+        ._childContext) {
         obj.childContext[childContextName] = childContextDescriptor;
       }
     }

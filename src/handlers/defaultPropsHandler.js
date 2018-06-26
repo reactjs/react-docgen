@@ -20,7 +20,9 @@ import resolveToValue from '../utils/resolveToValue';
 import resolveFunctionDefinitionToReturnValue from '../utils/resolveFunctionDefinitionToReturnValue';
 import isStatelessComponent from '../utils/isStatelessComponent';
 
-var {types: {namedTypes: types}} = recast;
+var {
+  types: { namedTypes: types },
+} = recast;
 
 function getDefaultValue(path: NodePath) {
   var node = path.node;
@@ -43,9 +45,10 @@ function getDefaultValue(path: NodePath) {
   if (typeof defaultValue !== 'undefined') {
     return {
       value: defaultValue,
-      computed: types.CallExpression.check(node) ||
-                types.MemberExpression.check(node) ||
-                types.Identifier.check(node),
+      computed:
+        types.CallExpression.check(node) ||
+        types.MemberExpression.check(node) ||
+        types.Identifier.check(node),
     };
   }
 }
@@ -57,7 +60,7 @@ function getStatelessPropsPath(componentDefinition): NodePath {
 function getDefaultPropsPath(componentDefinition: NodePath): ?NodePath {
   var defaultPropsPath = getMemberValuePath(
     componentDefinition,
-    'defaultProps'
+    'defaultProps',
   );
   if (!defaultPropsPath) {
     return;
@@ -71,7 +74,9 @@ function getDefaultPropsPath(componentDefinition: NodePath): ?NodePath {
   if (types.FunctionExpression.check(defaultPropsPath.node)) {
     // Find the value that is returned from the function and process it if it is
     // an object literal.
-    const returnValue = resolveFunctionDefinitionToReturnValue(defaultPropsPath);
+    const returnValue = resolveFunctionDefinitionToReturnValue(
+      defaultPropsPath,
+    );
     if (returnValue && types.ObjectExpression.check(returnValue.node)) {
       defaultPropsPath = returnValue;
     }
@@ -87,15 +92,19 @@ function getDefaultValuesFromProps(
   properties
     .filter(propertyPath => types.Property.check(propertyPath.node))
     // Don't evaluate property if component is functional and the node is not an AssignmentPattern
-    .filter(propertyPath => !isStatelessComponent || types.AssignmentPattern.check(propertyPath.get('value').node))
+    .filter(
+      propertyPath =>
+        !isStatelessComponent ||
+        types.AssignmentPattern.check(propertyPath.get('value').node),
+    )
     .forEach(function(propertyPath) {
       const propDescriptor = documentation.getPropDescriptor(
-        getPropertyName(propertyPath)
+        getPropertyName(propertyPath),
       );
       const defaultValue = getDefaultValue(
-        isStatelessComponent ?
-          propertyPath.get('value', 'right') :
-          propertyPath.get('value')
+        isStatelessComponent
+          ? propertyPath.get('value', 'right')
+          : propertyPath.get('value'),
       );
       if (defaultValue) {
         propDescriptor.defaultValue = defaultValue;
@@ -105,7 +114,7 @@ function getDefaultValuesFromProps(
 
 export default function defaultPropsHandler(
   documentation: Documentation,
-  componentDefinition: NodePath
+  componentDefinition: NodePath,
 ) {
   var statelessProps = null;
   var defaultPropsPath = getDefaultPropsPath(componentDefinition);
@@ -115,9 +124,17 @@ export default function defaultPropsHandler(
 
   // Do both statelessProps and defaultProps if both are available so defaultProps can override
   if (statelessProps && types.ObjectPattern.check(statelessProps.node)) {
-    getDefaultValuesFromProps(statelessProps.get('properties'), documentation, true);
+    getDefaultValuesFromProps(
+      statelessProps.get('properties'),
+      documentation,
+      true,
+    );
   }
   if (defaultPropsPath && types.ObjectExpression.check(defaultPropsPath.node)) {
-    getDefaultValuesFromProps(defaultPropsPath.get('properties'), documentation, false);
+    getDefaultValuesFromProps(
+      defaultPropsPath.get('properties'),
+      documentation,
+      false,
+    );
   }
 }

@@ -13,7 +13,9 @@ import recast from 'recast';
 
 import printValue from './printValue';
 
-const {types: {namedTypes: types}} = recast;
+const {
+  types: { namedTypes: types },
+} = recast;
 
 export default function getParameterName(parameterPath: NodePath): string {
   switch (parameterPath.node.type) {
@@ -29,7 +31,7 @@ export default function getParameterName(parameterPath: NodePath): string {
     default:
       throw new TypeError(
         'Parameter name must be an Identifier, an AssignmentPattern an ' +
-        `ObjectPattern or a RestElement, got ${parameterPath.node.type}`
+          `ObjectPattern or a RestElement, got ${parameterPath.node.type}`,
       );
   }
 }

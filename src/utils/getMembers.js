@@ -16,15 +16,18 @@
  * Helper methods for dealing with MemberExpressions (and CallExpressions).
  */
 
-type MemberDescriptor = { // eslint-disable-line no-undef
-  path: NodePath;
-  computed: boolean;
-  argumentsPath?: ?NodePath;
-}
+type MemberDescriptor = {
+  // eslint-disable-line no-undef
+  path: NodePath,
+  computed: boolean,
+  argumentsPath?: ?NodePath,
+};
 
 import recast from 'recast';
 
-var {types: {namedTypes: types}} = recast;
+var {
+  types: { namedTypes: types },
+} = recast;
 
 /**
  * Given a "nested" Member/CallExpression, e.g.
@@ -40,11 +43,12 @@ var {types: {namedTypes: types}} = recast;
  */
 export default function getMembers(
   path: NodePath,
-  includeRoot: bool = false
+  includeRoot: boolean = false,
 ): Array<MemberDescriptor> {
   var result = [];
   var argumentsPath = null;
-  loop: while(true) { // eslint-disable-line no-constant-condition
+  // eslint-disable-next-line no-constant-condition
+  loop: while (true) {
     switch (true) {
       case types.MemberExpression.check(path.node):
         result.push({

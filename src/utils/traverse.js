@@ -10,8 +10,6 @@
  *
  */
 
-'use strict';
-
 type Visitor = (path: NodePath) => any;
 
 import recast from 'recast';
@@ -22,9 +20,9 @@ import recast from 'recast';
  */
 export function traverseShallow(
   ast: ASTNode,
-  visitors: ({[key: string]: Visitor})
+  visitors: { [key: string]: Visitor },
 ): void {
-  recast.visit(ast, {...defaultVisitors, ...visitors});
+  recast.visit(ast, { ...defaultVisitors, ...visitors });
 }
 
 const ignore = () => false;

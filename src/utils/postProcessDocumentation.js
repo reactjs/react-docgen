@@ -19,7 +19,7 @@ function postProcessProps(props) {
   });
 }
 
-export default function (documentation) {
+export default function(documentation) {
   const props = documentation.props;
 
   if (props) {

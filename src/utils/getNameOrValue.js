@@ -12,7 +12,9 @@
 
 import recast from 'recast';
 
-var {types: {namedTypes: types}} = recast;
+var {
+  types: { namedTypes: types },
+} = recast;
 
 /**
  * If node is an Identifier, it returns its name. If it is a literal, it returns

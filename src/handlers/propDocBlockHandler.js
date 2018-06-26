@@ -17,11 +17,13 @@ import recast from 'recast';
 import resolveToValue from '../utils/resolveToValue';
 import setPropDescription from '../utils/setPropDescription';
 
-var {types: {namedTypes: types}} = recast;
+var {
+  types: { namedTypes: types },
+} = recast;
 
 export default function propDocBlockHandler(
   documentation: Documentation,
-  path: NodePath
+  path: NodePath,
 ) {
   var propTypesPath = getMemberValuePath(path, 'propTypes');
   if (!propTypesPath) {

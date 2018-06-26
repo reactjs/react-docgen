@@ -21,7 +21,8 @@
   "main": "dist/main.js",
   "scripts": {
     "build": "rimraf dist/ && babel src/ --out-dir dist/ --ignore __tests__,__mocks__",
-    "lint": "eslint src/ bin/",
+    "lint": "eslint .",
+    "fix": "eslint . --fix",
     "prepublish": "yarn build",
     "preversion": "yarn lint",
     "test": "jest",
@@ -54,10 +55,13 @@
     "babel-preset-flow": "^6.23.0",
     "cross-spawn": "^6.0.4",
     "eslint": "^5.0.1",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-prettier": "^2.6.1",
     "flow-bin": "^0.75.0",
     "jest": "^23.1.0",
     "jest-diff": "^23.0.1",
     "jest-matcher-utils": "^23.0.1",
+    "prettier": "^1.13.6",
     "rimraf": "^2.3.2",
     "temp": "^0.8.1"
   },

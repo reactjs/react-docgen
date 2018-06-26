@@ -10,7 +10,7 @@
  */
 
 import resolveToValue from './resolveToValue';
-import {traverseShallow} from './traverse';
+import { traverseShallow } from './traverse';
 
 export default function resolveFunctionDefinitionToReturnValue(
   path: NodePath,
@@ -27,4 +27,3 @@ export default function resolveFunctionDefinitionToReturnValue(
 
   return returnPath;
 }
-

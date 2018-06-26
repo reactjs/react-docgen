@@ -10,7 +10,6 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
-
 jest.disableAutomock();
 
 describe('isReactCreateClassCall', () => {

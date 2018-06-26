@@ -59,7 +59,6 @@ describe('resolveToModule', () => {
   });
 
   describe('ES6 import declarations', () => {
-
     it('resolves ImportDefaultSpecifier', () => {
       var path = parse(`
         import foo from "Foo";
@@ -97,6 +96,5 @@ describe('resolveToModule', () => {
       `);
       expect(resolveToModule(path)).toBe('Foo');
     });
-
   });
 });

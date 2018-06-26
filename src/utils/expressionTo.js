@@ -15,7 +15,9 @@
 import resolveToValue from './resolveToValue';
 import recast from 'recast';
 
-var {types: {namedTypes: types}} = recast;
+var {
+  types: { namedTypes: types },
+} = recast;
 
 /**
  * Splits a MemberExpression or CallExpression into parts.
@@ -55,14 +57,21 @@ function toArray(path: NodePath): Array<string> {
       continue;
     } else if (types.ObjectExpression.check(node)) {
       var properties = path.get('properties').map(function(property) {
-        return toString(property.get('key')) +
-          ': ' +
-          toString(property.get('value'));
-        });
-        result.push('{' + properties.join(', ') + '}');
-        continue;
-    } else if(types.ArrayExpression.check(node)) {
-      result.push('[' + path.get('elements').map(toString).join(', ') + ']');
+        return (
+          toString(property.get('key')) + ': ' + toString(property.get('value'))
+        );
+      });
+      result.push('{' + properties.join(', ') + '}');
+      continue;
+    } else if (types.ArrayExpression.check(node)) {
+      result.push(
+        '[' +
+          path
+            .get('elements')
+            .map(toString)
+            .join(', ') +
+          ']',
+      );
       continue;
     }
   }
@@ -77,7 +86,4 @@ function toString(path: NodePath): string {
   return toArray(path).join('.');
 }
 
-export {
-  toString as String,
-  toArray as Array,
-};
+export { toString as String, toArray as Array };

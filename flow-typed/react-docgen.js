@@ -22,13 +22,16 @@ type PropTypeDescriptor = {
 };
 
 type flowObjectSignatureType = {
-  properties: Array<{ key: string | FlowTypeDescriptor, value: FlowTypeDescriptor }>,
-  constructor?: FlowTypeDescriptor
+  properties: Array<{
+    key: string | FlowTypeDescriptor,
+    value: FlowTypeDescriptor,
+  }>,
+  constructor?: FlowTypeDescriptor,
 };
 
 type flowFunctionSignatureType = {
   arguments: Array<{ name: string, type: FlowTypeDescriptor }>,
-  return: FlowTypeDescriptor
+  return: FlowTypeDescriptor,
 };
 
 type FlowTypeDescriptor = {
@@ -53,5 +56,4 @@ type PropDescriptor = {
 };
 
 type Handler = (documentation: Documentation, path: NodePath) => void;
-type Resolver =
-  (node: ASTNode, recast: Recast) => (?NodePath|?Array<NodePath>);
+type Resolver = (node: ASTNode, recast: Recast) => ?NodePath | ?Array<NodePath>;

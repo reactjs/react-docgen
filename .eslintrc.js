@@ -1,13 +1,15 @@
 module.exports = {
   parser: 'babel-eslint',
-  extends: 'eslint:recommended',
+  extends: [
+    'eslint:recommended',
+    'prettier'
+  ],
+  plugins:[
+    'prettier'
+  ],
   rules: {
-    'comma-dangle': ['error', 'always-multiline'],
-    'no-underscore-dangle': 'off',
-    quotes: ['error', 'single', 'avoid-escape'],
-    strict: 'off',
-    'no-unused-vars': 'error',
-    'no-undef': 'error'
+    strict: ['error', 'never'],
+    'prettier/prettier': 'error',
   },
   env: {
     node: true,

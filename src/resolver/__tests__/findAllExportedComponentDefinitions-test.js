@@ -24,9 +24,7 @@ describe('findAllExportedComponentDefinitions', () => {
   }
 
   describe('CommonJS module exports', () => {
-
     describe('React.createClass', () => {
-
       it('finds React.createClass', () => {
         var parsed = parse(`
           var React = require("React");
@@ -34,7 +32,15 @@ describe('findAllExportedComponentDefinitions', () => {
           module.exports = Component;
         `);
         var actual = findComponents(parsed);
-        var expected = parsed.get('body', 1, 'declarations', 0, 'init', 'arguments', 0);
+        var expected = parsed.get(
+          'body',
+          1,
+          'declarations',
+          0,
+          'init',
+          'arguments',
+          0,
+        );
 
         expect(actual.length).toBe(1);
         expect(actual[0].node).toBe(expected.node);
@@ -64,7 +70,6 @@ describe('findAllExportedComponentDefinitions', () => {
     });
 
     describe('class definitions', () => {
-
       it('finds class declarations', () => {
         var parsed = parse(`
           var React = require("React");
@@ -102,7 +107,6 @@ describe('findAllExportedComponentDefinitions', () => {
     });
 
     describe('stateless components', () => {
-
       it('finds stateless component with JSX', () => {
         var parsed = parse(`
           var React = require("React");
@@ -140,9 +144,7 @@ describe('findAllExportedComponentDefinitions', () => {
     });
 
     describe('module.exports = <C>; / exports.foo = <C>;', () => {
-
       describe('React.createClass', () => {
-
         it('finds assignments to exports', () => {
           var parsed = parse(`
             var R = require("React");
@@ -164,8 +166,24 @@ describe('findAllExportedComponentDefinitions', () => {
             exports.ComponentB = ComponentB;
           `);
           var actual = findComponents(parsed);
-          var expectedA = parsed.get('body', 1, 'declarations', 0, 'init', 'arguments', 0);
-          var expectedB = parsed.get('body', 2, 'declarations', 0, 'init', 'arguments', 0);
+          var expectedA = parsed.get(
+            'body',
+            1,
+            'declarations',
+            0,
+            'init',
+            'arguments',
+            0,
+          );
+          var expectedB = parsed.get(
+            'body',
+            2,
+            'declarations',
+            0,
+            'init',
+            'arguments',
+            0,
+          );
 
           expect(actual.length).toBe(2);
           expect(actual[0].node).toBe(expectedA.node);
@@ -181,8 +199,24 @@ describe('findAllExportedComponentDefinitions', () => {
             exports.ComponentB = hoc(ComponentB);
           `);
           var actual = findComponents(parsed);
-          var expectedA = parsed.get('body', 1, 'declarations', 0, 'init', 'arguments', 0);
-          var expectedB = parsed.get('body', 2, 'declarations', 0, 'init', 'arguments', 0);
+          var expectedA = parsed.get(
+            'body',
+            1,
+            'declarations',
+            0,
+            'init',
+            'arguments',
+            0,
+          );
+          var expectedB = parsed.get(
+            'body',
+            2,
+            'declarations',
+            0,
+            'init',
+            'arguments',
+            0,
+          );
 
           expect(actual.length).toBe(2);
           expect(actual[0].node).toBe(expectedA.node);
@@ -197,7 +231,15 @@ describe('findAllExportedComponentDefinitions', () => {
             exports.ComponentB = ComponentB;
           `);
           var actual = findComponents(parsed);
-          var expected = parsed.get('body', 2, 'declarations', 0, 'init', 'arguments', 0);
+          var expected = parsed.get(
+            'body',
+            2,
+            'declarations',
+            0,
+            'init',
+            'arguments',
+            0,
+          );
 
           expect(actual.length).toBe(1);
           expect(actual[0].node).toBe(expected.node);
@@ -227,7 +269,6 @@ describe('findAllExportedComponentDefinitions', () => {
       });
 
       describe('class definition', () => {
-
         it('finds assignments to exports', () => {
           var parsed = parse(`
             var R = require("React");
@@ -297,11 +338,8 @@ describe('findAllExportedComponentDefinitions', () => {
   });
 
   describe('ES6 export declarations', () => {
-
     describe('export default <component>;', () => {
-
       describe('React.createClass', () => {
-
         it('finds default export', () => {
           var parsed = parse(`
             var React = require("React");
@@ -309,7 +347,15 @@ describe('findAllExportedComponentDefinitions', () => {
             export default Component
           `);
           var actual = findComponents(parsed);
-          var expected = parsed.get('body', 1, 'declarations', 0, 'init', 'arguments', 0);
+          var expected = parsed.get(
+            'body',
+            1,
+            'declarations',
+            0,
+            'init',
+            'arguments',
+            0,
+          );
 
           expect(actual.length).toBe(1);
           expect(actual[0].node).toBe(expected.node);
@@ -330,7 +376,16 @@ describe('findAllExportedComponentDefinitions', () => {
             export default React.createClass({});
           `);
           var actual = findComponents(parsed);
-          var expectedA = parsed.get('body', 1, 'declaration', 'declarations', 0, 'init', 'arguments', 0);
+          var expectedA = parsed.get(
+            'body',
+            1,
+            'declaration',
+            'declarations',
+            0,
+            'init',
+            'arguments',
+            0,
+          );
           var expectedB = parsed.get('body', 2, 'declaration', 'arguments', 0);
 
           expect(actual.length).toBe(2);
@@ -361,7 +416,6 @@ describe('findAllExportedComponentDefinitions', () => {
       });
 
       describe('class definition', () => {
-
         it('finds default export', () => {
           var parsed = parse(`
             import React from 'React';
@@ -390,7 +444,14 @@ describe('findAllExportedComponentDefinitions', () => {
             export default class ComponentB extends React.Component{};
           `);
           var actual = findComponents(parsed);
-          var expectedA = parsed.get('body', 1, 'declaration', 'declarations', 0, 'init');
+          var expectedA = parsed.get(
+            'body',
+            1,
+            'declaration',
+            'declarations',
+            0,
+            'init',
+          );
           var expectedB = parsed.get('body', 2, 'declaration');
 
           expect(actual.length).toBe(2);
@@ -422,16 +483,23 @@ describe('findAllExportedComponentDefinitions', () => {
     });
 
     describe('export var foo = <C>, ...;', () => {
-
       describe('React.createClass', () => {
-
         it('finds named exports', () => {
           var parsed = parse(`
             var React = require("React");
             export var somethingElse = 42, Component = React.createClass({});
           `);
           var actual = findComponents(parsed);
-          var expected = parsed.get('body', 1, 'declaration', 'declarations', 1, 'init', 'arguments', 0);
+          var expected = parsed.get(
+            'body',
+            1,
+            'declaration',
+            'declarations',
+            1,
+            'init',
+            'arguments',
+            0,
+          );
 
           expect(actual.length).toBe(1);
           expect(actual[0].node).toBe(expected.node);
@@ -498,7 +566,6 @@ describe('findAllExportedComponentDefinitions', () => {
       });
 
       describe('class definition', () => {
-
         it('finds named exports', () => {
           var parsed = parse(`
             import React from 'React';
@@ -506,7 +573,14 @@ describe('findAllExportedComponentDefinitions', () => {
               Component = class extends React.Component {};
           `);
           var actual = findComponents(parsed);
-          var expected = parsed.get('body', 1, 'declaration', 'declarations', 1, 'init');
+          var expected = parsed.get(
+            'body',
+            1,
+            'declaration',
+            'declarations',
+            1,
+            'init',
+          );
 
           expect(actual.length).toBe(1);
           expect(actual[0].node).toBe(expected.node);
@@ -578,7 +652,6 @@ describe('findAllExportedComponentDefinitions', () => {
       });
 
       describe('stateless components', () => {
-
         it('finds named exports', () => {
           var parsed = parse(`
             import React from 'React';
@@ -658,9 +731,7 @@ describe('findAllExportedComponentDefinitions', () => {
     });
 
     describe('export {<C>};', () => {
-
       describe('React.createClass', () => {
-
         it('finds exported specifiers', () => {
           var parsed = parse(`
             var React = require("React");
@@ -669,7 +740,15 @@ describe('findAllExportedComponentDefinitions', () => {
             export {foo, Component}
           `);
           var actual = findComponents(parsed);
-          var expected = parsed.get('body', 2, 'declarations', 0, 'init', 'arguments', 0);
+          var expected = parsed.get(
+            'body',
+            2,
+            'declarations',
+            0,
+            'init',
+            'arguments',
+            0,
+          );
 
           expect(actual.length).toBe(1);
           expect(actual[0].node).toBe(expected.node);
@@ -745,7 +824,6 @@ describe('findAllExportedComponentDefinitions', () => {
       });
 
       describe('class definition', () => {
-
         it('finds exported specifiers', () => {
           var parsed = parse(`
             import React from 'React';
@@ -836,7 +914,6 @@ describe('findAllExportedComponentDefinitions', () => {
       });
 
       describe('stateless components', () => {
-
         it('finds exported specifiers', () => {
           var parsed = parse(`
             import React from 'React';
@@ -914,9 +991,7 @@ describe('findAllExportedComponentDefinitions', () => {
     });
 
     describe('export <C>;', () => {
-
       describe('class definition', () => {
-
         it('finds named exports', () => {
           var parsed = parse(`
             import React from 'React';
@@ -954,7 +1029,6 @@ describe('findAllExportedComponentDefinitions', () => {
       });
 
       describe('function declaration', () => {
-
         it('finds named exports', () => {
           var parsed = parse(`
             import React from 'React';

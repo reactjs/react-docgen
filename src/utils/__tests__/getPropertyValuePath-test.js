@@ -17,9 +17,7 @@ describe('getPropertyValuePath', () => {
   var getPropertyValuePath;
 
   function parse(src) {
-    return new recast.types.NodePath(
-      recast.parse(src).program.body[0]
-    );
+    return new recast.types.NodePath(recast.parse(src).program.body[0]);
   }
 
   beforeEach(() => {
@@ -29,14 +27,13 @@ describe('getPropertyValuePath', () => {
 
   it('returns the value path if the property exists', () => {
     var objectExpressionPath = parse('({foo: 21, bar: 42})').get('expression');
-    expect(getPropertyValuePath(objectExpressionPath, 'bar'))
-      .toBe(objectExpressionPath.get('properties', 1).get('value'));
+    expect(getPropertyValuePath(objectExpressionPath, 'bar')).toBe(
+      objectExpressionPath.get('properties', 1).get('value'),
+    );
   });
 
   it('returns undefined if the property does not exist', () => {
     var objectExpressionPath = parse('({foo: 21, bar: 42})').get('expression');
-    expect(getPropertyValuePath(objectExpressionPath, 'baz'))
-      .toBeUndefined();
+    expect(getPropertyValuePath(objectExpressionPath, 'baz')).toBeUndefined();
   });
-
 });

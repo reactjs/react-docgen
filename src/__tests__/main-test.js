@@ -14,10 +14,9 @@ import fs from 'fs';
 import path from 'path';
 
 import * as docgen from '../main';
-import {ERROR_MISSING_DEFINITION} from '../parse';
+import { ERROR_MISSING_DEFINITION } from '../parse';
 
 describe('main', () => {
-
   function test(source) {
     it('parses with default resolver/handlers', () => {
       var docs = docgen.parse(source);

@@ -13,9 +13,9 @@
 jest.mock('../../Documentation');
 jest.mock('../../utils/getPropType', () => jest.fn(() => ({})));
 
-import {statement, expression} from '../../../tests/utils';
+import { statement, expression } from '../../../tests/utils';
 import Documentation from '../../Documentation';
-import {propTypeHandler} from '../propTypeHandler';
+import { propTypeHandler } from '../propTypeHandler';
 
 describe('propTypeHandler', () => {
   var getPropTypeMock;
@@ -37,8 +37,7 @@ describe('propTypeHandler', () => {
 
   function test(getSrc, parse) {
     it('passes the correct argument to getPropType', () => {
-      var propTypesSrc =
-        `{
+      var propTypesSrc = `{
           foo: PropTypes.bool,
           abc: PropTypes.xyz,
         }`;
@@ -50,20 +49,24 @@ describe('propTypeHandler', () => {
 
       propTypeHandler(documentation, definition);
 
-      expect(getPropTypeMock.mock.calls[0][0].node)
-        .toEqualASTNode(fooPath.node);
-      expect(getPropTypeMock.mock.calls[1][0].node)
-        .toEqualASTNode(xyzPath.node);
+      expect(getPropTypeMock.mock.calls[0][0].node).toEqualASTNode(
+        fooPath.node,
+      );
+      expect(getPropTypeMock.mock.calls[1][0].node).toEqualASTNode(
+        xyzPath.node,
+      );
     });
 
     it('finds definitions via React.PropTypes', () => {
-      var definition = parse(getSrc(
-        `{
+      var definition = parse(
+        getSrc(
+          `{
           foo: PropTypes.bool,
           bar: require("react").PropTypes.bool,
           baz: OtherPropTypes.bool,
-        }`
-      ));
+        }`,
+        ),
+      );
 
       propTypeHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
@@ -83,11 +86,13 @@ describe('propTypeHandler', () => {
     });
 
     it('finds definitions via the ReactPropTypes module', () => {
-      var definition = parse(getSrc(
-        `{
+      var definition = parse(
+        getSrc(
+          `{
           foo: require("ReactPropTypes").bool,
-        }`
-      ));
+        }`,
+        ),
+      );
 
       propTypeHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
@@ -99,42 +104,50 @@ describe('propTypeHandler', () => {
     });
 
     it('detects whether a prop is required', () => {
-      var definition = parse(getSrc(
-        `{
+      var definition = parse(
+        getSrc(
+          `{
           simple_prop: PropTypes.array.isRequired,
           complex_prop:
             PropTypes.oneOfType([PropTypes.number, PropTypes.bool]).isRequired,
-        }`
-      ));
+        }`,
+        ),
+      );
 
       propTypeHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
-          simple_prop: { // eslint-disable-line camelcase
-            type: {},
-            required: true,
-          },
-          complex_prop: { // eslint-disable-line camelcase
-            type: {},
-            required: true,
-          },
+        simple_prop: {
+          // eslint-disable-line camelcase
+          type: {},
+          required: true,
+        },
+        complex_prop: {
+          // eslint-disable-line camelcase
+          type: {},
+          required: true,
+        },
       });
     });
 
     it('only considers definitions from React or ReactPropTypes', () => {
-      var definition = parse(getSrc(
-        `{
+      var definition = parse(
+        getSrc(
+          `{
           custom_propA: PropTypes.bool,
           custom_propB: Prop.bool.isRequired,
-        }`
-      ));
+        }`,
+        ),
+      );
 
       propTypeHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
-        custom_propA: { // eslint-disable-line camelcase
+        custom_propA: {
+          // eslint-disable-line camelcase
           type: {},
           required: false,
         },
-        custom_propB: { // eslint-disable-line camelcase
+        custom_propB: {
+          // eslint-disable-line camelcase
           type: {
             name: 'custom',
             raw: 'Prop.bool.isRequired',
@@ -159,74 +172,71 @@ describe('propTypeHandler', () => {
         },
       });
     });
-
   }
 
   describe('React.createClass', () => {
     test(
       propTypesSrc => template(`({propTypes: ${propTypesSrc}})`),
-      src => statement(src).get('expression')
+      src => statement(src).get('expression'),
     );
   });
 
   describe('class definition', () => {
     describe('class property', () => {
       test(
-        propTypesSrc => template(`
+        propTypesSrc =>
+          template(`
           class Component {
             static propTypes = ${propTypesSrc};
           }
         `),
-        src => statement(src)
+        src => statement(src),
       );
     });
 
     describe('static getter', () => {
       test(
-        propTypesSrc => template(`
+        propTypesSrc =>
+          template(`
           class Component {
             static get propTypes() {
               return ${propTypesSrc};
             }
           }
         `),
-        src => statement(src)
+        src => statement(src),
       );
     });
   });
 
   describe('stateless component', () => {
     test(
-      propTypesSrc => template(`
+      propTypesSrc =>
+        template(`
         var Component = (props) => <div />;
         Component.propTypes = ${propTypesSrc};
       `),
-      src => statement(src)
+      src => statement(src),
     );
   });
 
   it('does not error if propTypes cannot be found', () => {
     var definition = expression('{fooBar: 42}');
-    expect(() => propTypeHandler(documentation, definition))
-      .not.toThrow();
+    expect(() => propTypeHandler(documentation, definition)).not.toThrow();
 
     definition = statement('class Foo {}');
-    expect(() => propTypeHandler(documentation, definition))
-      .not.toThrow();
+    expect(() => propTypeHandler(documentation, definition)).not.toThrow();
 
     definition = statement('function Foo() {}');
-    expect(() => propTypeHandler(documentation, definition))
-      .not.toThrow();
+    expect(() => propTypeHandler(documentation, definition)).not.toThrow();
 
     definition = expression('() => {}');
-    expect(() => propTypeHandler(documentation, definition))
-      .not.toThrow();
+    expect(() => propTypeHandler(documentation, definition)).not.toThrow();
   });
 
   // This case is handled by propTypeCompositionHandler
   it('does not error if propTypes is a member expression', () => {
     var definition = expression('{propTypes: Foo.propTypes}');
-    expect(() => propTypeHandler(documentation, definition))
-      .not.toThrow();
+    expect(() => propTypeHandler(documentation, definition)).not.toThrow();
   });
 });

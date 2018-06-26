@@ -13,7 +13,9 @@ import getMemberExpressionRoot from '../utils/getMemberExpressionRoot';
 import getMembers from '../utils/getMembers';
 import recast from 'recast';
 
-var {types: {namedTypes: types, builders}} = recast;
+var {
+  types: { namedTypes: types, builders },
+} = recast;
 var ignore = () => false;
 
 /**
@@ -36,24 +38,30 @@ var ignore = () => false;
  * }
  */
 export default function normalizeClassDefinition(
-  classDefinition: NodePath
+  classDefinition: NodePath,
 ): void {
   var variableName;
   if (types.ClassDeclaration.check(classDefinition.node)) {
     // Class declarations don't have an id, e.g.: `export default class extends React.Component {}`
-    if (classDefinition.node.id) {    
+    if (classDefinition.node.id) {
       variableName = classDefinition.node.id.name;
     }
   } else if (types.ClassExpression.check(classDefinition.node)) {
-    var {parentPath} = classDefinition;
-    while (parentPath.node !== classDefinition.scope.node &&
-        !types.BlockStatement.check(parentPath.node)) {
-      if (types.VariableDeclarator.check(parentPath.node) &&
-        types.Identifier.check(parentPath.node.id)) {
+    var { parentPath } = classDefinition;
+    while (
+      parentPath.node !== classDefinition.scope.node &&
+      !types.BlockStatement.check(parentPath.node)
+    ) {
+      if (
+        types.VariableDeclarator.check(parentPath.node) &&
+        types.Identifier.check(parentPath.node.id)
+      ) {
         variableName = parentPath.node.id.name;
         break;
-      } else if (types.AssignmentExpression.check(parentPath.node) &&
-        types.Identifier.check(parentPath.node.left)) {
+      } else if (
+        types.AssignmentExpression.check(parentPath.node) &&
+        types.Identifier.check(parentPath.node.left)
+      ) {
         variableName = parentPath.node.left.name;
         break;
       }
@@ -75,15 +83,17 @@ export default function normalizeClassDefinition(
     visitAssignmentExpression: function(path) {
       if (types.MemberExpression.check(path.node.left)) {
         var first = getMemberExpressionRoot(path.get('left'));
-        if (types.Identifier.check(first.node) &&
-          first.node.name === variableName) {
+        if (
+          types.Identifier.check(first.node) &&
+          first.node.name === variableName
+        ) {
           var [member] = getMembers(path.get('left'));
           if (member && !member.path.node.computed) {
             var classProperty = builders.classProperty(
               member.path.node,
               path.node.right,
               null,
-              true
+              true,
             );
             classDefinition.get('body', 'body').value.push(classProperty);
             return false;

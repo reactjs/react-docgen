@@ -15,7 +15,7 @@ describe('normalizeClassDefinition', () => {
   var normalizeClassDefinition;
 
   beforeEach(() => {
-    ({parse} = require('../../../tests/utils'));
+    ({ parse } = require('../../../tests/utils'));
     normalizeClassDefinition = require('../normalizeClassDefinition').default;
   });
 
@@ -26,7 +26,13 @@ describe('normalizeClassDefinition', () => {
     `).get('body', 0);
 
     normalizeClassDefinition(classDefinition);
-    var {node: {body: {body: [classProperty]}}} = classDefinition;
+    var {
+      node: {
+        body: {
+          body: [classProperty],
+        },
+      },
+    } = classDefinition;
     expect(classProperty).toBeDefined();
     expect(classProperty.key.name).toBe('propTypes');
     expect(classProperty.value.value).toBe(42);
@@ -38,10 +44,16 @@ describe('normalizeClassDefinition', () => {
       export default class extends React.Component {
         static propTypes = 42;
       }
-    `).get('body', 0, 'declaration')
+    `).get('body', 0, 'declaration');
 
     normalizeClassDefinition(classDefinition);
-    var {node: {body: {body: [classProperty]}}} = classDefinition;
+    var {
+      node: {
+        body: {
+          body: [classProperty],
+        },
+      },
+    } = classDefinition;
     expect(classProperty).toBeDefined();
     expect(classProperty.key.name).toBe('propTypes');
     expect(classProperty.value.value).toBe(42);
@@ -55,7 +67,13 @@ describe('normalizeClassDefinition', () => {
     `).get('body', 0, 'declarations', 0, 'init');
 
     normalizeClassDefinition(classDefinition);
-    var {node: {body: {body: [classProperty]}}} = classDefinition;
+    var {
+      node: {
+        body: {
+          body: [classProperty],
+        },
+      },
+    } = classDefinition;
     expect(classProperty).toBeDefined();
     expect(classProperty.key.name).toBe('propTypes');
     expect(classProperty.value.value).toBe(42);
@@ -68,7 +86,13 @@ describe('normalizeClassDefinition', () => {
     `).get('body', 1, 'expression', 'right');
 
     normalizeClassDefinition(classDefinition);
-    ({node: {body: {body: [classProperty]}}} = classDefinition);
+    ({
+      node: {
+        body: {
+          body: [classProperty],
+        },
+      },
+    } = classDefinition);
     expect(classProperty).toBeDefined();
   });
 
@@ -78,11 +102,26 @@ describe('normalizeClassDefinition', () => {
         (class {});
       };
       Foo.bar = 42;
-    `)
-    .get('body', 0, 'declarations', 0, 'init', 'body', 'body', '0', 'expression');
+    `).get(
+      'body',
+      0,
+      'declarations',
+      0,
+      'init',
+      'body',
+      'body',
+      '0',
+      'expression',
+    );
 
     normalizeClassDefinition(classDefinition);
-    var {node: {body: {body: [classProperty]}}} = classDefinition;
+    var {
+      node: {
+        body: {
+          body: [classProperty],
+        },
+      },
+    } = classDefinition;
     expect(classProperty).not.toBeDefined();
   });
 });

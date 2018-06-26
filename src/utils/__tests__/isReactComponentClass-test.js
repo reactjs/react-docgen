@@ -10,7 +10,6 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
-
 jest.disableAutomock();
 
 describe('isReactComponentClass', () => {
@@ -19,7 +18,7 @@ describe('isReactComponentClass', () => {
 
   beforeEach(() => {
     isReactComponentClass = require('../isReactComponentClass').default;
-    ({expression, statement, parse} = require('../../../tests/utils'));
+    ({ expression, statement, parse } = require('../../../tests/utils'));
   });
 
   describe('render method', () => {
@@ -114,5 +113,4 @@ describe('isReactComponentClass', () => {
       expect(isReactComponentClass(def)).toBe(true);
     });
   });
-
 });

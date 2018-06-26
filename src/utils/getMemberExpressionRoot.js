@@ -10,7 +10,9 @@
  */
 
 import recast from 'recast';
-var {types: {namedTypes: types}} = recast;
+var {
+  types: { namedTypes: types },
+} = recast;
 
 /**
  * Returns the path to the first part of the MemberExpression. I.e. given a
@@ -21,10 +23,10 @@ var {types: {namedTypes: types}} = recast;
  * it returns the path of/to `foo`.
  */
 export default function getMemberExpressionRoot(
-  memberExpressionPath: NodePath
+  memberExpressionPath: NodePath,
 ): NodePath {
   do {
     memberExpressionPath = memberExpressionPath.get('object');
-  } while(types.MemberExpression.check(memberExpressionPath.node));
+  } while (types.MemberExpression.check(memberExpressionPath.node));
   return memberExpressionPath;
 }

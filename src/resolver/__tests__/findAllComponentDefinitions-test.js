@@ -15,16 +15,11 @@ import * as utils from '../../../tests/utils';
 import findAllComponentDefinitions from '../findAllComponentDefinitions';
 
 describe('findAllComponentDefinitions', () => {
-
   function parse(source) {
-    return findAllComponentDefinitions(
-      utils.parse(source, recast),
-      recast
-    );
+    return findAllComponentDefinitions(utils.parse(source, recast), recast);
   }
 
   describe('React.createClass', () => {
-
     it('finds React.createClass', () => {
       var source = `
         var React = require("React");
@@ -99,11 +94,9 @@ describe('findAllComponentDefinitions', () => {
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(2);
     });
-
   });
 
   describe('class definitions', () => {
-
     it('finds component classes', () => {
       var source = `
         import React from 'React';
@@ -143,7 +136,6 @@ describe('findAllComponentDefinitions', () => {
   });
 
   describe('stateless components', () => {
-
     it('finds stateless components', () => {
       var source = `
         import React from 'React';
@@ -197,5 +189,4 @@ describe('findAllComponentDefinitions', () => {
       expect(result.length).toBe(0);
     });
   });
-
 });

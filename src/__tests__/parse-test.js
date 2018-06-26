@@ -19,7 +19,7 @@ describe('parse', () => {
   beforeEach(() => {
     utils = require('../../tests/utils');
     // ugly but necessary because ../parse has default and named exports
-    ({default: parse, ERROR_MISSING_DEFINITION} = require('../parse'));
+    ({ default: parse, ERROR_MISSING_DEFINITION } = require('../parse'));
   });
 
   function pathFromSource(source) {
@@ -38,11 +38,14 @@ describe('parse', () => {
 
   it('errors if component definition is not found', () => {
     var resolver = jest.fn();
-    expect(() => parse('//empty', resolver)).toThrowError(ERROR_MISSING_DEFINITION);
+    expect(() => parse('//empty', resolver)).toThrowError(
+      ERROR_MISSING_DEFINITION,
+    );
     expect(resolver).toBeCalled();
 
-    expect(() => parse('//empty', resolver)).toThrowError(ERROR_MISSING_DEFINITION);
+    expect(() => parse('//empty', resolver)).toThrowError(
+      ERROR_MISSING_DEFINITION,
+    );
     expect(resolver).toBeCalled();
   });
-
 });

@@ -19,8 +19,8 @@ describe('defaultPropsHandler', () => {
   var expression, statement;
 
   beforeEach(() => {
-    ({expression, statement} = require('../../../tests/utils'));
-    documentation = new (require('../../Documentation'));
+    ({ expression, statement } = require('../../../tests/utils'));
+    documentation = new (require('../../Documentation'))();
     displayNameHandler = require('../displayNameHandler').default;
   });
 
@@ -71,7 +71,6 @@ describe('defaultPropsHandler', () => {
   });
 
   describe('ClassDeclaration', () => {
-
     it('considers the class name', () => {
       const definition = statement(`
         class Foo {
@@ -136,13 +135,20 @@ describe('defaultPropsHandler', () => {
 
   describe('FunctionExpression', () => {
     it('considers the variable name', () => {
-      const definition = statement('var Foo = function () {};').get('declarations', 0, 'init');
+      const definition = statement('var Foo = function () {};').get(
+        'declarations',
+        0,
+        'init',
+      );
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('Foo');
     });
 
     it('considers the variable name on assign', () => {
-      const definition = statement('Foo = function () {};').get('expression', 'right');
+      const definition = statement('Foo = function () {};').get(
+        'expression',
+        'right',
+      );
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('Foo');
     });
@@ -159,13 +165,20 @@ describe('defaultPropsHandler', () => {
 
   describe('ArrowFunctionExpression', () => {
     it('considers the variable name', () => {
-      const definition = statement('var Foo = () => {};').get('declarations', 0, 'init');
+      const definition = statement('var Foo = () => {};').get(
+        'declarations',
+        0,
+        'init',
+      );
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('Foo');
     });
 
     it('considers the variable name on assign', () => {
-      const definition = statement('Foo = () => {};').get('expression', 'right');
+      const definition = statement('Foo = () => {};').get(
+        'expression',
+        'right',
+      );
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('Foo');
     });

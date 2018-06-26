@@ -12,8 +12,7 @@
 
 /*eslint no-use-before-define: 0*/
 
-
-import {getDocblock} from '../utils/docblock';
+import { getDocblock } from '../utils/docblock';
 import getMembers from './getMembers';
 import getPropertyName from './getPropertyName';
 import isRequiredPropType from '../utils/isRequiredPropType';
@@ -22,7 +21,9 @@ import recast from 'recast';
 import resolveToValue from './resolveToValue';
 import resolveObjectKeysToArray from './resolveObjectKeysToArray';
 
-var {types: {namedTypes: types}} = recast;
+var {
+  types: { namedTypes: types },
+} = recast;
 
 function getEnumValues(path) {
   const values = [];
@@ -55,7 +56,7 @@ function getEnumValues(path) {
 }
 
 function getPropTypeOneOf(argumentPath) {
-  const type: PropTypeDescriptor = {name: 'enum'};
+  const type: PropTypeDescriptor = { name: 'enum' };
   let value = resolveToValue(argumentPath);
   if (!types.ArrayExpression.check(value.node)) {
     value = resolveObjectKeysToArray(value);
@@ -73,7 +74,7 @@ function getPropTypeOneOf(argumentPath) {
 }
 
 function getPropTypeOneOfType(argumentPath) {
-  var type: PropTypeDescriptor = {name: 'union'};
+  var type: PropTypeDescriptor = { name: 'union' };
   if (!types.ArrayExpression.check(argumentPath.node)) {
     type.computed = true;
     type.value = printValue(argumentPath);
@@ -84,7 +85,7 @@ function getPropTypeOneOfType(argumentPath) {
 }
 
 function getPropTypeArrayOf(argumentPath) {
-  var type: PropTypeDescriptor = {name: 'arrayOf'};
+  var type: PropTypeDescriptor = { name: 'arrayOf' };
   var subType = getPropType(argumentPath);
 
   if (subType.name === 'unknown') {
@@ -97,7 +98,7 @@ function getPropTypeArrayOf(argumentPath) {
 }
 
 function getPropTypeObjectOf(argumentPath) {
-  var type: PropTypeDescriptor = {name: 'objectOf'};
+  var type: PropTypeDescriptor = { name: 'objectOf' };
   var subType = getPropType(argumentPath);
 
   if (subType.name === 'unknown') {
@@ -110,7 +111,7 @@ function getPropTypeObjectOf(argumentPath) {
 }
 
 function getPropTypeShape(argumentPath) {
-  var type: PropTypeDescriptor = {name: 'shape'};
+  var type: PropTypeDescriptor = { name: 'shape' };
   if (!types.ObjectExpression.check(argumentPath.node)) {
     argumentPath = resolveToValue(argumentPath);
   }
@@ -126,8 +127,9 @@ function getPropTypeShape(argumentPath) {
         return;
       }
 
-      var descriptor: PropDescriptor | PropTypeDescriptor =
-        getPropType(propertyPath.get('value'));
+      var descriptor: PropDescriptor | PropTypeDescriptor = getPropType(
+        propertyPath.get('value'),
+      );
       var docs = getDocblock(propertyPath);
       if (docs) {
         descriptor.description = docs;
@@ -195,7 +197,7 @@ export default function getPropType(path: NodePath): PropTypeDescriptor {
     }
     if (name) {
       if (simplePropTypes.hasOwnProperty(name)) {
-        descriptor = {name};
+        descriptor = { name };
         return true;
       } else if (propTypes.hasOwnProperty(name) && member.argumentsPath) {
         descriptor = propTypes[name](member.argumentsPath.get(0));
@@ -205,15 +207,19 @@ export default function getPropType(path: NodePath): PropTypeDescriptor {
   });
   if (!descriptor) {
     var node = path.node;
-    if (types.Identifier.check(node) &&
-        simplePropTypes.hasOwnProperty(node.name)) {
-      descriptor = {name: node.name};
-    } else if (types.CallExpression.check(node) &&
-        types.Identifier.check(node.callee) &&
-        propTypes.hasOwnProperty(node.callee.name)) {
+    if (
+      types.Identifier.check(node) &&
+      simplePropTypes.hasOwnProperty(node.name)
+    ) {
+      descriptor = { name: node.name };
+    } else if (
+      types.CallExpression.check(node) &&
+      types.Identifier.check(node.callee) &&
+      propTypes.hasOwnProperty(node.callee.name)
+    ) {
       descriptor = propTypes[node.callee.name](path.get('arguments', 0));
     } else {
-      descriptor = {name: 'custom', raw: printValue(path)};
+      descriptor = { name: 'custom', raw: printValue(path) };
     }
   }
   return descriptor;

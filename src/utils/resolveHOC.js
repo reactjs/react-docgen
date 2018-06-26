@@ -14,10 +14,7 @@ import recast from 'recast';
 import isReactCreateClassCall from './isReactCreateClassCall';
 
 var {
-  types: {
-    NodePath,
-    namedTypes: types,
-  },
+  types: { NodePath, namedTypes: types },
 } = recast;
 
 /**

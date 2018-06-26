@@ -18,7 +18,9 @@ import isReactComponentMethod from '../utils/isReactComponentMethod';
 
 import type Documentation from '../Documentation';
 
-const {types: {namedTypes: types}} = recast;
+const {
+  types: { namedTypes: types },
+} = recast;
 
 /**
  * The following values/constructs are considered methods:
@@ -31,15 +33,11 @@ const {types: {namedTypes: types}} = recast;
 function isMethod(path) {
   const isProbablyMethod =
     (types.MethodDefinition.check(path.node) &&
-     path.node.kind !== 'constructor'
-    ) ||
+      path.node.kind !== 'constructor') ||
     (types.ClassProperty.check(path.node) &&
-     types.Function.check(path.get('value').node)
-    ) ||
+      types.Function.check(path.get('value').node)) ||
     (types.Property.check(path.node) &&
-     types.Function.check(path.get('value').node)
-    )
-    ;
+      types.Function.check(path.get('value').node));
 
   return isProbablyMethod && !isReactComponentMethod(path);
 }
@@ -50,7 +48,7 @@ function isMethod(path) {
  */
 export default function componentMethodsHandler(
   documentation: Documentation,
-  path: NodePath
+  path: NodePath,
 ) {
   // Extract all methods from the class or object.
   let methodPaths = [];

@@ -19,7 +19,7 @@ describe('getMembers', () => {
 
   beforeEach(() => {
     getMembers = require('../getMembers').default;
-    ({expression} = require('../../../tests/utils'));
+    ({ expression } = require('../../../tests/utils'));
     memberExpressionPath = expression('foo.bar(123)(456)[baz][42]');
   });
 
@@ -39,5 +39,4 @@ describe('getMembers', () => {
     expect(members[2].computed).toBe(true);
     expect(members[2].argumentsPath).toBe(null);
   });
-
 });

@@ -16,16 +16,11 @@ import findExportedComponentDefinition from '../findExportedComponentDefinition'
 
 describe('findExportedComponentDefinition', () => {
   function parse(source) {
-    return findExportedComponentDefinition(
-      utils.parse(source),
-      recast
-    );
+    return findExportedComponentDefinition(utils.parse(source), recast);
   }
 
   describe('CommonJS module exports', () => {
-
     describe('React.createClass', () => {
-
       it('finds React.createClass', () => {
         var source = `
           var React = require("React");
@@ -101,11 +96,9 @@ describe('findExportedComponentDefinition', () => {
 
         expect(parse(source)).toBeUndefined();
       });
-
     });
 
     describe('class definitions', () => {
-
       it('finds class declarations', () => {
         var source = `
           var React = require("React");
@@ -144,7 +137,6 @@ describe('findExportedComponentDefinition', () => {
     });
 
     describe('stateless components', () => {
-
       it('finds stateless component with JSX', () => {
         var source = `
           var React = require("React");
@@ -174,13 +166,10 @@ describe('findExportedComponentDefinition', () => {
 
         expect(parse(source)).toBeUndefined();
       });
-
     });
 
     describe('module.exports = <C>; / exports.foo = <C>;', () => {
-
       describe('React.createClass', () => {
-
         it('finds assignments to exports', () => {
           var source = `
             var R = require("React");
@@ -223,7 +212,6 @@ describe('findExportedComponentDefinition', () => {
 
           expect(parse(source)).toBeDefined();
         });
-
       });
 
       describe('class definition', () => {
@@ -280,11 +268,8 @@ describe('findExportedComponentDefinition', () => {
   });
 
   describe('ES6 export declarations', () => {
-
     describe('export default <component>;', () => {
-
       describe('React.createClass', () => {
-
         it('finds default export', () => {
           var source = `
             var React = require("React");
@@ -328,11 +313,9 @@ describe('findExportedComponentDefinition', () => {
 
           expect(parse(source)).toBeDefined();
         });
-
       });
 
       describe('class definition', () => {
-
         it('finds default export', () => {
           var source = `
             import React from 'React';
@@ -354,7 +337,6 @@ describe('findExportedComponentDefinition', () => {
           expect(result.node.type).toBe('ClassDeclaration');
         });
 
-
         it('finds default export with hoc', () => {
           var source = `
             import React from 'React';
@@ -365,7 +347,6 @@ describe('findExportedComponentDefinition', () => {
           var result = parse(source);
           expect(result).toBeDefined();
           expect(result.node.type).toBe('ClassDeclaration');
-
         });
 
         it('finds default export with hoc and args', () => {
@@ -423,13 +404,10 @@ describe('findExportedComponentDefinition', () => {
           expect(result.node.type).toBe('ClassDeclaration');
         });
       });
-
     });
 
     describe('export var foo = <C>, ...;', () => {
-
       describe('React.createClass', () => {
-
         it('finds named exports', () => {
           var source = `
             var React = require("React");
@@ -487,11 +465,9 @@ describe('findExportedComponentDefinition', () => {
 
           expect(parse(source)).toBeDefined();
         });
-
       });
 
       describe('class definition', () => {
-
         it('finds named exports', () => {
           var source = `
             import React from 'React';
@@ -561,7 +537,6 @@ describe('findExportedComponentDefinition', () => {
       });
 
       describe('stateless components', () => {
-
         it('finds named exports', () => {
           var source = `
             import React from 'React';
@@ -632,9 +607,7 @@ describe('findExportedComponentDefinition', () => {
     });
 
     describe('export {<C>};', () => {
-
       describe('React.createClass', () => {
-
         it('finds exported specifiers', () => {
           var source = `
             var React = require("React");
@@ -683,11 +656,9 @@ describe('findExportedComponentDefinition', () => {
 
           expect(parse(source)).toBeDefined();
         });
-
       });
 
       describe('class definition', () => {
-
         it('finds exported specifiers', () => {
           var source = `
             import React from 'React';
@@ -743,11 +714,9 @@ describe('findExportedComponentDefinition', () => {
           expect(result).toBeDefined();
           expect(result.node.type).toBe('ClassExpression');
         });
-
       });
 
       describe('stateless components', () => {
-
         it('finds exported specifiers', () => {
           var source = `
             import React from 'React';
@@ -803,13 +772,11 @@ describe('findExportedComponentDefinition', () => {
           expect(result).toBeDefined();
           expect(result.node.type).toBe('ArrowFunctionExpression');
         });
-
       });
     });
 
     // Only applies to classes
     describe('export <C>;', () => {
-
       it('finds named exports', () => {
         var source = `
           import React from 'React';
@@ -841,8 +808,6 @@ describe('findExportedComponentDefinition', () => {
         expect(result).toBeDefined();
         expect(result.node.type).toBe('ClassDeclaration');
       });
-
     });
-
   });
 });

@@ -26,4 +26,4 @@ export default (documentation: Documentation, propertyPath: NodePath) => {
   }
 
   propDescriptor.description = getDocblock(propertyPath) || '';
-}
+};

@@ -30,37 +30,32 @@ describe('resolveHOC', () => {
   });
 
   it('resolves simple hoc', () => {
-    var path = parse([
-      'hoc(42);',
-    ].join('\n'));
+    var path = parse(['hoc(42);'].join('\n'));
     expect(resolveHOC(path).node).toEqualASTNode(builders.literal(42));
   });
 
   it('resolves simple hoc w/ multiple args', () => {
-    var path = parse([
-      'hoc1(arg1a, arg1b)(42);',
-    ].join('\n'));
+    var path = parse(['hoc1(arg1a, arg1b)(42);'].join('\n'));
     expect(resolveHOC(path).node).toEqualASTNode(builders.literal(42));
   });
 
   it('resolves nested hocs', () => {
-    var path = parse([
-      'hoc2(arg2b, arg2b)(',
-      '  hoc1(arg1a, arg2a)(42)',
-      ');',
-    ].join('\n'));
+    var path = parse(
+      ['hoc2(arg2b, arg2b)(', '  hoc1(arg1a, arg2a)(42)', ');'].join('\n'),
+    );
     expect(resolveHOC(path).node).toEqualASTNode(builders.literal(42));
   });
 
   it('resolves really nested hocs', () => {
-    var path = parse([
-      'hoc3(arg3a, arg3b)(',
-      '  hoc2(arg2b, arg2b)(',
-      '    hoc1(arg1a, arg2a)(42)',
-      '  )',
-      ');',
-    ].join('\n'));
+    var path = parse(
+      [
+        'hoc3(arg3a, arg3b)(',
+        '  hoc2(arg2b, arg2b)(',
+        '    hoc1(arg1a, arg2a)(42)',
+        '  )',
+        ');',
+      ].join('\n'),
+    );
     expect(resolveHOC(path).node).toEqualASTNode(builders.literal(42));
   });
-
 });

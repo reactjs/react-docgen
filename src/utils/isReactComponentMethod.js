@@ -13,7 +13,9 @@ import recast from 'recast';
 
 import getPropertyName from './getPropertyName';
 
-const {types: {namedTypes: types}} = recast;
+const {
+  types: { namedTypes: types },
+} = recast;
 
 const componentMethods = [
   'componentDidMount',
@@ -34,8 +36,10 @@ const componentMethods = [
  * Returns if the method path is a Component method.
  */
 export default function(methodPath: NodePath): boolean {
-  if (!types.MethodDefinition.check(methodPath.node) &&
-      !types.Property.check(methodPath.node)) {
+  if (
+    !types.MethodDefinition.check(methodPath.node) &&
+    !types.Property.check(methodPath.node)
+  ) {
     return false;
   }
 

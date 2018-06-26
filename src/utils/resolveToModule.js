@@ -10,12 +10,13 @@
  *
  */
 
-
 import match from './match';
 import recast from 'recast';
 import resolveToValue from './resolveToValue';
 
-var {types: {namedTypes: types}} = recast;
+var {
+  types: { namedTypes: types },
+} = recast;
 
 /**
  * Given a path (e.g. call expression, member expression or identifier),
@@ -31,7 +32,9 @@ export default function resolveToModule(path: NodePath): ?string {
       }
       break;
     case types.CallExpression.name:
-      if (match(node.callee, {type: types.Identifier.name, name: 'require'})) {
+      if (
+        match(node.callee, { type: types.Identifier.name, name: 'require' })
+      ) {
         return node.arguments[0].value;
       }
       return resolveToModule(path.get('callee'));

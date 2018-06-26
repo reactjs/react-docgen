@@ -11,7 +11,9 @@
  */
 
 import recast from 'recast';
-const { types: { namedTypes: types } } = recast;
+const {
+  types: { namedTypes: types },
+} = recast;
 
 function hasTypeAnnotation(path: NodePath): boolean {
   return !!path.node.typeAnnotation;
@@ -27,7 +29,10 @@ export default function getTypeAnnotation(path: NodePath): ?NodePath {
   let resultPath: NodePath = path;
   do {
     resultPath = resultPath.get('typeAnnotation');
-  } while (hasTypeAnnotation(resultPath) && !types.FlowType.check(resultPath.node));
+  } while (
+    hasTypeAnnotation(resultPath) &&
+    !types.FlowType.check(resultPath.node)
+  );
 
   return resultPath;
 }

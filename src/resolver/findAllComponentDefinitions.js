@@ -22,7 +22,7 @@ import resolveToValue from '../utils/resolveToValue';
  */
 export default function findAllReactCreateClassCalls(
   ast: ASTNode,
-  recast: Object
+  recast: Object,
 ): Array<NodePath> {
   var types = recast.types.namedTypes;
   var definitions = [];

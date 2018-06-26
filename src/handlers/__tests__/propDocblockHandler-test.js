@@ -22,15 +22,16 @@ describe('propDocBlockHandler', () => {
   var propDocBlockHandler;
 
   beforeEach(() => {
-    ({expression, statement} = require('../../../tests/utils'));
-    documentation = new (require('../../Documentation'));
+    ({ expression, statement } = require('../../../tests/utils'));
+    documentation = new (require('../../Documentation'))();
     propDocBlockHandler = require('../propDocBlockHandler').default;
   });
 
   function test(getSrc, parse) {
     it('finds docblocks for prop types', () => {
-      var definition = parse(getSrc(
-        `{
+      var definition = parse(
+        getSrc(
+          `{
           /**
            * Foo comment
            */
@@ -39,8 +40,9 @@ describe('propDocBlockHandler', () => {
            * Bar comment
            */
           bar: Prop.bool,
-        }`
-     ));
+        }`,
+        ),
+      );
 
       propDocBlockHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
@@ -54,8 +56,9 @@ describe('propDocBlockHandler', () => {
     });
 
     it('can handle multline comments', () => {
-      var definition = parse(getSrc(
-        `{
+      var definition = parse(
+        getSrc(
+          `{
           /**
            * Foo comment with
            * many lines!
@@ -63,21 +66,27 @@ describe('propDocBlockHandler', () => {
            * even with empty lines in between
            */
           foo: Prop.bool,
-        }`
-      ));
+        }`,
+        ),
+      );
 
       propDocBlockHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
         foo: {
           description:
-            'Foo comment with'+EOL+'many lines!'+EOL+'\neven with empty lines in between',
+            'Foo comment with' +
+            EOL +
+            'many lines!' +
+            EOL +
+            '\neven with empty lines in between',
         },
       });
     });
 
     it('ignores non-docblock comments', () => {
-      var definition = parse(getSrc(
-        `{
+      var definition = parse(
+        getSrc(
+          `{
           /**
            * Foo comment
            */
@@ -88,8 +97,9 @@ describe('propDocBlockHandler', () => {
            */
           /* This is not a doc comment */
           bar: Prop.bool,
-        }`
-      ));
+        }`,
+        ),
+      );
 
       propDocBlockHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
@@ -103,15 +113,17 @@ describe('propDocBlockHandler', () => {
     });
 
     it('only considers the comment with the property below it', () => {
-      var definition = parse(getSrc(
-        `{
+      var definition = parse(
+        getSrc(
+          `{
           /**
            * Foo comment
            */
           foo: Prop.bool,
           bar: Prop.bool,
-        }`
-      ));
+        }`,
+        ),
+      );
 
       propDocBlockHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
@@ -125,15 +137,17 @@ describe('propDocBlockHandler', () => {
     });
 
     it('understands and ignores the spread operator', () => {
-      var definition = parse(getSrc(
-        `{
+      var definition = parse(
+        getSrc(
+          `{
           ...Foo.propTypes,
           /**
            * Foo comment
            */
           foo: Prop.bool,
-        }`
-      ));
+        }`,
+        ),
+      );
 
       propDocBlockHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
@@ -166,7 +180,7 @@ describe('propDocBlockHandler', () => {
   describe('React.createClass', () => {
     test(
       propTypesSrc => `({propTypes: ${propTypesSrc}})`,
-      src => statement(src).get('expression')
+      src => statement(src).get('expression'),
     );
   });
 
@@ -178,7 +192,7 @@ describe('propDocBlockHandler', () => {
             static propTypes = ${propTypesSrc};
           }
         `,
-        src => statement(src)
+        src => statement(src),
       );
     });
 
@@ -191,7 +205,7 @@ describe('propDocBlockHandler', () => {
             }
           }
         `,
-        src => statement(src)
+        src => statement(src),
       );
     });
   });

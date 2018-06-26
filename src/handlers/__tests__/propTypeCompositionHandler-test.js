@@ -20,13 +20,14 @@ describe('propTypeCompositionHandler', () => {
   var propTypeCompositionHandler;
 
   beforeEach(() => {
-    ({statement, expression} = require('../../../tests/utils'));
+    ({ statement, expression } = require('../../../tests/utils'));
     getPropTypeMock = jest.fn(() => ({}));
     jest.setMock('../../utils/getPropType', getPropTypeMock);
     jest.mock('../../utils/getPropType');
 
     documentation = new (require('../../Documentation'))();
-    propTypeCompositionHandler = require('../propTypeCompositionHandler').default;
+    propTypeCompositionHandler = require('../propTypeCompositionHandler')
+      .default;
   });
 
   function test(getSrc, parse) {
@@ -54,7 +55,7 @@ describe('propTypeCompositionHandler', () => {
         `{
           ...Foo.propTypes,
           ...SharedProps,
-        }`
+        }`,
       );
       var definition = parse(`
         ${definitionSrc}
@@ -65,13 +66,12 @@ describe('propTypeCompositionHandler', () => {
       propTypeCompositionHandler(documentation, definition);
       expect(documentation.composes).toEqual(['Foo.react', 'SharedProps']);
     });
-
   }
 
   describe('React.createClass', () => {
     test(
       propTypesSrc => `({propTypes: ${propTypesSrc}})`,
-      src => statement(src).get('expression')
+      src => statement(src).get('expression'),
     );
   });
 
@@ -83,7 +83,7 @@ describe('propTypeCompositionHandler', () => {
             static propTypes = ${propTypesSrc};
           }
         `,
-        src => statement(src)
+        src => statement(src),
       );
     });
 
@@ -96,18 +96,20 @@ describe('propTypeCompositionHandler', () => {
             }
           }
         `,
-        src => statement(src)
+        src => statement(src),
       );
     });
   });
 
   it('does not error if propTypes cannot be found', () => {
     var definition = expression('{fooBar: 42}');
-    expect(() => propTypeCompositionHandler(documentation, definition))
-      .not.toThrow();
+    expect(() =>
+      propTypeCompositionHandler(documentation, definition),
+    ).not.toThrow();
 
     definition = statement('class Foo {}');
-    expect(() => propTypeCompositionHandler(documentation, definition))
-      .not.toThrow();
+    expect(() =>
+      propTypeCompositionHandler(documentation, definition),
+    ).not.toThrow();
   });
 });

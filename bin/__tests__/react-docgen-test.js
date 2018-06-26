@@ -25,16 +25,19 @@ var spawn = require('cross-spawn');
 
 function run(args, stdin) {
   return new Promise(resolve => {
-    var docgen = spawn( // eslint-disable-line camelcase
+    var docgen = spawn(
+      // eslint-disable-line camelcase
       path.join(__dirname, '../react-docgen.js'),
-      args
+      args,
     );
     var stdout = '';
     var stderr = '';
-    docgen.stdout.on('data', data => stdout += data);
-    docgen.stderr.on('data', data => stderr += data);
+    docgen.stdout.on('data', data => (stdout += data));
+    docgen.stderr.on('data', data => (stderr += data));
     docgen.on('close', () => resolve([stdout, stderr]));
-    docgen.on('error', (e) => { throw e; });
+    docgen.on('error', e => {
+      throw e;
+    });
     if (stdin) {
       docgen.stdin.write(stdin);
     }
@@ -43,7 +46,7 @@ function run(args, stdin) {
 }
 
 var component = fs.readFileSync(
-  path.join(__dirname, '../../example/components/Component.js')
+  path.join(__dirname, '../../example/components/Component.js'),
 );
 
 describe('react-docgen CLI', () => {
@@ -61,7 +64,7 @@ describe('react-docgen CLI', () => {
       dir = path.join(tempDir, dir);
       try {
         fs.mkdirSync(dir);
-      } catch(error) {
+      } catch (error) {
         if (error.message.indexOf('EEXIST') === -1) {
           throw error;
         }
@@ -95,183 +98,240 @@ describe('react-docgen CLI', () => {
     tempNoComponents = [];
   });
 
-  it('reads from stdin', () => {
-    return run([], component).then(([stdout, stderr]) => {
-      expect(stdout).not.toBe('');
-      expect(stderr).toBe('');
-    });
-  }, TEST_TIMEOUT);
+  it(
+    'reads from stdin',
+    () => {
+      return run([], component).then(([stdout, stderr]) => {
+        expect(stdout).not.toBe('');
+        expect(stderr).toBe('');
+      });
+    },
+    TEST_TIMEOUT,
+  );
 
-  it('reads files provided as command line arguments', () => {
-    createTempfiles();
-    return run(tempComponents.concat(tempNoComponents)).then(
-      ([stdout, stderr]) => {
+  it(
+    'reads files provided as command line arguments',
+    () => {
+      createTempfiles();
+      return run(tempComponents.concat(tempNoComponents)).then(
+        ([stdout, stderr]) => {
+          expect(stdout).toContain('Component');
+          expect(stderr).toContain('NoComponent');
+        },
+      );
+    },
+    TEST_TIMEOUT,
+  );
+
+  it(
+    'reads directories provided as command line arguments',
+    () => {
+      createTempfiles();
+      return run([tempDir]).then(([stdout, stderr]) => {
         expect(stdout).toContain('Component');
         expect(stderr).toContain('NoComponent');
-      }
-    );
-  }, TEST_TIMEOUT);
+      });
+    },
+    TEST_TIMEOUT,
+  );
 
-  it('reads directories provided as command line arguments', () => {
-    createTempfiles();
-    return run([tempDir]).then(([stdout, stderr]) => {
-      expect(stdout).toContain('Component');
-      expect(stderr).toContain('NoComponent');
-    });
-  }, TEST_TIMEOUT);
+  it(
+    'considers js and jsx by default',
+    () => {
+      createTempfiles();
+      createTempfiles('jsx');
+      createTempfiles('foo');
+      return run([tempDir]).then(([stdout, stderr]) => {
+        expect(stdout).toContain('Component.js');
+        expect(stdout).toContain('Component.jsx');
+        expect(stdout).not.toContain('Component.foo');
 
-  it('considers js and jsx by default', () => {
-    createTempfiles();
-    createTempfiles('jsx');
-    createTempfiles('foo');
-    return run([tempDir]).then(([stdout, stderr]) => {
-      expect(stdout).toContain('Component.js');
-      expect(stdout).toContain('Component.jsx');
-      expect(stdout).not.toContain('Component.foo');
+        expect(stderr).toContain('NoComponent.js');
+        expect(stderr).toContain('NoComponent.jsx');
+        expect(stderr).not.toContain('NoComponent.foo');
+      });
+    },
+    TEST_TIMEOUT,
+  );
 
-      expect(stderr).toContain('NoComponent.js');
-      expect(stderr).toContain('NoComponent.jsx');
-      expect(stderr).not.toContain('NoComponent.foo');
-    });
-  }, TEST_TIMEOUT);
+  it(
+    'considers files with the specified extension',
+    () => {
+      createTempfiles('foo');
+      createTempfiles('bar');
 
-  it('considers files with the specified extension', () => {
-    createTempfiles('foo');
-    createTempfiles('bar');
+      var verify = ([stdout, stderr]) => {
+        expect(stdout).toContain('Component.foo');
+        expect(stdout).toContain('Component.bar');
 
-    var verify = ([stdout, stderr]) => {
-      expect(stdout).toContain('Component.foo');
-      expect(stdout).toContain('Component.bar');
+        expect(stderr).toContain('NoComponent.foo');
+        expect(stderr).toContain('NoComponent.bar');
+      };
 
-      expect(stderr).toContain('NoComponent.foo');
-      expect(stderr).toContain('NoComponent.bar');
-    };
+      return Promise.all([
+        run(['--extension=foo', '--extension=bar', tempDir]).then(verify),
+        run(['-x', 'foo', '-x', 'bar', tempDir]).then(verify),
+      ]);
+    },
+    TEST_TIMEOUT,
+  );
 
-    return Promise.all([
-      run(['--extension=foo', '--extension=bar', tempDir]).then(verify),
-      run(['-x', 'foo', '-x', 'bar', tempDir]).then(verify),
-    ]);
-  }, TEST_TIMEOUT);
+  it(
+    'ignores files in node_modules, __tests__ and __mocks__ by default',
+    () => {
+      createTempfiles(null, 'node_modules');
+      createTempfiles(null, '__tests__');
+      createTempfiles(null, '__mocks__');
 
-  it('ignores files in node_modules, __tests__ and __mocks__ by default', () => {
-    createTempfiles(null, 'node_modules');
-    createTempfiles(null, '__tests__');
-    createTempfiles(null, '__mocks__');
+      return run([tempDir]).then(([stdout, stderr]) => {
+        expect(stdout).toBe('');
+        expect(stderr).toBe('');
+      });
+    },
+    TEST_TIMEOUT,
+  );
 
-    return run([tempDir]).then(([stdout, stderr]) => {
-      expect(stdout).toBe('');
-      expect(stderr).toBe('');
-    });
-  }, TEST_TIMEOUT);
+  it(
+    'ignores specified folders',
+    () => {
+      createTempfiles(null, 'foo');
 
-  it('ignores specified folders', () => {
-    createTempfiles(null, 'foo');
+      var verify = ([stdout, stderr]) => {
+        expect(stdout).toBe('');
+        expect(stderr).toBe('');
+      };
 
-    var verify = ([stdout, stderr]) => {
-      expect(stdout).toBe('');
-      expect(stderr).toBe('');
-    };
-
-    return Promise.all([
+      return Promise.all([
         run(['--ignore=foo', tempDir]).then(verify),
         run(['-i', 'foo', tempDir]).then(verify),
-    ]);
-  }, TEST_TIMEOUT);
+      ]);
+    },
+    TEST_TIMEOUT,
+  );
 
-  it('writes to stdout', () => {
-    return run([], component).then(([stdout, stderr]) => {
-      expect(stdout.length > 0).toBe(true);
-      expect(stderr.length).toBe(0);
-    });
-  }, TEST_TIMEOUT);
+  it(
+    'writes to stdout',
+    () => {
+      return run([], component).then(([stdout, stderr]) => {
+        expect(stdout.length > 0).toBe(true);
+        expect(stderr.length).toBe(0);
+      });
+    },
+    TEST_TIMEOUT,
+  );
 
-  it('writes to stderr', () => {
-    return run([], '{}').then(([stdout, stderr]) => {
-      expect(stderr.length > 0).toBe(true);
-      expect(stdout.length).toBe(0);
-    });
-  }, TEST_TIMEOUT);
+  it(
+    'writes to stderr',
+    () => {
+      return run([], '{}').then(([stdout, stderr]) => {
+        expect(stderr.length > 0).toBe(true);
+        expect(stdout.length).toBe(0);
+      });
+    },
+    TEST_TIMEOUT,
+  );
 
-  it('writes to a file if provided', () => {
-    var outFile = temp.openSync();
-    createTempfiles();
+  it(
+    'writes to a file if provided',
+    () => {
+      var outFile = temp.openSync();
+      createTempfiles();
 
-    var verify = ([stdout]) => {
-      expect(fs.readFileSync(outFile.path)).not.toBe('');
-      expect(stdout).toBe('');
-    };
+      var verify = ([stdout]) => {
+        expect(fs.readFileSync(outFile.path)).not.toBe('');
+        expect(stdout).toBe('');
+      };
 
-    return Promise.all([
-      run(['--out=' + outFile.path, tempDir]).then(verify),
-      run(['-o', outFile.path, tempDir]).then(verify),
-    ]);
-  }, TEST_TIMEOUT);
+      return Promise.all([
+        run(['--out=' + outFile.path, tempDir]).then(verify),
+        run(['-o', outFile.path, tempDir]).then(verify),
+      ]);
+    },
+    TEST_TIMEOUT,
+  );
 
   describe('--resolver', () => {
-    it('accepts the names of built in resolvers', () => {
-      return Promise.all([
-        // No option passed: same as --resolver=findExportedComponentDefinition
-        run([
-          path.join(__dirname, '../../example/components/Component.js'),
-        ]).then(([stdout]) => {
-          expect(stdout).toContain('Component');
-        }),
+    it(
+      'accepts the names of built in resolvers',
+      () => {
+        return Promise.all([
+          // No option passed: same as --resolver=findExportedComponentDefinition
+          run([
+            path.join(__dirname, '../../example/components/Component.js'),
+          ]).then(([stdout]) => {
+            expect(stdout).toContain('Component');
+          }),
 
-        run([
-          '--resolver=findExportedComponentDefinition',
-          path.join(__dirname, '../../example/components/Component.js'),
-        ]).then(([stdout]) => {
-          expect(stdout).toContain('Component');
-        }),
+          run([
+            '--resolver=findExportedComponentDefinition',
+            path.join(__dirname, '../../example/components/Component.js'),
+          ]).then(([stdout]) => {
+            expect(stdout).toContain('Component');
+          }),
 
-        run([
-          '--resolver=findAllComponentDefinitions',
-          path.join(__dirname, './example/MultipleComponents.js'),
-        ]).then(([stdout]) => {
-          expect(stdout).toContain('ComponentA');
-          expect(stdout).toContain('ComponentB');
-        }),
-      ]);
-    }, TEST_TIMEOUT);
+          run([
+            '--resolver=findAllComponentDefinitions',
+            path.join(__dirname, './example/MultipleComponents.js'),
+          ]).then(([stdout]) => {
+            expect(stdout).toContain('ComponentA');
+            expect(stdout).toContain('ComponentB');
+          }),
+        ]);
+      },
+      TEST_TIMEOUT,
+    );
 
-    it('accepts a path to a resolver function', () => {
-      return Promise.all([
-        run([
-          '--resolver='+path.join(__dirname, './example/customResolver.js'),
-          path.join(__dirname, '../../example/components/Component.js'),
-        ]).then(([stdout]) => {
-          expect(stdout).toContain('Custom');
-        }),
-      ]);
-    }, TEST_TIMEOUT);
+    it(
+      'accepts a path to a resolver function',
+      () => {
+        return Promise.all([
+          run([
+            '--resolver=' + path.join(__dirname, './example/customResolver.js'),
+            path.join(__dirname, '../../example/components/Component.js'),
+          ]).then(([stdout]) => {
+            expect(stdout).toContain('Custom');
+          }),
+        ]);
+      },
+      TEST_TIMEOUT,
+    );
   });
 
   describe('--exclude/-e', () => {
-    it('ignores files by name', () => {
-      createTempfiles(null, 'foo');
-      createTempfiles(null, 'bar');
+    it(
+      'ignores files by name',
+      () => {
+        createTempfiles(null, 'foo');
+        createTempfiles(null, 'bar');
 
-      var verify = ([stdout, stderr]) => {
-        expect(stdout).toBe('');
-        expect(stderr).toBe('');
-      };
+        var verify = ([stdout, stderr]) => {
+          expect(stdout).toBe('');
+          expect(stderr).toBe('');
+        };
 
-      return run(
-        ['--exclude=Component.js', '--exclude=NoComponent.js', tempDir]
-      ).then(verify);
-    }, TEST_TIMEOUT);
+        return run([
+          '--exclude=Component.js',
+          '--exclude=NoComponent.js',
+          tempDir,
+        ]).then(verify);
+      },
+      TEST_TIMEOUT,
+    );
 
-    it('ignores files by regex', () => {
-      createTempfiles(null, 'foo');
-      createTempfiles(null, 'bar');
+    it(
+      'ignores files by regex',
+      () => {
+        createTempfiles(null, 'foo');
+        createTempfiles(null, 'bar');
 
-      var verify = ([stdout, stderr]) => {
-        expect(stdout).toBe('');
-        expect(stderr).toBe('');
-      };
+        var verify = ([stdout, stderr]) => {
+          expect(stdout).toBe('');
+          expect(stderr).toBe('');
+        };
 
-      return run(['--exclude=/.*Component\\.js/', tempDir]).then(verify);
-    }, TEST_TIMEOUT);
+        return run(['--exclude=/.*Component\\.js/', tempDir]).then(verify);
+      },
+      TEST_TIMEOUT,
+    );
   });
-
 });

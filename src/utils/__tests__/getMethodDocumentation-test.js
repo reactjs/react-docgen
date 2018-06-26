@@ -52,7 +52,7 @@ describe('getMethodDocumentation', () => {
       const method = def.get('body', 'body', 0);
       expect(getMethodDocumentation(method)).toEqual({
         name: 'foo',
-        docblock: 'Don\'t use this!',
+        docblock: "Don't use this!",
         modifiers: [],
         returns: null,
         params: [],
@@ -61,7 +61,6 @@ describe('getMethodDocumentation', () => {
   });
 
   describe('parameters', () => {
-
     function methodParametersDoc(params) {
       return {
         name: 'foo',
@@ -80,15 +79,16 @@ describe('getMethodDocumentation', () => {
       `);
       const method = def.get('body', 'body', 0);
       expect(getMethodDocumentation(method)).toEqual(
-        methodParametersDoc([{
-          name: 'bar',
-          type: {name: 'number'},
-        }])
+        methodParametersDoc([
+          {
+            name: 'bar',
+            type: { name: 'number' },
+          },
+        ]),
       );
     });
 
     describe('modifiers', () => {
-
       function methodModifiersDoc(modifiers) {
         return {
           name: 'foo',
@@ -106,9 +106,7 @@ describe('getMethodDocumentation', () => {
           }
         `);
         const method = def.get('body', 'body', 0);
-        expect(getMethodDocumentation(method)).toEqual(
-          methodModifiersDoc([])
-        );
+        expect(getMethodDocumentation(method)).toEqual(methodModifiersDoc([]));
       });
 
       it('detects static functions', () => {
@@ -119,7 +117,7 @@ describe('getMethodDocumentation', () => {
         `);
         const method = def.get('body', 'body', 0);
         expect(getMethodDocumentation(method)).toEqual(
-          methodModifiersDoc(['static'])
+          methodModifiersDoc(['static']),
         );
       });
 
@@ -131,7 +129,7 @@ describe('getMethodDocumentation', () => {
         `);
         const method = def.get('body', 'body', 0);
         expect(getMethodDocumentation(method)).toEqual(
-          methodModifiersDoc(['generator'])
+          methodModifiersDoc(['generator']),
         );
       });
 
@@ -143,7 +141,7 @@ describe('getMethodDocumentation', () => {
         `);
         const method = def.get('body', 'body', 0);
         expect(getMethodDocumentation(method)).toEqual(
-          methodModifiersDoc(['async'])
+          methodModifiersDoc(['async']),
         );
       });
 
@@ -155,13 +153,12 @@ describe('getMethodDocumentation', () => {
         `);
         const method = def.get('body', 'body', 0);
         expect(getMethodDocumentation(method)).toEqual(
-          methodModifiersDoc(['static', 'async'])
+          methodModifiersDoc(['static', 'async']),
         );
       });
     });
 
     describe('returns', () => {
-
       function methodReturnDoc(returnValue) {
         return {
           name: 'foo',
@@ -179,9 +176,7 @@ describe('getMethodDocumentation', () => {
           }
         `);
         const method = def.get('body', 'body', 0);
-        expect(getMethodDocumentation(method)).toEqual(
-          methodReturnDoc(null)
-        );
+        expect(getMethodDocumentation(method)).toEqual(methodReturnDoc(null));
       });
 
       it('extracts flow types', () => {
@@ -193,8 +188,8 @@ describe('getMethodDocumentation', () => {
         const method = def.get('body', 'body', 0);
         expect(getMethodDocumentation(method)).toEqual(
           methodReturnDoc({
-            type: {name: 'number'},
-          })
+            type: { name: 'number' },
+          }),
         );
       });
     });

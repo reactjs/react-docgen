@@ -19,9 +19,9 @@ describe('setPropDescription', () => {
   var setPropDescription;
 
   beforeEach(() => {
-    ({expression} = require('../../../tests/utils'));
+    ({ expression } = require('../../../tests/utils'));
 
-    defaultDocumentation = new (require('../../Documentation'));
+    defaultDocumentation = new (require('../../Documentation'))();
     setPropDescription = require('../setPropDescription').default;
   });
 
@@ -52,10 +52,13 @@ describe('setPropDescription', () => {
   it('does not update description if already set', () => {
     defaultDocumentation.getPropDescriptor('foo').description = '12345678';
 
-    const descriptors = getDescriptors(`{
+    const descriptors = getDescriptors(
+      `{
       /** my description */
       foo: string,
-    }`, defaultDocumentation);
+    }`,
+      defaultDocumentation,
+    );
 
     expect(descriptors).toEqual({
       foo: {

@@ -42,11 +42,14 @@ var babelParserOptions = {
 };
 
 export type Options = {
-  legacyDecorators ?: boolean,
+  legacyDecorators?: boolean,
 };
 
 function buildOptions(options?: Options = {}) {
-  const parserOptions = { ...babelParserOptions, plugins: [...babelParserOptions.plugins] };
+  const parserOptions = {
+    ...babelParserOptions,
+    plugins: [...babelParserOptions.plugins],
+  };
   if (options.legacyDecorators) {
     parserOptions.plugins.push('decorators-legacy');
   } else {

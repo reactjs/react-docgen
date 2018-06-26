@@ -20,19 +20,17 @@ describe('componentDocblockHandler', () => {
 
   function lastStatement(src) {
     var programPath = parse(src);
-    return programPath.get(
-      'body',
-      programPath.node.body.length - 1
-    );
+    return programPath.get('body', programPath.node.body.length - 1);
   }
 
   beforeEach(() => {
-    ({parse} = require('../../../tests/utils'));
-    documentation = new (require('../../Documentation'));
+    ({ parse } = require('../../../tests/utils'));
+    documentation = new (require('../../Documentation'))();
     componentDocblockHandler = require('../componentDocblockHandler').default;
   });
 
-  function test(definitionSrc, parse) { // eslint-disable-line no-shadow
+  function test(definitionSrc, parse) {
+    // eslint-disable-line no-shadow
     it('finds docblocks for component definitions', () => {
       var definition = parse(`
         import something from 'somewhere';
@@ -89,9 +87,10 @@ describe('componentDocblockHandler', () => {
    * Decorates can only be assigned to class and therefore only make sense for
    * class declarations and export declarations.
    */
-  function testDecorators(classSrc, parse, exportSrc = '') { // eslint-disable-line no-shadow
+  function testDecorators(classSrc, parse, exportSrc = '') {
+    // eslint-disable-line no-shadow
     describe('decorators', () => {
-      it('uses the docblock above the decorator if it\'s the only one', () => {
+      it("uses the docblock above the decorator if it's the only one", () => {
         var definition = parse(`
           import something from 'somewhere';
           /**
@@ -130,152 +129,110 @@ describe('componentDocblockHandler', () => {
   }
 
   describe('React.createClass', () => {
-    test(
-      'var Component = React.createClass({})',
-      src => lastStatement(src).get('declarations', 0, 'init', 'arguments', 0)
-    );
+    test('var Component = React.createClass({})', src =>
+      lastStatement(src).get('declarations', 0, 'init', 'arguments', 0));
   });
 
   describe('ClassDeclaration', () => {
-    test(
-      'class Component {}',
-      src => lastStatement(src)
-    );
-    testDecorators(
-      'class Component {}',
-      src => lastStatement(src)
-    );
+    test('class Component {}', src => lastStatement(src));
+    testDecorators('class Component {}', src => lastStatement(src));
   });
 
   describe('ClassExpression', () => {
-    test(
-      'var Component = class {};',
-      src => lastStatement(src).get('declarations', 0, 'init')
-    );
+    test('var Component = class {};', src =>
+      lastStatement(src).get('declarations', 0, 'init'));
   });
 
   describe('Stateless functions', () => {
-    test(
-      'function Component() {}',
-      src => lastStatement(src)
-    );
-    test(
-      'var Component = function () {};',
-      src => lastStatement(src).get('declarations', 0, 'init')
-    );
-    test(
-      'var Component = () => {}',
-      src => lastStatement(src).get('declarations', 0, 'init')
-    );
+    test('function Component() {}', src => lastStatement(src));
+    test('var Component = function () {};', src =>
+      lastStatement(src).get('declarations', 0, 'init'));
+    test('var Component = () => {}', src =>
+      lastStatement(src).get('declarations', 0, 'init'));
   });
 
   describe('ES6 default exports', () => {
-
     describe('Default React.createClass export', () => {
-      test(
-        'export default React.createClass({});',
-        src => lastStatement(src).get('declaration', 'arguments', 0)
-      );
+      test('export default React.createClass({});', src =>
+        lastStatement(src).get('declaration', 'arguments', 0));
     });
 
     describe('Default class declaration export', () => {
-      test(
-        'export default class Component {}',
-        src => lastStatement(src).get('declaration')
-      );
+      test('export default class Component {}', src =>
+        lastStatement(src).get('declaration'));
       testDecorators(
         'class Component {}',
         src => lastStatement(src).get('declaration'),
-        'export default'
+        'export default',
       );
     });
 
     describe('Default class expression export', () => {
-      test(
-        'export default class {}',
-        src => lastStatement(src).get('declaration')
-      );
+      test('export default class {}', src =>
+        lastStatement(src).get('declaration'));
       testDecorators(
         'class {}',
         src => lastStatement(src).get('declaration'),
-        'export default'
+        'export default',
       );
     });
 
     describe('Default stateless function export', () => {
-
       describe('named function', () => {
-        test(
-          'export default function Component() {}',
-          src => lastStatement(src).get('declaration')
-        );
+        test('export default function Component() {}', src =>
+          lastStatement(src).get('declaration'));
       });
 
       describe('anonymous function', () => {
-        test(
-          'export default function() {}',
-          src => lastStatement(src).get('declaration')
-        );
+        test('export default function() {}', src =>
+          lastStatement(src).get('declaration'));
       });
 
       describe('arrow function', () => {
-        test(
-          'export default () => {}',
-          src => lastStatement(src).get('declaration')
-        );
+        test('export default () => {}', src =>
+          lastStatement(src).get('declaration'));
       });
-
     });
-
   });
 
   describe('ES6 named exports', () => {
-
     describe('Named React.createClass export', () => {
-      test(
-        'export var Component = React.createClass({});',
-        src => lastStatement(src).get(
-          'declaration', 'declarations', '0', 'init', 'arguments', 0
-        )
-      );
+      test('export var Component = React.createClass({});', src =>
+        lastStatement(src).get(
+          'declaration',
+          'declarations',
+          '0',
+          'init',
+          'arguments',
+          0,
+        ));
     });
 
     describe('Named class declaration export', () => {
-      test(
-        'export class Component {}',
-        src => lastStatement(src).get('declaration')
-      );
+      test('export class Component {}', src =>
+        lastStatement(src).get('declaration'));
       testDecorators(
         'class Component {}',
         src => lastStatement(src).get('declaration'),
-        'export'
+        'export',
       );
     });
 
     describe('Named stateless function', () => {
-
       describe('named function', () => {
-        test(
-          'export function Component() {}',
-          src => lastStatement(src).get('declaration')
-        );
+        test('export function Component() {}', src =>
+          lastStatement(src).get('declaration'));
       });
 
       describe('anonymous function', () => {
-        test(
-          'export var Component = function() {}',
-          src => lastStatement(src).get('declaration')
-        );
+        test('export var Component = function() {}', src =>
+          lastStatement(src).get('declaration'));
       });
 
       describe('arrow function', () => {
-        test(
-          'export var Component = () => {}',
-          src => lastStatement(src).get('declaration')
-        );
+        test('export var Component = () => {}', src =>
+          lastStatement(src).get('declaration'));
       });
-
     });
-
   });
 });

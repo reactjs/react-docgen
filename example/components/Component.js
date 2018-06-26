@@ -12,18 +12,18 @@ var Component = React.createClass({
     /**
      * Prop description
      */
-    bar: React.PropTypes.number
+    bar: React.PropTypes.number,
   },
 
   getDefaultProps: function() {
     return {
-      bar: 21
+      bar: 21,
     };
   },
 
   render: function() {
     // ...
-  }
+  },
 });
 
 module.exports = Component;

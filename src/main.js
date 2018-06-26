@@ -47,8 +47,8 @@ function defaultParse( // eslint-disable-line no-unused-vars
   src: string,
   resolver?: ?Resolver, // eslint-disable-line no-shadow
   handlers?: ?Array<Handler>, // eslint-disable-line no-shadow
-  options ?: Options = {}
-): Array<Object>|Object {
+  options?: Options = {},
+): Array<Object> | Object {
   if (!resolver) {
     resolver = defaultResolver;
   }
@@ -59,10 +59,4 @@ function defaultParse( // eslint-disable-line no-unused-vars
   return parse(src, resolver, handlers, options);
 }
 
-export {
-  defaultParse as parse,
-  defaultHandlers,
-  handlers,
-  resolver,
-  utils,
-};
+export { defaultParse as parse, defaultHandlers, handlers, resolver, utils };

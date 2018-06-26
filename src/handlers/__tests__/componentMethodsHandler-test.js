@@ -19,8 +19,8 @@ describe('componentMethodsHandler', () => {
   let parse;
 
   beforeEach(() => {
-    ({parse} = require('../../../tests/utils'));
-    documentation = new (require('../../Documentation'));
+    ({ parse } = require('../../../tests/utils'));
+    documentation = new (require('../../Documentation'))();
     componentMethodsHandler = require('../componentMethodsHandler').default;
   });
 
@@ -32,24 +32,28 @@ describe('componentMethodsHandler', () => {
         docblock: 'The foo method',
         modifiers: [],
         returns: {
-          type: {name: 'number'},
+          type: { name: 'number' },
         },
-        params: [{
-          name: 'bar',
-          type: {name: 'number'},
-        }],
+        params: [
+          {
+            name: 'bar',
+            type: { name: 'number' },
+          },
+        ],
       },
       {
         name: 'baz',
         docblock: '"arrow function method"',
         modifiers: [],
         returns: {
-          type: {name: 'string'},
+          type: { name: 'string' },
         },
-        params: [{
-          name: 'foo',
-          type: {name: 'string'},
-        }],
+        params: [
+          {
+            name: 'foo',
+            type: { name: 'string' },
+          },
+        ],
       },
       {
         name: 'bar',

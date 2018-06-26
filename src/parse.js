@@ -50,8 +50,8 @@ export default function parse(
   src: string,
   resolver: Resolver,
   handlers: Array<Handler>,
-  options: Options
-): Array<Object>|Object {
+  options: Options,
+): Array<Object> | Object {
   var ast = recast.parse(src, { parser: buildParser(options) });
   var componentDefinitions = resolver(ast.program, recast);
 
@@ -67,4 +67,4 @@ export default function parse(
   throw new Error(ERROR_MISSING_DEFINITION);
 }
 
-export {ERROR_MISSING_DEFINITION};
+export { ERROR_MISSING_DEFINITION };

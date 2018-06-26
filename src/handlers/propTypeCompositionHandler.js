@@ -17,7 +17,9 @@ import recast from 'recast';
 import resolveToModule from '../utils/resolveToModule';
 import resolveToValue from '../utils/resolveToValue';
 
-var {types: {namedTypes: types}} = recast;
+var {
+  types: { namedTypes: types },
+} = recast;
 
 /**
  * It resolves the path to its module name and adds it to the "composes" entry
@@ -44,7 +46,7 @@ function processObjectExpression(documentation, path) {
 
 export default function propTypeCompositionHandler(
   documentation: Documentation,
-  path: NodePath
+  path: NodePath,
 ) {
   var propTypesPath = getMemberValuePath(path, 'propTypes');
   if (!propTypesPath) {
