@@ -358,3 +358,258 @@ Object {
   },
 }
 `;
+
+exports[`main fixtures processes component "component_13.js" without errors 1`] = `
+Object {
+  "description": "",
+  "displayName": "Foo",
+  "methods": Array [],
+  "props": Object {
+    "RootComponent": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "ReactElementType",
+        "raw": "React.ElementType",
+      },
+      "required": false,
+    },
+    "align": Object {
+      "description": "",
+      "flowType": Object {
+        "elements": Array [
+          Object {
+            "name": "literal",
+            "value": "\\"left\\"",
+          },
+          Object {
+            "name": "literal",
+            "value": "\\"center\\"",
+          },
+          Object {
+            "name": "literal",
+            "value": "\\"right\\"",
+          },
+          Object {
+            "name": "literal",
+            "value": "\\"justify\\"",
+          },
+        ],
+        "name": "union",
+        "raw": "\\"left\\" | \\"center\\" | \\"right\\" | \\"justify\\"",
+      },
+      "required": false,
+    },
+    "capitalize": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "boolean",
+      },
+      "required": false,
+    },
+    "center": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "boolean",
+      },
+      "required": false,
+    },
+    "children": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "ReactNode",
+        "raw": "React.Node",
+      },
+      "required": false,
+    },
+    "className": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "string",
+      },
+      "required": false,
+    },
+    "color": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "string",
+      },
+      "required": false,
+    },
+    "justify": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "boolean",
+      },
+      "required": false,
+    },
+    "leading": Object {
+      "description": "",
+      "flowType": Object {
+        "elements": Array [
+          Object {
+            "name": "literal",
+            "value": "\\"none\\"",
+          },
+          Object {
+            "name": "literal",
+            "value": "\\"tight\\"",
+          },
+          Object {
+            "name": "literal",
+            "value": "\\"normal\\"",
+          },
+          Object {
+            "name": "literal",
+            "value": "\\"loose\\"",
+          },
+        ],
+        "name": "union",
+        "raw": "\\"none\\" | \\"tight\\" | \\"normal\\" | \\"loose\\"",
+      },
+      "required": false,
+    },
+    "leadingLoose": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "boolean",
+      },
+      "required": false,
+    },
+    "leadingNone": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "boolean",
+      },
+      "required": false,
+    },
+    "leadingNormal": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "boolean",
+      },
+      "required": false,
+    },
+    "leadingTight": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "boolean",
+      },
+      "required": false,
+    },
+    "left": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "boolean",
+      },
+      "required": false,
+    },
+    "lowercase": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "boolean",
+      },
+      "required": false,
+    },
+    "muted": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "boolean",
+      },
+      "required": false,
+    },
+    "right": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "boolean",
+      },
+      "required": false,
+    },
+    "size": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "string",
+      },
+      "required": false,
+    },
+    "tracking": Object {
+      "description": "",
+      "flowType": Object {
+        "elements": Array [
+          Object {
+            "name": "literal",
+            "value": "\\"tight\\"",
+          },
+          Object {
+            "name": "literal",
+            "value": "\\"normal\\"",
+          },
+          Object {
+            "name": "literal",
+            "value": "\\"wide\\"",
+          },
+        ],
+        "name": "union",
+        "raw": "\\"tight\\" | \\"normal\\" | \\"wide\\"",
+      },
+      "required": false,
+    },
+    "trackingNormal": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "boolean",
+      },
+      "required": false,
+    },
+    "trackingTight": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "boolean",
+      },
+      "required": false,
+    },
+    "trackingWide": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "boolean",
+      },
+      "required": false,
+    },
+    "transform": Object {
+      "description": "",
+      "flowType": Object {
+        "elements": Array [
+          Object {
+            "name": "literal",
+            "value": "\\"lowercase\\"",
+          },
+          Object {
+            "name": "literal",
+            "value": "\\"uppercase\\"",
+          },
+          Object {
+            "name": "literal",
+            "value": "\\"capitalize\\"",
+          },
+        ],
+        "name": "union",
+        "raw": "\\"lowercase\\" | \\"uppercase\\" | \\"capitalize\\"",
+      },
+      "required": false,
+    },
+    "uppercase": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "boolean",
+      },
+      "required": false,
+    },
+    "wrap": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "boolean",
+      },
+      "required": false,
+    },
+  },
+}
+`;
