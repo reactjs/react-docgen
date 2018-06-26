@@ -14,18 +14,18 @@ jest.disableAutomock();
 jest.mock('../../Documentation');
 
 describe('flowTypeHandler', () => {
-  var statement, expression;
-  var getFlowTypeMock;
-  var documentation;
-  var flowTypeHandler;
+  let statement, expression;
+  let getFlowTypeMock;
+  let documentation;
+  let flowTypeHandler;
 
   beforeEach(() => {
-    ({statement, expression} = require('../../../tests/utils'));
+    ({ statement, expression } = require('../../../tests/utils'));
     getFlowTypeMock = jest.fn(() => ({}));
     jest.setMock('../../utils/getFlowType', getFlowTypeMock);
     jest.mock('../../utils/getFlowType');
 
-    documentation = new (require('../../Documentation'));
+    documentation = new (require('../../Documentation'))();
     flowTypeHandler = require('../flowTypeHandler').default;
   });
 
@@ -41,14 +41,14 @@ describe('flowTypeHandler', () => {
 
   function test(getSrc) {
     it('detects types correctly', () => {
-      var flowTypesSrc = `
+      const flowTypesSrc = `
       {
         foo: string,
         bar: number,
         hal: boolean,
       }
       `;
-      var definition = getSrc(flowTypesSrc);
+      const definition = getSrc(flowTypesSrc);
 
       flowTypeHandler(documentation, definition);
 
@@ -68,17 +68,17 @@ describe('flowTypeHandler', () => {
           required: true,
           description: '',
         },
-        });
+      });
     });
 
     it('detects whether a prop is required', () => {
-      var flowTypesSrc = `
+      const flowTypesSrc = `
       {
         foo: string,
         bar?: number,
       }
       `;
-      var definition = getSrc(flowTypesSrc);
+      const definition = getSrc(flowTypesSrc);
 
       flowTypeHandler(documentation, definition);
 
@@ -97,13 +97,13 @@ describe('flowTypeHandler', () => {
     });
 
     it('detects union types', () => {
-      var flowTypesSrc = `
+      const flowTypesSrc = `
       {
         foo: string | number,
         bar: "test" | 1 | true,
       }
       `;
-      var definition = getSrc(flowTypesSrc);
+      const definition = getSrc(flowTypesSrc);
 
       flowTypeHandler(documentation, definition);
 
@@ -122,12 +122,12 @@ describe('flowTypeHandler', () => {
     });
 
     it('detects intersection types', () => {
-      var flowTypesSrc = `
+      const flowTypesSrc = `
       {
         foo: Foo & Bar,
       }
       `;
-      var definition = getSrc(flowTypesSrc);
+      const definition = getSrc(flowTypesSrc);
 
       flowTypeHandler(documentation, definition);
 
@@ -143,13 +143,13 @@ describe('flowTypeHandler', () => {
     describe('special generic type annotations', () => {
       ['$ReadOnly', '$Exact'].forEach(annotation => {
         it(`unwraps ${annotation}<...>`, () => {
-          var flowTypesSrc = `
+          const flowTypesSrc = `
             ${annotation}<{
               foo: string | number,
             }>
           `;
 
-          var definition = getSrc(flowTypesSrc);
+          const definition = getSrc(flowTypesSrc);
 
           flowTypeHandler(documentation, definition);
 
@@ -167,52 +167,68 @@ describe('flowTypeHandler', () => {
 
   describe('TypeAlias', () => {
     describe('class definition for flow <0.53', () => {
-      test(
-        propTypesSrc => statement(template('class Foo extends Component<void, Props, void> {}', propTypesSrc))
+      test(propTypesSrc =>
+        statement(
+          template(
+            'class Foo extends Component<void, Props, void> {}',
+            propTypesSrc,
+          ),
+        ),
       );
     });
 
     describe('class definition for flow >=0.53 without State', () => {
-      test(
-        propTypesSrc => statement(template('class Foo extends Component<Props> {}', propTypesSrc))
+      test(propTypesSrc =>
+        statement(
+          template('class Foo extends Component<Props> {}', propTypesSrc),
+        ),
       );
     });
 
     describe('class definition for flow >=0.53 with State', () => {
-      test(
-        propTypesSrc => statement(template('class Foo extends Component<Props, State> {}', propTypesSrc))
+      test(propTypesSrc =>
+        statement(
+          template(
+            'class Foo extends Component<Props, State> {}',
+            propTypesSrc,
+          ),
+        ),
       );
     });
 
     describe('class definition with inline props', () => {
-      test(
-          propTypesSrc => statement(template('class Foo extends Component { props: Props; }', propTypesSrc))
+      test(propTypesSrc =>
+        statement(
+          template(
+            'class Foo extends Component { props: Props; }',
+            propTypesSrc,
+          ),
+        ),
       );
     });
 
     describe('stateless component', () => {
-      test(
-        propTypesSrc => statement(template('(props: Props) => <div />;', propTypesSrc)).get('expression')
+      test(propTypesSrc =>
+        statement(template('(props: Props) => <div />;', propTypesSrc)).get(
+          'expression',
+        ),
       );
     });
   });
 
   it('does not error if flowTypes cannot be found', () => {
-    var definition = expression('{fooBar: 42}');
-    expect(() => flowTypeHandler(documentation, definition))
-      .not.toThrow();
+    let definition = expression('{fooBar: 42}');
+    expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
 
     definition = statement('class Foo extends Component {}');
-    expect(() => flowTypeHandler(documentation, definition))
-      .not.toThrow();
+    expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
 
     definition = statement('() => <div />');
-    expect(() => flowTypeHandler(documentation, definition))
-      .not.toThrow();
+    expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
   });
 
   it('supports intersection proptypes', () => {
-    var definition = statement(`
+    const definition = statement(`
       (props: Props) => <div />;
 
       var React = require('React');
@@ -233,7 +249,7 @@ describe('flowTypeHandler', () => {
   });
 
   it('does not support union proptypes', () => {
-    var definition = statement(`
+    const definition = statement(`
       (props: Props) => <div />;
 
       var React = require('React');
@@ -243,24 +259,22 @@ describe('flowTypeHandler', () => {
       type Props = Imported | Other | { foo: 'fooValue' };
     `).get('expression');
 
-    expect(() => flowTypeHandler(documentation, definition))
-      .not.toThrow();
+    expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
 
     expect(documentation.descriptors).toEqual({});
   });
 
   describe('does not error for unreachable type', () => {
-    function test(code) {
-      var definition = statement(code).get('expression');
+    function testCode(code) {
+      const definition = statement(code).get('expression');
 
-      expect(() => flowTypeHandler(documentation, definition))
-        .not.toThrow();
+      expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
 
       expect(documentation.descriptors).toEqual({});
     }
 
     it('required', () => {
-      test(`
+      testCode(`
         (props: Props) => <div />;
         var React = require('React');
         var Component = React.Component;
@@ -270,7 +284,7 @@ describe('flowTypeHandler', () => {
     });
 
     it('imported', () => {
-      test(`
+      testCode(`
         (props: Props) => <div />;
         var React = require('React');
         var Component = React.Component;
@@ -280,7 +294,7 @@ describe('flowTypeHandler', () => {
     });
 
     it('type imported', () => {
-      test(`
+      testCode(`
         (props: Props) => <div />;
         var React = require('React');
         var Component = React.Component;
@@ -290,7 +304,7 @@ describe('flowTypeHandler', () => {
     });
 
     it('not in scope', () => {
-      test(`
+      testCode(`
         (props: Props) => <div />;
         var React = require('React');
         var Component = React.Component;

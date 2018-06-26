@@ -18,11 +18,13 @@ import recast from 'recast';
 import resolveToValue from '../utils/resolveToValue';
 import resolveFunctionDefinitionToReturnValue from '../utils/resolveFunctionDefinitionToReturnValue';
 
-const {types: {namedTypes: types}} = recast;
+const {
+  types: { namedTypes: types },
+} = recast;
 
 export default function displayNameHandler(
   documentation: Documentation,
-  path: NodePath
+  path: NodePath,
 ) {
   let displayNamePath = getMemberValuePath(path, 'displayName');
   if (!displayNamePath) {
@@ -38,9 +40,15 @@ export default function displayNameHandler(
       types.FunctionExpression.check(path.node)
     ) {
       if (types.VariableDeclarator.check(path.parentPath.node)) {
-        documentation.set('displayName', getNameOrValue(path.parentPath.get('id')));
+        documentation.set(
+          'displayName',
+          getNameOrValue(path.parentPath.get('id')),
+        );
       } else if (types.AssignmentExpression.check(path.parentPath.node)) {
-        documentation.set('displayName', getNameOrValue(path.parentPath.get('left')));
+        documentation.set(
+          'displayName',
+          getNameOrValue(path.parentPath.get('left')),
+        );
       }
     }
     return;

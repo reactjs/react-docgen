@@ -10,12 +10,13 @@
  *
  */
 
-
 import match from './match';
 import recast from 'recast';
 import resolveToValue from './resolveToValue';
 
-var {types: {namedTypes: types}} = recast;
+const {
+  types: { namedTypes: types },
+} = recast;
 
 /**
  * Given a path (e.g. call expression, member expression or identifier),
@@ -23,7 +24,7 @@ var {types: {namedTypes: types}} = recast;
  * was imported.
  */
 export default function resolveToModule(path: NodePath): ?string {
-  var node = path.node;
+  const node = path.node;
   switch (node.type) {
     case types.VariableDeclarator.name:
       if (node.init) {
@@ -31,17 +32,20 @@ export default function resolveToModule(path: NodePath): ?string {
       }
       break;
     case types.CallExpression.name:
-      if (match(node.callee, {type: types.Identifier.name, name: 'require'})) {
+      if (
+        match(node.callee, { type: types.Identifier.name, name: 'require' })
+      ) {
         return node.arguments[0].value;
       }
       return resolveToModule(path.get('callee'));
     case types.Identifier.name:
-    case types.JSXIdentifier.name:
-      var valuePath = resolveToValue(path);
+    case types.JSXIdentifier.name: {
+      const valuePath = resolveToValue(path);
       if (valuePath !== path) {
         return resolveToModule(valuePath);
       }
       break;
+    }
     case types.ImportDeclaration.name:
       return node.source.value;
     case types.MemberExpression.name:
@@ -52,4 +56,6 @@ export default function resolveToModule(path: NodePath): ?string {
         return resolveToModule(path);
       }
   }
+
+  return null;
 }

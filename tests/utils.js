@@ -17,15 +17,15 @@ function stringify(value) {
  */
 export function parse(src, recast = _recast, options = {}) {
   return new recast.types.NodePath(
-    recast.parse(stringify(src), { parser: buildParser(options) }).program
+    recast.parse(stringify(src), { parser: buildParser(options) }).program,
   );
 }
 
-export function statement(src, recast=_recast) {
+export function statement(src, recast = _recast) {
   return parse(src, recast).get('body', 0);
 }
 
-export function expression(src, recast=_recast) {
+export function expression(src, recast = _recast) {
   return statement('(' + src + ')', recast).get('expression');
 }
 
@@ -39,14 +39,14 @@ export function parseWithTemplate(src, template) {
 /**
  * Default template that simply defines React and PropTypes.
  */
-export var REACT_TEMPLATE = [
+export const REACT_TEMPLATE = [
   'var React = require("React");',
   'var PropTypes = React.PropTypes;',
   'var {PropTypes: OtherPropTypes} = require("React");',
   '%s;',
 ].join('\n');
 
-export var MODULE_TEMPLATE = [
+export const MODULE_TEMPLATE = [
   'var React = require("React");',
   'var PropTypes = React.PropTypes;',
   'var Component = React.createClass(%s);',

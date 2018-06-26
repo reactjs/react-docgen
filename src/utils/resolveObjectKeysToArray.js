@@ -13,36 +13,34 @@
 import recast from 'recast';
 import resolveToValue from './resolveToValue';
 
-var {
-  types: {
-    ASTNode,
-    NodePath,
-    builders,
-    namedTypes: types,
-  },
+const {
+  types: { ASTNode, NodePath, builders, namedTypes: types },
 } = recast;
 
-function isObjectKeysCall(node: ASTNode): bool {
-  return types.CallExpression.check(node) &&
+function isObjectKeysCall(node: ASTNode): boolean {
+  return (
+    types.CallExpression.check(node) &&
     node.arguments.length === 1 &&
     types.MemberExpression.check(node.callee) &&
     types.Identifier.check(node.callee.object) &&
     node.callee.object.name === 'Object' &&
     types.Identifier.check(node.callee.property) &&
-    node.callee.property.name === 'keys';
+    node.callee.property.name === 'keys'
+  );
 }
 
-export function resolveObjectExpressionToNameArray(objectExpression: NodePath, raw: boolean = false): ?Array<string> {
+export function resolveObjectExpressionToNameArray(
+  objectExpression: NodePath,
+  raw: boolean = false,
+): ?Array<string> {
   if (
     types.ObjectExpression.check(objectExpression.value) &&
     objectExpression.value.properties.every(
       prop =>
-        types.Property.check(prop) &&
-        (
-          (types.Identifier.check(prop.key) && !prop.computed) ||
-          types.Literal.check(prop.key)
-        ) ||
-        (types.SpreadProperty.check(prop) || types.SpreadElement.check(prop))
+        (types.Property.check(prop) &&
+          ((types.Identifier.check(prop.key) && !prop.computed) ||
+            types.Literal.check(prop.key))) ||
+        (types.SpreadProperty.check(prop) || types.SpreadElement.check(prop)),
     )
   ) {
     let values = [];
@@ -56,7 +54,10 @@ export function resolveObjectExpressionToNameArray(objectExpression: NodePath, r
         const name = prop.key.name || (raw ? prop.key.raw : prop.key.value);
 
         values.push(name);
-      } else if (types.SpreadProperty.check(prop) || types.SpreadElement.check(prop)) {
+      } else if (
+        types.SpreadProperty.check(prop) ||
+        types.SpreadElement.check(prop)
+      ) {
         const spreadObject = resolveToValue(propPath.get('argument'));
         const spreadValues = resolveObjectExpressionToNameArray(spreadObject);
         if (!spreadValues) {
@@ -65,7 +66,6 @@ export function resolveObjectExpressionToNameArray(objectExpression: NodePath, r
         }
         values = [...values, ...spreadValues];
       }
-
     });
 
     if (!error) {
@@ -86,7 +86,7 @@ export function resolveObjectExpressionToNameArray(objectExpression: NodePath, r
  *  computed identifier keys
  */
 export default function resolveObjectKeysToArray(path: NodePath): ?NodePath {
-  var node = path.node;
+  const node = path.node;
 
   if (isObjectKeysCall(node)) {
     const objectExpression = resolveToValue(path.get('arguments').get(0));
@@ -95,7 +95,7 @@ export default function resolveObjectKeysToArray(path: NodePath): ?NodePath {
     if (values) {
       const nodes = values
         .filter((value, index, array) => array.indexOf(value) === index)
-        .map(value => builders.literal(value))
+        .map(value => builders.literal(value));
 
       return new NodePath(builders.arrayExpression(nodes));
     }

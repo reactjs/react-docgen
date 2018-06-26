@@ -13,11 +13,8 @@
 import recast from 'recast';
 import isReactCreateClassCall from './isReactCreateClassCall';
 
-var {
-  types: {
-    NodePath,
-    namedTypes: types,
-  },
+const {
+  types: { NodePath, namedTypes: types },
 } = recast;
 
 /**
@@ -27,7 +24,7 @@ var {
  * Else the path itself is returned.
  */
 export default function resolveHOC(path: NodePath): NodePath {
-  var node = path.node;
+  const node = path.node;
   if (types.CallExpression.check(node) && !isReactCreateClassCall(path)) {
     if (node.arguments.length) {
       return resolveHOC(path.get('arguments', node.arguments.length - 1));

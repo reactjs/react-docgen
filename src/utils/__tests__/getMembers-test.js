@@ -13,18 +13,18 @@
 jest.disableAutomock();
 
 describe('getMembers', () => {
-  var expression;
-  var getMembers;
-  var memberExpressionPath;
+  let expression;
+  let getMembers;
+  let memberExpressionPath;
 
   beforeEach(() => {
     getMembers = require('../getMembers').default;
-    ({expression} = require('../../../tests/utils'));
+    ({ expression } = require('../../../tests/utils'));
     memberExpressionPath = expression('foo.bar(123)(456)[baz][42]');
   });
 
   it('finds all "members" "inside" a MemberExpression', () => {
-    var members = getMembers(memberExpressionPath);
+    const members = getMembers(memberExpressionPath);
 
     //bar(123)
     expect(members[0].path.node.name).toEqual('bar');
@@ -39,5 +39,4 @@ describe('getMembers', () => {
     expect(members[2].computed).toBe(true);
     expect(members[2].argumentsPath).toBe(null);
   });
-
 });

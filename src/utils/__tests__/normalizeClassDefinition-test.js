@@ -11,22 +11,28 @@
 /*global describe, beforeEach, it, expect*/
 
 describe('normalizeClassDefinition', () => {
-  var parse;
-  var normalizeClassDefinition;
+  let parse;
+  let normalizeClassDefinition;
 
   beforeEach(() => {
-    ({parse} = require('../../../tests/utils'));
+    ({ parse } = require('../../../tests/utils'));
     normalizeClassDefinition = require('../normalizeClassDefinition').default;
   });
 
   it('finds assignments to class declarations', () => {
-    var classDefinition = parse(`
+    const classDefinition = parse(`
       class Foo {}
       Foo.propTypes = 42;
     `).get('body', 0);
 
     normalizeClassDefinition(classDefinition);
-    var {node: {body: {body: [classProperty]}}} = classDefinition;
+    const {
+      node: {
+        body: {
+          body: [classProperty],
+        },
+      },
+    } = classDefinition;
     expect(classProperty).toBeDefined();
     expect(classProperty.key.name).toBe('propTypes');
     expect(classProperty.value.value).toBe(42);
@@ -34,14 +40,20 @@ describe('normalizeClassDefinition', () => {
   });
 
   it('should not fail on classes without ids', () => {
-    var classDefinition = parse(`
+    const classDefinition = parse(`
       export default class extends React.Component {
         static propTypes = 42;
       }
-    `).get('body', 0, 'declaration')
+    `).get('body', 0, 'declaration');
 
     normalizeClassDefinition(classDefinition);
-    var {node: {body: {body: [classProperty]}}} = classDefinition;
+    const {
+      node: {
+        body: {
+          body: [classProperty],
+        },
+      },
+    } = classDefinition;
     expect(classProperty).toBeDefined();
     expect(classProperty.key.name).toBe('propTypes');
     expect(classProperty.value.value).toBe(42);
@@ -49,13 +61,19 @@ describe('normalizeClassDefinition', () => {
   });
 
   it('finds assignments to class expressions', () => {
-    var classDefinition = parse(`
+    let classDefinition = parse(`
       var Foo = class {};
       Foo.propTypes = 42;
     `).get('body', 0, 'declarations', 0, 'init');
 
     normalizeClassDefinition(classDefinition);
-    var {node: {body: {body: [classProperty]}}} = classDefinition;
+    let {
+      node: {
+        body: {
+          body: [classProperty],
+        },
+      },
+    } = classDefinition;
     expect(classProperty).toBeDefined();
     expect(classProperty.key.name).toBe('propTypes');
     expect(classProperty.value.value).toBe(42);
@@ -68,21 +86,42 @@ describe('normalizeClassDefinition', () => {
     `).get('body', 1, 'expression', 'right');
 
     normalizeClassDefinition(classDefinition);
-    ({node: {body: {body: [classProperty]}}} = classDefinition);
+    ({
+      node: {
+        body: {
+          body: [classProperty],
+        },
+      },
+    } = classDefinition);
     expect(classProperty).toBeDefined();
   });
 
   it('ignores assignments further up the tree', () => {
-    var classDefinition = parse(`
+    const classDefinition = parse(`
       var Foo = function() {
         (class {});
       };
       Foo.bar = 42;
-    `)
-    .get('body', 0, 'declarations', 0, 'init', 'body', 'body', '0', 'expression');
+    `).get(
+      'body',
+      0,
+      'declarations',
+      0,
+      'init',
+      'body',
+      'body',
+      '0',
+      'expression',
+    );
 
     normalizeClassDefinition(classDefinition);
-    var {node: {body: {body: [classProperty]}}} = classDefinition;
+    const {
+      node: {
+        body: {
+          body: [classProperty],
+        },
+      },
+    } = classDefinition;
     expect(classProperty).not.toBeDefined();
   });
 });

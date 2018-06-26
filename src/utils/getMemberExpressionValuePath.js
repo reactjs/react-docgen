@@ -14,19 +14,22 @@ import getNameOrValue from './getNameOrValue';
 import { String as toString } from './expressionTo';
 import recast from 'recast';
 
-var {types: {namedTypes: types}} = recast;
+const {
+  types: { namedTypes: types },
+} = recast;
 
 function resolveName(path) {
   if (types.VariableDeclaration.check(path.node)) {
-    var declarations = path.get('declarations');
+    const declarations = path.get('declarations');
     if (declarations.value.length && declarations.value.length !== 1) {
       throw new TypeError(
         'Got unsupported VariableDeclaration. VariableDeclaration must only ' +
-        'have a single VariableDeclarator. Got ' + declarations.value.length +
-        ' declarations.'
+          'have a single VariableDeclarator. Got ' +
+          declarations.value.length +
+          ' declarations.',
       );
     }
-    var value = declarations.get(0, 'id', 'name').value;
+    const value = declarations.get(0, 'id', 'name').value;
     return value;
   }
 
@@ -40,7 +43,7 @@ function resolveName(path) {
     types.TaggedTemplateExpression.check(path.node)
   ) {
     if (!types.VariableDeclarator.check(path.parent.node)) {
-      return; // eslint-disable-line consistent-return
+      return;
     }
 
     return path.parent.get('id', 'name').value;
@@ -48,13 +51,14 @@ function resolveName(path) {
 
   throw new TypeError(
     'Attempted to resolveName for an unsupported path. resolveName accepts a ' +
-    'VariableDeclaration, FunctionDeclaration, or FunctionExpression. Got "' +
-    path.node.type + '".'
+      'VariableDeclaration, FunctionDeclaration, or FunctionExpression. Got "' +
+      path.node.type +
+      '".',
   );
 }
 
 function getRoot(node) {
-  var root = node.parent;
+  let root = node.parent;
   while (root.parent) {
     root = root.parent;
   }
@@ -63,10 +67,10 @@ function getRoot(node) {
 
 export default function getMemberExpressionValuePath(
   variableDefinition: NodePath,
-  memberName: string
+  memberName: string,
 ): ?NodePath {
-  var localName = resolveName(variableDefinition);
-  var program = getRoot(variableDefinition);
+  const localName = resolveName(variableDefinition);
+  const program = getRoot(variableDefinition);
 
   if (!localName) {
     // likely an immediately exported and therefore nameless/anonymous node
@@ -74,16 +78,17 @@ export default function getMemberExpressionValuePath(
     return;
   }
 
-  var result;
+  let result;
   recast.visit(program, {
     visitAssignmentExpression(path) {
-      var memberPath = path.get('left');
+      const memberPath = path.get('left');
       if (!types.MemberExpression.check(memberPath.node)) {
         return this.traverse(path);
       }
 
       if (
-        (!memberPath.node.computed || types.Literal.check(memberPath.node.property)) &&
+        (!memberPath.node.computed ||
+          types.Literal.check(memberPath.node.property)) &&
         getNameOrValue(memberPath.get('property')) === memberName &&
         toString(memberPath.get('object')) === localName
       ) {
@@ -95,5 +100,5 @@ export default function getMemberExpressionValuePath(
     },
   });
 
-  return result; // eslint-disable-line consistent-return
+  return result;
 }

@@ -10,7 +10,6 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
-
 jest.disableAutomock();
 
 describe('isReactComponentMethod', () => {
@@ -19,7 +18,7 @@ describe('isReactComponentMethod', () => {
 
   beforeEach(() => {
     isReactComponentMethod = require('../isReactComponentMethod').default;
-    ({expression, statement} = require('../../../tests/utils'));
+    ({ expression, statement } = require('../../../tests/utils'));
   });
 
   it('returns true if the method is a component class method', () => {

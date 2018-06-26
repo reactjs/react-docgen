@@ -9,31 +9,33 @@
  * @flow
  */
 
-import {getDocblock} from './docblock';
+import { getDocblock } from './docblock';
 import getFlowType from './getFlowType';
 import getParameterName from './getParameterName';
 import getPropertyName from './getPropertyName';
 import getTypeAnnotation from './getTypeAnnotation';
 import recast from 'recast';
 
-const { types: { namedTypes: types } } = recast;
+const {
+  types: { namedTypes: types },
+} = recast;
 
 type MethodParameter = {
-  name: string;
-  type?: ?FlowTypeDescriptor;
-  optional?: boolean;
+  name: string,
+  type?: ?FlowTypeDescriptor,
+  optional?: boolean,
 };
 
 type MethodReturn = {
-  type: ?FlowTypeDescriptor;
+  type: ?FlowTypeDescriptor,
 };
 
 type MethodDocumentation = {
-  name: string;
-  docblock: ?string;
-  modifiers: Array<string>;
-  params: Array<MethodParameter>;
-  returns: ?MethodReturn;
+  name: string,
+  docblock: ?string,
+  modifiers: Array<string>,
+  params: Array<MethodParameter>,
+  returns: ?MethodReturn,
 };
 
 function getMethodParamsDoc(methodPath) {
@@ -70,7 +72,7 @@ function getMethodReturnDoc(methodPath) {
   if (functionExpression.node.returnType) {
     const returnType = getTypeAnnotation(functionExpression.get('returnType'));
     if (returnType) {
-      return {type: getFlowType(returnType)};
+      return { type: getFlowType(returnType) };
     }
   }
 
@@ -95,7 +97,9 @@ function getMethodModifiers(methodPath) {
   return modifiers;
 }
 
-export default function getMethodDocumentation(methodPath: NodePath): MethodDocumentation {
+export default function getMethodDocumentation(
+  methodPath: NodePath,
+): MethodDocumentation {
   const name = getPropertyName(methodPath);
   const docblock = getDocblock(methodPath);
 

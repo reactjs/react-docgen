@@ -18,7 +18,7 @@ import resolveExportDeclaration from '../utils/resolveExportDeclaration';
 import resolveToValue from '../utils/resolveToValue';
 import resolveHOC from '../utils/resolveHOC';
 
-var ERROR_MULTIPLE_DEFINITIONS =
+const ERROR_MULTIPLE_DEFINITIONS =
   'Multiple exported component definitions found.';
 
 function ignore() {
@@ -26,13 +26,17 @@ function ignore() {
 }
 
 function isComponentDefinition(path) {
-  return isReactCreateClassCall(path) || isReactComponentClass(path) || isStatelessComponent(path);
+  return (
+    isReactCreateClassCall(path) ||
+    isReactComponentClass(path) ||
+    isStatelessComponent(path)
+  );
 }
 
 function resolveDefinition(definition, types) {
   if (isReactCreateClassCall(definition)) {
     // return argument
-    var resolvedPath = resolveToValue(definition.get('arguments', 0));
+    const resolvedPath = resolveToValue(definition.get('arguments', 0));
     if (types.ObjectExpression.check(resolvedPath.node)) {
       return resolvedPath;
     }
@@ -62,33 +66,35 @@ function resolveDefinition(definition, types) {
  */
 export default function findExportedComponentDefinition(
   ast: ASTNode,
-  recast: Object
+  recast: Object,
 ): ?NodePath {
-  var types = recast.types.namedTypes;
-  var definition;
+  const types = recast.types.namedTypes;
+  let foundDefinition;
 
   function exportDeclaration(path) {
-    var definitions = resolveExportDeclaration(path, types)
-      .reduce((acc, definition) => {
+    const definitions = resolveExportDeclaration(path, types).reduce(
+      (acc, definition) => {
         if (isComponentDefinition(definition)) {
           acc.push(definition);
         } else {
-          var resolved = resolveToValue(resolveHOC(definition));
+          const resolved = resolveToValue(resolveHOC(definition));
           if (isComponentDefinition(resolved)) {
             acc.push(resolved);
           }
         }
         return acc;
-      }, []);
+      },
+      [],
+    );
 
     if (definitions.length === 0) {
       return false;
     }
-    if (definitions.length > 1 || definition) {
+    if (definitions.length > 1 || foundDefinition) {
       // If a file exports multiple components, ... complain!
       throw new Error(ERROR_MULTIPLE_DEFINITIONS);
     }
-    definition = resolveDefinition(definitions[0], types);
+    foundDefinition = resolveDefinition(definitions[0], types);
     return false;
   }
 
@@ -125,14 +131,14 @@ export default function findExportedComponentDefinition(
           return false;
         }
       }
-      if (definition) {
+      if (foundDefinition) {
         // If a file exports multiple components, ... complain!
         throw new Error(ERROR_MULTIPLE_DEFINITIONS);
       }
-      definition = resolveDefinition(path, types);
+      foundDefinition = resolveDefinition(path, types);
       return false;
     },
   });
 
-  return definition;
+  return foundDefinition;
 }

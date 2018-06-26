@@ -15,7 +15,9 @@ import match from './match';
 import recast from 'recast';
 import resolveToModule from './resolveToModule';
 
-var {types: {namedTypes: types}} = recast;
+const {
+  types: { namedTypes: types },
+} = recast;
 
 /**
  * Returns true if the expression is a function call of the form
@@ -26,14 +28,14 @@ export default function isReactChildrenElementCall(path: NodePath): boolean {
     path = path.get('expression');
   }
 
-  if (!match(path.node, {callee: {property: {name: 'only'}}})) {
+  if (!match(path.node, { callee: { property: { name: 'only' } } })) {
     return false;
   }
 
-  var calleeObj = path.get('callee', 'object');
-  var module = resolveToModule(calleeObj);
+  const calleeObj = path.get('callee', 'object');
+  const module = resolveToModule(calleeObj);
 
-  if (!match(calleeObj, { value: { property: { name: 'Children' }}})) {
+  if (!match(calleeObj, { value: { property: { name: 'Children' } } })) {
     return false;
   }
 

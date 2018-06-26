@@ -19,7 +19,7 @@ export default function match(node: ASTNode, pattern: Object): boolean {
   if (!node) {
     return false;
   }
-  for (var prop in pattern) {
+  for (const prop in pattern) {
     if (!node[prop]) {
       return false;
     }

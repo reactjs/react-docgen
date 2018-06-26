@@ -8,7 +8,7 @@
  *
  */
 
-var React = require('react');
+const React = require('react');
 
 exports.ComponentA = React.createClass({
   displayName: 'ComponentA',

@@ -38,39 +38,39 @@ class Documentation {
   }
 
   getPropDescriptor(propName: string): PropDescriptor {
-    var propDescriptor = this._props.get(propName);
+    let propDescriptor = this._props.get(propName);
     if (!propDescriptor) {
-      this._props.set(propName, propDescriptor = {});
+      this._props.set(propName, (propDescriptor = {}));
     }
     return propDescriptor;
   }
 
   getContextDescriptor(propName: string): PropDescriptor {
-    var propDescriptor = this._context.get(propName);
+    let propDescriptor = this._context.get(propName);
     if (!propDescriptor) {
-      this._context.set(propName, propDescriptor = {});
+      this._context.set(propName, (propDescriptor = {}));
     }
     return propDescriptor;
   }
 
   getChildContextDescriptor(propName: string): PropDescriptor {
-    var propDescriptor = this._childContext.get(propName);
+    let propDescriptor = this._childContext.get(propName);
     if (!propDescriptor) {
-      this._childContext.set(propName, propDescriptor = {});
+      this._childContext.set(propName, (propDescriptor = {}));
     }
     return propDescriptor;
   }
 
   toObject(): Object {
-    var obj = {};
+    const obj = {};
 
-    for (var [key, value] of this._data) {
+    for (const [key, value] of this._data) {
       obj[key] = value;
     }
 
     if (this._props.size > 0) {
       obj.props = {};
-      for (var [propName, propDescriptor] of this._props) {
+      for (const [propName, propDescriptor] of this._props) {
         if (Object.keys(propDescriptor).length > 0) {
           obj.props[propName] = propDescriptor;
         }
@@ -79,7 +79,7 @@ class Documentation {
 
     if (this._context.size > 0) {
       obj.context = {};
-      for (var [contextName, contextDescriptor] of this._context) {
+      for (const [contextName, contextDescriptor] of this._context) {
         if (Object.keys(contextDescriptor).length > 0) {
           obj.context[contextName] = contextDescriptor;
         }
@@ -88,7 +88,8 @@ class Documentation {
 
     if (this._childContext.size > 0) {
       obj.childContext = {};
-      for (var [childContextName, childContextDescriptor] of this._childContext) {
+      for (const [childContextName, childContextDescriptor] of this
+        ._childContext) {
         obj.childContext[childContextName] = childContextDescriptor;
       }
     }

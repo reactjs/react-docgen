@@ -15,7 +15,9 @@ import match from './match';
 import recast from 'recast';
 import resolveToModule from './resolveToModule';
 
-var {types: {namedTypes: types}} = recast;
+const {
+  types: { namedTypes: types },
+} = recast;
 
 /**
  * Returns true if the expression is a function call of the form
@@ -26,13 +28,12 @@ function isReactCreateClassCallBuiltIn(path: NodePath): boolean {
     path = path.get('expression');
   }
 
-  if (!match(path.node, {callee: {property: {name: 'createClass'}}})) {
+  if (!match(path.node, { callee: { property: { name: 'createClass' } } })) {
     return false;
   }
-  var module = resolveToModule(path.get('callee', 'object'));
+  const module = resolveToModule(path.get('callee', 'object'));
   return Boolean(module && isReactModuleName(module));
 }
-
 
 /**
  * Returns true if the expression is a function call of the form
@@ -46,10 +47,10 @@ function isReactCreateClassCallModular(path: NodePath): boolean {
     path = path.get('expression');
   }
 
-  if (!match(path.node, {type: 'CallExpression'})) {
+  if (!match(path.node, { type: 'CallExpression' })) {
     return false;
   }
-  var module = resolveToModule(path);
+  const module = resolveToModule(path);
   return Boolean(module && module === 'create-react-class');
 }
 
@@ -62,5 +63,7 @@ function isReactCreateClassCallModular(path: NodePath): boolean {
  * ```
  */
 export default function isReactCreateClassCall(path: NodePath): boolean {
-  return isReactCreateClassCallBuiltIn(path) || isReactCreateClassCallModular(path)
+  return (
+    isReactCreateClassCallBuiltIn(path) || isReactCreateClassCallModular(path)
+  );
 }

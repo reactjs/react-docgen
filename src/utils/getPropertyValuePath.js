@@ -13,7 +13,9 @@
 import getPropertyName from './getPropertyName';
 import recast from 'recast';
 
-var {types: {namedTypes: types}} = recast;
+const {
+  types: { namedTypes: types },
+} = recast;
 
 /**
  * Given an ObjectExpression, this function returns the path of the value of
@@ -21,11 +23,12 @@ var {types: {namedTypes: types}} = recast;
  */
 export default function getPropertyValuePath(
   path: NodePath,
-  propertyName: string
+  propertyName: string,
 ): ?NodePath {
   types.ObjectExpression.assert(path.node);
 
-  return path.get('properties')
+  return path
+    .get('properties')
     .filter(propertyPath => getPropertyName(propertyPath) === propertyName)
     .map(propertyPath => propertyPath.get('value'))[0];
 }

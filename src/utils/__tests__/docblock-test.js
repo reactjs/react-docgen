@@ -10,36 +10,40 @@
 
 /*global describe, it, expect*/
 import os from 'os';
-import {statement} from '../../../tests/utils';
+import { statement } from '../../../tests/utils';
 
-import {getDoclets, getDocblock} from '../docblock';
+import { getDoclets, getDocblock } from '../docblock';
 
 const EOL = os.EOL;
 
 describe('docblock', () => {
-
   describe('getDoclets', () => {
-
     it('extracts single line doclets', () => {
-      expect(getDoclets('@foo bar\n@bar baz'))
-        .toEqual({foo: 'bar', bar: 'baz'});
+      expect(getDoclets('@foo bar\n@bar baz')).toEqual({
+        foo: 'bar',
+        bar: 'baz',
+      });
     });
 
     it('extracts multi line doclets', () => {
-      expect(getDoclets('@foo bar\nbaz\n@bar baz'))
-        .toEqual({foo: 'bar\nbaz', bar: 'baz'});
+      expect(getDoclets('@foo bar\nbaz\n@bar baz')).toEqual({
+        foo: 'bar\nbaz',
+        bar: 'baz',
+      });
     });
 
     it('extracts boolean doclets', () => {
-      expect(getDoclets('@foo bar\nbaz\n@abc\n@bar baz'))
-        .toEqual({foo: 'bar\nbaz', abc: true, bar: 'baz'});
+      expect(getDoclets('@foo bar\nbaz\n@abc\n@bar baz')).toEqual({
+        foo: 'bar\nbaz',
+        abc: true,
+        bar: 'baz',
+      });
     });
-
   });
 
   describe('getDocblock', () => {
-    let comment = ['This is a docblock.', 'This is the second line.'];
-    let source = [
+    const comment = ['This is a docblock.', 'This is the second line.'];
+    const source = [
       '/**',
       ` * ${comment[0]}`,
       ` * ${comment[1]}`,
@@ -48,11 +52,11 @@ describe('docblock', () => {
     ];
 
     it('gets the closest docblock of the given node', () => {
-      let node = statement(source.join(EOL));
+      const node = statement(source.join(EOL));
       expect(getDocblock(node)).toEqual(comment.join(EOL));
     });
 
-    let terminators = [
+    const terminators = [
       '\u000A',
       '\u000D',
       '\u2028',
@@ -61,19 +65,14 @@ describe('docblock', () => {
     ];
     terminators.forEach(t => {
       it('can handle ' + escape(t) + ' as line terminator', () => {
-          let node = statement(source.join(t));
-          expect(getDocblock(node)).toEqual(comment.join(EOL));
+        const node = statement(source.join(t));
+        expect(getDocblock(node)).toEqual(comment.join(EOL));
       });
     });
 
     it('supports "short" docblocks', () => {
-      let source = [ // eslint-disable-line no-shadow
-        '/** bar */',
-        'foo;',
-      ];
-      let node = statement(source.join(EOL));
+      const node = statement('/** bar */\nfoo;');
       expect(getDocblock(node)).toEqual('bar');
     });
   });
-
 });

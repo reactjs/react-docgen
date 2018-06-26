@@ -19,6 +19,10 @@ const code = `
 `;
 
 module.exports = function(ast, recast) {
-  return (new recast.types.NodePath(recast.parse(code)))
-    .get('program', 'body', 0, 'expression');
+  return new recast.types.NodePath(recast.parse(code)).get(
+    'program',
+    'body',
+    0,
+    'expression'
+  );
 };

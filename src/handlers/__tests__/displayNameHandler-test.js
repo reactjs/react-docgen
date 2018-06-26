@@ -14,18 +14,18 @@ jest.disableAutomock();
 jest.mock('../../Documentation');
 
 describe('defaultPropsHandler', () => {
-  var documentation;
-  var displayNameHandler;
-  var expression, statement;
+  let documentation;
+  let displayNameHandler;
+  let expression, statement;
 
   beforeEach(() => {
-    ({expression, statement} = require('../../../tests/utils'));
-    documentation = new (require('../../Documentation'));
+    ({ expression, statement } = require('../../../tests/utils'));
+    documentation = new (require('../../Documentation'))();
     displayNameHandler = require('../displayNameHandler').default;
   });
 
   it('extracts the displayName', () => {
-    var definition = expression('({displayName: "FooBar"})');
+    let definition = expression('({displayName: "FooBar"})');
     displayNameHandler(documentation, definition);
     expect(documentation.displayName).toBe('FooBar');
 
@@ -39,7 +39,7 @@ describe('defaultPropsHandler', () => {
   });
 
   it('resolves identifiers', () => {
-    var definition = statement(`
+    let definition = statement(`
       ({displayName: name})
       var name = 'abc';
     `).get('expression');
@@ -57,7 +57,7 @@ describe('defaultPropsHandler', () => {
   });
 
   it('ignores non-literal names', () => {
-    var definition = expression('({displayName: foo.bar})');
+    let definition = expression('({displayName: foo.bar})');
     expect(() => displayNameHandler(documentation, definition)).not.toThrow();
     expect(documentation.displayName).not.toBeDefined();
 
@@ -71,7 +71,6 @@ describe('defaultPropsHandler', () => {
   });
 
   describe('ClassDeclaration', () => {
-
     it('considers the class name', () => {
       const definition = statement(`
         class Foo {
@@ -136,13 +135,20 @@ describe('defaultPropsHandler', () => {
 
   describe('FunctionExpression', () => {
     it('considers the variable name', () => {
-      const definition = statement('var Foo = function () {};').get('declarations', 0, 'init');
+      const definition = statement('var Foo = function () {};').get(
+        'declarations',
+        0,
+        'init',
+      );
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('Foo');
     });
 
     it('considers the variable name on assign', () => {
-      const definition = statement('Foo = function () {};').get('expression', 'right');
+      const definition = statement('Foo = function () {};').get(
+        'expression',
+        'right',
+      );
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('Foo');
     });
@@ -159,13 +165,20 @@ describe('defaultPropsHandler', () => {
 
   describe('ArrowFunctionExpression', () => {
     it('considers the variable name', () => {
-      const definition = statement('var Foo = () => {};').get('declarations', 0, 'init');
+      const definition = statement('var Foo = () => {};').get(
+        'declarations',
+        0,
+        'init',
+      );
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('Foo');
     });
 
     it('considers the variable name on assign', () => {
-      const definition = statement('Foo = () => {};').get('expression', 'right');
+      const definition = statement('Foo = () => {};').get(
+        'expression',
+        'right',
+      );
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('Foo');
     });

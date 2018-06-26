@@ -15,7 +15,9 @@ import match from './match';
 import recast from 'recast';
 import resolveToModule from './resolveToModule';
 
-var {types: {namedTypes: types}} = recast;
+const {
+  types: { namedTypes: types },
+} = recast;
 
 /**
  * Returns true if the expression is a function call of the form
@@ -26,9 +28,9 @@ export default function isReactCreateElementCall(path: NodePath): boolean {
     path = path.get('expression');
   }
 
-  if (!match(path.node, {callee: {property: {name: 'createElement'}}})) {
+  if (!match(path.node, { callee: { property: { name: 'createElement' } } })) {
     return false;
   }
-  var module = resolveToModule(path.get('callee', 'object'));
+  const module = resolveToModule(path.get('callee', 'object'));
   return Boolean(module && isReactModuleName(module));
 }

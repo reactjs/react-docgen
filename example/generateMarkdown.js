@@ -6,18 +6,17 @@
  * LICENSE file in the root directory of this source tree. An additional grant
  * of patent rights can be found in the PATENTS file in the same directory.
  */
-'use strict';
 
 function stringOfLength(string, length) {
-  var newString = '';
-  for (var i = 0; i < length; i++) {
+  let newString = '';
+  for (let i = 0; i < length; i++) {
     newString += string;
   }
   return newString;
 }
 
 function generateTitle(name) {
-  var title = '`' + name + '` (component)';
+  const title = '`' + name + '` (component)';
   return title + '\n' + stringOfLength('=', title.length) + '\n';
 }
 
@@ -26,18 +25,21 @@ function generateDesciption(description) {
 }
 
 function generatePropType(type) {
-  var values;
+  let values;
   if (Array.isArray(type.value)) {
-    values = '(' +
-      type.value.map(function(typeValue) {
-        return typeValue.name || typeValue.value;
-      }).join('|') +
+    values =
+      '(' +
+      type.value
+        .map(function(typeValue) {
+          return typeValue.name || typeValue.value;
+        })
+        .join('|') +
       ')';
   } else {
     values = type.value;
   }
 
-  return 'type: `' + type.name + (values ? values: '') + '`\n';
+  return 'type: `' + type.name + (values ? values : '') + '`\n';
 }
 
 function generatePropDefaultValue(value) {
@@ -46,7 +48,11 @@ function generatePropDefaultValue(value) {
 
 function generateProp(propName, prop) {
   return (
-    '### `' + propName + '`' + (prop.required ? ' (required)' : '') + '\n' +
+    '### `' +
+    propName +
+    '`' +
+    (prop.required ? ' (required)' : '') +
+    '\n' +
     '\n' +
     (prop.description ? prop.description + '\n\n' : '') +
     (prop.type ? generatePropType(prop.type) : '') +
@@ -56,22 +62,29 @@ function generateProp(propName, prop) {
 }
 
 function generateProps(props) {
-  var title = 'Props';
+  const title = 'Props';
 
   return (
-    title + '\n' +
-    stringOfLength('-', title.length) + '\n' +
+    title +
     '\n' +
-    Object.keys(props).sort().map(function(propName) {
-      return generateProp(propName, props[propName]);
-    }).join('\n')
+    stringOfLength('-', title.length) +
+    '\n' +
+    '\n' +
+    Object.keys(props)
+      .sort()
+      .map(function(propName) {
+        return generateProp(propName, props[propName]);
+      })
+      .join('\n')
   );
 }
 
 function generateMarkdown(name, reactAPI) {
-  var markdownString =
-    generateTitle(name) + '\n' +
-    generateDesciption(reactAPI.description) + '\n' +
+  const markdownString =
+    generateTitle(name) +
+    '\n' +
+    generateDesciption(reactAPI.description) +
+    '\n' +
     generateProps(reactAPI.props);
 
   return markdownString;

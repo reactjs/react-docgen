@@ -11,14 +11,18 @@
 
 import recast from 'recast';
 
-const { types: { namedTypes: types } } = recast;
+const {
+  types: { namedTypes: types },
+} = recast;
 
 /**
  * Returns true of the path is an unreachable TypePath
  */
 export default (path: NodePath): boolean => {
-  return !path ||
+  return (
+    !path ||
     types.Identifier.check(path.node) ||
     types.ImportDeclaration.check(path.node) ||
-    types.CallExpression.check(path.node);
-}
+    types.CallExpression.check(path.node)
+  );
+};

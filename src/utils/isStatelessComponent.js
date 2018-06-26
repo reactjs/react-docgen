@@ -18,7 +18,9 @@ import isReactChildrenElementCall from './isReactChildrenElementCall';
 import recast from 'recast';
 import resolveToValue from './resolveToValue';
 
-var {types: {namedTypes: types}} = recast;
+const {
+  types: { namedTypes: types },
+} = recast;
 
 const validPossibleStatelessComponentTypes = [
   'Property',
@@ -47,15 +49,19 @@ function resolvesToJSXElementOrReactCall(path) {
   // If the path points to a conditional expression, then we need to look only at
   // the two possible paths
   if (resolvedPath.node.type === 'ConditionalExpression') {
-    return resolvesToJSXElementOrReactCall(resolvedPath.get('consequent')) ||
-      resolvesToJSXElementOrReactCall(resolvedPath.get('alternate'));
+    return (
+      resolvesToJSXElementOrReactCall(resolvedPath.get('consequent')) ||
+      resolvesToJSXElementOrReactCall(resolvedPath.get('alternate'))
+    );
   }
 
   // If the path points to a logical expression (AND, OR, ...), then we need to look only at
   // the two possible paths
   if (resolvedPath.node.type === 'LogicalExpression') {
-    return resolvesToJSXElementOrReactCall(resolvedPath.get('left')) ||
-      resolvesToJSXElementOrReactCall(resolvedPath.get('right'));
+    return (
+      resolvesToJSXElementOrReactCall(resolvedPath.get('left')) ||
+      resolvesToJSXElementOrReactCall(resolvedPath.get('right'))
+    );
   }
 
   // Is the resolved path is already a JSX element or a call to one of the React.* functions
@@ -66,7 +72,6 @@ function resolvesToJSXElementOrReactCall(path) {
 
   // If we have a call expression, lets try to follow it
   if (resolvedPath.node.type === 'CallExpression') {
-
     let calleeValue = resolveToValue(resolvedPath.get('callee'));
 
     if (returnsJSXElementOrReactCall(calleeValue)) {
@@ -75,7 +80,7 @@ function resolvesToJSXElementOrReactCall(path) {
 
     let resolvedValue;
 
-    let namesToResolve = [calleeValue.get('property')];
+    const namesToResolve = [calleeValue.get('property')];
 
     if (calleeValue.node.type === 'MemberExpression') {
       if (calleeValue.get('object').node.type === 'Identifier') {
@@ -91,20 +96,22 @@ function resolvesToJSXElementOrReactCall(path) {
     }
 
     if (resolvedValue && types.ObjectExpression.check(resolvedValue.node)) {
-      var resolvedMemberExpression = namesToResolve
-        .reduce((result, path) => { // eslint-disable-line no-shadow
-          if (!path) {
+      const resolvedMemberExpression = namesToResolve.reduce(
+        (result, nodePath) => {
+          if (!nodePath) {
             return result;
           }
 
           if (result) {
-            result = getPropertyValuePath(result, path.node.name);
+            result = getPropertyValuePath(result, nodePath.node.name);
             if (result && types.Identifier.check(result.node)) {
               return resolveToValue(result);
             }
           }
           return result;
-        }, resolvedValue);
+        },
+        resolvedValue,
+      );
 
       if (
         !resolvedMemberExpression ||
@@ -156,17 +163,18 @@ function returnsJSXElementOrReactCall(path) {
 /**
  * Returns `true` if the path represents a function which returns a JSXElement
  */
-export default function isStatelessComponent(
-  path: NodePath
-): bool {
-  var node = path.node;
+export default function isStatelessComponent(path: NodePath): boolean {
+  const node = path.node;
 
   if (validPossibleStatelessComponentTypes.indexOf(node.type) === -1) {
     return false;
   }
 
   if (node.type === 'Property') {
-    if (isReactCreateClassCall(path.parent) || isReactComponentClass(path.parent)) {
+    if (
+      isReactCreateClassCall(path.parent) ||
+      isReactComponentClass(path.parent)
+    ) {
       return false;
     }
   }

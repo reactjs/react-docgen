@@ -18,7 +18,7 @@ function merge(obj1, obj2) {
   if (obj1 == null && obj2 == null) {
     return null;
   }
-  const merged = {...obj1};
+  const merged = { ...obj1 };
   for (const prop in obj2) {
     if (obj2[prop] != null) {
       merged[prop] = obj2[prop];
@@ -31,7 +31,7 @@ function merge(obj1, obj2) {
  * flowComponentMethodsHandler.
  */
 export default function componentMethodsJsDocHandler(
-  documentation: Documentation
+  documentation: Documentation,
 ) {
   let methods = documentation.get('methods');
   if (!methods) {

@@ -13,39 +13,43 @@
  * Helper functions to work with docblock comments.
  */
 
-var DOCLET_PATTERN = /^@(\w+)(?:$|\s((?:[^](?!^@\w))*))/gmi;
+const DOCLET_PATTERN = /^@(\w+)(?:$|\s((?:[^](?!^@\w))*))/gim;
 
 function parseDocblock(str) {
-  var lines = str.split('\n');
-  for (var i = 0, l = lines.length; i < l; i++) {
+  const lines = str.split('\n');
+  for (let i = 0, l = lines.length; i < l; i++) {
     lines[i] = lines[i].replace(/^\s*\*\s?/, '');
   }
   return lines.join('\n').trim();
 }
 
-let DOCBLOCK_HEADER = /^\*\s/;
+const DOCBLOCK_HEADER = /^\*\s/;
 
 /**
  * Given a path, this function returns the closest preceding docblock if it
  * exists.
  */
-export function getDocblock(path: NodePath, trailing: boolean = false): ?string {
-  var comments = [];
+export function getDocblock(
+  path: NodePath,
+  trailing: boolean = false,
+): ?string {
+  let comments = [];
   if (trailing && path.node.trailingComments) {
     comments = path.node.trailingComments.filter(
-      comment => comment.type === 'CommentBlock' &&
-        DOCBLOCK_HEADER.test(comment.value)
+      comment =>
+        comment.type === 'CommentBlock' && DOCBLOCK_HEADER.test(comment.value),
     );
   } else if (path.node.leadingComments) {
     comments = path.node.leadingComments.filter(
-      comment => comment.type === 'CommentBlock' &&
-        DOCBLOCK_HEADER.test(comment.value)
+      comment =>
+        comment.type === 'CommentBlock' && DOCBLOCK_HEADER.test(comment.value),
     );
   } else if (path.node.comments) {
     comments = path.node.comments.filter(
-      comment => comment.leading &&
+      comment =>
+        comment.leading &&
         comment.type === 'CommentBlock' &&
-        DOCBLOCK_HEADER.test(comment.value)
+        DOCBLOCK_HEADER.test(comment.value),
     );
   }
 
@@ -60,8 +64,8 @@ export function getDocblock(path: NodePath, trailing: boolean = false): ?string 
  * and their "content" as values.
  */
 export function getDoclets(str: string): Object {
-  var doclets = Object.create(null);
-  var match = DOCLET_PATTERN.exec(str);
+  const doclets = Object.create(null);
+  let match = DOCLET_PATTERN.exec(str);
 
   for (; match; match = DOCLET_PATTERN.exec(str)) {
     doclets[match[1]] = match[2] || true;

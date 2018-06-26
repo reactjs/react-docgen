@@ -19,7 +19,9 @@ import getTypeAnnotation from '../utils/getTypeAnnotation';
 import resolveToValue from '../utils/resolveToValue';
 import { resolveObjectExpressionToNameArray } from '../utils/resolveObjectKeysToArray';
 
-const { types: { namedTypes: types } } = recast;
+const {
+  types: { namedTypes: types },
+} = recast;
 
 const flowTypes = {
   AnyTypeAnnotation: 'any',
@@ -71,10 +73,12 @@ function handleKeysHelper(path: NodePath) {
       return {
         name: 'union',
         raw: printValue(path),
-        elements: keys.map(value => ({ name: 'literal', value })),
+        elements: keys.map(key => ({ name: 'literal', value: key })),
       };
     }
   }
+
+  return null;
 }
 
 function handleArrayTypeAnnotation(path: NodePath) {
@@ -106,7 +110,7 @@ function handleGenericTypeAnnotation(path: NodePath) {
       raw: printValue(path),
     };
   } else {
-    let resolvedPath = resolveToValue(path.get('id'));
+    const resolvedPath = resolveToValue(path.get('id'));
     if (resolvedPath && resolvedPath.node.right) {
       type = getFlowTypeWithResolvedTypes(resolvedPath.get('right'));
     }
@@ -124,7 +128,9 @@ function handleObjectTypeAnnotation(path: NodePath) {
   };
 
   path.get('callProperties').each(param => {
-    type.signature.constructor = getFlowTypeWithResolvedTypes(param.get('value'));
+    type.signature.constructor = getFlowTypeWithResolvedTypes(
+      param.get('value'),
+    );
   });
 
   path.get('indexers').each(param => {
@@ -136,8 +142,8 @@ function handleObjectTypeAnnotation(path: NodePath) {
 
   path.get('properties').each(param => {
     type.signature.properties.push({
-        key: getPropertyName(param),
-        value: getFlowTypeWithRequirements(param.get('value')),
+      key: getPropertyName(param),
+      value: getFlowTypeWithRequirements(param.get('value')),
     });
   });
 
@@ -148,7 +154,9 @@ function handleUnionTypeAnnotation(path: NodePath) {
   return {
     name: 'union',
     raw: printValue(path),
-    elements: path.get('types').map(subType => getFlowTypeWithResolvedTypes(subType)),
+    elements: path
+      .get('types')
+      .map(subType => getFlowTypeWithResolvedTypes(subType)),
   };
 }
 
@@ -156,7 +164,9 @@ function handleIntersectionTypeAnnotation(path: NodePath) {
   return {
     name: 'intersection',
     raw: printValue(path),
-    elements: path.get('types').map(subType => getFlowTypeWithResolvedTypes(subType)),
+    elements: path
+      .get('types')
+      .map(subType => getFlowTypeWithResolvedTypes(subType)),
   };
 }
 
@@ -184,7 +194,7 @@ function handleFunctionTypeAnnotation(path: NodePath) {
 
   path.get('params').each(param => {
     const typeAnnotation = getTypeAnnotation(param);
-    if (!typeAnnotation) return null;
+    if (!typeAnnotation) return;
 
     type.signature.arguments.push({
       name: param.node.name ? param.node.name.name : '',
@@ -210,7 +220,7 @@ function handleTypeofTypeAnnotation(path: NodePath) {
 }
 
 function handleQualifiedTypeIdentifier(path: NodePath) {
-  if (path.node.qualification.name !== 'React') return;
+  if (path.node.qualification.name !== 'React') return null;
 
   return { name: `React${path.node.id.name}`, raw: printValue(path) };
 }

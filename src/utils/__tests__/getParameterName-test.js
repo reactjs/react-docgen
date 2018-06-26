@@ -18,7 +18,7 @@ describe('getParameterName', () => {
 
   beforeEach(() => {
     getParameterName = require('../getParameterName').default;
-    ({expression} = require('../../../tests/utils'));
+    ({ expression } = require('../../../tests/utils'));
   });
 
   it('returns the name for a normal parameter', () => {

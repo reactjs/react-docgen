@@ -13,7 +13,9 @@
 import recast from 'recast';
 import getNameOrValue from './getNameOrValue';
 
-const {types: {namedTypes: types}} = recast;
+const {
+  types: { namedTypes: types },
+} = recast;
 
 /**
  * In an ObjectExpression, the name of a property can either be an identifier

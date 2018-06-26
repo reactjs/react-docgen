@@ -13,48 +13,52 @@
 jest.disableAutomock();
 
 describe('getMemberExpressionValuePath', () => {
-  var getMemberExpressionValuePath;
-  var statement;
+  let getMemberExpressionValuePath;
+  let statement;
 
   beforeEach(() => {
-    getMemberExpressionValuePath = require('../getMemberExpressionValuePath').default;
-    ({statement} = require('../../../tests/utils'));
+    getMemberExpressionValuePath = require('../getMemberExpressionValuePath')
+      .default;
+    ({ statement } = require('../../../tests/utils'));
   });
 
   describe('MethodExpression', () => {
     it('finds "normal" property definitions', () => {
-      var def = statement(`
+      const def = statement(`
         var Foo = () => {};
         Foo.propTypes = {};
       `);
 
-      expect(getMemberExpressionValuePath(def, 'propTypes'))
-        .toBe(def.parent.get('body', 1, 'expression', 'right'));
+      expect(getMemberExpressionValuePath(def, 'propTypes')).toBe(
+        def.parent.get('body', 1, 'expression', 'right'),
+      );
     });
 
     it('takes the correct property definitions', () => {
-      var def = statement(`
+      const def = statement(`
         var Foo = () => {};
         Foo.propTypes = {};
         Bar.propTypes = { unrelated: true };
       `);
 
-      expect(getMemberExpressionValuePath(def, 'propTypes'))
-        .toBe(def.parent.get('body', 1, 'expression', 'right'));
+      expect(getMemberExpressionValuePath(def, 'propTypes')).toBe(
+        def.parent.get('body', 1, 'expression', 'right'),
+      );
     });
 
     it('finds computed property definitions with literal keys', () => {
-      var def = statement(`
+      const def = statement(`
         function Foo () {}
         Foo['render'] = () => {};
       `);
 
-      expect(getMemberExpressionValuePath(def, 'render'))
-        .toBe(def.parent.get('body', 1, 'expression', 'right'));
+      expect(getMemberExpressionValuePath(def, 'render')).toBe(
+        def.parent.get('body', 1, 'expression', 'right'),
+      );
     });
 
     it('ignores computed property definitions with expression', () => {
-      var def = statement(`
+      const def = statement(`
         var Foo = function Bar() {};
         Foo[imComputed] = () => {};
       `);
@@ -64,13 +68,14 @@ describe('getMemberExpressionValuePath', () => {
   });
   describe('TaggedTemplateLiteral', () => {
     it('finds "normal" property definitions', () => {
-      var def = statement(`
+      const def = statement(`
         var Foo = foo\`bar\`
         Foo.propTypes = {};
       `);
 
-      expect(getMemberExpressionValuePath(def, 'propTypes'))
-        .toBe(def.parent.get('body', 1, 'expression', 'right'));
-      });
+      expect(getMemberExpressionValuePath(def, 'propTypes')).toBe(
+        def.parent.get('body', 1, 'expression', 'right'),
+      );
+    });
   });
 });

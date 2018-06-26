@@ -22,10 +22,10 @@ import resolveToValue from '../utils/resolveToValue';
  */
 export default function findAllReactCreateClassCalls(
   ast: ASTNode,
-  recast: Object
+  recast: Object,
 ): Array<NodePath> {
-  var types = recast.types.namedTypes;
-  var definitions = [];
+  const types = recast.types.namedTypes;
+  const definitions = [];
 
   function classVisitor(path) {
     if (isReactComponentClass(path)) {
@@ -52,7 +52,7 @@ export default function findAllReactCreateClassCalls(
       if (!isReactCreateClassCall(path)) {
         return false;
       }
-      var resolvedPath = resolveToValue(path.get('arguments', 0));
+      const resolvedPath = resolveToValue(path.get('arguments', 0));
       if (types.ObjectExpression.check(resolvedPath.node)) {
         definitions.push(resolvedPath);
       }

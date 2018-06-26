@@ -13,13 +13,13 @@
 jest.disableAutomock();
 
 describe('parse', () => {
-  var utils;
-  var parse, ERROR_MISSING_DEFINITION;
+  let utils;
+  let parse, ERROR_MISSING_DEFINITION;
 
   beforeEach(() => {
     utils = require('../../tests/utils');
     // ugly but necessary because ../parse has default and named exports
-    ({default: parse, ERROR_MISSING_DEFINITION} = require('../parse'));
+    ({ default: parse, ERROR_MISSING_DEFINITION } = require('../parse'));
   });
 
   function pathFromSource(source) {
@@ -27,9 +27,9 @@ describe('parse', () => {
   }
 
   it('allows custom component definition resolvers', () => {
-    var path = pathFromSource('({foo: "bar"})');
-    var resolver = jest.fn(() => path);
-    var handler = jest.fn();
+    const path = pathFromSource('({foo: "bar"})');
+    const resolver = jest.fn(() => path);
+    const handler = jest.fn();
     parse('//empty', resolver, [handler]);
 
     expect(resolver).toBeCalled();
@@ -37,12 +37,15 @@ describe('parse', () => {
   });
 
   it('errors if component definition is not found', () => {
-    var resolver = jest.fn();
-    expect(() => parse('//empty', resolver)).toThrowError(ERROR_MISSING_DEFINITION);
+    const resolver = jest.fn();
+    expect(() => parse('//empty', resolver)).toThrowError(
+      ERROR_MISSING_DEFINITION,
+    );
     expect(resolver).toBeCalled();
 
-    expect(() => parse('//empty', resolver)).toThrowError(ERROR_MISSING_DEFINITION);
+    expect(() => parse('//empty', resolver)).toThrowError(
+      ERROR_MISSING_DEFINITION,
+    );
     expect(resolver).toBeCalled();
   });
-
 });

@@ -14,13 +14,13 @@ jest.disableAutomock();
 jest.mock('../../Documentation');
 
 describe('defaultPropsHandler', () => {
-  var documentation;
-  var defaultPropsHandler;
-  var parse;
+  let documentation;
+  let defaultPropsHandler;
+  let parse;
 
   beforeEach(() => {
-    ({parse} = require('../../../tests/utils'));
-    documentation = new (require('../../Documentation'));
+    ({ parse } = require('../../../tests/utils'));
+    documentation = new (require('../../Documentation'))();
     defaultPropsHandler = require('../defaultPropsHandler').default;
   });
 
@@ -56,7 +56,7 @@ describe('defaultPropsHandler', () => {
 
   describe('ObjectExpression', () => {
     it('should find prop default values that are literals', () => {
-      var src = `
+      const src = `
         ({
           getDefaultProps: function() {
             return {
@@ -74,7 +74,7 @@ describe('defaultPropsHandler', () => {
 
   describe('ClassDeclaration with static defaultProps', () => {
     it('should find prop default values that are literals', () => {
-      var src = `
+      const src = `
         class Foo {
           static defaultProps = {
             foo: "bar",
@@ -88,7 +88,7 @@ describe('defaultPropsHandler', () => {
     });
 
     it('should find prop default values that are imported variables', () => {
-      var src = `
+      const src = `
         import ImportedComponent from './ImportedComponent';
 
         class Foo {
@@ -111,7 +111,7 @@ describe('defaultPropsHandler', () => {
 
   describe('ClassExpression with static defaultProps', () => {
     it('should find prop default values that are literals', () => {
-      var src = `
+      const src = `
         var Bar = class {
           static defaultProps = {
             foo: "bar",
@@ -125,7 +125,7 @@ describe('defaultPropsHandler', () => {
   });
 
   it('should only consider Property nodes, not e.g. spread properties', () => {
-    var src = `
+    const src = `
       ({
         getDefaultProps: function() {
           return {
@@ -135,9 +135,8 @@ describe('defaultPropsHandler', () => {
         }
       })
     `;
-    let definition = parse(src).get('body', 0, 'expression');
-    expect(() => defaultPropsHandler(documentation, definition))
-      .not.toThrow();
+    const definition = parse(src).get('body', 0, 'expression');
+    expect(() => defaultPropsHandler(documentation, definition)).not.toThrow();
     expect(documentation.descriptors).toEqual({
       bar: {
         defaultValue: {
@@ -150,7 +149,7 @@ describe('defaultPropsHandler', () => {
 
   describe('Functional components with default params', () => {
     it('should find default props that are literals', () => {
-      var src = `
+      const src = `
         ({
           foo = "bar",
           bar = 42,
@@ -162,7 +161,7 @@ describe('defaultPropsHandler', () => {
     });
 
     it('should override with defaultProps if available', () => {
-      var src = `
+      const src = `
         var Foo = ({
           foo = "bar",
           bar = 42,
@@ -175,7 +174,7 @@ describe('defaultPropsHandler', () => {
     });
 
     it('should work with aliases', () => {
-      var src = `
+      const src = `
         ({
           foo = "bar",
           bar = 42,
@@ -187,14 +186,17 @@ describe('defaultPropsHandler', () => {
     });
 
     it('should find prop default values that are imported variables', () => {
-      var src = `
+      const src = `
         import ImportedComponent from './ImportedComponent';
 
         ({
           foo = ImportedComponent,
         }) => <div />
       `;
-      defaultPropsHandler(documentation, parse(src).get('body', 1, 'expression'));
+      defaultPropsHandler(
+        documentation,
+        parse(src).get('body', 1, 'expression'),
+      );
 
       expect(documentation.descriptors).toEqual({
         foo: {
@@ -207,10 +209,13 @@ describe('defaultPropsHandler', () => {
     });
 
     it('should work with no defaults', () => {
-      var src = `
+      const src = `
         ({ foo }) => <div />
       `;
-      defaultPropsHandler(documentation, parse(src).get('body', 0, 'expression'));
+      defaultPropsHandler(
+        documentation,
+        parse(src).get('body', 0, 'expression'),
+      );
       expect(documentation.descriptors).toEqual({});
     });
   });

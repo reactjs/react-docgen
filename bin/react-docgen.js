@@ -9,101 +9,109 @@
  *
  */
 
-var argv = require('commander');
+const argv = require('commander');
 
 function collect(val, memo) {
   memo.push(val);
   return memo;
 }
 
-var defaultExtensions = ['js', 'jsx'];
-var defaultExclude = [];
-var defaultIgnore = ['node_modules', '__tests__', '__mocks__'];
+const defaultExtensions = ['js', 'jsx'];
+const defaultExclude = [];
+const defaultIgnore = ['node_modules', '__tests__', '__mocks__'];
 
 argv
-    .usage('[path...] [options]')
-    .description(
-        'Extract meta information from React components.\n' +
-        '  If a directory is passed, it is recursively traversed.')
-    .option(
-        '-o, --out <file>',
-        'Store extracted information in the FILE')
-    .option(
-        '--pretty',
-        'pretty print JSON')
-    .option(
-        '-x, --extension <extension>',
-        'File extensions to consider. Repeat to define multiple extensions. Default: ' + JSON.stringify(defaultExtensions),
-        collect,
-        ['js', 'jsx'])
-    .option(
-        '-e, --exclude <path>',
-        'Filename or regex to exclude. Default: ' + JSON.stringify(defaultExclude),
-        collect,
-        [])
-    .option(
-        '--legacy-decorators',
-        'Enable parsing of legacy decorators proposal. By default only the new decorators syntax will be parsable.')
-    .option(
-        '-i, --ignore <path>',
-        'Folders to ignore. Default: ' + JSON.stringify(defaultIgnore),
-        collect,
-        ['node_modules', '__tests__', '__mocks__'])
-    .option(
-        '--resolver <resolver>',
-        'Resolver name (findAllComponentDefinitions, findExportedComponentDefinition) or path to a module that exports ' +
-        'a resolver. Default: findExportedComponentDefinition',
-        'findExportedComponentDefinition')
-    .arguments('<path>');
+  .usage('[path...] [options]')
+  .description(
+    'Extract meta information from React components.\n' +
+      '  If a directory is passed, it is recursively traversed.'
+  )
+  .option('-o, --out <file>', 'Store extracted information in the FILE')
+  .option('--pretty', 'pretty print JSON')
+  .option(
+    '-x, --extension <extension>',
+    'File extensions to consider. Repeat to define multiple extensions. Default: ' +
+      JSON.stringify(defaultExtensions),
+    collect,
+    ['js', 'jsx']
+  )
+  .option(
+    '-e, --exclude <path>',
+    'Filename or regex to exclude. Default: ' + JSON.stringify(defaultExclude),
+    collect,
+    []
+  )
+  .option(
+    '--legacy-decorators',
+    'Enable parsing of legacy decorators proposal. By default only the new decorators syntax will be parsable.'
+  )
+  .option(
+    '-i, --ignore <path>',
+    'Folders to ignore. Default: ' + JSON.stringify(defaultIgnore),
+    collect,
+    ['node_modules', '__tests__', '__mocks__']
+  )
+  .option(
+    '--resolver <resolver>',
+    'Resolver name (findAllComponentDefinitions, findExportedComponentDefinition) or path to a module that exports ' +
+      'a resolver. Default: findExportedComponentDefinition',
+    'findExportedComponentDefinition'
+  )
+  .arguments('<path>');
 
 argv.parse(process.argv);
 
-var async = require('async');
-var dir = require('node-dir');
-var fs = require('fs');
-var parser = require('../dist/main');
-var path = require('path');
+const async = require('async');
+const dir = require('node-dir');
+const fs = require('fs');
+const parser = require('../dist/main');
+const path = require('path');
 
-var output = argv.out;
-var paths = argv.args || [];
-var extensions = new RegExp('\\.(?:' + argv.extension.join('|') + ')$');
-var ignoreDir = argv.ignore;
-var excludePatterns = argv.exclude;
-var resolver;
-var errorMessage;
-var regexRegex = /^\/(.*)\/([igymu]{0,5})$/;
-if (excludePatterns && excludePatterns.length === 1 && regexRegex.test(excludePatterns[0])){
-  var match = excludePatterns[0].match(regexRegex);
-    excludePatterns = new RegExp(match[1], match[2]);
+const output = argv.out;
+const paths = argv.args || [];
+const extensions = new RegExp('\\.(?:' + argv.extension.join('|') + ')$');
+const ignoreDir = argv.ignore;
+let excludePatterns = argv.exclude;
+let resolver;
+let errorMessage;
+const regexRegex = /^\/(.*)\/([igymu]{0,5})$/;
+if (
+  excludePatterns &&
+  excludePatterns.length === 1 &&
+  regexRegex.test(excludePatterns[0])
+) {
+  const match = excludePatterns[0].match(regexRegex);
+  excludePatterns = new RegExp(match[1], match[2]);
 }
 
 if (argv.resolver) {
   try {
     // Look for built-in resolver
     resolver = require(`../dist/resolver/${argv.resolver}`).default;
-  } catch(e) {
-    if (e.code !== 'MODULE_NOT_FOUND') {
-      throw e;
+  } catch (error) {
+    if (error.code !== 'MODULE_NOT_FOUND') {
+      throw error;
     }
     const resolverPath = path.resolve(process.cwd(), argv.resolver);
     try {
       // Look for local resolver
       resolver = require(resolverPath);
-    } catch (e) {
-      if (e.code !== 'MODULE_NOT_FOUND') {
-        throw e;
+    } catch (localError) {
+      if (localError.code !== 'MODULE_NOT_FOUND') {
+        throw localError;
       }
       // Will exit with this error message
-      errorMessage = (
+      errorMessage =
         `Unknown resolver: "${argv.resolver}" is neither a built-in resolver ` +
-        `nor can it be found locally ("${resolverPath}")`
-      );
+        `nor can it be found locally ("${resolverPath}")`;
     }
   }
 }
 
 function parse(source) {
-  return parser.parse(source, resolver, null, { legacyDecorators: argv.legacyDecorators });
+  return parser.parse(source, resolver, null, {
+    legacyDecorators: argv.legacyDecorators,
+  });
 }
 
 function writeError(msg, filePath) {
@@ -117,9 +125,9 @@ function writeError(msg, filePath) {
 }
 
 function writeResult(result) {
-  result = argv.pretty ?
-    JSON.stringify(result, null, 2) :
-    JSON.stringify(result);
+  result = argv.pretty
+    ? JSON.stringify(result, null, 2)
+    : JSON.stringify(result);
   if (output) {
     fs.writeFileSync(output, result);
   } else {
@@ -132,7 +140,7 @@ function traverseDir(filePath, result, done) {
     filePath,
     {
       match: extensions,
-      exclude:excludePatterns,
+      exclude: excludePatterns,
       excludeDir: ignoreDir,
     },
     function(error, content, filename, next) {
@@ -141,8 +149,8 @@ function traverseDir(filePath, result, done) {
       }
       try {
         result[filename] = parse(content);
-      } catch(error) {
-        writeError(error, filename);
+      } catch (parseError) {
+        writeError(parseError, filename);
       }
       next();
     },
@@ -165,20 +173,20 @@ if (errorMessage) {
   /**
    * 2. No files passed, consume input stream
    */
-  var source = '';
+  let source = '';
   process.stdin.setEncoding('utf8');
   process.stdin.resume();
-  var timer = setTimeout(function() {
+  const timer = setTimeout(function() {
     process.stderr.write('Still waiting for std input...');
   }, 5000);
-  process.stdin.on('data', function (chunk) {
+  process.stdin.on('data', function(chunk) {
     clearTimeout(timer);
     source += chunk;
   });
-  process.stdin.on('end', function () {
+  process.stdin.on('end', function() {
     try {
       writeResult(parse(source));
-    } catch(error) {
+    } catch (error) {
       writeError(error);
     }
   });
@@ -186,44 +194,47 @@ if (errorMessage) {
   /**
    * 3. Paths are passed
    */
-  var result = Object.create(null);
-  async.eachSeries(paths, function(filePath, done) {
-    fs.stat(filePath, function(error, stats) {
-      if (error) {
-        writeError(error, filePath);
-        done();
-        return;
-      }
-      if (stats.isDirectory()) {
-        try {
-          traverseDir(filePath, result, done);
-        } catch(error) {
-          writeError(error);
-          done();
-        }
-      }
-      else {
-        try {
-          result[filePath] = parse(fs.readFileSync(filePath));
-        } catch(error) {
+  const result = Object.create(null);
+  async.eachSeries(
+    paths,
+    function(filePath, done) {
+      fs.stat(filePath, function(error, stats) {
+        if (error) {
           writeError(error, filePath);
-        }
-        finally {
           done();
+          return;
         }
-      }
-    });
-  }, function() {
-    var resultsPaths = Object.keys(result);
-    if (resultsPaths.length === 0) {
-      // we must have gotten an error
-      process.exitCode = 1;
-    } else if (paths.length === 1) { // a single path?
-      fs.stat(paths[0], function(error, stats) {
-        writeResult(stats.isDirectory() ? result : result[resultsPaths[0]]);
+        if (stats.isDirectory()) {
+          try {
+            traverseDir(filePath, result, done);
+          } catch (traverseError) {
+            writeError(traverseError);
+            done();
+          }
+        } else {
+          try {
+            result[filePath] = parse(fs.readFileSync(filePath));
+          } catch (parseError) {
+            writeError(parseError, filePath);
+          } finally {
+            done();
+          }
+        }
       });
-    } else {
-      writeResult(result);
+    },
+    function() {
+      const resultsPaths = Object.keys(result);
+      if (resultsPaths.length === 0) {
+        // we must have gotten an error
+        process.exitCode = 1;
+      } else if (paths.length === 1) {
+        // a single path?
+        fs.stat(paths[0], function(error, stats) {
+          writeResult(stats.isDirectory() ? result : result[resultsPaths[0]]);
+        });
+      } else {
+        writeResult(result);
+      }
     }
-  });
+  );
 }

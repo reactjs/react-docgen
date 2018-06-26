@@ -13,20 +13,25 @@
 import getNameOrValue from './getNameOrValue';
 import recast from 'recast';
 
-var {types: {namedTypes: types}} = recast;
+const {
+  types: { namedTypes: types },
+} = recast;
 
 export default function getClassMemberValuePath(
   classDefinition: NodePath,
-  memberName: string
+  memberName: string,
 ): ?NodePath {
   // Fortunately it seems like that all members of a class body, be it
   // ClassProperty or MethodDefinition, have the same structure: They have a
   // "key" and a "value"
-  return classDefinition.get('body', 'body')
-    .filter(memberPath => (
-      (!memberPath.node.computed || types.Literal.check(memberPath.node.key)) &&
-      getNameOrValue(memberPath.get('key')) === memberName &&
-      memberPath.node.kind !== 'set'
-    ))
+  return classDefinition
+    .get('body', 'body')
+    .filter(
+      memberPath =>
+        (!memberPath.node.computed ||
+          types.Literal.check(memberPath.node.key)) &&
+        getNameOrValue(memberPath.get('key')) === memberName &&
+        memberPath.node.kind !== 'set',
+    )
     .map(memberPath => memberPath.get('value'))[0];
 }

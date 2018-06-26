@@ -13,16 +13,16 @@
 jest.disableAutomock();
 
 describe('getPropType', () => {
-  var expression, statement;
-  var getPropType;
+  let expression, statement;
+  let getPropType;
 
   beforeEach(() => {
     getPropType = require('../getPropType').default;
-    ({expression, statement} = require('../../../tests/utils'));
+    ({ expression, statement } = require('../../../tests/utils'));
   });
 
   it('detects simple prop types', () => {
-    var simplePropTypes = [
+    const simplePropTypes = [
       'array',
       'bool',
       'func',
@@ -35,21 +35,22 @@ describe('getPropType', () => {
       'symbol',
     ];
 
-    simplePropTypes.forEach(
-      type => expect(getPropType(expression('React.PropTypes.' + type)))
-        .toEqual({name: type})
+    simplePropTypes.forEach(type =>
+      expect(getPropType(expression('React.PropTypes.' + type))).toEqual({
+        name: type,
+      }),
     );
 
     // It doesn't actually matter what the MemberExpression is
-    simplePropTypes.forEach(
-      type => expect(getPropType(expression('Foo.' + type + '.bar')))
-        .toEqual({name: type})
+    simplePropTypes.forEach(type =>
+      expect(getPropType(expression('Foo.' + type + '.bar'))).toEqual({
+        name: type,
+      }),
     );
 
     // Doesn't even have to be a MemberExpression
-    simplePropTypes.forEach(
-      type => expect(getPropType(expression(type)))
-        .toEqual({name: type})
+    simplePropTypes.forEach(type =>
+      expect(getPropType(expression(type))).toEqual({ name: type }),
     );
   });
 
@@ -57,8 +58,8 @@ describe('getPropType', () => {
     expect(getPropType(expression('oneOf(["foo", "bar"])'))).toEqual({
       name: 'enum',
       value: [
-        {value: '"foo"', computed: false},
-        {value: '"bar"', computed: false},
+        { value: '"foo"', computed: false },
+        { value: '"bar"', computed: false },
       ],
     });
 
@@ -66,23 +67,20 @@ describe('getPropType', () => {
     expect(getPropType(expression('oneOf(["foo", // baz\n"bar"])'))).toEqual({
       name: 'enum',
       value: [
-        {value: '"foo"', computed: false},
-        {value: '"bar"', computed: false},
+        { value: '"foo"', computed: false },
+        { value: '"bar"', computed: false },
       ],
     });
 
     expect(getPropType(expression('oneOfType([number, bool])'))).toEqual({
       name: 'union',
-      value: [
-        {name: 'number'},
-        {name: 'bool'},
-      ],
+      value: [{ name: 'number' }, { name: 'bool' }],
     });
 
     // custom type
     expect(getPropType(expression('oneOfType([foo])'))).toEqual({
       name: 'union',
-      value: [{name: 'custom', raw: 'foo'}],
+      value: [{ name: 'custom', raw: 'foo' }],
     });
 
     expect(getPropType(expression('instanceOf(Foo)'))).toEqual({
@@ -92,12 +90,12 @@ describe('getPropType', () => {
 
     expect(getPropType(expression('arrayOf(string)'))).toEqual({
       name: 'arrayOf',
-      value: {name: 'string'},
+      value: { name: 'string' },
     });
 
     expect(getPropType(expression('objectOf(string)'))).toEqual({
       name: 'objectOf',
-      value: {name: 'string'},
+      value: { name: 'string' },
     });
 
     expect(getPropType(expression('shape({foo: string, bar: bool})'))).toEqual({
@@ -136,7 +134,7 @@ describe('getPropType', () => {
 
   describe('resolve identifier to their values', () => {
     it('resolves variables to their values', () => {
-      var propTypeExpression = statement(`
+      const propTypeExpression = statement(`
         PropTypes.shape(shape);
         var shape = {bar: PropTypes.string};
       `).get('expression');
@@ -153,7 +151,7 @@ describe('getPropType', () => {
     });
 
     it('resolves simple identifier to their initialization value', () => {
-      var propTypeIdentifier = statement(`
+      const propTypeIdentifier = statement(`
         PropTypes.oneOf(TYPES);
         var TYPES = ["foo", "bar"];
       `).get('expression');
@@ -161,12 +159,12 @@ describe('getPropType', () => {
       expect(getPropType(propTypeIdentifier)).toEqual({
         name: 'enum',
         value: [
-          {value: '"foo"', computed: false},
-          {value: '"bar"', computed: false},
+          { value: '"foo"', computed: false },
+          { value: '"bar"', computed: false },
         ],
       });
 
-      var identifierInsideArray = statement(`
+      const identifierInsideArray = statement(`
         PropTypes.oneOf([FOO, BAR]);
         var FOO = "foo";
         var BAR = "bar";
@@ -175,15 +173,14 @@ describe('getPropType', () => {
       expect(getPropType(identifierInsideArray)).toEqual({
         name: 'enum',
         value: [
-          {value: '"foo"', computed: false},
-          {value: '"bar"', computed: false},
+          { value: '"foo"', computed: false },
+          { value: '"bar"', computed: false },
         ],
       });
-
     });
 
     it('resolves memberExpressions', () => {
-      var propTypeExpression = statement(`
+      const propTypeExpression = statement(`
         PropTypes.oneOf([TYPES.FOO, TYPES.BAR]);
         var TYPES = { FOO: "foo", BAR: "bar" };
       `).get('expression');
@@ -191,14 +188,14 @@ describe('getPropType', () => {
       expect(getPropType(propTypeExpression)).toEqual({
         name: 'enum',
         value: [
-          {value: '"foo"', computed: false},
-          {value: '"bar"', computed: false},
+          { value: '"foo"', computed: false },
+          { value: '"bar"', computed: false },
         ],
       });
     });
 
     it('correctly resolves SpreadElements in arrays', () => {
-      var propTypeExpression = statement(`
+      const propTypeExpression = statement(`
         PropTypes.oneOf([...TYPES]);
         var TYPES = ["foo", "bar"];
       `).get('expression');
@@ -206,14 +203,14 @@ describe('getPropType', () => {
       expect(getPropType(propTypeExpression)).toEqual({
         name: 'enum',
         value: [
-          {value: '"foo"', computed: false},
-          {value: '"bar"', computed: false},
+          { value: '"foo"', computed: false },
+          { value: '"bar"', computed: false },
         ],
       });
     });
 
     it('correctly resolves nested SpreadElements in arrays', () => {
-      var propTypeExpression = statement(`
+      const propTypeExpression = statement(`
         PropTypes.oneOf([...TYPES]);
         var TYPES = ["foo", ...TYPES2];
         var TYPES2 = ["bar"];
@@ -222,14 +219,14 @@ describe('getPropType', () => {
       expect(getPropType(propTypeExpression)).toEqual({
         name: 'enum',
         value: [
-          {value: '"foo"', computed: false},
-          {value: '"bar"', computed: false},
+          { value: '"foo"', computed: false },
+          { value: '"bar"', computed: false },
         ],
       });
     });
 
     it('does not resolve computed values', () => {
-      var propTypeExpression = statement(`
+      const propTypeExpression = statement(`
         PropTypes.oneOf(Object.keys(TYPES));
         var TYPES = { FOO: "foo", BAR: "bar" };
       `).get('expression');
@@ -237,14 +234,14 @@ describe('getPropType', () => {
       expect(getPropType(propTypeExpression)).toEqual({
         name: 'enum',
         value: [
-          {value: '"FOO"', computed: false},
-          {value: '"BAR"', computed: false},
+          { value: '"FOO"', computed: false },
+          { value: '"BAR"', computed: false },
         ],
       });
     });
 
     it('does not resolve external values', () => {
-      var propTypeExpression = statement(`
+      const propTypeExpression = statement(`
         PropTypes.oneOf(TYPES);
         import { TYPES } from './foo';
       `).get('expression');
@@ -270,7 +267,9 @@ describe('getPropType', () => {
   });
 
   it('detects descriptions on nested types in shapes', () => {
-    expect(getPropType(expression(`shape({
+    expect(
+      getPropType(
+        expression(`shape({
       /**
        * test1
        */
@@ -279,8 +278,9 @@ describe('getPropType', () => {
        * test2
        */
       bar: bool
-    })`)))
-    .toEqual({
+    })`),
+      ),
+    ).toEqual({
       name: 'shape',
       value: {
         foo: {
@@ -298,11 +298,14 @@ describe('getPropType', () => {
   });
 
   it('detects required notations of nested types in shapes', () => {
-    expect(getPropType(expression(`shape({
+    expect(
+      getPropType(
+        expression(`shape({
       foo: string.isRequired,
       bar: bool
-    })`)))
-    .toEqual({
+    })`),
+      ),
+    ).toEqual({
       name: 'shape',
       value: {
         foo: {
@@ -316,5 +319,4 @@ describe('getPropType', () => {
       },
     });
   });
-
 });

@@ -25,7 +25,7 @@ describe('parseJsDoc', () => {
         Don't use this!
       `;
       expect(parseJsDoc(docblock)).toEqual({
-        description: 'Don\'t use this!',
+        description: "Don't use this!",
         returns: null,
         params: [],
       });
@@ -33,7 +33,6 @@ describe('parseJsDoc', () => {
   });
 
   describe('parameters', () => {
-
     it('extracts jsdoc description', () => {
       const docblock = `
         @param bar test
@@ -41,11 +40,13 @@ describe('parseJsDoc', () => {
       expect(parseJsDoc(docblock)).toEqual({
         description: null,
         returns: null,
-        params: [{
-          name: 'bar',
-          type: null,
-          description: 'test',
-        }],
+        params: [
+          {
+            name: 'bar',
+            type: null,
+            description: 'test',
+          },
+        ],
       });
     });
 
@@ -56,11 +57,13 @@ describe('parseJsDoc', () => {
       expect(parseJsDoc(docblock)).toEqual({
         description: null,
         returns: null,
-        params: [{
-          name: 'bar',
-          type: {name: 'string'},
-          description: null,
-        }],
+        params: [
+          {
+            name: 'bar',
+            type: { name: 'string' },
+            description: null,
+          },
+        ],
       });
     });
 
@@ -71,11 +74,13 @@ describe('parseJsDoc', () => {
       expect(parseJsDoc(docblock)).toEqual({
         description: null,
         returns: null,
-        params: [{
-          name: 'bar',
-          type: {name: 'union', value: ['string', 'Object']},
-          description: null,
-        }],
+        params: [
+          {
+            name: 'bar',
+            type: { name: 'union', value: ['string', 'Object'] },
+            description: null,
+          },
+        ],
       });
     });
 
@@ -86,17 +91,18 @@ describe('parseJsDoc', () => {
       expect(parseJsDoc(docblock)).toEqual({
         description: null,
         returns: null,
-        params: [{
-          name: 'bar',
-          type: {name: 'string'},
-          description: null,
-          optional: true,
-        }],
+        params: [
+          {
+            name: 'bar',
+            type: { name: 'string' },
+            description: null,
+            optional: true,
+          },
+        ],
       });
     });
 
     describe('returns', () => {
-
       it('returns null if return is not documented', () => {
         const docblock = `
           test
@@ -115,7 +121,7 @@ describe('parseJsDoc', () => {
         expect(parseJsDoc(docblock)).toEqual({
           description: null,
           returns: {
-            type: {name: 'string'},
+            type: { name: 'string' },
             description: null,
           },
           params: [],
@@ -129,7 +135,7 @@ describe('parseJsDoc', () => {
         expect(parseJsDoc(docblock)).toEqual({
           description: null,
           returns: {
-            type: {name: 'mixed'},
+            type: { name: 'mixed' },
             description: null,
           },
           params: [],

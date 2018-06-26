@@ -10,25 +10,25 @@
  *
  */
 
-import * as handlers from './handlers';
+import * as allHandlers from './handlers';
 import parse from './parse';
-import * as resolver from './resolver';
+import * as AllResolver from './resolver';
 import * as utils from './utils';
 import type { Options } from './babelParser';
 
-var defaultResolver = resolver.findExportedComponentDefinition;
-var defaultHandlers = [
-  handlers.propTypeHandler,
-  handlers.contextTypeHandler,
-  handlers.childContextTypeHandler,
-  handlers.propTypeCompositionHandler,
-  handlers.propDocBlockHandler,
-  handlers.flowTypeHandler,
-  handlers.defaultPropsHandler,
-  handlers.componentDocblockHandler,
-  handlers.displayNameHandler,
-  handlers.componentMethodsHandler,
-  handlers.componentMethodsJsDocHandler,
+const defaultResolver = AllResolver.findExportedComponentDefinition;
+const defaultHandlers = [
+  allHandlers.propTypeHandler,
+  allHandlers.contextTypeHandler,
+  allHandlers.childContextTypeHandler,
+  allHandlers.propTypeCompositionHandler,
+  allHandlers.propDocBlockHandler,
+  allHandlers.flowTypeHandler,
+  allHandlers.defaultPropsHandler,
+  allHandlers.componentDocblockHandler,
+  allHandlers.displayNameHandler,
+  allHandlers.componentMethodsHandler,
+  allHandlers.componentMethodsJsDocHandler,
 ];
 
 /**
@@ -43,12 +43,12 @@ var defaultHandlers = [
  * documentation (from docblocks), default prop values and component
  * documentation (from a docblock).
  */
-function defaultParse( // eslint-disable-line no-unused-vars
+function defaultParse(
   src: string,
-  resolver?: ?Resolver, // eslint-disable-line no-shadow
-  handlers?: ?Array<Handler>, // eslint-disable-line no-shadow
-  options ?: Options = {}
-): Array<Object>|Object {
+  resolver?: ?Resolver,
+  handlers?: ?Array<Handler>,
+  options?: Options = {},
+): Array<Object> | Object {
   if (!resolver) {
     resolver = defaultResolver;
   }
@@ -62,7 +62,7 @@ function defaultParse( // eslint-disable-line no-unused-vars
 export {
   defaultParse as parse,
   defaultHandlers,
-  handlers,
-  resolver,
+  allHandlers as handlers,
+  AllResolver as resolver,
   utils,
 };

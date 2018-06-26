@@ -14,13 +14,12 @@ import fs from 'fs';
 import path from 'path';
 
 import * as docgen from '../main';
-import {ERROR_MISSING_DEFINITION} from '../parse';
+import { ERROR_MISSING_DEFINITION } from '../parse';
 
 describe('main', () => {
-
   function test(source) {
     it('parses with default resolver/handlers', () => {
-      var docs = docgen.parse(source);
+      const docs = docgen.parse(source);
       expect(docs).toEqual({
         displayName: 'ABC',
         description: 'Example component description',
@@ -42,7 +41,7 @@ describe('main', () => {
     });
 
     it('parses with custom handlers', () => {
-      var docs = docgen.parse(source, null, [
+      const docs = docgen.parse(source, null, [
         docgen.handlers.componentDocblockHandler,
       ]);
       expect(docs).toEqual({

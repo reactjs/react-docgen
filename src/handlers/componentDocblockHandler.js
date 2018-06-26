@@ -13,14 +13,17 @@
 import type Documentation from '../Documentation';
 
 import recast from 'recast';
-import {getDocblock} from '../utils/docblock';
+import { getDocblock } from '../utils/docblock';
 
-var {types: {namedTypes: types}} = recast;
+const {
+  types: { namedTypes: types },
+} = recast;
 
 function isClassDefinition(nodePath) {
-  var node = nodePath.node;
-  return types.ClassDeclaration.check(node) ||
-    types.ClassExpression.check(node);
+  const node = nodePath.node;
+  return (
+    types.ClassDeclaration.check(node) || types.ClassExpression.check(node)
+  );
 }
 
 /**
@@ -28,27 +31,32 @@ function isClassDefinition(nodePath) {
  */
 export default function componentDocblockHandler(
   documentation: Documentation,
-  path: NodePath
+  path: NodePath,
 ) {
-  var description = null;
+  let description = null;
 
   if (isClassDefinition(path)) {
     // If we have a class declaration or expression, then the comment might be
     // attached to the last decorator instead as trailing comment.
     if (path.node.decorators && path.node.decorators.length > 0) {
-      description = getDocblock(path.get('decorators', path.node.decorators.length - 1), true);
+      description = getDocblock(
+        path.get('decorators', path.node.decorators.length - 1),
+        true,
+      );
     }
   }
   if (description == null) {
     // Find parent statement (e.g. var Component = React.createClass(<path>);)
-    var searchPath = path;
+    let searchPath = path;
     while (searchPath && !types.Statement.check(searchPath.node)) {
       searchPath = searchPath.parent;
     }
     if (searchPath) {
       // If the parent is an export statement, we have to traverse one more up
-      if (types.ExportNamedDeclaration.check(searchPath.parentPath.node) ||
-          types.ExportDefaultDeclaration.check(searchPath.parentPath.node)) {
+      if (
+        types.ExportNamedDeclaration.check(searchPath.parentPath.node) ||
+        types.ExportDefaultDeclaration.check(searchPath.parentPath.node)
+      ) {
         searchPath = searchPath.parentPath;
       }
       description = getDocblock(searchPath);

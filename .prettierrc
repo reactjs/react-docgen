@@ -1,0 +1,20 @@
+{
+    "arrowParens": "avoid",
+    "trailingComma": "all",
+    "useTabs": false,
+    "semi": true,
+    "singleQuote": true,
+    "bracketSpacing": true,
+    "jsxBracketSameLine": false,
+    "tabWidth": 2,
+    "printWidth": 80,
+    "overrides": [{
+      "files": [
+        "bin/react-docgen.js",
+        "bin/__tests__/example/**/*.js"
+      ],
+      "options": {
+        "trailingComma": "es5"
+      }
+    }]
+  }
