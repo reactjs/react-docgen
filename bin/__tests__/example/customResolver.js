@@ -23,6 +23,6 @@ module.exports = function(ast, recast) {
     'program',
     'body',
     0,
-    'expression',
+    'expression'
   );
 };

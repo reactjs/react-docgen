@@ -96,20 +96,22 @@ function resolvesToJSXElementOrReactCall(path) {
     }
 
     if (resolvedValue && types.ObjectExpression.check(resolvedValue.node)) {
-      var resolvedMemberExpression = namesToResolve.reduce((result, path) => {
-        // eslint-disable-line no-shadow
-        if (!path) {
-          return result;
-        }
-
-        if (result) {
-          result = getPropertyValuePath(result, path.node.name);
-          if (result && types.Identifier.check(result.node)) {
-            return resolveToValue(result);
+      var resolvedMemberExpression = namesToResolve.reduce(
+        (result, nodePath) => {
+          if (!nodePath) {
+            return result;
           }
-        }
-        return result;
-      }, resolvedValue);
+
+          if (result) {
+            result = getPropertyValuePath(result, nodePath.node.name);
+            if (result && types.Identifier.check(result.node)) {
+              return resolveToValue(result);
+            }
+          }
+          return result;
+        },
+        resolvedValue,
+      );
 
       if (
         !resolvedMemberExpression ||

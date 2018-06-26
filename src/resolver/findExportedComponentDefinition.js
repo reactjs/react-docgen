@@ -69,7 +69,7 @@ export default function findExportedComponentDefinition(
   recast: Object,
 ): ?NodePath {
   var types = recast.types.namedTypes;
-  var definition;
+  var foundDefinition;
 
   function exportDeclaration(path) {
     var definitions = resolveExportDeclaration(path, types).reduce(
@@ -90,11 +90,11 @@ export default function findExportedComponentDefinition(
     if (definitions.length === 0) {
       return false;
     }
-    if (definitions.length > 1 || definition) {
+    if (definitions.length > 1 || foundDefinition) {
       // If a file exports multiple components, ... complain!
       throw new Error(ERROR_MULTIPLE_DEFINITIONS);
     }
-    definition = resolveDefinition(definitions[0], types);
+    foundDefinition = resolveDefinition(definitions[0], types);
     return false;
   }
 
@@ -131,14 +131,14 @@ export default function findExportedComponentDefinition(
           return false;
         }
       }
-      if (definition) {
+      if (foundDefinition) {
         // If a file exports multiple components, ... complain!
         throw new Error(ERROR_MULTIPLE_DEFINITIONS);
       }
-      definition = resolveDefinition(path, types);
+      foundDefinition = resolveDefinition(path, types);
       return false;
     },
   });
 
-  return definition;
+  return foundDefinition;
 }

@@ -10,7 +10,8 @@
     "printWidth": 80,
     "overrides": [{
       "files": [
-        "bin/react-docgen.js"
+        "bin/react-docgen.js",
+        "bin/__tests__/example/**/*.js"
       ],
       "options": {
         "trailingComma": "es5"

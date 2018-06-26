@@ -117,12 +117,10 @@ describe('propTypeHandler', () => {
       propTypeHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
         simple_prop: {
-          // eslint-disable-line camelcase
           type: {},
           required: true,
         },
         complex_prop: {
-          // eslint-disable-line camelcase
           type: {},
           required: true,
         },
@@ -142,12 +140,10 @@ describe('propTypeHandler', () => {
       propTypeHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
         custom_propA: {
-          // eslint-disable-line camelcase
           type: {},
           required: false,
         },
         custom_propB: {
-          // eslint-disable-line camelcase
           type: {
             name: 'custom',
             raw: 'Prop.bool.isRequired',

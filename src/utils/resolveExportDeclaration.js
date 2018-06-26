@@ -14,7 +14,7 @@ import resolveToValue from './resolveToValue';
 
 var {
   types: { namedTypes: _types },
-} = recast; //eslint-disable-line no-unused-vars
+} = recast;
 
 export default function resolveExportDeclaration(
   path: NodePath,

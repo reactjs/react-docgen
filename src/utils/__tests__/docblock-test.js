@@ -59,12 +59,7 @@ describe('docblock', () => {
     });
 
     it('supports "short" docblocks', () => {
-      let source = [
-        // eslint-disable-line no-shadow
-        '/** bar */',
-        'foo;',
-      ];
-      let node = statement(source.join(EOL));
+      let node = statement('/** bar */\nfoo;');
       expect(getDocblock(node)).toEqual('bar');
     });
   });

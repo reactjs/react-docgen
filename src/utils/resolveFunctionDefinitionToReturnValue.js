@@ -19,8 +19,8 @@ export default function resolveFunctionDefinitionToReturnValue(
 
   traverseShallow(path.get('body'), {
     visitFunction: () => false,
-    visitReturnStatement: path => {
-      returnPath = resolveToValue(path.get('argument'));
+    visitReturnStatement: nodePath => {
+      returnPath = resolveToValue(nodePath.get('argument'));
       return false;
     },
   });

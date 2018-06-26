@@ -265,7 +265,7 @@ describe('flowTypeHandler', () => {
   });
 
   describe('does not error for unreachable type', () => {
-    function test(code) {
+    function testCode(code) {
       var definition = statement(code).get('expression');
 
       expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
@@ -274,7 +274,7 @@ describe('flowTypeHandler', () => {
     }
 
     it('required', () => {
-      test(`
+      testCode(`
         (props: Props) => <div />;
         var React = require('React');
         var Component = React.Component;
@@ -284,7 +284,7 @@ describe('flowTypeHandler', () => {
     });
 
     it('imported', () => {
-      test(`
+      testCode(`
         (props: Props) => <div />;
         var React = require('React');
         var Component = React.Component;
@@ -294,7 +294,7 @@ describe('flowTypeHandler', () => {
     });
 
     it('type imported', () => {
-      test(`
+      testCode(`
         (props: Props) => <div />;
         var React = require('React');
         var Component = React.Component;
@@ -304,7 +304,7 @@ describe('flowTypeHandler', () => {
     });
 
     it('not in scope', () => {
-      test(`
+      testCode(`
         (props: Props) => <div />;
         var React = require('React');
         var Component = React.Component;

@@ -9,6 +9,7 @@ module.exports = {
   ],
   rules: {
     strict: ['error', 'never'],
+    'no-shadow': 'error',
     'prettier/prettier': 'error',
   },
   env: {

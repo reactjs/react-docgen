@@ -73,10 +73,12 @@ function handleKeysHelper(path: NodePath) {
       return {
         name: 'union',
         raw: printValue(path),
-        elements: keys.map(value => ({ name: 'literal', value })),
+        elements: keys.map(key => ({ name: 'literal', value: key })),
       };
     }
   }
+
+  return null;
 }
 
 function handleArrayTypeAnnotation(path: NodePath) {
@@ -192,7 +194,7 @@ function handleFunctionTypeAnnotation(path: NodePath) {
 
   path.get('params').each(param => {
     const typeAnnotation = getTypeAnnotation(param);
-    if (!typeAnnotation) return null;
+    if (!typeAnnotation) return;
 
     type.signature.arguments.push({
       name: param.node.name ? param.node.name.name : '',
@@ -218,7 +220,7 @@ function handleTypeofTypeAnnotation(path: NodePath) {
 }
 
 function handleQualifiedTypeIdentifier(path: NodePath) {
-  if (path.node.qualification.name !== 'React') return;
+  if (path.node.qualification.name !== 'React') return null;
 
   return { name: `React${path.node.id.name}`, raw: printValue(path) };
 }

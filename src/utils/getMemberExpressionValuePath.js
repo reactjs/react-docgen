@@ -43,7 +43,7 @@ function resolveName(path) {
     types.TaggedTemplateExpression.check(path.node)
   ) {
     if (!types.VariableDeclarator.check(path.parent.node)) {
-      return; // eslint-disable-line consistent-return
+      return;
     }
 
     return path.parent.get('id', 'name').value;
@@ -100,5 +100,5 @@ export default function getMemberExpressionValuePath(
     },
   });
 
-  return result; // eslint-disable-line consistent-return
+  return result;
 }

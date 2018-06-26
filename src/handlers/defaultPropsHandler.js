@@ -51,6 +51,8 @@ function getDefaultValue(path: NodePath) {
         types.Identifier.check(node),
     };
   }
+
+  return null;
 }
 
 function getStatelessPropsPath(componentDefinition): NodePath {
@@ -63,12 +65,12 @@ function getDefaultPropsPath(componentDefinition: NodePath): ?NodePath {
     'defaultProps',
   );
   if (!defaultPropsPath) {
-    return;
+    return null;
   }
 
   defaultPropsPath = resolveToValue(defaultPropsPath);
   if (!defaultPropsPath) {
-    return;
+    return null;
   }
 
   if (types.FunctionExpression.check(defaultPropsPath.node)) {
@@ -87,14 +89,14 @@ function getDefaultPropsPath(componentDefinition: NodePath): ?NodePath {
 function getDefaultValuesFromProps(
   properties: NodePath,
   documentation: Documentation,
-  isStatelessComponent: boolean,
+  isStateless: boolean,
 ) {
   properties
     .filter(propertyPath => types.Property.check(propertyPath.node))
     // Don't evaluate property if component is functional and the node is not an AssignmentPattern
     .filter(
       propertyPath =>
-        !isStatelessComponent ||
+        !isStateless ||
         types.AssignmentPattern.check(propertyPath.get('value').node),
     )
     .forEach(function(propertyPath) {
@@ -102,7 +104,7 @@ function getDefaultValuesFromProps(
         getPropertyName(propertyPath),
       );
       const defaultValue = getDefaultValue(
-        isStatelessComponent
+        isStateless
           ? propertyPath.get('value', 'right')
           : propertyPath.get('value'),
       );

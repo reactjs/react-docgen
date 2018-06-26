@@ -29,10 +29,9 @@ describe('componentDocblockHandler', () => {
     componentDocblockHandler = require('../componentDocblockHandler').default;
   });
 
-  function test(definitionSrc, parse) {
-    // eslint-disable-line no-shadow
+  function test(definitionSrc, parseFunc) {
     it('finds docblocks for component definitions', () => {
-      var definition = parse(`
+      var definition = parseFunc(`
         import something from 'somewhere';
 
         /**
@@ -46,7 +45,7 @@ describe('componentDocblockHandler', () => {
     });
 
     it('ignores other types of comments', () => {
-      var definition = parse(`
+      var definition = parseFunc(`
         import something from 'somewhere';
 
         /*
@@ -58,7 +57,7 @@ describe('componentDocblockHandler', () => {
       componentDocblockHandler(documentation, definition);
       expect(documentation.description).toBe('');
 
-      definition = parse(`
+      definition = parseFunc(`
         // Inline comment'
         ${definitionSrc}
       `);
@@ -68,7 +67,7 @@ describe('componentDocblockHandler', () => {
     });
 
     it('only considers the docblock directly above the definition', () => {
-      var definition = parse(`
+      var definition = parseFunc(`
         import something from 'somewhere';
 
         /**
@@ -87,11 +86,10 @@ describe('componentDocblockHandler', () => {
    * Decorates can only be assigned to class and therefore only make sense for
    * class declarations and export declarations.
    */
-  function testDecorators(classSrc, parse, exportSrc = '') {
-    // eslint-disable-line no-shadow
+  function testDecorators(classSrc, parseFunc, exportSrc = '') {
     describe('decorators', () => {
       it("uses the docblock above the decorator if it's the only one", () => {
-        var definition = parse(`
+        var definition = parseFunc(`
           import something from 'somewhere';
           /**
            * Component description
@@ -107,7 +105,7 @@ describe('componentDocblockHandler', () => {
       });
 
       it('uses the component docblock if present', () => {
-        var definition = parse(`
+        var definition = parseFunc(`
           import something from 'somewhere';
 
           ${exportSrc}

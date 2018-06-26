@@ -10,14 +10,13 @@
  *
  */
 
-/*eslint no-labels: 0*/
+/* eslint no-labels: 0 */
 
 /**
  * Helper methods for dealing with MemberExpressions (and CallExpressions).
  */
 
 type MemberDescriptor = {
-  // eslint-disable-line no-undef
   path: NodePath,
   computed: boolean,
   argumentsPath?: ?NodePath,

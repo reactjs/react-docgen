@@ -25,11 +25,7 @@ var spawn = require('cross-spawn');
 
 function run(args, stdin) {
   return new Promise(resolve => {
-    var docgen = spawn(
-      // eslint-disable-line camelcase
-      path.join(__dirname, '../react-docgen.js'),
-      args,
-    );
+    var docgen = spawn(path.join(__dirname, '../react-docgen.js'), args);
     var stdout = '';
     var stderr = '';
     docgen.stdout.on('data', data => (stdout += data));
@@ -286,7 +282,7 @@ describe('react-docgen CLI', () => {
       () => {
         return Promise.all([
           run([
-            '--resolver=' + path.join(__dirname, './example/customResolver.js'),
+            '--resolver=' + path.join(__dirname, 'example/customResolver.js'),
             path.join(__dirname, '../../example/components/Component.js'),
           ]).then(([stdout]) => {
             expect(stdout).toContain('Custom');

@@ -44,7 +44,7 @@ function buildMemberExpressionFromPattern(path: NodePath): ?NodePath {
 
 function findScopePath(paths: Array<NodePath>, path: NodePath): ?NodePath {
   if (paths.length < 1) {
-    return;
+    return null;
   }
   let resultPath = paths[0];
   const parentPath = resultPath.parent;
@@ -68,6 +68,8 @@ function findScopePath(paths: Array<NodePath>, path: NodePath): ?NodePath {
   if (resultPath.node !== path.node) {
     return resolveToValue(resultPath);
   }
+
+  return null;
 }
 
 /**
@@ -162,8 +164,8 @@ export default function resolveToValue(path: NodePath): NodePath {
     } else {
       scope = path.scope.lookupType(node.name);
       if (scope) {
-        const types = scope.getTypes()[node.name];
-        resolvedPath = findScopePath(types, path);
+        const typesInScope = scope.getTypes()[node.name];
+        resolvedPath = findScopePath(typesInScope, path);
       }
     }
     return resolvedPath || path;

@@ -88,17 +88,17 @@ if (argv.resolver) {
   try {
     // Look for built-in resolver
     resolver = require(`../dist/resolver/${argv.resolver}`).default;
-  } catch (e) {
-    if (e.code !== 'MODULE_NOT_FOUND') {
-      throw e;
+  } catch (error) {
+    if (error.code !== 'MODULE_NOT_FOUND') {
+      throw error;
     }
     const resolverPath = path.resolve(process.cwd(), argv.resolver);
     try {
       // Look for local resolver
       resolver = require(resolverPath);
-    } catch (e) {
-      if (e.code !== 'MODULE_NOT_FOUND') {
-        throw e;
+    } catch (localError) {
+      if (localError.code !== 'MODULE_NOT_FOUND') {
+        throw localError;
       }
       // Will exit with this error message
       errorMessage =
@@ -149,8 +149,8 @@ function traverseDir(filePath, result, done) {
       }
       try {
         result[filename] = parse(content);
-      } catch (error) {
-        writeError(error, filename);
+      } catch (parseError) {
+        writeError(parseError, filename);
       }
       next();
     },
@@ -207,15 +207,15 @@ if (errorMessage) {
         if (stats.isDirectory()) {
           try {
             traverseDir(filePath, result, done);
-          } catch (error) {
-            writeError(error);
+          } catch (traverseError) {
+            writeError(traverseError);
             done();
           }
         } else {
           try {
             result[filePath] = parse(fs.readFileSync(filePath));
-          } catch (error) {
-            writeError(error, filePath);
+          } catch (parseError) {
+            writeError(parseError, filePath);
           } finally {
             done();
           }

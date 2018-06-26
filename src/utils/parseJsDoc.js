@@ -47,7 +47,7 @@ function getOptional(tag) {
   if (tag.type && tag.type.type && tag.type.type === 'OptionalType') {
     return true;
   }
-  return;
+  return undefined;
 }
 
 // Add jsdoc @return description.
