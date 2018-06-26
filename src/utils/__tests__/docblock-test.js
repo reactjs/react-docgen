@@ -42,24 +42,36 @@ describe('docblock', () => {
   });
 
   describe('getDocblock', () => {
-    let comment = ['This is a docblock.', 'This is the second line.'];
-    let source = ['/**', ` * ${comment[0]}`, ` * ${comment[1]}`, ' */', 'foo;'];
+    const comment = ['This is a docblock.', 'This is the second line.'];
+    const source = [
+      '/**',
+      ` * ${comment[0]}`,
+      ` * ${comment[1]}`,
+      ' */',
+      'foo;',
+    ];
 
     it('gets the closest docblock of the given node', () => {
-      let node = statement(source.join(EOL));
+      const node = statement(source.join(EOL));
       expect(getDocblock(node)).toEqual(comment.join(EOL));
     });
 
-    let terminators = ['\u000A', '\u000D', '\u2028', '\u2029', '\u000D\u000A'];
+    const terminators = [
+      '\u000A',
+      '\u000D',
+      '\u2028',
+      '\u2029',
+      '\u000D\u000A',
+    ];
     terminators.forEach(t => {
       it('can handle ' + escape(t) + ' as line terminator', () => {
-        let node = statement(source.join(t));
+        const node = statement(source.join(t));
         expect(getDocblock(node)).toEqual(comment.join(EOL));
       });
     });
 
     it('supports "short" docblocks', () => {
-      let node = statement('/** bar */\nfoo;');
+      const node = statement('/** bar */\nfoo;');
       expect(getDocblock(node)).toEqual('bar');
     });
   });

@@ -14,9 +14,9 @@ jest.disableAutomock();
 jest.mock('../../Documentation');
 
 describe('setPropDescription', () => {
-  var expression;
-  var defaultDocumentation;
-  var setPropDescription;
+  let expression;
+  let defaultDocumentation;
+  let setPropDescription;
 
   beforeEach(() => {
     ({ expression } = require('../../../tests/utils'));

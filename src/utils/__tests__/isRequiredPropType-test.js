@@ -13,8 +13,8 @@
 jest.disableAutomock();
 
 describe('isRequiredPropType', () => {
-  var expression;
-  var isRequiredPropType;
+  let expression;
+  let isRequiredPropType;
 
   beforeEach(() => {
     isRequiredPropType = require('../isRequiredPropType').default;

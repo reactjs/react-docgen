@@ -14,7 +14,7 @@ import match from './match';
 import recast from 'recast';
 import resolveToValue from './resolveToValue';
 
-var {
+const {
   types: { namedTypes: types },
 } = recast;
 
@@ -24,7 +24,7 @@ var {
  * was imported.
  */
 export default function resolveToModule(path: NodePath): ?string {
-  var node = path.node;
+  const node = path.node;
   switch (node.type) {
     case types.VariableDeclarator.name:
       if (node.init) {
@@ -39,12 +39,13 @@ export default function resolveToModule(path: NodePath): ?string {
       }
       return resolveToModule(path.get('callee'));
     case types.Identifier.name:
-    case types.JSXIdentifier.name:
-      var valuePath = resolveToValue(path);
+    case types.JSXIdentifier.name: {
+      const valuePath = resolveToValue(path);
       if (valuePath !== path) {
         return resolveToModule(valuePath);
       }
       break;
+    }
     case types.ImportDeclaration.name:
       return node.source.value;
     case types.MemberExpression.name:

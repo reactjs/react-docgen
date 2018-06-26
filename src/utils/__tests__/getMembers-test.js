@@ -13,9 +13,9 @@
 jest.disableAutomock();
 
 describe('getMembers', () => {
-  var expression;
-  var getMembers;
-  var memberExpressionPath;
+  let expression;
+  let getMembers;
+  let memberExpressionPath;
 
   beforeEach(() => {
     getMembers = require('../getMembers').default;
@@ -24,7 +24,7 @@ describe('getMembers', () => {
   });
 
   it('finds all "members" "inside" a MemberExpression', () => {
-    var members = getMembers(memberExpressionPath);
+    const members = getMembers(memberExpressionPath);
 
     //bar(123)
     expect(members[0].path.node.name).toEqual('bar');

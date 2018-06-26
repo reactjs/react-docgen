@@ -13,8 +13,8 @@
 jest.disableAutomock();
 
 describe('getMemberExpressionValuePath', () => {
-  var getMemberExpressionValuePath;
-  var statement;
+  let getMemberExpressionValuePath;
+  let statement;
 
   beforeEach(() => {
     getMemberExpressionValuePath = require('../getMemberExpressionValuePath')
@@ -24,7 +24,7 @@ describe('getMemberExpressionValuePath', () => {
 
   describe('MethodExpression', () => {
     it('finds "normal" property definitions', () => {
-      var def = statement(`
+      const def = statement(`
         var Foo = () => {};
         Foo.propTypes = {};
       `);
@@ -35,7 +35,7 @@ describe('getMemberExpressionValuePath', () => {
     });
 
     it('takes the correct property definitions', () => {
-      var def = statement(`
+      const def = statement(`
         var Foo = () => {};
         Foo.propTypes = {};
         Bar.propTypes = { unrelated: true };
@@ -47,7 +47,7 @@ describe('getMemberExpressionValuePath', () => {
     });
 
     it('finds computed property definitions with literal keys', () => {
-      var def = statement(`
+      const def = statement(`
         function Foo () {}
         Foo['render'] = () => {};
       `);
@@ -58,7 +58,7 @@ describe('getMemberExpressionValuePath', () => {
     });
 
     it('ignores computed property definitions with expression', () => {
-      var def = statement(`
+      const def = statement(`
         var Foo = function Bar() {};
         Foo[imComputed] = () => {};
       `);
@@ -68,7 +68,7 @@ describe('getMemberExpressionValuePath', () => {
   });
   describe('TaggedTemplateLiteral', () => {
     it('finds "normal" property definitions', () => {
-      var def = statement(`
+      const def = statement(`
         var Foo = foo\`bar\`
         Foo.propTypes = {};
       `);

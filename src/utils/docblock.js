@@ -13,17 +13,17 @@
  * Helper functions to work with docblock comments.
  */
 
-var DOCLET_PATTERN = /^@(\w+)(?:$|\s((?:[^](?!^@\w))*))/gim;
+const DOCLET_PATTERN = /^@(\w+)(?:$|\s((?:[^](?!^@\w))*))/gim;
 
 function parseDocblock(str) {
-  var lines = str.split('\n');
-  for (var i = 0, l = lines.length; i < l; i++) {
+  const lines = str.split('\n');
+  for (let i = 0, l = lines.length; i < l; i++) {
     lines[i] = lines[i].replace(/^\s*\*\s?/, '');
   }
   return lines.join('\n').trim();
 }
 
-let DOCBLOCK_HEADER = /^\*\s/;
+const DOCBLOCK_HEADER = /^\*\s/;
 
 /**
  * Given a path, this function returns the closest preceding docblock if it
@@ -33,7 +33,7 @@ export function getDocblock(
   path: NodePath,
   trailing: boolean = false,
 ): ?string {
-  var comments = [];
+  let comments = [];
   if (trailing && path.node.trailingComments) {
     comments = path.node.trailingComments.filter(
       comment =>
@@ -64,8 +64,8 @@ export function getDocblock(
  * and their "content" as values.
  */
 export function getDoclets(str: string): Object {
-  var doclets = Object.create(null);
-  var match = DOCLET_PATTERN.exec(str);
+  const doclets = Object.create(null);
+  let match = DOCLET_PATTERN.exec(str);
 
   for (; match; match = DOCLET_PATTERN.exec(str)) {
     doclets[match[1]] = match[2] || true;

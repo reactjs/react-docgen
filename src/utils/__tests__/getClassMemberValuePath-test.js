@@ -13,8 +13,8 @@
 jest.disableAutomock();
 
 describe('getClassMemberValuePath', () => {
-  var getClassMemberValuePath;
-  var statement;
+  let getClassMemberValuePath;
+  let statement;
 
   beforeEach(() => {
     getClassMemberValuePath = require('../getClassMemberValuePath').default;
@@ -23,7 +23,7 @@ describe('getClassMemberValuePath', () => {
 
   describe('MethodDefinitions', () => {
     it('finds "normal" method definitions', () => {
-      var def = statement(`
+      const def = statement(`
         class Foo {
           render() {}
         }
@@ -35,7 +35,7 @@ describe('getClassMemberValuePath', () => {
     });
 
     it('finds computed method definitions with literal keys', () => {
-      var def = statement(`
+      const def = statement(`
         class Foo {
           ['render']() {}
         }
@@ -47,7 +47,7 @@ describe('getClassMemberValuePath', () => {
     });
 
     it('ignores computed method definitions with expression', () => {
-      var def = statement(`
+      const def = statement(`
         class Foo {
           [render]() {}
         }
@@ -59,7 +59,7 @@ describe('getClassMemberValuePath', () => {
 
   describe('Getters and Setters', () => {
     it('finds getters', () => {
-      var def = statement(`
+      const def = statement(`
         class Foo {
           get foo() {}
         }
@@ -71,7 +71,7 @@ describe('getClassMemberValuePath', () => {
     });
 
     it('ignores setters', () => {
-      var def = statement(`
+      const def = statement(`
         class Foo {
           set foo(val) {}
         }
@@ -83,7 +83,7 @@ describe('getClassMemberValuePath', () => {
 
   describe('ClassProperty', () => {
     it('finds "normal" class properties', () => {
-      var def = statement(`
+      const def = statement(`
         class Foo {
           foo = 42;
         }

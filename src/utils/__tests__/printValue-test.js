@@ -13,8 +13,8 @@
 jest.disableAutomock();
 
 describe('printValue', () => {
-  var printValue;
-  var utils;
+  let printValue;
+  let utils;
 
   beforeEach(() => {
     printValue = require('../printValue').default;

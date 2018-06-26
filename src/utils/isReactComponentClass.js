@@ -15,12 +15,12 @@ import recast from 'recast';
 import resolveToModule from './resolveToModule';
 import resolveToValue from './resolveToValue';
 
-var {
+const {
   types: { namedTypes: types },
 } = recast;
 
 function isRenderMethod(node) {
-  var isProperty = node.type === 'ClassProperty';
+  const isProperty = node.type === 'ClassProperty';
   return (
     (types.MethodDefinition.check(node) || isProperty) &&
     !node.computed &&
@@ -35,7 +35,7 @@ function isRenderMethod(node) {
  * `React.Component` or implements a `render()` method.
  */
 export default function isReactComponentClass(path: NodePath): boolean {
-  var node = path.node;
+  const node = path.node;
   if (
     !types.ClassDeclaration.check(node) &&
     !types.ClassExpression.check(node)
@@ -50,7 +50,7 @@ export default function isReactComponentClass(path: NodePath): boolean {
 
   // check for @extends React.Component in docblock
   if (path.parentPath && path.parentPath.value) {
-    var classDeclaration = Array.isArray(path.parentPath.value)
+    const classDeclaration = Array.isArray(path.parentPath.value)
       ? path.parentPath.value.find(function(declaration) {
           return declaration.type === 'ClassDeclaration';
         })
@@ -71,10 +71,10 @@ export default function isReactComponentClass(path: NodePath): boolean {
   if (!node.superClass) {
     return false;
   }
-  var superClass = resolveToValue(path.get('superClass'));
+  const superClass = resolveToValue(path.get('superClass'));
   if (!match(superClass.node, { property: { name: 'Component' } })) {
     return false;
   }
-  var module = resolveToModule(superClass);
+  const module = resolveToModule(superClass);
   return !!module && isReactModuleName(module);
 }

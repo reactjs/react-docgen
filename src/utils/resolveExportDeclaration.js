@@ -12,7 +12,7 @@
 import recast from 'recast';
 import resolveToValue from './resolveToValue';
 
-var {
+const {
   types: { namedTypes: _types },
 } = recast;
 
@@ -20,7 +20,7 @@ export default function resolveExportDeclaration(
   path: NodePath,
   types: Object = _types,
 ): Array<NodePath> {
-  var definitions = [];
+  const definitions = [];
   if (path.node.default) {
     definitions.push(path.get('declaration'));
   } else if (path.node.declaration) {

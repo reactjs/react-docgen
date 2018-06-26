@@ -15,12 +15,12 @@ import type Documentation from '../Documentation';
 import recast from 'recast';
 import { getDocblock } from '../utils/docblock';
 
-var {
+const {
   types: { namedTypes: types },
 } = recast;
 
 function isClassDefinition(nodePath) {
-  var node = nodePath.node;
+  const node = nodePath.node;
   return (
     types.ClassDeclaration.check(node) || types.ClassExpression.check(node)
   );
@@ -33,7 +33,7 @@ export default function componentDocblockHandler(
   documentation: Documentation,
   path: NodePath,
 ) {
-  var description = null;
+  let description = null;
 
   if (isClassDefinition(path)) {
     // If we have a class declaration or expression, then the comment might be
@@ -47,7 +47,7 @@ export default function componentDocblockHandler(
   }
   if (description == null) {
     // Find parent statement (e.g. var Component = React.createClass(<path>);)
-    var searchPath = path;
+    let searchPath = path;
     while (searchPath && !types.Statement.check(searchPath.node)) {
       searchPath = searchPath.parent;
     }

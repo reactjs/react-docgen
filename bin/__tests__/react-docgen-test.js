@@ -17,17 +17,17 @@ const TEST_TIMEOUT = 120000;
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = TEST_TIMEOUT;
 
-var fs = require('fs');
-var path = require('path');
-var rimraf = require('rimraf');
-var temp = require('temp');
-var spawn = require('cross-spawn');
+const fs = require('fs');
+const path = require('path');
+const rimraf = require('rimraf');
+const temp = require('temp');
+const spawn = require('cross-spawn');
 
 function run(args, stdin) {
   return new Promise(resolve => {
-    var docgen = spawn(path.join(__dirname, '../react-docgen.js'), args);
-    var stdout = '';
-    var stderr = '';
+    const docgen = spawn(path.join(__dirname, '../react-docgen.js'), args);
+    let stdout = '';
+    let stderr = '';
     docgen.stdout.on('data', data => (stdout += data));
     docgen.stderr.on('data', data => (stderr += data));
     docgen.on('close', () => resolve([stdout, stderr]));
@@ -41,14 +41,14 @@ function run(args, stdin) {
   });
 }
 
-var component = fs.readFileSync(
+const component = fs.readFileSync(
   path.join(__dirname, '../../example/components/Component.js'),
 );
 
 describe('react-docgen CLI', () => {
-  var tempDir;
-  var tempComponents = [];
-  var tempNoComponents = [];
+  let tempDir;
+  let tempComponents = [];
+  let tempNoComponents = [];
 
   function createTempfiles(suffix, dir) {
     if (!tempDir) {
@@ -70,12 +70,12 @@ describe('react-docgen CLI', () => {
       suffix = 'js';
     }
 
-    var componentPath = path.join(dir, 'Component.' + suffix);
-    var componentFile = fs.openSync(componentPath, 'w');
+    const componentPath = path.join(dir, 'Component.' + suffix);
+    const componentFile = fs.openSync(componentPath, 'w');
     fs.writeSync(componentFile, component.toString());
     fs.closeSync(componentFile);
-    var noComponentPath = path.join(dir, 'NoComponent.' + suffix);
-    var noComponentFile = fs.openSync(noComponentPath, 'w');
+    const noComponentPath = path.join(dir, 'NoComponent.' + suffix);
+    const noComponentFile = fs.openSync(noComponentPath, 'w');
     fs.writeSync(noComponentFile, '{}');
     fs.closeSync(noComponentFile);
 
@@ -156,7 +156,7 @@ describe('react-docgen CLI', () => {
       createTempfiles('foo');
       createTempfiles('bar');
 
-      var verify = ([stdout, stderr]) => {
+      const verify = ([stdout, stderr]) => {
         expect(stdout).toContain('Component.foo');
         expect(stdout).toContain('Component.bar');
 
@@ -192,7 +192,7 @@ describe('react-docgen CLI', () => {
     () => {
       createTempfiles(null, 'foo');
 
-      var verify = ([stdout, stderr]) => {
+      const verify = ([stdout, stderr]) => {
         expect(stdout).toBe('');
         expect(stderr).toBe('');
       };
@@ -230,10 +230,10 @@ describe('react-docgen CLI', () => {
   it(
     'writes to a file if provided',
     () => {
-      var outFile = temp.openSync();
+      const outFile = temp.openSync();
       createTempfiles();
 
-      var verify = ([stdout]) => {
+      const verify = ([stdout]) => {
         expect(fs.readFileSync(outFile.path)).not.toBe('');
         expect(stdout).toBe('');
       };
@@ -300,7 +300,7 @@ describe('react-docgen CLI', () => {
         createTempfiles(null, 'foo');
         createTempfiles(null, 'bar');
 
-        var verify = ([stdout, stderr]) => {
+        const verify = ([stdout, stderr]) => {
           expect(stdout).toBe('');
           expect(stderr).toBe('');
         };
@@ -320,7 +320,7 @@ describe('react-docgen CLI', () => {
         createTempfiles(null, 'foo');
         createTempfiles(null, 'bar');
 
-        var verify = ([stdout, stderr]) => {
+        const verify = ([stdout, stderr]) => {
           expect(stdout).toBe('');
           expect(stderr).toBe('');
         };

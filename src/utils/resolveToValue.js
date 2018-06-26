@@ -16,14 +16,14 @@ import getPropertyValuePath from './getPropertyValuePath';
 import { Array as toArray } from './expressionTo';
 import { traverseShallow } from './traverse';
 
-var {
+const {
   types: { NodePath, builders, namedTypes: types },
 } = recast;
 
 function buildMemberExpressionFromPattern(path: NodePath): ?NodePath {
-  var node = path.node;
+  const node = path.node;
   if (types.Property.check(node)) {
-    var objPath = buildMemberExpressionFromPattern(path.parent);
+    const objPath = buildMemberExpressionFromPattern(path.parent);
     if (objPath) {
       return new NodePath(
         builders.memberExpression(
@@ -77,7 +77,7 @@ function findScopePath(paths: Array<NodePath>, path: NodePath): ?NodePath {
  * `scope`. We are not descending into any statements (blocks).
  */
 function findLastAssignedValue(scope, name) {
-  let results = [];
+  const results = [];
 
   traverseShallow(scope.path.node, {
     visitAssignmentExpression: function(path) {
@@ -110,7 +110,7 @@ function findLastAssignedValue(scope, name) {
  * Else the path itself is returned.
  */
 export default function resolveToValue(path: NodePath): NodePath {
-  var node = path.node;
+  const node = path.node;
   if (types.VariableDeclarator.check(node)) {
     if (node.init) {
       return resolveToValue(path.get('init'));

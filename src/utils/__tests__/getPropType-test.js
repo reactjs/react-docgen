@@ -13,8 +13,8 @@
 jest.disableAutomock();
 
 describe('getPropType', () => {
-  var expression, statement;
-  var getPropType;
+  let expression, statement;
+  let getPropType;
 
   beforeEach(() => {
     getPropType = require('../getPropType').default;
@@ -22,7 +22,7 @@ describe('getPropType', () => {
   });
 
   it('detects simple prop types', () => {
-    var simplePropTypes = [
+    const simplePropTypes = [
       'array',
       'bool',
       'func',
@@ -134,7 +134,7 @@ describe('getPropType', () => {
 
   describe('resolve identifier to their values', () => {
     it('resolves variables to their values', () => {
-      var propTypeExpression = statement(`
+      const propTypeExpression = statement(`
         PropTypes.shape(shape);
         var shape = {bar: PropTypes.string};
       `).get('expression');
@@ -151,7 +151,7 @@ describe('getPropType', () => {
     });
 
     it('resolves simple identifier to their initialization value', () => {
-      var propTypeIdentifier = statement(`
+      const propTypeIdentifier = statement(`
         PropTypes.oneOf(TYPES);
         var TYPES = ["foo", "bar"];
       `).get('expression');
@@ -164,7 +164,7 @@ describe('getPropType', () => {
         ],
       });
 
-      var identifierInsideArray = statement(`
+      const identifierInsideArray = statement(`
         PropTypes.oneOf([FOO, BAR]);
         var FOO = "foo";
         var BAR = "bar";
@@ -180,7 +180,7 @@ describe('getPropType', () => {
     });
 
     it('resolves memberExpressions', () => {
-      var propTypeExpression = statement(`
+      const propTypeExpression = statement(`
         PropTypes.oneOf([TYPES.FOO, TYPES.BAR]);
         var TYPES = { FOO: "foo", BAR: "bar" };
       `).get('expression');
@@ -195,7 +195,7 @@ describe('getPropType', () => {
     });
 
     it('correctly resolves SpreadElements in arrays', () => {
-      var propTypeExpression = statement(`
+      const propTypeExpression = statement(`
         PropTypes.oneOf([...TYPES]);
         var TYPES = ["foo", "bar"];
       `).get('expression');
@@ -210,7 +210,7 @@ describe('getPropType', () => {
     });
 
     it('correctly resolves nested SpreadElements in arrays', () => {
-      var propTypeExpression = statement(`
+      const propTypeExpression = statement(`
         PropTypes.oneOf([...TYPES]);
         var TYPES = ["foo", ...TYPES2];
         var TYPES2 = ["bar"];
@@ -226,7 +226,7 @@ describe('getPropType', () => {
     });
 
     it('does not resolve computed values', () => {
-      var propTypeExpression = statement(`
+      const propTypeExpression = statement(`
         PropTypes.oneOf(Object.keys(TYPES));
         var TYPES = { FOO: "foo", BAR: "bar" };
       `).get('expression');
@@ -241,7 +241,7 @@ describe('getPropType', () => {
     });
 
     it('does not resolve external values', () => {
-      var propTypeExpression = statement(`
+      const propTypeExpression = statement(`
         PropTypes.oneOf(TYPES);
         import { TYPES } from './foo';
       `).get('expression');

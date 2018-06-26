@@ -14,9 +14,9 @@ jest.disableAutomock();
 jest.mock('../../Documentation');
 
 describe('defaultPropsHandler', () => {
-  var documentation;
-  var displayNameHandler;
-  var expression, statement;
+  let documentation;
+  let displayNameHandler;
+  let expression, statement;
 
   beforeEach(() => {
     ({ expression, statement } = require('../../../tests/utils'));
@@ -25,7 +25,7 @@ describe('defaultPropsHandler', () => {
   });
 
   it('extracts the displayName', () => {
-    var definition = expression('({displayName: "FooBar"})');
+    let definition = expression('({displayName: "FooBar"})');
     displayNameHandler(documentation, definition);
     expect(documentation.displayName).toBe('FooBar');
 
@@ -39,7 +39,7 @@ describe('defaultPropsHandler', () => {
   });
 
   it('resolves identifiers', () => {
-    var definition = statement(`
+    let definition = statement(`
       ({displayName: name})
       var name = 'abc';
     `).get('expression');
@@ -57,7 +57,7 @@ describe('defaultPropsHandler', () => {
   });
 
   it('ignores non-literal names', () => {
-    var definition = expression('({displayName: foo.bar})');
+    let definition = expression('({displayName: foo.bar})');
     expect(() => displayNameHandler(documentation, definition)).not.toThrow();
     expect(documentation.displayName).not.toBeDefined();
 

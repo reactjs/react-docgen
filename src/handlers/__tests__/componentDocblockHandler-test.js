@@ -14,12 +14,12 @@ jest.disableAutomock();
 jest.mock('../../Documentation');
 
 describe('componentDocblockHandler', () => {
-  var parse;
-  var documentation;
-  var componentDocblockHandler;
+  let parse;
+  let documentation;
+  let componentDocblockHandler;
 
   function lastStatement(src) {
-    var programPath = parse(src);
+    const programPath = parse(src);
     return programPath.get('body', programPath.node.body.length - 1);
   }
 
@@ -31,7 +31,7 @@ describe('componentDocblockHandler', () => {
 
   function test(definitionSrc, parseFunc) {
     it('finds docblocks for component definitions', () => {
-      var definition = parseFunc(`
+      const definition = parseFunc(`
         import something from 'somewhere';
 
         /**
@@ -45,7 +45,7 @@ describe('componentDocblockHandler', () => {
     });
 
     it('ignores other types of comments', () => {
-      var definition = parseFunc(`
+      let definition = parseFunc(`
         import something from 'somewhere';
 
         /*
@@ -67,7 +67,7 @@ describe('componentDocblockHandler', () => {
     });
 
     it('only considers the docblock directly above the definition', () => {
-      var definition = parseFunc(`
+      const definition = parseFunc(`
         import something from 'somewhere';
 
         /**
@@ -89,7 +89,7 @@ describe('componentDocblockHandler', () => {
   function testDecorators(classSrc, parseFunc, exportSrc = '') {
     describe('decorators', () => {
       it("uses the docblock above the decorator if it's the only one", () => {
-        var definition = parseFunc(`
+        const definition = parseFunc(`
           import something from 'somewhere';
           /**
            * Component description
@@ -105,7 +105,7 @@ describe('componentDocblockHandler', () => {
       });
 
       it('uses the component docblock if present', () => {
-        var definition = parseFunc(`
+        const definition = parseFunc(`
           import something from 'somewhere';
 
           ${exportSrc}

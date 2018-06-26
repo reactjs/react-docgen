@@ -13,41 +13,41 @@
 jest.disableAutomock();
 
 describe('resolveHOC', () => {
-  var builders;
-  var utils;
-  var resolveHOC;
+  let builders;
+  let utils;
+  let resolveHOC;
 
   function parse(src) {
-    var root = utils.parse(src);
+    const root = utils.parse(src);
     return root.get('body', root.node.body.length - 1, 'expression');
   }
 
   beforeEach(() => {
-    var recast = require('recast');
+    const recast = require('recast');
     builders = recast.types.builders;
     resolveHOC = require('../resolveHOC').default;
     utils = require('../../../tests/utils');
   });
 
   it('resolves simple hoc', () => {
-    var path = parse(['hoc(42);'].join('\n'));
+    const path = parse(['hoc(42);'].join('\n'));
     expect(resolveHOC(path).node).toEqualASTNode(builders.literal(42));
   });
 
   it('resolves simple hoc w/ multiple args', () => {
-    var path = parse(['hoc1(arg1a, arg1b)(42);'].join('\n'));
+    const path = parse(['hoc1(arg1a, arg1b)(42);'].join('\n'));
     expect(resolveHOC(path).node).toEqualASTNode(builders.literal(42));
   });
 
   it('resolves nested hocs', () => {
-    var path = parse(
+    const path = parse(
       ['hoc2(arg2b, arg2b)(', '  hoc1(arg1a, arg2a)(42)', ');'].join('\n'),
     );
     expect(resolveHOC(path).node).toEqualASTNode(builders.literal(42));
   });
 
   it('resolves really nested hocs', () => {
-    var path = parse(
+    const path = parse(
       [
         'hoc3(arg3a, arg3b)(',
         '  hoc2(arg2b, arg2b)(',

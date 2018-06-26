@@ -110,7 +110,7 @@ function handleGenericTypeAnnotation(path: NodePath) {
       raw: printValue(path),
     };
   } else {
-    let resolvedPath = resolveToValue(path.get('id'));
+    const resolvedPath = resolveToValue(path.get('id'));
     if (resolvedPath && resolvedPath.node.right) {
       type = getFlowTypeWithResolvedTypes(resolvedPath.get('right'));
     }

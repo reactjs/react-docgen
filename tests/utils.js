@@ -39,14 +39,14 @@ export function parseWithTemplate(src, template) {
 /**
  * Default template that simply defines React and PropTypes.
  */
-export var REACT_TEMPLATE = [
+export const REACT_TEMPLATE = [
   'var React = require("React");',
   'var PropTypes = React.PropTypes;',
   'var {PropTypes: OtherPropTypes} = require("React");',
   '%s;',
 ].join('\n');
 
-export var MODULE_TEMPLATE = [
+export const MODULE_TEMPLATE = [
   'var React = require("React");',
   'var PropTypes = React.PropTypes;',
   'var Component = React.createClass(%s);',

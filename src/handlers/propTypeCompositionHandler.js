@@ -17,7 +17,7 @@ import recast from 'recast';
 import resolveToModule from '../utils/resolveToModule';
 import resolveToValue from '../utils/resolveToValue';
 
-var {
+const {
   types: { namedTypes: types },
 } = recast;
 
@@ -26,7 +26,7 @@ var {
  * in the documentation.
  */
 function amendComposes(documentation, path) {
-  var moduleName = resolveToModule(path);
+  const moduleName = resolveToModule(path);
   if (moduleName) {
     documentation.addComposes(moduleName);
   }
@@ -37,8 +37,10 @@ function processObjectExpression(documentation, path) {
     switch (propertyPath.node.type) {
       case types.SpreadProperty.name: // bc for older estree version
       case types.SpreadElement.name:
-        var resolvedValuePath = resolveToValue(propertyPath.get('argument'));
-        amendComposes(documentation, resolvedValuePath);
+        amendComposes(
+          documentation,
+          resolveToValue(propertyPath.get('argument')),
+        );
         break;
     }
   });
@@ -48,7 +50,7 @@ export default function propTypeCompositionHandler(
   documentation: Documentation,
   path: NodePath,
 ) {
-  var propTypesPath = getMemberValuePath(path, 'propTypes');
+  let propTypesPath = getMemberValuePath(path, 'propTypes');
   if (!propTypesPath) {
     return;
   }

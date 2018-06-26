@@ -13,8 +13,8 @@
 jest.disableAutomock();
 
 describe('isExportsOrModuleAssignment', () => {
-  var recast;
-  var isExportsOrModuleAssignment;
+  let recast;
+  let isExportsOrModuleAssignment;
 
   function parse(src) {
     return new recast.types.NodePath(recast.parse(src).program.body[0]);

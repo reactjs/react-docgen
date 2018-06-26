@@ -1,10 +1,10 @@
-var React = require('react');
-var Foo = require('Foo');
+const React = require('react');
+const Foo = require('Foo');
 
 /**
  * General component description.
  */
-var Component = React.createClass({
+const Component = React.createClass({
   displayName: 'Component',
 
   propTypes: {

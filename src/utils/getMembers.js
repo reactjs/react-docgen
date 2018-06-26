@@ -24,7 +24,7 @@ type MemberDescriptor = {
 
 import recast from 'recast';
 
-var {
+const {
   types: { namedTypes: types },
 } = recast;
 
@@ -44,8 +44,8 @@ export default function getMembers(
   path: NodePath,
   includeRoot: boolean = false,
 ): Array<MemberDescriptor> {
-  var result = [];
-  var argumentsPath = null;
+  const result = [];
+  let argumentsPath = null;
   // eslint-disable-next-line no-constant-condition
   loop: while (true) {
     switch (true) {

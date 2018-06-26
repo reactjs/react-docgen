@@ -41,8 +41,10 @@ function setPropDescriptor(documentation: Documentation, path: NodePath): void {
       documentation.addComposes(name.node.name);
     }
   } else if (types.ObjectTypeProperty.check(path.node)) {
-    let type = getFlowType(path.get('value'));
-    let propDescriptor = documentation.getPropDescriptor(getPropertyName(path));
+    const type = getFlowType(path.get('value'));
+    const propDescriptor = documentation.getPropDescriptor(
+      getPropertyName(path),
+    );
     propDescriptor.required = !path.node.optional;
     propDescriptor.flowType = type;
 
@@ -62,7 +64,7 @@ export default function flowTypeHandler(
   documentation: Documentation,
   path: NodePath,
 ) {
-  let flowTypesPath = getFlowTypeFromReactComponent(path);
+  const flowTypesPath = getFlowTypeFromReactComponent(path);
 
   if (!flowTypesPath) {
     return;

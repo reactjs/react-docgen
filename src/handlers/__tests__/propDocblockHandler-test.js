@@ -10,16 +10,16 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
-var os = require('os');
-var EOL = os.EOL;
+const os = require('os');
+const EOL = os.EOL;
 
 jest.disableAutomock();
 jest.mock('../../Documentation');
 
 describe('propDocBlockHandler', () => {
-  var expression, statement;
-  var documentation;
-  var propDocBlockHandler;
+  let expression, statement;
+  let documentation;
+  let propDocBlockHandler;
 
   beforeEach(() => {
     ({ expression, statement } = require('../../../tests/utils'));
@@ -29,7 +29,7 @@ describe('propDocBlockHandler', () => {
 
   function test(getSrc, parse) {
     it('finds docblocks for prop types', () => {
-      var definition = parse(
+      const definition = parse(
         getSrc(
           `{
           /**
@@ -56,7 +56,7 @@ describe('propDocBlockHandler', () => {
     });
 
     it('can handle multline comments', () => {
-      var definition = parse(
+      const definition = parse(
         getSrc(
           `{
           /**
@@ -84,7 +84,7 @@ describe('propDocBlockHandler', () => {
     });
 
     it('ignores non-docblock comments', () => {
-      var definition = parse(
+      const definition = parse(
         getSrc(
           `{
           /**
@@ -113,7 +113,7 @@ describe('propDocBlockHandler', () => {
     });
 
     it('only considers the comment with the property below it', () => {
-      var definition = parse(
+      const definition = parse(
         getSrc(
           `{
           /**
@@ -137,7 +137,7 @@ describe('propDocBlockHandler', () => {
     });
 
     it('understands and ignores the spread operator', () => {
-      var definition = parse(
+      const definition = parse(
         getSrc(
           `{
           ...Foo.propTypes,
@@ -158,7 +158,7 @@ describe('propDocBlockHandler', () => {
     });
 
     it('resolves variables', () => {
-      var definition = parse(`
+      const definition = parse(`
         ${getSrc('Props')}
         var Props = {
           /**
@@ -211,7 +211,7 @@ describe('propDocBlockHandler', () => {
   });
 
   it('does not error if propTypes cannot be found', () => {
-    var definition = expression('{fooBar: 42}');
+    let definition = expression('{fooBar: 42}');
     expect(() => propDocBlockHandler(documentation, definition)).not.toThrow();
 
     definition = statement('class Foo {}');

@@ -15,7 +15,7 @@
 import resolveToValue from './resolveToValue';
 import recast from 'recast';
 
-var {
+const {
   types: { namedTypes: types },
 } = recast;
 
@@ -24,19 +24,19 @@ var {
  * E.g. foo.bar.baz becomes ['foo', 'bar', 'baz']
  */
 function toArray(path: NodePath): Array<string> {
-  var parts = [path];
-  var result = [];
+  const parts = [path];
+  let result = [];
 
   while (parts.length > 0) {
     path = parts.shift();
-    var node = path.node;
+    const node = path.node;
     if (types.CallExpression.check(node)) {
       parts.push(path.get('callee'));
       continue;
     } else if (types.MemberExpression.check(node)) {
       parts.push(path.get('object'));
       if (node.computed) {
-        var resolvedPath = resolveToValue(path.get('property'));
+        const resolvedPath = resolveToValue(path.get('property'));
         if (resolvedPath !== undefined) {
           result = result.concat(toArray(resolvedPath));
         } else {
@@ -56,7 +56,7 @@ function toArray(path: NodePath): Array<string> {
       result.push('this');
       continue;
     } else if (types.ObjectExpression.check(node)) {
-      var properties = path.get('properties').map(function(property) {
+      const properties = path.get('properties').map(function(property) {
         return (
           toString(property.get('key')) + ': ' + toString(property.get('value'))
         );

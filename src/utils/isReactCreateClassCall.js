@@ -15,7 +15,7 @@ import match from './match';
 import recast from 'recast';
 import resolveToModule from './resolveToModule';
 
-var {
+const {
   types: { namedTypes: types },
 } = recast;
 
@@ -31,7 +31,7 @@ function isReactCreateClassCallBuiltIn(path: NodePath): boolean {
   if (!match(path.node, { callee: { property: { name: 'createClass' } } })) {
     return false;
   }
-  var module = resolveToModule(path.get('callee', 'object'));
+  const module = resolveToModule(path.get('callee', 'object'));
   return Boolean(module && isReactModuleName(module));
 }
 
@@ -50,7 +50,7 @@ function isReactCreateClassCallModular(path: NodePath): boolean {
   if (!match(path.node, { type: 'CallExpression' })) {
     return false;
   }
-  var module = resolveToModule(path);
+  const module = resolveToModule(path);
   return Boolean(module && module === 'create-react-class');
 }
 

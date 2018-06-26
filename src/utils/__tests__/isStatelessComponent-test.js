@@ -13,8 +13,8 @@
 jest.disableAutomock();
 
 describe('isStatelessComponent', () => {
-  var isStatelessComponent;
-  var statement, parse;
+  let isStatelessComponent;
+  let statement, parse;
 
   beforeEach(() => {
     isStatelessComponent = require('../isStatelessComponent').default;
@@ -142,7 +142,7 @@ describe('isStatelessComponent', () => {
 
   describe('Stateless Function Components with React.createElement', () => {
     it('accepts different name than React', () => {
-      var def = parse(`
+      const def = parse(`
         var AlphaBetters = require('react');
         var Foo = () => AlphaBetters.createElement("div", null);
       `)
@@ -156,7 +156,7 @@ describe('isStatelessComponent', () => {
 
   describe('Stateless Function Components inside module pattern', () => {
     it('', () => {
-      var def = parse(`
+      const def = parse(`
         var React = require('react');
         var Foo = {
           Bar() { return <div />; },
@@ -170,11 +170,11 @@ describe('isStatelessComponent', () => {
         .get('declarations', 0)
         .get('init');
 
-      var bar = def.get('properties', 0);
-      var baz = def.get('properties', 1);
-      var hello = def.get('properties', 2);
-      var render = def.get('properties', 3);
-      var world = def.get('properties', 4);
+      const bar = def.get('properties', 0);
+      const baz = def.get('properties', 1);
+      const hello = def.get('properties', 2);
+      const render = def.get('properties', 3);
+      const world = def.get('properties', 4);
 
       expect(isStatelessComponent(bar)).toBe(true);
       expect(isStatelessComponent(baz)).toBe(true);
@@ -186,7 +186,7 @@ describe('isStatelessComponent', () => {
 
   describe('is not overzealous', () => {
     it('does not accept declarations with a render method', () => {
-      var def = statement(`
+      const def = statement(`
         class Foo {
           render() {
             return <div />;
@@ -197,7 +197,7 @@ describe('isStatelessComponent', () => {
     });
 
     it('does not accept React.Component classes', () => {
-      var def = parse(`
+      const def = parse(`
         var React = require('react');
         class Foo extends React.Component {
           render() {
@@ -210,7 +210,7 @@ describe('isStatelessComponent', () => {
     });
 
     it('does not accept React.createClass calls', () => {
-      var def = statement(`
+      const def = statement(`
         React.createClass({
           render() {
             return <div />;
@@ -225,14 +225,14 @@ describe('isStatelessComponent', () => {
   describe('resolving return values', () => {
     function test(desc, code) {
       it(desc, () => {
-        var def = parse(code).get('body', 1);
+        const def = parse(code).get('body', 1);
 
         expect(isStatelessComponent(def)).toBe(true);
       });
     }
 
     it('does not see ifs as separate block', () => {
-      var def = statement(`
+      const def = statement(`
         function Foo (props) {
           if (x) {
             return <div />;

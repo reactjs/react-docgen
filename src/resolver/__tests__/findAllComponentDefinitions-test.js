@@ -21,13 +21,13 @@ describe('findAllComponentDefinitions', () => {
 
   describe('React.createClass', () => {
     it('finds React.createClass', () => {
-      var source = `
+      const source = `
         var React = require("React");
         var Component = React.createClass({});
         module.exports = Component;
       `;
 
-      var result = parse(source);
+      const result = parse(source);
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(1);
       expect(result[0] instanceof recast.types.NodePath).toBe(true);
@@ -35,51 +35,51 @@ describe('findAllComponentDefinitions', () => {
     });
 
     it('finds React.createClass, independent of the var name', () => {
-      var source = `
+      const source = `
         var R = require("React");
         var Component = R.createClass({});
         module.exports = Component;
       `;
 
-      var result = parse(source);
+      const result = parse(source);
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(1);
     });
 
     it('does not process X.createClass of other modules', () => {
-      var source = `
+      const source = `
         var R = require("NoReact");
         var Component = R.createClass({});
         module.exports = Component;
       `;
 
-      var result = parse(source);
+      const result = parse(source);
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(0);
     });
 
     it('finds assignments to exports', () => {
-      var source = `
+      const source = `
         var R = require("React");
         var Component = R.createClass({});
         exports.foo = 42;
         exports.Component = Component;
       `;
 
-      var result = parse(source);
+      const result = parse(source);
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(1);
     });
 
     it('accepts multiple definitions', () => {
-      var source = `
+      let source = `
         var R = require("React");
         var ComponentA = R.createClass({});
         var ComponentB = R.createClass({});
         exports.ComponentB = ComponentB;
       `;
 
-      var result = parse(source);
+      let result = parse(source);
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(2);
 
@@ -98,7 +98,7 @@ describe('findAllComponentDefinitions', () => {
 
   describe('class definitions', () => {
     it('finds component classes', () => {
-      var source = `
+      const source = `
         import React from 'React';
         class ComponentA extends React.Component {}
         class ComponentB { render() {} }
@@ -107,29 +107,29 @@ describe('findAllComponentDefinitions', () => {
         class NotAComponent {}
       `;
 
-      var result = parse(source);
+      const result = parse(source);
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(4);
     });
 
     it('finds React.createClass, independent of the var name', () => {
-      var source = `
+      const source = `
         import R from 'React';
         class Component extends R.Component {};
       `;
 
-      var result = parse(source);
+      const result = parse(source);
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(1);
     });
 
     it('does not process X.createClass of other modules', () => {
-      var source = `
+      const source = `
         import R from 'FakeReact';
         class Component extends R.Component {};
       `;
 
-      var result = parse(source);
+      const result = parse(source);
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(0);
     });
@@ -137,7 +137,7 @@ describe('findAllComponentDefinitions', () => {
 
   describe('stateless components', () => {
     it('finds stateless components', () => {
-      var source = `
+      const source = `
         import React from 'React';
         let ComponentA = () => <div />;
         function ComponentB () { return React.createElement('div', null); }
@@ -161,30 +161,30 @@ describe('findAllComponentDefinitions', () => {
         };
       `;
 
-      var result = parse(source);
+      const result = parse(source);
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(7);
     });
 
     it('finds React.createElement, independent of the var name', () => {
-      var source = `
+      const source = `
         import AlphaBetters from 'react';
         function ComponentA () { return AlphaBetters.createElement('div', null); }
         function ComponentB () { return 7; }
       `;
 
-      var result = parse(source);
+      const result = parse(source);
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(1);
     });
 
     it('does not process X.createClass of other modules', () => {
-      var source = `
+      const source = `
         import R from 'FakeReact';
         const ComponentA = () => R.createElement('div', null);
       `;
 
-      var result = parse(source);
+      const result = parse(source);
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(0);
     });

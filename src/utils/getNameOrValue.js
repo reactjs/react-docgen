@@ -12,7 +12,7 @@
 
 import recast from 'recast';
 
-var {
+const {
   types: { namedTypes: types },
 } = recast;
 
@@ -21,7 +21,7 @@ var {
  * its value.
  */
 export default function getNameOrValue(path: NodePath, raw?: boolean): string {
-  var node = path.node;
+  const node = path.node;
   switch (node.type) {
     case types.Identifier.name:
       return node.name;

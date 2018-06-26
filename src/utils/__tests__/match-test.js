@@ -13,7 +13,7 @@
 jest.disableAutomock();
 
 describe('match', () => {
-  var match;
+  let match;
 
   beforeEach(() => {
     match = require('../match').default;

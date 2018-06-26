@@ -10,7 +10,7 @@
  *
  */
 
-var reactModules = [
+const reactModules = [
   'react',
   'react/addons',
   'react-native',

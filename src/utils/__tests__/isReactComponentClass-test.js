@@ -13,8 +13,8 @@
 jest.disableAutomock();
 
 describe('isReactComponentClass', () => {
-  var isReactComponentClass;
-  var expression, statement, parse;
+  let isReactComponentClass;
+  let expression, statement, parse;
 
   beforeEach(() => {
     isReactComponentClass = require('../isReactComponentClass').default;
@@ -23,27 +23,27 @@ describe('isReactComponentClass', () => {
 
   describe('render method', () => {
     it('accepts class declarations with a render method', () => {
-      var def = statement('class Foo { render() {}}');
+      const def = statement('class Foo { render() {}}');
       expect(isReactComponentClass(def)).toBe(true);
     });
 
     it('accepts class expression with a render method', () => {
-      var def = expression('class { render() {}}');
+      const def = expression('class { render() {}}');
       expect(isReactComponentClass(def)).toBe(true);
     });
 
     it('ignores static render methods', () => {
-      var def = statement('class Foo { static render() {}}');
+      const def = statement('class Foo { static render() {}}');
       expect(isReactComponentClass(def)).toBe(false);
     });
 
     it('ignores dynamic render methods', () => {
-      var def = statement('class Foo { static [render]() {}}');
+      const def = statement('class Foo { static [render]() {}}');
       expect(isReactComponentClass(def)).toBe(false);
     });
 
     it('ignores getter or setter render methods', () => {
-      var def = statement('class Foo { get render() {}}');
+      let def = statement('class Foo { get render() {}}');
       expect(isReactComponentClass(def)).toBe(false);
 
       def = statement('class Foo { set render(value) {}}');
@@ -53,7 +53,7 @@ describe('isReactComponentClass', () => {
 
   describe('JSDoc @extends React.Component', () => {
     it('accepts class declarations declaring `@extends React.Component` in JSDoc', () => {
-      var def = parse(`
+      const def = parse(`
         var React = require('react');
         /**
          * @class Foo
@@ -68,7 +68,7 @@ describe('isReactComponentClass', () => {
 
   describe('React.Component inheritance', () => {
     it('accepts class declarations extending React.Component', () => {
-      var def = parse(`
+      const def = parse(`
         var React = require('react');
         class Foo extends React.Component {}
       `).get('body', 1);
@@ -77,7 +77,7 @@ describe('isReactComponentClass', () => {
     });
 
     it('accepts class expressions extending React.Component', () => {
-      var def = parse(`
+      const def = parse(`
         var React = require('react');
         var Foo = class extends React.Component {}
       `).get('body', 1, 'declarations', 0, 'init');
@@ -86,7 +86,7 @@ describe('isReactComponentClass', () => {
     });
 
     it('resolves the super class reference', () => {
-      var def = parse(`
+      const def = parse(`
         var {Component} = require('react');
         var C = Component;
         class Foo extends C {}
@@ -96,7 +96,7 @@ describe('isReactComponentClass', () => {
     });
 
     it('does not accept references to other modules', () => {
-      var def = parse(`
+      const def = parse(`
         var {Component} = require('FakeReact');
         class Foo extends Component {}
       `).get('body', 1);
@@ -105,7 +105,7 @@ describe('isReactComponentClass', () => {
     });
 
     it('does not consider super class if render method is present', () => {
-      var def = parse(`
+      const def = parse(`
         var {Component} = require('FakeReact');
         class Foo extends Component { render() {} }
       `).get('body', 1);

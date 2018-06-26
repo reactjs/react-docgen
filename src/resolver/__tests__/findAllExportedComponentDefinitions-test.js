@@ -26,13 +26,13 @@ describe('findAllExportedComponentDefinitions', () => {
   describe('CommonJS module exports', () => {
     describe('React.createClass', () => {
       it('finds React.createClass', () => {
-        var parsed = parse(`
+        const parsed = parse(`
           var React = require("React");
           var Component = React.createClass({});
           module.exports = Component;
         `);
-        var actual = findComponents(parsed);
-        var expected = parsed.get(
+        const actual = findComponents(parsed);
+        const expected = parsed.get(
           'body',
           1,
           'declarations',
@@ -47,23 +47,23 @@ describe('findAllExportedComponentDefinitions', () => {
       });
 
       it('finds React.createClass, independent of the var name', () => {
-        var parsed = parse(`
+        const parsed = parse(`
           var R = require("React");
           var Component = R.createClass({});
           module.exports = Component;
         `);
-        var actual = findComponents(parsed);
+        const actual = findComponents(parsed);
 
         expect(actual.length).toBe(1);
       });
 
       it('does not process X.createClass of other modules', () => {
-        var parsed = parse(`
+        const parsed = parse(`
           var R = require("NoReact");
           var Component = R.createClass({});
           module.exports = Component;
         `);
-        var actual = findComponents(parsed);
+        const actual = findComponents(parsed);
 
         expect(actual.length).toBe(0);
       });
@@ -71,31 +71,31 @@ describe('findAllExportedComponentDefinitions', () => {
 
     describe('class definitions', () => {
       it('finds class declarations', () => {
-        var parsed = parse(`
+        const parsed = parse(`
           var React = require("React");
           class Component extends React.Component {}
           module.exports = Component;
         `);
-        var actual = findComponents(parsed);
-        var expected = parsed.get('body', 1);
+        const actual = findComponents(parsed);
+        const expected = parsed.get('body', 1);
 
         expect(actual.length).toBe(1);
         expect(actual[0].node).toBe(expected.node);
       });
 
       it('finds class expression', () => {
-        var parsed = parse(`
+        const parsed = parse(`
           var React = require("React");
           var Component = class extends React.Component {}
           module.exports = Component;
         `);
-        var actual = findComponents(parsed);
+        const actual = findComponents(parsed);
 
         expect(actual.length).toBe(1);
       });
 
       it('finds class definition, independent of the var name', () => {
-        var parsed = parse(`
+        const parsed = parse(`
           var R = require("React");
           class Component extends R.Component {}
           module.exports = Component;
@@ -108,36 +108,36 @@ describe('findAllExportedComponentDefinitions', () => {
 
     describe('stateless components', () => {
       it('finds stateless component with JSX', () => {
-        var parsed = parse(`
+        const parsed = parse(`
           var React = require("React");
           var Component = () => <div />;
           module.exports = Component;
         `);
-        var actual = findComponents(parsed);
-        var expected = parsed.get('body', 1, 'declarations', 0, 'init');
+        const actual = findComponents(parsed);
+        const expected = parsed.get('body', 1, 'declarations', 0, 'init');
 
         expect(actual.length).toBe(1);
         expect(actual[0].node).toBe(expected.node);
       });
 
       it('finds stateless components with React.createElement, independent of the var name', () => {
-        var parsed = parse(`
+        const parsed = parse(`
           var R = require("React");
           var Component = () => R.createElement('div', {});
           module.exports = Component;
         `);
-        var actual = findComponents(parsed);
+        const actual = findComponents(parsed);
 
         expect(actual.length).toBe(1);
       });
 
       it('does not process X.createElement of other modules', () => {
-        var parsed = parse(`
+        const parsed = parse(`
           var R = require("NoReact");
           var Component = () => R.createElement({});
           module.exports = Component;
         `);
-        var actual = findComponents(parsed);
+        const actual = findComponents(parsed);
 
         expect(actual.length).toBe(0);
       });
@@ -146,27 +146,27 @@ describe('findAllExportedComponentDefinitions', () => {
     describe('module.exports = <C>; / exports.foo = <C>;', () => {
       describe('React.createClass', () => {
         it('finds assignments to exports', () => {
-          var parsed = parse(`
+          const parsed = parse(`
             var R = require("React");
             var Component = R.createClass({});
             exports.foo = 42;
             exports.Component = Component;
           `);
-          var actual = findComponents(parsed);
+          const actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
         });
 
         it('finds multiple exported components', () => {
-          var parsed = parse(`
+          const parsed = parse(`
             var R = require("React");
             var ComponentA = R.createClass({});
             var ComponentB = R.createClass({});
             exports.ComponentA = ComponentA;
             exports.ComponentB = ComponentB;
           `);
-          var actual = findComponents(parsed);
-          var expectedA = parsed.get(
+          const actual = findComponents(parsed);
+          const expectedA = parsed.get(
             'body',
             1,
             'declarations',
@@ -175,7 +175,7 @@ describe('findAllExportedComponentDefinitions', () => {
             'arguments',
             0,
           );
-          var expectedB = parsed.get(
+          const expectedB = parsed.get(
             'body',
             2,
             'declarations',
@@ -191,15 +191,15 @@ describe('findAllExportedComponentDefinitions', () => {
         });
 
         it('finds multiple exported components with hocs', () => {
-          var parsed = parse(`
+          const parsed = parse(`
             var R = require("React");
             var ComponentA = R.createClass({});
             var ComponentB = R.createClass({});
             exports.ComponentA = hoc(ComponentA);
             exports.ComponentB = hoc(ComponentB);
           `);
-          var actual = findComponents(parsed);
-          var expectedA = parsed.get(
+          const actual = findComponents(parsed);
+          const expectedA = parsed.get(
             'body',
             1,
             'declarations',
@@ -208,7 +208,7 @@ describe('findAllExportedComponentDefinitions', () => {
             'arguments',
             0,
           );
-          var expectedB = parsed.get(
+          const expectedB = parsed.get(
             'body',
             2,
             'declarations',
@@ -224,14 +224,14 @@ describe('findAllExportedComponentDefinitions', () => {
         });
 
         it('finds only exported components', () => {
-          var parsed = parse(`
+          let parsed = parse(`
             var R = require("React");
             var ComponentA = R.createClass({});
             var ComponentB = R.createClass({});
             exports.ComponentB = ComponentB;
           `);
-          var actual = findComponents(parsed);
-          var expected = parsed.get(
+          let actual = findComponents(parsed);
+          const expected = parsed.get(
             'body',
             2,
             'declarations',
@@ -256,13 +256,13 @@ describe('findAllExportedComponentDefinitions', () => {
         });
 
         it('finds exported components only once', () => {
-          var parsed = parse(`
+          const parsed = parse(`
             var R = require("React");
             var ComponentA = R.createClass({});
             exports.ComponentA = ComponentA;
             exports.ComponentB = ComponentA;
           `);
-          var actual = findComponents(parsed);
+          const actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
         });
@@ -270,30 +270,30 @@ describe('findAllExportedComponentDefinitions', () => {
 
       describe('class definition', () => {
         it('finds assignments to exports', () => {
-          var parsed = parse(`
+          const parsed = parse(`
             var R = require("React");
             class Component extends R.Component {}
             exports.foo = 42;
             exports.Component = Component;
           `);
-          var actual = findComponents(parsed);
-          var expected = parsed.get('body', 1);
+          const actual = findComponents(parsed);
+          const expected = parsed.get('body', 1);
 
           expect(actual.length).toBe(1);
           expect(actual[0].node).toBe(expected.node);
         });
 
         it('finds multiple exported components', () => {
-          var parsed = parse(`
+          const parsed = parse(`
             var R = require("React");
             class ComponentA extends R.Component {}
             class ComponentB extends R.Component {}
             exports.ComponentA = ComponentA;
             exports.ComponentB = ComponentB;
           `);
-          var actual = findComponents(parsed);
-          var expectedA = parsed.get('body', 1);
-          var expectedB = parsed.get('body', 2);
+          const actual = findComponents(parsed);
+          const expectedA = parsed.get('body', 1);
+          const expectedB = parsed.get('body', 2);
 
           expect(actual.length).toBe(2);
           expect(actual[0].node).toBe(expectedA.node);
@@ -301,13 +301,13 @@ describe('findAllExportedComponentDefinitions', () => {
         });
 
         it('finds only exported components', () => {
-          var parsed = parse(`
+          let parsed = parse(`
             var R = require("React");
             class ComponentA extends R.Component {}
             class ComponentB extends R.Component {}
             exports.ComponentB = ComponentB;
           `);
-          var actual = findComponents(parsed);
+          let actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
 
@@ -323,13 +323,13 @@ describe('findAllExportedComponentDefinitions', () => {
         });
 
         it('finds exported components only once', () => {
-          var parsed = parse(`
+          const parsed = parse(`
             var R = require("React");
             class ComponentA extends R.Component {}
             exports.ComponentA = ComponentA;
             exports.ComponentB = ComponentA;
           `);
-          var actual = findComponents(parsed);
+          const actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
         });
@@ -341,13 +341,13 @@ describe('findAllExportedComponentDefinitions', () => {
     describe('export default <component>;', () => {
       describe('React.createClass', () => {
         it('finds default export', () => {
-          var parsed = parse(`
+          let parsed = parse(`
             var React = require("React");
             var Component = React.createClass({});
             export default Component
           `);
-          var actual = findComponents(parsed);
-          var expected = parsed.get(
+          let actual = findComponents(parsed);
+          const expected = parsed.get(
             'body',
             1,
             'declarations',
@@ -370,13 +370,13 @@ describe('findAllExportedComponentDefinitions', () => {
         });
 
         it('finds multiple exported components', () => {
-          var parsed = parse(`
+          let parsed = parse(`
             import React, { createElement } from "React"
             export var Component = React.createClass({});
             export default React.createClass({});
           `);
-          var actual = findComponents(parsed);
-          var expectedA = parsed.get(
+          let actual = findComponents(parsed);
+          const expectedA = parsed.get(
             'body',
             1,
             'declaration',
@@ -386,7 +386,13 @@ describe('findAllExportedComponentDefinitions', () => {
             'arguments',
             0,
           );
-          var expectedB = parsed.get('body', 2, 'declaration', 'arguments', 0);
+          const expectedB = parsed.get(
+            'body',
+            2,
+            'declaration',
+            'arguments',
+            0,
+          );
 
           expect(actual.length).toBe(2);
           expect(actual[0].node).toBe(expectedA.node);
@@ -404,12 +410,12 @@ describe('findAllExportedComponentDefinitions', () => {
         });
 
         it('finds only exported components', () => {
-          var parsed = parse(`
+          const parsed = parse(`
             import React, { createElement } from "React"
             var Component = React.createClass({})
             export default React.createClass({});
           `);
-          var actual = findComponents(parsed);
+          const actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
         });
@@ -417,13 +423,13 @@ describe('findAllExportedComponentDefinitions', () => {
 
       describe('class definition', () => {
         it('finds default export', () => {
-          var parsed = parse(`
+          let parsed = parse(`
             import React from 'React';
             class Component extends React.Component {}
             export default Component;
           `);
-          var actual = findComponents(parsed);
-          var expected = parsed.get('body', 1);
+          let actual = findComponents(parsed);
+          const expected = parsed.get('body', 1);
 
           expect(actual.length).toBe(1);
           expect(actual[0].node).toBe(expected.node);
@@ -438,13 +444,13 @@ describe('findAllExportedComponentDefinitions', () => {
         });
 
         it('finds multiple exported components', () => {
-          var parsed = parse(`
+          let parsed = parse(`
             import React from 'React';
             export var Component = class extends React.Component {};
             export default class ComponentB extends React.Component{};
           `);
-          var actual = findComponents(parsed);
-          var expectedA = parsed.get(
+          let actual = findComponents(parsed);
+          const expectedA = parsed.get(
             'body',
             1,
             'declaration',
@@ -452,7 +458,7 @@ describe('findAllExportedComponentDefinitions', () => {
             0,
             'init',
           );
-          var expectedB = parsed.get('body', 2, 'declaration');
+          const expectedB = parsed.get('body', 2, 'declaration');
 
           expect(actual.length).toBe(2);
           expect(actual[0].node).toBe(expectedA.node);
@@ -470,12 +476,12 @@ describe('findAllExportedComponentDefinitions', () => {
         });
 
         it('finds only exported components', () => {
-          var parsed = parse(`
+          const parsed = parse(`
             import React from 'React';
             var Component = class extends React.Component {};
             export default class ComponentB extends React.Component{};
           `);
-          var actual = findComponents(parsed);
+          const actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
         });
@@ -485,12 +491,12 @@ describe('findAllExportedComponentDefinitions', () => {
     describe('export var foo = <C>, ...;', () => {
       describe('React.createClass', () => {
         it('finds named exports', () => {
-          var parsed = parse(`
+          let parsed = parse(`
             var React = require("React");
             export var somethingElse = 42, Component = React.createClass({});
           `);
-          var actual = findComponents(parsed);
-          var expected = parsed.get(
+          let actual = findComponents(parsed);
+          const expected = parsed.get(
             'body',
             1,
             'declaration',
@@ -533,12 +539,12 @@ describe('findAllExportedComponentDefinitions', () => {
         });
 
         it('finds multiple components', () => {
-          var parsed = parse(`
+          let parsed = parse(`
             var R = require("React");
             export var ComponentA = R.createClass({}),
               ComponentB = R.createClass({});
           `);
-          var actual = findComponents(parsed);
+          let actual = findComponents(parsed);
 
           expect(actual.length).toBe(2);
 
@@ -554,12 +560,12 @@ describe('findAllExportedComponentDefinitions', () => {
         });
 
         it('finds only exported components', () => {
-          var parsed = parse(`
+          const parsed = parse(`
             var R = require("React");
             var ComponentA = R.createClass({});
             export let ComponentB = R.createClass({});
           `);
-          var actual = findComponents(parsed);
+          const actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
         });
@@ -567,13 +573,13 @@ describe('findAllExportedComponentDefinitions', () => {
 
       describe('class definition', () => {
         it('finds named exports', () => {
-          var parsed = parse(`
+          let parsed = parse(`
             import React from 'React';
             export var somethingElse = 42,
               Component = class extends React.Component {};
           `);
-          var actual = findComponents(parsed);
-          var expected = parsed.get(
+          let actual = findComponents(parsed);
+          const expected = parsed.get(
             'body',
             1,
             'declaration',
@@ -618,12 +624,12 @@ describe('findAllExportedComponentDefinitions', () => {
         });
 
         it('finds multiple components', () => {
-          var parsed = parse(`
+          let parsed = parse(`
             import React from 'React';
             export var ComponentA  = class extends React.Component {};
             export var ComponentB  = class extends React.Component {};
           `);
-          var actual = findComponents(parsed);
+          let actual = findComponents(parsed);
 
           expect(actual.length).toBe(2);
 
@@ -639,12 +645,12 @@ describe('findAllExportedComponentDefinitions', () => {
         });
 
         it('finds only exported components', () => {
-          var parsed = parse(`
+          const parsed = parse(`
             import React from 'React';
             var ComponentA  = class extends React.Component {}
             export var ComponentB = class extends React.Component {};
           `);
-          var actual = findComponents(parsed);
+          const actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
           expect(actual[0].node.type).toBe('ClassExpression');
@@ -653,12 +659,12 @@ describe('findAllExportedComponentDefinitions', () => {
 
       describe('stateless components', () => {
         it('finds named exports', () => {
-          var parsed = parse(`
+          let parsed = parse(`
             import React from 'React';
             export var somethingElse = 42,
               Component = () => <div />;
           `);
-          var actual = findComponents(parsed);
+          let actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
           expect(actual[0].node.type).toBe('ArrowFunctionExpression');
@@ -696,12 +702,12 @@ describe('findAllExportedComponentDefinitions', () => {
         });
 
         it('finds multiple components', () => {
-          var parsed = parse(`
+          let parsed = parse(`
             import React from 'React';
             export var ComponentA = () => <div />
             export var ComponentB = () => <div />
           `);
-          var actual = findComponents(parsed);
+          let actual = findComponents(parsed);
 
           expect(actual.length).toBe(2);
 
@@ -717,12 +723,12 @@ describe('findAllExportedComponentDefinitions', () => {
         });
 
         it('finds only exported components', () => {
-          var parsed = parse(`
+          const parsed = parse(`
             import React from 'React';
             var ComponentA  = class extends React.Component {}
             export var ComponentB = function() { return <div />; };
           `);
-          var actual = findComponents(parsed);
+          const actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
           expect(actual[0].node.type).toBe('FunctionExpression');
@@ -733,14 +739,14 @@ describe('findAllExportedComponentDefinitions', () => {
     describe('export {<C>};', () => {
       describe('React.createClass', () => {
         it('finds exported specifiers', () => {
-          var parsed = parse(`
+          let parsed = parse(`
             var React = require("React");
             var foo = 42;
             var Component = React.createClass({});
             export {foo, Component}
           `);
-          var actual = findComponents(parsed);
-          var expected = parsed.get(
+          let actual = findComponents(parsed);
+          const expected = parsed.get(
             'body',
             2,
             'declarations',
@@ -776,48 +782,48 @@ describe('findAllExportedComponentDefinitions', () => {
         });
 
         it('finds multiple components', () => {
-          var parsed = parse(`
+          const parsed = parse(`
             var R = require("React");
             var ComponentA = R.createClass({});
             var ComponentB = R.createClass({});
             export {ComponentA as foo, ComponentB};
           `);
-          var actual = findComponents(parsed);
+          const actual = findComponents(parsed);
 
           expect(actual.length).toBe(2);
         });
 
         it('finds multiple components with hocs', () => {
-          var parsed = parse(`
+          const parsed = parse(`
             var R = require("React");
             var ComponentA = hoc(R.createClass({}));
             var ComponentB = hoc(R.createClass({}));
             export {ComponentA as foo, ComponentB};
           `);
-          var actual = findComponents(parsed);
+          const actual = findComponents(parsed);
 
           expect(actual.length).toBe(2);
         });
 
         it('finds only exported components', () => {
-          var parsed = parse(`
+          const parsed = parse(`
             var R = require("React");
             var ComponentA = R.createClass({});
             var ComponentB = R.createClass({});
             export {ComponentA}
           `);
-          var actual = findComponents(parsed);
+          const actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
         });
 
         it('finds exported components only once', () => {
-          var parsed = parse(`
+          const parsed = parse(`
             var R = require("React");
             var ComponentA = R.createClass({});
             export {ComponentA as foo, ComponentA as bar};
           `);
-          var actual = findComponents(parsed);
+          const actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
         });
@@ -825,13 +831,13 @@ describe('findAllExportedComponentDefinitions', () => {
 
       describe('class definition', () => {
         it('finds exported specifiers', () => {
-          var parsed = parse(`
+          let parsed = parse(`
             import React from 'React';
             var foo = 42;
             var Component = class extends React.Component {};
             export {foo, Component};
           `);
-          var actual = findComponents(parsed);
+          let actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
           expect(actual[0].node.type).toBe('ClassExpression');
@@ -861,19 +867,19 @@ describe('findAllExportedComponentDefinitions', () => {
         });
 
         it('finds multiple components', () => {
-          var parsed = parse(`
+          const parsed = parse(`
             import React from 'React';
             var ComponentA = class extends React.Component {};
             var ComponentB = class extends React.Component {};
             export {ComponentA as foo, ComponentB};
           `);
-          var actual = findComponents(parsed);
+          const actual = findComponents(parsed);
 
           expect(actual.length).toBe(2);
         });
 
         it('finds multiple components with hocs', () => {
-          var parsed = parse(`
+          const parsed = parse(`
             import React from 'React';
             class ComponentA extends React.Component {};
             class ComponentB extends React.Component {};
@@ -881,32 +887,32 @@ describe('findAllExportedComponentDefinitions', () => {
             var WrappedB = hoc(ComponentB);
             export {WrappedA, WrappedB};
           `);
-          var actual = findComponents(parsed);
+          const actual = findComponents(parsed);
 
           expect(actual.length).toBe(2);
         });
 
         it('finds only exported components', () => {
-          var parsed = parse(`
+          const parsed = parse(`
             import React from 'React';
             var ComponentA = class extends React.Component {};
             var ComponentB = class extends React.Component {};
             export {ComponentA};
           `);
-          var actual = findComponents(parsed);
+          const actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
           expect(actual[0].node.type).toBe('ClassExpression');
         });
 
         it('finds exported components only once', () => {
-          var parsed = parse(`
+          const parsed = parse(`
             import React from 'React';
             var ComponentA = class extends React.Component {};
             var ComponentB = class extends React.Component {};
             export {ComponentA as foo, ComponentA as bar};
           `);
-          var actual = findComponents(parsed);
+          const actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
           expect(actual[0].node.type).toBe('ClassExpression');
@@ -915,13 +921,13 @@ describe('findAllExportedComponentDefinitions', () => {
 
       describe('stateless components', () => {
         it('finds exported specifiers', () => {
-          var parsed = parse(`
+          let parsed = parse(`
             import React from 'React';
             var foo = 42;
             function Component() { return <div />; }
             export {foo, Component};
           `);
-          var actual = findComponents(parsed);
+          let actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
           expect(actual[0].node.type).toBe('FunctionDeclaration');
@@ -951,38 +957,38 @@ describe('findAllExportedComponentDefinitions', () => {
         });
 
         it('finds multiple components', () => {
-          var parsed = parse(`
+          const parsed = parse(`
             import React from 'React';
             var ComponentA = () => <div />;
             function ComponentB() { return <div />; }
             export {ComponentA as foo, ComponentB};
           `);
-          var actual = findComponents(parsed);
+          const actual = findComponents(parsed);
 
           expect(actual.length).toBe(2);
         });
 
         it('finds only exported components', () => {
-          var parsed = parse(`
+          const parsed = parse(`
             import React from 'React';
             var ComponentA = () => <div />;
             var ComponentB = () => <div />;
             export {ComponentA};
           `);
-          var actual = findComponents(parsed);
+          const actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
           expect(actual[0].node.type).toBe('ArrowFunctionExpression');
         });
 
         it('finds exported components only once', () => {
-          var parsed = parse(`
+          const parsed = parse(`
             import React from 'React';
             var ComponentA = () => <div />;
             var ComponentB = () => <div />;
             export {ComponentA as foo, ComponentA as bar};
           `);
-          var actual = findComponents(parsed);
+          const actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
           expect(actual[0].node.type).toBe('ArrowFunctionExpression');
@@ -993,35 +999,35 @@ describe('findAllExportedComponentDefinitions', () => {
     describe('export <C>;', () => {
       describe('class definition', () => {
         it('finds named exports', () => {
-          var parsed = parse(`
+          const parsed = parse(`
             import React from 'React';
             export var foo = 42;
             export class Component extends React.Component {};
           `);
-          var actual = findComponents(parsed);
+          const actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
           expect(actual[0].node.type).toBe('ClassDeclaration');
         });
 
         it('finds multiple components', () => {
-          var parsed = parse(`
+          const parsed = parse(`
             import React from 'React';
             export class ComponentA extends React.Component {};
             export class ComponentB extends React.Component {};
           `);
-          var actual = findComponents(parsed);
+          const actual = findComponents(parsed);
 
           expect(actual.length).toBe(2);
         });
 
         it('finds only exported components', () => {
-          var parsed = parse(`
+          const parsed = parse(`
             import React from 'React';
             class ComponentA extends React.Component {};
             export class ComponentB extends React.Component {};
           `);
-          var actual = findComponents(parsed);
+          const actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
           expect(actual[0].node.type).toBe('ClassDeclaration');
@@ -1030,35 +1036,35 @@ describe('findAllExportedComponentDefinitions', () => {
 
       describe('function declaration', () => {
         it('finds named exports', () => {
-          var parsed = parse(`
+          const parsed = parse(`
             import React from 'React';
             export var foo = 42;
             export function Component() { return <div />; };
           `);
-          var actual = findComponents(parsed);
+          const actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
           expect(actual[0].node.type).toBe('FunctionDeclaration');
         });
 
         it('finds multiple components', () => {
-          var parsed = parse(`
+          const parsed = parse(`
             import React from 'React';
             export function ComponentA() { return <div />; };
             export function ComponentB() { return <div />; };
           `);
-          var actual = findComponents(parsed);
+          const actual = findComponents(parsed);
 
           expect(actual.length).toBe(2);
         });
 
         it('finds only exported components', () => {
-          var parsed = parse(`
+          const parsed = parse(`
             import React from 'React';
             function ComponentA() { return <div />; }
             export function ComponentB() { return <div />; };
           `);
-          var actual = findComponents(parsed);
+          const actual = findComponents(parsed);
 
           expect(actual.length).toBe(1);
           expect(actual[0].node.type).toBe('FunctionDeclaration');

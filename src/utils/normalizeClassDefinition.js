@@ -13,10 +13,10 @@ import getMemberExpressionRoot from '../utils/getMemberExpressionRoot';
 import getMembers from '../utils/getMembers';
 import recast from 'recast';
 
-var {
+const {
   types: { namedTypes: types, builders },
 } = recast;
-var ignore = () => false;
+const ignore = () => false;
 
 /**
  * Given a class definition (i.e. `class` declaration or expression), this
@@ -40,14 +40,14 @@ var ignore = () => false;
 export default function normalizeClassDefinition(
   classDefinition: NodePath,
 ): void {
-  var variableName;
+  let variableName;
   if (types.ClassDeclaration.check(classDefinition.node)) {
     // Class declarations don't have an id, e.g.: `export default class extends React.Component {}`
     if (classDefinition.node.id) {
       variableName = classDefinition.node.id.name;
     }
   } else if (types.ClassExpression.check(classDefinition.node)) {
-    var { parentPath } = classDefinition;
+    let { parentPath } = classDefinition;
     while (
       parentPath.node !== classDefinition.scope.node &&
       !types.BlockStatement.check(parentPath.node)
@@ -73,7 +73,7 @@ export default function normalizeClassDefinition(
     return;
   }
 
-  var scopeRoot = classDefinition.scope;
+  const scopeRoot = classDefinition.scope;
   recast.visit(scopeRoot.node, {
     visitFunction: ignore,
     visitClassDeclaration: ignore,
@@ -82,14 +82,14 @@ export default function normalizeClassDefinition(
     visitForStatement: ignore,
     visitAssignmentExpression: function(path) {
       if (types.MemberExpression.check(path.node.left)) {
-        var first = getMemberExpressionRoot(path.get('left'));
+        const first = getMemberExpressionRoot(path.get('left'));
         if (
           types.Identifier.check(first.node) &&
           first.node.name === variableName
         ) {
-          var [member] = getMembers(path.get('left'));
+          const [member] = getMembers(path.get('left'));
           if (member && !member.path.node.computed) {
-            var classProperty = builders.classProperty(
+            const classProperty = builders.classProperty(
               member.path.node,
               path.node.right,
               null,

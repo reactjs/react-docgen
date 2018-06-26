@@ -11,8 +11,8 @@
 /*global describe, beforeEach, it, expect*/
 
 describe('normalizeClassDefinition', () => {
-  var parse;
-  var normalizeClassDefinition;
+  let parse;
+  let normalizeClassDefinition;
 
   beforeEach(() => {
     ({ parse } = require('../../../tests/utils'));
@@ -20,13 +20,13 @@ describe('normalizeClassDefinition', () => {
   });
 
   it('finds assignments to class declarations', () => {
-    var classDefinition = parse(`
+    const classDefinition = parse(`
       class Foo {}
       Foo.propTypes = 42;
     `).get('body', 0);
 
     normalizeClassDefinition(classDefinition);
-    var {
+    const {
       node: {
         body: {
           body: [classProperty],
@@ -40,14 +40,14 @@ describe('normalizeClassDefinition', () => {
   });
 
   it('should not fail on classes without ids', () => {
-    var classDefinition = parse(`
+    const classDefinition = parse(`
       export default class extends React.Component {
         static propTypes = 42;
       }
     `).get('body', 0, 'declaration');
 
     normalizeClassDefinition(classDefinition);
-    var {
+    const {
       node: {
         body: {
           body: [classProperty],
@@ -61,13 +61,13 @@ describe('normalizeClassDefinition', () => {
   });
 
   it('finds assignments to class expressions', () => {
-    var classDefinition = parse(`
+    let classDefinition = parse(`
       var Foo = class {};
       Foo.propTypes = 42;
     `).get('body', 0, 'declarations', 0, 'init');
 
     normalizeClassDefinition(classDefinition);
-    var {
+    let {
       node: {
         body: {
           body: [classProperty],
@@ -97,7 +97,7 @@ describe('normalizeClassDefinition', () => {
   });
 
   it('ignores assignments further up the tree', () => {
-    var classDefinition = parse(`
+    const classDefinition = parse(`
       var Foo = function() {
         (class {});
       };
@@ -115,7 +115,7 @@ describe('normalizeClassDefinition', () => {
     );
 
     normalizeClassDefinition(classDefinition);
-    var {
+    const {
       node: {
         body: {
           body: [classProperty],

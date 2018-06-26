@@ -14,13 +14,13 @@ import getNameOrValue from './getNameOrValue';
 import { String as toString } from './expressionTo';
 import recast from 'recast';
 
-var {
+const {
   types: { namedTypes: types },
 } = recast;
 
 function resolveName(path) {
   if (types.VariableDeclaration.check(path.node)) {
-    var declarations = path.get('declarations');
+    const declarations = path.get('declarations');
     if (declarations.value.length && declarations.value.length !== 1) {
       throw new TypeError(
         'Got unsupported VariableDeclaration. VariableDeclaration must only ' +
@@ -29,7 +29,7 @@ function resolveName(path) {
           ' declarations.',
       );
     }
-    var value = declarations.get(0, 'id', 'name').value;
+    const value = declarations.get(0, 'id', 'name').value;
     return value;
   }
 
@@ -58,7 +58,7 @@ function resolveName(path) {
 }
 
 function getRoot(node) {
-  var root = node.parent;
+  let root = node.parent;
   while (root.parent) {
     root = root.parent;
   }
@@ -69,8 +69,8 @@ export default function getMemberExpressionValuePath(
   variableDefinition: NodePath,
   memberName: string,
 ): ?NodePath {
-  var localName = resolveName(variableDefinition);
-  var program = getRoot(variableDefinition);
+  const localName = resolveName(variableDefinition);
+  const program = getRoot(variableDefinition);
 
   if (!localName) {
     // likely an immediately exported and therefore nameless/anonymous node
@@ -78,10 +78,10 @@ export default function getMemberExpressionValuePath(
     return;
   }
 
-  var result;
+  let result;
   recast.visit(program, {
     visitAssignmentExpression(path) {
-      var memberPath = path.get('left');
+      const memberPath = path.get('left');
       if (!types.MemberExpression.check(memberPath.node)) {
         return this.traverse(path);
       }

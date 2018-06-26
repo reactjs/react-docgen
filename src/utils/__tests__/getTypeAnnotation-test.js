@@ -13,8 +13,8 @@
 jest.disableAutomock();
 
 describe('getTypeAnnotation', () => {
-  var expression;
-  var getTypeAnnotation;
+  let expression;
+  let getTypeAnnotation;
 
   beforeEach(() => {
     getTypeAnnotation = require('../getTypeAnnotation').default;
@@ -22,7 +22,7 @@ describe('getTypeAnnotation', () => {
   });
 
   it('detects simple type', () => {
-    var path = expression('x: xyz');
+    const path = expression('x: xyz');
 
     expect(getTypeAnnotation(path)).toEqual(
       path.get('typeAnnotation').get('typeAnnotation'),
@@ -30,13 +30,13 @@ describe('getTypeAnnotation', () => {
   });
 
   it('does not fail if no type', () => {
-    var path = expression('x = 0');
+    const path = expression('x = 0');
 
     expect(getTypeAnnotation(path)).toEqual(null);
   });
 
   it('stops at first nested type', () => {
-    var path = expression('x: ?xyz');
+    const path = expression('x: ?xyz');
 
     expect(getTypeAnnotation(path)).toEqual(
       path.get('typeAnnotation').get('typeAnnotation'),

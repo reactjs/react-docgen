@@ -15,7 +15,7 @@ import match from './match';
 import recast from 'recast';
 import resolveToModule from './resolveToModule';
 
-var {
+const {
   types: { namedTypes: types },
 } = recast;
 
@@ -32,8 +32,8 @@ export default function isReactChildrenElementCall(path: NodePath): boolean {
     return false;
   }
 
-  var calleeObj = path.get('callee', 'object');
-  var module = resolveToModule(calleeObj);
+  const calleeObj = path.get('callee', 'object');
+  const module = resolveToModule(calleeObj);
 
   if (!match(calleeObj, { value: { property: { name: 'Children' } } })) {
     return false;

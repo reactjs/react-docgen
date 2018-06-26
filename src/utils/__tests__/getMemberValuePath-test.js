@@ -23,35 +23,35 @@ import getMemberExpressionValuePath from '../getMemberExpressionValuePath';
 
 describe('getMemberValuePath', () => {
   it('handles ObjectExpresisons', () => {
-    var path = expression('{}');
+    const path = expression('{}');
 
     getMemberValuePath(path, 'foo');
     expect(getPropertyValuePath).toBeCalledWith(path, 'foo');
   });
 
   it('handles ClassDeclarations', () => {
-    var path = statement('class Foo {}');
+    const path = statement('class Foo {}');
 
     getMemberValuePath(path, 'foo');
     expect(getClassMemberValuePath).toBeCalledWith(path, 'foo');
   });
 
   it('handles TaggedTemplateLiterals', () => {
-    var path = expression('foo``');
+    const path = expression('foo``');
 
     getMemberValuePath(path, 'foo');
     expect(getMemberExpressionValuePath).toBeCalledWith(path, 'foo');
   });
 
   it('handles ClassExpressions', () => {
-    var path = expression('class {}');
+    const path = expression('class {}');
 
     getMemberValuePath(path, 'foo');
     expect(getClassMemberValuePath).toBeCalledWith(path, 'foo');
   });
 
   it('tries synonyms', () => {
-    var path = expression('{}');
+    let path = expression('{}');
 
     getMemberValuePath(path, 'defaultProps');
     expect(getPropertyValuePath).toBeCalledWith(path, 'defaultProps');
@@ -67,7 +67,7 @@ describe('getMemberValuePath', () => {
   it('returns the result of getPropertyValuePath and getClassMemberValuePath', () => {
     getPropertyValuePath.mockReturnValue(42);
     getClassMemberValuePath.mockReturnValue(21);
-    var path = expression('{}');
+    let path = expression('{}');
 
     expect(getMemberValuePath(path, 'defaultProps')).toBe(42);
 

@@ -18,7 +18,7 @@ import isReactChildrenElementCall from './isReactChildrenElementCall';
 import recast from 'recast';
 import resolveToValue from './resolveToValue';
 
-var {
+const {
   types: { namedTypes: types },
 } = recast;
 
@@ -80,7 +80,7 @@ function resolvesToJSXElementOrReactCall(path) {
 
     let resolvedValue;
 
-    let namesToResolve = [calleeValue.get('property')];
+    const namesToResolve = [calleeValue.get('property')];
 
     if (calleeValue.node.type === 'MemberExpression') {
       if (calleeValue.get('object').node.type === 'Identifier') {
@@ -96,7 +96,7 @@ function resolvesToJSXElementOrReactCall(path) {
     }
 
     if (resolvedValue && types.ObjectExpression.check(resolvedValue.node)) {
-      var resolvedMemberExpression = namesToResolve.reduce(
+      const resolvedMemberExpression = namesToResolve.reduce(
         (result, nodePath) => {
           if (!nodePath) {
             return result;
@@ -164,7 +164,7 @@ function returnsJSXElementOrReactCall(path) {
  * Returns `true` if the path represents a function which returns a JSXElement
  */
 export default function isStatelessComponent(path: NodePath): boolean {
-  var node = path.node;
+  const node = path.node;
 
   if (validPossibleStatelessComponentTypes.indexOf(node.type) === -1) {
     return false;

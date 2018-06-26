@@ -18,8 +18,8 @@ import Documentation from '../../Documentation';
 import { propTypeHandler } from '../propTypeHandler';
 
 describe('propTypeHandler', () => {
-  var getPropTypeMock;
-  var documentation;
+  let getPropTypeMock;
+  let documentation;
 
   beforeEach(() => {
     getPropTypeMock = require('../../utils/getPropType');
@@ -37,15 +37,15 @@ describe('propTypeHandler', () => {
 
   function test(getSrc, parse) {
     it('passes the correct argument to getPropType', () => {
-      var propTypesSrc = `{
+      const propTypesSrc = `{
           foo: PropTypes.bool,
           abc: PropTypes.xyz,
         }`;
-      var definition = parse(getSrc(propTypesSrc));
-      var propTypesAST = expression(propTypesSrc);
+      const definition = parse(getSrc(propTypesSrc));
+      const propTypesAST = expression(propTypesSrc);
 
-      var fooPath = propTypesAST.get('properties', 0, 'value');
-      var xyzPath = propTypesAST.get('properties', 1, 'value');
+      const fooPath = propTypesAST.get('properties', 0, 'value');
+      const xyzPath = propTypesAST.get('properties', 1, 'value');
 
       propTypeHandler(documentation, definition);
 
@@ -58,7 +58,7 @@ describe('propTypeHandler', () => {
     });
 
     it('finds definitions via React.PropTypes', () => {
-      var definition = parse(
+      const definition = parse(
         getSrc(
           `{
           foo: PropTypes.bool,
@@ -86,7 +86,7 @@ describe('propTypeHandler', () => {
     });
 
     it('finds definitions via the ReactPropTypes module', () => {
-      var definition = parse(
+      const definition = parse(
         getSrc(
           `{
           foo: require("ReactPropTypes").bool,
@@ -104,7 +104,7 @@ describe('propTypeHandler', () => {
     });
 
     it('detects whether a prop is required', () => {
-      var definition = parse(
+      const definition = parse(
         getSrc(
           `{
           simple_prop: PropTypes.array.isRequired,
@@ -128,7 +128,7 @@ describe('propTypeHandler', () => {
     });
 
     it('only considers definitions from React or ReactPropTypes', () => {
-      var definition = parse(
+      const definition = parse(
         getSrc(
           `{
           custom_propA: PropTypes.bool,
@@ -154,8 +154,8 @@ describe('propTypeHandler', () => {
     });
 
     it('resolves variables', () => {
-      var definitionSrc = getSrc('props');
-      var definition = parse(`
+      const definitionSrc = getSrc('props');
+      const definition = parse(`
         ${definitionSrc}
         var props = {bar: PropTypes.bool};
       `);
@@ -217,7 +217,7 @@ describe('propTypeHandler', () => {
   });
 
   it('does not error if propTypes cannot be found', () => {
-    var definition = expression('{fooBar: 42}');
+    let definition = expression('{fooBar: 42}');
     expect(() => propTypeHandler(documentation, definition)).not.toThrow();
 
     definition = statement('class Foo {}');
@@ -232,7 +232,7 @@ describe('propTypeHandler', () => {
 
   // This case is handled by propTypeCompositionHandler
   it('does not error if propTypes is a member expression', () => {
-    var definition = expression('{propTypes: Foo.propTypes}');
+    const definition = expression('{propTypes: Foo.propTypes}');
     expect(() => propTypeHandler(documentation, definition)).not.toThrow();
   });
 });

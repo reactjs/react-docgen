@@ -14,10 +14,10 @@ jest.disableAutomock();
 jest.mock('../../Documentation');
 
 describe('flowTypeHandler', () => {
-  var statement, expression;
-  var getFlowTypeMock;
-  var documentation;
-  var flowTypeHandler;
+  let statement, expression;
+  let getFlowTypeMock;
+  let documentation;
+  let flowTypeHandler;
 
   beforeEach(() => {
     ({ statement, expression } = require('../../../tests/utils'));
@@ -41,14 +41,14 @@ describe('flowTypeHandler', () => {
 
   function test(getSrc) {
     it('detects types correctly', () => {
-      var flowTypesSrc = `
+      const flowTypesSrc = `
       {
         foo: string,
         bar: number,
         hal: boolean,
       }
       `;
-      var definition = getSrc(flowTypesSrc);
+      const definition = getSrc(flowTypesSrc);
 
       flowTypeHandler(documentation, definition);
 
@@ -72,13 +72,13 @@ describe('flowTypeHandler', () => {
     });
 
     it('detects whether a prop is required', () => {
-      var flowTypesSrc = `
+      const flowTypesSrc = `
       {
         foo: string,
         bar?: number,
       }
       `;
-      var definition = getSrc(flowTypesSrc);
+      const definition = getSrc(flowTypesSrc);
 
       flowTypeHandler(documentation, definition);
 
@@ -97,13 +97,13 @@ describe('flowTypeHandler', () => {
     });
 
     it('detects union types', () => {
-      var flowTypesSrc = `
+      const flowTypesSrc = `
       {
         foo: string | number,
         bar: "test" | 1 | true,
       }
       `;
-      var definition = getSrc(flowTypesSrc);
+      const definition = getSrc(flowTypesSrc);
 
       flowTypeHandler(documentation, definition);
 
@@ -122,12 +122,12 @@ describe('flowTypeHandler', () => {
     });
 
     it('detects intersection types', () => {
-      var flowTypesSrc = `
+      const flowTypesSrc = `
       {
         foo: Foo & Bar,
       }
       `;
-      var definition = getSrc(flowTypesSrc);
+      const definition = getSrc(flowTypesSrc);
 
       flowTypeHandler(documentation, definition);
 
@@ -143,13 +143,13 @@ describe('flowTypeHandler', () => {
     describe('special generic type annotations', () => {
       ['$ReadOnly', '$Exact'].forEach(annotation => {
         it(`unwraps ${annotation}<...>`, () => {
-          var flowTypesSrc = `
+          const flowTypesSrc = `
             ${annotation}<{
               foo: string | number,
             }>
           `;
 
-          var definition = getSrc(flowTypesSrc);
+          const definition = getSrc(flowTypesSrc);
 
           flowTypeHandler(documentation, definition);
 
@@ -217,7 +217,7 @@ describe('flowTypeHandler', () => {
   });
 
   it('does not error if flowTypes cannot be found', () => {
-    var definition = expression('{fooBar: 42}');
+    let definition = expression('{fooBar: 42}');
     expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
 
     definition = statement('class Foo extends Component {}');
@@ -228,7 +228,7 @@ describe('flowTypeHandler', () => {
   });
 
   it('supports intersection proptypes', () => {
-    var definition = statement(`
+    const definition = statement(`
       (props: Props) => <div />;
 
       var React = require('React');
@@ -249,7 +249,7 @@ describe('flowTypeHandler', () => {
   });
 
   it('does not support union proptypes', () => {
-    var definition = statement(`
+    const definition = statement(`
       (props: Props) => <div />;
 
       var React = require('React');
@@ -266,7 +266,7 @@ describe('flowTypeHandler', () => {
 
   describe('does not error for unreachable type', () => {
     function testCode(code) {
-      var definition = statement(code).get('expression');
+      const definition = statement(code).get('expression');
 
       expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
 

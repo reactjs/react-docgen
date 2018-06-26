@@ -16,7 +16,7 @@ import getMemberExpressionRoot from '../getMemberExpressionRoot';
 
 describe('getMemberExpressionRoot', () => {
   it('returns the root of a member expression', () => {
-    var root = getMemberExpressionRoot(expression('foo.bar.baz'));
+    const root = getMemberExpressionRoot(expression('foo.bar.baz'));
     expect(root.node).toEqualASTNode(expression('foo').node);
   });
 });

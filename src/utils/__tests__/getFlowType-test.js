@@ -13,8 +13,8 @@
 jest.disableAutomock();
 
 describe('getFlowType', () => {
-  var expression, statement;
-  var getFlowType;
+  let expression, statement;
+  let getFlowType;
 
   beforeEach(() => {
     getFlowType = require('../getFlowType').default;
@@ -22,7 +22,7 @@ describe('getFlowType', () => {
   });
 
   it('detects simple types', () => {
-    var simplePropTypes = [
+    const simplePropTypes = [
       'string',
       'number',
       'boolean',
@@ -37,7 +37,7 @@ describe('getFlowType', () => {
     ];
 
     simplePropTypes.forEach(type => {
-      var typePath = expression('x: ' + type)
+      const typePath = expression('x: ' + type)
         .get('typeAnnotation')
         .get('typeAnnotation');
       expect(getFlowType(typePath)).toEqual({ name: type });
@@ -45,10 +45,10 @@ describe('getFlowType', () => {
   });
 
   it('detects literal types', () => {
-    var literalTypes = ['"foo"', 1234, true];
+    const literalTypes = ['"foo"', 1234, true];
 
     literalTypes.forEach(value => {
-      var typePath = expression(`x: ${value}`)
+      const typePath = expression(`x: ${value}`)
         .get('typeAnnotation')
         .get('typeAnnotation');
       expect(getFlowType(typePath)).toEqual({
@@ -59,21 +59,21 @@ describe('getFlowType', () => {
   });
 
   it('detects external type', () => {
-    var typePath = expression('x: xyz')
+    const typePath = expression('x: xyz')
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getFlowType(typePath)).toEqual({ name: 'xyz' });
   });
 
   it('detects external nullable type', () => {
-    var typePath = expression('x: ?xyz')
+    const typePath = expression('x: ?xyz')
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getFlowType(typePath)).toEqual({ name: 'xyz', nullable: true });
   });
 
   it('detects array type shorthand optional', () => {
-    var typePath = expression('x: ?number[]')
+    const typePath = expression('x: ?number[]')
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getFlowType(typePath)).toEqual({
@@ -85,7 +85,7 @@ describe('getFlowType', () => {
   });
 
   it('detects array type shorthand optional type', () => {
-    var typePath = expression('x: (?number)[]')
+    const typePath = expression('x: (?number)[]')
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getFlowType(typePath)).toEqual({
@@ -96,7 +96,7 @@ describe('getFlowType', () => {
   });
 
   it('detects array type shorthand', () => {
-    var typePath = expression('x: number[]')
+    const typePath = expression('x: number[]')
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getFlowType(typePath)).toEqual({
@@ -107,7 +107,7 @@ describe('getFlowType', () => {
   });
 
   it('detects array type', () => {
-    var typePath = expression('x: Array<number>')
+    const typePath = expression('x: Array<number>')
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getFlowType(typePath)).toEqual({
@@ -118,7 +118,7 @@ describe('getFlowType', () => {
   });
 
   it('detects array type with multiple types', () => {
-    var typePath = expression('x: Array<number, xyz>')
+    const typePath = expression('x: Array<number, xyz>')
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getFlowType(typePath)).toEqual({
@@ -129,7 +129,7 @@ describe('getFlowType', () => {
   });
 
   it('detects class type', () => {
-    var typePath = expression('x: Class<Boolean>')
+    const typePath = expression('x: Class<Boolean>')
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getFlowType(typePath)).toEqual({
@@ -140,7 +140,7 @@ describe('getFlowType', () => {
   });
 
   it('detects function type with subtype', () => {
-    var typePath = expression('x: Function<xyz>')
+    const typePath = expression('x: Function<xyz>')
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getFlowType(typePath)).toEqual({
@@ -151,7 +151,7 @@ describe('getFlowType', () => {
   });
 
   it('detects object types', () => {
-    var typePath = expression('x: { a: string, b?: xyz }')
+    const typePath = expression('x: { a: string, b?: xyz }')
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getFlowType(typePath)).toEqual({
@@ -168,7 +168,7 @@ describe('getFlowType', () => {
   });
 
   it('detects object types with maybe type', () => {
-    var typePath = expression('x: { a: string, b: ?xyz }')
+    const typePath = expression('x: { a: string, b: ?xyz }')
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getFlowType(typePath)).toEqual({
@@ -185,7 +185,7 @@ describe('getFlowType', () => {
   });
 
   it('detects union type', () => {
-    var typePath = expression('x: string | xyz | "foo" | void')
+    const typePath = expression('x: string | xyz | "foo" | void')
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getFlowType(typePath)).toEqual({
@@ -201,7 +201,7 @@ describe('getFlowType', () => {
   });
 
   it('detects intersection type', () => {
-    var typePath = expression('x: string & xyz & "foo" & void')
+    const typePath = expression('x: string & xyz & "foo" & void')
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getFlowType(typePath)).toEqual({
@@ -217,7 +217,7 @@ describe('getFlowType', () => {
   });
 
   it('detects function signature type', () => {
-    var typePath = expression('x: (p1: number, p2: ?string) => boolean')
+    const typePath = expression('x: (p1: number, p2: ?string) => boolean')
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getFlowType(typePath)).toEqual({
@@ -235,7 +235,7 @@ describe('getFlowType', () => {
   });
 
   it('detects function signature types without parameter names', () => {
-    var typePath = expression('x: (number, ?string) => boolean')
+    const typePath = expression('x: (number, ?string) => boolean')
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getFlowType(typePath)).toEqual({
@@ -253,7 +253,7 @@ describe('getFlowType', () => {
   });
 
   it('detects function signature type with single parmeter without name', () => {
-    var typePath = expression('x: string => boolean')
+    const typePath = expression('x: string => boolean')
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getFlowType(typePath)).toEqual({
@@ -267,7 +267,7 @@ describe('getFlowType', () => {
     });
   });
   it('detects callable signature type', () => {
-    var typePath = expression('x: { (str: string): string, token: string }')
+    const typePath = expression('x: { (str: string): string, token: string }')
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getFlowType(typePath)).toEqual({
@@ -292,7 +292,7 @@ describe('getFlowType', () => {
   });
 
   it('detects map signature', () => {
-    var typePath = expression(
+    const typePath = expression(
       'x: { [key: string]: number, [key: "xl"]: string, token: "a" | "b" }',
     )
       .get('typeAnnotation')
@@ -329,7 +329,7 @@ describe('getFlowType', () => {
   });
 
   it('detects tuple signature', () => {
-    var typePath = expression('x: [string, number]')
+    const typePath = expression('x: [string, number]')
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getFlowType(typePath)).toEqual({
@@ -340,7 +340,7 @@ describe('getFlowType', () => {
   });
 
   it('detects tuple in union signature', () => {
-    var typePath = expression('x: [string, number] | [number, string]')
+    const typePath = expression('x: [string, number] | [number, string]')
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getFlowType(typePath)).toEqual({
@@ -362,7 +362,7 @@ describe('getFlowType', () => {
   });
 
   it('resolves types in scope', () => {
-    var typePath = statement(`
+    const typePath = statement(`
       var x: MyType = 2;
 
       type MyType = string;
@@ -376,7 +376,7 @@ describe('getFlowType', () => {
   });
 
   it('handles typeof types', () => {
-    var typePath = statement(`
+    const typePath = statement(`
       var x: typeof MyType = {};
 
       type MyType = { a: string, b: ?xyz };
@@ -401,7 +401,7 @@ describe('getFlowType', () => {
 
   describe('React types', () => {
     function test(type, expected) {
-      var typePath = statement(`
+      const typePath = statement(`
         var x: ${type} = 2;
 
         type Props = { x: string };
@@ -452,7 +452,7 @@ describe('getFlowType', () => {
   });
 
   it('resolves $Keys to union', () => {
-    var typePath = statement(`
+    const typePath = statement(`
       var x: $Keys<typeof CONTENTS> = 2;
       const CONTENTS = {
         'apple': '🍎',
@@ -475,7 +475,7 @@ describe('getFlowType', () => {
   });
 
   it('resolves $Keys without typeof to union', () => {
-    var typePath = statement(`
+    const typePath = statement(`
       var x: $Keys<CONTENTS> = 2;
       const CONTENTS = {
         'apple': '🍎',
@@ -498,7 +498,7 @@ describe('getFlowType', () => {
   });
 
   it('handles multiple references to one type', () => {
-    var typePath = statement(`
+    const typePath = statement(`
       let action: { a: Action, b: Action };
       type Action = {};
     `)
@@ -539,7 +539,7 @@ describe('getFlowType', () => {
   });
 
   it('handles self-referencing type cycles', () => {
-    var typePath = statement(`
+    const typePath = statement(`
       let action: Action;
       type Action = { subAction: Action };
     `)
@@ -561,7 +561,7 @@ describe('getFlowType', () => {
   });
 
   it('handles long type cycles', () => {
-    var typePath = statement(`
+    const typePath = statement(`
       let action: Action;
       type Action = { subAction: SubAction };
       type SubAction = { subAction: SubSubAction };

@@ -13,11 +13,11 @@
 jest.disableAutomock();
 
 describe('resolveToModule', () => {
-  var utils;
-  var resolveToModule;
+  let utils;
+  let resolveToModule;
 
   function parse(src) {
-    var root = utils.parse(src);
+    const root = utils.parse(src);
     return root.get('body', root.node.body.length - 1, 'expression');
   }
 
@@ -27,7 +27,7 @@ describe('resolveToModule', () => {
   });
 
   it('resolves identifiers', () => {
-    var path = parse(`
+    const path = parse(`
       var foo = require("Foo");
       foo;
     `);
@@ -35,7 +35,7 @@ describe('resolveToModule', () => {
   });
 
   it('resolves function calls', () => {
-    var path = parse(`
+    const path = parse(`
       var foo = require("Foo");
       foo();
     `);
@@ -43,7 +43,7 @@ describe('resolveToModule', () => {
   });
 
   it('resolves member expressions', () => {
-    var path = parse(`
+    const path = parse(`
       var foo = require("Foo");
       foo.bar().baz;
     `);
@@ -51,7 +51,7 @@ describe('resolveToModule', () => {
   });
 
   it('understands destructuring', () => {
-    var path = parse(`
+    const path = parse(`
       var {foo} = require("Foo");
       foo;
     `);
@@ -60,7 +60,7 @@ describe('resolveToModule', () => {
 
   describe('ES6 import declarations', () => {
     it('resolves ImportDefaultSpecifier', () => {
-      var path = parse(`
+      let path = parse(`
         import foo from "Foo";
         foo;
       `);
@@ -74,7 +74,7 @@ describe('resolveToModule', () => {
     });
 
     it('resolves ImportSpecifier', () => {
-      var path = parse(`
+      const path = parse(`
         import {foo, bar} from "Foo";
         bar;
       `);
@@ -82,7 +82,7 @@ describe('resolveToModule', () => {
     });
 
     it('resolves aliased ImportSpecifier', () => {
-      var path = parse(`
+      const path = parse(`
         import {foo, bar as baz} from "Foo";
         baz;
       `);
@@ -90,7 +90,7 @@ describe('resolveToModule', () => {
     });
 
     it('resolves ImportNamespaceSpecifier', () => {
-      var path = parse(`
+      const path = parse(`
         import * as foo from "Foo";
         foo;
       `);

@@ -13,7 +13,7 @@
 import recast from 'recast';
 import resolveToValue from './resolveToValue';
 
-var {
+const {
   types: { ASTNode, NodePath, builders, namedTypes: types },
 } = recast;
 
@@ -86,7 +86,7 @@ export function resolveObjectExpressionToNameArray(
  *  computed identifier keys
  */
 export default function resolveObjectKeysToArray(path: NodePath): ?NodePath {
-  var node = path.node;
+  const node = path.node;
 
   if (isObjectKeysCall(node)) {
     const objectExpression = resolveToValue(path.get('arguments').get(0));

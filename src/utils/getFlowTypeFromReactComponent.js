@@ -87,7 +87,7 @@ export function applyToFlowTypeProperties(
   } else if (path.node.type !== 'UnionTypeAnnotation') {
     // The react-docgen output format does not currently allow
     // for the expression of union types
-    let typePath = resolveGenericTypeAnnotation(path);
+    const typePath = resolveGenericTypeAnnotation(path);
     if (typePath) {
       applyToFlowTypeProperties(typePath, callback);
     }

@@ -13,7 +13,7 @@
 import * as expressionTo from './expressionTo';
 import recast from 'recast';
 
-var {
+const {
   types: { namedTypes: types },
 } = recast;
 
@@ -32,7 +32,7 @@ export default function isExportsOrModuleAssignment(path: NodePath): boolean {
     return false;
   }
 
-  var exprArr = expressionTo.Array(path.get('left'));
+  const exprArr = expressionTo.Array(path.get('left'));
   return (
     (exprArr[0] === 'module' && exprArr[1] === 'exports') ||
     exprArr[0] === 'exports'

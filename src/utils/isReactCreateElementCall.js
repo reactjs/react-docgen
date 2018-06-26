@@ -15,7 +15,7 @@ import match from './match';
 import recast from 'recast';
 import resolveToModule from './resolveToModule';
 
-var {
+const {
   types: { namedTypes: types },
 } = recast;
 
@@ -31,6 +31,6 @@ export default function isReactCreateElementCall(path: NodePath): boolean {
   if (!match(path.node, { callee: { property: { name: 'createElement' } } })) {
     return false;
   }
-  var module = resolveToModule(path.get('callee', 'object'));
+  const module = resolveToModule(path.get('callee', 'object'));
   return Boolean(module && isReactModuleName(module));
 }

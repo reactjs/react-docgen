@@ -16,11 +16,11 @@ import postProcessDocumentation from './utils/postProcessDocumentation';
 import buildParser, { type Options } from './babelParser';
 import recast from 'recast';
 
-var ERROR_MISSING_DEFINITION = 'No suitable component definition found.';
+const ERROR_MISSING_DEFINITION = 'No suitable component definition found.';
 
 function executeHandlers(handlers, componentDefinitions) {
   return componentDefinitions.map(componentDefinition => {
-    var documentation = new Documentation();
+    const documentation = new Documentation();
     handlers.forEach(handler => handler(documentation, componentDefinition));
     return postProcessDocumentation(documentation.toObject());
   });
@@ -52,8 +52,8 @@ export default function parse(
   handlers: Array<Handler>,
   options: Options,
 ): Array<Object> | Object {
-  var ast = recast.parse(src, { parser: buildParser(options) });
-  var componentDefinitions = resolver(ast.program, recast);
+  const ast = recast.parse(src, { parser: buildParser(options) });
+  const componentDefinitions = resolver(ast.program, recast);
 
   if (Array.isArray(componentDefinitions)) {
     if (componentDefinitions.length === 0) {

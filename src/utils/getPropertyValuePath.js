@@ -13,7 +13,7 @@
 import getPropertyName from './getPropertyName';
 import recast from 'recast';
 
-var {
+const {
   types: { namedTypes: types },
 } = recast;
 

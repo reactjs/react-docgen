@@ -9,16 +9,16 @@
  *
  */
 
-var argv = require('commander');
+const argv = require('commander');
 
 function collect(val, memo) {
   memo.push(val);
   return memo;
 }
 
-var defaultExtensions = ['js', 'jsx'];
-var defaultExclude = [];
-var defaultIgnore = ['node_modules', '__tests__', '__mocks__'];
+const defaultExtensions = ['js', 'jsx'];
+const defaultExclude = [];
+const defaultIgnore = ['node_modules', '__tests__', '__mocks__'];
 
 argv
   .usage('[path...] [options]')
@@ -61,26 +61,26 @@ argv
 
 argv.parse(process.argv);
 
-var async = require('async');
-var dir = require('node-dir');
-var fs = require('fs');
-var parser = require('../dist/main');
-var path = require('path');
+const async = require('async');
+const dir = require('node-dir');
+const fs = require('fs');
+const parser = require('../dist/main');
+const path = require('path');
 
-var output = argv.out;
-var paths = argv.args || [];
-var extensions = new RegExp('\\.(?:' + argv.extension.join('|') + ')$');
-var ignoreDir = argv.ignore;
-var excludePatterns = argv.exclude;
-var resolver;
-var errorMessage;
-var regexRegex = /^\/(.*)\/([igymu]{0,5})$/;
+const output = argv.out;
+const paths = argv.args || [];
+const extensions = new RegExp('\\.(?:' + argv.extension.join('|') + ')$');
+const ignoreDir = argv.ignore;
+let excludePatterns = argv.exclude;
+let resolver;
+let errorMessage;
+const regexRegex = /^\/(.*)\/([igymu]{0,5})$/;
 if (
   excludePatterns &&
   excludePatterns.length === 1 &&
   regexRegex.test(excludePatterns[0])
 ) {
-  var match = excludePatterns[0].match(regexRegex);
+  const match = excludePatterns[0].match(regexRegex);
   excludePatterns = new RegExp(match[1], match[2]);
 }
 
@@ -173,10 +173,10 @@ if (errorMessage) {
   /**
    * 2. No files passed, consume input stream
    */
-  var source = '';
+  let source = '';
   process.stdin.setEncoding('utf8');
   process.stdin.resume();
-  var timer = setTimeout(function() {
+  const timer = setTimeout(function() {
     process.stderr.write('Still waiting for std input...');
   }, 5000);
   process.stdin.on('data', function(chunk) {
@@ -194,7 +194,7 @@ if (errorMessage) {
   /**
    * 3. Paths are passed
    */
-  var result = Object.create(null);
+  const result = Object.create(null);
   async.eachSeries(
     paths,
     function(filePath, done) {
@@ -223,7 +223,7 @@ if (errorMessage) {
       });
     },
     function() {
-      var resultsPaths = Object.keys(result);
+      const resultsPaths = Object.keys(result);
       if (resultsPaths.length === 0) {
         // we must have gotten an error
         process.exitCode = 1;

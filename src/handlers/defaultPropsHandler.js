@@ -20,13 +20,13 @@ import resolveToValue from '../utils/resolveToValue';
 import resolveFunctionDefinitionToReturnValue from '../utils/resolveFunctionDefinitionToReturnValue';
 import isStatelessComponent from '../utils/isStatelessComponent';
 
-var {
+const {
   types: { namedTypes: types },
 } = recast;
 
 function getDefaultValue(path: NodePath) {
-  var node = path.node;
-  var defaultValue;
+  let node = path.node;
+  let defaultValue;
   if (types.Literal.check(node)) {
     defaultValue = node.raw;
   } else {
@@ -60,7 +60,7 @@ function getStatelessPropsPath(componentDefinition): NodePath {
 }
 
 function getDefaultPropsPath(componentDefinition: NodePath): ?NodePath {
-  var defaultPropsPath = getMemberValuePath(
+  let defaultPropsPath = getMemberValuePath(
     componentDefinition,
     'defaultProps',
   );
@@ -118,8 +118,8 @@ export default function defaultPropsHandler(
   documentation: Documentation,
   componentDefinition: NodePath,
 ) {
-  var statelessProps = null;
-  var defaultPropsPath = getDefaultPropsPath(componentDefinition);
+  let statelessProps = null;
+  const defaultPropsPath = getDefaultPropsPath(componentDefinition);
   if (isStatelessComponent(componentDefinition)) {
     statelessProps = getStatelessPropsPath(componentDefinition);
   }

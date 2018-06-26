@@ -10,6 +10,8 @@ module.exports = {
   rules: {
     strict: ['error', 'never'],
     'no-shadow': 'error',
+    'no-var': 'error',
+    'prefer-const': 'error',
     'prettier/prettier': 'error',
   },
   env: {

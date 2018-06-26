@@ -22,12 +22,12 @@ import recast from 'recast';
 import resolveToModule from '../utils/resolveToModule';
 import resolveToValue from '../utils/resolveToValue';
 
-var {
+const {
   types: { namedTypes: types },
 } = recast;
 
 function isPropTypesExpression(path) {
-  var moduleName = resolveToModule(path);
+  const moduleName = resolveToModule(path);
   if (moduleName) {
     return isReactModuleName(moduleName) || moduleName === 'ReactPropTypes';
   }
@@ -41,10 +41,10 @@ function amendPropTypes(getDescriptor, path) {
 
   path.get('properties').each(function(propertyPath) {
     switch (propertyPath.node.type) {
-      case types.Property.name:
-        var propDescriptor = getDescriptor(getPropertyName(propertyPath));
-        var valuePath = propertyPath.get('value');
-        var type = isPropTypesExpression(valuePath)
+      case types.Property.name: {
+        const propDescriptor = getDescriptor(getPropertyName(propertyPath));
+        const valuePath = propertyPath.get('value');
+        const type = isPropTypesExpression(valuePath)
           ? getPropType(valuePath)
           : { name: 'custom', raw: printValue(valuePath) };
 
@@ -54,22 +54,24 @@ function amendPropTypes(getDescriptor, path) {
             type.name !== 'custom' && isRequiredPropType(valuePath);
         }
         break;
+      }
       case types.SpreadProperty.name: // bc for older estree version
-      case types.SpreadElement.name:
-        var resolvedValuePath = resolveToValue(propertyPath.get('argument'));
+      case types.SpreadElement.name: {
+        const resolvedValuePath = resolveToValue(propertyPath.get('argument'));
         switch (resolvedValuePath.node.type) {
           case types.ObjectExpression.name: // normal object literal
             amendPropTypes(getDescriptor, resolvedValuePath);
             break;
         }
         break;
+      }
     }
   });
 }
 
 function getPropTypeHandler(propName: string) {
   return function(documentation: Documentation, path: NodePath) {
-    var propTypesPath = getMemberValuePath(path, propName);
+    let propTypesPath = getMemberValuePath(path, propName);
     if (!propTypesPath) {
       return;
     }

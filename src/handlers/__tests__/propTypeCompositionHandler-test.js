@@ -14,10 +14,10 @@ jest.disableAutomock();
 jest.mock('../../Documentation');
 
 describe('propTypeCompositionHandler', () => {
-  var statement, expression;
-  var getPropTypeMock;
-  var documentation;
-  var propTypeCompositionHandler;
+  let statement, expression;
+  let getPropTypeMock;
+  let documentation;
+  let propTypeCompositionHandler;
 
   beforeEach(() => {
     ({ statement, expression } = require('../../../tests/utils'));
@@ -32,7 +32,7 @@ describe('propTypeCompositionHandler', () => {
 
   function test(getSrc, parse) {
     it('understands assignment from module', () => {
-      var definition = parse(`
+      let definition = parse(`
         ${getSrc('Foo.propTypes')}
         var Foo = require("Foo.react");
       `);
@@ -51,13 +51,13 @@ describe('propTypeCompositionHandler', () => {
     });
 
     it('understands the spread operator', () => {
-      var definitionSrc = getSrc(
+      const definitionSrc = getSrc(
         `{
           ...Foo.propTypes,
           ...SharedProps,
         }`,
       );
-      var definition = parse(`
+      const definition = parse(`
         ${definitionSrc}
         var Foo = require("Foo.react");
         var SharedProps = require("SharedProps");
@@ -102,7 +102,7 @@ describe('propTypeCompositionHandler', () => {
   });
 
   it('does not error if propTypes cannot be found', () => {
-    var definition = expression('{fooBar: 42}');
+    let definition = expression('{fooBar: 42}');
     expect(() =>
       propTypeCompositionHandler(documentation, definition),
     ).not.toThrow();
