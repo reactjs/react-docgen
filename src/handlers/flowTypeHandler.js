@@ -20,16 +20,29 @@ import getFlowTypeFromReactComponent, {
 } from '../utils/getFlowTypeFromReactComponent';
 import resolveToValue from '../utils/resolveToValue';
 import setPropDescription from '../utils/setPropDescription';
+import {
+  isSupportedUtilityType,
+  unwrapUtilityType,
+} from '../utils/flowUtilityTypes';
 
 const {
   types: { namedTypes: types },
 } = recast;
 function setPropDescriptor(documentation: Documentation, path: NodePath): void {
   if (types.ObjectTypeSpreadProperty.check(path.node)) {
-    const name = path
-      .get('argument')
-      .get('id')
-      .get('name');
+    let argument = path.get('argument');
+    while (isSupportedUtilityType(argument)) {
+      argument = unwrapUtilityType(argument);
+    }
+
+    if (types.ObjectTypeAnnotation.check(argument.node)) {
+      applyToFlowTypeProperties(argument, propertyPath => {
+        setPropDescriptor(documentation, propertyPath);
+      });
+      return;
+    }
+
+    const name = argument.get('id').get('name');
     const resolvedPath = resolveToValue(name);
 
     if (resolvedPath && types.TypeAlias.check(resolvedPath.node)) {
