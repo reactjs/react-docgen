@@ -17,12 +17,15 @@ import isStatelessComponent from '../utils/isStatelessComponent';
 import isUnreachableFlowType from '../utils/isUnreachableFlowType';
 import recast from 'recast';
 import resolveToValue from '../utils/resolveToValue';
+import {
+  isSupportedUtilityType,
+  unwrapUtilityType,
+} from '../utils/flowUtilityTypes';
+import resolveGenericTypeAnnotation from '../utils/resolveGenericTypeAnnotation';
 
 const {
   types: { namedTypes: types },
 } = recast;
-
-const supportedUtilityTypes = new Set(['$Exact', '$ReadOnly']);
 
 /**
  * Given an React component (stateless or class) tries to find the
@@ -92,42 +95,4 @@ export function applyToFlowTypeProperties(
       applyToFlowTypeProperties(typePath, callback);
     }
   }
-}
-
-function resolveGenericTypeAnnotation(path: NodePath): ?NodePath {
-  // If the node doesn't have types or properties, try to get the type.
-  let typePath: ?NodePath;
-  if (path && isSupportedUtilityType(path)) {
-    typePath = unwrapUtilityType(path);
-  } else if (path && types.GenericTypeAnnotation.check(path.node)) {
-    typePath = resolveToValue(path.get('id'));
-    if (isUnreachableFlowType(typePath)) {
-      return;
-    }
-
-    typePath = typePath.get('right');
-  }
-
-  return typePath;
-}
-
-/**
- * See `supportedUtilityTypes` for which types are supported and
- * https://flow.org/en/docs/types/utilities/ for which types are available.
- */
-function isSupportedUtilityType(path: NodePath): boolean {
-  if (types.GenericTypeAnnotation.check(path.node)) {
-    const idPath = path.get('id');
-    return Boolean(idPath) && supportedUtilityTypes.has(idPath.node.name);
-  }
-  return false;
-}
-
-/**
- * Unwraps well known utility types. For example:
- *
- *   $ReadOnly<T> => T
- */
-function unwrapUtilityType(path: NodePath): ?NodePath {
-  return path.get('typeParameters', 'params', 0);
 }

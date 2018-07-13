@@ -631,3 +631,66 @@ Object {
   },
 }
 `;
+
+exports[`main fixtures processes component "component_15.js" without errors 1`] = `
+Object {
+  "composes": Array [
+    "BarProps",
+    "BarProps2",
+    "BarProps3",
+  ],
+  "description": "",
+  "displayName": "Foo",
+  "methods": Array [],
+  "props": Object {
+    "other": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "literal",
+        "value": "'a'",
+      },
+      "required": true,
+    },
+    "other2": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "literal",
+        "value": "'b'",
+      },
+      "required": true,
+    },
+    "other3": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "literal",
+        "value": "'c'",
+      },
+      "required": true,
+    },
+    "other4": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "literal",
+        "value": "'g'",
+      },
+      "required": true,
+    },
+    "other5": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "literal",
+        "value": "'f'",
+      },
+      "required": true,
+    },
+    "somePropOverride": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "literal",
+        "value": "'baz'",
+      },
+      "required": true,
+    },
+  },
+}
+`;
