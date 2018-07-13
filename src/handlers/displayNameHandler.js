@@ -39,16 +39,22 @@ export default function displayNameHandler(
       types.ArrowFunctionExpression.check(path.node) ||
       types.FunctionExpression.check(path.node)
     ) {
-      if (types.VariableDeclarator.check(path.parentPath.node)) {
-        documentation.set(
-          'displayName',
-          getNameOrValue(path.parentPath.get('id')),
-        );
-      } else if (types.AssignmentExpression.check(path.parentPath.node)) {
-        documentation.set(
-          'displayName',
-          getNameOrValue(path.parentPath.get('left')),
-        );
+      let currentPath = path;
+      while (currentPath.parent) {
+        if (types.VariableDeclarator.check(currentPath.parent.node)) {
+          documentation.set(
+            'displayName',
+            getNameOrValue(currentPath.parent.get('id')),
+          );
+          return;
+        } else if (types.AssignmentExpression.check(currentPath.parent.node)) {
+          documentation.set(
+            'displayName',
+            getNameOrValue(currentPath.parent.get('left')),
+          );
+          return;
+        }
+        currentPath = currentPath.parent;
       }
     }
     return;

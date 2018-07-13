@@ -174,6 +174,18 @@ describe('defaultPropsHandler', () => {
       expect(documentation.displayName).toBe('Foo');
     });
 
+    it('considers the variable name even if wrapped', () => {
+      const definition = statement('var Foo = React.forwardRef(() => {});').get(
+        'declarations',
+        0,
+        'init',
+        'arguments',
+        0,
+      );
+      expect(() => displayNameHandler(documentation, definition)).not.toThrow();
+      expect(documentation.displayName).toBe('Foo');
+    });
+
     it('considers the variable name on assign', () => {
       const definition = statement('Foo = () => {};').get(
         'expression',
@@ -183,9 +195,29 @@ describe('defaultPropsHandler', () => {
       expect(documentation.displayName).toBe('Foo');
     });
 
+    it('considers the variable name on assign even if wrapped', () => {
+      const definition = statement('Foo = React.forwardRef(() => {});').get(
+        'expression',
+        'right',
+        'arguments',
+        0,
+      );
+      expect(() => displayNameHandler(documentation, definition)).not.toThrow();
+      expect(documentation.displayName).toBe('Foo');
+    });
+
     it('considers a static displayName object property over variable name', () => {
       const definition = statement(`
         var Foo = () => {};
+        Foo.displayName = 'Bar';
+      `);
+      expect(() => displayNameHandler(documentation, definition)).not.toThrow();
+      expect(documentation.displayName).toBe('Bar');
+    });
+
+    it('considers a static displayName object property over variable name even if wrapped', () => {
+      const definition = statement(`
+        var Foo = React.forwardRef(() => {});
         Foo.displayName = 'Bar';
       `);
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();

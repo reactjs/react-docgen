@@ -42,11 +42,16 @@ function resolveName(path) {
     types.ArrowFunctionExpression.check(path.node) ||
     types.TaggedTemplateExpression.check(path.node)
   ) {
-    if (!types.VariableDeclarator.check(path.parent.node)) {
-      return;
+    let currentPath = path;
+    while (currentPath.parent) {
+      if (types.VariableDeclarator.check(currentPath.parent.node)) {
+        return currentPath.parent.get('id', 'name').value;
+      }
+
+      currentPath = currentPath.parent;
     }
 
-    return path.parent.get('id', 'name').value;
+    return;
   }
 
   throw new TypeError(
