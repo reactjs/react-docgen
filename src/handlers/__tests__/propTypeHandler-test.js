@@ -49,12 +49,8 @@ describe('propTypeHandler', () => {
 
       propTypeHandler(documentation, definition);
 
-      expect(getPropTypeMock.mock.calls[0][0].node).toEqualASTNode(
-        fooPath.node,
-      );
-      expect(getPropTypeMock.mock.calls[1][0].node).toEqualASTNode(
-        xyzPath.node,
-      );
+      expect(getPropTypeMock.mock.calls[0][0]).toEqualASTNode(fooPath);
+      expect(getPropTypeMock.mock.calls[1][0]).toEqualASTNode(xyzPath);
     });
 
     it('finds definitions via React.PropTypes', () => {

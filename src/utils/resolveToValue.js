@@ -135,7 +135,8 @@ export default function resolveToValue(path: NodePath): NodePath {
     types.ImportNamespaceSpecifier.check(node) ||
     types.ImportSpecifier.check(node)
   ) {
-    return path.parentPath;
+    // go up two levels as first level is only the array of specifiers
+    return path.parentPath.parentPath;
   } else if (types.AssignmentExpression.check(node)) {
     if (node.operator === '=') {
       return resolveToValue(path.get('right'));

@@ -27,7 +27,7 @@ describe('resolveObjectKeysToArray', () => {
       ['var foo = { bar: 1, foo: 2 };', 'Object.keys(foo);'].join('\n'),
     );
 
-    expect(resolveObjectKeysToArray(path).node).toEqualASTNode(
+    expect(resolveObjectKeysToArray(path)).toEqualASTNode(
       builders.arrayExpression([
         builders.literal('bar'),
         builders.literal('foo'),
@@ -40,7 +40,7 @@ describe('resolveObjectKeysToArray', () => {
       ['var foo = { "bar": 1, 5: 2 };', 'Object.keys(foo);'].join('\n'),
     );
 
-    expect(resolveObjectKeysToArray(path).node).toEqualASTNode(
+    expect(resolveObjectKeysToArray(path)).toEqualASTNode(
       builders.arrayExpression([
         builders.literal('bar'),
         builders.literal('5'),
@@ -53,7 +53,7 @@ describe('resolveObjectKeysToArray', () => {
       ['var foo = { ["bar"]: 1, [5]: 2};', 'Object.keys(foo);'].join('\n'),
     );
 
-    expect(resolveObjectKeysToArray(path).node).toEqualASTNode(
+    expect(resolveObjectKeysToArray(path)).toEqualASTNode(
       builders.arrayExpression([
         builders.literal('bar'),
         builders.literal('5'),
@@ -70,7 +70,7 @@ describe('resolveObjectKeysToArray', () => {
       ].join('\n'),
     );
 
-    expect(resolveObjectKeysToArray(path).node).toEqualASTNode(
+    expect(resolveObjectKeysToArray(path)).toEqualASTNode(
       builders.arrayExpression([
         builders.literal('boo'),
         builders.literal('foo'),
@@ -86,7 +86,7 @@ describe('resolveObjectKeysToArray', () => {
       ),
     );
 
-    expect(resolveObjectKeysToArray(path).node).toEqualASTNode(
+    expect(resolveObjectKeysToArray(path)).toEqualASTNode(
       builders.arrayExpression([
         builders.literal('boo'),
         builders.literal('foo'),
@@ -103,7 +103,7 @@ describe('resolveObjectKeysToArray', () => {
       ].join('\n'),
     );
 
-    expect(resolveObjectKeysToArray(path).node).toEqualASTNode(
+    expect(resolveObjectKeysToArray(path)).toEqualASTNode(
       builders.arrayExpression([
         builders.literal('boo'),
         builders.literal('foo'),
@@ -121,7 +121,7 @@ describe('resolveObjectKeysToArray', () => {
       ].join('\n'),
     );
 
-    expect(resolveObjectKeysToArray(path).node).toEqualASTNode(
+    expect(resolveObjectKeysToArray(path)).toEqualASTNode(
       builders.arrayExpression([
         builders.literal('boo'),
         builders.literal('foo'),
@@ -137,7 +137,7 @@ describe('resolveObjectKeysToArray', () => {
       ),
     );
 
-    expect(resolveObjectKeysToArray(path).node).toEqualASTNode(
+    expect(resolveObjectKeysToArray(path)).toEqualASTNode(
       builders.arrayExpression([builders.literal('x')]),
     );
   });
