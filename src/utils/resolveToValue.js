@@ -141,6 +141,8 @@ export default function resolveToValue(path: NodePath): NodePath {
     if (node.operator === '=') {
       return resolveToValue(path.get('right'));
     }
+  } else if (types.TypeCastExpression.check(node)) {
+    return resolveToValue(path.get('expression'));
   } else if (types.Identifier.check(node)) {
     if (
       (types.ClassDeclaration.check(path.parentPath.node) ||

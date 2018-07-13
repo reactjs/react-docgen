@@ -18,7 +18,7 @@ import * as utils from '../../../tests/utils';
 
 describe('resolveToValue', () => {
   function parse(src) {
-    const root = utils.parse(src);
+    const root = utils.parse(src.trim());
     return root.get('body', root.node.body.length - 1, 'expression');
   }
 
@@ -61,23 +61,27 @@ describe('resolveToValue', () => {
   });
 
   it('resolves to class declarations', () => {
-    const program = utils.parse(`
+    const path = parse(`
       class Foo {}
       Foo;
     `);
-    expect(resolveToValue(program.get('body', 1, 'expression')).node.type).toBe(
-      'ClassDeclaration',
-    );
+    expect(resolveToValue(path).node.type).toBe('ClassDeclaration');
   });
 
   it('resolves to class function declaration', () => {
-    const program = utils.parse(`
+    const path = parse(`
       function foo() {}
       foo;
     `);
-    expect(resolveToValue(program.get('body', 1, 'expression')).node.type).toBe(
-      'FunctionDeclaration',
-    );
+    expect(resolveToValue(path).node.type).toBe('FunctionDeclaration');
+  });
+
+  it('resolves type cast expressions', () => {
+    const path = parse(`
+      function foo() {}
+      (foo: any);
+    `);
+    expect(resolveToValue(path).node.type).toBe('FunctionDeclaration');
   });
 
   describe('assignments', () => {
