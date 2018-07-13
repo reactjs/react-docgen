@@ -613,3 +613,21 @@ Object {
   },
 }
 `;
+
+exports[`main fixtures processes component "component_14.js" without errors 1`] = `
+Object {
+  "description": "",
+  "displayName": "UncoloredView",
+  "methods": Array [],
+  "props": Object {
+    "color": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "string",
+        "nullable": true,
+      },
+      "required": false,
+    },
+  },
+}
+`;
