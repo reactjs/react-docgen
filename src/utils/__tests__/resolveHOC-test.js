@@ -31,19 +31,19 @@ describe('resolveHOC', () => {
 
   it('resolves simple hoc', () => {
     const path = parse(['hoc(42);'].join('\n'));
-    expect(resolveHOC(path).node).toEqualASTNode(builders.literal(42));
+    expect(resolveHOC(path)).toEqualASTNode(builders.literal(42));
   });
 
   it('resolves simple hoc w/ multiple args', () => {
     const path = parse(['hoc1(arg1a, arg1b)(42);'].join('\n'));
-    expect(resolveHOC(path).node).toEqualASTNode(builders.literal(42));
+    expect(resolveHOC(path)).toEqualASTNode(builders.literal(42));
   });
 
   it('resolves nested hocs', () => {
     const path = parse(
       ['hoc2(arg2b, arg2b)(', '  hoc1(arg1a, arg2a)(42)', ');'].join('\n'),
     );
-    expect(resolveHOC(path).node).toEqualASTNode(builders.literal(42));
+    expect(resolveHOC(path)).toEqualASTNode(builders.literal(42));
   });
 
   it('resolves really nested hocs', () => {
@@ -56,6 +56,6 @@ describe('resolveHOC', () => {
         ');',
       ].join('\n'),
     );
-    expect(resolveHOC(path).node).toEqualASTNode(builders.literal(42));
+    expect(resolveHOC(path)).toEqualASTNode(builders.literal(42));
   });
 });

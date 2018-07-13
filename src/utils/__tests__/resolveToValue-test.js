@@ -24,14 +24,14 @@ describe('resolveToValue', () => {
 
   it('resolves simple variable declarations', () => {
     const path = parse(['var foo  = 42;', 'foo;'].join('\n'));
-    expect(resolveToValue(path).node).toEqualASTNode(builders.literal(42));
+    expect(resolveToValue(path)).toEqualASTNode(builders.literal(42));
   });
 
   it('resolves object destructuring', () => {
     const path = parse(['var {foo: {bar: baz}} = bar;', 'baz;'].join('\n'));
 
     // Node should be equal to bar.foo.bar
-    expect(resolveToValue(path).node).toEqualASTNode(
+    expect(resolveToValue(path)).toEqualASTNode(
       builders.memberExpression(
         builders.memberExpression(
           builders.identifier('bar'),
@@ -45,19 +45,19 @@ describe('resolveToValue', () => {
   it('handles SpreadElements properly', () => {
     const path = parse(['var {foo: {bar}, ...baz} = bar;', 'baz;'].join('\n'));
 
-    expect(resolveToValue(path).node).toEqualASTNode(path.node);
+    expect(resolveToValue(path)).toEqualASTNode(path);
   });
 
   it('returns the original path if it cannot be resolved', () => {
     const path = parse(['function foo() {}', 'foo()'].join('\n'));
 
-    expect(resolveToValue(path).node).toEqualASTNode(path.node);
+    expect(resolveToValue(path)).toEqualASTNode(path);
   });
 
   it('resolves variable declarators to their init value', () => {
     const path = utils.parse('var foo = 42;').get('body', 0, 'declarations', 0);
 
-    expect(resolveToValue(path).node).toEqualASTNode(builders.literal(42));
+    expect(resolveToValue(path)).toEqualASTNode(builders.literal(42));
   });
 
   it('resolves to class declarations', () => {
@@ -84,33 +84,41 @@ describe('resolveToValue', () => {
     it('resolves to assigned values', () => {
       const path = parse(['var foo;', 'foo = 42;', 'foo;'].join('\n'));
 
-      expect(resolveToValue(path).node).toEqualASTNode(builders.literal(42));
+      expect(resolveToValue(path)).toEqualASTNode(builders.literal(42));
     });
   });
 
   describe('ImportDeclaration', () => {
     it('resolves default import references to the import declaration', () => {
       const path = parse(['import foo from "Foo"', 'foo;'].join('\n'));
+      const value = resolveToValue(path);
 
-      expect(resolveToValue(path).node.type).toBe('ImportDeclaration');
+      expect(Array.isArray(value.value)).toBe(false);
+      expect(value.node.type).toBe('ImportDeclaration');
     });
 
     it('resolves named import references to the import declaration', () => {
       const path = parse(['import {foo} from "Foo"', 'foo;'].join('\n'));
+      const value = resolveToValue(path);
 
-      expect(resolveToValue(path).node.type).toBe('ImportDeclaration');
+      expect(Array.isArray(value.value)).toBe(false);
+      expect(value.node.type).toBe('ImportDeclaration');
     });
 
     it('resolves aliased import references to the import declaration', () => {
       const path = parse(['import {foo as bar} from "Foo"', 'bar;'].join('\n'));
+      const value = resolveToValue(path);
 
-      expect(resolveToValue(path).node.type).toBe('ImportDeclaration');
+      expect(Array.isArray(value.value)).toBe(false);
+      expect(value.node.type).toBe('ImportDeclaration');
     });
 
     it('resolves namespace import references to the import declaration', () => {
       const path = parse(['import * as bar from "Foo"', 'bar;'].join('\n'));
+      const value = resolveToValue(path);
 
-      expect(resolveToValue(path).node.type).toBe('ImportDeclaration');
+      expect(Array.isArray(value.value)).toBe(false);
+      expect(value.node.type).toBe('ImportDeclaration');
     });
   });
 
@@ -118,7 +126,7 @@ describe('resolveToValue', () => {
     it("resolves a MemberExpression to it's init value", () => {
       const path = parse(['var foo = { bar: 1 };', 'foo.bar;'].join('\n'));
 
-      expect(resolveToValue(path).node).toEqualASTNode(builders.literal(1));
+      expect(resolveToValue(path)).toEqualASTNode(builders.literal(1));
     });
 
     it('resolves a MemberExpression in the scope chain', () => {
@@ -126,7 +134,7 @@ describe('resolveToValue', () => {
         ['var foo = 1;', 'var bar = { baz: foo };', 'bar.baz;'].join('\n'),
       );
 
-      expect(resolveToValue(path).node).toEqualASTNode(builders.literal(1));
+      expect(resolveToValue(path)).toEqualASTNode(builders.literal(1));
     });
 
     it('resolves a nested MemberExpression in the scope chain', () => {
@@ -138,7 +146,7 @@ describe('resolveToValue', () => {
         ].join('\n'),
       );
 
-      expect(resolveToValue(path).node).toEqualASTNode(builders.literal(1));
+      expect(resolveToValue(path)).toEqualASTNode(builders.literal(1));
     });
 
     it('returns the last resolvable MemberExpression', () => {
@@ -150,7 +158,7 @@ describe('resolveToValue', () => {
         ].join('\n'),
       );
 
-      expect(resolveToValue(path).node).toEqualASTNode(
+      expect(resolveToValue(path)).toEqualASTNode(
         builders.memberExpression(
           builders.identifier('foo'),
           builders.identifier('bar'),
@@ -163,7 +171,7 @@ describe('resolveToValue', () => {
         ['var foo = {};', 'foo.bar = 1;', 'foo.bar;'].join('\n'),
       );
 
-      expect(resolveToValue(path).node).toEqualASTNode(path.node);
+      expect(resolveToValue(path)).toEqualASTNode(path);
     });
   });
 });

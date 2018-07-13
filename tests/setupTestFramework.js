@@ -17,16 +17,24 @@ const matchers = {
       );
     }
 
+    // Use value here instead of node, as node has some magic and always returns
+    // the next Node it finds even if value is an array
+    const receivedNode = received.value;
+    let expectedNode = expected;
+    if (expected instanceof recast.types.NodePath) {
+      expectedNode = expected.value;
+    }
+
     return {
-      pass: recast.types.astNodesAreEquivalent(received, expected),
+      pass: recast.types.astNodesAreEquivalent(receivedNode, expectedNode),
       message: () => {
-        const diffString = diff(expected, received);
+        const diffString = diff(expectedNode, receivedNode);
 
         return (
           'Expected value to be (using ast-types):\n' +
-          `  ${utils.printExpected(expected)}\n` +
+          `  ${utils.printExpected(expectedNode)}\n` +
           'Received:\n' +
-          `  ${utils.printReceived(received)}` +
+          `  ${utils.printReceived(receivedNode)}` +
           (diffString ? `\n\nDifference:\n\n${diffString}` : '')
         );
       },
