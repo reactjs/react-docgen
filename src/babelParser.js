@@ -36,7 +36,7 @@ const babelParserOptions = {
     'bigInt',
     'optionalCatchBinding',
     'throwExpressions',
-    'pipelineOperator',
+    ['pipelineOperator', { proposal: 'minimal' }],
     'nullishCoalescingOperator',
   ],
 };

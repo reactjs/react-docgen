@@ -36,7 +36,7 @@
   "author": "Felix Kling",
   "license": "BSD-3-Clause",
   "dependencies": {
-    "@babel/parser": "7.0.0-beta.51",
+    "@babel/parser": "7.0.0-beta.53",
     "async": "^2.1.4",
     "babel-runtime": "^6.9.2",
     "commander": "^2.9.0",
@@ -57,7 +57,7 @@
     "eslint": "^5.0.1",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-prettier": "^2.6.1",
-    "flow-bin": "^0.75.0",
+    "flow-bin": "^0.76.0",
     "jest": "^23.1.0",
     "jest-diff": "^23.0.1",
     "jest-matcher-utils": "^23.0.1",
