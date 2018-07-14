@@ -266,6 +266,44 @@ describe('getPropType', () => {
     });
   });
 
+  it('detects descriptions on nested types in arrayOf', () => {
+    expect(
+      getPropType(
+        expression(`arrayOf(
+      /**
+       * test2
+       */
+      string
+    )`),
+      ),
+    ).toEqual({
+      name: 'arrayOf',
+      description: 'test2',
+      value: {
+        name: 'string',
+      },
+    });
+  });
+
+  it('detects descriptions on nested types in objectOf', () => {
+    expect(
+      getPropType(
+        expression(`objectOf(
+      /**
+       * test2
+       */
+      string
+    )`),
+      ),
+    ).toEqual({
+      name: 'objectOf',
+      description: 'test2',
+      value: {
+        name: 'string',
+      },
+    });
+  });
+
   it('detects descriptions on nested types in shapes', () => {
     expect(
       getPropType(
