@@ -76,13 +76,14 @@ As with the CLI, this will look for the exported component created through `Reac
 
 `parse` accepts more arguments with which this behavior can be customized.
 
-### parse(source \[, resolver \[, handlers\]\])
+### parse(source \[, resolver \[, handlers \[, options\]\]\])
 
 | Parameter |  Type | Description |
 | -------------- | ------ | --------------- |
 | source       | string | The source text |
 | resolver     | function | A function of the form `(ast: ASTNode, recast: Object) => (NodePath|Array<NodePath>)`. Given an AST and a reference to recast, it returns an (array of) NodePath which represents the component definition. |
-| handlers    | Array\<function\> | An array of functions of the form `(documentation: Documentation, definition: NodePath) => void`. Each function is called with a `Documentation` object and a reference to the component definition as returned by `resolver`. Handlers extract relevant information from the definition and augment `documentation`. |
+| handlers     | Array\<function\> | An array of functions of the form `(documentation: Documentation, definition: NodePath) => void`. Each function is called with a `Documentation` object and a reference to the component definition as returned by `resolver`. Handlers extract relevant information from the definition and augment `documentation`. |
+| options      | Pass options to react-docgen. Supported option is `legacyDecorators` which is a boolean |
 
 #### resolver
 
