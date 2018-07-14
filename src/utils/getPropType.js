@@ -86,6 +86,12 @@ function getPropTypeOneOfType(argumentPath) {
 
 function getPropTypeArrayOf(argumentPath) {
   const type: PropTypeDescriptor = { name: 'arrayOf' };
+
+  const docs = getDocblock(argumentPath);
+  if (docs) {
+    type.description = docs;
+  }
+
   const subType = getPropType(argumentPath);
 
   if (subType.name === 'unknown') {
@@ -99,6 +105,12 @@ function getPropTypeArrayOf(argumentPath) {
 
 function getPropTypeObjectOf(argumentPath) {
   const type: PropTypeDescriptor = { name: 'objectOf' };
+
+  const docs = getDocblock(argumentPath);
+  if (docs) {
+    type.description = docs;
+  }
+
   const subType = getPropType(argumentPath);
 
   if (subType.name === 'unknown') {
