@@ -21,6 +21,24 @@ const {
   types: { namedTypes: types },
 } = recast;
 
+function resolveDocumentation(
+  documentation: Documentation,
+  path: NodePath,
+): void {
+  if (!types.ObjectExpression.check(path.node)) {
+    return;
+  }
+
+  path.get('properties').each(propertyPath => {
+    if (types.Property.check(propertyPath.node)) {
+      setPropDescription(documentation, propertyPath);
+    } else if (types.SpreadElement.check(propertyPath.node)) {
+      const resolvedValuePath = resolveToValue(propertyPath.get('argument'));
+      resolveDocumentation(documentation, resolvedValuePath);
+    }
+  });
+}
+
 export default function propDocBlockHandler(
   documentation: Documentation,
   path: NodePath,
@@ -30,14 +48,9 @@ export default function propDocBlockHandler(
     return;
   }
   propTypesPath = resolveToValue(propTypesPath);
-  if (!propTypesPath || !types.ObjectExpression.check(propTypesPath.node)) {
+  if (!propTypesPath) {
     return;
   }
 
-  propTypesPath.get('properties').each(propertyPath => {
-    // we only support documentation of actual properties, not spread
-    if (types.Property.check(propertyPath.node)) {
-      setPropDescription(documentation, propertyPath);
-    }
-  });
+  resolveDocumentation(documentation, propTypesPath);
 }

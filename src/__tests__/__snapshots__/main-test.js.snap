@@ -865,3 +865,25 @@ Object {
   },
 }
 `;
+
+exports[`main fixtures processes component "component_16.js" without errors 1`] = `
+Object {
+  "description": "",
+  "displayName": "Foo",
+  "methods": Array [],
+  "props": Object {
+    "bar": Object {
+      "defaultValue": Object {
+        "computed": false,
+        "value": "null",
+      },
+      "description": "This does something.",
+      "required": false,
+      "type": Object {
+        "name": "custom",
+        "raw": "PropTypes.node",
+      },
+    },
+  },
+}
+`;
