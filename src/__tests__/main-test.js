@@ -230,8 +230,11 @@ describe('main', () => {
       const fileContent = fs.readFileSync(path.join(fixturePath, fileNames[i]));
 
       it(`processes component "${fileNames[i]}" without errors`, () => {
-        expect(() => docgen.parse(fileContent)).not.toThrowError();
-        expect(docgen.parse(fileContent)).toMatchSnapshot();
+        let result;
+        expect(() => {
+          result = docgen.parse(fileContent);
+        }).not.toThrowError();
+        expect(result).toMatchSnapshot();
       });
     }
   });
