@@ -20,6 +20,7 @@ import printValue from './printValue';
 import recast from 'recast';
 import resolveToValue from './resolveToValue';
 import resolveObjectKeysToArray from './resolveObjectKeysToArray';
+import type { PropTypeDescriptor, PropDescriptor } from '../types';
 
 const {
   types: { namedTypes: types },
@@ -164,18 +165,18 @@ function getPropTypeInstanceOf(argumentPath) {
   };
 }
 
-const simplePropTypes = {
-  array: 1,
-  bool: 1,
-  func: 1,
-  number: 1,
-  object: 1,
-  string: 1,
-  any: 1,
-  element: 1,
-  node: 1,
-  symbol: 1,
-};
+const simplePropTypes = [
+  'array',
+  'bool',
+  'func',
+  'number',
+  'object',
+  'string',
+  'any',
+  'element',
+  'node',
+  'symbol',
+];
 
 const propTypes = {
   oneOf: getPropTypeOneOf,
@@ -205,7 +206,7 @@ export default function getPropType(path: NodePath): PropTypeDescriptor {
       name = node.name;
     }
     if (name) {
-      if (simplePropTypes.hasOwnProperty(name)) {
+      if (simplePropTypes.includes(name)) {
         descriptor = { name };
         return true;
       } else if (propTypes.hasOwnProperty(name) && member.argumentsPath) {
@@ -216,10 +217,7 @@ export default function getPropType(path: NodePath): PropTypeDescriptor {
   });
   if (!descriptor) {
     const node = path.node;
-    if (
-      types.Identifier.check(node) &&
-      simplePropTypes.hasOwnProperty(node.name)
-    ) {
+    if (types.Identifier.check(node) && simplePropTypes.includes(node.name)) {
       descriptor = { name: node.name };
     } else if (
       types.CallExpression.check(node) &&

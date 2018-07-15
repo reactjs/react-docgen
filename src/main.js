@@ -16,6 +16,7 @@ import * as AllResolver from './resolver';
 import * as utils from './utils';
 import type { Options } from './babelParser';
 import type { DocumentationObject } from './Documentation';
+import type { Handler, Resolver } from './types';
 
 const defaultResolver = AllResolver.findExportedComponentDefinition;
 const defaultHandlers = [

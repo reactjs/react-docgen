@@ -20,7 +20,7 @@
   },
   "main": "dist/main.js",
   "scripts": {
-    "build": "rimraf dist/ && babel src/ --out-dir dist/ --ignore __tests__,__mocks__",
+    "build": "rimraf dist/ && babel src/ --out-dir dist/ --ignore __tests__,__mocks__,src/types.js",
     "lint": "eslint . --report-unused-disable-directives",
     "fix": "eslint . --fix --report-unused-disable-directives",
     "prepublish": "yarn build",

@@ -20,11 +20,7 @@ module.exports = {
   },
   globals: {
     ASTNode: true,
-    FlowTypeDescriptor: true,
-    Handler: true,
     NodePath: true,
-    PropDescriptor: true,
-    PropTypeDescriptor: true,
-    Resolver: true
+    Recast: true
   }
 }

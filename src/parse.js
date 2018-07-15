@@ -14,6 +14,7 @@ import postProcessDocumentation from './utils/postProcessDocumentation';
 
 import buildParser, { type Options } from './babelParser';
 import recast from 'recast';
+import type { Handler, Resolver } from './types';
 
 const ERROR_MISSING_DEFINITION = 'No suitable component definition found.';
 

@@ -15,6 +15,7 @@ import getParameterName from './getParameterName';
 import getPropertyName from './getPropertyName';
 import getTypeAnnotation from './getTypeAnnotation';
 import recast from 'recast';
+import type { FlowTypeDescriptor } from '../types';
 
 const {
   types: { namedTypes: types },

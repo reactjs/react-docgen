@@ -10,19 +10,21 @@
  *
  */
 
+import type { PropDescriptor } from './types';
+
 export type DocumentationObject = {
-  props?: Object,
-  context?: Object,
-  childContext?: Object,
+  props?: { [string]: PropDescriptor },
+  context?: { [string]: PropDescriptor },
+  childContext?: { [string]: PropDescriptor },
   composes?: Array<string>,
 };
 
 class Documentation {
-  _props: Object;
-  _context: Object;
-  _childContext: Object;
+  _props: Map<string, PropDescriptor>;
+  _context: Map<string, PropDescriptor>;
+  _childContext: Map<string, PropDescriptor>;
   _composes: Set<string>;
-  _data: Object;
+  _data: Map<string, any>;
 
   constructor() {
     this._props = new Map();

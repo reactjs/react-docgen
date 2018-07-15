@@ -18,6 +18,12 @@ import recast from 'recast';
 import getTypeAnnotation from '../utils/getTypeAnnotation';
 import resolveToValue from '../utils/resolveToValue';
 import { resolveObjectExpressionToNameArray } from '../utils/resolveObjectKeysToArray';
+import type {
+  FlowTypeDescriptor,
+  FlowElementsType,
+  FlowFunctionSignatureType,
+  FlowObjectSignatureType,
+} from '../types';
 
 const {
   types: { namedTypes: types },
@@ -58,7 +64,7 @@ function getFlowTypeWithRequirements(path: NodePath): FlowTypeDescriptor {
   return type;
 }
 
-function handleKeysHelper(path: NodePath) {
+function handleKeysHelper(path: NodePath): ?FlowElementsType {
   let value = path.get('typeParameters', 'params', 0);
   if (types.TypeofTypeAnnotation.check(value.node)) {
     value = value.get('argument', 'id');
@@ -81,7 +87,7 @@ function handleKeysHelper(path: NodePath) {
   return null;
 }
 
-function handleArrayTypeAnnotation(path: NodePath) {
+function handleArrayTypeAnnotation(path: NodePath): FlowElementsType {
   return {
     name: 'Array',
     elements: [getFlowTypeWithResolvedTypes(path.get('elementType'))],
@@ -89,14 +95,23 @@ function handleArrayTypeAnnotation(path: NodePath) {
   };
 }
 
-function handleGenericTypeAnnotation(path: NodePath) {
+function handleGenericTypeAnnotation(path: NodePath): ?FlowTypeDescriptor {
   if (path.node.id.name === '$Keys' && path.node.typeParameters) {
     return handleKeysHelper(path);
   }
 
-  let type;
+  let type: FlowTypeDescriptor;
   if (types.QualifiedTypeIdentifier.check(path.node.id)) {
-    type = handleQualifiedTypeIdentifier(path.get('id'));
+    const id = path.get('id');
+
+    if (id.node.qualification.name === 'React') {
+      type = {
+        name: `${id.node.qualification.name}${id.node.id.name}`,
+        raw: printValue(id),
+      };
+    } else {
+      type = { name: printValue(id).replace(/<.*>$/, '') };
+    }
   } else {
     type = { name: path.node.id.name };
   }
@@ -119,8 +134,8 @@ function handleGenericTypeAnnotation(path: NodePath) {
   return type;
 }
 
-function handleObjectTypeAnnotation(path: NodePath) {
-  const type = {
+function handleObjectTypeAnnotation(path: NodePath): FlowTypeDescriptor {
+  const type: FlowObjectSignatureType = {
     name: 'signature',
     type: 'object',
     raw: printValue(path),
@@ -150,7 +165,7 @@ function handleObjectTypeAnnotation(path: NodePath) {
   return type;
 }
 
-function handleUnionTypeAnnotation(path: NodePath) {
+function handleUnionTypeAnnotation(path: NodePath): FlowElementsType {
   return {
     name: 'union',
     raw: printValue(path),
@@ -160,7 +175,7 @@ function handleUnionTypeAnnotation(path: NodePath) {
   };
 }
 
-function handleIntersectionTypeAnnotation(path: NodePath) {
+function handleIntersectionTypeAnnotation(path: NodePath): FlowElementsType {
   return {
     name: 'intersection',
     raw: printValue(path),
@@ -170,7 +185,7 @@ function handleIntersectionTypeAnnotation(path: NodePath) {
   };
 }
 
-function handleNullableTypeAnnotation(path: NodePath) {
+function handleNullableTypeAnnotation(path: NodePath): ?FlowTypeDescriptor {
   const typeAnnotation = getTypeAnnotation(path);
 
   if (!typeAnnotation) return null;
@@ -181,8 +196,10 @@ function handleNullableTypeAnnotation(path: NodePath) {
   return type;
 }
 
-function handleFunctionTypeAnnotation(path: NodePath) {
-  const type = {
+function handleFunctionTypeAnnotation(
+  path: NodePath,
+): FlowFunctionSignatureType {
+  const type: FlowFunctionSignatureType = {
     name: 'signature',
     type: 'function',
     raw: printValue(path),
@@ -205,8 +222,12 @@ function handleFunctionTypeAnnotation(path: NodePath) {
   return type;
 }
 
-function handleTupleTypeAnnotation(path: NodePath) {
-  const type = { name: 'tuple', raw: printValue(path), elements: [] };
+function handleTupleTypeAnnotation(path: NodePath): FlowElementsType {
+  const type: FlowElementsType = {
+    name: 'tuple',
+    raw: printValue(path),
+    elements: [],
+  };
 
   path.get('types').each(param => {
     type.elements.push(getFlowTypeWithResolvedTypes(param));
@@ -215,14 +236,8 @@ function handleTupleTypeAnnotation(path: NodePath) {
   return type;
 }
 
-function handleTypeofTypeAnnotation(path: NodePath) {
+function handleTypeofTypeAnnotation(path: NodePath): FlowTypeDescriptor {
   return getFlowTypeWithResolvedTypes(path.get('argument'));
-}
-
-function handleQualifiedTypeIdentifier(path: NodePath) {
-  if (path.node.qualification.name !== 'React') return null;
-
-  return { name: `React${path.node.id.name}`, raw: printValue(path) };
 }
 
 let visitedTypes = {};

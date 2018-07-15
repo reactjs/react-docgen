@@ -399,6 +399,44 @@ describe('getFlowType', () => {
     });
   });
 
+  it('handles qualified type identifiers', () => {
+    const typePath = statement(`
+      var x: MyType.x = {};
+
+      type MyType = { a: string, b: ?xyz };
+    `)
+      .get('declarations', 0)
+      .get('id')
+      .get('typeAnnotation')
+      .get('typeAnnotation');
+
+    expect(getFlowType(typePath)).toEqual({
+      name: 'MyType.x',
+    });
+  });
+
+  it('handles qualified type identifiers with params', () => {
+    const typePath = statement(`
+      var x: MyType.x<any> = {};
+
+      type MyType = { a: string, b: ?xyz };
+    `)
+      .get('declarations', 0)
+      .get('id')
+      .get('typeAnnotation')
+      .get('typeAnnotation');
+
+    expect(getFlowType(typePath)).toEqual({
+      name: 'MyType.x',
+      raw: 'MyType.x<any>',
+      elements: [
+        {
+          name: 'any',
+        },
+      ],
+    });
+  });
+
   describe('React types', () => {
     function test(type, expected) {
       const typePath = statement(`
