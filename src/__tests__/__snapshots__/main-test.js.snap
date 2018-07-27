@@ -17,6 +17,7 @@ Object {
       "docblock": null,
       "modifiers": Array [
         "static",
+        "get",
       ],
       "name": "displayName",
       "params": Array [],
@@ -26,6 +27,7 @@ Object {
       "docblock": null,
       "modifiers": Array [
         "static",
+        "get",
       ],
       "name": "defaultProps",
       "params": Array [],
