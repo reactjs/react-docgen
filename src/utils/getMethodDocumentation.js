@@ -87,6 +87,10 @@ function getMethodModifiers(methodPath) {
     modifiers.push('static');
   }
 
+  if (methodPath.node.kind === 'get' || methodPath.node.kind === 'set') {
+    modifiers.push(methodPath.node.kind);
+  }
+
   const functionExpression = methodPath.get('value').node;
   if (functionExpression.generator) {
     modifiers.push('generator');
