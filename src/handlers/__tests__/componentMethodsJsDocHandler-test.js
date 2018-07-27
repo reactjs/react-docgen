@@ -13,7 +13,7 @@
 import Documentation from '../../Documentation';
 import componentMethodsJsDocHandler from '../componentMethodsJsDocHandler';
 
-describe('componentMethodsHandler', () => {
+describe('componentMethodsJsDocHandler', () => {
   let documentation;
 
   beforeEach(() => {
@@ -76,6 +76,7 @@ describe('componentMethodsHandler', () => {
           {
             name: 'test',
             description: null,
+            optional: false,
             type: { name: 'string' },
           },
         ],
@@ -121,6 +122,7 @@ describe('componentMethodsHandler', () => {
           {
             name: 'test',
             description: null,
+            optional: false,
             type: { name: 'number' },
           },
         ],
@@ -166,6 +168,7 @@ describe('componentMethodsHandler', () => {
           {
             name: 'test',
             description: 'The test',
+            optional: false,
             type: null,
           },
         ],
