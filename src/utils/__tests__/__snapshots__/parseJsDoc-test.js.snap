@@ -1,0 +1,189 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`parseJsDoc @param extracts jsdoc description 1`] = `
+Object {
+  "description": null,
+  "params": Array [
+    Object {
+      "description": "test",
+      "name": "bar",
+      "optional": false,
+      "type": null,
+    },
+  ],
+  "returns": null,
+}
+`;
+
+exports[`parseJsDoc @param extracts jsdoc empty description 1`] = `
+Object {
+  "description": null,
+  "params": Array [
+    Object {
+      "description": null,
+      "name": "bar",
+      "optional": false,
+      "type": Object {
+        "name": "string",
+      },
+    },
+  ],
+  "returns": null,
+}
+`;
+
+exports[`parseJsDoc @param extracts jsdoc optional 1`] = `
+Object {
+  "description": null,
+  "params": Array [
+    Object {
+      "description": null,
+      "name": "bar",
+      "optional": true,
+      "type": Object {
+        "name": "string",
+      },
+    },
+  ],
+  "returns": null,
+}
+`;
+
+exports[`parseJsDoc @param extracts jsdoc typed array 1`] = `
+Object {
+  "description": null,
+  "params": Array [
+    Object {
+      "description": null,
+      "name": "bar",
+      "optional": false,
+      "type": Object {
+        "elements": Array [
+          Object {
+            "name": "string",
+          },
+          Object {
+            "name": "number",
+          },
+        ],
+        "name": "tuple",
+      },
+    },
+  ],
+  "returns": null,
+}
+`;
+
+exports[`parseJsDoc @param extracts jsdoc union type param 1`] = `
+Object {
+  "description": null,
+  "params": Array [
+    Object {
+      "description": null,
+      "name": "bar",
+      "optional": false,
+      "type": Object {
+        "elements": Array [
+          Object {
+            "name": "string",
+          },
+          Object {
+            "name": "Object",
+          },
+          Object {
+            "elements": Array [
+              Object {
+                "name": "some",
+              },
+            ],
+            "name": "Array",
+          },
+        ],
+        "name": "union",
+      },
+    },
+  ],
+  "returns": null,
+}
+`;
+
+exports[`parseJsDoc @returns extracts description from jsdoc 1`] = `
+Object {
+  "description": null,
+  "params": Array [],
+  "returns": Object {
+    "description": "The number",
+    "type": null,
+  },
+}
+`;
+
+exports[`parseJsDoc @returns extracts jsdoc mixed types 1`] = `
+Object {
+  "description": null,
+  "params": Array [],
+  "returns": Object {
+    "description": null,
+    "type": Object {
+      "name": "mixed",
+    },
+  },
+}
+`;
+
+exports[`parseJsDoc @returns extracts jsdoc typed array 1`] = `
+Object {
+  "description": null,
+  "params": Array [
+    Object {
+      "description": null,
+      "name": "bar",
+      "optional": false,
+      "type": Object {
+        "elements": Array [
+          Object {
+            "name": "string",
+          },
+          Object {
+            "name": "number",
+          },
+        ],
+        "name": "tuple",
+      },
+    },
+  ],
+  "returns": null,
+}
+`;
+
+exports[`parseJsDoc @returns extracts jsdoc types 1`] = `
+Object {
+  "description": null,
+  "params": Array [],
+  "returns": Object {
+    "description": null,
+    "type": Object {
+      "name": "string",
+    },
+  },
+}
+`;
+
+exports[`parseJsDoc @returns works with @return 1`] = `
+Object {
+  "description": null,
+  "params": Array [],
+  "returns": Object {
+    "description": "The number",
+    "type": null,
+  },
+}
+`;
+
+exports[`parseJsDoc description extracts the method description in jsdoc 1`] = `
+Object {
+  "description": "Don't use this!",
+  "params": Array [],
+  "returns": null,
+}
+`;

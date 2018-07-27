@@ -25,29 +25,51 @@ type JsDoc = {
   },
 };
 
-function getType(tag) {
-  if (!tag.type) {
+function getType(tagType) {
+  if (!tagType) {
     return null;
-  } else if (tag.type.type === 'UnionType') {
-    // union type
-    return {
-      name: 'union',
-      value: tag.type.elements.map(function(element) {
-        return element.name;
-      }),
-    };
-  } else if (tag.type.type === 'AllLiteral') {
-    // return {*}
-    return { name: 'mixed' };
   }
-  return { name: tag.type.name ? tag.type.name : tag.type.expression.name };
+
+  const { type, name, expression, elements, applications } = tagType;
+
+  switch (type) {
+    case 'NameExpression':
+      // {a}
+      return { name };
+    case 'UnionType':
+      // {a|b}
+      return {
+        name: 'union',
+        elements: elements.map(element => getType(element)),
+      };
+    case 'AllLiteral':
+      // {*}
+      return { name: 'mixed' };
+    case 'TypeApplication':
+      // {Array<string>} or {string[]}
+      return {
+        name: expression.name,
+        elements: applications.map(element => getType(element)),
+      };
+    case 'ArrayType':
+      // {[number, string]}
+      return {
+        name: 'tuple',
+        elements: elements.map(element => getType(element)),
+      };
+    default: {
+      const typeName = name ? name : expression ? expression.name : null;
+      if (typeName) {
+        return { name: typeName };
+      } else {
+        return null;
+      }
+    }
+  }
 }
 
-function getOptional(tag) {
-  if (tag.type && tag.type.type && tag.type.type === 'OptionalType') {
-    return true;
-  }
-  return undefined;
+function getOptional(tag): boolean {
+  return !!(tag.type && tag.type.type && tag.type.type === 'OptionalType');
 }
 
 // Add jsdoc @return description.
@@ -58,7 +80,7 @@ function getReturnsJsDoc(jsDoc) {
   if (returnTag) {
     return {
       description: returnTag.description,
-      type: getType(returnTag),
+      type: getType(returnTag.type),
     };
   }
   return null;
@@ -73,7 +95,7 @@ function getParamsJsDoc(jsDoc) {
     return {
       name: tag.name,
       description: tag.description,
-      type: getType(tag),
+      type: getType(tag.type),
       optional: getOptional(tag),
     };
   });

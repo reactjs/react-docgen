@@ -24,150 +24,38 @@ describe('parseJsDoc', () => {
       const docblock = `
         Don't use this!
       `;
-      expect(parseJsDoc(docblock)).toEqual({
-        description: "Don't use this!",
-        returns: null,
-        params: [],
+      expect(parseJsDoc(docblock)).toMatchSnapshot();
+    });
+  });
+  describe('@param', () => {
+    const docBlocks = {
+      'extracts jsdoc description': '@param bar test',
+      'extracts jsdoc empty description': '@param {string} bar',
+      'extracts jsdoc union type param': '@param {string|Object|some[]} bar',
+      'extracts jsdoc optional': '@param {string=} bar',
+      'extracts jsdoc typed array': '@param {[string, number]} bar',
+    };
+
+    Object.keys(docBlocks).forEach(name => {
+      const docBlock = docBlocks[name];
+      it(name, () => {
+        expect(parseJsDoc(docBlock)).toMatchSnapshot();
       });
     });
   });
+  describe('@returns', () => {
+    const docBlocks = {
+      'extracts jsdoc types': '@returns {string}',
+      'extracts jsdoc mixed types': '@returns {*}',
+      'extracts description from jsdoc': '@returns The number',
+      'works with @return': '@return The number',
+      'extracts jsdoc typed array': '@param {[string, number]} bar',
+    };
 
-  describe('parameters', () => {
-    it('extracts jsdoc description', () => {
-      const docblock = `
-        @param bar test
-      `;
-      expect(parseJsDoc(docblock)).toEqual({
-        description: null,
-        returns: null,
-        params: [
-          {
-            name: 'bar',
-            type: null,
-            description: 'test',
-          },
-        ],
-      });
-    });
-
-    it('extracts jsdoc description', () => {
-      const docblock = `
-        @param {string} bar
-      `;
-      expect(parseJsDoc(docblock)).toEqual({
-        description: null,
-        returns: null,
-        params: [
-          {
-            name: 'bar',
-            type: { name: 'string' },
-            description: null,
-          },
-        ],
-      });
-    });
-
-    it('extracts jsdoc union type param', () => {
-      const docblock = `
-        @param {string|Object} bar
-      `;
-      expect(parseJsDoc(docblock)).toEqual({
-        description: null,
-        returns: null,
-        params: [
-          {
-            name: 'bar',
-            type: { name: 'union', value: ['string', 'Object'] },
-            description: null,
-          },
-        ],
-      });
-    });
-
-    it('extracts jsdoc optional', () => {
-      const docblock = `
-        @param {string=} bar
-      `;
-      expect(parseJsDoc(docblock)).toEqual({
-        description: null,
-        returns: null,
-        params: [
-          {
-            name: 'bar',
-            type: { name: 'string' },
-            description: null,
-            optional: true,
-          },
-        ],
-      });
-    });
-
-    describe('returns', () => {
-      it('returns null if return is not documented', () => {
-        const docblock = `
-          test
-        `;
-        expect(parseJsDoc(docblock)).toEqual({
-          description: 'test',
-          returns: null,
-          params: [],
-        });
-      });
-
-      it('extracts jsdoc types', () => {
-        const docblock = `
-          @returns {string}
-        `;
-        expect(parseJsDoc(docblock)).toEqual({
-          description: null,
-          returns: {
-            type: { name: 'string' },
-            description: null,
-          },
-          params: [],
-        });
-      });
-
-      it('extracts jsdoc mixed types', () => {
-        const docblock = `
-          @returns {*}
-        `;
-        expect(parseJsDoc(docblock)).toEqual({
-          description: null,
-          returns: {
-            type: { name: 'mixed' },
-            description: null,
-          },
-          params: [],
-        });
-      });
-
-      it('extracts description from jsdoc', () => {
-        const docblock = `
-          @returns The number
-        `;
-        expect(parseJsDoc(docblock)).toEqual({
-          description: null,
-          returns: {
-            type: null,
-            description: 'The number',
-          },
-          params: [],
-        });
-      });
-
-      it('works with @return', () => {
-        const docblock = `
-          @return The number
-        `;
-        expect(parseJsDoc(docblock)).toEqual({
-          description: null,
-          returns: {
-            type: null,
-            description: 'The number',
-          },
-          params: [],
-        });
+    Object.keys(docBlocks).forEach(name => {
+      const docBlock = docBlocks[name];
+      it(name, () => {
+        expect(parseJsDoc(docBlock)).toMatchSnapshot();
       });
     });
   });
