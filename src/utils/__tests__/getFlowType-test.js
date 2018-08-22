@@ -535,6 +535,25 @@ describe('getFlowType', () => {
     });
   });
 
+  it('resolves $Keys with an ObjectTypeAnnotation typeParameter to union', () => {
+    const typePath = statement(`
+      var x: $Keys<{| apple: string, banana: string |}> = 2;
+    `)
+      .get('declarations', 0)
+      .get('id')
+      .get('typeAnnotation')
+      .get('typeAnnotation');
+
+    expect(getFlowType(typePath)).toEqual({
+      name: 'union',
+      elements: [
+        { name: 'literal', value: 'apple' },
+        { name: 'literal', value: 'banana' },
+      ],
+      raw: '$Keys<{| apple: string, banana: string |}>',
+    });
+  });
+
   it('handles multiple references to one type', () => {
     const typePath = statement(`
       let action: { a: Action, b: Action };
