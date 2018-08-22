@@ -68,7 +68,7 @@ function handleKeysHelper(path: NodePath): ?FlowElementsType {
   let value = path.get('typeParameters', 'params', 0);
   if (types.TypeofTypeAnnotation.check(value.node)) {
     value = value.get('argument', 'id');
-  } else {
+  } else if (!types.ObjectTypeAnnotation.check(value.node)) {
     value = value.get('id');
   }
   const resolvedPath = resolveToValue(value);
@@ -82,6 +82,19 @@ function handleKeysHelper(path: NodePath): ?FlowElementsType {
         elements: keys.map(key => ({ name: 'literal', value: key })),
       };
     }
+  } else if (
+    resolvedPath &&
+    types.ObjectTypeAnnotation.check(resolvedPath.node) &&
+    resolvedPath.node.properties.length
+  ) {
+    return {
+      name: 'union',
+      raw: printValue(path),
+      elements: resolvedPath.node.properties.map(prop => ({
+        name: 'literal',
+        value: prop.key.name,
+      })),
+    };
   }
 
   return null;
