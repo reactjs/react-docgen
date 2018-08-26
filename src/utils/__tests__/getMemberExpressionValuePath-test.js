@@ -85,8 +85,6 @@ describe('getMemberExpressionValuePath', () => {
         Foo.propTypes = {};
       `);
 
-      console.log(def);
-
       expect(getMemberExpressionValuePath(def, 'propTypes')).toBe(
         def.parent.get('body', 1, 'expression', 'right'),
       );
