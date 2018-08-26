@@ -78,4 +78,18 @@ describe('getMemberExpressionValuePath', () => {
       );
     });
   });
+  describe('CallExpression', () => {
+    it('finds "normal" property definitions', () => {
+      const def = statement(`
+        const Foo = system({is: "button"}, "space");
+        Foo.propTypes = {};
+      `);
+
+      console.log(def);
+
+      expect(getMemberExpressionValuePath(def, 'propTypes')).toBe(
+        def.parent.get('body', 1, 'expression', 'right'),
+      );
+    });
+  });
 });

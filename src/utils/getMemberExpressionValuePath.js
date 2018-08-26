@@ -40,7 +40,8 @@ function resolveName(path) {
   if (
     types.FunctionExpression.check(path.node) ||
     types.ArrowFunctionExpression.check(path.node) ||
-    types.TaggedTemplateExpression.check(path.node)
+    types.TaggedTemplateExpression.check(path.node) ||
+    types.CallExpression.check(path.node)
   ) {
     let currentPath = path;
     while (currentPath.parent) {
@@ -56,7 +57,7 @@ function resolveName(path) {
 
   throw new TypeError(
     'Attempted to resolveName for an unsupported path. resolveName accepts a ' +
-      'VariableDeclaration, FunctionDeclaration, or FunctionExpression. Got "' +
+      'VariableDeclaration, FunctionDeclaration, FunctionExpression, or CallExpression. Got "' +
       path.node.type +
       '".',
   );
