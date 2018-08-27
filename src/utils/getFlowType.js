@@ -90,9 +90,9 @@ function handleKeysHelper(path: NodePath): ?FlowElementsType {
     return {
       name: 'union',
       raw: printValue(path),
-      elements: resolvedPath.node.properties.map(prop => ({
+      elements: resolvedPath.get('properties').map(prop => ({
         name: 'literal',
-        value: prop.key.name,
+        value: getPropertyName(prop),
       })),
     };
   }
