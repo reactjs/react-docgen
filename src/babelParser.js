@@ -53,7 +53,10 @@ function buildOptions(options?: Options = {}) {
   if (options.legacyDecorators) {
     parserOptions.plugins.push('decorators-legacy');
   } else {
-    parserOptions.plugins.push('decorators');
+    parserOptions.plugins.push([
+      'decorators',
+      { decoratorsBeforeExport: false },
+    ]);
   }
 
   return parserOptions;
