@@ -29,34 +29,57 @@ function isObjectKeysCall(node: ASTNode): boolean {
   );
 }
 
-export function resolveObjectExpressionToNameArray(
-  objectExpression: NodePath,
+function isWhitelistedObjectProperty(prop) {
+  return (
+    (types.Property.check(prop) &&
+      ((types.Identifier.check(prop.key) && !prop.computed) ||
+        types.Literal.check(prop.key))) ||
+    types.SpreadElement.check(prop)
+  );
+}
+
+function isWhiteListedObjectTypeProperty(prop) {
+  return (
+    types.ObjectTypeProperty.check(prop) ||
+    types.ObjectTypeSpreadProperty.check(prop)
+  );
+}
+
+// Resolves an ObjectExpression or an ObjectTypeAnnotation
+export function resolveObjectToNameArray(
+  object: NodePath,
   raw: boolean = false,
 ): ?Array<string> {
   if (
-    types.ObjectExpression.check(objectExpression.value) &&
-    objectExpression.value.properties.every(
-      prop =>
-        (types.Property.check(prop) &&
-          ((types.Identifier.check(prop.key) && !prop.computed) ||
-            types.Literal.check(prop.key))) ||
-        types.SpreadElement.check(prop),
-    )
+    (types.ObjectExpression.check(object.value) &&
+      object.value.properties.every(isWhitelistedObjectProperty)) ||
+    (types.ObjectTypeAnnotation.check(object.value) &&
+      object.value.properties.every(isWhiteListedObjectTypeProperty))
   ) {
     let values = [];
     let error = false;
-    objectExpression.get('properties').each(propPath => {
+    object.get('properties').each(propPath => {
       if (error) return;
       const prop = propPath.value;
 
-      if (types.Property.check(prop)) {
+      if (types.Property.check(prop) || types.ObjectTypeProperty.check(prop)) {
         // Key is either Identifier or Literal
         const name = prop.key.name || (raw ? prop.key.raw : prop.key.value);
 
         values.push(name);
-      } else if (types.SpreadElement.check(prop)) {
-        const spreadObject = resolveToValue(propPath.get('argument'));
-        const spreadValues = resolveObjectExpressionToNameArray(spreadObject);
+      } else if (
+        types.SpreadElement.check(prop) ||
+        types.ObjectTypeSpreadProperty.check(prop)
+      ) {
+        let spreadObject = resolveToValue(propPath.get('argument'));
+        if (types.GenericTypeAnnotation.check(spreadObject.value)) {
+          const typeAlias = resolveToValue(spreadObject.get('id'));
+          if (types.ObjectTypeAnnotation.check(typeAlias.get('right').value)) {
+            spreadObject = resolveToValue(typeAlias.get('right'));
+          }
+        }
+
+        const spreadValues = resolveObjectToNameArray(spreadObject);
         if (!spreadValues) {
           error = true;
           return;
@@ -87,7 +110,7 @@ export default function resolveObjectKeysToArray(path: NodePath): ?NodePath {
 
   if (isObjectKeysCall(node)) {
     const objectExpression = resolveToValue(path.get('arguments').get(0));
-    const values = resolveObjectExpressionToNameArray(objectExpression);
+    const values = resolveObjectToNameArray(objectExpression);
 
     if (values) {
       const nodes = values
