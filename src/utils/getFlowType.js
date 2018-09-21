@@ -33,6 +33,7 @@ const flowTypes = {
   AnyTypeAnnotation: 'any',
   BooleanTypeAnnotation: 'boolean',
   MixedTypeAnnotation: 'mixed',
+  NullLiteralTypeAnnotation: 'null',
   NumberTypeAnnotation: 'number',
   StringTypeAnnotation: 'string',
   VoidTypeAnnotation: 'void',
