@@ -23,6 +23,7 @@ describe('isStatelessComponent', () => {
 
   const componentIdentifiers = {
     JSX: '<div />',
+    JSXFragment: '<></>',
     'React.createElement': 'React.createElement("div", null)',
     'React.cloneElement': 'React.cloneElement(children, null)',
     'React.Children.only()': 'React.Children.only(children, null)',
