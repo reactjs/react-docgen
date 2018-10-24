@@ -48,11 +48,14 @@ export default function displayNameHandler(
           );
           return;
         } else if (types.AssignmentExpression.check(currentPath.parent.node)) {
-          documentation.set(
-            'displayName',
-            getNameOrValue(currentPath.parent.get('left')),
-          );
-          return;
+          const leftPath = currentPath.parent.get('left');
+          if (
+            types.Identifier.check(leftPath.node) ||
+            types.Literal.check(leftPath.node)
+          ) {
+            documentation.set('displayName', getNameOrValue(leftPath));
+            return;
+          }
         }
         currentPath = currentPath.parent;
       }
