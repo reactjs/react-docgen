@@ -15,6 +15,7 @@ const parser = require('@babel/parser');
 const babelParserOptions = {
   sourceType: 'module',
   strictMode: false,
+  tokens: true,
   plugins: [
     'jsx',
     'flow',
@@ -68,9 +69,7 @@ export default function buildParse(options: Options) {
 
   return {
     parse(src: string) {
-      const file = parser.parse(src, parserOptions);
-      file.program.comments = file.comments;
-      return file.program;
+      return parser.parse(src, parserOptions);
     },
   };
 }
