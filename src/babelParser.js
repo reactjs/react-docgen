@@ -43,6 +43,7 @@ const babelParserOptions = {
 
 export type Options = {
   legacyDecorators?: boolean,
+  decoratorsBeforeExport?: boolean,
 };
 
 function buildOptions(options?: Options = {}) {
@@ -55,7 +56,7 @@ function buildOptions(options?: Options = {}) {
   } else {
     parserOptions.plugins.push([
       'decorators',
-      { decoratorsBeforeExport: false },
+      { decoratorsBeforeExport: options.decoratorsBeforeExport || false },
     ]);
   }
 
