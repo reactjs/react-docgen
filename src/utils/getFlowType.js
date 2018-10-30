@@ -273,13 +273,13 @@ function getFlowTypeWithResolvedTypes(path: NodePath): FlowTypeDescriptor {
     }
   }
 
+  if (!type) {
+    type = { name: 'unknown' };
+  }
+
   if (isTypeAlias) {
     // mark the type as unvisited so that further calls can resolve the type again
     visitedTypes[path.parentPath.node.id.name] = type;
-  }
-
-  if (!type) {
-    type = { name: 'unknown' };
   }
 
   return type;
