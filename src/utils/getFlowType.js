@@ -293,6 +293,12 @@ function getFlowTypeWithResolvedTypes(path: NodePath): FlowTypeDescriptor {
  * If there is no match, "unknown" is returned.
  */
 export default function getFlowType(path: NodePath): FlowTypeDescriptor {
+  // Empty visited types before an after run
+  // Before: in case the detection threw and we rerun again
+  // After: cleanup memory after we are done here
   visitedTypes = {};
-  return getFlowTypeWithResolvedTypes(path);
+  const type = getFlowTypeWithResolvedTypes(path);
+  visitedTypes = {};
+
+  return type;
 }
