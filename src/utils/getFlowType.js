@@ -68,6 +68,8 @@ function handleKeysHelper(path: NodePath): ?FlowElementsType {
   let value = path.get('typeParameters', 'params', 0);
   if (types.TypeofTypeAnnotation.check(value.node)) {
     value = value.get('argument', 'id');
+  } else if (!types.ObjectTypeAnnotation.check(value.node)) {
+    value = value.get('id');
   }
   const resolvedPath = resolveToValue(value);
   if (

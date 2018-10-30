@@ -512,6 +512,29 @@ describe('getFlowType', () => {
     });
   });
 
+  it('resolves $Keys without typeof to union', () => {
+    const typePath = statement(`
+      var x: $Keys<CONTENTS> = 2;
+      const CONTENTS = {
+        'apple': '🍎',
+        'banana': '🍌',
+      };
+    `)
+      .get('declarations', 0)
+      .get('id')
+      .get('typeAnnotation')
+      .get('typeAnnotation');
+
+    expect(getFlowType(typePath)).toEqual({
+      name: 'union',
+      elements: [
+        { name: 'literal', value: "'apple'" },
+        { name: 'literal', value: "'banana'" },
+      ],
+      raw: '$Keys<CONTENTS>',
+    });
+  });
+
   it('resolves $Keys with an ObjectTypeAnnotation typeParameter to union', () => {
     const typePath = statement(`
       var x: $Keys<{| apple: string, banana: string |}> = 2;
