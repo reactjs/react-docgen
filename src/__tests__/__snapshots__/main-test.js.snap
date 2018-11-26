@@ -933,3 +933,33 @@ Object {
   },
 }
 `;
+
+exports[`main fixtures processes component "component_18.js" without errors 1`] = `
+Object {
+  "description": "",
+  "displayName": "UncoloredView",
+  "methods": Array [],
+  "props": Object {
+    "color": Object {
+      "description": "",
+      "required": false,
+      "type": Object {
+        "name": "custom",
+        "raw": "PropTypes.string.isRequired",
+      },
+    },
+    "id": Object {
+      "defaultValue": Object {
+        "computed": false,
+        "value": "'test-forward-ref-default'",
+      },
+      "description": "",
+      "required": false,
+      "type": Object {
+        "name": "custom",
+        "raw": "PropTypes.string",
+      },
+    },
+  },
+}
+`;

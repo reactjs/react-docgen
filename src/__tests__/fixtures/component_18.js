@@ -7,9 +7,16 @@ type Props = $ReadOnly<{|
 |}>;
 
 const ColoredView = React.forwardRef((props: Props, ref) => (
-  <View style={{backgroundColor: props.color}} />
+  <div ref={ref} style={{backgroundColor: props.color}} />
 ));
 
 ColoredView.displayName = 'UncoloredView';
+ColoredView.propTypes = {
+  color: PropTypes.string.isRequired,
+  id: PropTypes.string
+}
+ColoredView.defaultProps = {
+  id: 'test-forward-ref-default'
+}
 
 module.exports = extendStyles(ColoredView);
