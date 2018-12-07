@@ -114,6 +114,8 @@ Handlers do the actual work and extract the desired information from the result 
 
 For example, while the `propTypesHandler` expects the prop types definition to be an ObjectExpression and be available as `propTypes` in the component definition, most of the work is actually performed by the `getPropType` utility function.
 
+> There are some community created handlers available. Have a look at the wiki for a list: https://github.com/reactjs/react-docgen/wiki
+
 ## Guidelines for default resolvers and handlers
 
 - Modules have to export a single component, and only that component is analyzed.
