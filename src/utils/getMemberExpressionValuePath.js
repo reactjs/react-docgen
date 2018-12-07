@@ -42,6 +42,7 @@ function resolveName(path) {
     types.FunctionExpression.check(path.node) ||
     types.ArrowFunctionExpression.check(path.node) ||
     types.TaggedTemplateExpression.check(path.node) ||
+    types.CallExpression.check(path.node) ||
     isReactForwardRefCall(path)
   ) {
     let currentPath = path;

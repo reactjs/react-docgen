@@ -50,6 +50,13 @@ describe('getMemberValuePath', () => {
     expect(getClassMemberValuePath).toBeCalledWith(path, 'foo');
   });
 
+  it('handles CallExpressions', () => {
+    const path = expression('system({is: "button"}, "space")');
+
+    getMemberValuePath(path, 'foo');
+    expect(getMemberExpressionValuePath).toBeCalledWith(path, 'foo');
+  });
+
   it('tries synonyms', () => {
     let path = expression('{}');
 

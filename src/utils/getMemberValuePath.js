@@ -54,7 +54,7 @@ function isSupportedDefinitionType({ node }) {
      * TaggedTemplateExpression's to generate components.
      *
      * While react-docgen's built-in resolvers do not support resolving
-     * TaggedTemplateExpression definitiona, third-party resolvers (such as
+     * TaggedTemplateExpression definitions, third-party resolvers (such as
      * https://github.com/Jmeyering/react-docgen-annotation-resolver) could be
      * used to add these definitions.
      */
@@ -64,6 +64,16 @@ function isSupportedDefinitionType({ node }) {
     types.ArrowFunctionExpression.check(node) ||
     types.FunctionDeclaration.check(node) ||
     types.FunctionExpression.check(node) ||
+    /**
+     * Adds support for libraries such as
+     * [system-components]{@link https://jxnblk.com/styled-system/system-components} that use
+     * CallExpressions to generate components.
+     *
+     * While react-docgen's built-in resolvers do not support resolving
+     * CallExpressions definitions, third-party resolvers (such as
+     * https://github.com/Jmeyering/react-docgen-annotation-resolver) could be
+     * used to add these definitions.
+     */
     types.CallExpression.check(node)
   );
 }
@@ -92,8 +102,7 @@ export default function getMemberValuePath(
         'VariableDeclaration, ArrowFunctionExpression, FunctionExpression, ' +
         'TaggedTemplateExpression, FunctionDeclaration or CallExpression. Got "' +
         componentDefinition.node.type +
-        '"' +
-        'instead.',
+        '" instead.',
     );
   }
 
