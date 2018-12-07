@@ -20,7 +20,7 @@ yarn add react-docgen --dev
 ```
 
 ```
-npm install react-docgen
+npm install --save-dev react-docgen
 ```
 
 
@@ -163,7 +163,7 @@ MyComponent.defaultProps = {
   bar: 21
 };
 
-export default Component;
+export default MyComponent;
 ```
 
 we are getting this output:

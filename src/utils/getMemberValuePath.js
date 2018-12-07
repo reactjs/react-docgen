@@ -34,6 +34,7 @@ const POSTPROCESS_MEMBERS = {
 
 const LOOKUP_METHOD = {
   [types.ArrowFunctionExpression.name]: getMemberExpressionValuePath,
+  [types.CallExpression.name]: getMemberExpressionValuePath,
   [types.FunctionExpression.name]: getMemberExpressionValuePath,
   [types.FunctionDeclaration.name]: getMemberExpressionValuePath,
   [types.VariableDeclaration.name]: getMemberExpressionValuePath,
@@ -99,7 +100,7 @@ export default function getMemberValuePath(
       'Got unsupported definition type. Definition must be one of ' +
         'ObjectExpression, ClassDeclaration, ClassExpression,' +
         'VariableDeclaration, ArrowFunctionExpression, FunctionExpression, ' +
-        'TaggedTemplateExpression, FunctionDeclaration, or CallExpression. Got "' +
+        'TaggedTemplateExpression, FunctionDeclaration or CallExpression. Got "' +
         componentDefinition.node.type +
         '" instead.',
     );

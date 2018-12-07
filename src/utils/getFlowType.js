@@ -17,7 +17,7 @@ import printValue from './printValue';
 import recast from 'recast';
 import getTypeAnnotation from '../utils/getTypeAnnotation';
 import resolveToValue from '../utils/resolveToValue';
-import { resolveObjectExpressionToNameArray } from '../utils/resolveObjectKeysToArray';
+import { resolveObjectToNameArray } from '../utils/resolveObjectKeysToArray';
 import type {
   FlowTypeDescriptor,
   FlowElementsType,
@@ -33,6 +33,7 @@ const flowTypes = {
   AnyTypeAnnotation: 'any',
   BooleanTypeAnnotation: 'boolean',
   MixedTypeAnnotation: 'mixed',
+  NullLiteralTypeAnnotation: 'null',
   NumberTypeAnnotation: 'number',
   StringTypeAnnotation: 'string',
   VoidTypeAnnotation: 'void',
@@ -68,12 +69,16 @@ function handleKeysHelper(path: NodePath): ?FlowElementsType {
   let value = path.get('typeParameters', 'params', 0);
   if (types.TypeofTypeAnnotation.check(value.node)) {
     value = value.get('argument', 'id');
-  } else {
+  } else if (!types.ObjectTypeAnnotation.check(value.node)) {
     value = value.get('id');
   }
   const resolvedPath = resolveToValue(value);
-  if (resolvedPath && types.ObjectExpression.check(resolvedPath.node)) {
-    const keys = resolveObjectExpressionToNameArray(resolvedPath, true);
+  if (
+    resolvedPath &&
+    (types.ObjectExpression.check(resolvedPath.node) ||
+      types.ObjectTypeAnnotation.check(resolvedPath.node))
+  ) {
+    const keys = resolveObjectToNameArray(resolvedPath, true);
 
     if (keys) {
       return {
@@ -272,13 +277,13 @@ function getFlowTypeWithResolvedTypes(path: NodePath): FlowTypeDescriptor {
     }
   }
 
+  if (!type) {
+    type = { name: 'unknown' };
+  }
+
   if (isTypeAlias) {
     // mark the type as unvisited so that further calls can resolve the type again
     visitedTypes[path.parentPath.node.id.name] = type;
-  }
-
-  if (!type) {
-    type = { name: 'unknown' };
   }
 
   return type;
@@ -292,6 +297,12 @@ function getFlowTypeWithResolvedTypes(path: NodePath): FlowTypeDescriptor {
  * If there is no match, "unknown" is returned.
  */
 export default function getFlowType(path: NodePath): FlowTypeDescriptor {
+  // Empty visited types before an after run
+  // Before: in case the detection threw and we rerun again
+  // After: cleanup memory after we are done here
   visitedTypes = {};
-  return getFlowTypeWithResolvedTypes(path);
+  const type = getFlowTypeWithResolvedTypes(path);
+  visitedTypes = {};
+
+  return type;
 }

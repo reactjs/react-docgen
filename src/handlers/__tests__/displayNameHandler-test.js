@@ -223,5 +223,14 @@ describe('defaultPropsHandler', () => {
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('Bar');
     });
+
+    it('ignores assignment to non-literal/identifier', () => {
+      const definition = statement('Foo.Bar = () => {};').get(
+        'expression',
+        'right',
+      );
+      expect(() => displayNameHandler(documentation, definition)).not.toThrow();
+      expect(documentation.displayName).not.toBeDefined();
+    });
   });
 });

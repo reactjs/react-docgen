@@ -80,7 +80,14 @@ function getPropTypeOneOfType(argumentPath) {
     type.computed = true;
     type.value = printValue(argumentPath);
   } else {
-    type.value = argumentPath.get('elements').map(getPropType);
+    type.value = argumentPath.get('elements').map(function(itemPath) {
+      const descriptor: PropTypeDescriptor = getPropType(itemPath);
+      const docs = getDocblock(itemPath);
+      if (docs) {
+        descriptor.description = docs;
+      }
+      return descriptor;
+    });
   }
   return type;
 }

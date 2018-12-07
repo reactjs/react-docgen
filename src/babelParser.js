@@ -15,6 +15,7 @@ const parser = require('@babel/parser');
 const babelParserOptions = {
   sourceType: 'module',
   strictMode: false,
+  tokens: true,
   plugins: [
     'jsx',
     'flow',
@@ -43,6 +44,7 @@ const babelParserOptions = {
 
 export type Options = {
   legacyDecorators?: boolean,
+  decoratorsBeforeExport?: boolean,
 };
 
 function buildOptions(options?: Options = {}) {
@@ -53,7 +55,10 @@ function buildOptions(options?: Options = {}) {
   if (options.legacyDecorators) {
     parserOptions.plugins.push('decorators-legacy');
   } else {
-    parserOptions.plugins.push('decorators');
+    parserOptions.plugins.push([
+      'decorators',
+      { decoratorsBeforeExport: options.decoratorsBeforeExport || false },
+    ]);
   }
 
   return parserOptions;
@@ -64,9 +69,7 @@ export default function buildParse(options: Options) {
 
   return {
     parse(src: string) {
-      const file = parser.parse(src, parserOptions);
-      file.program.comments = file.comments;
-      return file.program;
+      return parser.parse(src, parserOptions);
     },
   };
 }

@@ -46,6 +46,10 @@ argv
     'Enable parsing of legacy decorators proposal. By default only the new decorators syntax will be parsable.'
   )
   .option(
+    '--decorators-before-export',
+    'Switches the decorators proposal to allow decorators before the export statement. By default this is false.'
+  )
+  .option(
     '-i, --ignore <path>',
     'Folders to ignore. Default: ' + JSON.stringify(defaultIgnore),
     collect,
@@ -111,6 +115,7 @@ if (argv.resolver) {
 function parse(source) {
   return parser.parse(source, resolver, null, {
     legacyDecorators: argv.legacyDecorators,
+    decoratorsBeforeExport: argv.decoratorsBeforeExport,
   });
 }
 

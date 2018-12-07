@@ -32,6 +32,7 @@ const validPossibleStatelessComponentTypes = [
 function isJSXElementOrReactCall(path) {
   return (
     path.node.type === 'JSXElement' ||
+    path.node.type === 'JSXFragment' ||
     (path.node.type === 'CallExpression' && isReactCreateElementCall(path)) ||
     (path.node.type === 'CallExpression' && isReactCloneElementCall(path)) ||
     (path.node.type === 'CallExpression' && isReactChildrenElementCall(path))
