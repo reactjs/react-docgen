@@ -17,7 +17,7 @@ import printValue from './printValue';
 import recast from 'recast';
 import getTypeAnnotation from '../utils/getTypeAnnotation';
 import resolveToValue from '../utils/resolveToValue';
-import { resolveObjectExpressionToNameArray } from '../utils/resolveObjectKeysToArray';
+import { resolveObjectToNameArray } from '../utils/resolveObjectKeysToArray';
 import type {
   FlowTypeDescriptor,
   FlowElementsType,
@@ -69,12 +69,16 @@ function handleKeysHelper(path: NodePath): ?FlowElementsType {
   let value = path.get('typeParameters', 'params', 0);
   if (types.TypeofTypeAnnotation.check(value.node)) {
     value = value.get('argument', 'id');
-  } else {
+  } else if (!types.ObjectTypeAnnotation.check(value.node)) {
     value = value.get('id');
   }
   const resolvedPath = resolveToValue(value);
-  if (resolvedPath && types.ObjectExpression.check(resolvedPath.node)) {
-    const keys = resolveObjectExpressionToNameArray(resolvedPath, true);
+  if (
+    resolvedPath &&
+    (types.ObjectExpression.check(resolvedPath.node) ||
+      types.ObjectTypeAnnotation.check(resolvedPath.node))
+  ) {
+    const keys = resolveObjectToNameArray(resolvedPath, true);
 
     if (keys) {
       return {
