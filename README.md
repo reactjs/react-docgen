@@ -20,7 +20,7 @@ yarn add react-docgen --dev
 ```
 
 ```
-npm install react-docgen
+npm install --save-dev react-docgen
 ```
 
 
