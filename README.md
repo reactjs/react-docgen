@@ -163,7 +163,7 @@ MyComponent.defaultProps = {
   bar: 21
 };
 
-export default Component;
+export default MyComponent;
 ```
 
 we are getting this output:
