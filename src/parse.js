@@ -66,7 +66,7 @@ export default function parse(
     }
     return executeHandlers(handlers, componentDefinitions);
   } else if (componentDefinitions) {
-    return executeHandlers(handlers, [(componentDefinitions: NodePath)])[0];
+    return executeHandlers(handlers, [componentDefinitions])[0];
   }
 
   throw new Error(ERROR_MISSING_DEFINITION);
