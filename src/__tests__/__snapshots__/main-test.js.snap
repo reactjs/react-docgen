@@ -78,11 +78,33 @@ Object {
         "value": "Child.propTypes",
       },
     },
+    "childExact": Object {
+      "description": "",
+      "required": true,
+      "type": Object {
+        "computed": true,
+        "name": "exact",
+        "value": "Child.propTypes",
+      },
+    },
     "extendedChild": Object {
       "description": "",
       "required": true,
       "type": Object {
         "name": "shape",
+        "value": Object {
+          "adopted": Object {
+            "name": "bool",
+            "required": true,
+          },
+        },
+      },
+    },
+    "extendedChildExact": Object {
+      "description": "",
+      "required": true,
+      "type": Object {
+        "name": "exact",
         "value": Object {
           "adopted": Object {
             "name": "bool",
@@ -896,6 +918,24 @@ Object {
   "displayName": "Foo",
   "methods": Array [],
   "props": Object {
+    "exactProp": Object {
+      "description": "",
+      "required": false,
+      "type": Object {
+        "name": "exact",
+        "value": Object {
+          "c": Object {
+            "description": "Comment for property c",
+            "name": "string",
+            "required": false,
+          },
+          "d": Object {
+            "name": "number",
+            "required": false,
+          },
+        },
+      },
+    },
     "oneOfTypeProp": Object {
       "description": "",
       "required": false,

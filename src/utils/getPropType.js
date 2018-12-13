@@ -130,8 +130,11 @@ function getPropTypeObjectOf(argumentPath) {
   return type;
 }
 
-function getPropTypeShape(argumentPath) {
-  const type: PropTypeDescriptor = { name: 'shape' };
+/**
+ * Handles shape and exact prop types
+ */
+function getPropTypeShapish(name, argumentPath) {
+  const type: PropTypeDescriptor = { name };
   if (!types.ObjectExpression.check(argumentPath.node)) {
     argumentPath = resolveToValue(argumentPath);
   }
@@ -191,7 +194,8 @@ const propTypes = {
   instanceOf: getPropTypeInstanceOf,
   arrayOf: getPropTypeArrayOf,
   objectOf: getPropTypeObjectOf,
-  shape: getPropTypeShape,
+  shape: getPropTypeShapish.bind(null, 'shape'),
+  exact: getPropTypeShapish.bind(null, 'exact'),
 };
 
 /**

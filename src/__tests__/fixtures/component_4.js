@@ -23,6 +23,11 @@ class Parent extends React.Component {
     extendedChild: pt.shape({
       ...Child.propTypes,
       adopted: pt.bool.isRequired
+    }).isRequired,
+    childExact: pt.exact(Child.propTypes).isRequired,
+    extendedChildExact: pt.exact({
+      ...Child.propTypes,
+      adopted: pt.bool.isRequired
     }).isRequired
   };
 }

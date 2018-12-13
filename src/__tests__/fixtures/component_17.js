@@ -25,6 +25,11 @@ Foo.propTypes = {
     a: PropTypes.string,
     b: PropTypes.number
   }),
+  exactProp: PropTypes.exact({
+    /** Comment for property c */
+    c: PropTypes.string,
+    d: PropTypes.number
+  }),
   oneOfTypeProp: PropTypes.oneOfType([
     /** Comment for type string */
     PropTypes.string,

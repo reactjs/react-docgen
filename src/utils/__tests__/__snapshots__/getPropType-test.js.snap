@@ -1,0 +1,219 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getPropType detects custom validation functions for arrow function 1`] = `
+Object {
+  "name": "custom",
+  "raw": "() => {}",
+}
+`;
+
+exports[`getPropType detects custom validation functions for function 1`] = `
+Object {
+  "name": "custom",
+  "raw": "(function() {})",
+}
+`;
+
+exports[`getPropType detects descriptions on nested types in arrayOf 1`] = `
+Object {
+  "description": "test2",
+  "name": "arrayOf",
+  "value": Object {
+    "name": "string",
+  },
+}
+`;
+
+exports[`getPropType detects descriptions on nested types in exacts 1`] = `
+Object {
+  "name": "exact",
+  "value": Object {
+    "bar": Object {
+      "description": "test2",
+      "name": "bool",
+      "required": false,
+    },
+    "foo": Object {
+      "description": "test1",
+      "name": "string",
+      "required": false,
+    },
+  },
+}
+`;
+
+exports[`getPropType detects descriptions on nested types in objectOf 1`] = `
+Object {
+  "description": "test2",
+  "name": "objectOf",
+  "value": Object {
+    "name": "string",
+  },
+}
+`;
+
+exports[`getPropType detects descriptions on nested types in shapes 1`] = `
+Object {
+  "name": "shape",
+  "value": Object {
+    "bar": Object {
+      "description": "test2",
+      "name": "bool",
+      "required": false,
+    },
+    "foo": Object {
+      "description": "test1",
+      "name": "string",
+      "required": false,
+    },
+  },
+}
+`;
+
+exports[`getPropType detects required notations of nested types in exacts 1`] = `
+Object {
+  "name": "exact",
+  "value": Object {
+    "bar": Object {
+      "name": "bool",
+      "required": false,
+    },
+    "foo": Object {
+      "name": "string",
+      "required": true,
+    },
+  },
+}
+`;
+
+exports[`getPropType detects required notations of nested types in shapes 1`] = `
+Object {
+  "name": "shape",
+  "value": Object {
+    "bar": Object {
+      "name": "bool",
+      "required": false,
+    },
+    "foo": Object {
+      "name": "string",
+      "required": true,
+    },
+  },
+}
+`;
+
+exports[`getPropType resolve identifier to their values correctly resolves SpreadElements in arrays 1`] = `
+Object {
+  "name": "enum",
+  "value": Array [
+    Object {
+      "computed": false,
+      "value": "\\"foo\\"",
+    },
+    Object {
+      "computed": false,
+      "value": "\\"bar\\"",
+    },
+  ],
+}
+`;
+
+exports[`getPropType resolve identifier to their values correctly resolves nested SpreadElements in arrays 1`] = `
+Object {
+  "name": "enum",
+  "value": Array [
+    Object {
+      "computed": false,
+      "value": "\\"foo\\"",
+    },
+    Object {
+      "computed": false,
+      "value": "\\"bar\\"",
+    },
+  ],
+}
+`;
+
+exports[`getPropType resolve identifier to their values does not resolve computed values 1`] = `
+Object {
+  "name": "enum",
+  "value": Array [
+    Object {
+      "computed": false,
+      "value": "\\"FOO\\"",
+    },
+    Object {
+      "computed": false,
+      "value": "\\"BAR\\"",
+    },
+  ],
+}
+`;
+
+exports[`getPropType resolve identifier to their values does not resolve external values 1`] = `
+Object {
+  "computed": true,
+  "name": "enum",
+  "value": "TYPES",
+}
+`;
+
+exports[`getPropType resolve identifier to their values resolves memberExpressions 1`] = `
+Object {
+  "name": "enum",
+  "value": Array [
+    Object {
+      "computed": false,
+      "value": "\\"foo\\"",
+    },
+    Object {
+      "computed": false,
+      "value": "\\"bar\\"",
+    },
+  ],
+}
+`;
+
+exports[`getPropType resolve identifier to their values resolves simple identifier to their initialization value 1`] = `
+Object {
+  "name": "enum",
+  "value": Array [
+    Object {
+      "computed": false,
+      "value": "\\"foo\\"",
+    },
+    Object {
+      "computed": false,
+      "value": "\\"bar\\"",
+    },
+  ],
+}
+`;
+
+exports[`getPropType resolve identifier to their values resolves simple identifier to their initialization value in array 1`] = `
+Object {
+  "name": "enum",
+  "value": Array [
+    Object {
+      "computed": false,
+      "value": "\\"foo\\"",
+    },
+    Object {
+      "computed": false,
+      "value": "\\"bar\\"",
+    },
+  ],
+}
+`;
+
+exports[`getPropType resolve identifier to their values resolves variables to their values 1`] = `
+Object {
+  "name": "shape",
+  "value": Object {
+    "bar": Object {
+      "name": "string",
+      "required": false,
+    },
+  },
+}
+`;

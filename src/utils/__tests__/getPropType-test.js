@@ -112,9 +112,35 @@ describe('getPropType', () => {
       },
     });
 
+    expect(getPropType(expression('exact({foo: string, bar: bool})'))).toEqual({
+      name: 'exact',
+      value: {
+        foo: {
+          name: 'string',
+          required: false,
+        },
+        bar: {
+          name: 'bool',
+          required: false,
+        },
+      },
+    });
+
     // custom
     expect(getPropType(expression('shape({foo: xyz})'))).toEqual({
       name: 'shape',
+      value: {
+        foo: {
+          name: 'custom',
+          raw: 'xyz',
+          required: false,
+        },
+      },
+    });
+
+    // custom
+    expect(getPropType(expression('exact({foo: xyz})'))).toEqual({
+      name: 'exact',
       value: {
         foo: {
           name: 'custom',
@@ -130,6 +156,13 @@ describe('getPropType', () => {
       value: 'Child.propTypes',
       computed: true,
     });
+
+    // computed
+    expect(getPropType(expression('exact(Child.propTypes)'))).toEqual({
+      name: 'exact',
+      value: 'Child.propTypes',
+      computed: true,
+    });
   });
 
   describe('resolve identifier to their values', () => {
@@ -139,15 +172,7 @@ describe('getPropType', () => {
         var shape = {bar: PropTypes.string};
       `).get('expression');
 
-      expect(getPropType(propTypeExpression)).toEqual({
-        name: 'shape',
-        value: {
-          bar: {
-            name: 'string',
-            required: false,
-          },
-        },
-      });
+      expect(getPropType(propTypeExpression)).toMatchSnapshot();
     });
 
     it('resolves simple identifier to their initialization value', () => {
@@ -156,27 +181,17 @@ describe('getPropType', () => {
         var TYPES = ["foo", "bar"];
       `).get('expression');
 
-      expect(getPropType(propTypeIdentifier)).toEqual({
-        name: 'enum',
-        value: [
-          { value: '"foo"', computed: false },
-          { value: '"bar"', computed: false },
-        ],
-      });
+      expect(getPropType(propTypeIdentifier)).toMatchSnapshot();
+    });
 
+    it('resolves simple identifier to their initialization value in array', () => {
       const identifierInsideArray = statement(`
         PropTypes.oneOf([FOO, BAR]);
         var FOO = "foo";
         var BAR = "bar";
       `).get('expression');
 
-      expect(getPropType(identifierInsideArray)).toEqual({
-        name: 'enum',
-        value: [
-          { value: '"foo"', computed: false },
-          { value: '"bar"', computed: false },
-        ],
-      });
+      expect(getPropType(identifierInsideArray)).toMatchSnapshot();
     });
 
     it('resolves memberExpressions', () => {
@@ -185,13 +200,7 @@ describe('getPropType', () => {
         var TYPES = { FOO: "foo", BAR: "bar" };
       `).get('expression');
 
-      expect(getPropType(propTypeExpression)).toEqual({
-        name: 'enum',
-        value: [
-          { value: '"foo"', computed: false },
-          { value: '"bar"', computed: false },
-        ],
-      });
+      expect(getPropType(propTypeExpression)).toMatchSnapshot();
     });
 
     it('correctly resolves SpreadElements in arrays', () => {
@@ -200,13 +209,7 @@ describe('getPropType', () => {
         var TYPES = ["foo", "bar"];
       `).get('expression');
 
-      expect(getPropType(propTypeExpression)).toEqual({
-        name: 'enum',
-        value: [
-          { value: '"foo"', computed: false },
-          { value: '"bar"', computed: false },
-        ],
-      });
+      expect(getPropType(propTypeExpression)).toMatchSnapshot();
     });
 
     it('correctly resolves nested SpreadElements in arrays', () => {
@@ -216,13 +219,7 @@ describe('getPropType', () => {
         var TYPES2 = ["bar"];
       `).get('expression');
 
-      expect(getPropType(propTypeExpression)).toEqual({
-        name: 'enum',
-        value: [
-          { value: '"foo"', computed: false },
-          { value: '"bar"', computed: false },
-        ],
-      });
+      expect(getPropType(propTypeExpression)).toMatchSnapshot();
     });
 
     it('does not resolve computed values', () => {
@@ -231,13 +228,7 @@ describe('getPropType', () => {
         var TYPES = { FOO: "foo", BAR: "bar" };
       `).get('expression');
 
-      expect(getPropType(propTypeExpression)).toEqual({
-        name: 'enum',
-        value: [
-          { value: '"FOO"', computed: false },
-          { value: '"BAR"', computed: false },
-        ],
-      });
+      expect(getPropType(propTypeExpression)).toMatchSnapshot();
     });
 
     it('does not resolve external values', () => {
@@ -246,24 +237,16 @@ describe('getPropType', () => {
         import { TYPES } from './foo';
       `).get('expression');
 
-      expect(getPropType(propTypeExpression)).toEqual({
-        name: 'enum',
-        value: 'TYPES',
-        computed: true,
-      });
+      expect(getPropType(propTypeExpression)).toMatchSnapshot();
     });
   });
 
-  it('detects custom validation functions', () => {
-    expect(getPropType(expression('(function() {})'))).toEqual({
-      name: 'custom',
-      raw: '(function() {})',
-    });
+  it('detects custom validation functions for function', () => {
+    expect(getPropType(expression('(function() {})'))).toMatchSnapshot();
+  });
 
-    expect(getPropType(expression('() => {}'))).toEqual({
-      name: 'custom',
-      raw: '() => {}',
-    });
+  it('detects custom validation functions for arrow function', () => {
+    expect(getPropType(expression('() => {}'))).toMatchSnapshot();
   });
 
   it('detects descriptions on nested types in arrayOf', () => {
@@ -276,13 +259,7 @@ describe('getPropType', () => {
       string
     )`),
       ),
-    ).toEqual({
-      name: 'arrayOf',
-      description: 'test2',
-      value: {
-        name: 'string',
-      },
-    });
+    ).toMatchSnapshot();
   });
 
   it('detects descriptions on nested types in objectOf', () => {
@@ -295,13 +272,7 @@ describe('getPropType', () => {
       string
     )`),
       ),
-    ).toEqual({
-      name: 'objectOf',
-      description: 'test2',
-      value: {
-        name: 'string',
-      },
-    });
+    ).toMatchSnapshot();
   });
 
   it('detects descriptions on nested types in shapes', () => {
@@ -318,21 +289,7 @@ describe('getPropType', () => {
       bar: bool
     })`),
       ),
-    ).toEqual({
-      name: 'shape',
-      value: {
-        foo: {
-          name: 'string',
-          description: 'test1',
-          required: false,
-        },
-        bar: {
-          name: 'bool',
-          description: 'test2',
-          required: false,
-        },
-      },
-    });
+    ).toMatchSnapshot();
   });
 
   it('detects required notations of nested types in shapes', () => {
@@ -343,18 +300,34 @@ describe('getPropType', () => {
       bar: bool
     })`),
       ),
-    ).toEqual({
-      name: 'shape',
-      value: {
-        foo: {
-          name: 'string',
-          required: true,
-        },
-        bar: {
-          name: 'bool',
-          required: false,
-        },
-      },
-    });
+    ).toMatchSnapshot();
+  });
+
+  it('detects descriptions on nested types in exacts', () => {
+    expect(
+      getPropType(
+        expression(`exact({
+      /**
+       * test1
+       */
+      foo: string,
+      /**
+       * test2
+       */
+      bar: bool
+    })`),
+      ),
+    ).toMatchSnapshot();
+  });
+
+  it('detects required notations of nested types in exacts', () => {
+    expect(
+      getPropType(
+        expression(`exact({
+      foo: string.isRequired,
+      bar: bool
+    })`),
+      ),
+    ).toMatchSnapshot();
   });
 });

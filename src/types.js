@@ -27,11 +27,12 @@ export type PropTypeDescriptor = {
     | 'symbol'
     | 'objectOf'
     | 'shape'
+    | 'exact'
     | 'union',
   value?: any,
   raw?: string,
   computed?: boolean,
-  // These are only needed for shape types.
+  // These are only needed for shape/exact types.
   // Consider consolidating PropTypeDescriptor and PropDescriptor
   description?: string,
   required?: boolean,
