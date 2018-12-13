@@ -9,7 +9,7 @@ It provides a default implementation for React components defined via
 (stateless components). These component definitions must follow certain
 guidelines in order to be analyzable (see below for more info).
 
-> react-docgen is a low level tool to extract information about react components. If you are searching for a more high level tool try [react-styleguidist](https://github.com/styleguidist/react-styleguidist) which comes with a complete styleguide and is build on top of react-docgen.
+> react-docgen is a low level tool to extract information about react components. If you are searching for a more high level styleguide with nice interface try [react-styleguidist](https://github.com/styleguidist/react-styleguidist) or any of the other tools listed in the [wiki](https://github.com/reactjs/react-docgen/wiki).
 
 ## Install
 
@@ -22,7 +22,6 @@ yarn add react-docgen --dev
 ```
 npm install --save-dev react-docgen
 ```
-
 
 
 ## CLI
