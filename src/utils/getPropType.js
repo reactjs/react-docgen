@@ -20,6 +20,7 @@ import printValue from './printValue';
 import recast from 'recast';
 import resolveToValue from './resolveToValue';
 import resolveObjectKeysToArray from './resolveObjectKeysToArray';
+import resolveObjectValuesToArray from './resolveObjectValuesToArray';
 import type { PropTypeDescriptor, PropDescriptor } from '../types';
 
 const {
@@ -60,7 +61,8 @@ function getPropTypeOneOf(argumentPath) {
   const type: PropTypeDescriptor = { name: 'enum' };
   let value = resolveToValue(argumentPath);
   if (!types.ArrayExpression.check(value.node)) {
-    value = resolveObjectKeysToArray(value);
+    value =
+      resolveObjectKeysToArray(value) || resolveObjectValuesToArray(value);
     if (value) {
       type.value = getEnumValues(value);
     } else {
