@@ -222,9 +222,18 @@ describe('getPropType', () => {
       expect(getPropType(propTypeExpression)).toMatchSnapshot();
     });
 
-    it('does not resolve computed values', () => {
+    it('does resolve object keys values', () => {
       const propTypeExpression = statement(`
         PropTypes.oneOf(Object.keys(TYPES));
+        var TYPES = { FOO: "foo", BAR: "bar" };
+      `).get('expression');
+
+      expect(getPropType(propTypeExpression)).toMatchSnapshot();
+    });
+
+    it('does resolve object values', () => {
+      const propTypeExpression = statement(`
+        PropTypes.oneOf(Object.values(TYPES));
         var TYPES = { FOO: "foo", BAR: "bar" };
       `).get('expression');
 
