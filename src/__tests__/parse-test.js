@@ -10,6 +10,9 @@
 
 /*global jest, describe, beforeEach, it, expect*/
 
+const fs = require('fs');
+const temp = require('temp');
+
 jest.disableAutomock();
 
 describe('parse', () => {
@@ -47,5 +50,26 @@ describe('parse', () => {
       ERROR_MISSING_DEFINITION,
     );
     expect(resolver).toBeCalled();
+  });
+
+  it.only('uses local babelrc', () => {
+    const dir = temp.mkdirSync();
+
+    try {
+      // Write and empty babelrc to override the parser defaults
+      fs.writeFileSync(`${dir}/.babelrc`, '{}');
+
+      expect(() =>
+        parse('const chained  = () => foo?.bar?.join?.()', () => {}, null, {
+          cwd: dir,
+          filename: `${dir}/component.js`,
+        }),
+      ).toThrowError(
+        /.*Support for the experimental syntax 'optionalChaining' isn't currently enabled.*/,
+      );
+    } finally {
+      fs.unlinkSync(`${dir}/.babelrc`);
+      fs.rmdirSync(dir);
+    }
   });
 });

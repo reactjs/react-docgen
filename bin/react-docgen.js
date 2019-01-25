@@ -112,8 +112,9 @@ if (argv.resolver) {
   }
 }
 
-function parse(source) {
+function parse(source, filename) {
   return parser.parse(source, resolver, null, {
+    filename,
     legacyDecorators: argv.legacyDecorators,
     decoratorsBeforeExport: argv.decoratorsBeforeExport,
   });
@@ -153,7 +154,7 @@ function traverseDir(filePath, result, done) {
         throw error;
       }
       try {
-        result[filename] = parse(content);
+        result[filename] = parse(content, path.join(filePath, filename));
       } catch (parseError) {
         writeError(parseError, filename);
       }

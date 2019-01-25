@@ -10,7 +10,7 @@
  *
  */
 
-const parser = require('@babel/parser');
+const babel = require('@babel/core');
 
 const babelParserOptions = {
   sourceType: 'module',
@@ -43,33 +43,52 @@ const babelParserOptions = {
 };
 
 export type Options = {
+  cwd?: string,
+  filename?: string,
   legacyDecorators?: boolean,
   decoratorsBeforeExport?: boolean,
 };
 
-function buildOptions(options?: Options = {}) {
+function buildOptions(options: Options) {
   const parserOptions = {
-    ...babelParserOptions,
-    plugins: [...babelParserOptions.plugins],
+    strictMode: false,
+    tokens: true,
+    plugins: [],
   };
+
   if (options.legacyDecorators) {
     parserOptions.plugins.push('decorators-legacy');
-  } else {
-    parserOptions.plugins.push([
-      'decorators',
-      { decoratorsBeforeExport: options.decoratorsBeforeExport || false },
-    ]);
+  }
+
+  const partialConfig = babel.loadPartialConfig({
+    cwd: options.cwd,
+    filename: options.filename,
+  });
+
+  if (!partialConfig.hasFilesystemConfig()) {
+    parserOptions.plugins = [...babelParserOptions.plugins];
+
+    if (!options.legacyDecorators) {
+      parserOptions.plugins.push([
+        'decorators',
+        { decoratorsBeforeExport: options.decoratorsBeforeExport || false },
+      ]);
+    }
   }
 
   return parserOptions;
 }
 
-export default function buildParse(options: Options) {
-  const parserOptions = buildOptions(options);
+export default function buildParse(options?: Options = {}) {
+  const parserOpts = buildOptions(options);
 
   return {
     parse(src: string) {
-      return parser.parse(src, parserOptions);
+      return babel.parseSync(src, {
+        parserOpts,
+        cwd: options.cwd,
+        filename: options.filename,
+      });
     },
   };
 }
