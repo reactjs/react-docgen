@@ -619,7 +619,6 @@ describe('findExportedComponentDefinition', () => {
 
           source = `
             import React from "React"
-            var React = require("React");
             var Component = React.createClass({});
             export {Component, foo}
           `;

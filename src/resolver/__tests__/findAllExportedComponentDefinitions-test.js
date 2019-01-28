@@ -761,7 +761,7 @@ describe('findAllExportedComponentDefinitions', () => {
 
           parsed = parse(`
             import React from "React"
-            var React = require("React");
+
             var Component = React.createClass({});
             export {Component, foo}
           `);
