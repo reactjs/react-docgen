@@ -982,10 +982,9 @@ Object {
   "props": Object {
     "color": Object {
       "description": "",
-      "required": false,
+      "required": true,
       "type": Object {
-        "name": "custom",
-        "raw": "PropTypes.string.isRequired",
+        "name": "string",
       },
     },
     "id": Object {
@@ -996,8 +995,7 @@ Object {
       "description": "",
       "required": false,
       "type": Object {
-        "name": "custom",
-        "raw": "PropTypes.string",
+        "name": "string",
       },
     },
   },
