@@ -137,7 +137,7 @@ import PropTypes from 'prop-types';
  * General component description.
  */
 class MyComponent extends Component {
-  render: function() {
+  render() {
     // ...
   }
 }
@@ -146,7 +146,7 @@ MyComponent.propTypes = {
   /**
    * Description of prop "foo".
    */
-  foo: PropTypes.number,
+  foo: PropTypes.number.isRequired,
   /**
    * Description of prop "bar" (a custom validation function).
    */
@@ -176,7 +176,7 @@ we are getting this output:
       "type": {
         "name": "number"
       },
-      "required": false,
+      "required": true,
       "description": "Description of prop \"foo\".",
       "defaultValue": {
         "value": "42",
