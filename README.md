@@ -160,7 +160,6 @@ MyComponent.propTypes = {
 };
 
 MyComponent.defaultProps = {
-  foo: 42,
   bar: 21
 };
 
@@ -169,8 +168,6 @@ export default MyComponent;
 
 we are getting this output:
 
-> `foo` is not required even though it has `isRequired` because props with default value are never required 
-
 ```json
 {
   "props": {
@@ -178,12 +175,8 @@ we are getting this output:
       "type": {
         "name": "number"
       },
-      "required": false,
-      "description": "Description of prop \"foo\".",
-      "defaultValue": {
-        "value": "42",
-        "computed": false
-      }
+      "required": true,
+      "description": "Description of prop \"foo\"."
     },
     "bar": {
       "type": {
