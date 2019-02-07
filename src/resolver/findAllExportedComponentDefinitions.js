@@ -12,6 +12,7 @@
 import isExportsOrModuleAssignment from '../utils/isExportsOrModuleAssignment';
 import isReactComponentClass from '../utils/isReactComponentClass';
 import isReactCreateClassCall from '../utils/isReactCreateClassCall';
+import isReactForwardRefCall from '../utils/isReactForwardRefCall';
 import isStatelessComponent from '../utils/isStatelessComponent';
 import normalizeClassDefinition from '../utils/normalizeClassDefinition';
 import resolveExportDeclaration from '../utils/resolveExportDeclaration';
@@ -26,7 +27,8 @@ function isComponentDefinition(path) {
   return (
     isReactCreateClassCall(path) ||
     isReactComponentClass(path) ||
-    isStatelessComponent(path)
+    isStatelessComponent(path) ||
+    isReactForwardRefCall(path)
   );
 }
 
@@ -40,7 +42,10 @@ function resolveDefinition(definition, types): ?NodePath {
   } else if (isReactComponentClass(definition)) {
     normalizeClassDefinition(definition);
     return definition;
-  } else if (isStatelessComponent(definition)) {
+  } else if (
+    isStatelessComponent(definition) ||
+    isReactForwardRefCall(definition)
+  ) {
     return definition;
   }
   return null;

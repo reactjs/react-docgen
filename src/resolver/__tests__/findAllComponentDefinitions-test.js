@@ -189,4 +189,44 @@ describe('findAllComponentDefinitions', () => {
       expect(result.length).toBe(0);
     });
   });
+
+  describe('forwardRef components', () => {
+    it('finds forwardRef components', () => {
+      const source = `
+        import React from 'react';
+        import PropTypes from 'prop-types';
+        import extendStyles from 'enhancers/extendStyles';
+
+        const ColoredView = React.forwardRef((props, ref) => (
+          <div ref={ref} style={{backgroundColor: props.color}} />
+        ));
+
+        extendStyles(ColoredView);
+      `;
+
+      const result = parse(source);
+      expect(Array.isArray(result)).toBe(true);
+      expect(result.length).toBe(1);
+      expect(result[0].value.type).toEqual('CallExpression');
+    });
+
+    it('finds none inline forwardRef components', () => {
+      const source = `
+        import React from 'react';
+        import PropTypes from 'prop-types';
+        import extendStyles from 'enhancers/extendStyles';
+
+        function ColoredView(props, ref) {
+          return <div ref={ref} style={{backgroundColor: props.color}} />
+        }
+
+        const ForwardedColoredView = React.forwardRef(ColoredView);
+      `;
+
+      const result = parse(source);
+      expect(Array.isArray(result)).toBe(true);
+      expect(result.length).toBe(1);
+      expect(result[0].value.type).toEqual('CallExpression');
+    });
+  });
 });
