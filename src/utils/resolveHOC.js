@@ -12,6 +12,7 @@
 
 import recast from 'recast';
 import isReactCreateClassCall from './isReactCreateClassCall';
+import isReactForwardRefCall from './isReactForwardRefCall';
 
 const {
   types: { NodePath, namedTypes: types },
@@ -25,7 +26,11 @@ const {
  */
 export default function resolveHOC(path: NodePath): NodePath {
   const node = path.node;
-  if (types.CallExpression.check(node) && !isReactCreateClassCall(path)) {
+  if (
+    types.CallExpression.check(node) &&
+    !isReactCreateClassCall(path) &&
+    !isReactForwardRefCall(path)
+  ) {
     if (node.arguments.length) {
       return resolveHOC(path.get('arguments', node.arguments.length - 1));
     }
