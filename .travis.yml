@@ -10,9 +10,12 @@ cache:
   directories:
     - ".eslintcache"
     - "node_modules"
-script: yarn test:ci
+script:
+  - yarn test:ci
+  # Build the website in PRs so we make sure that PRs do not break the website
+  - if [ "$TRAVIS_PULL_REQUEST" != "false" ] && [ "$TRAVIS_NODE_VERSION" = "10" ]; then yarn build:website; fi
 
-after_success: yarn build:website
+before_deploy: yarn build:website
 deploy:
   provider: pages
   skip_cleanup: true
