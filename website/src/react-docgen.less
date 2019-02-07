@@ -1,0 +1,102 @@
+@heading-color: black;
+@text-color: #333;
+@link-color: #007eff;
+@gutter: 30px;
+
+body {
+  color: @text-color;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol';
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+}
+
+a {
+  color: @link-color;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.page-header {
+  height: 40px;
+  padding: .5rem 1.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: flex-end !important;
+}
+
+.page-title {
+  margin-right: auto !important;
+  .subtitle {
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 1.5rem;
+  }
+}
+
+.octicon {
+  display: inline-block;
+  vertical-align: text-top !important;
+  fill: currentColor;
+}
+
+.nav-link {
+  color: rgba(0, 0, 0, 0.5);
+  display: block;
+  padding: 0.5rem 1rem;
+
+  &:hover {
+    color: rgba(0, 0, 0, 0.7);
+    text-decoration: none;
+  }
+}
+.view-gituhb {
+  display: inline !important;
+}
+
+#root {
+  height: calc(100% - 41px - 1rem);
+  overflow: hidden;
+  display: flex;
+  flex-flow: row wrap;
+  flex: 1;
+}
+
+.editor {
+  box-sizing: border-box;
+  display: flex;
+  flex: 1 1 50%;
+  position: relative;
+}
+
+.CodeMirror {
+  height: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 500;
+  line-height: 1;
+  margin-top: 0;
+}
+
+// common
+
+.page-body {
+  padding: @gutter 0;
+  height: 100%;
+}
