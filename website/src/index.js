@@ -78,7 +78,7 @@ class App extends React.Component {
           value={this.state.content}
           mode="text/jsx"
           codeSample={codeSample}
-          onChange={this.compile}
+          onChange={this.handleChange}
         />
         <Panel
           readOnly={true}

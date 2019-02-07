@@ -60,6 +60,11 @@ module.exports = {
     contentBase: sourceDirectory,
     port: 8000,
   },
+  node: {
+    fs: 'empty',
+    module: 'empty',
+    net: 'empty',
+  },
   module: {
     rules: [
       {
