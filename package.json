@@ -21,7 +21,7 @@
   "main": "dist/main.js",
   "scripts": {
     "build": "rimraf dist/ && babel src/ --out-dir dist/ --ignore **/__tests__,**/__mocks__,**/src/types.js",
-    "build:website":"cd website/ && yarn && yarn build",
+    "build:website": "cd website/ && yarn && yarn build",
     "lint": "eslint . --report-unused-disable-directives",
     "fix": "eslint . --fix --report-unused-disable-directives",
     "prepublish": "yarn build",
@@ -42,9 +42,9 @@
     "@babel/runtime": "^7.0.0",
     "async": "^2.1.4",
     "commander": "^2.19.0",
-    "doctrine": "^2.0.0",
+    "doctrine": "^3.0.0",
     "node-dir": "^0.1.10",
-    "recast": "^0.16.0"
+    "recast": "^0.17.3"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",
@@ -53,23 +53,24 @@
     "@babel/plugin-transform-runtime": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-flow": "^7.0.0",
-    "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
-    "babel-jest": "^23.6.0",
+    "babel-jest": "^24.1.0",
     "cross-spawn": "^6.0.4",
     "eslint": "^5.7.0",
-    "eslint-config-prettier": "^3.1.0",
+    "eslint-config-prettier": "^4.0.0",
     "eslint-plugin-prettier": "^3.0.0",
     "flow-bin": "^0.93.0",
-    "jest": "^23.6.0",
-    "jest-diff": "^23.6.0",
-    "jest-matcher-utils": "^23.6.0",
+    "jest": "^24.1.0",
+    "jest-diff": "^24.0.0",
+    "jest-matcher-utils": "^24.0.0",
     "prettier": "^1.14.3",
     "rimraf": "^2.3.2",
-    "temp": "^0.8.1"
+    "temp": "^0.9.0"
   },
   "jest": {
-    "setupTestFrameworkScriptFile": "<rootDir>/tests/setupTestFramework.js",
+    "setupFilesAfterEnv": [
+      "<rootDir>/tests/setupTestFramework.js"
+    ],
     "roots": [
       "bin",
       "src"

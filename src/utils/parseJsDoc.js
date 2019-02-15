@@ -91,14 +91,16 @@ function getParamsJsDoc(jsDoc) {
   if (!jsDoc.tags) {
     return [];
   }
-  return jsDoc.tags.filter(tag => tag.title === 'param').map(tag => {
-    return {
-      name: tag.name,
-      description: tag.description,
-      type: getType(tag.type),
-      optional: getOptional(tag),
-    };
-  });
+  return jsDoc.tags
+    .filter(tag => tag.title === 'param')
+    .map(tag => {
+      return {
+        name: tag.name,
+        description: tag.description,
+        type: getType(tag.type),
+        optional: getOptional(tag),
+      };
+    });
 }
 
 export default function parseJsDoc(docblock: string): JsDoc {
