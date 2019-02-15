@@ -52,7 +52,7 @@ describe('parse', () => {
     expect(resolver).toBeCalled();
   });
 
-  it.only('uses local babelrc', () => {
+  it('uses local babelrc', () => {
     const dir = temp.mkdirSync();
 
     try {
@@ -71,5 +71,18 @@ describe('parse', () => {
       fs.unlinkSync(`${dir}/.babelrc`);
       fs.rmdirSync(dir);
     }
+  });
+
+  it('supports custom parserOptions', () => {
+    expect(() =>
+      parse('const chained: Type = 1;', () => {}, null, {
+        parserOptions: {
+          plugins: [
+            // no flow
+            'jsx',
+          ],
+        },
+      }),
+    ).toThrowError(/.*Unexpected token \(1:13\).*/);
   });
 });

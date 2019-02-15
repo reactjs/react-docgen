@@ -12,71 +12,76 @@
 
 const babel = require('@babel/core');
 
-const babelParserOptions = {
-  sourceType: 'module',
-  strictMode: false,
-  tokens: true,
-  plugins: [
-    'jsx',
-    'flow',
-    'estree',
-    'doExpressions',
-    'objectRestSpread',
-    'classProperties',
-    'classPrivateProperties',
-    'classPrivateMethods',
-    'exportDefaultFrom',
-    'exportNamespaceFrom',
-    'asyncGenerators',
-    'functionBind',
-    'functionSent',
-    'dynamicImport',
-    'numericSeparator',
-    'optionalChaining',
-    'importMeta',
-    'bigInt',
-    'optionalCatchBinding',
-    'throwExpressions',
-    ['pipelineOperator', { proposal: 'minimal' }],
-    'nullishCoalescingOperator',
-  ],
+const defaultPlugins = [
+  'jsx',
+  'flow',
+  'asyncGenerators',
+  'bigInt',
+  'classProperties',
+  'classPrivateProperties',
+  'classPrivateMethods',
+  ['decorators', { decoratorsBeforeExport: false }],
+  'doExpressions',
+  'dynamicImport',
+  'exportDefaultFrom',
+  'exportNamespaceFrom',
+  'functionBind',
+  'functionSent',
+  'importMeta',
+  'logicalAssignment',
+  'nullishCoalescingOperator',
+  'numericSeparator',
+  'objectRestSpread',
+  'optionalCatchBinding',
+  'optionalChaining',
+  ['pipelineOperator', { proposal: 'minimal' }],
+  'throwExpressions',
+];
+
+type ParserOptions = {
+  plugins?: Array<string | [string, {}]>,
+  tokens?: boolean,
 };
 
 export type Options = {
   cwd?: string,
   filename?: string,
-  legacyDecorators?: boolean,
-  decoratorsBeforeExport?: boolean,
+  parserOptions?: ParserOptions,
 };
 
-function buildOptions(options: Options) {
-  const parserOptions = {
-    strictMode: false,
-    tokens: true,
+function buildOptions({
+  cwd,
+  filename,
+  parserOptions,
+}: Options): ParserOptions {
+  let options = {
     plugins: [],
   };
 
-  if (options.legacyDecorators) {
-    parserOptions.plugins.push('decorators-legacy');
+  if (parserOptions) {
+    options = {
+      ...parserOptions,
+      plugins: parserOptions.plugins ? [...parserOptions.plugins] : [],
+    };
   }
 
   const partialConfig = babel.loadPartialConfig({
-    cwd: options.cwd,
-    filename: options.filename,
+    cwd,
+    filename,
   });
 
-  if (!partialConfig.hasFilesystemConfig()) {
-    parserOptions.plugins = [...babelParserOptions.plugins];
-
-    if (!options.legacyDecorators) {
-      parserOptions.plugins.push([
-        'decorators',
-        { decoratorsBeforeExport: options.decoratorsBeforeExport || false },
-      ]);
-    }
+  if (!partialConfig.hasFilesystemConfig() && options.plugins.length === 0) {
+    options.plugins = [...defaultPlugins];
   }
 
-  return parserOptions;
+  // Recast needs tokens to be in the tree
+  // $FlowIssue tokens is clearly in the Options
+  options.tokens = true;
+  // Ensure we always have estree plugin enabled, if we add it a second time
+  // here it does not matter
+  options.plugins.push('estree');
+
+  return options;
 }
 
 export default function buildParse(options?: Options = {}) {
