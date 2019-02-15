@@ -73,7 +73,7 @@ describe('parse', () => {
     }
   });
 
-  it('supports custom parserOptions', () => {
+  it('supports custom parserOptions with plugins', () => {
     expect(() =>
       parse('const chained: Type = 1;', () => {}, null, {
         parserOptions: {
@@ -84,5 +84,15 @@ describe('parse', () => {
         },
       }),
     ).toThrowError(/.*Unexpected token \(1:13\).*/);
+  });
+
+  it('supports custom parserOptions without plugins', () => {
+    expect(() =>
+      parse('const chained: Type = 1;', () => {}, null, {
+        parserOptions: {
+          allowSuperOutsideMethod: true,
+        },
+      }),
+    ).toThrowError(ERROR_MISSING_DEFINITION);
   });
 });
