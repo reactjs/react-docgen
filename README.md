@@ -44,7 +44,6 @@ Options:
    -i, --ignore          Folders to ignore. Default:  [node_modules,__tests__,__mocks__]
    --resolver RESOLVER   Resolver name (findAllComponentDefinitions, findExportedComponentDefinition) or
       path to a module that exports a resolver.  [findExportedComponentDefinition]
-   --legacy-decorators   Switch parsing to support only the legacy decorators syntax
 
 Extract meta information from React components.
 If a directory is passed, it is recursively traversed.
@@ -59,6 +58,9 @@ resolvers](#resolver).
 
 Have a look at `example/` for an example of how to use the result to generate a
 markdown version of the documentation.
+
+`react-docgen` will look for a babel configuration and use it if available. If no config file is found
+it will fallback to a default configuration, enabling all [syntax extension](https://babeljs.io/docs/en/babel-parser#plugins) of the babel-parser.
 
 ## API
 
@@ -83,7 +85,31 @@ As with the CLI, this will look for the exported component created through `Reac
 | source       | string | The source text |
 | resolver     | function | A function of the form `(ast: ASTNode, recast: Object) => (NodePath|Array<NodePath>)`. Given an AST and a reference to recast, it returns an (array of) NodePath which represents the component definition. |
 | handlers     | Array\<function\> | An array of functions of the form `(documentation: Documentation, definition: NodePath) => void`. Each function is called with a `Documentation` object and a reference to the component definition as returned by `resolver`. Handlers extract relevant information from the definition and augment `documentation`. |
-| options      | Object | Pass options to react-docgen. Supported option is `legacyDecorators` which is a boolean |
+| options      | Object | Pass options to react-docgen, see below. |
+
+#### options
+
+##### ∙ filename
+
+Type: `string`
+
+The absolute path to the file associated with the code currently being parsed, if there is one. This is used to search for the correct babel config.
+
+This option is optional, but it is highly recommended to set it when integrating `react-docgen`.
+
+##### ∙ cwd
+
+Type: `string`
+Default: `process.cwd()`
+
+The working directory that babel configurations will be searched in.
+
+##### ∙ parserOptions
+
+Type: `BabelParserOptions`
+
+This options will be directly supplied to `@babel/parser`. To see a list of
+supported options head over to the [babel website](https://babeljs.io/docs/en/babel-parser#options) and have a look.
 
 #### resolver
 
