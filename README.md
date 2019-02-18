@@ -83,7 +83,7 @@ As with the CLI, this will look for the exported component created through `Reac
 | Parameter |  Type | Description |
 | -------------- | ------ | --------------- |
 | source       | string | The source text |
-| resolver     | function | A function of the form `(ast: ASTNode, recast: Object) => (NodePath|Array<NodePath>)`. Given an AST and a reference to recast, it returns an (array of) NodePath which represents the component definition. |
+| resolver     | function | A function of the form `(ast: ASTNode, recast: Object) => (NodePath\|Array<NodePath>)`. Given an AST and a reference to recast, it returns an (array of) NodePath which represents the component definition. Resolvers are available under `resolvers` property, e.g. `reactDocgen.resolver.findAllComponentDefinitions`|
 | handlers     | Array\<function\> | An array of functions of the form `(documentation: Documentation, definition: NodePath) => void`. Each function is called with a `Documentation` object and a reference to the component definition as returned by `resolver`. Handlers extract relevant information from the definition and augment `documentation`. |
 | options      | Object | Pass options to react-docgen, see below. |
 
