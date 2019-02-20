@@ -188,6 +188,7 @@ const simplePropTypes = [
   'element',
   'node',
   'symbol',
+  'elementType',
 ];
 
 const propTypes = {
