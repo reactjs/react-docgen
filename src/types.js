@@ -28,7 +28,8 @@ export type PropTypeDescriptor = {
     | 'objectOf'
     | 'shape'
     | 'exact'
-    | 'union',
+    | 'union'
+    | 'elementType',
   value?: any,
   raw?: string,
   computed?: boolean,
