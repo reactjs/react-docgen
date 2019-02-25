@@ -24,7 +24,7 @@
     "build:website": "cd website/ && yarn && yarn build",
     "lint": "eslint . --report-unused-disable-directives",
     "fix": "eslint . --fix --report-unused-disable-directives",
-    "prepublish": "yarn build",
+    "prepare": "yarn build",
     "preversion": "yarn lint",
     "start": "cd website && yarn && yarn start",
     "test": "jest",
