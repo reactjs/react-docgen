@@ -23,7 +23,6 @@ yarn add react-docgen --dev
 npm install --save-dev react-docgen
 ```
 
-
 ## CLI
 
 Installing the module adds a `react-docgen` executable which allows you to convert
@@ -85,7 +84,7 @@ As with the CLI, this will look for the exported component created through `Reac
 | source       | string | The source text |
 | resolver     | function | A function of the form `(ast: ASTNode, recast: Object) => (NodePath|Array<NodePath>)`. Given an AST and a reference to recast, it returns an (array of) NodePath which represents the component definition. |
 | handlers     | Array\<function\> | An array of functions of the form `(documentation: Documentation, definition: NodePath) => void`. Each function is called with a `Documentation` object and a reference to the component definition as returned by `resolver`. Handlers extract relevant information from the definition and augment `documentation`. |
-| options      | Object | Pass options to react-docgen, see below. |
+| opt
 
 #### options
 
@@ -103,6 +102,14 @@ Type: `string`
 Default: `process.cwd()`
 
 The working directory that babel configurations will be searched in.
+
+##### ∙ babelrc, babelrcRoots, root, rootMode, configFile, envName
+
+Type: `boolean`
+Default: `true`
+
+These options, will be passed directly to `babel` for locating and resolving a local config or babelrc. To see
+documentation for each option consult the [babel website](https://babeljs.io/docs/en/options#config-loading-options).
 
 ##### ∙ parserOptions
 
@@ -129,7 +136,7 @@ module.exports = Component;
 
 and returns the ObjectExpression to which `<def>` resolves to, or the class declaration itself.
 
-`findAllComponentDefinitions` works similarly, but finds *all* `React.createClass` calls and class definitions, not only the one that is exported.
+`findAllComponentDefinitions` works similarly, but finds _all_ `React.createClass` calls and class definitions, not only the one that is exported.
 
 This makes it easy, together with the utility methods created to analyze the AST, to introduce new or custom resolver methods. For example, a resolver could look for plain ObjectExpressions with a `render` method.
 
@@ -145,7 +152,7 @@ For example, while the `propTypesHandler` expects the prop types definition to b
 
 - Modules have to export a single component, and only that component is analyzed.
 - When using `React.createClass`, the component definition (the value passed to it) must resolve to an object literal.
-- When using classes, the class must either `extend React.Component` *or* define a `render()` method.
+- When using classes, the class must either `extend React.Component` _or_ define a `render()` method.
 - `propTypes` must be an object literal or resolve to an object literal in the same file.
 - The `return` statement in `getDefaultProps` must contain an object literal.
 
@@ -179,14 +186,11 @@ MyComponent.propTypes = {
   bar: function(props, propName, componentName) {
     // ...
   },
-  baz: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.string
-  ]),
+  baz: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 };
 
 MyComponent.defaultProps = {
-  bar: 21
+  bar: 21,
 };
 
 export default MyComponent;
@@ -263,7 +267,6 @@ type Props = {
  * General component description.
  */
 export default class MyComponent extends Component<void, Props, void> {
-
   props: Props;
 
   render(): ?ReactElement {
@@ -276,83 +279,77 @@ we are getting this output:
 
 ```json
 {
-  "description":"General component description.",
-  "props":{
-    "primitive":{
-      "flowType":{ "name":"number" },
-      "required":true,
-      "description":"Description of prop \"foo\"."
+  "description": "General component description.",
+  "props": {
+    "primitive": {
+      "flowType": { "name": "number" },
+      "required": true,
+      "description": "Description of prop \"foo\"."
     },
-    "literalsAndUnion":{
-      "flowType":{
-        "name":"union",
-        "raw":"'string' | 'otherstring' | number",
-        "elements":[
-          { "name":"literal", "value":"'string'" },
-          { "name":"literal", "value":"'otherstring'" },
-          { "name":"number" }
+    "literalsAndUnion": {
+      "flowType": {
+        "name": "union",
+        "raw": "'string' | 'otherstring' | number",
+        "elements": [
+          { "name": "literal", "value": "'string'" },
+          { "name": "literal", "value": "'otherstring'" },
+          { "name": "number" }
         ]
       },
-      "required":true,
-      "description":"Description of prop \"bar\"."
+      "required": true,
+      "description": "Description of prop \"bar\"."
     },
-    "arr":{
-      "flowType":{
-        "name":"Array",
-        "elements":[
-          { "name":"any" }
-        ],
-        "raw":"Array<any>"
+    "arr": {
+      "flowType": {
+        "name": "Array",
+        "elements": [{ "name": "any" }],
+        "raw": "Array<any>"
       },
-      "required":true
+      "required": true
     },
-    "func":{
-      "flowType":{
-        "name":"signature",
-        "type":"function",
-        "raw":"(value: string) => void",
-        "signature":{
-          "arguments":[
-            { "name":"value", "type":{ "name":"string" } }
-          ],
-          "return":{ "name":"void" }
+    "func": {
+      "flowType": {
+        "name": "signature",
+        "type": "function",
+        "raw": "(value: string) => void",
+        "signature": {
+          "arguments": [{ "name": "value", "type": { "name": "string" } }],
+          "return": { "name": "void" }
         }
       },
-      "required":false
+      "required": false
     },
-    "noParameterName":{
-      "flowType":{
-        "name":"signature",
-        "type":"function",
-        "raw":"string => void",
-        "signature":{
-          "arguments":[
-            { "name":"", "type":{ "name":"string" } }
-          ],
-          "return":{ "name":"void" }
+    "noParameterName": {
+      "flowType": {
+        "name": "signature",
+        "type": "function",
+        "raw": "string => void",
+        "signature": {
+          "arguments": [{ "name": "", "type": { "name": "string" } }],
+          "return": { "name": "void" }
         }
       },
-      "required":false
+      "required": false
     },
-    "obj":{
-      "flowType":{
-        "name":"signature",
-        "type":"object",
-        "raw":"{ subvalue: ?boolean }",
-        "signature":{
-          "properties":[
+    "obj": {
+      "flowType": {
+        "name": "signature",
+        "type": "object",
+        "raw": "{ subvalue: ?boolean }",
+        "signature": {
+          "properties": [
             {
-              "key":"subvalue",
-              "value":{
-                "name":"boolean",
-                "nullable":true,
-                "required":true
+              "key": "subvalue",
+              "value": {
+                "name": "boolean",
+                "nullable": true,
+                "required": true
               }
             }
           ]
         }
       },
-      "required":false
+      "required": false
     }
   }
 }
@@ -362,18 +359,18 @@ we are getting this output:
 
 Here is a list of all the available types and its result structure.
 
-Name  | Examples | Result
-------------- | ------------- | -------------
-Simple  | ```let x: string;```<br />```let x: number;```<br />```let x: boolean;```<br />```let x: any;```<br />```let x: void;```<br />```let x: Object;```<br />```let x: String;```<br />```let x: MyClass;``` | ```{ "name": "<type>" }```
-Literals  | ```let x: 'foo';```<br />```let x: 1;```<br />```let x: true;``` | ```{ "name": "literal", "value": "<rawvalue>" }```
-Typed Classes  | ```let x: Array<foo>;```<br />```let x: Class<foo>;```<br />```let x: MyClass<bar>;``` | ```{ "name": "<type>", "elements": [{ <element-type> }, ...] }```
-Object Signature  | ```let x: { foo: string, bar?: mixed };```<br />```let x: { [key: string]: string, foo: number };``` | ```{ "name": "signature", "type": "object", "raw": "<raw-signature>", "signature": { "properties": [{ "key": "<property-name>"|{ <property-key-type> }, "value": { <property-type>, "required": <true/false> } }, ...] } }```
-Function Signature  | ```let x: (x: string) => void;``` | ```{ "name": "signature", "type": "function", "raw": "<raw-signature>", "signature": { "arguments": [{ "name": "<argument-name>", "type": { <argument-type> } }, ...], "return": { <return-type> } } }```
-Callable-Object/Function-Object Signature | ```let x: { (x: string): void, prop: string };``` | ```{ "name": "signature", "type": "object", "raw": "<raw-signature>", "signature": { "properties": [{ "key": "<property-name>"|{ <property-key-type> }, "value": { <property-type>, "required": <true/false> } }, ...], "constructor": { <function-signature> } } }```
-Tuple | ```let x: [foo, "value", number];``` | ```{ "name": "tuple", "raw": "<raw-signature>", "elements": [{ <element-type> }, ...] }```
-Union | ```let x: number | string;``` | ```{ "name": "union", "raw": "<raw-signature>", "elements": [{ <element-type> }, ...] }```
-Intersect | ```let x: number & string;``` | ```{ "name": "intersect", "raw": "<raw-signature>", "elements": [{ <element-type> }, ...] }```
-Nullable modifier | ```let x: ?number;``` | ```{ "name": "number", "nullable": true }```
+| Name                                      | Examples                                                                                                                                                                | Result                                                                                                                                                                                                                                                             |
+| ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Simple                                    | `let x: string;`<br />`let x: number;`<br />`let x: boolean;`<br />`let x: any;`<br />`let x: void;`<br />`let x: Object;`<br />`let x: String;`<br />`let x: MyClass;` | `{ "name": "<type>" }`                                                                                                                                                                                                                                             |
+| Literals                                  | `let x: 'foo';`<br />`let x: 1;`<br />`let x: true;`                                                                                                                    | `{ "name": "literal", "value": "<rawvalue>" }`                                                                                                                                                                                                                     |
+| Typed Classes                             | `let x: Array<foo>;`<br />`let x: Class<foo>;`<br />`let x: MyClass<bar>;`                                                                                              | `{ "name": "<type>", "elements": [{ <element-type> }, ...] }`                                                                                                                                                                                                      |
+| Object Signature                          | `let x: { foo: string, bar?: mixed };`<br />`let x: { [key: string]: string, foo: number };`                                                                            | `{ "name": "signature", "type": "object", "raw": "<raw-signature>", "signature": { "properties": [{ "key": "<property-name>"|{ <property-key-type> }, "value": { <property-type>, "required": <true/false> } }, ...] } }`                                          |
+| Function Signature                        | `let x: (x: string) => void;`                                                                                                                                           | `{ "name": "signature", "type": "function", "raw": "<raw-signature>", "signature": { "arguments": [{ "name": "<argument-name>", "type": { <argument-type> } }, ...], "return": { <return-type> } } }`                                                              |
+| Callable-Object/Function-Object Signature | `let x: { (x: string): void, prop: string };`                                                                                                                           | `{ "name": "signature", "type": "object", "raw": "<raw-signature>", "signature": { "properties": [{ "key": "<property-name>"|{ <property-key-type> }, "value": { <property-type>, "required": <true/false> } }, ...], "constructor": { <function-signature> } } }` |
+| Tuple                                     | `let x: [foo, "value", number];`                                                                                                                                        | `{ "name": "tuple", "raw": "<raw-signature>", "elements": [{ <element-type> }, ...] }`                                                                                                                                                                             |
+| Union                                     | `let x: number | string;`                                                                                                                                               | `{ "name": "union", "raw": "<raw-signature>", "elements": [{ <element-type> }, ...] }`                                                                                                                                                                             |
+| Intersect                                 | `let x: number & string;`                                                                                                                                               | `{ "name": "intersect", "raw": "<raw-signature>", "elements": [{ <element-type> }, ...] }`                                                                                                                                                                         |
+| Nullable modifier                         | `let x: ?number;`                                                                                                                                                       | `{ "name": "number", "nullable": true }`                                                                                                                                                                                                                           |
 
 ## Result data structure
 
@@ -402,13 +399,13 @@ The structure of the JSON blob / JavaScript object is as follows:
   ["composes": <componentNames>]
 }
 ```
+
 (`[...]` means the property may not exist if such information was not found in the component definition)
 
-- `<propName>`:  For each prop that was found, there will be an entry in `props` under the same name.
-- `<typeName>`: The name of the type, which is usually corresponds to the function name in `React.PropTypes`. However, for types define with `oneOf`, we use `"enum"`  and for `oneOfType` we use `"union"`. If a custom function is provided or the type cannot be resolved to anything of `React.PropTypes`, we use `"custom"`.
+- `<propName>`: For each prop that was found, there will be an entry in `props` under the same name.
+- `<typeName>`: The name of the type, which is usually corresponds to the function name in `React.PropTypes`. However, for types define with `oneOf`, we use `"enum"` and for `oneOfType` we use `"union"`. If a custom function is provided or the type cannot be resolved to anything of `React.PropTypes`, we use `"custom"`.
 - `<typeValue>`: Some types accept parameters which define the type in more detail (such as `arrayOf`, `instanceOf`, `oneOf`, etc). Those are stored in `<typeValue>`. The data type of `<typeValue>` depends on the type definition.
 - `<flowType>`: If using flow type this property contains the parsed flow type as can be seen in the table above.
-
 
 [react]: http://facebook.github.io/react/
 [flow]: http://flowtype.org/
