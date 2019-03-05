@@ -43,56 +43,61 @@ type ParserOptions = {
   tokens?: boolean,
 };
 
-export type Options = {
+type BabelOptions = {
   cwd?: string,
   filename?: string,
+  envName?: string,
+  babelrc?: boolean,
+  root?: string,
+  rootMode?: string,
+  configFile?: string | false,
+  babelrcRoots?: true | string | string[],
+};
+
+export type Options = BabelOptions & {
   parserOptions?: ParserOptions,
 };
 
-function buildOptions({
-  cwd,
-  filename,
-  parserOptions,
-}: Options): ParserOptions {
-  let options = {
+function buildOptions(
+  parserOptions: ?ParserOptions,
+  babelOptions: BabelOptions,
+): ParserOptions {
+  let parserOpts = {
     plugins: [],
   };
 
   if (parserOptions) {
-    options = {
+    parserOpts = {
       ...parserOptions,
       plugins: parserOptions.plugins ? [...parserOptions.plugins] : [],
     };
   }
 
-  const partialConfig = babel.loadPartialConfig({
-    cwd,
-    filename,
-  });
+  const partialConfig = babel.loadPartialConfig(babelOptions);
 
-  if (!partialConfig.hasFilesystemConfig() && options.plugins.length === 0) {
-    options.plugins = [...defaultPlugins];
+  if (!partialConfig.hasFilesystemConfig() && parserOpts.plugins.length === 0) {
+    parserOpts.plugins = [...defaultPlugins];
   }
 
   // Recast needs tokens to be in the tree
   // $FlowIssue tokens is clearly in the Options
-  options.tokens = true;
+  parserOpts.tokens = true;
   // Ensure we always have estree plugin enabled, if we add it a second time
   // here it does not matter
-  options.plugins.push('estree');
+  parserOpts.plugins.push('estree');
 
-  return options;
+  return parserOpts;
 }
 
 export default function buildParse(options?: Options = {}) {
-  const parserOpts = buildOptions(options);
+  const { parserOptions, ...babelOptions } = options;
+  const parserOpts = buildOptions(parserOptions, babelOptions);
 
   return {
     parse(src: string) {
       return babel.parseSync(src, {
         parserOpts,
-        cwd: options.cwd,
-        filename: options.filename,
+        ...babelOptions,
       });
     },
   };
