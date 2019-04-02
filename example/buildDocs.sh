@@ -34,6 +34,11 @@ function buildDocs(api) {
 
 function getComponentName(filepath) {
   var name = path.basename(filepath);
+  // check for index.js
+  if (name === 'index.js') {
+    const dirs = path.dirname(filepath).split('/');
+    name = dirs[dirs.length - 1];
+  }
   var ext;
   while ((ext = path.extname(name))) {
     name = name.substring(0, name.length - ext.length);
