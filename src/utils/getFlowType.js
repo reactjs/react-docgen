@@ -161,10 +161,12 @@ function handleObjectTypeAnnotation(path: NodePath): FlowTypeDescriptor {
   });
 
   path.get('properties').each(param => {
-    type.signature.properties.push({
-      key: getPropertyName(param),
-      value: getFlowTypeWithRequirements(param.get('value')),
-    });
+    if (types.ObjectTypeProperty.check(param.node)) {
+      type.signature.properties.push({
+        key: getPropertyName(param),
+        value: getFlowTypeWithRequirements(param.get('value')),
+      });
+    }
   });
 
   return type;

@@ -1001,3 +1001,68 @@ Object {
   },
 }
 `;
+
+exports[`main fixtures processes component "component_19.js" without errors 1`] = `
+Object {
+  "composes": Array [
+    undefined,
+  ],
+  "description": "",
+  "displayName": "Component",
+  "methods": Array [
+    Object {
+      "docblock": null,
+      "modifiers": Array [],
+      "name": "UNSAFE_componentWillReceiveProps",
+      "params": Array [
+        Object {
+          "name": "nextProps",
+          "optional": undefined,
+          "type": Object {
+            "alias": "Props",
+            "name": "signature",
+            "raw": "{|
+  data?: Array<mixed>,
+  ...React.ElementConfig<typeof SomeOtherComponent>,
+|}",
+            "signature": Object {
+              "properties": Array [
+                Object {
+                  "key": "data",
+                  "value": Object {
+                    "elements": Array [
+                      Object {
+                        "name": "mixed",
+                      },
+                    ],
+                    "name": "Array",
+                    "raw": "Array<mixed>",
+                    "required": false,
+                  },
+                },
+              ],
+            },
+            "type": "object",
+          },
+        },
+      ],
+      "returns": null,
+    },
+  ],
+  "props": Object {
+    "data": Object {
+      "description": "",
+      "flowType": Object {
+        "elements": Array [
+          Object {
+            "name": "mixed",
+          },
+        ],
+        "name": "Array",
+        "raw": "Array<mixed>",
+      },
+      "required": false,
+    },
+  },
+}
+`;
