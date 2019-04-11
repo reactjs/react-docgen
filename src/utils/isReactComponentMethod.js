@@ -22,14 +22,21 @@ const componentMethods = [
   'componentDidReceiveProps',
   'componentDidUpdate',
   'componentWillMount',
+  'UNSAFE_componentWillMount',
   'componentWillReceiveProps',
+  'UNSAFE_componentWillReceiveProps',
   'componentWillUnmount',
   'componentWillUpdate',
+  'UNSAFE_componentWillUpdate',
   'getChildContext',
   'getDefaultProps',
   'getInitialState',
   'render',
   'shouldComponentUpdate',
+  'getDerivedStateFromProps',
+  'getDerivedStateFromError',
+  'getSnapshotBeforeUpdate',
+  'componentDidCatch',
 ];
 
 /**
