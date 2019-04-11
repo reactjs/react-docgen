@@ -96,10 +96,11 @@ function getDefaultValuesFromProps(
         !isStateless ||
         types.AssignmentPattern.check(propertyPath.get('value').node),
     )
-    .forEach(function(propertyPath) {
-      const propDescriptor = documentation.getPropDescriptor(
-        getPropertyName(propertyPath),
-      );
+    .forEach(propertyPath => {
+      const propName = getPropertyName(propertyPath);
+      if (!propName) return;
+
+      const propDescriptor = documentation.getPropDescriptor(propName);
       const defaultValue = getDefaultValue(
         isStateless
           ? propertyPath.get('value', 'right')

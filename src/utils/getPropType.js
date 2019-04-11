@@ -146,6 +146,8 @@ function getPropTypeShapish(name, argumentPath) {
         return;
       }
 
+      const propertyName = getPropertyName(propertyPath);
+      if (!propertyName) return;
       const descriptor: PropDescriptor | PropTypeDescriptor = getPropType(
         propertyPath.get('value'),
       );
@@ -154,7 +156,7 @@ function getPropTypeShapish(name, argumentPath) {
         descriptor.description = docs;
       }
       descriptor.required = isRequiredPropType(propertyPath.get('value'));
-      value[getPropertyName(propertyPath)] = descriptor;
+      value[propertyName] = descriptor;
     });
     type.value = value;
   }

@@ -6,8 +6,6 @@
  *
  */
 
-/*global jest, describe, it, expect, beforeEach*/
-
 jest.mock('../../Documentation');
 jest.mock('../../utils/getPropType', () => jest.fn(() => ({})));
 
@@ -119,6 +117,36 @@ describe('propTypeHandler', () => {
           required: true,
         },
       });
+    });
+
+    it('handles computed properties', () => {
+      const definition = parse(
+        getSrc(
+          `{
+          [foo]: PropTypes.array.isRequired,
+          complex_prop:
+            PropTypes.oneOfType([PropTypes.number, PropTypes.bool]).isRequired,
+        }`,
+        ),
+      );
+
+      propTypeHandler(documentation, definition);
+      expect(documentation.descriptors).toMatchSnapshot();
+    });
+
+    it('ignores complex computed properties', () => {
+      const definition = parse(
+        getSrc(
+          `{
+          [() => {}]: PropTypes.array.isRequired,
+          complex_prop:
+            PropTypes.oneOfType([PropTypes.number, PropTypes.bool]).isRequired,
+        }`,
+        ),
+      );
+
+      propTypeHandler(documentation, definition);
+      expect(documentation.descriptors).toMatchSnapshot();
     });
 
     it('only considers definitions from React or ReactPropTypes', () => {

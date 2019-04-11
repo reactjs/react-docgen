@@ -27,5 +27,9 @@ module.exports = {
         'no-unused-vars': 'off',
       },
     },
+    {
+      files: 'src/**/__tests__/*-test.js',
+      env: { jest: true },
+    },
   ],
 };

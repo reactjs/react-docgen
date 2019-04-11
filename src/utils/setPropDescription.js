@@ -11,16 +11,12 @@ import type Documentation from '../Documentation';
 import getPropertyName from './getPropertyName';
 import { getDocblock } from './docblock';
 
-/**
- *
- */
 export default (documentation: Documentation, propertyPath: NodePath) => {
   const propName = getPropertyName(propertyPath);
-  const propDescriptor = documentation.getPropDescriptor(propName);
+  if (!propName) return;
 
-  if (propDescriptor.description) {
-    return;
-  }
+  const propDescriptor = documentation.getPropDescriptor(propName);
+  if (propDescriptor.description) return;
 
   propDescriptor.description = getDocblock(propertyPath) || '';
 };

@@ -94,6 +94,20 @@ describe('flowTypeHandler', () => {
       });
     });
 
+    it('ignores hash map entry', () => {
+      const flowTypesSrc = `
+      {
+        [key: string]: string,
+        bar?: number,
+      }
+      `;
+      const definition = getSrc(flowTypesSrc);
+
+      flowTypeHandler(documentation, definition);
+
+      expect(documentation.descriptors).toMatchSnapshot();
+    });
+
     it('detects union types', () => {
       const flowTypesSrc = `
       {
