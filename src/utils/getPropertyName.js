@@ -29,7 +29,10 @@ export default function getPropertyName(propertyPath: NodePath): ?string {
     const key = propertyPath.get('key');
 
     // Try to resolve variables and member expressions
-    if (types.Identifier.check(key.node) || types.MemberExpression.check(key.node)) {
+    if (
+      types.Identifier.check(key.node) ||
+      types.MemberExpression.check(key.node)
+    ) {
       const value = resolveToValue(key).node;
 
       if (
