@@ -9,6 +9,7 @@
 
 import recast from 'recast';
 import getNameOrValue from './getNameOrValue';
+import resolveToValue from './resolveToValue';
 
 const {
   types: { namedTypes: types },
@@ -25,17 +26,30 @@ export default function getPropertyName(propertyPath: NodePath): ?string {
   if (types.ObjectTypeSpreadProperty.check(propertyPath.node)) {
     return getNameOrValue(propertyPath.get('argument').get('id'), false);
   } else if (propertyPath.node.computed) {
-    if (types.Identifier.check(propertyPath.node.key)) {
-      return `${COMPUTED_PREFIX}${getNameOrValue(
-        propertyPath.get('key'),
-        false,
-      )}`;
-    } else if (
-      types.Literal.check(propertyPath.node.key) &&
-      (typeof propertyPath.node.key.value === 'string' ||
-        typeof propertyPath.node.key.value === 'number')
+    const key = propertyPath.get('key');
+
+    // Try to resolve variables and member expressions
+    if (types.Identifier.check(key.node) || types.MemberExpression.check(key.node)) {
+      const value = resolveToValue(key).node;
+
+      if (
+        types.Literal.check(value) &&
+        (typeof value.value === 'string' || typeof value.value === 'number')
+      ) {
+        return `${value.value}`;
+      }
+    }
+
+    // generate name for identifier
+    if (types.Identifier.check(key.node)) {
+      return `${COMPUTED_PREFIX}${key.node.name}`;
+    }
+
+    if (
+      types.Literal.check(key.node) &&
+      (typeof key.node.value === 'string' || typeof key.node.value === 'number')
     ) {
-      return `${COMPUTED_PREFIX}${propertyPath.node.key.value}`;
+      return `${key.node.value}`;
     }
 
     return null;
