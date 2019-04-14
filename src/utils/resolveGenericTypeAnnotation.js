@@ -25,11 +25,13 @@ export default function resolveGenericTypeAnnotation(
   path: NodePath,
 ): ?NodePath {
   // If the node doesn't have types or properties, try to get the type.
-  let typePath: ?NodePath;
-  if (path && isSupportedUtilityType(path)) {
-    typePath = unwrapUtilityType(path);
-  } else if (path && types.GenericTypeAnnotation.check(path.node)) {
-    typePath = resolveToValue(path.get('id'));
+  let typePath: NodePath = path;
+  if (typePath && isSupportedUtilityType(typePath)) {
+    typePath = unwrapUtilityType(typePath);
+  }
+
+  if (typePath && types.GenericTypeAnnotation.check(typePath.node)) {
+    typePath = resolveToValue(typePath.get('id'));
     if (isUnreachableFlowType(typePath)) {
       return;
     }
