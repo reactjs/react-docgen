@@ -10,7 +10,7 @@
 import isUnreachableFlowType from '../utils/isUnreachableFlowType';
 import recast from 'recast';
 import resolveToValue from '../utils/resolveToValue';
-import { isSupportedUtilityType, unwrapUtilityType } from './flowUtilityTypes';
+import { unwrapUtilityType } from './flowUtilityTypes';
 
 const {
   types: { namedTypes: types },
@@ -25,18 +25,15 @@ export default function resolveGenericTypeAnnotation(
   path: NodePath,
 ): ?NodePath {
   // If the node doesn't have types or properties, try to get the type.
-  let typePath: NodePath = path;
-  if (typePath && isSupportedUtilityType(typePath)) {
-    typePath = unwrapUtilityType(typePath);
-  }
+  let typePath = unwrapUtilityType(path);
 
-  if (typePath && types.GenericTypeAnnotation.check(typePath.node)) {
+  if (types.GenericTypeAnnotation.check(typePath.node)) {
     typePath = resolveToValue(typePath.get('id'));
     if (isUnreachableFlowType(typePath)) {
       return;
     }
 
-    typePath = typePath.get('right');
+    typePath = unwrapUtilityType(typePath.get('right'));
   }
 
   return typePath;
