@@ -94,4 +94,29 @@ describe('getClassMemberValuePath', () => {
       );
     });
   });
+
+  describe('PrivateClassProperty', () => {
+    it('ignores private class properties', () => {
+      const def = statement(`
+        class Foo {
+          #foo = 42;
+        }
+      `);
+
+      expect(getClassMemberValuePath(def, 'foo')).toBe(undefined);
+    });
+
+    it('finds "normal" class properties with private present', () => {
+      const def = statement(`
+        class Foo {
+          #private = 54;
+          foo = 42;
+        }
+      `);
+
+      expect(getClassMemberValuePath(def, 'foo')).toBe(
+        def.get('body', 'body', 1, 'value'),
+      );
+    });
+  });
 });
