@@ -130,6 +130,35 @@ describe('componentMethodsHandler', () => {
     test(parse(src).get('body', 0));
   });
 
+  it('should handle and ignore computed methods', () => {
+    const src = `
+      class Test {
+        /**
+         * The foo method
+         */
+        [foo](bar: number): number {
+          return bar;
+        }
+
+        /**
+         * Should not show up
+         */
+        [() => {}](bar: number): number {
+          return bar;
+        }
+
+        componentDidMount() {}
+
+        render() {
+          return null;
+        }
+      }
+    `;
+
+    componentMethodsHandler(documentation, parse(src).get('body', 0));
+    expect(documentation.methods).toMatchSnapshot();
+  });
+
   it('should not find methods for stateless components', () => {
     const src = `
       (props) => {}

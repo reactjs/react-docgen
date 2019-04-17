@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getMethodDocumentation name handles computed method name 1`] = `
+Object {
+  "docblock": null,
+  "modifiers": Array [],
+  "name": "@computed#foo",
+  "params": Array [],
+  "returns": null,
+}
+`;
+
+exports[`getMethodDocumentation name ignores complex computed method name 1`] = `null`;

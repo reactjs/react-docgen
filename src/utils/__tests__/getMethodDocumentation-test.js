@@ -35,6 +35,26 @@ describe('getMethodDocumentation', () => {
         params: [],
       });
     });
+
+    it('handles computed method name', () => {
+      const def = statement(`
+        class Foo {
+          [foo]() {}
+        }
+      `);
+      const method = def.get('body', 'body', 0);
+      expect(getMethodDocumentation(method)).toMatchSnapshot();
+    });
+
+    it('ignores complex computed method name', () => {
+      const def = statement(`
+        class Foo {
+          [() => {}]() {}
+        }
+      `);
+      const method = def.get('body', 'body', 0);
+      expect(getMethodDocumentation(method)).toMatchSnapshot();
+    });
   });
 
   describe('docblock', () => {

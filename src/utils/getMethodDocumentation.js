@@ -102,8 +102,10 @@ function getMethodModifiers(methodPath) {
 
 export default function getMethodDocumentation(
   methodPath: NodePath,
-): MethodDocumentation {
+): ?MethodDocumentation {
   const name = getPropertyName(methodPath);
+  if (!name) return null;
+
   const docblock = getDocblock(methodPath);
 
   return {

@@ -1,0 +1,89 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`propTypeHandler React.createClass handles computed properties 1`] = `
+Object {
+  "@computed#foo": Object {
+    "required": true,
+    "type": Object {},
+  },
+  "complex_prop": Object {
+    "required": true,
+    "type": Object {},
+  },
+}
+`;
+
+exports[`propTypeHandler React.createClass ignores complex computed properties 1`] = `
+Object {
+  "complex_prop": Object {
+    "required": true,
+    "type": Object {},
+  },
+}
+`;
+
+exports[`propTypeHandler class definition class property handles computed properties 1`] = `
+Object {
+  "@computed#foo": Object {
+    "required": true,
+    "type": Object {},
+  },
+  "complex_prop": Object {
+    "required": true,
+    "type": Object {},
+  },
+}
+`;
+
+exports[`propTypeHandler class definition class property ignores complex computed properties 1`] = `
+Object {
+  "complex_prop": Object {
+    "required": true,
+    "type": Object {},
+  },
+}
+`;
+
+exports[`propTypeHandler class definition static getter handles computed properties 1`] = `
+Object {
+  "@computed#foo": Object {
+    "required": true,
+    "type": Object {},
+  },
+  "complex_prop": Object {
+    "required": true,
+    "type": Object {},
+  },
+}
+`;
+
+exports[`propTypeHandler class definition static getter ignores complex computed properties 1`] = `
+Object {
+  "complex_prop": Object {
+    "required": true,
+    "type": Object {},
+  },
+}
+`;
+
+exports[`propTypeHandler stateless component handles computed properties 1`] = `
+Object {
+  "@computed#foo": Object {
+    "required": true,
+    "type": Object {},
+  },
+  "complex_prop": Object {
+    "required": true,
+    "type": Object {},
+  },
+}
+`;
+
+exports[`propTypeHandler stateless component ignores complex computed properties 1`] = `
+Object {
+  "complex_prop": Object {
+    "required": true,
+    "type": Object {},
+  },
+}
+`;

@@ -49,5 +49,5 @@ export default function(methodPath: NodePath): boolean {
   }
 
   const name = getPropertyName(methodPath);
-  return componentMethods.indexOf(name) !== -1;
+  return !!name && componentMethods.indexOf(name) !== -1;
 }

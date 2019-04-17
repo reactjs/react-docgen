@@ -67,5 +67,8 @@ export default function componentMethodsHandler(
     }
   }
 
-  documentation.set('methods', methodPaths.map(getMethodDocumentation));
+  documentation.set(
+    'methods',
+    methodPaths.map(getMethodDocumentation).filter(Boolean),
+  );
 }

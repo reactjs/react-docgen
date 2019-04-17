@@ -1,5 +1,55 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`flowTypeHandler TypeAlias class definition for flow <0.53 ignores hash map entry 1`] = `
+Object {
+  "bar": Object {
+    "description": "",
+    "flowType": Object {},
+    "required": false,
+  },
+}
+`;
+
+exports[`flowTypeHandler TypeAlias class definition for flow >=0.53 with State ignores hash map entry 1`] = `
+Object {
+  "bar": Object {
+    "description": "",
+    "flowType": Object {},
+    "required": false,
+  },
+}
+`;
+
+exports[`flowTypeHandler TypeAlias class definition for flow >=0.53 without State ignores hash map entry 1`] = `
+Object {
+  "bar": Object {
+    "description": "",
+    "flowType": Object {},
+    "required": false,
+  },
+}
+`;
+
+exports[`flowTypeHandler TypeAlias class definition with inline props ignores hash map entry 1`] = `
+Object {
+  "bar": Object {
+    "description": "",
+    "flowType": Object {},
+    "required": false,
+  },
+}
+`;
+
+exports[`flowTypeHandler TypeAlias stateless component ignores hash map entry 1`] = `
+Object {
+  "bar": Object {
+    "description": "",
+    "flowType": Object {},
+    "required": false,
+  },
+}
+`;
+
 exports[`flowTypeHandler does support utility types inline 1`] = `
 Object {
   "foo": Object {

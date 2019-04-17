@@ -1027,3 +1027,24 @@ Object {
   },
 }
 `;
+
+exports[`main fixtures processes component "component_20.js" without errors 1`] = `
+Object {
+  "description": "",
+  "displayName": "Button",
+  "methods": Array [],
+  "props": Object {
+    "@computed#children": Object {
+      "defaultValue": Object {
+        "computed": false,
+        "value": "\\"default\\"",
+      },
+      "description": "This is a test",
+      "required": false,
+      "type": Object {
+        "name": "string",
+      },
+    },
+  },
+}
+`;

@@ -338,4 +338,26 @@ describe('getPropType', () => {
       ),
     ).toMatchSnapshot();
   });
+
+  it('handles computed properties', () => {
+    expect(
+      getPropType(
+        expression(`exact({
+      [foo]: string.isRequired,
+      bar: bool
+    })`),
+      ),
+    ).toMatchSnapshot();
+  });
+
+  it('ignores complex computed properties', () => {
+    expect(
+      getPropType(
+        expression(`exact({
+      [() => {}]: string.isRequired,
+      bar: bool
+    })`),
+      ),
+    ).toMatchSnapshot();
+  });
 });

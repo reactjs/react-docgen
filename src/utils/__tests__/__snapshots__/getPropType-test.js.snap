@@ -102,6 +102,34 @@ Object {
 }
 `;
 
+exports[`getPropType handles computed properties 1`] = `
+Object {
+  "name": "exact",
+  "value": Object {
+    "@computed#foo": Object {
+      "name": "string",
+      "required": true,
+    },
+    "bar": Object {
+      "name": "bool",
+      "required": false,
+    },
+  },
+}
+`;
+
+exports[`getPropType ignores complex computed properties 1`] = `
+Object {
+  "name": "exact",
+  "value": Object {
+    "bar": Object {
+      "name": "bool",
+      "required": false,
+    },
+  },
+}
+`;
+
 exports[`getPropType resolve identifier to their values correctly resolves SpreadElements in arrays 1`] = `
 Object {
   "name": "enum",

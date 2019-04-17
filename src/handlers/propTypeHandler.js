@@ -36,10 +36,13 @@ function amendPropTypes(getDescriptor, path) {
     return;
   }
 
-  path.get('properties').each(function(propertyPath) {
+  path.get('properties').each(propertyPath => {
     switch (propertyPath.node.type) {
       case types.Property.name: {
-        const propDescriptor = getDescriptor(getPropertyName(propertyPath));
+        const propName = getPropertyName(propertyPath);
+        if (!propName) return;
+
+        const propDescriptor = getDescriptor(propName);
         const valuePath = propertyPath.get('value');
         const type = isPropTypesExpression(valuePath)
           ? getPropType(valuePath)

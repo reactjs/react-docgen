@@ -46,9 +46,10 @@ function setPropDescriptor(documentation: Documentation, path: NodePath): void {
     }
   } else if (types.ObjectTypeProperty.check(path.node)) {
     const type = getFlowType(path.get('value'));
-    const propDescriptor = documentation.getPropDescriptor(
-      getPropertyName(path),
-    );
+    const propName = getPropertyName(path);
+    if (!propName) return;
+
+    const propDescriptor = documentation.getPropDescriptor(propName);
     propDescriptor.required = !path.node.optional;
     propDescriptor.flowType = type;
 
