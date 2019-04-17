@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`flowTypeHandler does support utility types inline 1`] = `
+Object {
+  "foo": Object {
+    "description": "",
+    "flowType": Object {},
+    "required": true,
+  },
+}
+`;

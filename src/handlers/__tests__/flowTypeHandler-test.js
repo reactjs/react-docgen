@@ -248,6 +248,20 @@ describe('flowTypeHandler', () => {
     });
   });
 
+  it('does support utility types inline', () => {
+    const definition = statement(`
+      (props: $ReadOnly<Props>) => <div />;
+
+      var React = require('React');
+
+      type Props = { foo: 'fooValue' };
+    `).get('expression');
+
+    expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
+
+    expect(documentation.descriptors).toMatchSnapshot();
+  });
+
   it('does not support union proptypes', () => {
     const definition = statement(`
       (props: Props) => <div />;

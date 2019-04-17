@@ -24,7 +24,7 @@ const supportedUtilityTypes = new Set(['$Exact', '$ReadOnly']);
 export function isSupportedUtilityType(path: NodePath): boolean {
   if (types.GenericTypeAnnotation.check(path.node)) {
     const idPath = path.get('id');
-    return Boolean(idPath) && supportedUtilityTypes.has(idPath.node.name);
+    return !!idPath && supportedUtilityTypes.has(idPath.node.name);
   }
   return false;
 }
@@ -35,5 +35,9 @@ export function isSupportedUtilityType(path: NodePath): boolean {
  *   $ReadOnly<T> => T
  */
 export function unwrapUtilityType(path: NodePath): NodePath {
-  return path.get('typeParameters', 'params', 0);
+  while (isSupportedUtilityType(path)) {
+    path = path.get('typeParameters', 'params', 0);
+  }
+
+  return path;
 }

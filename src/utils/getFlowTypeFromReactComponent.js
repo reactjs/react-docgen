@@ -14,18 +14,7 @@ import getTypeAnnotation from '../utils/getTypeAnnotation';
 import getMemberValuePath from '../utils/getMemberValuePath';
 import isReactComponentClass from '../utils/isReactComponentClass';
 import isStatelessComponent from '../utils/isStatelessComponent';
-import isUnreachableFlowType from '../utils/isUnreachableFlowType';
-import recast from 'recast';
-import resolveToValue from '../utils/resolveToValue';
-import {
-  isSupportedUtilityType,
-  unwrapUtilityType,
-} from '../utils/flowUtilityTypes';
 import resolveGenericTypeAnnotation from '../utils/resolveGenericTypeAnnotation';
-
-const {
-  types: { namedTypes: types },
-} = recast;
 
 /**
  * Given an React component (stateless or class) tries to find the
@@ -57,21 +46,6 @@ export default (path: NodePath): ?NodePath => {
     const param = path.get('params').get(0);
 
     typePath = getTypeAnnotation(param);
-  }
-
-  if (typePath && isSupportedUtilityType(typePath)) {
-    typePath = unwrapUtilityType(typePath);
-  } else if (typePath && types.GenericTypeAnnotation.check(typePath.node)) {
-    typePath = resolveToValue(typePath.get('id'));
-    if (
-      !typePath ||
-      types.Identifier.check(typePath.node) ||
-      isUnreachableFlowType(typePath)
-    ) {
-      return;
-    }
-
-    typePath = typePath.get('right');
   }
 
   return typePath;
