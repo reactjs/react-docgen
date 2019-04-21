@@ -6,19 +6,10 @@
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
-
-jest.disableAutomock();
+import { expression, statement, parse } from '../../../tests/utils';
+import isReactComponentClass from '../isReactComponentClass';
 
 describe('isReactComponentClass', () => {
-  let isReactComponentClass;
-  let expression, statement, parse;
-
-  beforeEach(() => {
-    isReactComponentClass = require('../isReactComponentClass').default;
-    ({ expression, statement, parse } = require('../../../tests/utils'));
-  });
-
   describe('render method', () => {
     it('accepts class declarations with a render method', () => {
       const def = statement('class Foo { render() {}}');

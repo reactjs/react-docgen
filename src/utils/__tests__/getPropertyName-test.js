@@ -9,18 +9,13 @@
  */
 
 import { parse, expression } from '../../../tests/utils';
+import getPropertyName from '../getPropertyName';
 
 describe('getPropertyName', () => {
-  let getPropertyName;
-
   function parsePath(src) {
     const root = parse(src.trim());
     return root.get('body', root.node.body.length - 1, 'expression');
   }
-
-  beforeEach(() => {
-    getPropertyName = require('../getPropertyName').default;
-  });
 
   it('returns the name for a normal property', () => {
     const def = expression('{ foo: 1 }');

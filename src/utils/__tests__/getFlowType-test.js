@@ -6,19 +6,10 @@
  *
  */
 
-/* global jest, describe, beforeEach, it, expect */
-
-jest.disableAutomock();
+import getFlowType from '../getFlowType';
+import { expression, statement } from '../../../tests/utils';
 
 describe('getFlowType', () => {
-  let expression, statement;
-  let getFlowType;
-
-  beforeEach(() => {
-    getFlowType = require('../getFlowType').default;
-    ({ expression, statement } = require('../../../tests/utils'));
-  });
-
   it('detects simple types', () => {
     const simplePropTypes = [
       'string',

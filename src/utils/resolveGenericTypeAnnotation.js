@@ -7,14 +7,12 @@
  * @flow
  */
 
+import types from 'ast-types';
 import isUnreachableFlowType from '../utils/isUnreachableFlowType';
-import recast from 'recast';
 import resolveToValue from '../utils/resolveToValue';
 import { unwrapUtilityType } from './flowUtilityTypes';
 
-const {
-  types: { namedTypes: types },
-} = recast;
+const { namedTypes: t } = types;
 
 function tryResolveGenericTypeAnnotation(path: NodePath): ?NodePath {
   let typePath = unwrapUtilityType(path);
@@ -22,9 +20,9 @@ function tryResolveGenericTypeAnnotation(path: NodePath): ?NodePath {
 
   if (typePath.node.id) {
     idPath = typePath.get('id');
-  } else if (types.TSTypeReference.check(typePath.node)) {
+  } else if (t.TSTypeReference.check(typePath.node)) {
     idPath = typePath.get('typeName');
-  } else if (types.TSExpressionWithTypeArguments.check(typePath.node)) {
+  } else if (t.TSExpressionWithTypeArguments.check(typePath.node)) {
     idPath = typePath.get('expression');
   }
 
@@ -34,9 +32,9 @@ function tryResolveGenericTypeAnnotation(path: NodePath): ?NodePath {
       return;
     }
 
-    if (types.TypeAlias.check(typePath.node)) {
+    if (t.TypeAlias.check(typePath.node)) {
       return tryResolveGenericTypeAnnotation(typePath.get('right'));
-    } else if (types.TSTypeAliasDeclaration.check(typePath.node)) {
+    } else if (t.TSTypeAliasDeclaration.check(typePath.node)) {
       return tryResolveGenericTypeAnnotation(typePath.get('typeAnnotation'));
     }
 

@@ -16,7 +16,6 @@ module.exports = {
   globals: {
     ASTNode: true,
     NodePath: true,
-    Recast: true,
   },
   overrides: [
     {
@@ -28,7 +27,7 @@ module.exports = {
       },
     },
     {
-      files: 'src/**/__tests__/*-test.js',
+      files: '@(src|bin)/**/__tests__/*-test.js',
       env: { jest: true },
     },
   ],

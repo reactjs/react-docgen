@@ -6,8 +6,6 @@
  *
  */
 
-/*global describe, beforeEach, it, expect*/
-
 import Documentation from '../../Documentation';
 import componentMethodsJsDocHandler from '../componentMethodsJsDocHandler';
 

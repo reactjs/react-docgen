@@ -6,15 +6,15 @@
  *
  */
 
-/*global describe, it, expect*/
-
-import recast from 'recast';
+import types from 'ast-types';
 import * as utils from '../../../tests/utils';
 import findAllComponentDefinitions from '../findAllComponentDefinitions';
 
+const { NodePath } = types;
+
 describe('findAllComponentDefinitions', () => {
   function parse(source) {
-    return findAllComponentDefinitions(utils.parse(source, recast), recast);
+    return findAllComponentDefinitions(utils.parse(source), utils.getParser());
   }
 
   describe('React.createClass', () => {
@@ -28,7 +28,7 @@ describe('findAllComponentDefinitions', () => {
       const result = parse(source);
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(1);
-      expect(result[0] instanceof recast.types.NodePath).toBe(true);
+      expect(result[0] instanceof NodePath).toBe(true);
       expect(result[0].node.type).toBe('ObjectExpression');
     });
 

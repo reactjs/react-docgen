@@ -6,18 +6,15 @@
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
-
-jest.disableAutomock();
 jest.mock('../../Documentation');
+
+import { parse } from '../../../tests/utils';
 
 describe('componentMethodsHandler', () => {
   let documentation;
   let componentMethodsHandler;
-  let parse;
 
   beforeEach(() => {
-    ({ parse } = require('../../../tests/utils'));
     documentation = new (require('../../Documentation'))();
     componentMethodsHandler = require('../componentMethodsHandler').default;
   });

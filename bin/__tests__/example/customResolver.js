@@ -16,8 +16,10 @@ const code = `
   })
 `;
 
-module.exports = function(ast, recast) {
-  return new recast.types.NodePath(recast.parse(code)).get(
+const { NodePath } = require('ast-types');
+
+module.exports = function(ast, parser) {
+  return new NodePath(parser.parse(code)).get(
     'program',
     'body',
     0,

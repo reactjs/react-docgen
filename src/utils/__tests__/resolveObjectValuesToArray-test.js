@@ -6,13 +6,11 @@
  *
  */
 
-/* eslint-env jest */
-
-import recast from 'recast';
-
-const builders = recast.types.builders;
+import types from 'ast-types';
 import resolveObjectValuesToArray from '../resolveObjectValuesToArray';
 import * as utils from '../../../tests/utils';
+
+const { builders } = types;
 
 describe('resolveObjectValuesToArray', () => {
   function parse(src) {

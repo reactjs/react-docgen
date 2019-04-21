@@ -6,19 +6,10 @@
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
-
-jest.disableAutomock();
+import getClassMemberValuePath from '../getClassMemberValuePath';
+import { statement } from '../../../tests/utils';
 
 describe('getClassMemberValuePath', () => {
-  let getClassMemberValuePath;
-  let statement;
-
-  beforeEach(() => {
-    getClassMemberValuePath = require('../getClassMemberValuePath').default;
-    ({ statement } = require('../../../tests/utils'));
-  });
-
   describe('MethodDefinitions', () => {
     it('finds "normal" method definitions', () => {
       const def = statement(`

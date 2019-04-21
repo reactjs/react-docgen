@@ -7,22 +7,19 @@
  * @flow
  */
 
-import recast from 'recast';
+import types from 'ast-types';
 import resolveToValue from './resolveToValue';
 
-const {
-  types: { namedTypes: _types },
-} = recast;
+const { namedTypes: t } = types;
 
 export default function resolveExportDeclaration(
   path: NodePath,
-  types: Object = _types,
 ): Array<NodePath> {
   const definitions = [];
   if (path.node.default) {
     definitions.push(path.get('declaration'));
   } else if (path.node.declaration) {
-    if (types.VariableDeclaration.check(path.node.declaration)) {
+    if (t.VariableDeclaration.check(path.node.declaration)) {
       path
         .get('declaration', 'declarations')
         .each(declarator => definitions.push(declarator));

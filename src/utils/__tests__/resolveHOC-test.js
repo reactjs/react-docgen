@@ -6,26 +6,17 @@
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
+import types from 'ast-types';
+import resolveHOC from '../resolveHOC';
+import * as utils from '../../../tests/utils';
 
-jest.disableAutomock();
+const { builders } = types;
 
 describe('resolveHOC', () => {
-  let builders;
-  let utils;
-  let resolveHOC;
-
   function parse(src) {
     const root = utils.parse(src);
     return root.get('body', root.node.body.length - 1, 'expression');
   }
-
-  beforeEach(() => {
-    const recast = require('recast');
-    builders = recast.types.builders;
-    resolveHOC = require('../resolveHOC').default;
-    utils = require('../../../tests/utils');
-  });
 
   it('resolves simple hoc', () => {
     const path = parse(['hoc(42);'].join('\n'));

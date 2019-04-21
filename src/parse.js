@@ -9,21 +9,23 @@
 
 import Documentation, { type DocumentationObject } from './Documentation';
 import postProcessDocumentation from './utils/postProcessDocumentation';
-
-import buildParser, { type Options } from './babelParser';
-import recast from 'recast';
+import buildParser, { type Options, type Parser } from './babelParser';
 import type { Handler, Resolver } from './types';
+import types from 'ast-types';
 
 const ERROR_MISSING_DEFINITION = 'No suitable component definition found.';
 
 function executeHandlers(
   handlers: Array<Handler>,
   componentDefinitions: Array<NodePath>,
+  parser: Parser,
 ): Array<DocumentationObject> {
   return componentDefinitions.map(
-    (componentDefinition): DocumentationObject => {
+    (componentDefinition: NodePath): DocumentationObject => {
       const documentation = new Documentation();
-      handlers.forEach(handler => handler(documentation, componentDefinition));
+      handlers.forEach(handler =>
+        handler(documentation, componentDefinition, parser),
+      );
       return postProcessDocumentation(documentation.toObject());
     },
   );
@@ -36,14 +38,15 @@ function executeHandlers(
  * `resolver` is a strategy to find the AST node(s) of the component
  * definition(s) inside `src`.
  * It is a function that gets passed the program AST node of
- * the source as first argument, and a reference to recast as second argument.
+ * the source as first argument, and a reference to the parser as second argument.
  *
  * This allows you define your own strategy for finding component definitions.
  *
  * `handlers` is an array of functions which are passed a reference to the
  * component definitions (extracted by `resolver`) so that they can extract
  * information from it. They get also passed a reference to a `Documentation`
- * object to attach the information to.
+ * object to attach the information to. A reference to the parser is parsed as the
+ * last argument.
  *
  * If `resolver` returns an array of component definitions, `parse` will return
  * an array of documentation objects. If `resolver` returns a single node
@@ -55,16 +58,18 @@ export default function parse(
   handlers: Array<Handler>,
   options: Options,
 ): Array<DocumentationObject> | DocumentationObject {
-  const ast = recast.parse(src, { parser: buildParser(options) });
-  const componentDefinitions = resolver(ast.program, recast);
+  const parser = buildParser(options);
+  const ast = parser.parse(src);
+  ast.__src = src;
+  const componentDefinitions = resolver(ast, parser);
 
   if (Array.isArray(componentDefinitions)) {
     if (componentDefinitions.length === 0) {
       throw new Error(ERROR_MISSING_DEFINITION);
     }
-    return executeHandlers(handlers, componentDefinitions);
+    return executeHandlers(handlers, componentDefinitions, parser);
   } else if (componentDefinitions) {
-    return executeHandlers(handlers, [componentDefinitions])[0];
+    return executeHandlers(handlers, [componentDefinitions], parser)[0];
   }
 
   throw new Error(ERROR_MISSING_DEFINITION);

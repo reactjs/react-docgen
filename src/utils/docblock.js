@@ -14,11 +14,9 @@
 const DOCLET_PATTERN = /^@(\w+)(?:$|\s((?:[^](?!^@\w))*))/gim;
 
 function parseDocblock(str) {
-  const lines = str.split('\n');
-  for (let i = 0, l = lines.length; i < l; i++) {
-    lines[i] = lines[i].replace(/^\s*\*\s?/, '');
-  }
-  return lines.join('\n').trim();
+  // Does not use \s in the regex as this would match also \n and conflicts
+  // with windows line endings.
+  return str.replace(/^[ \t]*\*[ \t]?/gm, '').trim();
 }
 
 const DOCBLOCK_HEADER = /^\*\s/;

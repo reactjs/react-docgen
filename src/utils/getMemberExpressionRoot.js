@@ -7,10 +7,9 @@
  * @flow
  */
 
-import recast from 'recast';
-const {
-  types: { namedTypes: types },
-} = recast;
+import types from 'ast-types';
+
+const { namedTypes: t } = types;
 
 /**
  * Returns the path to the first part of the MemberExpression. I.e. given a
@@ -25,6 +24,6 @@ export default function getMemberExpressionRoot(
 ): NodePath {
   do {
     memberExpressionPath = memberExpressionPath.get('object');
-  } while (types.MemberExpression.check(memberExpressionPath.node));
+  } while (t.MemberExpression.check(memberExpressionPath.node));
   return memberExpressionPath;
 }

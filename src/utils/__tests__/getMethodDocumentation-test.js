@@ -6,19 +6,10 @@
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
-
-jest.disableAutomock();
+import { statement } from '../../../tests/utils';
+import getMethodDocumentation from '../getMethodDocumentation';
 
 describe('getMethodDocumentation', () => {
-  let getMethodDocumentation;
-  let statement;
-
-  beforeEach(() => {
-    getMethodDocumentation = require('../getMethodDocumentation').default;
-    ({ statement } = require('../../../tests/utils'));
-  });
-
   describe('name', () => {
     it('extracts the method name', () => {
       const def = statement(`

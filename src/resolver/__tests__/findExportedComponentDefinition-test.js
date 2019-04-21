@@ -6,15 +6,15 @@
  *
  */
 
-/*global describe, it, expect*/
-
-import recast from 'recast';
 import * as utils from '../../../tests/utils';
 import findExportedComponentDefinition from '../findExportedComponentDefinition';
 
 describe('findExportedComponentDefinition', () => {
   function parse(source) {
-    return findExportedComponentDefinition(utils.parse(source), recast);
+    return findExportedComponentDefinition(
+      utils.parse(source),
+      utils.getParser(),
+    );
   }
 
   describe('CommonJS module exports', () => {

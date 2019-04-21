@@ -7,24 +7,22 @@
  * @flow
  */
 
+import types from 'ast-types';
 import * as expressionTo from './expressionTo';
-import recast from 'recast';
 
-const {
-  types: { namedTypes: types },
-} = recast;
+const { namedTypes: t } = types;
 
 /**
  * Returns true if the expression is of form `exports.foo = ...;` or
  * `modules.exports = ...;`.
  */
 export default function isExportsOrModuleAssignment(path: NodePath): boolean {
-  if (types.ExpressionStatement.check(path.node)) {
+  if (t.ExpressionStatement.check(path.node)) {
     path = path.get('expression');
   }
   if (
-    !types.AssignmentExpression.check(path.node) ||
-    !types.MemberExpression.check(path.node.left)
+    !t.AssignmentExpression.check(path.node) ||
+    !t.MemberExpression.check(path.node.left)
   ) {
     return false;
   }

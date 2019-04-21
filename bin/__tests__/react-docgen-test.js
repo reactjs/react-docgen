@@ -6,14 +6,10 @@
  *
  */
 
-/*global jasmine, describe, it, expect, afterEach*/
-
 // NOTE: This test spawns a subprocesses that load the files from dist/, not
 // src/. Before running this test run `npm run build` or `npm run watch`.
 
 const TEST_TIMEOUT = 120000;
-
-jasmine.DEFAULT_TIMEOUT_INTERVAL = TEST_TIMEOUT;
 
 const fs = require('fs');
 const path = require('path');
@@ -90,7 +86,7 @@ describe('react-docgen CLI', () => {
     tempDir = null;
     tempComponents = [];
     tempNoComponents = [];
-  });
+  }, TEST_TIMEOUT);
 
   it(
     'reads from stdin',

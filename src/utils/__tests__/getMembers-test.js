@@ -6,35 +6,13 @@
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
-
-jest.disableAutomock();
+import { expression } from '../../../tests/utils';
+import getMembers from '../getMembers';
 
 describe('getMembers', () => {
-  let expression;
-  let getMembers;
-  let memberExpressionPath;
-
-  beforeEach(() => {
-    getMembers = require('../getMembers').default;
-    ({ expression } = require('../../../tests/utils'));
-    memberExpressionPath = expression('foo.bar(123)(456)[baz][42]');
-  });
-
   it('finds all "members" "inside" a MemberExpression', () => {
-    const members = getMembers(memberExpressionPath);
+    const members = getMembers(expression('foo.bar(123)(456)[baz][42]'));
 
-    //bar(123)
-    expect(members[0].path.node.name).toEqual('bar');
-    expect(members[0].computed).toBe(false);
-    expect(members[0].argumentsPath.get(0).node.value).toEqual(123);
-    //[baz]
-    expect(members[1].path.node.name).toEqual('baz');
-    expect(members[1].computed).toBe(true);
-    expect(members[1].argumentsPath).toBe(null);
-    //[42]
-    expect(members[2].path.node.value).toEqual(42);
-    expect(members[2].computed).toBe(true);
-    expect(members[2].argumentsPath).toBe(null);
+    expect(members).toMatchSnapshot();
   });
 });

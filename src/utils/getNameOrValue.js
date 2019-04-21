@@ -7,11 +7,9 @@
  * @flow
  */
 
-import recast from 'recast';
+import types from 'ast-types';
 
-const {
-  types: { namedTypes: types },
-} = recast;
+const { namedTypes: t } = types;
 
 /**
  * If node is an Identifier, it returns its name. If it is a literal, it returns
@@ -20,9 +18,9 @@ const {
 export default function getNameOrValue(path: NodePath, raw?: boolean): string {
   const node = path.node;
   switch (node.type) {
-    case types.Identifier.name:
+    case t.Identifier.name:
       return node.name;
-    case types.Literal.name:
+    case t.Literal.name:
       return raw ? node.raw : node.value;
     default:
       throw new TypeError('Argument must be an Identifier or a Literal');

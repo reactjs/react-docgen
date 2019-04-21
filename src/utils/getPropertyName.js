@@ -7,13 +7,11 @@
  * @flow
  */
 
-import recast from 'recast';
+import types from 'ast-types';
 import getNameOrValue from './getNameOrValue';
 import resolveToValue from './resolveToValue';
 
-const {
-  types: { namedTypes: types },
-} = recast;
+const { namedTypes: t } = types;
 
 export const COMPUTED_PREFIX = '@computed#';
 
@@ -23,20 +21,17 @@ export const COMPUTED_PREFIX = '@computed#';
  * returns the value of the literal or name of the identifier.
  */
 export default function getPropertyName(propertyPath: NodePath): ?string {
-  if (types.ObjectTypeSpreadProperty.check(propertyPath.node)) {
+  if (t.ObjectTypeSpreadProperty.check(propertyPath.node)) {
     return getNameOrValue(propertyPath.get('argument').get('id'), false);
   } else if (propertyPath.node.computed) {
     const key = propertyPath.get('key');
 
     // Try to resolve variables and member expressions
-    if (
-      types.Identifier.check(key.node) ||
-      types.MemberExpression.check(key.node)
-    ) {
+    if (t.Identifier.check(key.node) || t.MemberExpression.check(key.node)) {
       const value = resolveToValue(key).node;
 
       if (
-        types.Literal.check(value) &&
+        t.Literal.check(value) &&
         (typeof value.value === 'string' || typeof value.value === 'number')
       ) {
         return `${value.value}`;
@@ -44,12 +39,12 @@ export default function getPropertyName(propertyPath: NodePath): ?string {
     }
 
     // generate name for identifier
-    if (types.Identifier.check(key.node)) {
+    if (t.Identifier.check(key.node)) {
       return `${COMPUTED_PREFIX}${key.node.name}`;
     }
 
     if (
-      types.Literal.check(key.node) &&
+      t.Literal.check(key.node) &&
       (typeof key.node.value === 'string' || typeof key.node.value === 'number')
     ) {
       return `${key.node.value}`;

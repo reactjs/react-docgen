@@ -4,9 +4,11 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
+ * @flow
  */
 
 import type Documentation from './Documentation';
+import { type Parser } from './babelParser';
 
 export type PropTypeDescriptor = {
   name:
@@ -103,8 +105,12 @@ export type PropDescriptor = {
   description?: string,
 };
 
-export type Handler = (documentation: Documentation, path: NodePath) => void;
+export type Handler = (
+  documentation: Documentation,
+  path: NodePath,
+  parser: Parser,
+) => void;
 export type Resolver = (
   node: ASTNode,
-  recast: Recast,
+  parser: Parser,
 ) => ?NodePath | ?Array<NodePath>;

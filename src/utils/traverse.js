@@ -7,9 +7,9 @@
  * @flow
  */
 
-type Visitor = (path: NodePath) => any;
+import types from 'ast-types';
 
-import recast from 'recast';
+type Visitor = (path: NodePath) => any;
 
 /**
  * A helper function that doesn't traverse into nested blocks / statements by
@@ -19,7 +19,7 @@ export function traverseShallow(
   ast: ASTNode,
   visitors: { [key: string]: Visitor },
 ): void {
-  recast.visit(ast, { ...defaultVisitors, ...visitors });
+  types.visit(ast, { ...defaultVisitors, ...visitors });
 }
 
 const ignore = () => false;
@@ -36,7 +36,6 @@ const defaultVisitors = {
   visitForStatement: ignore,
   visitForInStatement: ignore,
   visitForOfStatement: ignore,
-  visitExportDeclaration: ignore,
   visitExportNamedDeclaration: ignore,
   visitExportDefaultDeclaration: ignore,
   visitConditionalExpression: ignore,

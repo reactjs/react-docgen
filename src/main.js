@@ -43,7 +43,7 @@ const defaultHandlers = [
  * documentation (from a docblock).
  */
 function defaultParse(
-  src: string,
+  src: string | Buffer,
   resolver?: ?Resolver,
   handlers?: ?Array<Handler>,
   options?: Options = {},
@@ -55,7 +55,7 @@ function defaultParse(
     handlers = defaultHandlers;
   }
 
-  return parse(src, resolver, handlers, options);
+  return parse(String(src), resolver, handlers, options);
 }
 
 export {

@@ -6,18 +6,15 @@
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
-
-jest.disableAutomock();
 jest.mock('../../Documentation');
+
+import { expression, statement } from '../../../tests/utils';
 
 describe('defaultPropsHandler', () => {
   let documentation;
   let displayNameHandler;
-  let expression, statement;
 
   beforeEach(() => {
-    ({ expression, statement } = require('../../../tests/utils'));
     documentation = new (require('../../Documentation'))();
     displayNameHandler = require('../displayNameHandler').default;
   });

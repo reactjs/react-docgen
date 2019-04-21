@@ -7,18 +7,16 @@
  * @flow
  */
 
+import types from 'ast-types';
 import getPropertyValuePath from './getPropertyValuePath';
 import isReactComponentClass from './isReactComponentClass';
 import isReactCreateClassCall from './isReactCreateClassCall';
 import isReactCreateElementCall from './isReactCreateElementCall';
 import isReactCloneElementCall from './isReactCloneElementCall';
 import isReactChildrenElementCall from './isReactChildrenElementCall';
-import recast from 'recast';
 import resolveToValue from './resolveToValue';
 
-const {
-  types: { namedTypes: types },
-} = recast;
+const { visit, namedTypes: t } = types;
 
 const validPossibleStatelessComponentTypes = [
   'Property',
@@ -84,17 +82,17 @@ function resolvesToJSXElementOrReactCall(path) {
     if (calleeValue.node.type === 'MemberExpression') {
       if (calleeValue.get('object').node.type === 'Identifier') {
         resolvedValue = resolveToValue(calleeValue.get('object'));
-      } else if (types.MemberExpression.check(calleeValue.node)) {
+      } else if (t.MemberExpression.check(calleeValue.node)) {
         do {
           calleeValue = calleeValue.get('object');
           namesToResolve.unshift(calleeValue.get('property'));
-        } while (types.MemberExpression.check(calleeValue.node));
+        } while (t.MemberExpression.check(calleeValue.node));
 
         resolvedValue = resolveToValue(calleeValue.get('object'));
       }
     }
 
-    if (resolvedValue && types.ObjectExpression.check(resolvedValue.node)) {
+    if (resolvedValue && t.ObjectExpression.check(resolvedValue.node)) {
       const resolvedMemberExpression = namesToResolve.reduce(
         (result, nodePath) => {
           if (!nodePath) {
@@ -103,7 +101,7 @@ function resolvesToJSXElementOrReactCall(path) {
 
           if (result) {
             result = getPropertyValuePath(result, nodePath.node.name);
-            if (result && types.Identifier.check(result.node)) {
+            if (result && t.Identifier.check(result.node)) {
               return resolveToValue(result);
             }
           }
@@ -142,7 +140,7 @@ function returnsJSXElementOrReactCall(path) {
     scope = path.get('value').scope;
   }
 
-  recast.visit(path, {
+  visit(path, {
     visitReturnStatement(returnPath) {
       // Only check return statements which are part of the checked function scope
       if (returnPath.scope !== scope) return false;

@@ -6,11 +6,9 @@
  *
  * @flow
  */
-import recast from 'recast';
+import types from 'ast-types';
 
-const {
-  types: { namedTypes: types },
-} = recast;
+const { namedTypes: t } = types;
 
 const supportedUtilityTypes = new Set(['$Exact', '$ReadOnly']);
 
@@ -19,7 +17,7 @@ const supportedUtilityTypes = new Set(['$Exact', '$ReadOnly']);
  * https://flow.org/en/docs/types/utilities/ for which types are available.
  */
 export function isSupportedUtilityType(path: NodePath): boolean {
-  if (types.GenericTypeAnnotation.check(path.node)) {
+  if (t.GenericTypeAnnotation.check(path.node)) {
     const idPath = path.get('id');
     return !!idPath && supportedUtilityTypes.has(idPath.node.name);
   }

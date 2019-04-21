@@ -7,13 +7,11 @@
  * @flow
  */
 
-import recast from 'recast';
+import types from 'ast-types';
 import isReactCreateClassCall from './isReactCreateClassCall';
 import isReactForwardRefCall from './isReactForwardRefCall';
 
-const {
-  types: { NodePath, namedTypes: types },
-} = recast;
+const { namedTypes: t } = types;
 
 /**
  * If the path is a call expression, it recursively resolves to the
@@ -24,7 +22,7 @@ const {
 export default function resolveHOC(path: NodePath): NodePath {
   const node = path.node;
   if (
-    types.CallExpression.check(node) &&
+    t.CallExpression.check(node) &&
     !isReactCreateClassCall(path) &&
     !isReactForwardRefCall(path)
   ) {

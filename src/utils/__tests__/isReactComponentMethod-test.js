@@ -6,19 +6,10 @@
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
-
-jest.disableAutomock();
+import { expression, statement } from '../../../tests/utils';
+import isReactComponentMethod from '../isReactComponentMethod';
 
 describe('isReactComponentMethod', () => {
-  let isReactComponentMethod;
-  let expression, statement;
-
-  beforeEach(() => {
-    isReactComponentMethod = require('../isReactComponentMethod').default;
-    ({ expression, statement } = require('../../../tests/utils'));
-  });
-
   it('returns true if the method is a component class method', () => {
     const def = statement('class Foo { render() {}}');
     const method = def.get('body', 'body', 0);

@@ -6,22 +6,15 @@
  *
  */
 
-/*global describe, beforeEach, it, expect*/
+import { statement } from '../../../tests/utils';
+import normalizeClassDefinition from '../normalizeClassDefinition';
 
 describe('normalizeClassDefinition', () => {
-  let parse;
-  let normalizeClassDefinition;
-
-  beforeEach(() => {
-    ({ parse } = require('../../../tests/utils'));
-    normalizeClassDefinition = require('../normalizeClassDefinition').default;
-  });
-
   it('finds assignments to class declarations', () => {
-    const classDefinition = parse(`
+    const classDefinition = statement(`
       class Foo {}
       Foo.propTypes = 42;
-    `).get('body', 0);
+    `);
 
     normalizeClassDefinition(classDefinition);
     const {
@@ -38,11 +31,11 @@ describe('normalizeClassDefinition', () => {
   });
 
   it('should not fail on classes without ids', () => {
-    const classDefinition = parse(`
+    const classDefinition = statement(`
       export default class extends React.Component {
         static propTypes = 42;
       }
-    `).get('body', 0, 'declaration');
+    `).get('declaration');
 
     normalizeClassDefinition(classDefinition);
     const {
@@ -59,10 +52,10 @@ describe('normalizeClassDefinition', () => {
   });
 
   it('finds assignments to class expressions', () => {
-    let classDefinition = parse(`
+    let classDefinition = statement(`
       var Foo = class {};
       Foo.propTypes = 42;
-    `).get('body', 0, 'declarations', 0, 'init');
+    `).get('declarations', 0, 'init');
 
     normalizeClassDefinition(classDefinition);
     let {
@@ -77,11 +70,11 @@ describe('normalizeClassDefinition', () => {
     expect(classProperty.value.value).toBe(42);
     expect(classProperty.static).toBe(true);
 
-    classDefinition = parse(`
+    classDefinition = statement(`
       var Foo;
       Foo = class {};
       Foo.propTypes = 42;
-    `).get('body', 1, 'expression', 'right');
+    `).get('expression', 'right');
 
     normalizeClassDefinition(classDefinition);
     ({
@@ -95,22 +88,12 @@ describe('normalizeClassDefinition', () => {
   });
 
   it('ignores assignments further up the tree', () => {
-    const classDefinition = parse(`
+    const classDefinition = statement(`
       var Foo = function() {
         (class {});
       };
       Foo.bar = 42;
-    `).get(
-      'body',
-      0,
-      'declarations',
-      0,
-      'init',
-      'body',
-      'body',
-      '0',
-      'expression',
-    );
+    `).get('declarations', 0, 'init', 'body', 'body', '0', 'expression');
 
     normalizeClassDefinition(classDefinition);
     const {

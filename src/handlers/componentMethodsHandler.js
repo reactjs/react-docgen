@@ -7,18 +7,14 @@
  * @flow
  */
 
-import recast from 'recast';
-
+import types from 'ast-types';
 import getMemberValuePath from '../utils/getMemberValuePath';
 import getMethodDocumentation from '../utils/getMethodDocumentation';
 import isReactComponentClass from '../utils/isReactComponentClass';
 import isReactComponentMethod from '../utils/isReactComponentMethod';
-
 import type Documentation from '../Documentation';
 
-const {
-  types: { namedTypes: types },
-} = recast;
+const { namedTypes: t } = types;
 
 /**
  * The following values/constructs are considered methods:
@@ -30,12 +26,9 @@ const {
  */
 function isMethod(path) {
   const isProbablyMethod =
-    (types.MethodDefinition.check(path.node) &&
-      path.node.kind !== 'constructor') ||
-    (types.ClassProperty.check(path.node) &&
-      types.Function.check(path.get('value').node)) ||
-    (types.Property.check(path.node) &&
-      types.Function.check(path.get('value').node));
+    (t.MethodDefinition.check(path.node) && path.node.kind !== 'constructor') ||
+    ((t.ClassProperty.check(path.node) || t.Property.check(path.node)) &&
+      t.Function.check(path.get('value').node));
 
   return isProbablyMethod && !isReactComponentMethod(path);
 }
@@ -52,7 +45,7 @@ export default function componentMethodsHandler(
   let methodPaths = [];
   if (isReactComponentClass(path)) {
     methodPaths = path.get('body', 'body').filter(isMethod);
-  } else if (types.ObjectExpression.check(path.node)) {
+  } else if (t.ObjectExpression.check(path.node)) {
     methodPaths = path.get('properties').filter(isMethod);
 
     // Add the statics object properties.

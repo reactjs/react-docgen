@@ -7,21 +7,19 @@
  * @flow
  */
 
+import types from 'ast-types';
 import isReactModuleName from './isReactModuleName';
 import match from './match';
-import recast from 'recast';
 import resolveToModule from './resolveToModule';
 
-const {
-  types: { namedTypes: types },
-} = recast;
+const { namedTypes: t } = types;
 
 /**
  * Returns true if the expression is a function call of the form
  * `React.createElement(...)`.
  */
 export default function isReactCloneElementCall(path: NodePath): boolean {
-  if (types.ExpressionStatement.check(path.node)) {
+  if (t.ExpressionStatement.check(path.node)) {
     path = path.get('expression');
   }
 

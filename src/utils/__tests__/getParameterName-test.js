@@ -6,19 +6,10 @@
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
-
-jest.disableAutomock();
+import { expression } from '../../../tests/utils';
+import getParameterName from '../getParameterName';
 
 describe('getParameterName', () => {
-  let getParameterName;
-  let expression;
-
-  beforeEach(() => {
-    getParameterName = require('../getParameterName').default;
-    ({ expression } = require('../../../tests/utils'));
-  });
-
   it('returns the name for a normal parameter', () => {
     const def = expression('function(a) {}');
     const param = def.get('params', 0);

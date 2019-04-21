@@ -7,16 +7,13 @@
  * @flow
  */
 
-import type Documentation from '../Documentation';
-
+import types from 'ast-types';
 import getMemberValuePath from '../utils/getMemberValuePath';
-import recast from 'recast';
 import resolveToModule from '../utils/resolveToModule';
 import resolveToValue from '../utils/resolveToValue';
+import type Documentation from '../Documentation';
 
-const {
-  types: { namedTypes: types },
-} = recast;
+const { namedTypes: t } = types;
 
 /**
  * It resolves the path to its module name and adds it to the "composes" entry
@@ -32,7 +29,7 @@ function amendComposes(documentation, path) {
 function processObjectExpression(documentation, path) {
   path.get('properties').each(function(propertyPath) {
     switch (propertyPath.node.type) {
-      case types.SpreadElement.name:
+      case t.SpreadElement.name:
         amendComposes(
           documentation,
           resolveToValue(propertyPath.get('argument')),
@@ -56,7 +53,7 @@ export default function propTypeCompositionHandler(
   }
 
   switch (propTypesPath.node.type) {
-    case types.ObjectExpression.name:
+    case t.ObjectExpression.name:
       processObjectExpression(documentation, propTypesPath);
       break;
     default:

@@ -6,19 +6,16 @@
  *
  */
 
-/*global jest, describe, it, expect, beforeEach*/
-
-jest.disableAutomock();
 jest.mock('../../Documentation');
 
+import { expression, statement } from '../../../tests/utils';
+
 describe('flowTypeHandler', () => {
-  let statement, expression;
   let getFlowTypeMock;
   let documentation;
   let flowTypeHandler;
 
   beforeEach(() => {
-    ({ statement, expression } = require('../../../tests/utils'));
     getFlowTypeMock = jest.fn(() => ({}));
     jest.setMock('../../utils/getFlowType', getFlowTypeMock);
     jest.mock('../../utils/getFlowType');

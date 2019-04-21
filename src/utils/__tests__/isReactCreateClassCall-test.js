@@ -6,27 +6,18 @@
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
-
-jest.disableAutomock();
+import { parse } from '../../../tests/utils';
+import isReactCreateClassCall from '../isReactCreateClassCall';
 
 describe('isReactCreateClassCall', () => {
-  let isReactCreateClassCall;
-  let utils;
-
-  function parse(src) {
-    const root = utils.parse(src);
+  function parsePath(src) {
+    const root = parse(src);
     return root.get('body', root.node.body.length - 1, 'expression');
   }
 
-  beforeEach(() => {
-    isReactCreateClassCall = require('../isReactCreateClassCall').default;
-    utils = require('../../../tests/utils');
-  });
-
   describe('built in React.createClass', () => {
     it('accepts createClass called on React', () => {
-      const def = parse(`
+      const def = parsePath(`
         var React = require("React");
         React.createClass({
           render() {}
@@ -36,7 +27,7 @@ describe('isReactCreateClassCall', () => {
     });
 
     it('accepts createClass called on aliased React', () => {
-      const def = parse(`
+      const def = parsePath(`
         var other = require("React");
         other.createClass({
           render() {}
@@ -46,7 +37,7 @@ describe('isReactCreateClassCall', () => {
     });
 
     it('ignores other React calls', () => {
-      const def = parse(`
+      const def = parsePath(`
         var React = require("React");
         React.isValidElement({});
       `);
@@ -54,7 +45,7 @@ describe('isReactCreateClassCall', () => {
     });
 
     it('ignores non React calls to createClass', () => {
-      const def = parse(`
+      const def = parsePath(`
         var React = require("bob");
         React.createClass({
           render() {}
@@ -66,7 +57,7 @@ describe('isReactCreateClassCall', () => {
 
   describe('modular in create-react-class', () => {
     it('accepts create-react-class', () => {
-      const def = parse(`
+      const def = parsePath(`
         var createReactClass = require("create-react-class");
         createReactClass({
           render() {}
@@ -76,7 +67,7 @@ describe('isReactCreateClassCall', () => {
     });
 
     it('accepts create-react-class calls on another name', () => {
-      const def = parse(`
+      const def = parsePath(`
         var makeClass = require("create-react-class");
         makeClass({
           render() {}
@@ -86,7 +77,7 @@ describe('isReactCreateClassCall', () => {
     });
 
     it('ignores non create-react-class calls to createReactClass', () => {
-      const def = parse(`
+      const def = parsePath(`
         var createReactClass = require("bob");
         createReactClass({
           render() {}

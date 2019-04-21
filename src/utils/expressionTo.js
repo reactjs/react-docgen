@@ -9,12 +9,10 @@
 
 /*eslint no-loop-func: 0, no-use-before-define: 0*/
 
+import types from 'ast-types';
 import resolveToValue from './resolveToValue';
-import recast from 'recast';
 
-const {
-  types: { namedTypes: types },
-} = recast;
+const { namedTypes: t } = types;
 
 /**
  * Splits a MemberExpression or CallExpression into parts.
@@ -27,10 +25,10 @@ function toArray(path: NodePath): Array<string> {
   while (parts.length > 0) {
     path = parts.shift();
     const node = path.node;
-    if (types.CallExpression.check(node)) {
+    if (t.CallExpression.check(node)) {
       parts.push(path.get('callee'));
       continue;
-    } else if (types.MemberExpression.check(node)) {
+    } else if (t.MemberExpression.check(node)) {
       parts.push(path.get('object'));
       if (node.computed) {
         const resolvedPath = resolveToValue(path.get('property'));
@@ -43,16 +41,16 @@ function toArray(path: NodePath): Array<string> {
         result.push(node.property.name);
       }
       continue;
-    } else if (types.Identifier.check(node)) {
+    } else if (t.Identifier.check(node)) {
       result.push(node.name);
       continue;
-    } else if (types.Literal.check(node)) {
+    } else if (t.Literal.check(node)) {
       result.push(node.raw);
       continue;
-    } else if (types.ThisExpression.check(node)) {
+    } else if (t.ThisExpression.check(node)) {
       result.push('this');
       continue;
-    } else if (types.ObjectExpression.check(node)) {
+    } else if (t.ObjectExpression.check(node)) {
       const properties = path.get('properties').map(function(property) {
         return (
           toString(property.get('key')) + ': ' + toString(property.get('value'))
@@ -60,7 +58,7 @@ function toArray(path: NodePath): Array<string> {
       });
       result.push('{' + properties.join(', ') + '}');
       continue;
-    } else if (types.ArrayExpression.check(node)) {
+    } else if (t.ArrayExpression.check(node)) {
       result.push(
         '[' +
           path

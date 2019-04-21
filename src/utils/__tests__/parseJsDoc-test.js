@@ -6,17 +6,9 @@
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
-
-jest.disableAutomock();
+import parseJsDoc from '../parseJsDoc';
 
 describe('parseJsDoc', () => {
-  let parseJsDoc;
-
-  beforeEach(() => {
-    parseJsDoc = require('../parseJsDoc').default;
-  });
-
   describe('description', () => {
     it('extracts the method description in jsdoc', () => {
       const docblock = `
