@@ -38,7 +38,8 @@ function isWhitelistedObjectProperty(prop) {
 function isWhiteListedObjectTypeProperty(prop) {
   return (
     types.ObjectTypeProperty.check(prop) ||
-    types.ObjectTypeSpreadProperty.check(prop)
+    types.ObjectTypeSpreadProperty.check(prop) ||
+    types.TSPropertySignature.check(prop)
   );
 }
 
@@ -51,15 +52,24 @@ export function resolveObjectToNameArray(
     (types.ObjectExpression.check(object.value) &&
       object.value.properties.every(isWhitelistedObjectProperty)) ||
     (types.ObjectTypeAnnotation.check(object.value) &&
-      object.value.properties.every(isWhiteListedObjectTypeProperty))
+      object.value.properties.every(isWhiteListedObjectTypeProperty)) ||
+    (types.TSTypeLiteral.check(object.value) &&
+      object.value.members.every(isWhiteListedObjectTypeProperty))
   ) {
     let values = [];
     let error = false;
-    object.get('properties').each(propPath => {
+    const properties = types.TSTypeLiteral.check(object.value)
+      ? object.get('members')
+      : object.get('properties');
+    properties.each(propPath => {
       if (error) return;
       const prop = propPath.value;
 
-      if (types.Property.check(prop) || types.ObjectTypeProperty.check(prop)) {
+      if (
+        types.Property.check(prop) ||
+        types.ObjectTypeProperty.check(prop) ||
+        types.TSPropertySignature.check(prop)
+      ) {
         // Key is either Identifier or Literal
         const name = prop.key.name || (raw ? prop.key.raw : prop.key.value);
 

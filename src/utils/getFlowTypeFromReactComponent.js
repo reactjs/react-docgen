@@ -54,7 +54,12 @@ export function applyToFlowTypeProperties(
 ) {
   if (path.node.properties) {
     path.get('properties').each(propertyPath => callback(propertyPath));
-  } else if (path.node.type === 'IntersectionTypeAnnotation') {
+  } else if (path.node.members) {
+    path.get('members').each(propertyPath => callback(propertyPath));
+  } else if (
+    path.node.type === 'IntersectionTypeAnnotation' ||
+    path.node.type === 'TSIntersectionType'
+  ) {
     path
       .get('types')
       .each(typesPath => applyToFlowTypeProperties(typesPath, callback));

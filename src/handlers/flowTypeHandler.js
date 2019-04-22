@@ -11,6 +11,7 @@ import recast from 'recast';
 import type Documentation from '../Documentation';
 
 import getFlowType from '../utils/getFlowType';
+import getTSType from '../utils/getTSType';
 import getPropertyName from '../utils/getPropertyName';
 import getFlowTypeFromReactComponent, {
   applyToFlowTypeProperties,
@@ -46,6 +47,20 @@ function setPropDescriptor(documentation: Documentation, path: NodePath): void {
     }
   } else if (types.ObjectTypeProperty.check(path.node)) {
     const type = getFlowType(path.get('value'));
+    const propName = getPropertyName(path);
+    if (!propName) return;
+
+    const propDescriptor = documentation.getPropDescriptor(propName);
+    propDescriptor.required = !path.node.optional;
+    propDescriptor.flowType = type;
+
+    // We are doing this here instead of in a different handler
+    // to not need to duplicate the logic for checking for
+    // imported types that are spread in to props.
+    setPropDescription(documentation, path);
+  } else if (types.TSPropertySignature.check(path.node)) {
+    const type = getTSType(path.get('typeAnnotation'));
+
     const propName = getPropertyName(path);
     if (!propName) return;
 

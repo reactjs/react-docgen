@@ -1048,3 +1048,131 @@ Object {
   },
 }
 `;
+
+exports[`main fixtures processes component "component_21.tsx" without errors 1`] = `
+Object {
+  "description": "This is a typescript class component",
+  "displayName": "TSComponent",
+  "methods": Array [],
+  "props": Object {
+    "bar": Object {
+      "description": "Required prop",
+      "flowType": Object {
+        "name": "number",
+      },
+      "required": true,
+    },
+    "baz": Object {
+      "description": "Complex union prop",
+      "flowType": Object {
+        "elements": Array [
+          Object {
+            "name": "number",
+          },
+          Object {
+            "name": "signature",
+            "raw": "{ enter?: number, exit?: number }",
+            "signature": Object {
+              "properties": Array [
+                Object {
+                  "key": "enter",
+                  "value": Object {
+                    "name": "number",
+                    "required": false,
+                  },
+                },
+                Object {
+                  "key": "exit",
+                  "value": Object {
+                    "name": "number",
+                    "required": false,
+                  },
+                },
+              ],
+            },
+            "type": "object",
+          },
+          Object {
+            "name": "literal",
+            "value": "'auto'",
+          },
+        ],
+        "name": "union",
+        "raw": "number | { enter?: number, exit?: number } | 'auto'",
+      },
+      "required": true,
+    },
+    "foo": Object {
+      "description": "Optional prop",
+      "flowType": Object {
+        "name": "string",
+      },
+      "required": false,
+    },
+  },
+}
+`;
+
+exports[`main fixtures processes component "component_22.tsx" without errors 1`] = `
+Object {
+  "description": "This is a TypeScript function component",
+  "displayName": "TSFunctionComponent",
+  "methods": Array [],
+  "props": Object {
+    "align": Object {
+      "description": "",
+      "flowType": Object {
+        "elements": Array [
+          Object {
+            "name": "literal",
+            "value": "\\"left\\"",
+          },
+          Object {
+            "name": "literal",
+            "value": "\\"center\\"",
+          },
+          Object {
+            "name": "literal",
+            "value": "\\"right\\"",
+          },
+          Object {
+            "name": "literal",
+            "value": "\\"justify\\"",
+          },
+        ],
+        "name": "union",
+        "raw": "\\"left\\" | \\"center\\" | \\"right\\" | \\"justify\\"",
+      },
+      "required": false,
+    },
+    "center": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "boolean",
+      },
+      "required": false,
+    },
+    "justify": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "boolean",
+      },
+      "required": false,
+    },
+    "left": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "boolean",
+      },
+      "required": false,
+    },
+    "right": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "boolean",
+      },
+      "required": false,
+    },
+  },
+}
+`;

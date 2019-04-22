@@ -21,12 +21,12 @@ export function parse(src, recast = _recast, options = {}) {
   );
 }
 
-export function statement(src, recast = _recast) {
-  return parse(src, recast).get('body', 0);
+export function statement(src, recast = _recast, options) {
+  return parse(src, recast, options).get('body', 0);
 }
 
-export function expression(src, recast = _recast) {
-  return statement('(' + src + ')', recast).get('expression');
+export function expression(src, recast = _recast, options) {
+  return statement('(' + src + ')', recast, options).get('expression');
 }
 
 /**

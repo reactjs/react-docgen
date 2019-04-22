@@ -26,6 +26,13 @@ function tryResolveGenericTypeAnnotation(path: NodePath): ?NodePath {
     }
 
     return tryResolveGenericTypeAnnotation(typePath.get('right'));
+  } else if (types.TSTypeReference.check(typePath.node)) {
+    typePath = resolveToValue(typePath.get('typeName'));
+    if (isUnreachableFlowType(typePath)) {
+      return;
+    }
+
+    return tryResolveGenericTypeAnnotation(typePath.get('typeAnnotation'));
   }
 
   return typePath;

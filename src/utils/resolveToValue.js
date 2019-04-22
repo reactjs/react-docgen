@@ -51,7 +51,8 @@ function findScopePath(paths: Array<NodePath>, path: NodePath): ?NodePath {
     types.ImportSpecifier.check(parentPath.node) ||
     types.ImportNamespaceSpecifier.check(parentPath.node) ||
     types.VariableDeclarator.check(parentPath.node) ||
-    types.TypeAlias.check(parentPath.node)
+    types.TypeAlias.check(parentPath.node) ||
+    types.TSTypeAliasDeclaration.check(parentPath.node)
   ) {
     resultPath = parentPath;
   } else if (types.Property.check(parentPath.node)) {
