@@ -8,32 +8,42 @@
  */
 
 const babel = require('@babel/core');
+const path = require('path');
 
-const defaultPlugins = [
-  'jsx',
-  'flow',
-  'asyncGenerators',
-  'bigInt',
-  'classProperties',
-  'classPrivateProperties',
-  'classPrivateMethods',
-  ['decorators', { decoratorsBeforeExport: false }],
-  'doExpressions',
-  'dynamicImport',
-  'exportDefaultFrom',
-  'exportNamespaceFrom',
-  'functionBind',
-  'functionSent',
-  'importMeta',
-  'logicalAssignment',
-  'nullishCoalescingOperator',
-  'numericSeparator',
-  'objectRestSpread',
-  'optionalCatchBinding',
-  'optionalChaining',
-  ['pipelineOperator', { proposal: 'minimal' }],
-  'throwExpressions',
-];
+const TYPESCRIPT_EXTS = {
+  '.ts': true,
+  '.tsx': true,
+};
+
+function getDefaultPlugins(options: BabelOptions) {
+  return [
+    'jsx',
+    TYPESCRIPT_EXTS[path.extname(options.filename || '')]
+      ? 'typescript'
+      : 'flow',
+    'asyncGenerators',
+    'bigInt',
+    'classProperties',
+    'classPrivateProperties',
+    'classPrivateMethods',
+    ['decorators', { decoratorsBeforeExport: false }],
+    'doExpressions',
+    'dynamicImport',
+    'exportDefaultFrom',
+    'exportNamespaceFrom',
+    'functionBind',
+    'functionSent',
+    'importMeta',
+    'logicalAssignment',
+    'nullishCoalescingOperator',
+    'numericSeparator',
+    'objectRestSpread',
+    'optionalCatchBinding',
+    'optionalChaining',
+    ['pipelineOperator', { proposal: 'minimal' }],
+    'throwExpressions',
+  ];
+}
 
 type ParserOptions = {
   plugins?: Array<string | [string, {}]>,
@@ -73,7 +83,7 @@ function buildOptions(
   const partialConfig = babel.loadPartialConfig(babelOptions);
 
   if (!partialConfig.hasFilesystemConfig() && parserOpts.plugins.length === 0) {
-    parserOpts.plugins = [...defaultPlugins];
+    parserOpts.plugins = getDefaultPlugins(babelOptions);
   }
 
   // Recast needs tokens to be in the tree
