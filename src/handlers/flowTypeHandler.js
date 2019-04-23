@@ -28,7 +28,7 @@ function setPropDescriptor(documentation: Documentation, path: NodePath): void {
     const argument = unwrapUtilityType(path.get('argument'));
 
     if (types.ObjectTypeAnnotation.check(argument.node)) {
-      applyToFlowTypeProperties(argument, propertyPath => {
+      applyToFlowTypeProperties(documentation, argument, propertyPath => {
         setPropDescriptor(documentation, propertyPath);
       });
       return;
@@ -39,7 +39,7 @@ function setPropDescriptor(documentation: Documentation, path: NodePath): void {
 
     if (resolvedPath && types.TypeAlias.check(resolvedPath.node)) {
       const right = resolvedPath.get('right');
-      applyToFlowTypeProperties(right, propertyPath => {
+      applyToFlowTypeProperties(documentation, right, propertyPath => {
         setPropDescriptor(documentation, propertyPath);
       });
     } else {
@@ -90,7 +90,7 @@ export default function flowTypeHandler(
     return;
   }
 
-  applyToFlowTypeProperties(flowTypesPath, propertyPath => {
+  applyToFlowTypeProperties(documentation, flowTypesPath, propertyPath => {
     setPropDescriptor(documentation, propertyPath);
   });
 }

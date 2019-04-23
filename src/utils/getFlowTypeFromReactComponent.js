@@ -7,6 +7,7 @@
  * @flow
  */
 
+import type Documentation from '../Documentation';
 import getTypeAnnotation from '../utils/getTypeAnnotation';
 import getMemberValuePath from '../utils/getMemberValuePath';
 import isReactComponentClass from '../utils/isReactComponentClass';
@@ -49,6 +50,7 @@ export default (path: NodePath): ?NodePath => {
 };
 
 export function applyToFlowTypeProperties(
+  documentation: Documentation,
   path: NodePath,
   callback: (propertyPath: NodePath) => void,
 ) {
@@ -58,13 +60,13 @@ export function applyToFlowTypeProperties(
     path.get('members').each(propertyPath => callback(propertyPath));
   } else if (path.node.type === 'InterfaceDeclaration') {
     if (path.node.extends) {
-      applyExtends(path, callback);
+      applyExtends(documentation, path, callback);
     }
 
     path.get('body', 'properties').each(propertyPath => callback(propertyPath));
   } else if (path.node.type === 'TSInterfaceDeclaration') {
     if (path.node.extends) {
-      applyExtends(path, callback);
+      applyExtends(documentation, path, callback);
     }
 
     path.get('body', 'body').each(propertyPath => callback(propertyPath));
@@ -74,22 +76,27 @@ export function applyToFlowTypeProperties(
   ) {
     path
       .get('types')
-      .each(typesPath => applyToFlowTypeProperties(typesPath, callback));
+      .each(typesPath => applyToFlowTypeProperties(documentation, typesPath, callback));
   } else if (path.node.type !== 'UnionTypeAnnotation') {
     // The react-docgen output format does not currently allow
     // for the expression of union types
     const typePath = resolveGenericTypeAnnotation(path);
     if (typePath) {
-      applyToFlowTypeProperties(typePath, callback);
+      applyToFlowTypeProperties(documentation, typePath, callback);
     }
   }
 }
 
-function applyExtends(path, callback) {
+function applyExtends(documentation, path, callback) {
   path.get('extends').each((extendsPath: NodePath) => {
     const resolvedPath = resolveGenericTypeAnnotation(extendsPath);
     if (resolvedPath) {
-      applyToFlowTypeProperties(resolvedPath, callback);
+      applyToFlowTypeProperties(documentation, resolvedPath, callback);
+    } else {
+      let id = extendsPath.node.id || extendsPath.node.typeName || extendsPath.node.expression;
+      if (id && id.type === 'Identifier') {
+        documentation.addComposes(id.name);
+      }
     }
   });
 }

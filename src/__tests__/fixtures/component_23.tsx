@@ -17,7 +17,7 @@ interface BaseProps {
 
 type TransitionDuration = number | { enter?: number, exit?: number } | 'auto';
 
-interface Props extends BaseProps {
+interface Props extends BaseProps, OtherProps {
   /** Complex union prop */
   baz: TransitionDuration
 }

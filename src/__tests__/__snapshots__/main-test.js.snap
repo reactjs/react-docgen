@@ -1179,6 +1179,9 @@ Object {
 
 exports[`main fixtures processes component "component_23.tsx" without errors 1`] = `
 Object {
+  "composes": Array [
+    "OtherProps",
+  ],
   "description": "This is a typescript class component",
   "displayName": "TSComponent",
   "methods": Array [],
@@ -1243,6 +1246,9 @@ Object {
 
 exports[`main fixtures processes component "component_24.js" without errors 1`] = `
 Object {
+  "composes": Array [
+    "OtherProps",
+  ],
   "description": "This is a flow class component with an interface as props",
   "displayName": "FlowComponent",
   "methods": Array [],
