@@ -56,6 +56,18 @@ export function applyToFlowTypeProperties(
     path.get('properties').each(propertyPath => callback(propertyPath));
   } else if (path.node.members) {
     path.get('members').each(propertyPath => callback(propertyPath));
+  } else if (path.node.type === 'InterfaceDeclaration') {
+    if (path.node.extends) {
+      applyExtends(path, callback);
+    }
+
+    path.get('body', 'properties').each(propertyPath => callback(propertyPath));
+  } else if (path.node.type === 'TSInterfaceDeclaration') {
+    if (path.node.extends) {
+      applyExtends(path, callback);
+    }
+
+    path.get('body', 'body').each(propertyPath => callback(propertyPath));
   } else if (
     path.node.type === 'IntersectionTypeAnnotation' ||
     path.node.type === 'TSIntersectionType'
@@ -71,4 +83,13 @@ export function applyToFlowTypeProperties(
       applyToFlowTypeProperties(typePath, callback);
     }
   }
+}
+
+function applyExtends(path, callback) {
+  path.get('extends').each((extendsPath: NodePath) => {
+    const resolvedPath = resolveGenericTypeAnnotation(extendsPath);
+    if (resolvedPath) {
+      applyToFlowTypeProperties(resolvedPath, callback);
+    }
+  });
 }

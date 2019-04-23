@@ -1176,3 +1176,131 @@ Object {
   },
 }
 `;
+
+exports[`main fixtures processes component "component_23.tsx" without errors 1`] = `
+Object {
+  "description": "This is a typescript class component",
+  "displayName": "TSComponent",
+  "methods": Array [],
+  "props": Object {
+    "bar": Object {
+      "description": "Required prop",
+      "flowType": Object {
+        "name": "number",
+      },
+      "required": true,
+    },
+    "baz": Object {
+      "description": "Complex union prop",
+      "flowType": Object {
+        "elements": Array [
+          Object {
+            "name": "number",
+          },
+          Object {
+            "name": "signature",
+            "raw": "{ enter?: number, exit?: number }",
+            "signature": Object {
+              "properties": Array [
+                Object {
+                  "key": "enter",
+                  "value": Object {
+                    "name": "number",
+                    "required": false,
+                  },
+                },
+                Object {
+                  "key": "exit",
+                  "value": Object {
+                    "name": "number",
+                    "required": false,
+                  },
+                },
+              ],
+            },
+            "type": "object",
+          },
+          Object {
+            "name": "literal",
+            "value": "'auto'",
+          },
+        ],
+        "name": "union",
+        "raw": "number | { enter?: number, exit?: number } | 'auto'",
+      },
+      "required": true,
+    },
+    "foo": Object {
+      "description": "Optional prop",
+      "flowType": Object {
+        "name": "string",
+      },
+      "required": false,
+    },
+  },
+}
+`;
+
+exports[`main fixtures processes component "component_24.js" without errors 1`] = `
+Object {
+  "description": "This is a flow class component with an interface as props",
+  "displayName": "FlowComponent",
+  "methods": Array [],
+  "props": Object {
+    "bar": Object {
+      "description": "Required prop",
+      "flowType": Object {
+        "name": "number",
+      },
+      "required": true,
+    },
+    "baz": Object {
+      "description": "Complex union prop",
+      "flowType": Object {
+        "elements": Array [
+          Object {
+            "name": "number",
+          },
+          Object {
+            "name": "signature",
+            "raw": "{ enter?: number, exit?: number }",
+            "signature": Object {
+              "properties": Array [
+                Object {
+                  "key": "enter",
+                  "value": Object {
+                    "name": "number",
+                    "required": false,
+                  },
+                },
+                Object {
+                  "key": "exit",
+                  "value": Object {
+                    "name": "number",
+                    "required": false,
+                  },
+                },
+              ],
+            },
+            "type": "object",
+          },
+          Object {
+            "name": "literal",
+            "value": "'auto'",
+          },
+        ],
+        "name": "union",
+        "raw": "number | { enter?: number, exit?: number } | 'auto'",
+      },
+      "required": true,
+    },
+    "foo": Object {
+      "description": "Optional prop",
+      "flowType": Object {
+        "name": "string",
+      },
+      "required": false,
+    },
+  },
+}
+`;

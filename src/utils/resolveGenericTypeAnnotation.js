@@ -18,21 +18,29 @@ const {
 
 function tryResolveGenericTypeAnnotation(path: NodePath): ?NodePath {
   let typePath = unwrapUtilityType(path);
+  let idPath;
 
-  if (types.GenericTypeAnnotation.check(typePath.node)) {
-    typePath = resolveToValue(typePath.get('id'));
-    if (isUnreachableFlowType(typePath)) {
-      return;
-    }
-
-    return tryResolveGenericTypeAnnotation(typePath.get('right'));
+  if (typePath.node.id) {
+    idPath = typePath.get('id');
   } else if (types.TSTypeReference.check(typePath.node)) {
-    typePath = resolveToValue(typePath.get('typeName'));
+    idPath = typePath.get('typeName');
+  } else if (types.TSExpressionWithTypeArguments.check(typePath.node)) {
+    idPath = typePath.get('expression');
+  }
+
+  if (idPath) {
+    typePath = resolveToValue(idPath);
     if (isUnreachableFlowType(typePath)) {
       return;
     }
 
-    return tryResolveGenericTypeAnnotation(typePath.get('typeAnnotation'));
+    if (types.TypeAlias.check(typePath.node)) {
+      return tryResolveGenericTypeAnnotation(typePath.get('right'));
+    } else if (types.TSTypeAliasDeclaration.check(typePath.node)) {
+      return tryResolveGenericTypeAnnotation(typePath.get('typeAnnotation'));
+    }
+
+    return typePath;
   }
 
   return typePath;
