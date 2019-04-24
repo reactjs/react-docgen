@@ -219,4 +219,28 @@ describe('defaultPropsHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
   });
+
+  describe('forwardRef', () => {
+    it('resolves default props in the parameters', () => {
+      const src = `
+        import React from 'react';
+        React.forwardRef(({ foo = 'bar' }, ref) => <div ref={ref}>{foo}</div>);
+      `;
+      defaultPropsHandler(
+        documentation,
+        parse(src).get('body', 1, 'expression'),
+      );
+      expect(documentation.descriptors).toMatchSnapshot();
+    });
+
+    it('resolves defaultProps', () => {
+      const src = `
+        import React from 'react';
+        const Component = React.forwardRef(({ foo }, ref) => <div ref={ref}>{foo}</div>);
+        Component.defaultProps = { foo: 'baz' };
+      `;
+      defaultPropsHandler(documentation, parse(src).get('body', 1));
+      expect(documentation.descriptors).toMatchSnapshot();
+    });
+  });
 });
