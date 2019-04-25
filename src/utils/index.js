@@ -32,6 +32,7 @@ export {
 export { default as isReactComponentClass } from './isReactComponentClass';
 export { default as isReactComponentMethod } from './isReactComponentMethod';
 export { default as isReactCreateClassCall } from './isReactCreateClassCall';
+export { default as isReactForwardRefCall } from './isReactForwardRefCall';
 export { default as isReactModuleName } from './isReactModuleName';
 export { default as isStatelessComponent } from './isStatelessComponent';
 export { default as match } from './match';
