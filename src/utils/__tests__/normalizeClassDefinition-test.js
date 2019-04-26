@@ -6,7 +6,7 @@
  *
  */
 
-import { statement } from '../../../tests/utils';
+import { statement, parse } from '../../../tests/utils';
 import normalizeClassDefinition from '../normalizeClassDefinition';
 
 describe('normalizeClassDefinition', () => {
@@ -70,11 +70,11 @@ describe('normalizeClassDefinition', () => {
     expect(classProperty.value.value).toBe(42);
     expect(classProperty.static).toBe(true);
 
-    classDefinition = statement(`
+    classDefinition = parse(`
       var Foo;
       Foo = class {};
       Foo.propTypes = 42;
-    `).get('expression', 'right');
+    `).get('body', 1, 'expression', 'right');
 
     normalizeClassDefinition(classDefinition);
     ({
