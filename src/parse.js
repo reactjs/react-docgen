@@ -11,7 +11,6 @@ import Documentation, { type DocumentationObject } from './Documentation';
 import postProcessDocumentation from './utils/postProcessDocumentation';
 import buildParser, { type Options, type Parser } from './babelParser';
 import type { Handler, Resolver } from './types';
-import types from 'ast-types';
 
 const ERROR_MISSING_DEFINITION = 'No suitable component definition found.';
 
