@@ -35,6 +35,9 @@ function getSrcFromAst(path: NodePath): string {
  */
 export default function printValue(path: NodePath): string {
   if (path.node.start == null) {
+    // This only happens when we use AST builders to create nodes that do not actually
+    // exist in the source (e.g. when resolving Object.keys()). We might need to enhance
+    // this if we start using builders from `ast-types` more.
     if (path.node.type === 'Literal') {
       return `"${path.node.value}"`;
     }
