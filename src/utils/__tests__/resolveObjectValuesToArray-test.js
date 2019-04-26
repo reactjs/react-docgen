@@ -66,6 +66,14 @@ describe('resolveObjectValuesToArray', () => {
     );
   });
 
+  it('does not resolve Object.values with complex computed key', () => {
+    const path = parse(
+      ['var foo = { [()=>{}]: 1, [5]: 2};', 'Object.values(foo);'].join('\n'),
+    );
+
+    expect(resolveObjectValuesToArray(path)).toBeNull();
+  });
+
   it('resolves Object.values when using resolvable spread', () => {
     const path = parse(
       [

@@ -34,9 +34,17 @@ function getSrcFromAst(path: NodePath): string {
  * Prints the given path without leading or trailing comments.
  */
 export default function printValue(path: NodePath): string {
+  if (path.node.start == null) {
+    if (path.node.type === 'Literal') {
+      return `"${path.node.value}"`;
+    }
+    throw new Error(
+      `Cannot print raw value for type '${
+        path.node.type
+      }'. Please report this with an example at https://github.com/reactjs/react-docgen/issues`,
+    );
+  }
   const src = getSrcFromAst(path);
-
-  // TODO: Filter out comments in returned code
 
   return deindent(src.slice(path.node.start, path.node.end));
 }

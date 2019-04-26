@@ -34,7 +34,4 @@ declare class NodePath {
   map<T>(f: (p: NodePath) => T): Array<T>;
   filter(f: (p: NodePath) => boolean): Array<NodePath>;
   push(node: ASTNode): void;
-
-  // our addition
-  getSrc(): string;
 }

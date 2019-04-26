@@ -10,7 +10,7 @@ Object {
 exports[`getPropType detects custom validation functions for function 1`] = `
 Object {
   "name": "custom",
-  "raw": "(function() {})",
+  "raw": "function() {}",
 }
 `;
 
