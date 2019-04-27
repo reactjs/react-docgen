@@ -66,7 +66,7 @@ function setPropDescriptor(documentation: Documentation, path: NodePath): void {
 
     const propDescriptor = documentation.getPropDescriptor(propName);
     propDescriptor.required = !path.node.optional;
-    propDescriptor.flowType = type;
+    propDescriptor.tsType = type;
 
     // We are doing this here instead of in a different handler
     // to not need to duplicate the logic for checking for

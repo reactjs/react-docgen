@@ -1057,14 +1057,15 @@ Object {
   "props": Object {
     "bar": Object {
       "description": "Required prop",
-      "flowType": Object {
+      "required": true,
+      "tsType": Object {
         "name": "number",
       },
-      "required": true,
     },
     "baz": Object {
       "description": "Complex union prop",
-      "flowType": Object {
+      "required": true,
+      "tsType": Object {
         "elements": Array [
           Object {
             "name": "number",
@@ -1100,14 +1101,13 @@ Object {
         "name": "union",
         "raw": "number | { enter?: number, exit?: number } | 'auto'",
       },
-      "required": true,
     },
     "foo": Object {
       "description": "Optional prop",
-      "flowType": Object {
+      "required": false,
+      "tsType": Object {
         "name": "string",
       },
-      "required": false,
     },
   },
 }
@@ -1121,7 +1121,8 @@ Object {
   "props": Object {
     "align": Object {
       "description": "",
-      "flowType": Object {
+      "required": false,
+      "tsType": Object {
         "elements": Array [
           Object {
             "name": "literal",
@@ -1143,35 +1144,34 @@ Object {
         "name": "union",
         "raw": "\\"left\\" | \\"center\\" | \\"right\\" | \\"justify\\"",
       },
-      "required": false,
     },
     "center": Object {
       "description": "",
-      "flowType": Object {
+      "required": false,
+      "tsType": Object {
         "name": "boolean",
       },
-      "required": false,
     },
     "justify": Object {
       "description": "",
-      "flowType": Object {
+      "required": false,
+      "tsType": Object {
         "name": "boolean",
       },
-      "required": false,
     },
     "left": Object {
       "description": "",
-      "flowType": Object {
+      "required": false,
+      "tsType": Object {
         "name": "boolean",
       },
-      "required": false,
     },
     "right": Object {
       "description": "",
-      "flowType": Object {
+      "required": false,
+      "tsType": Object {
         "name": "boolean",
       },
-      "required": false,
     },
   },
 }
@@ -1188,14 +1188,15 @@ Object {
   "props": Object {
     "bar": Object {
       "description": "Required prop",
-      "flowType": Object {
+      "required": true,
+      "tsType": Object {
         "name": "number",
       },
-      "required": true,
     },
     "baz": Object {
       "description": "Complex union prop",
-      "flowType": Object {
+      "required": true,
+      "tsType": Object {
         "elements": Array [
           Object {
             "name": "number",
@@ -1231,14 +1232,13 @@ Object {
         "name": "union",
         "raw": "number | { enter?: number, exit?: number } | 'auto'",
       },
-      "required": true,
     },
     "foo": Object {
       "description": "Optional prop",
-      "flowType": Object {
+      "required": false,
+      "tsType": Object {
         "name": "string",
       },
-      "required": false,
     },
   },
 }
