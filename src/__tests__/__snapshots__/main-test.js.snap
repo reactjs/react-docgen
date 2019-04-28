@@ -1384,3 +1384,40 @@ Object {
   },
 }
 `;
+
+exports[`main fixtures processes component "component_27.tsx" without errors 1`] = `
+Object {
+  "description": "This is a typescript class component",
+  "displayName": "TSComponent",
+  "methods": Array [
+    Object {
+      "description": "This is a method",
+      "docblock": "This is a method",
+      "modifiers": Array [],
+      "name": "method",
+      "params": Array [
+        Object {
+          "name": "a",
+          "type": Object {
+            "name": "string",
+          },
+        },
+      ],
+      "returns": Object {
+        "type": Object {
+          "name": "string",
+        },
+      },
+    },
+  ],
+  "props": Object {
+    "foo": Object {
+      "description": "",
+      "required": true,
+      "tsType": Object {
+        "name": "string",
+      },
+    },
+  },
+}
+`;
