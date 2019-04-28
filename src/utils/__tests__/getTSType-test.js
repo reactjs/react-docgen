@@ -185,7 +185,9 @@ describe('getTSType', () => {
   });
 
   it('detects function signature type', () => {
-    const typePath = expression('x: (p1: number, p2: string) => boolean')
+    const typePath = expression(
+      'x: (p1: number, p2: string, ...rest: Array<string>) => boolean',
+    )
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getTSType(typePath)).toEqual({
@@ -195,10 +197,19 @@ describe('getTSType', () => {
         arguments: [
           { name: 'p1', type: { name: 'number' } },
           { name: 'p2', type: { name: 'string' } },
+          {
+            name: 'rest',
+            rest: true,
+            type: {
+              name: 'Array',
+              elements: [{ name: 'string' }],
+              raw: 'Array<string>',
+            },
+          },
         ],
         return: { name: 'boolean' },
       },
-      raw: '(p1: number, p2: string) => boolean',
+      raw: '(p1: number, p2: string, ...rest: Array<string>) => boolean',
     });
   });
 

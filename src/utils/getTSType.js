@@ -19,6 +19,7 @@ import type {
   FlowTypeDescriptor,
   FlowElementsType,
   FlowFunctionSignatureType,
+  FlowFunctionArgumentType,
   FlowObjectSignatureType,
 } from '../types';
 
@@ -30,6 +31,7 @@ const tsTypes = {
   TSAnyKeyword: 'any',
   TSBooleanKeyword: 'boolean',
   TSUnknownKeyword: 'unknown',
+  TSNeverKeyword: 'never',
   TSNullKeyword: 'null',
   TSUndefinedKeyword: 'undefined',
   TSNumberKeyword: 'number',
@@ -227,12 +229,19 @@ function handleTSFunctionType(
 
   path.get('parameters').each(param => {
     const typeAnnotation = getTypeAnnotation(param);
-    if (!typeAnnotation) return;
-
-    type.signature.arguments.push({
+    const arg: FlowFunctionArgumentType = {
       name: param.node.name || '',
-      type: getTSTypeWithResolvedTypes(typeAnnotation, typeParams),
-    });
+      type: typeAnnotation
+        ? getTSTypeWithResolvedTypes(typeAnnotation, typeParams)
+        : null,
+    };
+
+    if (param.node.type === 'RestElement') {
+      arg.name = param.node.argument.name;
+      arg.rest = true;
+    }
+
+    type.signature.arguments.push(arg);
   });
 
   return type;

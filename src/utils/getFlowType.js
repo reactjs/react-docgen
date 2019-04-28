@@ -266,13 +266,27 @@ function handleFunctionTypeAnnotation(
 
   path.get('params').each(param => {
     const typeAnnotation = getTypeAnnotation(param);
-    if (!typeAnnotation) return;
 
     type.signature.arguments.push({
       name: param.node.name ? param.node.name.name : '',
-      type: getFlowTypeWithResolvedTypes(typeAnnotation, typeParams),
+      type: typeAnnotation
+        ? getFlowTypeWithResolvedTypes(typeAnnotation, typeParams)
+        : null,
     });
   });
+
+  if (path.node.rest) {
+    const rest = path.get('rest');
+    const typeAnnotation = getTypeAnnotation(rest);
+
+    type.signature.arguments.push({
+      name: rest.node.name ? rest.node.name.name : '',
+      type: typeAnnotation
+        ? getFlowTypeWithResolvedTypes(typeAnnotation, typeParams)
+        : null,
+      rest: true,
+    });
+  }
 
   return type;
 }
