@@ -12,6 +12,9 @@ import recast from 'recast';
 import getTypeAnnotation from '../utils/getTypeAnnotation';
 import resolveToValue from '../utils/resolveToValue';
 import { resolveObjectToNameArray } from '../utils/resolveObjectKeysToArray';
+import getTypeParameters, {
+  type TypeParameters,
+} from '../utils/getTypeParameters';
 import type {
   FlowTypeDescriptor,
   FlowElementsType,
@@ -41,6 +44,7 @@ const namedTypes = {
   TSArrayType: handleTSArrayType,
   TSTypeReference: handleTSTypeReference,
   TSTypeLiteral: handleTSTypeLiteral,
+  TSInterfaceDeclaration: handleTSInterfaceDeclaration,
   TSUnionType: handleTSUnionType,
   TSFunctionType: handleTSFunctionType,
   TSIntersectionType: handleTSIntersectionType,
@@ -49,15 +53,21 @@ const namedTypes = {
   TSTypeOperator: handleTSTypeOperator,
 };
 
-function handleTSArrayType(path: NodePath): FlowElementsType {
+function handleTSArrayType(
+  path: NodePath,
+  typeParams: ?TypeParameters,
+): FlowElementsType {
   return {
     name: 'Array',
-    elements: [getTSTypeWithResolvedTypes(path.get('elementType'))],
+    elements: [getTSTypeWithResolvedTypes(path.get('elementType'), typeParams)],
     raw: printValue(path),
   };
 }
 
-function handleTSTypeReference(path: NodePath): ?FlowTypeDescriptor {
+function handleTSTypeReference(
+  path: NodePath,
+  typeParams: ?TypeParameters,
+): ?FlowTypeDescriptor {
   let type: FlowTypeDescriptor;
   if (types.TSQualifiedName.check(path.node.typeName)) {
     const typeName = path.get('typeName');
@@ -74,31 +84,55 @@ function handleTSTypeReference(path: NodePath): ?FlowTypeDescriptor {
     type = { name: path.node.typeName.name };
   }
 
-  if (path.node.typeParameters) {
+  const resolvedPath =
+    (typeParams && typeParams[type.name]) ||
+    resolveToValue(path.get('typeName'));
+
+  if (path.node.typeParameters && resolvedPath.node.typeParameters) {
+    typeParams = getTypeParameters(
+      resolvedPath.get('typeParameters'),
+      path.get('typeParameters'),
+      typeParams,
+    );
+  }
+
+  if (typeParams && typeParams[type.name]) {
+    type = getTSTypeWithResolvedTypes(resolvedPath, typeParams);
+  }
+
+  if (resolvedPath && resolvedPath.node.typeAnnotation) {
+    type = getTSTypeWithResolvedTypes(
+      resolvedPath.get('typeAnnotation'),
+      typeParams,
+    );
+  } else if (path.node.typeParameters) {
     const params = path.get('typeParameters').get('params');
 
     type = {
       ...type,
-      elements: params.map(param => getTSTypeWithResolvedTypes(param)),
+      elements: params.map(param =>
+        getTSTypeWithResolvedTypes(param, typeParams),
+      ),
       raw: printValue(path),
     };
-  } else {
-    const resolvedPath = resolveToValue(path.get('typeName'));
-    if (resolvedPath && resolvedPath.node.typeAnnotation) {
-      type = getTSTypeWithResolvedTypes(resolvedPath.get('typeAnnotation'));
-    }
   }
 
   return type;
 }
 
-function getTSTypeWithRequirements(path: NodePath): FlowTypeDescriptor {
-  const type = getTSTypeWithResolvedTypes(path);
+function getTSTypeWithRequirements(
+  path: NodePath,
+  typeParams: ?TypeParameters,
+): FlowTypeDescriptor {
+  const type = getTSTypeWithResolvedTypes(path, typeParams);
   type.required = !path.parentPath.node.optional;
   return type;
 }
 
-function handleTSTypeLiteral(path: NodePath): FlowTypeDescriptor {
+function handleTSTypeLiteral(
+  path: NodePath,
+  typeParams: ?TypeParameters,
+): FlowTypeDescriptor {
   const type: FlowObjectSignatureType = {
     name: 'signature',
     type: 'object',
@@ -113,10 +147,13 @@ function handleTSTypeLiteral(path: NodePath): FlowTypeDescriptor {
     ) {
       type.signature.properties.push({
         key: getPropertyName(param),
-        value: getTSTypeWithRequirements(param.get('typeAnnotation')),
+        value: getTSTypeWithRequirements(
+          param.get('typeAnnotation'),
+          typeParams,
+        ),
       });
     } else if (types.TSCallSignatureDeclaration.check(param.node)) {
-      type.signature.constructor = handleTSFunctionType(param);
+      type.signature.constructor = handleTSFunctionType(param, typeParams);
     } else if (types.TSIndexSignature.check(param.node)) {
       type.signature.properties.push({
         key: getTSTypeWithResolvedTypes(
@@ -124,8 +161,12 @@ function handleTSTypeLiteral(path: NodePath): FlowTypeDescriptor {
             .get('parameters')
             .get(0)
             .get('typeAnnotation'),
+          typeParams,
         ),
-        value: getTSTypeWithRequirements(param.get('typeAnnotation')),
+        value: getTSTypeWithRequirements(
+          param.get('typeAnnotation'),
+          typeParams,
+        ),
       });
     }
   });
@@ -133,34 +174,54 @@ function handleTSTypeLiteral(path: NodePath): FlowTypeDescriptor {
   return type;
 }
 
-function handleTSUnionType(path: NodePath): FlowElementsType {
+function handleTSInterfaceDeclaration(path: NodePath): FlowElementsType {
+  // Interfaces are handled like references which would be documented separately,
+  // rather than inlined like type aliases.
+  return {
+    name: path.node.id.name,
+  };
+}
+
+function handleTSUnionType(
+  path: NodePath,
+  typeParams: ?TypeParameters,
+): FlowElementsType {
   return {
     name: 'union',
     raw: printValue(path),
     elements: path
       .get('types')
-      .map(subType => getTSTypeWithResolvedTypes(subType)),
+      .map(subType => getTSTypeWithResolvedTypes(subType, typeParams)),
   };
 }
 
-function handleTSIntersectionType(path: NodePath): FlowElementsType {
+function handleTSIntersectionType(
+  path: NodePath,
+  typeParams: ?TypeParameters,
+): FlowElementsType {
   return {
     name: 'intersection',
     raw: printValue(path),
     elements: path
       .get('types')
-      .map(subType => getTSTypeWithResolvedTypes(subType)),
+      .map(subType => getTSTypeWithResolvedTypes(subType, typeParams)),
   };
 }
 
-function handleTSFunctionType(path: NodePath): FlowFunctionSignatureType {
+function handleTSFunctionType(
+  path: NodePath,
+  typeParams: ?TypeParameters,
+): FlowFunctionSignatureType {
   const type: FlowFunctionSignatureType = {
     name: 'signature',
     type: 'function',
     raw: printValue(path),
     signature: {
       arguments: [],
-      return: getTSTypeWithResolvedTypes(path.get('typeAnnotation')),
+      return: getTSTypeWithResolvedTypes(
+        path.get('typeAnnotation'),
+        typeParams,
+      ),
     },
   };
 
@@ -170,14 +231,17 @@ function handleTSFunctionType(path: NodePath): FlowFunctionSignatureType {
 
     type.signature.arguments.push({
       name: param.node.name || '',
-      type: getTSTypeWithResolvedTypes(typeAnnotation),
+      type: getTSTypeWithResolvedTypes(typeAnnotation, typeParams),
     });
   });
 
   return type;
 }
 
-function handleTSTupleType(path: NodePath): FlowElementsType {
+function handleTSTupleType(
+  path: NodePath,
+  typeParams: ?TypeParameters,
+): FlowElementsType {
   const type: FlowElementsType = {
     name: 'tuple',
     raw: printValue(path),
@@ -185,16 +249,22 @@ function handleTSTupleType(path: NodePath): FlowElementsType {
   };
 
   path.get('elementTypes').each(param => {
-    type.elements.push(getTSTypeWithResolvedTypes(param));
+    type.elements.push(getTSTypeWithResolvedTypes(param, typeParams));
   });
 
   return type;
 }
 
-function handleTSTypeQuery(path: NodePath): FlowTypeDescriptor {
+function handleTSTypeQuery(
+  path: NodePath,
+  typeParams: ?TypeParameters,
+): FlowTypeDescriptor {
   const resolvedPath = resolveToValue(path.get('exprName'));
   if (resolvedPath && resolvedPath.node.typeAnnotation) {
-    return getTSTypeWithResolvedTypes(resolvedPath.get('typeAnnotation'));
+    return getTSTypeWithResolvedTypes(
+      resolvedPath.get('typeAnnotation'),
+      typeParams,
+    );
   }
 
   return { name: path.node.exprName.name };
@@ -232,7 +302,10 @@ function handleTSTypeOperator(path: NodePath): FlowTypeDescriptor {
 
 let visitedTypes = {};
 
-function getTSTypeWithResolvedTypes(path: NodePath): FlowTypeDescriptor {
+function getTSTypeWithResolvedTypes(
+  path: NodePath,
+  typeParams: ?TypeParameters,
+): FlowTypeDescriptor {
   if (types.TSTypeAnnotation.check(path.node)) {
     path = path.get('typeAnnotation');
   }
@@ -256,17 +329,15 @@ function getTSTypeWithResolvedTypes(path: NodePath): FlowTypeDescriptor {
     visitedTypes[path.parentPath.node.id.name] = true;
   }
 
-  if (types.TSType.check(node)) {
-    if (node.type in tsTypes) {
-      type = { name: tsTypes[node.type] };
-    } else if (types.TSLiteralType.check(node)) {
-      type = {
-        name: 'literal',
-        value: node.literal.raw || `${node.literal.value}`,
-      };
-    } else if (node.type in namedTypes) {
-      type = namedTypes[node.type](path);
-    }
+  if (node.type in tsTypes) {
+    type = { name: tsTypes[node.type] };
+  } else if (types.TSLiteralType.check(node)) {
+    type = {
+      name: 'literal',
+      value: node.literal.raw || `${node.literal.value}`,
+    };
+  } else if (node.type in namedTypes) {
+    type = namedTypes[node.type](path, typeParams);
   }
 
   if (!type) {
@@ -282,18 +353,21 @@ function getTSTypeWithResolvedTypes(path: NodePath): FlowTypeDescriptor {
 }
 
 /**
- * Tries to identify the flow type by inspecting the path for known
- * flow type names. This method doesn't check whether the found type is actually
+ * Tries to identify the typescript type by inspecting the path for known
+ * typescript type names. This method doesn't check whether the found type is actually
  * existing. It simply assumes that a match is always valid.
  *
  * If there is no match, "unknown" is returned.
  */
-export default function getTSType(path: NodePath): FlowTypeDescriptor {
+export default function getTSType(
+  path: NodePath,
+  typeParamMap: ?TypeParameters,
+): FlowTypeDescriptor {
   // Empty visited types before an after run
   // Before: in case the detection threw and we rerun again
   // After: cleanup memory after we are done here
   visitedTypes = {};
-  const type = getTSTypeWithResolvedTypes(path);
+  const type = getTSTypeWithResolvedTypes(path, typeParamMap);
   visitedTypes = {};
 
   return type;

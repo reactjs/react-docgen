@@ -19,18 +19,28 @@ import getFlowTypeFromReactComponent, {
 import resolveToValue from '../utils/resolveToValue';
 import setPropDescription from '../utils/setPropDescription';
 import { unwrapUtilityType } from '../utils/flowUtilityTypes';
+import { type TypeParameters } from '../utils/getTypeParameters';
 
 const {
   types: { namedTypes: types },
 } = recast;
-function setPropDescriptor(documentation: Documentation, path: NodePath): void {
+function setPropDescriptor(
+  documentation: Documentation,
+  path: NodePath,
+  typeParams: ?TypeParameters,
+): void {
   if (types.ObjectTypeSpreadProperty.check(path.node)) {
     const argument = unwrapUtilityType(path.get('argument'));
 
     if (types.ObjectTypeAnnotation.check(argument.node)) {
-      applyToFlowTypeProperties(documentation, argument, propertyPath => {
-        setPropDescriptor(documentation, propertyPath);
-      });
+      applyToFlowTypeProperties(
+        documentation,
+        argument,
+        (propertyPath, innerTypeParams) => {
+          setPropDescriptor(documentation, propertyPath, innerTypeParams);
+        },
+        typeParams,
+      );
       return;
     }
 
@@ -39,14 +49,19 @@ function setPropDescriptor(documentation: Documentation, path: NodePath): void {
 
     if (resolvedPath && types.TypeAlias.check(resolvedPath.node)) {
       const right = resolvedPath.get('right');
-      applyToFlowTypeProperties(documentation, right, propertyPath => {
-        setPropDescriptor(documentation, propertyPath);
-      });
+      applyToFlowTypeProperties(
+        documentation,
+        right,
+        (propertyPath, innerTypeParams) => {
+          setPropDescriptor(documentation, propertyPath, innerTypeParams);
+        },
+        typeParams,
+      );
     } else {
       documentation.addComposes(name.node.name);
     }
   } else if (types.ObjectTypeProperty.check(path.node)) {
-    const type = getFlowType(path.get('value'));
+    const type = getFlowType(path.get('value'), typeParams);
     const propName = getPropertyName(path);
     if (!propName) return;
 
@@ -59,7 +74,7 @@ function setPropDescriptor(documentation: Documentation, path: NodePath): void {
     // imported types that are spread in to props.
     setPropDescription(documentation, path);
   } else if (types.TSPropertySignature.check(path.node)) {
-    const type = getTSType(path.get('typeAnnotation'));
+    const type = getTSType(path.get('typeAnnotation'), typeParams);
 
     const propName = getPropertyName(path);
     if (!propName) return;
@@ -90,7 +105,11 @@ export default function flowTypeHandler(
     return;
   }
 
-  applyToFlowTypeProperties(documentation, flowTypesPath, propertyPath => {
-    setPropDescriptor(documentation, propertyPath);
-  });
+  applyToFlowTypeProperties(
+    documentation,
+    flowTypesPath,
+    (propertyPath, typeParams) => {
+      setPropDescriptor(documentation, propertyPath, typeParams);
+    },
+  );
 }

@@ -1310,3 +1310,77 @@ Object {
   },
 }
 `;
+
+exports[`main fixtures processes component "component_25.tsx" without errors 1`] = `
+Object {
+  "description": "This is a typescript class component",
+  "displayName": "TSComponent",
+  "methods": Array [],
+  "props": Object {
+    "bar": Object {
+      "description": "Required prop",
+      "required": true,
+      "tsType": Object {
+        "elements": Array [
+          Object {
+            "name": "Child",
+          },
+        ],
+        "name": "Array",
+        "raw": "Array<X>",
+      },
+    },
+    "baz": Object {
+      "description": "Complex union prop",
+      "required": true,
+      "tsType": Object {
+        "name": "number",
+      },
+    },
+    "foo": Object {
+      "description": "Optional prop",
+      "required": false,
+      "tsType": Object {
+        "name": "Child",
+      },
+    },
+  },
+}
+`;
+
+exports[`main fixtures processes component "component_26.js" without errors 1`] = `
+Object {
+  "description": "This is a typescript class component",
+  "displayName": "FlowComponent",
+  "methods": Array [],
+  "props": Object {
+    "bar": Object {
+      "description": "Required prop",
+      "flowType": Object {
+        "elements": Array [
+          Object {
+            "name": "Child",
+          },
+        ],
+        "name": "Array",
+        "raw": "Array<X>",
+      },
+      "required": true,
+    },
+    "baz": Object {
+      "description": "Complex union prop",
+      "flowType": Object {
+        "name": "number",
+      },
+      "required": true,
+    },
+    "foo": Object {
+      "description": "Optional prop",
+      "flowType": Object {
+        "name": "Child",
+      },
+      "required": false,
+    },
+  },
+}
+`;

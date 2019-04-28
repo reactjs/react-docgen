@@ -13,6 +13,9 @@ import getMemberValuePath from '../utils/getMemberValuePath';
 import isReactComponentClass from '../utils/isReactComponentClass';
 import isStatelessComponent from '../utils/isStatelessComponent';
 import resolveGenericTypeAnnotation from '../utils/resolveGenericTypeAnnotation';
+import getTypeParameters, {
+  type TypeParameters,
+} from '../utils/getTypeParameters';
 
 /**
  * Given an React component (stateless or class) tries to find the
@@ -52,48 +55,79 @@ export default (path: NodePath): ?NodePath => {
 export function applyToFlowTypeProperties(
   documentation: Documentation,
   path: NodePath,
-  callback: (propertyPath: NodePath) => void,
+  callback: (propertyPath: NodePath, typeParams: ?TypeParameters) => void,
+  typeParams?: ?TypeParameters,
 ) {
   if (path.node.properties) {
-    path.get('properties').each(propertyPath => callback(propertyPath));
+    path
+      .get('properties')
+      .each(propertyPath => callback(propertyPath, typeParams));
   } else if (path.node.members) {
-    path.get('members').each(propertyPath => callback(propertyPath));
+    path
+      .get('members')
+      .each(propertyPath => callback(propertyPath, typeParams));
   } else if (path.node.type === 'InterfaceDeclaration') {
     if (path.node.extends) {
-      applyExtends(documentation, path, callback);
+      applyExtends(documentation, path, callback, typeParams);
     }
 
-    path.get('body', 'properties').each(propertyPath => callback(propertyPath));
+    path
+      .get('body', 'properties')
+      .each(propertyPath => callback(propertyPath, typeParams));
   } else if (path.node.type === 'TSInterfaceDeclaration') {
     if (path.node.extends) {
-      applyExtends(documentation, path, callback);
+      applyExtends(documentation, path, callback, typeParams);
     }
 
-    path.get('body', 'body').each(propertyPath => callback(propertyPath));
+    path
+      .get('body', 'body')
+      .each(propertyPath => callback(propertyPath, typeParams));
   } else if (
     path.node.type === 'IntersectionTypeAnnotation' ||
     path.node.type === 'TSIntersectionType'
   ) {
     path
       .get('types')
-      .each(typesPath => applyToFlowTypeProperties(documentation, typesPath, callback));
+      .each(typesPath =>
+        applyToFlowTypeProperties(
+          documentation,
+          typesPath,
+          callback,
+          typeParams,
+        ),
+      );
   } else if (path.node.type !== 'UnionTypeAnnotation') {
     // The react-docgen output format does not currently allow
     // for the expression of union types
     const typePath = resolveGenericTypeAnnotation(path);
     if (typePath) {
-      applyToFlowTypeProperties(documentation, typePath, callback);
+      applyToFlowTypeProperties(documentation, typePath, callback, typeParams);
     }
   }
 }
 
-function applyExtends(documentation, path, callback) {
+function applyExtends(documentation, path, callback, typeParams) {
   path.get('extends').each((extendsPath: NodePath) => {
     const resolvedPath = resolveGenericTypeAnnotation(extendsPath);
     if (resolvedPath) {
-      applyToFlowTypeProperties(documentation, resolvedPath, callback);
+      if (resolvedPath.node.typeParameters && extendsPath.node.typeParameters) {
+        typeParams = getTypeParameters(
+          resolvedPath.get('typeParameters'),
+          extendsPath.get('typeParameters'),
+          typeParams,
+        );
+      }
+      applyToFlowTypeProperties(
+        documentation,
+        resolvedPath,
+        callback,
+        typeParams,
+      );
     } else {
-      let id = extendsPath.node.id || extendsPath.node.typeName || extendsPath.node.expression;
+      const id =
+        extendsPath.node.id ||
+        extendsPath.node.typeName ||
+        extendsPath.node.expression;
       if (id && id.type === 'Identifier') {
         documentation.addComposes(id.name);
       }

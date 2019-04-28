@@ -436,6 +436,44 @@ describe('getFlowType', () => {
     });
   });
 
+  it('handles generic types', () => {
+    const typePath = statement(`
+      var x: MyType<string> = {};
+
+      type MyType<T> = { a: T, b: Array<T> };
+    `)
+      .get('declarations', 0)
+      .get('id')
+      .get('typeAnnotation')
+      .get('typeAnnotation');
+
+    expect(getFlowType(typePath)).toEqual({
+      name: 'signature',
+      type: 'object',
+      raw: '{ a: T, b: Array<T> }',
+      signature: {
+        properties: [
+          {
+            key: 'a',
+            value: {
+              name: 'string',
+              required: true,
+            },
+          },
+          {
+            key: 'b',
+            value: {
+              name: 'Array',
+              raw: 'Array<T>',
+              required: true,
+              elements: [{ name: 'string' }],
+            },
+          },
+        ],
+      },
+    });
+  });
+
   describe('React types', () => {
     function test(type, expected) {
       const typePath = statement(`
