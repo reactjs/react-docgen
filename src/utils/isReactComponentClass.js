@@ -64,7 +64,7 @@ export default function isReactComponentClass(path: NodePath): boolean {
   if (!node.superClass) {
     return false;
   }
-  const superClass = resolveToValue(path.get('superClass'));
+  const superClass = resolveToValue(path.get('superClass'), false);
   if (!match(superClass.node, { property: { name: 'Component' } })) {
     return false;
   }

@@ -1421,3 +1421,144 @@ Object {
   },
 }
 `;
+
+exports[`main fixtures processes component "component_28.tsx" without errors 1`] = `
+Object {
+  "description": "This is a typescript component with imported prop types",
+  "displayName": "ImportedComponent",
+  "methods": Array [],
+  "props": Object {
+    "foo": Object {
+      "description": "",
+      "required": true,
+      "tsType": Object {
+        "name": "string",
+      },
+    },
+  },
+}
+`;
+
+exports[`main fixtures processes component "component_29.tsx" without errors 1`] = `
+Object {
+  "description": "This is a typescript component with imported prop types",
+  "displayName": "ImportedExtendedComponent",
+  "methods": Array [],
+  "props": Object {
+    "bar": Object {
+      "description": "",
+      "required": true,
+      "tsType": Object {
+        "name": "number",
+      },
+    },
+    "foo": Object {
+      "description": "",
+      "required": true,
+      "tsType": Object {
+        "name": "string",
+      },
+    },
+  },
+}
+`;
+
+exports[`main fixtures processes component "component_30.js" without errors 1`] = `
+Object {
+  "description": "",
+  "displayName": "CustomButton",
+  "methods": Array [],
+  "props": Object {
+    "children": Object {
+      "description": "",
+      "required": true,
+      "type": Object {
+        "name": "string",
+      },
+    },
+    "color": Object {
+      "description": "",
+      "required": false,
+      "type": Object {
+        "name": "string",
+      },
+    },
+    "onClick": Object {
+      "description": "",
+      "required": false,
+      "type": Object {
+        "name": "func",
+      },
+    },
+    "style": Object {
+      "description": "",
+      "required": false,
+      "type": Object {
+        "name": "object",
+      },
+    },
+  },
+}
+`;
+
+exports[`main fixtures processes component "component_31.js" without errors 1`] = `
+Object {
+  "description": "",
+  "displayName": "SuperCustomButton",
+  "methods": Array [],
+  "props": Object {
+    "children": Object {
+      "description": "",
+      "required": true,
+      "type": Object {
+        "name": "string",
+      },
+    },
+    "onClick": Object {
+      "description": "",
+      "required": false,
+      "type": Object {
+        "name": "func",
+      },
+    },
+    "style": Object {
+      "description": "",
+      "required": false,
+      "type": Object {
+        "name": "object",
+      },
+    },
+  },
+}
+`;
+
+exports[`main fixtures processes component "component_32.js" without errors 1`] = `
+Object {
+  "description": "",
+  "displayName": "SuperDuperCustomButton",
+  "methods": Array [],
+  "props": Object {
+    "children": Object {
+      "description": "",
+      "required": true,
+      "type": Object {
+        "name": "string",
+      },
+    },
+    "onClick": Object {
+      "description": "",
+      "required": false,
+      "type": Object {
+        "name": "func",
+      },
+    },
+    "style": Object {
+      "description": "",
+      "required": false,
+      "type": Object {
+        "name": "object",
+      },
+    },
+  },
+}
+`;

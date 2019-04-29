@@ -8,7 +8,7 @@
 
 import React, { Component } from 'react';
 
-interface Props {
+export interface Props {
   foo: string
 }
 
