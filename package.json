@@ -43,7 +43,7 @@
     "commander": "^2.19.0",
     "doctrine": "^3.0.0",
     "node-dir": "^0.1.10",
-    "recast": "^0.17.3"
+    "recast": "^0.17.6"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",
