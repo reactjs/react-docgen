@@ -59,12 +59,18 @@ export type FlowElementsType = FlowBaseType & {
   elements: Array<FlowTypeDescriptor>,
 };
 
+export type FlowFunctionArgumentType = {
+  name: string,
+  type: FlowTypeDescriptor,
+  rest?: boolean,
+};
+
 export type FlowFunctionSignatureType = FlowBaseType & {
   name: 'signature',
   type: 'function',
   raw: string,
   signature: {
-    arguments: Array<{ name: string, type: FlowTypeDescriptor }>,
+    arguments: Array<FlowFunctionArgumentType>,
     return: FlowTypeDescriptor,
   },
 };

@@ -43,7 +43,8 @@ function isWhitelistedObjectProperty(prop) {
 function isWhiteListedObjectTypeProperty(prop) {
   return (
     types.ObjectTypeProperty.check(prop) ||
-    types.ObjectTypeSpreadProperty.check(prop)
+    types.ObjectTypeSpreadProperty.check(prop) ||
+    types.TSPropertySignature.check(prop)
   );
 }
 
@@ -56,18 +57,27 @@ export function resolveObjectToPropMap(
     (types.ObjectExpression.check(object.value) &&
       object.value.properties.every(isWhitelistedObjectProperty)) ||
     (types.ObjectTypeAnnotation.check(object.value) &&
-      object.value.properties.every(isWhiteListedObjectTypeProperty))
+      object.value.properties.every(isWhiteListedObjectTypeProperty)) ||
+    (types.TSTypeLiteral.check(object.value) &&
+      object.value.members.every(isWhiteListedObjectTypeProperty))
   ) {
     const properties = [];
     let values = {};
     let error = false;
-    object.get('properties').each(propPath => {
+    const members = types.TSTypeLiteral.check(object.value)
+      ? object.get('members')
+      : object.get('properties');
+    members.each(propPath => {
       if (error) return;
       const prop = propPath.value;
 
       if (prop.kind === 'get' || prop.kind === 'set') return;
 
-      if (types.Property.check(prop) || types.ObjectTypeProperty.check(prop)) {
+      if (
+        types.Property.check(prop) ||
+        types.ObjectTypeProperty.check(prop) ||
+        types.TSPropertySignature.check(prop)
+      ) {
         // Key is either Identifier or Literal
         const name = prop.key.name || (raw ? prop.key.raw : prop.key.value);
         const propValue = propPath.get(name).parentPath.value;

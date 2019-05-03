@@ -9,6 +9,7 @@
 
 import { getDocblock } from './docblock';
 import getFlowType from './getFlowType';
+import getTSType from './getTSType';
 import getParameterName from './getParameterName';
 import getPropertyName from './getPropertyName';
 import getTypeAnnotation from './getTypeAnnotation';
@@ -45,10 +46,15 @@ function getMethodParamsDoc(methodPath) {
   functionExpression.get('params').each(paramPath => {
     let type = null;
     const typePath = getTypeAnnotation(paramPath);
-    if (typePath) {
+    if (typePath && types.Flow.check(typePath.node)) {
       type = getFlowType(typePath);
       if (types.GenericTypeAnnotation.check(typePath.node)) {
         type.alias = typePath.node.id.name;
+      }
+    } else if (typePath) {
+      type = getTSType(typePath);
+      if (types.TSTypeReference.check(typePath.node)) {
+        type.alias = typePath.node.typeName.name;
       }
     }
 
@@ -70,8 +76,10 @@ function getMethodReturnDoc(methodPath) {
 
   if (functionExpression.node.returnType) {
     const returnType = getTypeAnnotation(functionExpression.get('returnType'));
-    if (returnType) {
+    if (returnType && types.Flow.check(returnType.node)) {
       return { type: getFlowType(returnType) };
+    } else if (returnType) {
+      return { type: getTSType(returnType) };
     }
   }
 

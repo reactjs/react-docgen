@@ -53,7 +53,7 @@ describe('resolveExportDeclaration', () => {
   });
 
   it('resolves named exports', () => {
-    const exp = statement('export {foo, bar, baz}');
+    const exp = statement('export {foo, bar, baz}; var foo, bar, baz;');
     const resolved = resolveExportDeclaration(exp);
 
     const specifiers = exp.get('specifiers');

@@ -28,7 +28,8 @@ export default function getTypeAnnotation(path: NodePath): ?NodePath {
     resultPath = resultPath.get('typeAnnotation');
   } while (
     hasTypeAnnotation(resultPath) &&
-    !types.FlowType.check(resultPath.node)
+    !types.FlowType.check(resultPath.node) &&
+    !types.TSType.check(resultPath.node)
   );
 
   return resultPath;

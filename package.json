@@ -37,17 +37,16 @@
   "author": "Felix Kling",
   "license": "MIT",
   "dependencies": {
-    "@babel/core": "^7.0.0",
+    "@babel/core": "^7.4.4",
     "@babel/runtime": "^7.0.0",
     "async": "^2.1.4",
     "commander": "^2.19.0",
     "doctrine": "^3.0.0",
     "node-dir": "^0.1.10",
-    "recast": "^0.17.3"
+    "recast": "^0.17.6"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",
-    "@babel/core": "^7.0.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
     "@babel/plugin-transform-runtime": "^7.0.0",
     "@babel/preset-env": "^7.0.0",

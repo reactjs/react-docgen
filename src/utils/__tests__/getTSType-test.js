@@ -10,13 +10,26 @@
 
 jest.disableAutomock();
 
-describe('getFlowType', () => {
+describe('getTSType', () => {
   let expression, statement;
-  let getFlowType;
+  let getTSType;
 
   beforeEach(() => {
-    getFlowType = require('../getFlowType').default;
-    ({ expression, statement } = require('../../../tests/utils'));
+    getTSType = require('../getTSType').default;
+    const {
+      expression: expr,
+      statement: stmt,
+    } = require('../../../tests/utils');
+    expression = code =>
+      expr(code, undefined, {
+        filename: 'test.ts',
+        babelrc: false,
+      });
+    statement = code =>
+      stmt(code, undefined, {
+        filename: 'test.ts',
+        babelrc: false,
+      });
   });
 
   it('detects simple types', () => {
@@ -24,9 +37,12 @@ describe('getFlowType', () => {
       'string',
       'number',
       'boolean',
+      'symbol',
+      'object',
       'any',
-      'mixed',
+      'unknown',
       'null',
+      'undefined',
       'void',
       'Object',
       'Function',
@@ -39,7 +55,7 @@ describe('getFlowType', () => {
       const typePath = expression('x: ' + type)
         .get('typeAnnotation')
         .get('typeAnnotation');
-      expect(getFlowType(typePath)).toEqual({ name: type });
+      expect(getTSType(typePath)).toEqual({ name: type });
     });
   });
 
@@ -50,7 +66,7 @@ describe('getFlowType', () => {
       const typePath = expression(`x: ${value}`)
         .get('typeAnnotation')
         .get('typeAnnotation');
-      expect(getFlowType(typePath)).toEqual({
+      expect(getTSType(typePath)).toEqual({
         name: 'literal',
         value: `${value}`,
       });
@@ -61,44 +77,14 @@ describe('getFlowType', () => {
     const typePath = expression('x: xyz')
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({ name: 'xyz' });
-  });
-
-  it('detects external nullable type', () => {
-    const typePath = expression('x: ?xyz')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({ name: 'xyz', nullable: true });
-  });
-
-  it('detects array type shorthand optional', () => {
-    const typePath = expression('x: ?number[]')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
-      name: 'Array',
-      elements: [{ name: 'number' }],
-      raw: 'number[]',
-      nullable: true,
-    });
-  });
-
-  it('detects array type shorthand optional type', () => {
-    const typePath = expression('x: (?number)[]')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
-      name: 'Array',
-      elements: [{ name: 'number', nullable: true }],
-      raw: '(?number)[]',
-    });
+    expect(getTSType(typePath)).toEqual({ name: 'xyz' });
   });
 
   it('detects array type shorthand', () => {
     const typePath = expression('x: number[]')
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'Array',
       elements: [{ name: 'number' }],
       raw: 'number[]',
@@ -109,7 +95,7 @@ describe('getFlowType', () => {
     const typePath = expression('x: Array<number>')
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'Array',
       elements: [{ name: 'number' }],
       raw: 'Array<number>',
@@ -120,7 +106,7 @@ describe('getFlowType', () => {
     const typePath = expression('x: Array<number, xyz>')
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'Array',
       elements: [{ name: 'number' }, { name: 'xyz' }],
       raw: 'Array<number, xyz>',
@@ -131,7 +117,7 @@ describe('getFlowType', () => {
     const typePath = expression('x: Class<Boolean>')
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'Class',
       elements: [{ name: 'Boolean' }],
       raw: 'Class<Boolean>',
@@ -142,7 +128,7 @@ describe('getFlowType', () => {
     const typePath = expression('x: Function<xyz>')
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'Function',
       elements: [{ name: 'xyz' }],
       raw: 'Function<xyz>',
@@ -153,7 +139,7 @@ describe('getFlowType', () => {
     const typePath = expression('x: { a: string, b?: xyz }')
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'object',
       signature: {
@@ -166,28 +152,11 @@ describe('getFlowType', () => {
     });
   });
 
-  it('detects object types with maybe type', () => {
-    const typePath = expression('x: { a: string, b: ?xyz }')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
-      name: 'signature',
-      type: 'object',
-      signature: {
-        properties: [
-          { key: 'a', value: { name: 'string', required: true } },
-          { key: 'b', value: { name: 'xyz', nullable: true, required: true } },
-        ],
-      },
-      raw: '{ a: string, b: ?xyz }',
-    });
-  });
-
   it('detects union type', () => {
     const typePath = expression('x: string | xyz | "foo" | void')
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'union',
       elements: [
         { name: 'string' },
@@ -203,7 +172,7 @@ describe('getFlowType', () => {
     const typePath = expression('x: string & xyz & "foo" & void')
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'intersection',
       elements: [
         { name: 'string' },
@@ -217,17 +186,17 @@ describe('getFlowType', () => {
 
   it('detects function signature type', () => {
     const typePath = expression(
-      'x: (p1: number, p2: ?string, ...rest: Array<string>) => boolean',
+      'x: (p1: number, p2: string, ...rest: Array<string>) => boolean',
     )
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'function',
       signature: {
         arguments: [
           { name: 'p1', type: { name: 'number' } },
-          { name: 'p2', type: { name: 'string', nullable: true } },
+          { name: 'p2', type: { name: 'string' } },
           {
             name: 'rest',
             rest: true,
@@ -240,40 +209,23 @@ describe('getFlowType', () => {
         ],
         return: { name: 'boolean' },
       },
-      raw: '(p1: number, p2: ?string, ...rest: Array<string>) => boolean',
+      raw: '(p1: number, p2: string, ...rest: Array<string>) => boolean',
     });
   });
 
-  it('detects function signature types without parameter names', () => {
-    const typePath = expression('x: (number, ?string) => boolean')
+  it('detects function signature type with `this` parameter', () => {
+    const typePath = expression('x: (this: Foo, p1: number) => boolean')
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'function',
       signature: {
-        arguments: [
-          { name: '', type: { name: 'number' } },
-          { name: '', type: { name: 'string', nullable: true } },
-        ],
+        arguments: [{ name: 'p1', type: { name: 'number' } }],
+        this: { name: 'Foo' },
         return: { name: 'boolean' },
       },
-      raw: '(number, ?string) => boolean',
-    });
-  });
-
-  it('detects function signature type with single parmeter without name', () => {
-    const typePath = expression('x: string => boolean')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
-      name: 'signature',
-      type: 'function',
-      signature: {
-        arguments: [{ name: '', type: { name: 'string' } }],
-        return: { name: 'boolean' },
-      },
-      raw: 'string => boolean',
+      raw: '(this: Foo, p1: number) => boolean',
     });
   });
 
@@ -281,7 +233,7 @@ describe('getFlowType', () => {
     const typePath = expression('x: { (str: string): string, token: string }')
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'object',
       signature: {
@@ -292,7 +244,7 @@ describe('getFlowType', () => {
             arguments: [{ name: 'str', type: { name: 'string' } }],
             return: { name: 'string' },
           },
-          raw: '(str: string): string',
+          raw: '(str: string): string,', // TODO: why does it print a comma?
         },
         properties: [
           { key: 'token', value: { name: 'string', required: true } },
@@ -308,7 +260,7 @@ describe('getFlowType', () => {
     )
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'object',
       signature: {
@@ -343,7 +295,7 @@ describe('getFlowType', () => {
     const typePath = expression('x: [string, number]')
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'tuple',
       elements: [{ name: 'string' }, { name: 'number' }],
       raw: '[string, number]',
@@ -354,7 +306,7 @@ describe('getFlowType', () => {
     const typePath = expression('x: [string, number] | [number, string]')
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'union',
       elements: [
         {
@@ -383,30 +335,30 @@ describe('getFlowType', () => {
       .get('typeAnnotation')
       .get('typeAnnotation');
 
-    expect(getFlowType(typePath)).toEqual({ name: 'string' });
+    expect(getTSType(typePath)).toEqual({ name: 'string' });
   });
 
   it('handles typeof types', () => {
     const typePath = statement(`
       var x: typeof MyType = {};
 
-      type MyType = { a: string, b: ?xyz };
+      type MyType = { a: string, b: xyz };
     `)
       .get('declarations', 0)
       .get('id')
       .get('typeAnnotation')
       .get('typeAnnotation');
 
-    expect(getFlowType(typePath)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'object',
       signature: {
         properties: [
           { key: 'a', value: { name: 'string', required: true } },
-          { key: 'b', value: { name: 'xyz', nullable: true, required: true } },
+          { key: 'b', value: { name: 'xyz', required: true } },
         ],
       },
-      raw: '{ a: string, b: ?xyz }',
+      raw: '{ a: string, b: xyz }',
     });
   });
 
@@ -414,14 +366,14 @@ describe('getFlowType', () => {
     const typePath = statement(`
       var x: MyType.x = {};
 
-      type MyType = { a: string, b: ?xyz };
+      type MyType = { a: string, b: xyz };
     `)
       .get('declarations', 0)
       .get('id')
       .get('typeAnnotation')
       .get('typeAnnotation');
 
-    expect(getFlowType(typePath)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'MyType.x',
     });
   });
@@ -430,14 +382,14 @@ describe('getFlowType', () => {
     const typePath = statement(`
       var x: MyType.x<any> = {};
 
-      type MyType = { a: string, b: ?xyz };
+      type MyType = { a: string, b: xyz };
     `)
       .get('declarations', 0)
       .get('id')
       .get('typeAnnotation')
       .get('typeAnnotation');
 
-    expect(getFlowType(typePath)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'MyType.x',
       raw: 'MyType.x<any>',
       elements: [
@@ -459,7 +411,7 @@ describe('getFlowType', () => {
       .get('typeAnnotation')
       .get('typeAnnotation');
 
-    expect(getFlowType(typePath)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'object',
       raw: '{ a: T, b: Array<T> }',
@@ -498,7 +450,7 @@ describe('getFlowType', () => {
         .get('typeAnnotation')
         .get('typeAnnotation');
 
-      expect(getFlowType(typePath)).toEqual({
+      expect(getTSType(typePath)).toEqual({
         ...expected,
         name: type.replace('.', '').replace(/<.+>/, ''),
         raw: type,
@@ -538,9 +490,9 @@ describe('getFlowType', () => {
     });
   });
 
-  it('resolves $Keys to union', () => {
+  it('resolves keyof to union', () => {
     const typePath = statement(`
-      var x: $Keys<typeof CONTENTS> = 2;
+      var x: keyof typeof CONTENTS = 2;
       const CONTENTS = {
         'apple': '🍎',
         'banana': '🍌',
@@ -551,76 +503,32 @@ describe('getFlowType', () => {
       .get('typeAnnotation')
       .get('typeAnnotation');
 
-    expect(getFlowType(typePath)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'union',
       elements: [
         { name: 'literal', value: "'apple'" },
         { name: 'literal', value: "'banana'" },
       ],
-      raw: '$Keys<typeof CONTENTS>',
+      raw: 'keyof typeof CONTENTS',
     });
   });
 
-  it('resolves $Keys without typeof to union', () => {
+  it('resolves keyof with inline object to union', () => {
     const typePath = statement(`
-      var x: $Keys<CONTENTS> = 2;
-      const CONTENTS = {
-        'apple': '🍎',
-        'banana': '🍌',
-      };
+      var x: keyof { apple: string, banana: string } = 2;
     `)
       .get('declarations', 0)
       .get('id')
       .get('typeAnnotation')
       .get('typeAnnotation');
 
-    expect(getFlowType(typePath)).toEqual({
-      name: 'union',
-      elements: [
-        { name: 'literal', value: "'apple'" },
-        { name: 'literal', value: "'banana'" },
-      ],
-      raw: '$Keys<CONTENTS>',
-    });
-  });
-
-  it('resolves $Keys with an ObjectTypeAnnotation typeParameter to union', () => {
-    const typePath = statement(`
-      var x: $Keys<{| apple: string, banana: string |}> = 2;
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-
-    expect(getFlowType(typePath)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'union',
       elements: [
         { name: 'literal', value: 'apple' },
         { name: 'literal', value: 'banana' },
       ],
-      raw: '$Keys<{| apple: string, banana: string |}>',
-    });
-  });
-
-  it('resolves $Keys with an ObjectTypeAnnotation typeParameter to union with an ObjectTypeSpreadProperty', () => {
-    const typePath = statement(`
-      var x: $Keys<{| apple: string, banana: string, ...OtherFruits |}> = 2;
-      type OtherFruits = { orange: string }
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-
-    expect(getFlowType(typePath)).toEqual({
-      name: 'union',
-      elements: [
-        { name: 'literal', value: 'apple' },
-        { name: 'literal', value: 'banana' },
-        { name: 'literal', value: 'orange' },
-      ],
-      raw: '$Keys<{| apple: string, banana: string, ...OtherFruits |}>',
+      raw: 'keyof { apple: string, banana: string }',
     });
   });
 
@@ -634,7 +542,7 @@ describe('getFlowType', () => {
       .get('typeAnnotation')
       .get('typeAnnotation');
 
-    expect(getFlowType(typePath)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'object',
       signature: {
@@ -675,7 +583,7 @@ describe('getFlowType', () => {
       .get('typeAnnotation')
       .get('typeAnnotation');
 
-    expect(getFlowType(typePath)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'object',
       signature: {
@@ -700,7 +608,7 @@ describe('getFlowType', () => {
       .get('typeAnnotation')
       .get('typeAnnotation');
 
-    expect(getFlowType(typePath)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'object',
       signature: {

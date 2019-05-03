@@ -239,15 +239,15 @@ we are getting this output:
 }
 ```
 
-## Flow Type support
+## Flow and TypeScript support
 
-If you are using [flow][flow] then react-docgen can also extract the flow type annotations. As flow has a way more advanced and fine granular type system, the returned types from react-docgen are different in comparison when using `React.PropTypes`.
+If you are using [flow][flow] or [typescript][typescript] then react-docgen can also extract the type annotations. As flow and typescript have way more advanced and fine granular type systems, the returned types from react-docgen are different in comparison when using `React.PropTypes`.
 
 > **Note**: react-docgen will not be able to grab the type definition if the type is imported or declared in a different file.
 
 ### Example
 
-For the following component
+For the following component with Flow types
 
 ```js
 import React, { Component } from 'react';
@@ -387,6 +387,7 @@ The structure of the JSON blob / JavaScript object is as follows:
         ["raw": string]
       },
       "flowType": <flowType>,
+      "tsType": <tsType>,
       "required": boolean,
       "description": string,
       ["defaultValue": {
@@ -406,9 +407,11 @@ The structure of the JSON blob / JavaScript object is as follows:
 - `<typeName>`: The name of the type, which is usually corresponds to the function name in `React.PropTypes`. However, for types define with `oneOf`, we use `"enum"` and for `oneOfType` we use `"union"`. If a custom function is provided or the type cannot be resolved to anything of `React.PropTypes`, we use `"custom"`.
 - `<typeValue>`: Some types accept parameters which define the type in more detail (such as `arrayOf`, `instanceOf`, `oneOf`, etc). Those are stored in `<typeValue>`. The data type of `<typeValue>` depends on the type definition.
 - `<flowType>`: If using flow type this property contains the parsed flow type as can be seen in the table above.
+- `<tsType>`: If using TypeScript type this property contains the parsed TypeScript type as can be seen in the table above.
 
 [react]: http://facebook.github.io/react/
 [flow]: http://flowtype.org/
+[typescript]: http://typescriptlang.org/
 [recast]: https://github.com/benjamn/recast
 [@babel/parser]: https://github.com/babel/babel/tree/master/packages/babel-parser
 [classes]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes

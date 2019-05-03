@@ -225,12 +225,16 @@ describe('main', () => {
     const fixturePath = path.join(__dirname, 'fixtures');
     const fileNames = fs.readdirSync(fixturePath);
     for (let i = 0; i < fileNames.length; i++) {
-      const fileContent = fs.readFileSync(path.join(fixturePath, fileNames[i]));
+      const filePath = path.join(fixturePath, fileNames[i]);
+      const fileContent = fs.readFileSync(filePath);
 
       it(`processes component "${fileNames[i]}" without errors`, () => {
         let result;
         expect(() => {
-          result = docgen.parse(fileContent);
+          result = docgen.parse(fileContent, null, null, {
+            filename: filePath,
+            babelrc: false,
+          });
         }).not.toThrowError();
         expect(result).toMatchSnapshot();
       });
