@@ -17,8 +17,9 @@ export default function getTypeParameters(
   declaration: NodePath,
   instantiation: NodePath,
   inputParams: ?TypeParameters,
-) {
+): TypeParameters {
   const params = {};
+  const numInstantiationParams = instantiation.node.params.length;
 
   let i = 0;
   declaration.get('params').each((paramPath: NodePath) => {
@@ -27,7 +28,7 @@ export default function getTypeParameters(
       ? paramPath.get('default')
       : null;
     const typePath =
-      i < instantiation.node.params.length
+      i < numInstantiationParams
         ? instantiation.get('params', i++)
         : defaultTypePath;
 
