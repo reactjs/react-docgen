@@ -15,7 +15,8 @@ import printValue from '../utils/printValue';
 import recast from 'recast';
 import resolveToValue from '../utils/resolveToValue';
 import resolveFunctionDefinitionToReturnValue from '../utils/resolveFunctionDefinitionToReturnValue';
-import isStatelessComponent from '../utils/isStatelessComponent';
+import isReactComponentClass from '../utils/isReactComponentClass';
+import isReactForwardRefCall from '../utils/isReactForwardRefCall';
 
 const {
   types: { namedTypes: types },
@@ -53,7 +54,12 @@ function getDefaultValue(path: NodePath) {
 }
 
 function getStatelessPropsPath(componentDefinition): NodePath {
-  return resolveToValue(componentDefinition).get('params', 0);
+  const value = resolveToValue(componentDefinition);
+  if (isReactForwardRefCall(value)) {
+    const inner = value.get('arguments', 0);
+    return inner.get('params', 0);
+  }
+  return value.get('params', 0);
 }
 
 function getDefaultPropsPath(componentDefinition: NodePath): ?NodePath {
@@ -118,7 +124,10 @@ export default function defaultPropsHandler(
 ) {
   let statelessProps = null;
   const defaultPropsPath = getDefaultPropsPath(componentDefinition);
-  if (isStatelessComponent(componentDefinition)) {
+  /**
+   * function, lazy, memo, forwardRef etc components can resolve default props as well
+   */
+  if (!isReactComponentClass(componentDefinition)) {
     statelessProps = getStatelessPropsPath(componentDefinition);
   }
 

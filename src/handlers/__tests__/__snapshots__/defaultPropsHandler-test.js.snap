@@ -226,6 +226,28 @@ Object {
 }
 `;
 
+exports[`defaultPropsHandler forwardRef resolves default props in the parameters 1`] = `
+Object {
+  "foo": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "'bar'",
+    },
+  },
+}
+`;
+
+exports[`defaultPropsHandler forwardRef resolves defaultProps 1`] = `
+Object {
+  "foo": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "'baz'",
+    },
+  },
+}
+`;
+
 exports[`defaultPropsHandler should only consider Property nodes, not e.g. spread properties 1`] = `
 Object {
   "bar": Object {
