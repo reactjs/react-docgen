@@ -236,6 +236,11 @@ function handleTSFunctionType(
         : null,
     };
 
+    if (param.node.name === 'this') {
+      type.signature.this = arg.type;
+      return;
+    }
+
     if (param.node.type === 'RestElement') {
       arg.name = param.node.argument.name;
       arg.rest = true;

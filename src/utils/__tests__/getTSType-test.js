@@ -213,6 +213,22 @@ describe('getTSType', () => {
     });
   });
 
+  it('detects function signature type with `this` parameter', () => {
+    const typePath = expression('x: (this: Foo, p1: number) => boolean')
+      .get('typeAnnotation')
+      .get('typeAnnotation');
+    expect(getTSType(typePath)).toEqual({
+      name: 'signature',
+      type: 'function',
+      signature: {
+        arguments: [{ name: 'p1', type: { name: 'number' } }],
+        this: { name: 'Foo' },
+        return: { name: 'boolean' },
+      },
+      raw: '(this: Foo, p1: number) => boolean',
+    });
+  });
+
   it('detects callable signature type', () => {
     const typePath = expression('x: { (str: string): string, token: string }')
       .get('typeAnnotation')
