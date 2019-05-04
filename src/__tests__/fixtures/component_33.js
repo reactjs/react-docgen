@@ -1,4 +1,4 @@
-import * as C31 from './component_31';
+import * as C31 from './component_32';
 import PropTypes from 'prop-types';
 
 export function SuperDuperCustomButton({color, ...otherProps}) {

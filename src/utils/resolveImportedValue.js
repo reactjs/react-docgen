@@ -17,8 +17,6 @@ import fs from 'fs';
 const { namedTypes: t, NodePath } = types;
 
 export default function resolveImportedValue(path: NodePath, name: string) {
-  t.ImportDeclaration.assert(path.node);
-
   // Bail if no filename was provided for the current source file.
   // Also never traverse into react itself.
   const source = path.node.source.value;
@@ -101,7 +99,14 @@ function findExportedValue(ast, name) {
 
       return false;
     },
-    // TODO: visitExportAllDeclaration
+    visitExportAllDeclaration(path: NodePath) {
+      const resolvedPath = resolveImportedValue(path, name);
+      if (resolvedPath) {
+        resultPath = resolvedPath;
+      }
+
+      return false;
+    }
   });
 
   return resultPath;
