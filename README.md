@@ -81,10 +81,10 @@ As with the CLI, this will look for the exported component created through `Reac
 
 | Parameter |  Type | Description |
 | -------------- | ------ | --------------- |
-| source       | string | The source text |
-| resolver     | function | A function of the form `(ast: ASTNode, parser: Parser) => (NodePath|Array<NodePath>)`. Given an AST and a reference to the parser, it returns an (array of) NodePath which represents the component definition. |
-| handlers     | Array\<function\> | An array of functions of the form `(documentation: Documentation, definition: NodePath, parser: Parser) => void`. Each function is called with a `Documentation` object and a reference to the component definition as returned by `resolver`. Handlers extract relevant information from the definition and augment `documentation`. |
-| opt
+| source       | `string \| Buffer` | The source text |
+| resolver     | `(ast: ASTNode, parser: { parse: (string) => ASTNode }) => (NodePath\|Array<NodePath>)` | Given an AST and a reference to the parser, it returns an (array of) NodePath which represents the component definition. |
+| handlers     | `Array<(documentation: Documentation, definition: NodePath, parser: { parse: (string) => ASTNode }) => void>` | Each function is called with a `Documentation` object, a reference to the component definition as returned by a `resolver` and a reference to the parser. Handlers extract relevant information from the definition and augment `documentation`. |
+| options | `object` | see below |
 
 #### options
 
