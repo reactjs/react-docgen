@@ -6,3 +6,4 @@ export function SuperDuperCustomButton({color, ...otherProps}) {
 }
 
 SuperDuperCustomButton.propTypes = C31.sharedProps;
+export {SuperCustomButton} from './component_32';

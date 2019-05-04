@@ -167,7 +167,9 @@ export default function resolveToValue(
       return propertyPath;
     } else if (isSupportedDefinitionType(resolved)) {
       const memberPath = getMemberValuePath(resolved, path.node.property.name);
-      return memberPath || path;
+      if (memberPath) {
+        return resolveToValue(memberPath, resolveImports);
+      }
     } else if (t.ImportDeclaration.check(resolved.node)) {
       // Handle references to namespace imports, e.g. import * as foo from 'bar'.
       // Try to find a specifier that matches the root of the member expression, and

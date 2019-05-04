@@ -74,7 +74,7 @@ function findExportedValue(ast, name, seen) {
 
   traverseShallow(ast, {
     visitExportNamedDeclaration(path: NodePath) {
-      const { declaration, specifiers } = path.node;
+      const { declaration, specifiers, source } = path.node;
       if (declaration && declaration.id && declaration.id.name === name) {
         resultPath = path.get('declaration');
       } else if (declaration && declaration.declarations) {
@@ -92,7 +92,12 @@ function findExportedValue(ast, name, seen) {
       } else if (specifiers) {
         path.get('specifiers').each((specifierPath: NodePath) => {
           if (specifierPath.node.exported.name === name) {
-            resultPath = specifierPath.get('local');
+            if (source) {
+              const local = specifierPath.node.local.name;
+              resultPath = resolveImportedValue(path, local, seen);
+            } else {
+              resultPath = specifierPath.get('local');
+            }
           }
         });
       }
