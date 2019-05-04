@@ -60,7 +60,7 @@
     "eslint": "^5.7.0",
     "eslint-config-prettier": "^4.0.0",
     "eslint-plugin-prettier": "^3.0.0",
-    "flow-bin": "^0.93.0",
+    "flow-bin": "^0.98.0",
     "jest": "^24.1.0",
     "jest-diff": "^24.0.0",
     "jest-matcher-utils": "^24.0.0",
