@@ -6,26 +6,17 @@
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
-
-jest.disableAutomock();
+import { parse } from '../../../tests/utils';
+import resolveToModule from '../resolveToModule';
 
 describe('resolveToModule', () => {
-  let utils;
-  let resolveToModule;
-
-  function parse(src) {
-    const root = utils.parse(src);
+  function parsePath(src) {
+    const root = parse(src);
     return root.get('body', root.node.body.length - 1, 'expression');
   }
 
-  beforeEach(() => {
-    resolveToModule = require('../resolveToModule').default;
-    utils = require('../../../tests/utils');
-  });
-
   it('resolves identifiers', () => {
-    const path = parse(`
+    const path = parsePath(`
       var foo = require("Foo");
       foo;
     `);
@@ -33,7 +24,7 @@ describe('resolveToModule', () => {
   });
 
   it('resolves function calls', () => {
-    const path = parse(`
+    const path = parsePath(`
       var foo = require("Foo");
       foo();
     `);
@@ -41,7 +32,7 @@ describe('resolveToModule', () => {
   });
 
   it('resolves member expressions', () => {
-    const path = parse(`
+    const path = parsePath(`
       var foo = require("Foo");
       foo.bar().baz;
     `);
@@ -49,7 +40,7 @@ describe('resolveToModule', () => {
   });
 
   it('understands destructuring', () => {
-    const path = parse(`
+    const path = parsePath(`
       var {foo} = require("Foo");
       foo;
     `);
@@ -58,13 +49,13 @@ describe('resolveToModule', () => {
 
   describe('ES6 import declarations', () => {
     it('resolves ImportDefaultSpecifier', () => {
-      let path = parse(`
+      let path = parsePath(`
         import foo from "Foo";
         foo;
       `);
       expect(resolveToModule(path)).toBe('Foo');
 
-      path = parse(`
+      path = parsePath(`
         import foo, {createElement} from "Foo";
         foo;
       `);
@@ -72,7 +63,7 @@ describe('resolveToModule', () => {
     });
 
     it('resolves ImportSpecifier', () => {
-      const path = parse(`
+      const path = parsePath(`
         import {foo, bar} from "Foo";
         bar;
       `);
@@ -80,7 +71,7 @@ describe('resolveToModule', () => {
     });
 
     it('resolves aliased ImportSpecifier', () => {
-      const path = parse(`
+      const path = parsePath(`
         import {foo, bar as baz} from "Foo";
         baz;
       `);
@@ -88,7 +79,7 @@ describe('resolveToModule', () => {
     });
 
     it('resolves ImportNamespaceSpecifier', () => {
-      const path = parse(`
+      const path = parsePath(`
         import * as foo from "Foo";
         foo;
       `);

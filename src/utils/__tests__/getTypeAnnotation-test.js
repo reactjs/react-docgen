@@ -6,19 +6,10 @@
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
-
-jest.disableAutomock();
+import { expression } from '../../../tests/utils';
+import getTypeAnnotation from '../getTypeAnnotation';
 
 describe('getTypeAnnotation', () => {
-  let expression;
-  let getTypeAnnotation;
-
-  beforeEach(() => {
-    getTypeAnnotation = require('../getTypeAnnotation').default;
-    ({ expression } = require('../../../tests/utils'));
-  });
-
   it('detects simple type', () => {
     const path = expression('x: xyz');
 

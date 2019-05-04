@@ -1,0 +1,152 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getMembers finds all "members" "inside" a MemberExpression 1`] = `
+Array [
+  Object {
+    "argumentsPath": Node {
+      "arguments": Array [
+        Node {
+          "end": 12,
+          "loc": SourceLocation {
+            "end": Position {
+              "column": 12,
+              "line": 1,
+            },
+            "start": Position {
+              "column": 9,
+              "line": 1,
+            },
+          },
+          "raw": "123",
+          "start": 9,
+          "type": "Literal",
+          "value": 123,
+        },
+      ],
+      "callee": Node {
+        "computed": false,
+        "end": 8,
+        "loc": SourceLocation {
+          "end": Position {
+            "column": 8,
+            "line": 1,
+          },
+          "start": Position {
+            "column": 1,
+            "line": 1,
+          },
+        },
+        "object": Node {
+          "end": 4,
+          "loc": SourceLocation {
+            "end": Position {
+              "column": 4,
+              "line": 1,
+            },
+            "identifierName": "foo",
+            "start": Position {
+              "column": 1,
+              "line": 1,
+            },
+          },
+          "name": "foo",
+          "start": 1,
+          "type": "Identifier",
+        },
+        "property": Node {
+          "end": 8,
+          "loc": SourceLocation {
+            "end": Position {
+              "column": 8,
+              "line": 1,
+            },
+            "identifierName": "bar",
+            "start": Position {
+              "column": 5,
+              "line": 1,
+            },
+          },
+          "name": "bar",
+          "start": 5,
+          "type": "Identifier",
+        },
+        "start": 1,
+        "type": "MemberExpression",
+      },
+      "end": 13,
+      "loc": SourceLocation {
+        "end": Position {
+          "column": 13,
+          "line": 1,
+        },
+        "start": Position {
+          "column": 1,
+          "line": 1,
+        },
+      },
+      "start": 1,
+      "type": "CallExpression",
+    },
+    "computed": false,
+    "path": Node {
+      "end": 8,
+      "loc": SourceLocation {
+        "end": Position {
+          "column": 8,
+          "line": 1,
+        },
+        "identifierName": "bar",
+        "start": Position {
+          "column": 5,
+          "line": 1,
+        },
+      },
+      "name": "bar",
+      "start": 5,
+      "type": "Identifier",
+    },
+  },
+  Object {
+    "argumentsPath": null,
+    "computed": true,
+    "path": Node {
+      "end": 22,
+      "loc": SourceLocation {
+        "end": Position {
+          "column": 22,
+          "line": 1,
+        },
+        "identifierName": "baz",
+        "start": Position {
+          "column": 19,
+          "line": 1,
+        },
+      },
+      "name": "baz",
+      "start": 19,
+      "type": "Identifier",
+    },
+  },
+  Object {
+    "argumentsPath": null,
+    "computed": true,
+    "path": Node {
+      "end": 26,
+      "loc": SourceLocation {
+        "end": Position {
+          "column": 26,
+          "line": 1,
+        },
+        "start": Position {
+          "column": 24,
+          "line": 1,
+        },
+      },
+      "raw": "42",
+      "start": 24,
+      "type": "Literal",
+      "value": 42,
+    },
+  },
+]
+`;

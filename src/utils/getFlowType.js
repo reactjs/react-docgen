@@ -7,11 +7,9 @@
  * @flow
  */
 
-/* eslint no-use-before-define: 0 */
-
+import types from 'ast-types';
 import getPropertyName from './getPropertyName';
 import printValue from './printValue';
-import recast from 'recast';
 import getTypeAnnotation from '../utils/getTypeAnnotation';
 import resolveToValue from '../utils/resolveToValue';
 import { resolveObjectToNameArray } from '../utils/resolveObjectKeysToArray';
@@ -19,15 +17,14 @@ import getTypeParameters, {
   type TypeParameters,
 } from '../utils/getTypeParameters';
 import type {
-  FlowTypeDescriptor,
   FlowElementsType,
   FlowFunctionSignatureType,
   FlowObjectSignatureType,
+  FlowSimpleType,
+  FlowTypeDescriptor,
 } from '../types';
 
-const {
-  types: { namedTypes: types },
-} = recast;
+const { namedTypes: t } = types;
 
 const flowTypes = {
   AnyTypeAnnotation: 'any',
@@ -71,16 +68,16 @@ function getFlowTypeWithRequirements(
 
 function handleKeysHelper(path: NodePath): ?FlowElementsType {
   let value = path.get('typeParameters', 'params', 0);
-  if (types.TypeofTypeAnnotation.check(value.node)) {
+  if (t.TypeofTypeAnnotation.check(value.node)) {
     value = value.get('argument', 'id');
-  } else if (!types.ObjectTypeAnnotation.check(value.node)) {
+  } else if (!t.ObjectTypeAnnotation.check(value.node)) {
     value = value.get('id');
   }
   const resolvedPath = resolveToValue(value);
   if (
     resolvedPath &&
-    (types.ObjectExpression.check(resolvedPath.node) ||
-      types.ObjectTypeAnnotation.check(resolvedPath.node))
+    (t.ObjectExpression.check(resolvedPath.node) ||
+      t.ObjectTypeAnnotation.check(resolvedPath.node))
   ) {
     const keys = resolveObjectToNameArray(resolvedPath, true);
 
@@ -118,7 +115,7 @@ function handleGenericTypeAnnotation(
   }
 
   let type: FlowTypeDescriptor;
-  if (types.QualifiedTypeIdentifier.check(path.node.id)) {
+  if (t.QualifiedTypeIdentifier.check(path.node.id)) {
     const id = path.get('id');
 
     if (id.node.qualification.name === 'React') {
@@ -191,9 +188,10 @@ function handleObjectTypeAnnotation(
   });
 
   path.get('properties').each(param => {
-    if (types.ObjectTypeProperty.check(param.node)) {
+    if (t.ObjectTypeProperty.check(param.node)) {
       type.signature.properties.push({
-        key: getPropertyName(param),
+        // For ObjectTypeProperties `getPropertyName` always returns string
+        key: ((getPropertyName(param): any): string),
         value: getFlowTypeWithRequirements(param.get('value'), typeParams),
       });
     }
@@ -202,7 +200,7 @@ function handleObjectTypeAnnotation(
   return type;
 }
 
-function handleInterfaceDeclaration(path: NodePath): FlowElementsType {
+function handleInterfaceDeclaration(path: NodePath): FlowSimpleType {
   // Interfaces are handled like references which would be documented separately,
   // rather than inlined like type aliases.
   return {
@@ -271,7 +269,7 @@ function handleFunctionTypeAnnotation(
       name: param.node.name ? param.node.name.name : '',
       type: typeAnnotation
         ? getFlowTypeWithResolvedTypes(typeAnnotation, typeParams)
-        : null,
+        : undefined,
     });
   });
 
@@ -283,7 +281,7 @@ function handleFunctionTypeAnnotation(
       name: rest.node.name ? rest.node.name.name : '',
       type: typeAnnotation
         ? getFlowTypeWithResolvedTypes(typeAnnotation, typeParams)
-        : null,
+        : undefined,
       rest: true,
     });
   }
@@ -324,7 +322,7 @@ function getFlowTypeWithResolvedTypes(
   const node = path.node;
   let type: ?FlowTypeDescriptor;
 
-  const isTypeAlias = types.TypeAlias.check(path.parentPath.node);
+  const isTypeAlias = t.TypeAlias.check(path.parentPath.node);
   // When we see a typealias mark it as visited so that the next
   // call of this function does not run into an endless loop
   if (isTypeAlias) {

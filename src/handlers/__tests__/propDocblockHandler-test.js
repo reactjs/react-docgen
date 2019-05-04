@@ -6,21 +6,15 @@
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
-
-const os = require('os');
-const EOL = os.EOL;
-
-jest.disableAutomock();
 jest.mock('../../Documentation');
 
+import { expression, statement } from '../../../tests/utils';
+
 describe('propDocBlockHandler', () => {
-  let expression, statement;
   let documentation;
   let propDocBlockHandler;
 
   beforeEach(() => {
-    ({ expression, statement } = require('../../../tests/utils'));
     documentation = new (require('../../Documentation'))();
     propDocBlockHandler = require('../propDocBlockHandler').default;
   });
@@ -72,11 +66,7 @@ describe('propDocBlockHandler', () => {
       expect(documentation.descriptors).toEqual({
         foo: {
           description:
-            'Foo comment with' +
-            EOL +
-            'many lines!' +
-            EOL +
-            '\neven with empty lines in between',
+            'Foo comment with\nmany lines!\n\neven with empty lines in between',
         },
       });
     });

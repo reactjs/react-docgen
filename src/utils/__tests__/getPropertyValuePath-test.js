@@ -6,25 +6,12 @@
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
-
-jest.disableAutomock();
+import { statement } from '../../../tests/utils';
+import getPropertyValuePath from '../getPropertyValuePath';
 
 describe('getPropertyValuePath', () => {
-  let recast;
-  let getPropertyValuePath;
-
-  function parse(src) {
-    return new recast.types.NodePath(recast.parse(src).program.body[0]);
-  }
-
-  beforeEach(() => {
-    getPropertyValuePath = require('../getPropertyValuePath').default;
-    recast = require('recast');
-  });
-
   it('returns the value path if the property exists', () => {
-    const objectExpressionPath = parse('({foo: 21, bar: 42})').get(
+    const objectExpressionPath = statement('({foo: 21, bar: 42})').get(
       'expression',
     );
     expect(getPropertyValuePath(objectExpressionPath, 'bar')).toBe(
@@ -33,7 +20,7 @@ describe('getPropertyValuePath', () => {
   });
 
   it('returns undefined if the property does not exist', () => {
-    const objectExpressionPath = parse('({foo: 21, bar: 42})').get(
+    const objectExpressionPath = statement('({foo: 21, bar: 42})').get(
       'expression',
     );
     expect(getPropertyValuePath(objectExpressionPath, 'baz')).toBeUndefined();

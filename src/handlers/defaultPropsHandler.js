@@ -7,33 +7,30 @@
  * @flow
  */
 
-import type Documentation from '../Documentation';
-
+import types from 'ast-types';
 import getPropertyName from '../utils/getPropertyName';
 import getMemberValuePath from '../utils/getMemberValuePath';
 import printValue from '../utils/printValue';
-import recast from 'recast';
 import resolveToValue from '../utils/resolveToValue';
 import resolveFunctionDefinitionToReturnValue from '../utils/resolveFunctionDefinitionToReturnValue';
 import isReactComponentClass from '../utils/isReactComponentClass';
 import isReactForwardRefCall from '../utils/isReactForwardRefCall';
+import type Documentation from '../Documentation';
 
-const {
-  types: { namedTypes: types },
-} = recast;
+const { namedTypes: t } = types;
 
 function getDefaultValue(path: NodePath) {
   let node = path.node;
   let defaultValue;
-  if (types.Literal.check(node)) {
+  if (t.Literal.check(node)) {
     defaultValue = node.raw;
   } else {
-    if (types.AssignmentPattern.check(path.node)) {
+    if (t.AssignmentPattern.check(path.node)) {
       path = resolveToValue(path.get('right'));
     } else {
       path = resolveToValue(path);
     }
-    if (types.ImportDeclaration.check(path.node)) {
+    if (t.ImportDeclaration.check(path.node)) {
       defaultValue = node.name;
     } else {
       node = path.node;
@@ -44,9 +41,9 @@ function getDefaultValue(path: NodePath) {
     return {
       value: defaultValue,
       computed:
-        types.CallExpression.check(node) ||
-        types.MemberExpression.check(node) ||
-        types.Identifier.check(node),
+        t.CallExpression.check(node) ||
+        t.MemberExpression.check(node) ||
+        t.Identifier.check(node),
     };
   }
 
@@ -76,13 +73,13 @@ function getDefaultPropsPath(componentDefinition: NodePath): ?NodePath {
     return null;
   }
 
-  if (types.FunctionExpression.check(defaultPropsPath.node)) {
+  if (t.FunctionExpression.check(defaultPropsPath.node)) {
     // Find the value that is returned from the function and process it if it is
     // an object literal.
     const returnValue = resolveFunctionDefinitionToReturnValue(
       defaultPropsPath,
     );
-    if (returnValue && types.ObjectExpression.check(returnValue.node)) {
+    if (returnValue && t.ObjectExpression.check(returnValue.node)) {
       defaultPropsPath = returnValue;
     }
   }
@@ -95,12 +92,12 @@ function getDefaultValuesFromProps(
   isStateless: boolean,
 ) {
   properties
-    .filter(propertyPath => types.Property.check(propertyPath.node))
+    .filter(propertyPath => t.Property.check(propertyPath.node))
     // Don't evaluate property if component is functional and the node is not an AssignmentPattern
     .filter(
       propertyPath =>
         !isStateless ||
-        types.AssignmentPattern.check(propertyPath.get('value').node),
+        t.AssignmentPattern.check(propertyPath.get('value').node),
     )
     .forEach(propertyPath => {
       const propName = getPropertyName(propertyPath);
@@ -132,14 +129,14 @@ export default function defaultPropsHandler(
   }
 
   // Do both statelessProps and defaultProps if both are available so defaultProps can override
-  if (statelessProps && types.ObjectPattern.check(statelessProps.node)) {
+  if (statelessProps && t.ObjectPattern.check(statelessProps.node)) {
     getDefaultValuesFromProps(
       statelessProps.get('properties'),
       documentation,
       true,
     );
   }
-  if (defaultPropsPath && types.ObjectExpression.check(defaultPropsPath.node)) {
+  if (defaultPropsPath && t.ObjectExpression.check(defaultPropsPath.node)) {
     getDefaultValuesFromProps(
       defaultPropsPath.get('properties'),
       documentation,

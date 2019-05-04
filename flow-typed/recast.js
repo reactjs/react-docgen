@@ -9,7 +9,7 @@
 /*eslint no-unused-vars: 0*/
 
 /**
- * A minimal set of declarations to make flow work with the recast API.
+ * A minimal set of declarations to make flow work with the ast-types API.
  */
 
 type ASTNode = Object;
@@ -35,8 +35,3 @@ declare class NodePath {
   filter(f: (p: NodePath) => boolean): Array<NodePath>;
   push(node: ASTNode): void;
 }
-
-type Recast = {
-  parse: (src: string) => ASTNode,
-  print: (path: NodePath) => { code: string },
-};

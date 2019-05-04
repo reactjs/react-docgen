@@ -45,6 +45,10 @@ function getDefaultPlugins(options: BabelOptions) {
   ];
 }
 
+export type Parser = {
+  parse: (src: string) => ASTNode,
+};
+
 type ParserOptions = {
   plugins?: Array<string | [string, {}]>,
   tokens?: boolean,
@@ -86,9 +90,6 @@ function buildOptions(
     parserOpts.plugins = getDefaultPlugins(babelOptions);
   }
 
-  // Recast needs tokens to be in the tree
-  // $FlowIssue tokens is clearly in the Options
-  parserOpts.tokens = true;
   // Ensure we always have estree plugin enabled, if we add it a second time
   // here it does not matter
   parserOpts.plugins.push('estree');
@@ -96,12 +97,12 @@ function buildOptions(
   return parserOpts;
 }
 
-export default function buildParse(options?: Options = {}) {
+export default function buildParse(options?: Options = {}): Parser {
   const { parserOptions, ...babelOptions } = options;
   const parserOpts = buildOptions(parserOptions, babelOptions);
 
   return {
-    parse(src: string) {
+    parse(src: string): ASTNode {
       return babel.parseSync(src, {
         parserOpts,
         ...babelOptions,

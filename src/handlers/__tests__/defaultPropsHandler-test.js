@@ -8,13 +8,13 @@
 
 jest.mock('../../Documentation');
 
+import { parse } from '../../../tests/utils';
+
 describe('defaultPropsHandler', () => {
   let documentation;
   let defaultPropsHandler;
-  let parse;
 
   beforeEach(() => {
-    ({ parse } = require('../../../tests/utils'));
     documentation = new (require('../../Documentation'))();
     defaultPropsHandler = require('../defaultPropsHandler').default;
   });

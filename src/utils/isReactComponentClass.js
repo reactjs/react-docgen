@@ -7,20 +7,18 @@
  * @flow
  */
 
+import types from 'ast-types';
 import isReactModuleName from './isReactModuleName';
 import match from './match';
-import recast from 'recast';
 import resolveToModule from './resolveToModule';
 import resolveToValue from './resolveToValue';
 
-const {
-  types: { namedTypes: types },
-} = recast;
+const { namedTypes: t } = types;
 
 function isRenderMethod(node) {
   const isProperty = node.type === 'ClassProperty';
   return (
-    (types.MethodDefinition.check(node) || isProperty) &&
+    (t.MethodDefinition.check(node) || isProperty) &&
     !node.computed &&
     !node.static &&
     (node.kind === '' || node.kind === 'method' || isProperty) &&
@@ -34,10 +32,7 @@ function isRenderMethod(node) {
  */
 export default function isReactComponentClass(path: NodePath): boolean {
   const node = path.node;
-  if (
-    !types.ClassDeclaration.check(node) &&
-    !types.ClassExpression.check(node)
-  ) {
+  if (!t.ClassDeclaration.check(node) && !t.ClassExpression.check(node)) {
     return false;
   }
 

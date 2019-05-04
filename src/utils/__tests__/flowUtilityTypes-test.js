@@ -6,8 +6,6 @@
  *
  */
 
-/*global describe, it, expect*/
-
 import { unwrapUtilityType, isSupportedUtilityType } from '../flowUtilityTypes';
 
 import { statement } from '../../../tests/utils';

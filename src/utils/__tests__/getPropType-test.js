@@ -6,19 +6,10 @@
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
-
-jest.disableAutomock();
+import { expression, statement } from '../../../tests/utils';
+import getPropType from '../getPropType';
 
 describe('getPropType', () => {
-  let expression, statement;
-  let getPropType;
-
-  beforeEach(() => {
-    getPropType = require('../getPropType').default;
-    ({ expression, statement } = require('../../../tests/utils'));
-  });
-
   it('detects simple prop types', () => {
     const simplePropTypes = [
       'array',

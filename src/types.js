@@ -4,9 +4,11 @@
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  *
+ * @flow
  */
 
 import type Documentation from './Documentation';
+import { type Parser } from './babelParser';
 
 export type PropTypeDescriptor = {
   name:
@@ -43,10 +45,12 @@ export type FlowBaseType = {
   alias?: string,
 };
 
-export type FlowSimpleType = FlowBaseType & {|
-  name: string,
-  raw?: string,
-|};
+export type FlowSimpleType = $Exact<
+  FlowBaseType & {
+    name: string,
+    raw?: string,
+  },
+>;
 
 export type FlowLiteralType = FlowBaseType & {
   name: 'literal',
@@ -61,7 +65,7 @@ export type FlowElementsType = FlowBaseType & {
 
 export type FlowFunctionArgumentType = {
   name: string,
-  type: FlowTypeDescriptor,
+  type?: FlowTypeDescriptor,
   rest?: boolean,
 };
 
@@ -72,6 +76,17 @@ export type FlowFunctionSignatureType = FlowBaseType & {
   signature: {
     arguments: Array<FlowFunctionArgumentType>,
     return: FlowTypeDescriptor,
+  },
+};
+
+export type TSFunctionSignatureType = FlowBaseType & {
+  name: 'signature',
+  type: 'function',
+  raw: string,
+  signature: {
+    arguments: Array<FlowFunctionArgumentType>,
+    return: FlowTypeDescriptor,
+    this?: FlowTypeDescriptor,
   },
 };
 
@@ -98,13 +113,18 @@ export type FlowTypeDescriptor =
 export type PropDescriptor = {
   type?: PropTypeDescriptor,
   flowType?: FlowTypeDescriptor,
+  tsType?: FlowTypeDescriptor,
   required?: boolean,
   defaultValue?: any,
   description?: string,
 };
 
-export type Handler = (documentation: Documentation, path: NodePath) => void;
+export type Handler = (
+  documentation: Documentation,
+  path: NodePath,
+  parser: Parser,
+) => void;
 export type Resolver = (
   node: ASTNode,
-  recast: Recast,
+  parser: Parser,
 ) => ?NodePath | ?Array<NodePath>;

@@ -6,10 +6,7 @@
  *
  */
 
-/*global describe, it, expect*/
-
 import { expression } from '../../../tests/utils';
-
 import getMemberExpressionRoot from '../getMemberExpressionRoot';
 
 describe('getMemberExpressionRoot', () => {

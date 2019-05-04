@@ -6,18 +6,15 @@
  *
  */
 
-/*global describe, it, expect*/
-
 import fs from 'fs';
 import path from 'path';
-
-import * as docgen from '../main';
+import { parse, handlers } from '../main';
 import { ERROR_MISSING_DEFINITION } from '../parse';
 
 describe('main', () => {
   function test(source) {
     it('parses with default resolver/handlers', () => {
-      const docs = docgen.parse(source);
+      const docs = parse(source);
       expect(docs).toEqual({
         displayName: 'ABC',
         description: 'Example component description',
@@ -39,9 +36,7 @@ describe('main', () => {
     });
 
     it('parses with custom handlers', () => {
-      const docs = docgen.parse(source, null, [
-        docgen.handlers.componentDocblockHandler,
-      ]);
+      const docs = parse(source, null, [handlers.componentDocblockHandler]);
       expect(docs).toEqual({
         description: 'Example component description',
       });
@@ -217,7 +212,7 @@ describe('main', () => {
         export default NotAComponent;
       `;
 
-      expect(() => docgen.parse(source)).toThrowError(ERROR_MISSING_DEFINITION);
+      expect(() => parse(source)).toThrowError(ERROR_MISSING_DEFINITION);
     });
   });
 
@@ -226,12 +221,12 @@ describe('main', () => {
     const fileNames = fs.readdirSync(fixturePath);
     for (let i = 0; i < fileNames.length; i++) {
       const filePath = path.join(fixturePath, fileNames[i]);
-      const fileContent = fs.readFileSync(filePath);
+      const fileContent = fs.readFileSync(filePath, 'utf8');
 
       it(`processes component "${fileNames[i]}" without errors`, () => {
         let result;
         expect(() => {
-          result = docgen.parse(fileContent, null, null, {
+          result = parse(fileContent, null, null, {
             filename: filePath,
             babelrc: false,
           });

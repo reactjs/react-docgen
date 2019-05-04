@@ -6,27 +6,25 @@
  *
  */
 
-/*global describe, it, expect*/
-
-import recast from 'recast';
-
-const builders = recast.types.builders;
+import types from 'ast-types';
 import resolveToValue from '../resolveToValue';
-import * as utils from '../../../tests/utils';
+import { parse } from '../../../tests/utils';
+
+const { builders } = types;
 
 describe('resolveToValue', () => {
-  function parse(src) {
-    const root = utils.parse(src.trim());
+  function parsePath(src) {
+    const root = parse(src.trim());
     return root.get('body', root.node.body.length - 1, 'expression');
   }
 
   it('resolves simple variable declarations', () => {
-    const path = parse(['var foo  = 42;', 'foo;'].join('\n'));
+    const path = parsePath(['var foo  = 42;', 'foo;'].join('\n'));
     expect(resolveToValue(path)).toEqualASTNode(builders.literal(42));
   });
 
   it('resolves object destructuring', () => {
-    const path = parse(['var {foo: {bar: baz}} = bar;', 'baz;'].join('\n'));
+    const path = parsePath(['var {foo: {bar: baz}} = bar;', 'baz;'].join('\n'));
 
     // Node should be equal to bar.foo.bar
     expect(resolveToValue(path)).toEqualASTNode(
@@ -41,25 +39,27 @@ describe('resolveToValue', () => {
   });
 
   it('handles SpreadElements properly', () => {
-    const path = parse(['var {foo: {bar}, ...baz} = bar;', 'baz;'].join('\n'));
+    const path = parsePath(
+      ['var {foo: {bar}, ...baz} = bar;', 'baz;'].join('\n'),
+    );
 
     expect(resolveToValue(path)).toEqualASTNode(path);
   });
 
   it('returns the original path if it cannot be resolved', () => {
-    const path = parse(['function foo() {}', 'foo()'].join('\n'));
+    const path = parsePath(['function foo() {}', 'foo()'].join('\n'));
 
     expect(resolveToValue(path)).toEqualASTNode(path);
   });
 
   it('resolves variable declarators to their init value', () => {
-    const path = utils.parse('var foo = 42;').get('body', 0, 'declarations', 0);
+    const path = parse('var foo = 42;').get('body', 0, 'declarations', 0);
 
     expect(resolveToValue(path)).toEqualASTNode(builders.literal(42));
   });
 
   it('resolves to class declarations', () => {
-    const path = parse(`
+    const path = parsePath(`
       class Foo {}
       Foo;
     `);
@@ -67,7 +67,7 @@ describe('resolveToValue', () => {
   });
 
   it('resolves to class function declaration', () => {
-    const path = parse(`
+    const path = parsePath(`
       function foo() {}
       foo;
     `);
@@ -75,7 +75,7 @@ describe('resolveToValue', () => {
   });
 
   it('resolves type cast expressions', () => {
-    const path = parse(`
+    const path = parsePath(`
       function foo() {}
       (foo: any);
     `);
@@ -84,7 +84,7 @@ describe('resolveToValue', () => {
 
   describe('assignments', () => {
     it('resolves to assigned values', () => {
-      const path = parse(['var foo;', 'foo = 42;', 'foo;'].join('\n'));
+      const path = parsePath(['var foo;', 'foo = 42;', 'foo;'].join('\n'));
 
       expect(resolveToValue(path)).toEqualASTNode(builders.literal(42));
     });
@@ -92,7 +92,7 @@ describe('resolveToValue', () => {
 
   describe('ImportDeclaration', () => {
     it('resolves default import references to the import declaration', () => {
-      const path = parse(['import foo from "Foo"', 'foo;'].join('\n'));
+      const path = parsePath(['import foo from "Foo"', 'foo;'].join('\n'));
       const value = resolveToValue(path);
 
       expect(Array.isArray(value.value)).toBe(false);
@@ -100,7 +100,7 @@ describe('resolveToValue', () => {
     });
 
     it('resolves named import references to the import declaration', () => {
-      const path = parse(['import {foo} from "Foo"', 'foo;'].join('\n'));
+      const path = parsePath(['import {foo} from "Foo"', 'foo;'].join('\n'));
       const value = resolveToValue(path);
 
       expect(Array.isArray(value.value)).toBe(false);
@@ -108,7 +108,9 @@ describe('resolveToValue', () => {
     });
 
     it('resolves aliased import references to the import declaration', () => {
-      const path = parse(['import {foo as bar} from "Foo"', 'bar;'].join('\n'));
+      const path = parsePath(
+        ['import {foo as bar} from "Foo"', 'bar;'].join('\n'),
+      );
       const value = resolveToValue(path);
 
       expect(Array.isArray(value.value)).toBe(false);
@@ -116,7 +118,7 @@ describe('resolveToValue', () => {
     });
 
     it('resolves namespace import references to the import declaration', () => {
-      const path = parse(['import * as bar from "Foo"', 'bar;'].join('\n'));
+      const path = parsePath(['import * as bar from "Foo"', 'bar;'].join('\n'));
       const value = resolveToValue(path);
 
       expect(Array.isArray(value.value)).toBe(false);
@@ -126,13 +128,13 @@ describe('resolveToValue', () => {
 
   describe('MemberExpression', () => {
     it("resolves a MemberExpression to it's init value", () => {
-      const path = parse(['var foo = { bar: 1 };', 'foo.bar;'].join('\n'));
+      const path = parsePath(['var foo = { bar: 1 };', 'foo.bar;'].join('\n'));
 
       expect(resolveToValue(path)).toEqualASTNode(builders.literal(1));
     });
 
     it('resolves a MemberExpression in the scope chain', () => {
-      const path = parse(
+      const path = parsePath(
         ['var foo = 1;', 'var bar = { baz: foo };', 'bar.baz;'].join('\n'),
       );
 
@@ -140,7 +142,7 @@ describe('resolveToValue', () => {
     });
 
     it('resolves a nested MemberExpression in the scope chain', () => {
-      const path = parse(
+      const path = parsePath(
         [
           'var foo = { bar: 1 };',
           'var bar = { baz: foo.bar };',
@@ -152,7 +154,7 @@ describe('resolveToValue', () => {
     });
 
     it('returns the last resolvable MemberExpression', () => {
-      const path = parse(
+      const path = parsePath(
         [
           'import foo from "bar";',
           'var bar = { baz: foo.bar };',
@@ -169,7 +171,7 @@ describe('resolveToValue', () => {
     });
 
     it('returns the path itself if it can not resolve it any further', () => {
-      const path = parse(
+      const path = parsePath(
         ['var foo = {};', 'foo.bar = 1;', 'foo.bar;'].join('\n'),
       );
 

@@ -7,21 +7,18 @@
  * @flow
  */
 
-import type Documentation from '../Documentation';
-
+import types from 'ast-types';
 import getPropType from '../utils/getPropType';
 import getPropertyName from '../utils/getPropertyName';
 import getMemberValuePath from '../utils/getMemberValuePath';
 import isReactModuleName from '../utils/isReactModuleName';
 import isRequiredPropType from '../utils/isRequiredPropType';
 import printValue from '../utils/printValue';
-import recast from 'recast';
 import resolveToModule from '../utils/resolveToModule';
 import resolveToValue from '../utils/resolveToValue';
+import type Documentation from '../Documentation';
 
-const {
-  types: { namedTypes: types },
-} = recast;
+const { namedTypes: t } = types;
 
 function isPropTypesExpression(path) {
   const moduleName = resolveToModule(path);
@@ -32,13 +29,13 @@ function isPropTypesExpression(path) {
 }
 
 function amendPropTypes(getDescriptor, path) {
-  if (!types.ObjectExpression.check(path.node)) {
+  if (!t.ObjectExpression.check(path.node)) {
     return;
   }
 
   path.get('properties').each(propertyPath => {
     switch (propertyPath.node.type) {
-      case types.Property.name: {
+      case t.Property.name: {
         const propName = getPropertyName(propertyPath);
         if (!propName) return;
 
@@ -55,10 +52,10 @@ function amendPropTypes(getDescriptor, path) {
         }
         break;
       }
-      case types.SpreadElement.name: {
+      case t.SpreadElement.name: {
         const resolvedValuePath = resolveToValue(propertyPath.get('argument'));
         switch (resolvedValuePath.node.type) {
-          case types.ObjectExpression.name: // normal object literal
+          case t.ObjectExpression.name: // normal object literal
             amendPropTypes(getDescriptor, resolvedValuePath);
             break;
         }

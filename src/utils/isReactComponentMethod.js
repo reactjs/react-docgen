@@ -7,13 +7,10 @@
  * @flow
  */
 
-import recast from 'recast';
-
+import types from 'ast-types';
 import getPropertyName from './getPropertyName';
 
-const {
-  types: { namedTypes: types },
-} = recast;
+const { namedTypes: t } = types;
 
 const componentMethods = [
   'componentDidMount',
@@ -42,8 +39,8 @@ const componentMethods = [
  */
 export default function(methodPath: NodePath): boolean {
   if (
-    !types.MethodDefinition.check(methodPath.node) &&
-    !types.Property.check(methodPath.node)
+    !t.MethodDefinition.check(methodPath.node) &&
+    !t.Property.check(methodPath.node)
   ) {
     return false;
   }

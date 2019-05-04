@@ -6,19 +6,16 @@
  *
  */
 
-/*global jest, describe, it, expect, beforeEach*/
-
-jest.disableAutomock();
 jest.mock('../../Documentation');
 
+import { expression, statement } from '../../../tests/utils';
+
 describe('propTypeCompositionHandler', () => {
-  let statement, expression;
   let getPropTypeMock;
   let documentation;
   let propTypeCompositionHandler;
 
   beforeEach(() => {
-    ({ statement, expression } = require('../../../tests/utils'));
     getPropTypeMock = jest.fn(() => ({}));
     jest.setMock('../../utils/getPropType', getPropTypeMock);
     jest.mock('../../utils/getPropType');

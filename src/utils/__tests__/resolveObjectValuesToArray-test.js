@@ -6,13 +6,11 @@
  *
  */
 
-/* eslint-env jest */
-
-import recast from 'recast';
-
-const builders = recast.types.builders;
+import types from 'ast-types';
 import resolveObjectValuesToArray from '../resolveObjectValuesToArray';
 import * as utils from '../../../tests/utils';
+
+const { builders } = types;
 
 describe('resolveObjectValuesToArray', () => {
   function parse(src) {
@@ -66,6 +64,14 @@ describe('resolveObjectValuesToArray', () => {
     expect(resolveObjectValuesToArray(path)).toEqualASTNode(
       builders.arrayExpression([builders.literal(2), builders.literal(1)]),
     );
+  });
+
+  it('does not resolve Object.values with complex computed key', () => {
+    const path = parse(
+      ['var foo = { [()=>{}]: 1, [5]: 2};', 'Object.values(foo);'].join('\n'),
+    );
+
+    expect(resolveObjectValuesToArray(path)).toBeNull();
   });
 
   it('resolves Object.values when using resolvable spread', () => {

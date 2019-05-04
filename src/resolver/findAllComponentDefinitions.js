@@ -7,6 +7,7 @@
  * @flow
  */
 
+import types from 'ast-types';
 import isReactComponentClass from '../utils/isReactComponentClass';
 import isReactCreateClassCall from '../utils/isReactCreateClassCall';
 import isReactForwardRefCall from '../utils/isReactForwardRefCall';
@@ -14,15 +15,15 @@ import isStatelessComponent from '../utils/isStatelessComponent';
 import normalizeClassDefinition from '../utils/normalizeClassDefinition';
 import resolveToValue from '../utils/resolveToValue';
 
+const { visit, namedTypes: t } = types;
+
 /**
  * Given an AST, this function tries to find all object expressions that are
  * passed to `React.createClass` calls, by resolving all references properly.
  */
 export default function findAllReactCreateClassCalls(
   ast: ASTNode,
-  recast: Object,
 ): Array<NodePath> {
-  const types = recast.types.namedTypes;
   const definitions = new Set();
 
   function classVisitor(path) {
@@ -40,7 +41,7 @@ export default function findAllReactCreateClassCalls(
     return false;
   }
 
-  recast.visit(ast, {
+  visit(ast, {
     visitFunctionDeclaration: statelessVisitor,
     visitFunctionExpression: statelessVisitor,
     visitArrowFunctionExpression: statelessVisitor,
@@ -55,7 +56,7 @@ export default function findAllReactCreateClassCalls(
         definitions.add(path);
       } else if (isReactCreateClassCall(path)) {
         const resolvedPath = resolveToValue(path.get('arguments', 0));
-        if (types.ObjectExpression.check(resolvedPath.node)) {
+        if (t.ObjectExpression.check(resolvedPath.node)) {
           definitions.add(resolvedPath);
         }
       }

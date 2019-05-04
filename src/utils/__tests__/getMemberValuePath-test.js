@@ -6,8 +6,6 @@
  *
  */
 
-/*global jest, describe, it, expect*/
-
 jest.mock('../getPropertyValuePath');
 jest.mock('../getClassMemberValuePath');
 jest.mock('../getMemberExpressionValuePath');
@@ -20,7 +18,7 @@ import getMemberValuePath from '../getMemberValuePath';
 import getMemberExpressionValuePath from '../getMemberExpressionValuePath';
 
 describe('getMemberValuePath', () => {
-  it('handles ObjectExpresisons', () => {
+  it('handles ObjectExpressions', () => {
     const path = expression('{}');
 
     getMemberValuePath(path, 'foo');

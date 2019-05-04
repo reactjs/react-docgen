@@ -6,17 +6,9 @@
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
-
-jest.disableAutomock();
+import match from '../match';
 
 describe('match', () => {
-  let match;
-
-  beforeEach(() => {
-    match = require('../match').default;
-  });
-
   it('matches with exact properties', () => {
     expect(match({ foo: { bar: 42 } }, { foo: { bar: 42 } })).toBe(true);
   });

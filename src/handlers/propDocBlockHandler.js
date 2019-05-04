@@ -7,29 +7,26 @@
  * @flow
  */
 
-import type Documentation from '../Documentation';
-
+import types from 'ast-types';
 import getMemberValuePath from '../utils/getMemberValuePath';
-import recast from 'recast';
 import resolveToValue from '../utils/resolveToValue';
 import setPropDescription from '../utils/setPropDescription';
+import type Documentation from '../Documentation';
 
-const {
-  types: { namedTypes: types },
-} = recast;
+const { namedTypes: t } = types;
 
 function resolveDocumentation(
   documentation: Documentation,
   path: NodePath,
 ): void {
-  if (!types.ObjectExpression.check(path.node)) {
+  if (!t.ObjectExpression.check(path.node)) {
     return;
   }
 
   path.get('properties').each(propertyPath => {
-    if (types.Property.check(propertyPath.node)) {
+    if (t.Property.check(propertyPath.node)) {
       setPropDescription(documentation, propertyPath);
-    } else if (types.SpreadElement.check(propertyPath.node)) {
+    } else if (t.SpreadElement.check(propertyPath.node)) {
       const resolvedValuePath = resolveToValue(propertyPath.get('argument'));
       resolveDocumentation(documentation, resolvedValuePath);
     }

@@ -7,12 +7,10 @@
  * @flow
  */
 
+import types from 'ast-types';
 import getPropertyName from './getPropertyName';
-import recast from 'recast';
 
-const {
-  types: { namedTypes: types },
-} = recast;
+const { namedTypes: t } = types;
 
 /**
  * Given an ObjectExpression, this function returns the path of the value of
@@ -22,7 +20,7 @@ export default function getPropertyValuePath(
   path: NodePath,
   propertyName: string,
 ): ?NodePath {
-  types.ObjectExpression.assert(path.node);
+  t.ObjectExpression.assert(path.node);
 
   return path
     .get('properties')

@@ -7,44 +7,42 @@
  * @flow
  */
 
-import recast from 'recast';
+import types from 'ast-types';
 import resolveToValue from './resolveToValue';
+
+const { ASTNode, NodePath, builders, namedTypes: t } = types;
 
 type ObjectPropMap = {
   properties: Array<string>,
   values: Object,
 };
 
-const {
-  types: { ASTNode, NodePath, builders, namedTypes: types },
-} = recast;
-
 function isObjectValuesCall(node: ASTNode): boolean {
   return (
-    types.CallExpression.check(node) &&
+    t.CallExpression.check(node) &&
     node.arguments.length === 1 &&
-    types.MemberExpression.check(node.callee) &&
-    types.Identifier.check(node.callee.object) &&
+    t.MemberExpression.check(node.callee) &&
+    t.Identifier.check(node.callee.object) &&
     node.callee.object.name === 'Object' &&
-    types.Identifier.check(node.callee.property) &&
+    t.Identifier.check(node.callee.property) &&
     node.callee.property.name === 'values'
   );
 }
 
 function isWhitelistedObjectProperty(prop) {
   return (
-    (types.Property.check(prop) &&
-      ((types.Identifier.check(prop.key) && !prop.computed) ||
-        types.Literal.check(prop.key))) ||
-    types.SpreadElement.check(prop)
+    (t.Property.check(prop) &&
+      ((t.Identifier.check(prop.key) && !prop.computed) ||
+        t.Literal.check(prop.key))) ||
+    t.SpreadElement.check(prop)
   );
 }
 
 function isWhiteListedObjectTypeProperty(prop) {
   return (
-    types.ObjectTypeProperty.check(prop) ||
-    types.ObjectTypeSpreadProperty.check(prop) ||
-    types.TSPropertySignature.check(prop)
+    t.ObjectTypeProperty.check(prop) ||
+    t.ObjectTypeSpreadProperty.check(prop) ||
+    t.TSPropertySignature.check(prop)
   );
 }
 
@@ -54,17 +52,17 @@ export function resolveObjectToPropMap(
   raw: boolean = false,
 ): ?ObjectPropMap {
   if (
-    (types.ObjectExpression.check(object.value) &&
+    (t.ObjectExpression.check(object.value) &&
       object.value.properties.every(isWhitelistedObjectProperty)) ||
-    (types.ObjectTypeAnnotation.check(object.value) &&
+    (t.ObjectTypeAnnotation.check(object.value) &&
       object.value.properties.every(isWhiteListedObjectTypeProperty)) ||
-    (types.TSTypeLiteral.check(object.value) &&
+    (t.TSTypeLiteral.check(object.value) &&
       object.value.members.every(isWhiteListedObjectTypeProperty))
   ) {
     const properties = [];
     let values = {};
     let error = false;
-    const members = types.TSTypeLiteral.check(object.value)
+    const members = t.TSTypeLiteral.check(object.value)
       ? object.get('members')
       : object.get('properties');
     members.each(propPath => {
@@ -74,9 +72,9 @@ export function resolveObjectToPropMap(
       if (prop.kind === 'get' || prop.kind === 'set') return;
 
       if (
-        types.Property.check(prop) ||
-        types.ObjectTypeProperty.check(prop) ||
-        types.TSPropertySignature.check(prop)
+        t.Property.check(prop) ||
+        t.ObjectTypeProperty.check(prop) ||
+        t.TSPropertySignature.check(prop)
       ) {
         // Key is either Identifier or Literal
         const name = prop.key.name || (raw ? prop.key.raw : prop.key.value);
@@ -90,13 +88,13 @@ export function resolveObjectToPropMap(
         }
         values[name] = value;
       } else if (
-        types.SpreadElement.check(prop) ||
-        types.ObjectTypeSpreadProperty.check(prop)
+        t.SpreadElement.check(prop) ||
+        t.ObjectTypeSpreadProperty.check(prop)
       ) {
         let spreadObject = resolveToValue(propPath.get('argument'));
-        if (types.GenericTypeAnnotation.check(spreadObject.value)) {
+        if (t.GenericTypeAnnotation.check(spreadObject.value)) {
           const typeAlias = resolveToValue(spreadObject.get('id'));
-          if (types.ObjectTypeAnnotation.check(typeAlias.get('right').value)) {
+          if (t.ObjectTypeAnnotation.check(typeAlias.get('right').value)) {
             spreadObject = resolveToValue(typeAlias.get('right'));
           }
         }
@@ -124,7 +122,7 @@ export function resolveObjectToPropMap(
 }
 
 /**
- * Returns an ArrayExpression which contains all the keys resolved from an object
+ * Returns an ArrayExpression which contains all the values resolved from an object
  *
  * Ignores setters in objects
  *

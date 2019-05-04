@@ -6,19 +6,10 @@
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
-
-jest.disableAutomock();
+import { statement, parse } from '../../../tests/utils';
+import isStatelessComponent from '../isStatelessComponent';
 
 describe('isStatelessComponent', () => {
-  let isStatelessComponent;
-  let statement, parse;
-
-  beforeEach(() => {
-    isStatelessComponent = require('../isStatelessComponent').default;
-    ({ statement, parse } = require('../../../tests/utils'));
-  });
-
   const componentIdentifiers = {
     JSX: '<div />',
     JSXFragment: '<></>',

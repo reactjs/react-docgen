@@ -7,12 +7,10 @@
  * @flow
  */
 
+import types from 'ast-types';
 import getNameOrValue from './getNameOrValue';
-import recast from 'recast';
 
-const {
-  types: { namedTypes: types },
-} = recast;
+const { namedTypes: t } = types;
 
 export default function getClassMemberValuePath(
   classDefinition: NodePath,
@@ -25,9 +23,8 @@ export default function getClassMemberValuePath(
     .get('body', 'body')
     .filter(
       memberPath =>
-        (!memberPath.node.computed ||
-          types.Literal.check(memberPath.node.key)) &&
-        !types.PrivateName.check(memberPath.node.key) &&
+        (!memberPath.node.computed || t.Literal.check(memberPath.node.key)) &&
+        !t.PrivateName.check(memberPath.node.key) &&
         getNameOrValue(memberPath.get('key')) === memberName &&
         memberPath.node.kind !== 'set',
     )

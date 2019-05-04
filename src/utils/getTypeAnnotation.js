@@ -7,10 +7,9 @@
  * @flow
  */
 
-import recast from 'recast';
-const {
-  types: { namedTypes: types },
-} = recast;
+import types from 'ast-types';
+
+const { namedTypes: t } = types;
 
 function hasTypeAnnotation(path: NodePath): boolean {
   return !!path.node.typeAnnotation;
@@ -28,8 +27,8 @@ export default function getTypeAnnotation(path: NodePath): ?NodePath {
     resultPath = resultPath.get('typeAnnotation');
   } while (
     hasTypeAnnotation(resultPath) &&
-    !types.FlowType.check(resultPath.node) &&
-    !types.TSType.check(resultPath.node)
+    !t.FlowType.check(resultPath.node) &&
+    !t.TSType.check(resultPath.node)
   );
 
   return resultPath;

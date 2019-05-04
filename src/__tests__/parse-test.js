@@ -6,29 +6,14 @@
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
-
-const fs = require('fs');
-const temp = require('temp');
-
-jest.disableAutomock();
+import fs from 'fs';
+import temp from 'temp';
+import { expression } from '../../tests/utils';
+import parse, { ERROR_MISSING_DEFINITION } from '../parse';
 
 describe('parse', () => {
-  let utils;
-  let parse, ERROR_MISSING_DEFINITION;
-
-  beforeEach(() => {
-    utils = require('../../tests/utils');
-    // ugly but necessary because ../parse has default and named exports
-    ({ default: parse, ERROR_MISSING_DEFINITION } = require('../parse'));
-  });
-
-  function pathFromSource(source) {
-    return utils.parse(source).get('body', 0, 'expression');
-  }
-
   it('allows custom component definition resolvers', () => {
-    const path = pathFromSource('({foo: "bar"})');
+    const path = expression('{foo: "bar"}');
     const resolver = jest.fn(() => path);
     const handler = jest.fn();
     parse('//empty', resolver, [handler]);

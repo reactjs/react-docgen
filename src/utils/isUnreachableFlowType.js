@@ -7,11 +7,9 @@
  * @flow
  */
 
-import recast from 'recast';
+import types from 'ast-types';
 
-const {
-  types: { namedTypes: types },
-} = recast;
+const { namedTypes: t } = types;
 
 /**
  * Returns true of the path is an unreachable TypePath
@@ -19,8 +17,8 @@ const {
 export default (path: NodePath): boolean => {
   return (
     !path ||
-    types.Identifier.check(path.node) ||
-    types.ImportDeclaration.check(path.node) ||
-    types.CallExpression.check(path.node)
+    t.Identifier.check(path.node) ||
+    t.ImportDeclaration.check(path.node) ||
+    t.CallExpression.check(path.node)
   );
 };

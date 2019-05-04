@@ -7,23 +7,15 @@
  * @flow
  */
 
-/* eslint no-labels: 0 */
+import types from 'ast-types';
 
-/**
- * Helper methods for dealing with MemberExpressions (and CallExpressions).
- */
+const { namedTypes: t } = types;
 
 type MemberDescriptor = {
   path: NodePath,
   computed: boolean,
   argumentsPath?: ?NodePath,
 };
-
-import recast from 'recast';
-
-const {
-  types: { namedTypes: types },
-} = recast;
 
 /**
  * Given a "nested" Member/CallExpression, e.g.
@@ -46,7 +38,7 @@ export default function getMembers(
   // eslint-disable-next-line no-constant-condition
   loop: while (true) {
     switch (true) {
-      case types.MemberExpression.check(path.node):
+      case t.MemberExpression.check(path.node):
         result.push({
           path: path.get('property'),
           computed: path.node.computed,
@@ -55,7 +47,7 @@ export default function getMembers(
         argumentsPath = null;
         path = path.get('object');
         break;
-      case types.CallExpression.check(path.node):
+      case t.CallExpression.check(path.node):
         argumentsPath = path.get('arguments');
         path = path.get('callee');
         break;

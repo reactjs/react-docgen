@@ -6,20 +6,10 @@
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
-
-jest.disableAutomock();
+import { statement } from '../../../tests/utils';
+import getMemberExpressionValuePath from '../getMemberExpressionValuePath';
 
 describe('getMemberExpressionValuePath', () => {
-  let getMemberExpressionValuePath;
-  let statement;
-
-  beforeEach(() => {
-    getMemberExpressionValuePath = require('../getMemberExpressionValuePath')
-      .default;
-    ({ statement } = require('../../../tests/utils'));
-  });
-
   describe('MethodExpression', () => {
     it('finds "normal" property definitions', () => {
       const def = statement(`

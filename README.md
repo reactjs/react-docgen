@@ -2,7 +2,7 @@
 
 `react-docgen` is a CLI and toolbox to help extracting information from [React][] components, and generate documentation from it.
 
-It uses [recast][] and [@babel/parser][] to parse the source into an AST and provides methods to process this AST to extract the desired information. The output / return value is a JSON blob / JavaScript object.
+It uses [ast-types][] and [@babel/parser][] to parse the source into an AST and provides methods to process this AST to extract the desired information. The output / return value is a JSON blob / JavaScript object.
 
 It provides a default implementation for React components defined via
 `React.createClass`, [ES2015 class definitions][classes] or functions
@@ -82,8 +82,8 @@ As with the CLI, this will look for the exported component created through `Reac
 | Parameter |  Type | Description |
 | -------------- | ------ | --------------- |
 | source       | string | The source text |
-| resolver     | function | A function of the form `(ast: ASTNode, recast: Object) => (NodePath|Array<NodePath>)`. Given an AST and a reference to recast, it returns an (array of) NodePath which represents the component definition. |
-| handlers     | Array\<function\> | An array of functions of the form `(documentation: Documentation, definition: NodePath) => void`. Each function is called with a `Documentation` object and a reference to the component definition as returned by `resolver`. Handlers extract relevant information from the definition and augment `documentation`. |
+| resolver     | function | A function of the form `(ast: ASTNode, parser: Parser) => (NodePath|Array<NodePath>)`. Given an AST and a reference to the parser, it returns an (array of) NodePath which represents the component definition. |
+| handlers     | Array\<function\> | An array of functions of the form `(documentation: Documentation, definition: NodePath, parser: Parser) => void`. Each function is called with a `Documentation` object and a reference to the component definition as returned by `resolver`. Handlers extract relevant information from the definition and augment `documentation`. |
 | opt
 
 #### options
@@ -412,6 +412,6 @@ The structure of the JSON blob / JavaScript object is as follows:
 [react]: http://facebook.github.io/react/
 [flow]: http://flowtype.org/
 [typescript]: http://typescriptlang.org/
-[recast]: https://github.com/benjamn/recast
+[ast-types]: https://github.com/benjamn/ast-types
 [@babel/parser]: https://github.com/babel/babel/tree/master/packages/babel-parser
 [classes]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes

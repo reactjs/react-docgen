@@ -6,12 +6,9 @@
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
-
 jest.mock('../resolveToValue');
 
 import { statement } from '../../../tests/utils';
-
 import resolveToValue from '../resolveToValue';
 import resolveExportDeclaration from '../resolveExportDeclaration';
 
