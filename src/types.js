@@ -45,10 +45,12 @@ export type FlowBaseType = {
   alias?: string,
 };
 
-export type FlowSimpleType = FlowBaseType & {|
-  name: string,
-  raw?: string,
-|};
+export type FlowSimpleType = $Exact<
+  FlowBaseType & {
+    name: string,
+    raw?: string,
+  },
+>;
 
 export type FlowLiteralType = FlowBaseType & {
   name: 'literal',
@@ -63,7 +65,7 @@ export type FlowElementsType = FlowBaseType & {
 
 export type FlowFunctionArgumentType = {
   name: string,
-  type: FlowTypeDescriptor,
+  type?: FlowTypeDescriptor,
   rest?: boolean,
 };
 
@@ -74,6 +76,17 @@ export type FlowFunctionSignatureType = FlowBaseType & {
   signature: {
     arguments: Array<FlowFunctionArgumentType>,
     return: FlowTypeDescriptor,
+  },
+};
+
+export type TSFunctionSignatureType = FlowBaseType & {
+  name: 'signature',
+  type: 'function',
+  raw: string,
+  signature: {
+    arguments: Array<FlowFunctionArgumentType>,
+    return: FlowTypeDescriptor,
+    this?: FlowTypeDescriptor,
   },
 };
 
@@ -100,6 +113,7 @@ export type FlowTypeDescriptor =
 export type PropDescriptor = {
   type?: PropTypeDescriptor,
   flowType?: FlowTypeDescriptor,
+  tsType?: FlowTypeDescriptor,
   required?: boolean,
   defaultValue?: any,
   description?: string,

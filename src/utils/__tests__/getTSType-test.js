@@ -6,32 +6,23 @@
  *
  */
 
-/* global jest, describe, beforeEach, it, expect */
+import { expression as expr, statement as stmt } from '../../../tests/utils';
+import getTSType from '../getTSType';
 
-jest.disableAutomock();
+function expression(code) {
+  return expr(code, {
+    filename: 'test.ts',
+    babelrc: false,
+  });
+}
+function statement(code) {
+  return stmt(code, {
+    filename: 'test.ts',
+    babelrc: false,
+  });
+}
 
 describe('getTSType', () => {
-  let expression, statement;
-  let getTSType;
-
-  beforeEach(() => {
-    getTSType = require('../getTSType').default;
-    const {
-      expression: expr,
-      statement: stmt,
-    } = require('../../../tests/utils');
-    expression = code =>
-      expr(code, undefined, {
-        filename: 'test.ts',
-        babelrc: false,
-      });
-    statement = code =>
-      stmt(code, undefined, {
-        filename: 'test.ts',
-        babelrc: false,
-      });
-  });
-
   it('detects simple types', () => {
     const simplePropTypes = [
       'string',

@@ -16,6 +16,7 @@ module.exports = {
   globals: {
     ASTNode: true,
     NodePath: true,
+    $Exact: true,
   },
   overrides: [
     {

@@ -6,9 +6,10 @@
  *
  * @flow
  */
+
+import types from 'ast-types';
 import getPropertyName from './getPropertyName';
 import printValue from './printValue';
-import recast from 'recast';
 import getTypeAnnotation from '../utils/getTypeAnnotation';
 import resolveToValue from '../utils/resolveToValue';
 import { resolveObjectToNameArray } from '../utils/resolveObjectKeysToArray';
@@ -16,16 +17,15 @@ import getTypeParameters, {
   type TypeParameters,
 } from '../utils/getTypeParameters';
 import type {
-  FlowTypeDescriptor,
   FlowElementsType,
-  FlowFunctionSignatureType,
   FlowFunctionArgumentType,
   FlowObjectSignatureType,
+  FlowSimpleType,
+  FlowTypeDescriptor,
+  TSFunctionSignatureType,
 } from '../types';
 
-const {
-  types: { namedTypes: types },
-} = recast;
+const { namedTypes: t } = types;
 
 const tsTypes = {
   TSAnyKeyword: 'any',
@@ -71,7 +71,7 @@ function handleTSTypeReference(
   typeParams: ?TypeParameters,
 ): ?FlowTypeDescriptor {
   let type: FlowTypeDescriptor;
-  if (types.TSQualifiedName.check(path.node.typeName)) {
+  if (t.TSQualifiedName.check(path.node.typeName)) {
     const typeName = path.get('typeName');
 
     if (typeName.node.left.name === 'React') {
@@ -144,19 +144,23 @@ function handleTSTypeLiteral(
 
   path.get('members').each(param => {
     if (
-      types.TSPropertySignature.check(param.node) ||
-      types.TSMethodSignature.check(param.node)
+      t.TSPropertySignature.check(param.node) ||
+      t.TSMethodSignature.check(param.node)
     ) {
+      const propName = getPropertyName(param);
+      if (!propName) {
+        return;
+      }
       type.signature.properties.push({
-        key: getPropertyName(param),
+        key: propName,
         value: getTSTypeWithRequirements(
           param.get('typeAnnotation'),
           typeParams,
         ),
       });
-    } else if (types.TSCallSignatureDeclaration.check(param.node)) {
+    } else if (t.TSCallSignatureDeclaration.check(param.node)) {
       type.signature.constructor = handleTSFunctionType(param, typeParams);
-    } else if (types.TSIndexSignature.check(param.node)) {
+    } else if (t.TSIndexSignature.check(param.node)) {
       type.signature.properties.push({
         key: getTSTypeWithResolvedTypes(
           param
@@ -176,7 +180,7 @@ function handleTSTypeLiteral(
   return type;
 }
 
-function handleTSInterfaceDeclaration(path: NodePath): FlowElementsType {
+function handleTSInterfaceDeclaration(path: NodePath): FlowSimpleType {
   // Interfaces are handled like references which would be documented separately,
   // rather than inlined like type aliases.
   return {
@@ -213,8 +217,8 @@ function handleTSIntersectionType(
 function handleTSFunctionType(
   path: NodePath,
   typeParams: ?TypeParameters,
-): FlowFunctionSignatureType {
-  const type: FlowFunctionSignatureType = {
+): TSFunctionSignatureType {
+  const type: TSFunctionSignatureType = {
     name: 'signature',
     type: 'function',
     raw: printValue(path),
@@ -233,7 +237,7 @@ function handleTSFunctionType(
       name: param.node.name || '',
       type: typeAnnotation
         ? getTSTypeWithResolvedTypes(typeAnnotation, typeParams)
-        : null,
+        : undefined,
     };
 
     if (param.node.name === 'this') {
@@ -284,13 +288,13 @@ function handleTSTypeQuery(
   return { name: path.node.exprName.name };
 }
 
-function handleTSTypeOperator(path: NodePath): FlowTypeDescriptor {
+function handleTSTypeOperator(path: NodePath): ?FlowTypeDescriptor {
   if (path.node.operator !== 'keyof') {
     return null;
   }
 
   let value = path.get('typeAnnotation');
-  if (types.TSTypeQuery.check(value.node)) {
+  if (t.TSTypeQuery.check(value.node)) {
     value = value.get('exprName');
   } else if (value.node.id) {
     value = value.get('id');
@@ -299,8 +303,8 @@ function handleTSTypeOperator(path: NodePath): FlowTypeDescriptor {
   const resolvedPath = resolveToValue(value);
   if (
     resolvedPath &&
-    (types.ObjectExpression.check(resolvedPath.node) ||
-      types.TSTypeLiteral.check(resolvedPath.node))
+    (t.ObjectExpression.check(resolvedPath.node) ||
+      t.TSTypeLiteral.check(resolvedPath.node))
   ) {
     const keys = resolveObjectToNameArray(resolvedPath, true);
 
@@ -320,13 +324,13 @@ function getTSTypeWithResolvedTypes(
   path: NodePath,
   typeParams: ?TypeParameters,
 ): FlowTypeDescriptor {
-  if (types.TSTypeAnnotation.check(path.node)) {
+  if (t.TSTypeAnnotation.check(path.node)) {
     path = path.get('typeAnnotation');
   }
 
   const node = path.node;
   let type: ?FlowTypeDescriptor;
-  const isTypeAlias = types.TSTypeAliasDeclaration.check(path.parentPath.node);
+  const isTypeAlias = t.TSTypeAliasDeclaration.check(path.parentPath.node);
 
   // When we see a typealias mark it as visited so that the next
   // call of this function does not run into an endless loop
@@ -345,7 +349,7 @@ function getTSTypeWithResolvedTypes(
 
   if (node.type in tsTypes) {
     type = { name: tsTypes[node.type] };
-  } else if (types.TSLiteralType.check(node)) {
+  } else if (t.TSLiteralType.check(node)) {
     type = {
       name: 'literal',
       value: node.literal.raw || `${node.literal.value}`,

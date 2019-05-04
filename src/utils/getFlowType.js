@@ -17,10 +17,11 @@ import getTypeParameters, {
   type TypeParameters,
 } from '../utils/getTypeParameters';
 import type {
-  FlowTypeDescriptor,
   FlowElementsType,
   FlowFunctionSignatureType,
   FlowObjectSignatureType,
+  FlowSimpleType,
+  FlowTypeDescriptor,
 } from '../types';
 
 const { namedTypes: t } = types;
@@ -199,7 +200,7 @@ function handleObjectTypeAnnotation(
   return type;
 }
 
-function handleInterfaceDeclaration(path: NodePath): FlowElementsType {
+function handleInterfaceDeclaration(path: NodePath): FlowSimpleType {
   // Interfaces are handled like references which would be documented separately,
   // rather than inlined like type aliases.
   return {
@@ -268,7 +269,7 @@ function handleFunctionTypeAnnotation(
       name: param.node.name ? param.node.name.name : '',
       type: typeAnnotation
         ? getFlowTypeWithResolvedTypes(typeAnnotation, typeParams)
-        : null,
+        : undefined,
     });
   });
 
@@ -280,7 +281,7 @@ function handleFunctionTypeAnnotation(
       name: rest.node.name ? rest.node.name.name : '',
       type: typeAnnotation
         ? getFlowTypeWithResolvedTypes(typeAnnotation, typeParams)
-        : null,
+        : undefined,
       rest: true,
     });
   }
