@@ -79,12 +79,23 @@ As with the CLI, this will look for the exported component created through `Reac
 
 ### parse(source \[, resolver \[, handlers \[, options\]\]\])
 
-| Parameter |  Type | Description |
-| -------------- | ------ | --------------- |
-| source       | `string \| Buffer` | The source text |
-| resolver     | `(ast: ASTNode, parser: { parse: (string) => ASTNode }) => (NodePath\|Array<NodePath>)` | Given an AST and a reference to the parser, it returns an (array of) NodePath which represents the component definition. |
-| handlers     | `Array<(documentation: Documentation, definition: NodePath, parser: { parse: (string) => ASTNode }) => void>` | Each function is called with a `Documentation` object, a reference to the component definition as returned by a `resolver` and a reference to the parser. Handlers extract relevant information from the definition and augment `documentation`. |
-| options | `object` | see below |
+#### source
+
+Type: `string | Buffer`
+
+The source text that react-docgen will try to extract the documentation from.
+
+#### resolver
+
+Type: `(ast: ASTNode, parser: { parse: (string) => ASTNode }) => (NodePath | Array<NodePath>)`
+
+Given an AST and a reference to the parser, it returns an (array of) NodePath which represents the component definition.
+
+#### handlers
+
+Type: `Array<(documentation: Documentation, definition: NodePath, parser: { parse: (string) => ASTNode }) => void>`
+
+Each function is called with a `Documentation` object, a reference to the component definition as returned by a `resolver` and a reference to the parser. Handlers extract relevant information from the definition and augment `documentation`.
 
 #### options
 
