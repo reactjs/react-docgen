@@ -52,17 +52,15 @@ function findScopePath(
   let resultPath = paths[0];
   const parentPath = resultPath.parent;
 
+  // Namespace imports are handled separately, at the site of a member expression access
   if (
     resolveImports &&
     (t.ImportDefaultSpecifier.check(parentPath.node) ||
-      t.ImportSpecifier.check(parentPath.node) ||
-      t.ImportNamespaceSpecifier.check(parentPath.node))
+      t.ImportSpecifier.check(parentPath.node))
   ) {
     let exportName;
     if (t.ImportDefaultSpecifier.check(parentPath.node)) {
       exportName = 'default';
-    } else if (t.ImportNamespaceSpecifier.check(parentPath.node)) {
-      exportName = '*';
     } else {
       exportName = parentPath.node.imported.name;
     }
@@ -150,8 +148,9 @@ export default function resolveToValue(
       return resolveToValue(path.get('init'), resolveImports);
     }
   } else if (t.MemberExpression.check(node)) {
-    const resolved = resolveToValue(
-      getMemberExpressionRoot(path),
+    const root = getMemberExpressionRoot(path);
+    let resolved = resolveToValue(
+      root,
       resolveImports,
     );
     if (t.ObjectExpression.check(resolved.node)) {
@@ -169,6 +168,18 @@ export default function resolveToValue(
     } else if (isSupportedDefinitionType(resolved)) {
       const memberPath = getMemberValuePath(resolved, path.node.property.name);
       return memberPath || path;
+    } else if (t.ImportDeclaration.check(resolved.node)) {
+      // Handle references to namespace imports, e.g. import * as foo from 'bar'.
+      // Try to find a specifier that matches the root of the member expression, and
+      // find the export that matches the property name.
+      for (let specifier of resolved.node.specifiers) {
+        if (t.ImportNamespaceSpecifier.check(specifier) && specifier.local.name === root.node.name) {
+          const resolvedPath = resolveImportedValue(resolved, root.parentPath.node.property.name);
+          if (resolvedPath) {
+            return resolveToValue(resolvedPath, resolveImports);
+          }
+        }
+      }
     }
   } else if (
     t.ImportDefaultSpecifier.check(node) ||

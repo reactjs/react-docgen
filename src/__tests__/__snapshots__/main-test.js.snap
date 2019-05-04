@@ -1562,3 +1562,34 @@ Object {
   },
 }
 `;
+
+exports[`main fixtures processes component "component_33.js" without errors 1`] = `
+Object {
+  "description": "",
+  "displayName": "SuperDuperCustomButton",
+  "methods": Array [],
+  "props": Object {
+    "children": Object {
+      "description": "",
+      "required": true,
+      "type": Object {
+        "name": "string",
+      },
+    },
+    "onClick": Object {
+      "description": "",
+      "required": false,
+      "type": Object {
+        "name": "func",
+      },
+    },
+    "style": Object {
+      "description": "",
+      "required": false,
+      "type": Object {
+        "name": "object",
+      },
+    },
+  },
+}
+`;
