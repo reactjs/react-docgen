@@ -16,7 +16,7 @@ import fs from 'fs';
 
 const { namedTypes: t, NodePath } = types;
 
-export default function resolveImportedValue(path: NodePath, name: string) {
+export default function resolveImportedValue(path: NodePath, name: string, seen: Set<string> = new Set()) {
   // Bail if no filename was provided for the current source file.
   // Also never traverse into react itself.
   const source = path.node.source.value;
@@ -38,6 +38,13 @@ export default function resolveImportedValue(path: NodePath, name: string) {
     return null;
   }
 
+  // Prevent recursive imports
+  if (seen.has(resolvedSource)) {
+    return null;
+  }
+
+  seen.add(resolvedSource);
+
   // Read and parse the code
   // TODO: cache and reuse
   const code = fs.readFileSync(resolvedSource, 'utf8');
@@ -49,7 +56,7 @@ export default function resolveImportedValue(path: NodePath, name: string) {
 
   const parser = buildParser(parseOptions);
   const ast = parser.parse(code);
-  return findExportedValue(ast.program, name);
+  return findExportedValue(ast.program, name, seen);
 }
 
 // Find the root Program node, which we attached our options too in babelParser.js
@@ -62,7 +69,7 @@ function getOptions(path: NodePath): Options {
 }
 
 // Traverses the program looking for an export that matches the requested name
-function findExportedValue(ast, name) {
+function findExportedValue(ast, name, seen) {
   let resultPath: ?NodePath = null;
 
   traverseShallow(ast, {
@@ -100,7 +107,7 @@ function findExportedValue(ast, name) {
       return false;
     },
     visitExportAllDeclaration(path: NodePath) {
-      const resolvedPath = resolveImportedValue(path, name);
+      const resolvedPath = resolveImportedValue(path, name, seen);
       if (resolvedPath) {
         resultPath = resolvedPath;
       }
