@@ -94,7 +94,8 @@ describe('componentMethodsHandler', () => {
 
   it('extracts the documentation for a ClassDeclaration', () => {
     const src = `
-      class Test {
+      import React from 'react';
+      class Test extends React.Component {
         /**
          * The foo method
          */
@@ -124,12 +125,13 @@ describe('componentMethodsHandler', () => {
       }
     `;
 
-    test(parse(src).get('body', 0));
+    test(parse(src).get('body', 1));
   });
 
   it('should handle and ignore computed methods', () => {
     const src = `
-      class Test {
+      import React from 'react';
+      class Test extends React.Component {
         /**
          * The foo method
          */
@@ -152,7 +154,7 @@ describe('componentMethodsHandler', () => {
       }
     `;
 
-    componentMethodsHandler(documentation, parse(src).get('body', 0));
+    componentMethodsHandler(documentation, parse(src).get('body', 1));
     expect(documentation.methods).toMatchSnapshot();
   });
 

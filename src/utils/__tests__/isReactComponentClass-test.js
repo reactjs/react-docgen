@@ -6,40 +6,10 @@
  *
  */
 
-import { expression, statement, parse } from '../../../tests/utils';
+import { parse } from '../../../tests/utils';
 import isReactComponentClass from '../isReactComponentClass';
 
 describe('isReactComponentClass', () => {
-  describe('render method', () => {
-    it('accepts class declarations with a render method', () => {
-      const def = statement('class Foo { render() {}}');
-      expect(isReactComponentClass(def)).toBe(true);
-    });
-
-    it('accepts class expression with a render method', () => {
-      const def = expression('class { render() {}}');
-      expect(isReactComponentClass(def)).toBe(true);
-    });
-
-    it('ignores static render methods', () => {
-      const def = statement('class Foo { static render() {}}');
-      expect(isReactComponentClass(def)).toBe(false);
-    });
-
-    it('ignores dynamic render methods', () => {
-      const def = statement('class Foo { static [render]() {}}');
-      expect(isReactComponentClass(def)).toBe(false);
-    });
-
-    it('ignores getter or setter render methods', () => {
-      let def = statement('class Foo { get render() {}}');
-      expect(isReactComponentClass(def)).toBe(false);
-
-      def = statement('class Foo { set render(value) {}}');
-      expect(isReactComponentClass(def)).toBe(false);
-    });
-  });
-
   describe('JSDoc @extends React.Component', () => {
     it('accepts class declarations declaring `@extends React.Component` in JSDoc', () => {
       const def = parse(`
@@ -91,15 +61,6 @@ describe('isReactComponentClass', () => {
       `).get('body', 1);
 
       expect(isReactComponentClass(def)).toBe(false);
-    });
-
-    it('does not consider super class if render method is present', () => {
-      const def = parse(`
-        var {Component} = require('FakeReact');
-        class Foo extends Component { render() {} }
-      `).get('body', 1);
-
-      expect(isReactComponentClass(def)).toBe(true);
     });
   });
 });

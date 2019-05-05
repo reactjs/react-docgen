@@ -107,7 +107,7 @@ describe('findAllComponentDefinitions', () => {
 
       const result = parse(source);
       expect(Array.isArray(result)).toBe(true);
-      expect(result.length).toBe(4);
+      expect(result.length).toBe(2);
     });
 
     it('finds React.createClass, independent of the var name', () => {
