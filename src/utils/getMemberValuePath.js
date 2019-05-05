@@ -37,7 +37,7 @@ const LOOKUP_METHOD = {
   [t.ClassExpression.name]: getClassMemberValuePath,
 };
 
-export function isSupportedDefinitionType({ node }) {
+export function isSupportedDefinitionType({ node }: NodePath) {
   return (
     t.ObjectExpression.check(node) ||
     t.ClassDeclaration.check(node) ||
