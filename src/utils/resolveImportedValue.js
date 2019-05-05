@@ -16,7 +16,11 @@ import fs from 'fs';
 
 const { namedTypes: t, NodePath } = types;
 
-export default function resolveImportedValue(path: NodePath, name: string, seen: Set<string> = new Set()) {
+export default function resolveImportedValue(
+  path: NodePath,
+  name: string,
+  seen: Set<string> = new Set(),
+) {
   // Bail if no filename was provided for the current source file.
   // Also never traverse into react itself.
   const source = path.node.source.value;
@@ -118,7 +122,7 @@ function findExportedValue(ast, name, seen) {
       }
 
       return false;
-    }
+    },
   });
 
   return resultPath;

@@ -149,10 +149,7 @@ export default function resolveToValue(
     }
   } else if (t.MemberExpression.check(node)) {
     const root = getMemberExpressionRoot(path);
-    let resolved = resolveToValue(
-      root,
-      resolveImports,
-    );
+    const resolved = resolveToValue(root, resolveImports);
     if (t.ObjectExpression.check(resolved.node)) {
       let propertyPath = resolved;
       for (const propertyName of toArray(path).slice(1)) {
@@ -174,9 +171,15 @@ export default function resolveToValue(
       // Handle references to namespace imports, e.g. import * as foo from 'bar'.
       // Try to find a specifier that matches the root of the member expression, and
       // find the export that matches the property name.
-      for (let specifier of resolved.node.specifiers) {
-        if (t.ImportNamespaceSpecifier.check(specifier) && specifier.local.name === root.node.name) {
-          const resolvedPath = resolveImportedValue(resolved, root.parentPath.node.property.name);
+      for (const specifier of resolved.node.specifiers) {
+        if (
+          t.ImportNamespaceSpecifier.check(specifier) &&
+          specifier.local.name === root.node.name
+        ) {
+          const resolvedPath = resolveImportedValue(
+            resolved,
+            root.parentPath.node.property.name,
+          );
           if (resolvedPath) {
             return resolveToValue(resolvedPath, resolveImports);
           }
