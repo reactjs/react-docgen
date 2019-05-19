@@ -50,6 +50,7 @@ const namedTypes = {
   TSUnionType: handleTSUnionType,
   TSFunctionType: handleTSFunctionType,
   TSIntersectionType: handleTSIntersectionType,
+  TSMappedType: handleTSMappedType,
   TSTupleType: handleTSTupleType,
   TSTypeQuery: handleTSTypeQuery,
   TSTypeOperator: handleTSTypeOperator,
@@ -211,6 +212,34 @@ function handleTSIntersectionType(
     elements: path
       .get('types')
       .map(subType => getTSTypeWithResolvedTypes(subType, typeParams)),
+  };
+}
+
+function handleTSMappedType(
+  path: NodePath,
+  typeParams: ?TypeParameters,
+): FlowObjectSignatureType {
+  const key = getTSTypeWithResolvedTypes(
+    path.get('typeParameter').get('constraint'),
+    typeParams,
+  );
+  key.required = !path.node.optional;
+
+  return {
+    name: 'signature',
+    type: 'object',
+    raw: printValue(path),
+    signature: {
+      properties: [
+        {
+          key,
+          value: getTSTypeWithResolvedTypes(
+            path.get('typeAnnotation'),
+            typeParams,
+          ),
+        },
+      ],
+    },
   };
 }
 
