@@ -53,6 +53,7 @@ const namedTypes = {
   TSTupleType: handleTSTupleType,
   TSTypeQuery: handleTSTypeQuery,
   TSTypeOperator: handleTSTypeOperator,
+  TSIndexedAccessType: handleTSIndexedAccessType,
 };
 
 function handleTSArrayType(
@@ -316,6 +317,35 @@ function handleTSTypeOperator(path: NodePath): ?FlowTypeDescriptor {
       };
     }
   }
+}
+
+function handleTSIndexedAccessType(path, typeParams) {
+  const objectType = getTSTypeWithResolvedTypes(
+    path.get('objectType'),
+    typeParams,
+  );
+  const indexType = getTSTypeWithResolvedTypes(
+    path.get('indexType'),
+    typeParams,
+  );
+
+  // We only get the signature if the objectType is a type (vs interface)
+  if (!objectType.signature)
+    return {
+      name: `${objectType.name}[${indexType.value.toString()}]`,
+      raw: printValue(path),
+    };
+  const resolvedType = objectType.signature.properties.find(p => {
+    // indexType.value = "'foo'"
+    return p.key === indexType.value.replace(/['"]+/g, '');
+  });
+  if (!resolvedType) {
+    return { name: 'unknown' };
+  }
+  return {
+    name: resolvedType.value.name,
+    raw: printValue(path),
+  };
 }
 
 let visitedTypes = {};
