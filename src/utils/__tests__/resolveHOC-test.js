@@ -47,4 +47,11 @@ describe('resolveHOC', () => {
     );
     expect(resolveHOC(path)).toEqualASTNode(builders.literal(42));
   });
+
+  it('resolves intermediate hocs', () => {
+    const path = parse(
+      ['const Component = React.memo(42);', 'hoc()(Component);'].join('\n'),
+    );
+    expect(resolveHOC(path)).toEqualASTNode(builders.literal(42));
+  });
 });
