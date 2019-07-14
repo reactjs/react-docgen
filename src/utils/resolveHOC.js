@@ -10,6 +10,7 @@
 import types from 'ast-types';
 import isReactCreateClassCall from './isReactCreateClassCall';
 import isReactForwardRefCall from './isReactForwardRefCall';
+import resolveToValue from './resolveToValue';
 
 const { namedTypes: t } = types;
 
@@ -27,7 +28,9 @@ export default function resolveHOC(path: NodePath): NodePath {
     !isReactForwardRefCall(path)
   ) {
     if (node.arguments.length) {
-      return resolveHOC(path.get('arguments', node.arguments.length - 1));
+      return resolveHOC(
+        resolveToValue(path.get('arguments', node.arguments.length - 1)),
+      );
     }
   }
 
