@@ -429,6 +429,46 @@ describe('getTSType', () => {
     });
   });
 
+  it('handles mapped types', () => {
+    const typePath = statement(`
+      var x: { [key in 'x' | 'y']: boolean};
+    `)
+      .get('declarations', 0)
+      .get('id')
+      .get('typeAnnotation')
+      .get('typeAnnotation');
+
+    expect(getTSType(typePath)).toEqual({
+      name: 'signature',
+      type: 'object',
+      raw: "{ [key in 'x' | 'y']: boolean}",
+      signature: {
+        properties: [
+          {
+            key: {
+              elements: [
+                {
+                  name: 'literal',
+                  value: "'x'",
+                },
+                {
+                  name: 'literal',
+                  value: "'y'",
+                },
+              ],
+              name: 'union',
+              raw: "'x' | 'y'",
+              required: true,
+            },
+            value: {
+              name: 'boolean',
+            },
+          },
+        ],
+      },
+    });
+  });
+
   describe('React types', () => {
     function test(type, expected) {
       const typePath = statement(`
