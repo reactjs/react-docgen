@@ -13,11 +13,13 @@ guidelines in order to be analyzable (see below for more info).
 
 ## Install
 
-Install the module using `yarn` or `npm`:
+Install the module with yarn or npm:
 
-```sh
+```
 yarn add react-docgen --dev
-# or
+```
+
+```
 npm install --save-dev react-docgen
 ```
 
@@ -28,7 +30,7 @@ a single file, multiple files or an input stream. We are trying to make the
 executable as versatile as possible so that it can be integrated into many
 workflows.
 
-```console
+```
 Usage: react-docgen [path]... [options]
 
 path     A component file or directory. If no path is provided it reads from stdin.
@@ -64,8 +66,8 @@ it will fallback to a default configuration, enabling all [syntax extension](htt
 The tool can be used programmatically to extract component information and customize the extraction process:
 
 ```js
-const reactDocs = require('react-docgen');
-const componentInfo = reactDocs.parse(src);
+var reactDocs = require('react-docgen');
+var componentInfo = reactDocs.parse(src);
 ```
 
 As with the CLI, this will look for the exported component created through `React.createClass` or a class definition in the provided source. The whole process of analyzing the source code is separated into two parts:
@@ -132,7 +134,7 @@ supported options head over to the [babel website](https://babeljs.io/docs/en/ba
 The resolver's task is to extract those parts from the source code which the handlers can analyze. For example, the `findExportedComponentDefinition` resolver inspects the AST to find
 
 ```js
-const Component = React.createClass(<def>);
+var Component = React.createClass(<def>);
 module.exports = Component;
 
 // or
@@ -155,7 +157,7 @@ Handlers do the actual work and extract the desired information from the result 
 
 For example, while the `propTypesHandler` expects the prop types definition to be an ObjectExpression and be available as `propTypes` in the component definition, most of the work is actually performed by the `getPropType` utility function.
 
-> There are some community created handlers available. Have a look at the wiki for a list: <https://github.com/reactjs/react-docgen/wiki>
+> There are some community created handlers available. Have a look at the wiki for a list: https://github.com/reactjs/react-docgen/wiki
 
 ## Guidelines for default resolvers and handlers
 
@@ -368,18 +370,18 @@ we are getting this output:
 
 Here is a list of all the available types and its result structure.
 
-| Name                                      | Examples                                                                                                                                                                | Result                                                                                                                                                                                                                                                              |
-| ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Simple                                    | `let x: string;`<br />`let x: number;`<br />`let x: boolean;`<br />`let x: any;`<br />`let x: void;`<br />`let x: Object;`<br />`let x: String;`<br />`let x: MyClass;` | `{ "name": "<type>" }`                                                                                                                                                                                                                                              |
-| Literals                                  | `let x: 'foo';`<br />`let x: 1;`<br />`let x: true;`                                                                                                                    | `{ "name": "literal", "value": "<rawvalue>" }`                                                                                                                                                                                                                      |
-| Typed Classes                             | `let x: Array<foo>;`<br />`let x: Class<foo>;`<br />`let x: MyClass<bar>;`                                                                                              | `{ "name": "<type>", "elements": [{ <element-type> }, ...] }`                                                                                                                                                                                                       |
+| Name                                      | Examples                                                                                                                                                                | Result                                                                                                                                                                                                                                                             |
+| ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Simple                                    | `let x: string;`<br />`let x: number;`<br />`let x: boolean;`<br />`let x: any;`<br />`let x: void;`<br />`let x: Object;`<br />`let x: String;`<br />`let x: MyClass;` | `{ "name": "<type>" }`                                                                                                                                                                                                                                             |
+| Literals                                  | `let x: 'foo';`<br />`let x: 1;`<br />`let x: true;`                                                                                                                    | `{ "name": "literal", "value": "<rawvalue>" }`                                                                                                                                                                                                                     |
+| Typed Classes                             | `let x: Array<foo>;`<br />`let x: Class<foo>;`<br />`let x: MyClass<bar>;`                                                                                              | `{ "name": "<type>", "elements": [{ <element-type> }, ...] }`                                                                                                                                                                                                      |
 | Object Signature                          | `let x: { foo: string, bar?: mixed };`<br />`let x: { [key: string]: string, foo: number };`                                                                            | `{ "name": "signature", "type": "object", "raw": "<raw-signature>", "signature": { "properties": [{ "key": "<property-name>"\|{ <property-key-type> }, "value": { <property-type>, "required": <true/false> } }, ...] } }`                                          |
-| Function Signature                        | `let x: (x: string) => void;`                                                                                                                                           | `{ "name": "signature", "type": "function", "raw": "<raw-signature>", "signature": { "arguments": [{ "name": "<argument-name>", "type": { <argument-type> } }, ...], "return": { <return-type> } } }`                                                               |
+| Function Signature                        | `let x: (x: string) => void;`                                                                                                                                           | `{ "name": "signature", "type": "function", "raw": "<raw-signature>", "signature": { "arguments": [{ "name": "<argument-name>", "type": { <argument-type> } }, ...], "return": { <return-type> } } }`                                                              |
 | Callable-Object/Function-Object Signature | `let x: { (x: string): void, prop: string };`                                                                                                                           | `{ "name": "signature", "type": "object", "raw": "<raw-signature>", "signature": { "properties": [{ "key": "<property-name>"\|{ <property-key-type> }, "value": { <property-type>, "required": <true/false> } }, ...], "constructor": { <function-signature> } } }` |
-| Tuple                                     | `let x: [foo, "value", number];`                                                                                                                                        | `{ "name": "tuple", "raw": "<raw-signature>", "elements": [{ <element-type> }, ...] }`                                                                                                                                                                              |
-| Union                                     | `let x: number \| string;`                                                                                                                                              | `{ "name": "union", "raw": "<raw-signature>", "elements": [{ <element-type> }, ...] }`                                                                                                                                                                              |
-| Intersect                                 | `let x: number & string;`                                                                                                                                               | `{ "name": "intersect", "raw": "<raw-signature>", "elements": [{ <element-type> }, ...] }`                                                                                                                                                                          |
-| Nullable modifier                         | `let x: ?number;`                                                                                                                                                       | `{ "name": "number", "nullable": true }`                                                                                                                                                                                                                            |
+| Tuple                                     | `let x: [foo, "value", number];`                                                                                                                                        | `{ "name": "tuple", "raw": "<raw-signature>", "elements": [{ <element-type> }, ...] }`                                                                                                                                                                             |
+| Union                                     | `let x: number \| string;`                                                                                                                                              | `{ "name": "union", "raw": "<raw-signature>", "elements": [{ <element-type> }, ...] }`                                                                                                                                                                             |
+| Intersect                                 | `let x: number & string;`                                                                                                                                               | `{ "name": "intersect", "raw": "<raw-signature>", "elements": [{ <element-type> }, ...] }`                                                                                                                                                                         |
+| Nullable modifier                         | `let x: ?number;`                                                                                                                                                       | `{ "name": "number", "nullable": true }`                                                                                                                                                                                                                           |
 
 ## Result data structure
 
