@@ -8,7 +8,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import { parse, handlers } from '../main';
+import { handlers, parse } from '../main';
 import { ERROR_MISSING_DEFINITION } from '../parse';
 
 describe('main', () => {
@@ -45,7 +45,7 @@ describe('main', () => {
 
   describe('React.createClass', () => {
     test(`
-      var React = require("React");
+      var React = require("react");
       var PropTypes = React.PropTypes;
 
       var defaultProps = {
@@ -74,7 +74,7 @@ describe('main', () => {
 
   describe('Class definition', () => {
     test(`
-      const React = require("React");
+      const React = require("react");
       const PropTypes = React.PropTypes;
 
       const defaultProps = {
@@ -101,7 +101,7 @@ describe('main', () => {
 
   describe('Stateless Component definition: ArrowFunctionExpression', () => {
     test(`
-      import React, {PropTypes} from "React";
+      import React, {PropTypes} from "react";
 
       const defaultProps = {
         foo: true,
@@ -127,7 +127,7 @@ describe('main', () => {
 
   describe('Stateless Component definition: FunctionDeclaration', () => {
     test(`
-      import React, {PropTypes} from "React";
+      import React, {PropTypes} from "react";
 
       const defaultProps = {
         foo: true,
@@ -156,7 +156,7 @@ describe('main', () => {
 
   describe('Stateless Component definition: FunctionExpression', () => {
     test(`
-      import React, {PropTypes} from "React";
+      import React, {PropTypes} from "react";
 
       const defaultProps = {
         foo: true,
@@ -186,7 +186,7 @@ describe('main', () => {
   describe('Stateless Component definition', () => {
     it('is not so greedy', () => {
       const source = `
-        import React, {PropTypes} from "React";
+        import React, {PropTypes} from "react";
 
         /**
         * Example component description
