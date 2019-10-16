@@ -982,7 +982,11 @@ Object {
   "props": Object {
     "color": Object {
       "description": "",
-      "required": true,
+      "flowType": Object {
+        "name": "string",
+        "nullable": true,
+      },
+      "required": false,
       "type": Object {
         "name": "string",
       },
