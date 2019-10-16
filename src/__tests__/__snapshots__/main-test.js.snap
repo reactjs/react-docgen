@@ -982,7 +982,11 @@ Object {
   "props": Object {
     "color": Object {
       "description": "",
-      "required": true,
+      "flowType": Object {
+        "name": "string",
+        "nullable": true,
+      },
+      "required": false,
       "type": Object {
         "name": "string",
       },
@@ -1416,6 +1420,27 @@ Object {
       "required": true,
       "tsType": Object {
         "name": "string",
+      },
+    },
+  },
+}
+`;
+
+exports[`main fixtures processes component "component_28.tsx" without errors 1`] = `
+Object {
+  "description": "Example component description",
+  "displayName": "ABC",
+  "methods": Array [],
+  "props": Object {
+    "foo": Object {
+      "defaultValue": Object {
+        "computed": false,
+        "value": "true",
+      },
+      "description": "Example prop description",
+      "required": false,
+      "tsType": Object {
+        "name": "boolean",
       },
     },
   },

@@ -8,17 +8,17 @@
  */
 
 import types from 'ast-types';
+import type Documentation from '../Documentation';
+import { unwrapUtilityType } from '../utils/flowUtilityTypes';
 import getFlowType from '../utils/getFlowType';
-import getTSType from '../utils/getTSType';
-import getPropertyName from '../utils/getPropertyName';
 import getFlowTypeFromReactComponent, {
   applyToFlowTypeProperties,
 } from '../utils/getFlowTypeFromReactComponent';
+import getPropertyName from '../utils/getPropertyName';
+import getTSType from '../utils/getTSType';
+import { type TypeParameters } from '../utils/getTypeParameters';
 import resolveToValue from '../utils/resolveToValue';
 import setPropDescription from '../utils/setPropDescription';
-import { unwrapUtilityType } from '../utils/flowUtilityTypes';
-import { type TypeParameters } from '../utils/getTypeParameters';
-import type Documentation from '../Documentation';
 
 const { namedTypes: t } = types;
 

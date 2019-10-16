@@ -8,14 +8,22 @@
  */
 
 import type Documentation from '../Documentation';
-import getTypeAnnotation from '../utils/getTypeAnnotation';
-import getMemberValuePath from '../utils/getMemberValuePath';
-import isReactComponentClass from '../utils/isReactComponentClass';
-import isStatelessComponent from '../utils/isStatelessComponent';
-import resolveGenericTypeAnnotation from '../utils/resolveGenericTypeAnnotation';
-import getTypeParameters, {
-  type TypeParameters,
-} from '../utils/getTypeParameters';
+import getMemberValuePath from './getMemberValuePath';
+import getTypeAnnotation from './getTypeAnnotation';
+import getTypeParameters, { type TypeParameters } from './getTypeParameters';
+import isReactComponentClass from './isReactComponentClass';
+import isReactForwardRefCall from './isReactForwardRefCall';
+import resolveGenericTypeAnnotation from './resolveGenericTypeAnnotation';
+import resolveToValue from './resolveToValue';
+
+function getStatelessPropsPath(componentDefinition): NodePath {
+  const value = resolveToValue(componentDefinition);
+  if (isReactForwardRefCall(value)) {
+    const inner = value.get('arguments', 0);
+    return inner.get('params', 0);
+  }
+  return value.get('params', 0);
+}
 
 /**
  * Given an React component (stateless or class) tries to find the
@@ -23,7 +31,7 @@ import getTypeParameters, {
  * component types returns null.
  */
 export default (path: NodePath): ?NodePath => {
-  let typePath: ?NodePath;
+  let typePath: ?NodePath = null;
 
   if (isReactComponentClass(path)) {
     const superTypes = path.get('superTypeParameters');
@@ -43,10 +51,14 @@ export default (path: NodePath): ?NodePath => {
 
       typePath = getTypeAnnotation(propsMemberPath.parentPath);
     }
-  } else if (isStatelessComponent(path)) {
-    const param = path.get('params').get(0);
 
-    typePath = getTypeAnnotation(param);
+    return typePath;
+  }
+
+  const propsParam = getStatelessPropsPath(path);
+
+  if (propsParam) {
+    typePath = getTypeAnnotation(propsParam);
   }
 
   return typePath;
