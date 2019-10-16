@@ -207,7 +207,7 @@ if (errorMessage) {
           }
         } else {
           try {
-            result[filePath] = parse(fs.readFileSync(filePath));
+            result[filePath] = parse(fs.readFileSync(filePath), filePath);
           } catch (parseError) {
             writeError(parseError, filePath);
           } finally {
