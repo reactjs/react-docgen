@@ -8,27 +8,11 @@
  */
 
 import types from 'ast-types';
-import isReactModuleName from './isReactModuleName';
 import match from './match';
 import resolveToModule from './resolveToModule';
+import isReactBuiltinCall from './isReactBuiltinCall';
 
 const { namedTypes: t } = types;
-
-/**
- * Returns true if the expression is a function call of the form
- * `React.createClass(...)`.
- */
-function isReactCreateClassCallBuiltIn(path: NodePath): boolean {
-  if (t.ExpressionStatement.check(path.node)) {
-    path = path.get('expression');
-  }
-
-  if (!match(path.node, { callee: { property: { name: 'createClass' } } })) {
-    return false;
-  }
-  const module = resolveToModule(path.get('callee', 'object'));
-  return Boolean(module && isReactModuleName(module));
-}
 
 /**
  * Returns true if the expression is a function call of the form
@@ -59,6 +43,7 @@ function isReactCreateClassCallModular(path: NodePath): boolean {
  */
 export default function isReactCreateClassCall(path: NodePath): boolean {
   return (
-    isReactCreateClassCallBuiltIn(path) || isReactCreateClassCallModular(path)
+    isReactBuiltinCall(path, 'createClass') ||
+    isReactCreateClassCallModular(path)
   );
 }
