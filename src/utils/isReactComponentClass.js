@@ -28,12 +28,29 @@ function isRenderMethod(node) {
 
 /**
  * Returns `true` of the path represents a class definition which either extends
- * `React.Component` or implements a `render()` method.
+ * `React.Component` or has a superclass and implements a `render()` method.
  */
 export default function isReactComponentClass(path: NodePath): boolean {
   const node = path.node;
   if (!t.ClassDeclaration.check(node) && !t.ClassExpression.check(node)) {
     return false;
+  }
+
+  // extends something
+  if (!node.superClass) {
+    return false;
+  }
+
+  // React.Component or React.PureComponent
+  const superClass = resolveToValue(path.get('superClass'), false);
+  if (
+    match(superClass.node, { property: { name: 'Component' } }) ||
+    match(superClass.node, { property: { name: 'PureComponent' } })
+  ) {
+    const module = resolveToModule(superClass);
+    if (module && isReactModuleName(module)) {
+      return true;
+    }
   }
 
   // render method
@@ -60,14 +77,5 @@ export default function isReactComponentClass(path: NodePath): boolean {
     }
   }
 
-  // extends ReactComponent?
-  if (!node.superClass) {
-    return false;
-  }
-  const superClass = resolveToValue(path.get('superClass'), false);
-  if (!match(superClass.node, { property: { name: 'Component' } })) {
-    return false;
-  }
-  const module = resolveToModule(superClass);
-  return !!module && isReactModuleName(module);
+  return false;
 }

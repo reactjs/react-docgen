@@ -94,7 +94,7 @@ describe('componentMethodsHandler', () => {
 
   it('extracts the documentation for a ClassDeclaration', () => {
     const src = `
-      class Test {
+      class Test extends React.Component {
         /**
          * The foo method
          */
@@ -129,7 +129,7 @@ describe('componentMethodsHandler', () => {
 
   it('should handle and ignore computed methods', () => {
     const src = `
-      class Test {
+      class Test extends React.Component {
         /**
          * The foo method
          */
