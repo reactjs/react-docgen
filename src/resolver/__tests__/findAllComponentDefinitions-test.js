@@ -99,9 +99,9 @@ describe('findAllComponentDefinitions', () => {
       const source = `
         import React from 'React';
         class ComponentA extends React.Component {}
-        class ComponentB { render() {} }
-        var ComponentC = class extends React.Component {}
-        var ComponentD = class { render() {} }
+        class ComponentB extends Foo { render() {} }
+        var ComponentC = class extends React.PureComponent {}
+        var ComponentD = class extends Bar { render() {} }
         class NotAComponent {}
       `;
 
