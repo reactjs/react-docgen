@@ -19,6 +19,7 @@ import getTypeParameters, {
 import type {
   FlowElementsType,
   FlowFunctionArgumentType,
+  FlowLiteralType,
   FlowObjectSignatureType,
   FlowSimpleType,
   FlowTypeDescriptor,
@@ -50,9 +51,11 @@ const namedTypes = {
   TSUnionType: handleTSUnionType,
   TSFunctionType: handleTSFunctionType,
   TSIntersectionType: handleTSIntersectionType,
+  TSMappedType: handleTSMappedType,
   TSTupleType: handleTSTupleType,
   TSTypeQuery: handleTSTypeQuery,
   TSTypeOperator: handleTSTypeOperator,
+  TSIndexedAccessType: handleTSIndexedAccessType,
 };
 
 function handleTSArrayType(
@@ -214,6 +217,34 @@ function handleTSIntersectionType(
   };
 }
 
+function handleTSMappedType(
+  path: NodePath,
+  typeParams: ?TypeParameters,
+): FlowObjectSignatureType {
+  const key = getTSTypeWithResolvedTypes(
+    path.get('typeParameter').get('constraint'),
+    typeParams,
+  );
+  key.required = !path.node.optional;
+
+  return {
+    name: 'signature',
+    type: 'object',
+    raw: printValue(path),
+    signature: {
+      properties: [
+        {
+          key,
+          value: getTSTypeWithResolvedTypes(
+            path.get('typeAnnotation'),
+            typeParams,
+          ),
+        },
+      ],
+    },
+  };
+}
+
 function handleTSFunctionType(
   path: NodePath,
   typeParams: ?TypeParameters,
@@ -316,6 +347,40 @@ function handleTSTypeOperator(path: NodePath): ?FlowTypeDescriptor {
       };
     }
   }
+}
+
+function handleTSIndexedAccessType(
+  path: NodePath,
+  typeParams: ?TypeParameters,
+): FlowSimpleType {
+  // eslint-disable-next-line no-undef
+  const objectType: $Shape<FlowObjectSignatureType> = getTSTypeWithResolvedTypes(
+    path.get('objectType'),
+    typeParams,
+  );
+  // eslint-disable-next-line no-undef
+  const indexType: $Shape<FlowLiteralType> = getTSTypeWithResolvedTypes(
+    path.get('indexType'),
+    typeParams,
+  );
+
+  // We only get the signature if the objectType is a type (vs interface)
+  if (!objectType.signature)
+    return {
+      name: `${objectType.name}[${indexType.value.toString()}]`,
+      raw: printValue(path),
+    };
+  const resolvedType = objectType.signature.properties.find(p => {
+    // indexType.value = "'foo'"
+    return p.key === indexType.value.replace(/['"]+/g, '');
+  });
+  if (!resolvedType) {
+    return { name: 'unknown' };
+  }
+  return {
+    name: resolvedType.value.name,
+    raw: printValue(path),
+  };
 }
 
 let visitedTypes = {};

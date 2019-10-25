@@ -54,13 +54,22 @@ export default function findAllReactCreateClassCalls(
         const inner = resolveToValue(path.get('arguments', 0));
         definitions.delete(inner);
         definitions.add(path);
+
+        // Do not traverse into arguments
+        return false;
       } else if (isReactCreateClassCall(path)) {
         const resolvedPath = resolveToValue(path.get('arguments', 0));
         if (t.ObjectExpression.check(resolvedPath.node)) {
           definitions.add(resolvedPath);
         }
+
+        // Do not traverse into arguments
+        return false;
       }
-      return false;
+
+      // If it is neither of the above cases we need to traverse further
+      // as this call expression could be a HOC
+      this.traverse(path);
     },
   });
 

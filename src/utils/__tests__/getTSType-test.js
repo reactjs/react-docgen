@@ -315,6 +315,38 @@ describe('getTSType', () => {
     });
   });
 
+  it('detects indexed access', () => {
+    const typePath = statement(`
+      var x: A["x"] = 2;
+
+      interface A { x: string };
+    `)
+      .get('declarations', 0)
+      .get('id')
+      .get('typeAnnotation')
+      .get('typeAnnotation');
+    expect(getTSType(typePath)).toEqual({
+      name: 'A["x"]',
+      raw: 'A["x"]',
+    });
+  });
+
+  it('resolves indexed access', () => {
+    const typePath = statement(`
+      var x: A["x"] = 2;
+
+      type A = { x: string };
+    `)
+      .get('declarations', 0)
+      .get('id')
+      .get('typeAnnotation')
+      .get('typeAnnotation');
+    expect(getTSType(typePath)).toEqual({
+      name: 'string',
+      raw: 'A["x"]',
+    });
+  });
+
   it('resolves types in scope', () => {
     const typePath = statement(`
       var x: MyType = 2;
@@ -422,6 +454,46 @@ describe('getTSType', () => {
               raw: 'Array<T>',
               required: true,
               elements: [{ name: 'string' }],
+            },
+          },
+        ],
+      },
+    });
+  });
+
+  it('handles mapped types', () => {
+    const typePath = statement(`
+      var x: { [key in 'x' | 'y']: boolean};
+    `)
+      .get('declarations', 0)
+      .get('id')
+      .get('typeAnnotation')
+      .get('typeAnnotation');
+
+    expect(getTSType(typePath)).toEqual({
+      name: 'signature',
+      type: 'object',
+      raw: "{ [key in 'x' | 'y']: boolean}",
+      signature: {
+        properties: [
+          {
+            key: {
+              elements: [
+                {
+                  name: 'literal',
+                  value: "'x'",
+                },
+                {
+                  name: 'literal',
+                  value: "'y'",
+                },
+              ],
+              name: 'union',
+              raw: "'x' | 'y'",
+              required: true,
+            },
+            value: {
+              name: 'boolean',
             },
           },
         ],

@@ -227,4 +227,30 @@ describe('findAllComponentDefinitions', () => {
       expect(result[0].value.type).toEqual('CallExpression');
     });
   });
+
+  describe('regressions', () => {
+    it('finds component wrapped in HOC', () => {
+      const source = `
+        /**
+         * @flow
+         */
+        import * as React from 'react';
+
+        type Props = $ReadOnly<{|
+          tabs: $ReadOnlyArray<string>,
+        |}>;
+
+        const TetraAdminTabs = React.memo<Props>((props: Props) => (
+          <div></div>
+        ));
+
+        export default TetraAdminTabs;
+      `;
+
+      const result = parse(source);
+      expect(Array.isArray(result)).toBe(true);
+      expect(result.length).toBe(1);
+      expect(result[0].value.type).toEqual('ArrowFunctionExpression');
+    });
+  });
 });

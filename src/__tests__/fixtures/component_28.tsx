@@ -6,16 +6,22 @@
  *
  */
 
-import React, { Component } from 'react';
-import { Props as ImportedProps } from './component_27';
+import React from 'react';
 
-export default interface ExtendedProps extends ImportedProps {
-  bar: number
+interface Props {
+  /**
+   * Example prop description
+   */
+  foo: boolean;
 }
 
 /**
- * This is a typescript component with imported prop types
+ * Example component description
  */
-export function ImportedComponent(props: ImportedProps) {
-  return <h1>Hello world</h1>;
-}
+const Component = React.forwardRef(({ foo = true }: Props, ref: any) => {
+  return <div />;
+})
+
+Component.displayName = 'ABC';
+
+export default Component;

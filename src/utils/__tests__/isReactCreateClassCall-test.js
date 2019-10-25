@@ -53,6 +53,38 @@ describe('isReactCreateClassCall', () => {
       `);
       expect(isReactCreateClassCall(def)).toBe(false);
     });
+
+    it('accepts createClass called on destructed value', () => {
+      const def = parsePath(`
+        var { createClass } = require("react");
+        createClass({});
+      `);
+      expect(isReactCreateClassCall(def)).toBe(true);
+    });
+
+    it('accepts createClass called on destructed aliased value', () => {
+      const def = parsePath(`
+        var { createClass: foo } = require("react");
+        foo({});
+      `);
+      expect(isReactCreateClassCall(def)).toBe(true);
+    });
+
+    it('accepts createClass called on imported value', () => {
+      const def = parsePath(`
+        import { createClass } from "react";
+        createClass({});
+      `);
+      expect(isReactCreateClassCall(def)).toBe(true);
+    });
+
+    it('accepts createClass called on imported aliased value', () => {
+      const def = parsePath(`
+        import { createClass as foo } from "react";
+        foo({});
+      `);
+      expect(isReactCreateClassCall(def)).toBe(true);
+    });
   });
 
   describe('modular in create-react-class', () => {

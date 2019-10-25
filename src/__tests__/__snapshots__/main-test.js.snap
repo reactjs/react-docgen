@@ -982,7 +982,11 @@ Object {
   "props": Object {
     "color": Object {
       "description": "",
-      "required": true,
+      "flowType": Object {
+        "name": "string",
+        "nullable": true,
+      },
+      "required": false,
       "type": Object {
         "name": "string",
       },
@@ -1424,15 +1428,19 @@ Object {
 
 exports[`main fixtures processes component "component_28.tsx" without errors 1`] = `
 Object {
-  "description": "This is a typescript component with imported prop types",
-  "displayName": "ImportedComponent",
+  "description": "Example component description",
+  "displayName": "ABC",
   "methods": Array [],
   "props": Object {
     "foo": Object {
-      "description": "",
-      "required": true,
+      "defaultValue": Object {
+        "computed": false,
+        "value": "true",
+      },
+      "description": "Example prop description",
+      "required": false,
       "tsType": Object {
-        "name": "string",
+        "name": "boolean",
       },
     },
   },
@@ -1444,22 +1452,6 @@ Object {
   "description": "This is a typescript component with imported prop types",
   "displayName": "ImportedExtendedComponent",
   "methods": Array [],
-  "props": Object {
-    "bar": Object {
-      "description": "",
-      "required": true,
-      "tsType": Object {
-        "name": "number",
-      },
-    },
-    "foo": Object {
-      "description": "",
-      "required": true,
-      "tsType": Object {
-        "name": "string",
-      },
-    },
-  },
 }
 `;
 
@@ -1619,6 +1611,23 @@ Object {
       "required": false,
       "type": Object {
         "name": "object",
+      },
+    },
+  },
+}
+`;
+
+exports[`main fixtures processes component "component_35.tsx" without errors 1`] = `
+Object {
+  "description": "This is a typescript component with imported prop types",
+  "displayName": "ImportedComponent",
+  "methods": Array [],
+  "props": Object {
+    "foo": Object {
+      "description": "",
+      "required": true,
+      "tsType": Object {
+        "name": "string",
       },
     },
   },
