@@ -44,8 +44,8 @@
     "commander": "^2.19.0",
     "doctrine": "^3.0.0",
     "node-dir": "^0.1.10",
-    "strip-indent": "^3.0.0",
-    "resolve": "^1.10.1"
+    "resolve": "^1.10.1",
+    "strip-indent": "^3.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",
