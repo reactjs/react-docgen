@@ -36,7 +36,7 @@ export default function resolveImportedValue(
   try {
     resolvedSource = resolve.sync(source, {
       basedir,
-      extensions: ['.js', '.jsx', '.ts', '.tsx'],
+      extensions: ['.js', '.jsx', '.mjs', '.ts', '.tsx'],
     });
   } catch (err) {
     return null;
