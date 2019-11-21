@@ -1633,3 +1633,26 @@ Object {
   },
 }
 `;
+
+exports[`main fixtures processes component "component_36.js" without errors 1`] = `
+Object {
+  "description": "",
+  "displayName": "SuperDuperCustomButton",
+  "methods": Array [],
+  "props": Object {
+    "size": Object {
+      "defaultValue": Object {
+        "computed": true,
+        "value": "Sizes.EXTRA_LARGE",
+      },
+      "description": "",
+      "required": false,
+      "type": Object {
+        "computed": true,
+        "name": "enum",
+        "value": "Object.values(Sizes)",
+      },
+    },
+  },
+}
+`;
