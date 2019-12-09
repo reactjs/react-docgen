@@ -7,13 +7,11 @@
  * @flow
  */
 
-import types from 'ast-types';
+import { NodePath, builders, namedTypes as t } from 'ast-types';
 import getMemberExpressionRoot from './getMemberExpressionRoot';
 import getPropertyValuePath from './getPropertyValuePath';
 import { Array as toArray } from './expressionTo';
 import { traverseShallow } from './traverse';
-
-const { namedTypes: t, NodePath, builders } = types;
 
 function buildMemberExpressionFromPattern(path: NodePath): ?NodePath {
   const node = path.node;

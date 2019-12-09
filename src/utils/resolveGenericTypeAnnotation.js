@@ -7,12 +7,10 @@
  * @flow
  */
 
-import types from 'ast-types';
+import { namedTypes as t } from 'ast-types';
 import isUnreachableFlowType from '../utils/isUnreachableFlowType';
 import resolveToValue from '../utils/resolveToValue';
 import { unwrapUtilityType } from './flowUtilityTypes';
-
-const { namedTypes: t } = types;
 
 function tryResolveGenericTypeAnnotation(path: NodePath): ?NodePath {
   let typePath = unwrapUtilityType(path);

@@ -7,11 +7,9 @@
  * @flow
  */
 
-import types from 'ast-types';
+import { namedTypes as t } from 'ast-types';
 import getNameOrValue from './getNameOrValue';
 import resolveToValue from './resolveToValue';
-
-const { namedTypes: t } = types;
 
 export const COMPUTED_PREFIX = '@computed#';
 

@@ -2,10 +2,8 @@
  * Helper methods for tests.
  */
 
-import types from 'ast-types';
+import { NodePath } from 'ast-types';
 import buildParser from '../src/babelParser';
-
-const { NodePath } = types;
 
 function stringify(value) {
   if (Array.isArray(value)) {

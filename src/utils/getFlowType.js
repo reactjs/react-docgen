@@ -7,7 +7,7 @@
  * @flow
  */
 
-import types from 'ast-types';
+import { namedTypes as t } from 'ast-types';
 import getPropertyName from './getPropertyName';
 import printValue from './printValue';
 import getTypeAnnotation from '../utils/getTypeAnnotation';
@@ -23,8 +23,6 @@ import type {
   FlowSimpleType,
   FlowTypeDescriptor,
 } from '../types';
-
-const { namedTypes: t } = types;
 
 const flowTypes = {
   AnyTypeAnnotation: 'any',

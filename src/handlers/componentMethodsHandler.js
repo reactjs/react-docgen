@@ -7,14 +7,12 @@
  * @flow
  */
 
-import types from 'ast-types';
+import { namedTypes as t } from 'ast-types';
 import getMemberValuePath from '../utils/getMemberValuePath';
 import getMethodDocumentation from '../utils/getMethodDocumentation';
 import isReactComponentClass from '../utils/isReactComponentClass';
 import isReactComponentMethod from '../utils/isReactComponentMethod';
 import type Documentation from '../Documentation';
-
-const { namedTypes: t } = types;
 
 /**
  * The following values/constructs are considered methods:

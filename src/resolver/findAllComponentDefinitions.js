@@ -7,15 +7,13 @@
  * @flow
  */
 
-import types from 'ast-types';
+import { namedTypes as t, visit } from 'ast-types';
 import isReactComponentClass from '../utils/isReactComponentClass';
 import isReactCreateClassCall from '../utils/isReactCreateClassCall';
 import isReactForwardRefCall from '../utils/isReactForwardRefCall';
 import isStatelessComponent from '../utils/isStatelessComponent';
 import normalizeClassDefinition from '../utils/normalizeClassDefinition';
 import resolveToValue from '../utils/resolveToValue';
-
-const { visit, namedTypes: t } = types;
 
 /**
  * Given an AST, this function tries to find all object expressions that are

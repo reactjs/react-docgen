@@ -9,7 +9,7 @@
 
 /*eslint no-use-before-define: 0*/
 
-import types from 'ast-types';
+import { namedTypes as t } from 'ast-types';
 import { getDocblock } from '../utils/docblock';
 import getMembers from './getMembers';
 import getPropertyName from './getPropertyName';
@@ -19,8 +19,6 @@ import resolveToValue from './resolveToValue';
 import resolveObjectKeysToArray from './resolveObjectKeysToArray';
 import resolveObjectValuesToArray from './resolveObjectValuesToArray';
 import type { PropTypeDescriptor, PropDescriptor } from '../types';
-
-const { namedTypes: t } = types;
 
 function getEnumValues(path) {
   const values = [];

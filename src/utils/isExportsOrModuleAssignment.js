@@ -7,10 +7,8 @@
  * @flow
  */
 
-import types from 'ast-types';
+import { namedTypes as t } from 'ast-types';
 import * as expressionTo from './expressionTo';
-
-const { namedTypes: t } = types;
 
 /**
  * Returns true if the expression is of form `exports.foo = ...;` or

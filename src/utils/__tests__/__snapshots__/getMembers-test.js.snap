@@ -26,6 +26,8 @@ Array [
       "callee": Node {
         "computed": false,
         "end": 8,
+        "innerComments": undefined,
+        "leadingComments": undefined,
         "loc": SourceLocation {
           "end": Position {
             "column": 8,
@@ -38,6 +40,8 @@ Array [
         },
         "object": Node {
           "end": 4,
+          "innerComments": undefined,
+          "leadingComments": undefined,
           "loc": SourceLocation {
             "end": Position {
               "column": 4,
@@ -51,10 +55,13 @@ Array [
           },
           "name": "foo",
           "start": 1,
+          "trailingComments": undefined,
           "type": "Identifier",
         },
         "property": Node {
           "end": 8,
+          "innerComments": undefined,
+          "leadingComments": undefined,
           "loc": SourceLocation {
             "end": Position {
               "column": 8,
@@ -68,12 +75,16 @@ Array [
           },
           "name": "bar",
           "start": 5,
+          "trailingComments": undefined,
           "type": "Identifier",
         },
         "start": 1,
+        "trailingComments": undefined,
         "type": "MemberExpression",
       },
       "end": 13,
+      "innerComments": undefined,
+      "leadingComments": undefined,
       "loc": SourceLocation {
         "end": Position {
           "column": 13,
@@ -85,11 +96,14 @@ Array [
         },
       },
       "start": 1,
+      "trailingComments": undefined,
       "type": "CallExpression",
     },
     "computed": false,
     "path": Node {
       "end": 8,
+      "innerComments": undefined,
+      "leadingComments": undefined,
       "loc": SourceLocation {
         "end": Position {
           "column": 8,
@@ -103,6 +117,7 @@ Array [
       },
       "name": "bar",
       "start": 5,
+      "trailingComments": undefined,
       "type": "Identifier",
     },
   },
@@ -111,6 +126,8 @@ Array [
     "computed": true,
     "path": Node {
       "end": 22,
+      "innerComments": undefined,
+      "leadingComments": undefined,
       "loc": SourceLocation {
         "end": Position {
           "column": 22,
@@ -124,6 +141,7 @@ Array [
       },
       "name": "baz",
       "start": 19,
+      "trailingComments": undefined,
       "type": "Identifier",
     },
   },

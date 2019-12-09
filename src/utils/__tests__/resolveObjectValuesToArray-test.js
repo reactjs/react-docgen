@@ -6,11 +6,9 @@
  *
  */
 
-import types from 'ast-types';
-import resolveObjectValuesToArray from '../resolveObjectValuesToArray';
+import { builders } from 'ast-types';
 import * as utils from '../../../tests/utils';
-
-const { builders } = types;
+import resolveObjectValuesToArray from '../resolveObjectValuesToArray';
 
 describe('resolveObjectValuesToArray', () => {
   function parse(src) {

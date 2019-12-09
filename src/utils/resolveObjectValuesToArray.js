@@ -7,10 +7,8 @@
  * @flow
  */
 
-import types from 'ast-types';
+import { ASTNode, NodePath, builders, namedTypes as t } from 'ast-types';
 import resolveToValue from './resolveToValue';
-
-const { ASTNode, NodePath, builders, namedTypes: t } = types;
 
 type ObjectPropMap = {
   properties: Array<string>,

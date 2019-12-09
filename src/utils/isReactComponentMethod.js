@@ -7,10 +7,8 @@
  * @flow
  */
 
-import types from 'ast-types';
+import { namedTypes as t } from 'ast-types';
 import getPropertyName from './getPropertyName';
-
-const { namedTypes: t } = types;
 
 const componentMethods = [
   'componentDidMount',

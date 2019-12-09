@@ -6,13 +6,11 @@
  *
  * @flow
  */
-import types from 'ast-types';
+import { namedTypes as t } from 'ast-types';
 import getClassMemberValuePath from './getClassMemberValuePath';
 import getMemberExpressionValuePath from './getMemberExpressionValuePath';
 import getPropertyValuePath from './getPropertyValuePath';
 import resolveFunctionDefinitionToReturnValue from '../utils/resolveFunctionDefinitionToReturnValue';
-
-const { namedTypes: t } = types;
 
 const SYNONYMS = {
   getDefaultProps: 'defaultProps',

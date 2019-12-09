@@ -7,9 +7,7 @@
  * @flow
  */
 
-import types from 'ast-types';
-
-const { namedTypes: t } = types;
+import { namedTypes as t } from 'ast-types';
 
 /**
  * Returns the path to the first part of the MemberExpression. I.e. given a

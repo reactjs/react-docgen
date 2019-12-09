@@ -6,11 +6,9 @@
  *
  */
 
-import types from 'ast-types';
-import resolveToValue from '../resolveToValue';
+import { builders } from 'ast-types';
 import { parse } from '../../../tests/utils';
-
-const { builders } = types;
+import resolveToValue from '../resolveToValue';
 
 describe('resolveToValue', () => {
   function parsePath(src) {

@@ -7,7 +7,7 @@
  * @flow
  */
 
-import types from 'ast-types';
+import { namedTypes as t, visit } from 'ast-types';
 import getPropertyValuePath from './getPropertyValuePath';
 import isReactComponentClass from './isReactComponentClass';
 import isReactCreateClassCall from './isReactCreateClassCall';
@@ -15,8 +15,6 @@ import isReactCreateElementCall from './isReactCreateElementCall';
 import isReactCloneElementCall from './isReactCloneElementCall';
 import isReactChildrenElementCall from './isReactChildrenElementCall';
 import resolveToValue from './resolveToValue';
-
-const { visit, namedTypes: t } = types;
 
 const validPossibleStatelessComponentTypes = [
   'Property',

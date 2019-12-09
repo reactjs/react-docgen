@@ -7,12 +7,10 @@
  * @flow
  */
 
-import types from 'ast-types';
+import { namedTypes as t } from 'ast-types';
 import isReactCreateClassCall from './isReactCreateClassCall';
 import isReactForwardRefCall from './isReactForwardRefCall';
 import resolveToValue from './resolveToValue';
-
-const { namedTypes: t } = types;
 
 /**
  * If the path is a call expression, it recursively resolves to the

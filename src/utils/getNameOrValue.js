@@ -7,9 +7,7 @@
  * @flow
  */
 
-import types from 'ast-types';
-
-const { namedTypes: t } = types;
+import { namedTypes as t } from 'ast-types';
 
 /**
  * If node is an Identifier, it returns its name. If it is a literal, it returns

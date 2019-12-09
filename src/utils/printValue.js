@@ -42,9 +42,7 @@ export default function printValue(path: NodePath): string {
       return `"${path.node.value}"`;
     }
     throw new Error(
-      `Cannot print raw value for type '${
-        path.node.type
-      }'. Please report this with an example at https://github.com/reactjs/react-docgen/issues`,
+      `Cannot print raw value for type '${path.node.type}'. Please report this with an example at https://github.com/reactjs/react-docgen/issues`,
     );
   }
   const src = getSrcFromAst(path);

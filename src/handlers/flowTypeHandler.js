@@ -7,7 +7,7 @@
  * @flow
  */
 
-import types from 'ast-types';
+import { namedTypes as t } from 'ast-types';
 import type Documentation from '../Documentation';
 import { unwrapUtilityType } from '../utils/flowUtilityTypes';
 import getFlowType from '../utils/getFlowType';
@@ -19,8 +19,6 @@ import getTSType from '../utils/getTSType';
 import { type TypeParameters } from '../utils/getTypeParameters';
 import resolveToValue from '../utils/resolveToValue';
 import setPropDescription from '../utils/setPropDescription';
-
-const { namedTypes: t } = types;
 
 function setPropDescriptor(
   documentation: Documentation,
