@@ -6,11 +6,9 @@
  *
  */
 
-import types from 'ast-types';
-import resolveHOC from '../resolveHOC';
+import { builders } from 'ast-types';
 import * as utils from '../../../tests/utils';
-
-const { builders } = types;
+import resolveHOC from '../resolveHOC';
 
 describe('resolveHOC', () => {
   function parse(src) {

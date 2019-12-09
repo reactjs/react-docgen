@@ -7,7 +7,7 @@
  * @flow
  */
 
-import types from 'ast-types';
+import { namedTypes as t } from 'ast-types';
 import getPropertyName from '../utils/getPropertyName';
 import getMemberValuePath from '../utils/getMemberValuePath';
 import printValue from '../utils/printValue';
@@ -16,8 +16,6 @@ import resolveFunctionDefinitionToReturnValue from '../utils/resolveFunctionDefi
 import isReactComponentClass from '../utils/isReactComponentClass';
 import isReactForwardRefCall from '../utils/isReactForwardRefCall';
 import type Documentation from '../Documentation';
-
-const { namedTypes: t } = types;
 
 function getDefaultValue(path: NodePath) {
   let node = path.node;

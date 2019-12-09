@@ -6,11 +6,9 @@
  *
  */
 
-import types from 'ast-types';
+import { NodePath } from 'ast-types';
 import * as utils from '../../../tests/utils';
 import findAllComponentDefinitions from '../findAllComponentDefinitions';
-
-const { NodePath } = types;
 
 describe('findAllComponentDefinitions', () => {
   function parse(source) {

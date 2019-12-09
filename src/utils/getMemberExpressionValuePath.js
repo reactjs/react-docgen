@@ -7,12 +7,10 @@
  * @flow
  */
 
-import types from 'ast-types';
+import { namedTypes as t, visit } from 'ast-types';
 import getNameOrValue from './getNameOrValue';
 import { String as toString } from './expressionTo';
 import isReactForwardRefCall from './isReactForwardRefCall';
-
-const { visit, namedTypes: t } = types;
 
 function resolveName(path) {
   if (t.VariableDeclaration.check(path.node)) {

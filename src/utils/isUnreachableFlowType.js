@@ -7,9 +7,7 @@
  * @flow
  */
 
-import types from 'ast-types';
-
-const { namedTypes: t } = types;
+import { namedTypes as t } from 'ast-types';
 
 /**
  * Returns true of the path is an unreachable TypePath

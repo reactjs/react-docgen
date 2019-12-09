@@ -9,10 +9,8 @@
 
 /*eslint no-loop-func: 0, no-use-before-define: 0*/
 
-import types from 'ast-types';
+import { namedTypes as t } from 'ast-types';
 import resolveToValue from './resolveToValue';
-
-const { namedTypes: t } = types;
 
 /**
  * Splits a MemberExpression or CallExpression into parts.

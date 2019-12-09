@@ -7,13 +7,11 @@
  * @flow
  */
 
-import types from 'ast-types';
+import { namedTypes as t } from 'ast-types';
 import getMemberValuePath from '../utils/getMemberValuePath';
 import resolveToValue from '../utils/resolveToValue';
 import setPropDescription from '../utils/setPropDescription';
 import type Documentation from '../Documentation';
-
-const { namedTypes: t } = types;
 
 function resolveDocumentation(
   documentation: Documentation,

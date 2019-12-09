@@ -7,7 +7,7 @@
  * @flow
  */
 
-import types from 'ast-types';
+import { namedTypes as t } from 'ast-types';
 import getPropType from '../utils/getPropType';
 import getPropertyName from '../utils/getPropertyName';
 import getMemberValuePath from '../utils/getMemberValuePath';
@@ -17,8 +17,6 @@ import printValue from '../utils/printValue';
 import resolveToModule from '../utils/resolveToModule';
 import resolveToValue from '../utils/resolveToValue';
 import type Documentation from '../Documentation';
-
-const { namedTypes: t } = types;
 
 function isPropTypesExpression(path) {
   const moduleName = resolveToModule(path);

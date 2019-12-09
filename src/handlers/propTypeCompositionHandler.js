@@ -7,13 +7,11 @@
  * @flow
  */
 
-import types from 'ast-types';
+import { namedTypes as t } from 'ast-types';
 import getMemberValuePath from '../utils/getMemberValuePath';
 import resolveToModule from '../utils/resolveToModule';
 import resolveToValue from '../utils/resolveToValue';
 import type Documentation from '../Documentation';
-
-const { namedTypes: t } = types;
 
 /**
  * It resolves the path to its module name and adds it to the "composes" entry

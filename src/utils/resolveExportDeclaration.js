@@ -7,10 +7,8 @@
  * @flow
  */
 
-import types from 'ast-types';
+import { namedTypes as t } from 'ast-types';
 import resolveToValue from './resolveToValue';
-
-const { namedTypes: t } = types;
 
 export default function resolveExportDeclaration(
   path: NodePath,

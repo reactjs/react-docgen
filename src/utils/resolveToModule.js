@@ -7,11 +7,9 @@
  * @flow
  */
 
-import types from 'ast-types';
+import { namedTypes as t } from 'ast-types';
 import match from './match';
 import resolveToValue from './resolveToValue';
-
-const { namedTypes: t } = types;
 
 /**
  * Given a path (e.g. call expression, member expression or identifier),

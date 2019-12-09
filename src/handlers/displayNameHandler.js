@@ -7,14 +7,12 @@
  * @flow
  */
 
-import types from 'ast-types';
+import { namedTypes as t } from 'ast-types';
 import getMemberValuePath from '../utils/getMemberValuePath';
 import getNameOrValue from '../utils/getNameOrValue';
 import resolveToValue from '../utils/resolveToValue';
 import resolveFunctionDefinitionToReturnValue from '../utils/resolveFunctionDefinitionToReturnValue';
 import type Documentation from '../Documentation';
-
-const { namedTypes: t } = types;
 
 export default function displayNameHandler(
   documentation: Documentation,

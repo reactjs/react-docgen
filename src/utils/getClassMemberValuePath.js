@@ -7,10 +7,8 @@
  * @flow
  */
 
-import types from 'ast-types';
+import { namedTypes as t } from 'ast-types';
 import getNameOrValue from './getNameOrValue';
-
-const { namedTypes: t } = types;
 
 export default function getClassMemberValuePath(
   classDefinition: NodePath,

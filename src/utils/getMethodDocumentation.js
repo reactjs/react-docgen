@@ -7,7 +7,7 @@
  * @flow
  */
 
-import types from 'ast-types';
+import { namedTypes as t } from 'ast-types';
 import { getDocblock } from './docblock';
 import getFlowType from './getFlowType';
 import getTSType from './getTSType';
@@ -15,8 +15,6 @@ import getParameterName from './getParameterName';
 import getPropertyName from './getPropertyName';
 import getTypeAnnotation from './getTypeAnnotation';
 import type { FlowTypeDescriptor } from '../types';
-
-const { namedTypes: t } = types;
 
 type MethodParameter = {
   name: string,

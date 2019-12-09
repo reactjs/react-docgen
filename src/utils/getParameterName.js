@@ -7,10 +7,8 @@
  * @flow
  */
 
-import types from 'ast-types';
+import { namedTypes as t } from 'ast-types';
 import printValue from './printValue';
-
-const { namedTypes: t } = types;
 
 export default function getParameterName(parameterPath: NodePath): string {
   switch (parameterPath.node.type) {

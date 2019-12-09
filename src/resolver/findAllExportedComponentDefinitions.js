@@ -7,7 +7,7 @@
  * @flow
  */
 
-import types from 'ast-types';
+import { namedTypes as t, visit } from 'ast-types';
 import isExportsOrModuleAssignment from '../utils/isExportsOrModuleAssignment';
 import isReactComponentClass from '../utils/isReactComponentClass';
 import isReactCreateClassCall from '../utils/isReactCreateClassCall';
@@ -17,8 +17,6 @@ import normalizeClassDefinition from '../utils/normalizeClassDefinition';
 import resolveExportDeclaration from '../utils/resolveExportDeclaration';
 import resolveToValue from '../utils/resolveToValue';
 import resolveHOC from '../utils/resolveHOC';
-
-const { visit, namedTypes: t } = types;
 
 function ignore(): false {
   return false;

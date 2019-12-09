@@ -7,13 +7,11 @@
  * @flow
  */
 
-import types from 'ast-types';
+import { namedTypes as t } from 'ast-types';
 import isReactModuleName from './isReactModuleName';
 import match from './match';
 import resolveToModule from './resolveToModule';
 import resolveToValue from './resolveToValue';
-
-const { namedTypes: t } = types;
 
 /**
  * Returns true if the expression is a function call of the form

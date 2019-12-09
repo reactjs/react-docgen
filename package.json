@@ -4,9 +4,11 @@
   "description": "A CLI and toolkit to extract information from React components for documentation generation.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/reactjs/react-docgen.git"
+    "url": "git+https://github.com/reactjs/react-docgen.git"
   },
-  "bugs": "https://github.com/reactjs/react-docgen/issues",
+  "bugs": {
+    "url": "https://github.com/reactjs/react-docgen/issues"
+  },
   "bin": {
     "react-docgen": "bin/react-docgen.js"
   },
@@ -34,12 +36,14 @@
     "react",
     "documentation-generation"
   ],
-  "author": "Felix Kling",
+  "author": {
+    "name": "Felix Kling"
+  },
   "license": "MIT",
   "dependencies": {
-    "@babel/core": "^7.4.4",
-    "@babel/runtime": "^7.0.0",
-    "ast-types": "^0.12.4",
+    "@babel/core": "^7.7.5",
+    "@babel/runtime": "^7.7.6",
+    "ast-types": "^0.13.2",
     "async": "^2.1.4",
     "commander": "^2.19.0",
     "doctrine": "^3.0.0",
@@ -47,25 +51,25 @@
     "strip-indent": "^3.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.0.0",
-    "@babel/plugin-transform-runtime": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
-    "@babel/preset-flow": "^7.0.0",
-    "babel-eslint": "^10.0.1",
-    "babel-jest": "^24.1.0",
+    "@babel/cli": "^7.7.5",
+    "@babel/plugin-transform-runtime": "^7.7.6",
+    "@babel/preset-env": "^7.7.6",
+    "@babel/preset-flow": "^7.7.4",
+    "babel-eslint": "^10.0.3",
+    "babel-jest": "^24.9.0",
     "benchmark": "^2.1.4",
     "cli-table": "^0.3.1",
     "cross-spawn": "^6.0.4",
     "eslint": "^5.7.0",
     "eslint-config-prettier": "^4.0.0",
-    "eslint-plugin-prettier": "^3.0.0",
+    "eslint-plugin-prettier": "^3.1.1",
     "flow-bin": "^0.98.0",
-    "jest": "^24.1.0",
-    "jest-diff": "^24.0.0",
-    "jest-matcher-utils": "^24.0.0",
-    "prettier": "^1.14.3",
-    "rimraf": "^2.3.2",
-    "temp": "^0.9.0"
+    "jest": "^24.9.0",
+    "jest-diff": "^24.9.0",
+    "jest-matcher-utils": "^24.9.0",
+    "prettier": "^1.19.1",
+    "rimraf": "^3.0.0",
+    "temp": "^0.9.1"
   },
   "jest": {
     "snapshotSerializers": [
