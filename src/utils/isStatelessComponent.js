@@ -35,7 +35,14 @@ function isJSXElementOrReactCall(path) {
   );
 }
 
-function resolvesToJSXElementOrReactCall(path) {
+function resolvesToJSXElementOrReactCall(path, seen) {
+  // avoid returns with recursive function calls
+  if (seen.has(path)) {
+    return false;
+  }
+
+  seen.add(path);
+
   // Is the path is already a JSX element or a call to one of the React.* functions
   if (isJSXElementOrReactCall(path)) {
     return true;
@@ -47,8 +54,8 @@ function resolvesToJSXElementOrReactCall(path) {
   // the two possible paths
   if (resolvedPath.node.type === 'ConditionalExpression') {
     return (
-      resolvesToJSXElementOrReactCall(resolvedPath.get('consequent')) ||
-      resolvesToJSXElementOrReactCall(resolvedPath.get('alternate'))
+      resolvesToJSXElementOrReactCall(resolvedPath.get('consequent'), seen) ||
+      resolvesToJSXElementOrReactCall(resolvedPath.get('alternate'), seen)
     );
   }
 
@@ -56,8 +63,8 @@ function resolvesToJSXElementOrReactCall(path) {
   // the two possible paths
   if (resolvedPath.node.type === 'LogicalExpression') {
     return (
-      resolvesToJSXElementOrReactCall(resolvedPath.get('left')) ||
-      resolvesToJSXElementOrReactCall(resolvedPath.get('right'))
+      resolvesToJSXElementOrReactCall(resolvedPath.get('left'), seen) ||
+      resolvesToJSXElementOrReactCall(resolvedPath.get('right'), seen)
     );
   }
 
@@ -71,7 +78,7 @@ function resolvesToJSXElementOrReactCall(path) {
   if (resolvedPath.node.type === 'CallExpression') {
     let calleeValue = resolveToValue(resolvedPath.get('callee'));
 
-    if (returnsJSXElementOrReactCall(calleeValue)) {
+    if (returnsJSXElementOrReactCall(calleeValue, seen)) {
       return true;
     }
 
@@ -112,7 +119,7 @@ function resolvesToJSXElementOrReactCall(path) {
 
       if (
         !resolvedMemberExpression ||
-        returnsJSXElementOrReactCall(resolvedMemberExpression)
+        returnsJSXElementOrReactCall(resolvedMemberExpression, seen)
       ) {
         return true;
       }
@@ -122,14 +129,14 @@ function resolvesToJSXElementOrReactCall(path) {
   return false;
 }
 
-function returnsJSXElementOrReactCall(path) {
+function returnsJSXElementOrReactCall(path, seen = new WeakSet()) {
   let visited = false;
 
   // early exit for ArrowFunctionExpressions
   if (
     path.node.type === 'ArrowFunctionExpression' &&
     path.get('body').node.type !== 'BlockStatement' &&
-    resolvesToJSXElementOrReactCall(path.get('body'))
+    resolvesToJSXElementOrReactCall(path.get('body'), seen)
   ) {
     return true;
   }
@@ -145,7 +152,7 @@ function returnsJSXElementOrReactCall(path) {
       // Only check return statements which are part of the checked function scope
       if (returnPath.scope !== scope) return false;
 
-      if (resolvesToJSXElementOrReactCall(returnPath.get('argument'))) {
+      if (resolvesToJSXElementOrReactCall(returnPath.get('argument'), seen)) {
         visited = true;
         return false;
       }

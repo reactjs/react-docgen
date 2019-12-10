@@ -6,7 +6,7 @@
  *
  */
 
-import { statement, parse } from '../../../tests/utils';
+import { parse, statement } from '../../../tests/utils';
 import isStatelessComponent from '../isStatelessComponent';
 
 describe('isStatelessComponent', () => {
@@ -231,6 +231,16 @@ describe('isStatelessComponent', () => {
       `);
 
       expect(isStatelessComponent(def)).toBe(true);
+    });
+
+    it('handles recursive function calls', () => {
+      const def = statement(`
+        function Foo (props) {
+          return props && Foo(props);
+        }
+      `);
+
+      expect(isStatelessComponent(def)).toBe(false);
     });
 
     test(
