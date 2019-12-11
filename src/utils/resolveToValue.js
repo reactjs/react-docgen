@@ -137,7 +137,11 @@ export default function resolveToValue(path: NodePath): NodePath {
     if (node.operator === '=') {
       return resolveToValue(path.get('right'));
     }
-  } else if (t.TypeCastExpression.check(node)) {
+  } else if (
+    t.TypeCastExpression.check(node) ||
+    t.TSAsExpression.check(node) ||
+    t.TSTypeAssertion.check(node)
+  ) {
     return resolveToValue(path.get('expression'));
   } else if (t.Identifier.check(node)) {
     if (
