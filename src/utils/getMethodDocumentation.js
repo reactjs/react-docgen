@@ -93,6 +93,10 @@ function getMethodModifiers(methodPath) {
     modifiers.push(methodPath.node.kind);
   }
 
+  if (methodPath.node.accessibility === 'private') {
+    modifiers.push(methodPath.node.accessibility);
+  }
+
   const functionExpression = methodPath.get('value').node;
   if (functionExpression.generator) {
     modifiers.push('generator');
