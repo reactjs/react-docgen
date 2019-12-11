@@ -11,8 +11,8 @@ import { parse } from '../../../tests/utils';
 import resolveToValue from '../resolveToValue';
 
 describe('resolveToValue', () => {
-  function parsePath(src) {
-    const root = parse(src.trim());
+  function parsePath(src, options = {}) {
+    const root = parse(src.trim(), options);
     return root.get('body', root.node.body.length - 1, 'expression');
   }
 
@@ -72,12 +72,35 @@ describe('resolveToValue', () => {
     expect(resolveToValue(path).node.type).toBe('FunctionDeclaration');
   });
 
-  it('resolves type cast expressions', () => {
-    const path = parsePath(`
+  describe('flow', () => {
+    it('resolves type cast expressions', () => {
+      const path = parsePath(`
       function foo() {}
       (foo: any);
     `);
-    expect(resolveToValue(path).node.type).toBe('FunctionDeclaration');
+      expect(resolveToValue(path).node.type).toBe('FunctionDeclaration');
+    });
+  });
+
+  describe('typescript', () => {
+    const parseTypescript = src =>
+      parsePath(src, { parserOptions: { plugins: ['typescript'] } });
+
+    it('resolves type as expressions', () => {
+      const path = parseTypescript(`
+      function foo() {}
+      (foo as any);
+    `);
+      expect(resolveToValue(path).node.type).toBe('FunctionDeclaration');
+    });
+
+    it('resolves type assertions', () => {
+      const path = parseTypescript(`
+      function foo() {}
+      (<any> foo);
+    `);
+      expect(resolveToValue(path).node.type).toBe('FunctionDeclaration');
+    });
   });
 
   describe('assignments', () => {
