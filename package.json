@@ -10,7 +10,9 @@
     "url": "https://github.com/reactjs/react-docgen/issues"
   },
   "bin": {
-    "react-docgen": "bin/react-docgen.js"
+    "react-docgen": "bin/react-docgen.js",
+    "react-docgen-markdown": "bin/react-docgen-markdown.js",
+    "build-docs": "bin/buildDocs.sh"
   },
   "files": [
     "bin",
