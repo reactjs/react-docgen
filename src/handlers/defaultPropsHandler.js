@@ -90,7 +90,6 @@ function getDefaultValuesFromProps(
   isStateless: boolean,
 ) {
   properties
-    .filter(propertyPath => t.Property.check(propertyPath.node))
     // Don't evaluate property if component is functional and the node is not an AssignmentPattern
     .filter(
       propertyPath =>
@@ -98,17 +97,28 @@ function getDefaultValuesFromProps(
         t.AssignmentPattern.check(propertyPath.get('value').node),
     )
     .forEach(propertyPath => {
-      const propName = getPropertyName(propertyPath);
-      if (!propName) return;
+      if (t.Property.check(propertyPath.node)) {
+        const propName = getPropertyName(propertyPath);
+        if (!propName) return;
 
-      const propDescriptor = documentation.getPropDescriptor(propName);
-      const defaultValue = getDefaultValue(
-        isStateless
-          ? propertyPath.get('value', 'right')
-          : propertyPath.get('value'),
-      );
-      if (defaultValue) {
-        propDescriptor.defaultValue = defaultValue;
+        const propDescriptor = documentation.getPropDescriptor(propName);
+        const defaultValue = getDefaultValue(
+          isStateless
+            ? propertyPath.get('value', 'right')
+            : propertyPath.get('value'),
+        );
+        if (defaultValue) {
+          propDescriptor.defaultValue = defaultValue;
+        }
+      } else if (t.SpreadElement.check(propertyPath.node)) {
+        const resolvedValuePath = resolveToValue(propertyPath.get('argument'));
+        if (t.ObjectExpression.check(resolvedValuePath.node)) {
+          getDefaultValuesFromProps(
+            resolvedValuePath.get('properties'),
+            documentation,
+            isStateless,
+          );
+        }
       }
     });
 }
