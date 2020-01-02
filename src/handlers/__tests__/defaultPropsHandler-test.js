@@ -75,6 +75,26 @@ describe('defaultPropsHandler', () => {
       );
       expect(documentation.descriptors).toMatchSnapshot();
     });
+
+    it('resolves local spreads', () => {
+      const src = `
+        const other = { bar: "foo" };
+
+        ({
+          getDefaultProps: function() {
+            return {
+              foo: "bar",
+              ...other,
+            };
+          }
+        })
+      `;
+      defaultPropsHandler(
+        documentation,
+        parse(src).get('body', 1, 'expression'),
+      );
+      expect(documentation.descriptors).toMatchSnapshot();
+    });
   });
 
   describe('ClassDeclaration with static defaultProps', () => {
@@ -90,6 +110,21 @@ describe('defaultPropsHandler', () => {
         }
       `;
       defaultPropsHandler(documentation, parse(src).get('body', 0));
+      expect(documentation.descriptors).toMatchSnapshot();
+    });
+
+    it('should resolve local spreads', () => {
+      const src = `
+        const other = { bar: "foo" };
+
+        class Foo {
+          static defaultProps = {
+            foo: "bar",
+            ...other
+          };
+        }
+      `;
+      defaultPropsHandler(documentation, parse(src).get('body', 1));
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
@@ -173,6 +208,19 @@ describe('defaultPropsHandler', () => {
       defaultPropsHandler(
         documentation,
         parse(src).get('body', 0, 'declarations', 0, 'init'),
+      );
+      expect(documentation.descriptors).toMatchSnapshot();
+    });
+
+    it('resolves local spreads', () => {
+      const src = `
+        const other = { bar: "foo" };
+        var Foo = (props) => <div />
+        Foo.defaultProps = { foo: "bar", ...other };
+      `;
+      defaultPropsHandler(
+        documentation,
+        parse(src).get('body', 1, 'declarations', 0, 'init'),
       );
       expect(documentation.descriptors).toMatchSnapshot();
     });

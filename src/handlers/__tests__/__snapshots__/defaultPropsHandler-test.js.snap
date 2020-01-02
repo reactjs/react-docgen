@@ -40,6 +40,23 @@ Object {
 }
 `;
 
+exports[`defaultPropsHandler ClassDeclaration with static defaultProps should resolve local spreads 1`] = `
+Object {
+  "bar": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "\\"foo\\"",
+    },
+  },
+  "foo": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "\\"bar\\"",
+    },
+  },
+}
+`;
+
 exports[`defaultPropsHandler ClassExpression with static defaultProps should find prop default values that are literals 1`] = `
 Object {
   "abc": Object {
@@ -58,6 +75,23 @@ Object {
     "defaultValue": Object {
       "computed": false,
       "value": "[\\"foo\\", \\"bar\\"]",
+    },
+  },
+  "foo": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "\\"bar\\"",
+    },
+  },
+}
+`;
+
+exports[`defaultPropsHandler Functional components with default params resolves local spreads 1`] = `
+Object {
+  "bar": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "\\"foo\\"",
     },
   },
   "foo": Object {
@@ -188,6 +222,23 @@ Object {
 
 exports[`defaultPropsHandler ObjectExpression ignores complex computed properties 1`] = `
 Object {
+  "foo": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "\\"bar\\"",
+    },
+  },
+}
+`;
+
+exports[`defaultPropsHandler ObjectExpression resolves local spreads 1`] = `
+Object {
+  "bar": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "\\"foo\\"",
+    },
+  },
   "foo": Object {
     "defaultValue": Object {
       "computed": false,
