@@ -100,7 +100,7 @@ function handleTSTypeReference(
   }
 
   if (typeParams && typeParams[type.name]) {
-    type = getTSTypeWithResolvedTypes(resolvedPath, typeParams);
+    type = getTSTypeWithResolvedTypes(resolvedPath);
   }
 
   if (resolvedPath && resolvedPath.node.typeAnnotation) {

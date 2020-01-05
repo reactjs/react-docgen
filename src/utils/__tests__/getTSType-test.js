@@ -636,6 +636,22 @@ describe('getTSType', () => {
     });
   });
 
+  it('handles generics of the same Name', () => {
+    const typePath = statement(`
+      interface Props {
+        baz: Foo<T>
+      }
+
+      type Foo<T> = Bar<T>
+
+    `)
+      .get('body')
+      .get('body', 0)
+      .get('typeAnnotation');
+
+    getTSType(typePath);
+  });
+
   it('handles self-referencing type cycles', () => {
     const typePath = statement(`
       let action: Action;
