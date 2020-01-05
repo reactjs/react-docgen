@@ -11,3 +11,5 @@ Object {
 `;
 
 exports[`getMethodDocumentation name ignores complex computed method name 1`] = `null`;
+
+exports[`getMethodDocumentation parameters private ignores private typescript methods 1`] = `null`;

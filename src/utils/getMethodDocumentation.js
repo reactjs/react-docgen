@@ -107,6 +107,10 @@ function getMethodModifiers(methodPath) {
 export default function getMethodDocumentation(
   methodPath: NodePath,
 ): ?MethodDocumentation {
+  if (methodPath.node.accessibility === 'private') {
+    return null;
+  }
+
   const name = getPropertyName(methodPath);
   if (!name) return null;
 

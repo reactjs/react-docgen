@@ -23,7 +23,21 @@ export default class TSComponent extends Component<Props> {
   /**
    * This is a method
    */
-  method(a: string): string {
+  foo(a: string): string {
+    return a;
+  }
+
+  /**
+   * This is a public method
+   */
+  public bar(a: string): string {
+    return a;
+  }
+
+  /**
+   * This is a private method
+   */
+  private baz(a: string): string {
     return a;
   }
 }
