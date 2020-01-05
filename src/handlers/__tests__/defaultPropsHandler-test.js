@@ -1,58 +1,23 @@
-/*
- *  Copyright (c) 2015, Facebook, Inc.
- *  All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
-
-jest.disableAutomock();
 jest.mock('../../Documentation');
+
+import { parse } from '../../../tests/utils';
 
 describe('defaultPropsHandler', () => {
   let documentation;
   let defaultPropsHandler;
-  let parse;
 
   beforeEach(() => {
-    ({ parse } = require('../../../tests/utils'));
     documentation = new (require('../../Documentation'))();
     defaultPropsHandler = require('../defaultPropsHandler').default;
   });
-
-  function test(definition) {
-    defaultPropsHandler(documentation, definition);
-    expect(documentation.descriptors).toEqual({
-      foo: {
-        defaultValue: {
-          value: '"bar"',
-          computed: false,
-        },
-      },
-      bar: {
-        defaultValue: {
-          value: '42',
-          computed: false,
-        },
-      },
-      baz: {
-        defaultValue: {
-          value: '["foo", "bar"]',
-          computed: false,
-        },
-      },
-      abc: {
-        defaultValue: {
-          value: '{xyz: abc.def, 123: 42}',
-          computed: false,
-        },
-      },
-    });
-  }
 
   describe('ObjectExpression', () => {
     it('should find prop default values that are literals', () => {
@@ -68,7 +33,67 @@ describe('defaultPropsHandler', () => {
           }
         })
       `;
-      test(parse(src).get('body', 0, 'expression'));
+      defaultPropsHandler(
+        documentation,
+        parse(src).get('body', 0, 'expression'),
+      );
+      expect(documentation.descriptors).toMatchSnapshot();
+    });
+
+    it('handles computed properties', () => {
+      const src = `
+        ({
+          getDefaultProps: function() {
+            return {
+              foo: "bar",
+              [bar]: 42,
+            };
+          }
+        })
+      `;
+      defaultPropsHandler(
+        documentation,
+        parse(src).get('body', 0, 'expression'),
+      );
+      expect(documentation.descriptors).toMatchSnapshot();
+    });
+
+    it('ignores complex computed properties', () => {
+      const src = `
+        ({
+          getDefaultProps: function() {
+            return {
+              foo: "bar",
+              [() => {}]: 42,
+            };
+          }
+        })
+      `;
+      defaultPropsHandler(
+        documentation,
+        parse(src).get('body', 0, 'expression'),
+      );
+      expect(documentation.descriptors).toMatchSnapshot();
+    });
+
+    it('resolves local spreads', () => {
+      const src = `
+        const other = { bar: "foo" };
+
+        ({
+          getDefaultProps: function() {
+            return {
+              foo: "bar",
+              ...other,
+            };
+          }
+        })
+      `;
+      defaultPropsHandler(
+        documentation,
+        parse(src).get('body', 1, 'expression'),
+      );
+      expect(documentation.descriptors).toMatchSnapshot();
     });
   });
 
@@ -84,7 +109,23 @@ describe('defaultPropsHandler', () => {
           };
         }
       `;
-      test(parse(src).get('body', 0));
+      defaultPropsHandler(documentation, parse(src).get('body', 0));
+      expect(documentation.descriptors).toMatchSnapshot();
+    });
+
+    it('should resolve local spreads', () => {
+      const src = `
+        const other = { bar: "foo" };
+
+        class Foo {
+          static defaultProps = {
+            foo: "bar",
+            ...other
+          };
+        }
+      `;
+      defaultPropsHandler(documentation, parse(src).get('body', 1));
+      expect(documentation.descriptors).toMatchSnapshot();
     });
 
     it('should find prop default values that are imported variables', () => {
@@ -98,14 +139,7 @@ describe('defaultPropsHandler', () => {
         }
       `;
       defaultPropsHandler(documentation, parse(src).get('body', 1));
-      expect(documentation.descriptors).toEqual({
-        foo: {
-          defaultValue: {
-            value: 'ImportedComponent',
-            computed: true,
-          },
-        },
-      });
+      expect(documentation.descriptors).toMatchSnapshot();
     });
   });
 
@@ -120,7 +154,11 @@ describe('defaultPropsHandler', () => {
             abc: {xyz: abc.def, 123: 42}
           };
       }`;
-      test(parse(src).get('body', 0, 'declarations', 0, 'init'));
+      defaultPropsHandler(
+        documentation,
+        parse(src).get('body', 0, 'declarations', 0, 'init'),
+      );
+      expect(documentation.descriptors).toMatchSnapshot();
     });
   });
 
@@ -137,14 +175,7 @@ describe('defaultPropsHandler', () => {
     `;
     const definition = parse(src).get('body', 0, 'expression');
     expect(() => defaultPropsHandler(documentation, definition)).not.toThrow();
-    expect(documentation.descriptors).toEqual({
-      bar: {
-        defaultValue: {
-          value: '42',
-          computed: false,
-        },
-      },
-    });
+    expect(documentation.descriptors).toMatchSnapshot();
   });
 
   describe('Functional components with default params', () => {
@@ -157,7 +188,11 @@ describe('defaultPropsHandler', () => {
           abc = {xyz: abc.def, 123: 42}
         }) => <div />
       `;
-      test(parse(src).get('body', 0, 'expression'));
+      defaultPropsHandler(
+        documentation,
+        parse(src).get('body', 0, 'expression'),
+      );
+      expect(documentation.descriptors).toMatchSnapshot();
     });
 
     it('should override with defaultProps if available', () => {
@@ -170,7 +205,24 @@ describe('defaultPropsHandler', () => {
         }) => <div />
         Foo.defaultProps = { abc: {xyz: abc.def, 123: 42} };
       `;
-      test(parse(src).get('body', 0, 'declarations', 0, 'init'));
+      defaultPropsHandler(
+        documentation,
+        parse(src).get('body', 0, 'declarations', 0, 'init'),
+      );
+      expect(documentation.descriptors).toMatchSnapshot();
+    });
+
+    it('resolves local spreads', () => {
+      const src = `
+        const other = { bar: "foo" };
+        var Foo = (props) => <div />
+        Foo.defaultProps = { foo: "bar", ...other };
+      `;
+      defaultPropsHandler(
+        documentation,
+        parse(src).get('body', 1, 'declarations', 0, 'init'),
+      );
+      expect(documentation.descriptors).toMatchSnapshot();
     });
 
     it('should work with aliases', () => {
@@ -182,7 +234,11 @@ describe('defaultPropsHandler', () => {
           abc: defg = {xyz: abc.def, 123: 42}
         }) => <div />
       `;
-      test(parse(src).get('body', 0, 'expression'));
+      defaultPropsHandler(
+        documentation,
+        parse(src).get('body', 0, 'expression'),
+      );
+      expect(documentation.descriptors).toMatchSnapshot();
     });
 
     it('should find prop default values that are imported variables', () => {
@@ -197,15 +253,7 @@ describe('defaultPropsHandler', () => {
         documentation,
         parse(src).get('body', 1, 'expression'),
       );
-
-      expect(documentation.descriptors).toEqual({
-        foo: {
-          defaultValue: {
-            value: 'ImportedComponent',
-            computed: true,
-          },
-        },
-      });
+      expect(documentation.descriptors).toMatchSnapshot();
     });
 
     it('should work with no defaults', () => {
@@ -216,7 +264,31 @@ describe('defaultPropsHandler', () => {
         documentation,
         parse(src).get('body', 0, 'expression'),
       );
-      expect(documentation.descriptors).toEqual({});
+      expect(documentation.descriptors).toMatchSnapshot();
+    });
+  });
+
+  describe('forwardRef', () => {
+    it('resolves default props in the parameters', () => {
+      const src = `
+        import React from 'react';
+        React.forwardRef(({ foo = 'bar' }, ref) => <div ref={ref}>{foo}</div>);
+      `;
+      defaultPropsHandler(
+        documentation,
+        parse(src).get('body', 1, 'expression'),
+      );
+      expect(documentation.descriptors).toMatchSnapshot();
+    });
+
+    it('resolves defaultProps', () => {
+      const src = `
+        import React from 'react';
+        const Component = React.forwardRef(({ foo }, ref) => <div ref={ref}>{foo}</div>);
+        Component.defaultProps = { foo: 'baz' };
+      `;
+      defaultPropsHandler(documentation, parse(src).get('body', 1));
+      expect(documentation.descriptors).toMatchSnapshot();
     });
   });
 });

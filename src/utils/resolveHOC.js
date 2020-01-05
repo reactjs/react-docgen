@@ -1,22 +1,16 @@
-/*
- * Copyright (c) 2015, Facebook, Inc.
- * All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * @flow
- *
  */
 
-import recast from 'recast';
+import { namedTypes as t } from 'ast-types';
 import isReactCreateClassCall from './isReactCreateClassCall';
 import isReactForwardRefCall from './isReactForwardRefCall';
-
-const {
-  types: { NodePath, namedTypes: types },
-} = recast;
+import resolveToValue from './resolveToValue';
 
 /**
  * If the path is a call expression, it recursively resolves to the
@@ -27,12 +21,28 @@ const {
 export default function resolveHOC(path: NodePath): NodePath {
   const node = path.node;
   if (
-    types.CallExpression.check(node) &&
+    t.CallExpression.check(node) &&
     !isReactCreateClassCall(path) &&
     !isReactForwardRefCall(path)
   ) {
     if (node.arguments.length) {
-      return resolveHOC(path.get('arguments', node.arguments.length - 1));
+      const inner = path.get('arguments', 0);
+
+      // If the first argument is one of these types then the component might be the last argument
+      // If there are all identifiers then we cannot figure out exactly and have to assume it is the first
+      if (
+        node.arguments.length > 1 &&
+        (t.Literal.check(inner.node) ||
+          t.ObjectExpression.check(inner.node) ||
+          t.ArrayExpression.check(inner.node) ||
+          t.SpreadElement.check(inner.node))
+      ) {
+        return resolveHOC(
+          resolveToValue(path.get('arguments', node.arguments.length - 1)),
+        );
+      }
+
+      return resolveHOC(resolveToValue(inner));
     }
   }
 

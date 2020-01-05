@@ -1,14 +1,13 @@
-/*
- * Copyright (c) 2015, Facebook, Inc.
- * All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * @flow
  */
 
+import { namedTypes as t, visit } from 'ast-types';
 import isExportsOrModuleAssignment from '../utils/isExportsOrModuleAssignment';
 import isReactComponentClass from '../utils/isReactComponentClass';
 import isReactCreateClassCall from '../utils/isReactCreateClassCall';
@@ -35,11 +34,11 @@ function isComponentDefinition(path) {
   );
 }
 
-function resolveDefinition(definition, types) {
+function resolveDefinition(definition) {
   if (isReactCreateClassCall(definition)) {
     // return argument
     const resolvedPath = resolveToValue(definition.get('arguments', 0));
-    if (types.ObjectExpression.check(resolvedPath.node)) {
+    if (t.ObjectExpression.check(resolvedPath.node)) {
       return resolvedPath;
     }
   } else if (isReactComponentClass(definition)) {
@@ -71,13 +70,11 @@ function resolveDefinition(definition, types) {
  */
 export default function findExportedComponentDefinition(
   ast: ASTNode,
-  recast: Object,
 ): ?NodePath {
-  const types = recast.types.namedTypes;
   let foundDefinition;
 
   function exportDeclaration(path) {
-    const definitions = resolveExportDeclaration(path, types).reduce(
+    const definitions = resolveExportDeclaration(path).reduce(
       (acc, definition) => {
         if (isComponentDefinition(definition)) {
           acc.push(definition);
@@ -99,11 +96,11 @@ export default function findExportedComponentDefinition(
       // If a file exports multiple components, ... complain!
       throw new Error(ERROR_MULTIPLE_DEFINITIONS);
     }
-    foundDefinition = resolveDefinition(definitions[0], types);
+    foundDefinition = resolveDefinition(definitions[0]);
     return false;
   }
 
-  recast.visit(ast, {
+  visit(ast, {
     visitFunctionDeclaration: ignore,
     visitFunctionExpression: ignore,
     visitClassDeclaration: ignore,
@@ -111,13 +108,13 @@ export default function findExportedComponentDefinition(
     visitIfStatement: ignore,
     visitWithStatement: ignore,
     visitSwitchStatement: ignore,
-    visitCatchCause: ignore,
     visitWhileStatement: ignore,
     visitDoWhileStatement: ignore,
     visitForStatement: ignore,
     visitForInStatement: ignore,
+    visitForOfStatement: ignore,
+    visitImportDeclaration: ignore,
 
-    visitExportDeclaration: exportDeclaration,
     visitExportNamedDeclaration: exportDeclaration,
     visitExportDefaultDeclaration: exportDeclaration,
 
@@ -140,7 +137,7 @@ export default function findExportedComponentDefinition(
         // If a file exports multiple components, ... complain!
         throw new Error(ERROR_MULTIPLE_DEFINITIONS);
       }
-      foundDefinition = resolveDefinition(path, types);
+      foundDefinition = resolveDefinition(path);
       return false;
     },
   });

@@ -1,41 +1,34 @@
-/*
- * Copyright (c) 2015, Facebook, Inc.
- * All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * @flow
- *
  */
 
-import type Documentation from '../Documentation';
-
+import { namedTypes as t } from 'ast-types';
 import getPropertyName from '../utils/getPropertyName';
 import getMemberValuePath from '../utils/getMemberValuePath';
 import printValue from '../utils/printValue';
-import recast from 'recast';
 import resolveToValue from '../utils/resolveToValue';
 import resolveFunctionDefinitionToReturnValue from '../utils/resolveFunctionDefinitionToReturnValue';
-import isStatelessComponent from '../utils/isStatelessComponent';
-
-const {
-  types: { namedTypes: types },
-} = recast;
+import isReactComponentClass from '../utils/isReactComponentClass';
+import isReactForwardRefCall from '../utils/isReactForwardRefCall';
+import type Documentation from '../Documentation';
 
 function getDefaultValue(path: NodePath) {
   let node = path.node;
   let defaultValue;
-  if (types.Literal.check(node)) {
+  if (t.Literal.check(node)) {
     defaultValue = node.raw;
   } else {
-    if (types.AssignmentPattern.check(path.node)) {
+    if (t.AssignmentPattern.check(path.node)) {
       path = resolveToValue(path.get('right'));
     } else {
       path = resolveToValue(path);
     }
-    if (types.ImportDeclaration.check(path.node)) {
+    if (t.ImportDeclaration.check(path.node)) {
       defaultValue = node.name;
     } else {
       node = path.node;
@@ -46,9 +39,9 @@ function getDefaultValue(path: NodePath) {
     return {
       value: defaultValue,
       computed:
-        types.CallExpression.check(node) ||
-        types.MemberExpression.check(node) ||
-        types.Identifier.check(node),
+        t.CallExpression.check(node) ||
+        t.MemberExpression.check(node) ||
+        t.Identifier.check(node),
     };
   }
 
@@ -56,7 +49,12 @@ function getDefaultValue(path: NodePath) {
 }
 
 function getStatelessPropsPath(componentDefinition): NodePath {
-  return resolveToValue(componentDefinition).get('params', 0);
+  const value = resolveToValue(componentDefinition);
+  if (isReactForwardRefCall(value)) {
+    const inner = value.get('arguments', 0);
+    return inner.get('params', 0);
+  }
+  return value.get('params', 0);
 }
 
 function getDefaultPropsPath(componentDefinition: NodePath): ?NodePath {
@@ -73,13 +71,13 @@ function getDefaultPropsPath(componentDefinition: NodePath): ?NodePath {
     return null;
   }
 
-  if (types.FunctionExpression.check(defaultPropsPath.node)) {
+  if (t.FunctionExpression.check(defaultPropsPath.node)) {
     // Find the value that is returned from the function and process it if it is
     // an object literal.
     const returnValue = resolveFunctionDefinitionToReturnValue(
       defaultPropsPath,
     );
-    if (returnValue && types.ObjectExpression.check(returnValue.node)) {
+    if (returnValue && t.ObjectExpression.check(returnValue.node)) {
       defaultPropsPath = returnValue;
     }
   }
@@ -92,24 +90,35 @@ function getDefaultValuesFromProps(
   isStateless: boolean,
 ) {
   properties
-    .filter(propertyPath => types.Property.check(propertyPath.node))
     // Don't evaluate property if component is functional and the node is not an AssignmentPattern
     .filter(
       propertyPath =>
         !isStateless ||
-        types.AssignmentPattern.check(propertyPath.get('value').node),
+        t.AssignmentPattern.check(propertyPath.get('value').node),
     )
-    .forEach(function(propertyPath) {
-      const propDescriptor = documentation.getPropDescriptor(
-        getPropertyName(propertyPath),
-      );
-      const defaultValue = getDefaultValue(
-        isStateless
-          ? propertyPath.get('value', 'right')
-          : propertyPath.get('value'),
-      );
-      if (defaultValue) {
-        propDescriptor.defaultValue = defaultValue;
+    .forEach(propertyPath => {
+      if (t.Property.check(propertyPath.node)) {
+        const propName = getPropertyName(propertyPath);
+        if (!propName) return;
+
+        const propDescriptor = documentation.getPropDescriptor(propName);
+        const defaultValue = getDefaultValue(
+          isStateless
+            ? propertyPath.get('value', 'right')
+            : propertyPath.get('value'),
+        );
+        if (defaultValue) {
+          propDescriptor.defaultValue = defaultValue;
+        }
+      } else if (t.SpreadElement.check(propertyPath.node)) {
+        const resolvedValuePath = resolveToValue(propertyPath.get('argument'));
+        if (t.ObjectExpression.check(resolvedValuePath.node)) {
+          getDefaultValuesFromProps(
+            resolvedValuePath.get('properties'),
+            documentation,
+            isStateless,
+          );
+        }
       }
     });
 }
@@ -120,19 +129,22 @@ export default function defaultPropsHandler(
 ) {
   let statelessProps = null;
   const defaultPropsPath = getDefaultPropsPath(componentDefinition);
-  if (isStatelessComponent(componentDefinition)) {
+  /**
+   * function, lazy, memo, forwardRef etc components can resolve default props as well
+   */
+  if (!isReactComponentClass(componentDefinition)) {
     statelessProps = getStatelessPropsPath(componentDefinition);
   }
 
   // Do both statelessProps and defaultProps if both are available so defaultProps can override
-  if (statelessProps && types.ObjectPattern.check(statelessProps.node)) {
+  if (statelessProps && t.ObjectPattern.check(statelessProps.node)) {
     getDefaultValuesFromProps(
       statelessProps.get('properties'),
       documentation,
       true,
     );
   }
-  if (defaultPropsPath && types.ObjectExpression.check(defaultPropsPath.node)) {
+  if (defaultPropsPath && t.ObjectExpression.check(defaultPropsPath.node)) {
     getDefaultValuesFromProps(
       defaultPropsPath.get('properties'),
       documentation,

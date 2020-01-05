@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-const recast = require('recast');
+const types = require('ast-types');
 const diff = require('jest-diff');
 const utils = require('jest-matcher-utils');
 
@@ -21,12 +21,12 @@ const matchers = {
     // the next Node it finds even if value is an array
     const receivedNode = received.value;
     let expectedNode = expected;
-    if (expected instanceof recast.types.NodePath) {
+    if (expected instanceof types.NodePath) {
       expectedNode = expected.value;
     }
 
     return {
-      pass: recast.types.astNodesAreEquivalent(receivedNode, expectedNode),
+      pass: types.astNodesAreEquivalent(receivedNode, expectedNode),
       message: () => {
         const diffString = diff(expectedNode, receivedNode);
 

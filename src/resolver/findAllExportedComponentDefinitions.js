@@ -1,14 +1,13 @@
-/*
- * Copyright (c) 2015, Facebook, Inc.
- * All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * @flow
  */
 
+import { namedTypes as t, visit } from 'ast-types';
 import isExportsOrModuleAssignment from '../utils/isExportsOrModuleAssignment';
 import isReactComponentClass from '../utils/isReactComponentClass';
 import isReactCreateClassCall from '../utils/isReactCreateClassCall';
@@ -19,11 +18,11 @@ import resolveExportDeclaration from '../utils/resolveExportDeclaration';
 import resolveToValue from '../utils/resolveToValue';
 import resolveHOC from '../utils/resolveHOC';
 
-function ignore() {
+function ignore(): false {
   return false;
 }
 
-function isComponentDefinition(path) {
+function isComponentDefinition(path: NodePath): boolean {
   return (
     isReactCreateClassCall(path) ||
     isReactComponentClass(path) ||
@@ -32,11 +31,11 @@ function isComponentDefinition(path) {
   );
 }
 
-function resolveDefinition(definition, types): ?NodePath {
+function resolveDefinition(definition: NodePath): ?NodePath {
   if (isReactCreateClassCall(definition)) {
     // return argument
     const resolvedPath = resolveToValue(definition.get('arguments', 0));
-    if (types.ObjectExpression.check(resolvedPath.node)) {
+    if (t.ObjectExpression.check(resolvedPath.node)) {
       return resolvedPath;
     }
   } else if (isReactComponentClass(definition)) {
@@ -68,13 +67,11 @@ function resolveDefinition(definition, types): ?NodePath {
  */
 export default function findExportedComponentDefinitions(
   ast: ASTNode,
-  recast: Object,
 ): Array<NodePath> {
-  const types = recast.types.namedTypes;
   const components: Array<NodePath> = [];
 
-  function exportDeclaration(path) {
-    const definitions: Array<?NodePath> = resolveExportDeclaration(path, types)
+  function exportDeclaration(path: NodePath): ?boolean {
+    const definitions: Array<?NodePath> = resolveExportDeclaration(path)
       .reduce((acc, definition) => {
         if (isComponentDefinition(definition)) {
           acc.push(definition);
@@ -86,7 +83,7 @@ export default function findExportedComponentDefinitions(
         }
         return acc;
       }, [])
-      .map(definition => resolveDefinition(definition, types));
+      .map(definition => resolveDefinition(definition));
 
     if (definitions.length === 0) {
       return false;
@@ -99,7 +96,7 @@ export default function findExportedComponentDefinitions(
     return false;
   }
 
-  recast.visit(ast, {
+  visit(ast, {
     visitFunctionDeclaration: ignore,
     visitFunctionExpression: ignore,
     visitClassDeclaration: ignore,
@@ -117,7 +114,7 @@ export default function findExportedComponentDefinitions(
     visitExportNamedDeclaration: exportDeclaration,
     visitExportDefaultDeclaration: exportDeclaration,
 
-    visitAssignmentExpression: function(path) {
+    visitAssignmentExpression: function(path: NodePath): ?boolean {
       // Ignore anything that is not `exports.X = ...;` or
       // `module.exports = ...;`
       if (!isExportsOrModuleAssignment(path)) {
@@ -132,7 +129,7 @@ export default function findExportedComponentDefinitions(
           return false;
         }
       }
-      const definition = resolveDefinition(path, types);
+      const definition = resolveDefinition(path);
       if (definition && components.indexOf(definition) === -1) {
         components.push(definition);
       }

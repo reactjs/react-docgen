@@ -1,25 +1,20 @@
-/*
- *  Copyright (c) 2015, Facebook, Inc.
- *  All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
-/*global describe, it, expect*/
-
 import fs from 'fs';
 import path from 'path';
-
-import * as docgen from '../main';
+import { handlers, parse } from '../main';
 import { ERROR_MISSING_DEFINITION } from '../parse';
 
 describe('main', () => {
   function test(source) {
     it('parses with default resolver/handlers', () => {
-      const docs = docgen.parse(source);
+      const docs = parse(source);
       expect(docs).toEqual({
         displayName: 'ABC',
         description: 'Example component description',
@@ -41,9 +36,7 @@ describe('main', () => {
     });
 
     it('parses with custom handlers', () => {
-      const docs = docgen.parse(source, null, [
-        docgen.handlers.componentDocblockHandler,
-      ]);
+      const docs = parse(source, null, [handlers.componentDocblockHandler]);
       expect(docs).toEqual({
         description: 'Example component description',
       });
@@ -52,7 +45,7 @@ describe('main', () => {
 
   describe('React.createClass', () => {
     test(`
-      var React = require("React");
+      var React = require("react");
       var PropTypes = React.PropTypes;
 
       var defaultProps = {
@@ -81,7 +74,7 @@ describe('main', () => {
 
   describe('Class definition', () => {
     test(`
-      const React = require("React");
+      const React = require("react");
       const PropTypes = React.PropTypes;
 
       const defaultProps = {
@@ -108,7 +101,7 @@ describe('main', () => {
 
   describe('Stateless Component definition: ArrowFunctionExpression', () => {
     test(`
-      import React, {PropTypes} from "React";
+      import React, {PropTypes} from "react";
 
       const defaultProps = {
         foo: true,
@@ -134,7 +127,7 @@ describe('main', () => {
 
   describe('Stateless Component definition: FunctionDeclaration', () => {
     test(`
-      import React, {PropTypes} from "React";
+      import React, {PropTypes} from "react";
 
       const defaultProps = {
         foo: true,
@@ -163,7 +156,7 @@ describe('main', () => {
 
   describe('Stateless Component definition: FunctionExpression', () => {
     test(`
-      import React, {PropTypes} from "React";
+      import React, {PropTypes} from "react";
 
       const defaultProps = {
         foo: true,
@@ -193,7 +186,7 @@ describe('main', () => {
   describe('Stateless Component definition', () => {
     it('is not so greedy', () => {
       const source = `
-        import React, {PropTypes} from "React";
+        import React, {PropTypes} from "react";
 
         /**
         * Example component description
@@ -219,7 +212,7 @@ describe('main', () => {
         export default NotAComponent;
       `;
 
-      expect(() => docgen.parse(source)).toThrowError(ERROR_MISSING_DEFINITION);
+      expect(() => parse(source)).toThrowError(ERROR_MISSING_DEFINITION);
     });
   });
 
@@ -227,12 +220,16 @@ describe('main', () => {
     const fixturePath = path.join(__dirname, 'fixtures');
     const fileNames = fs.readdirSync(fixturePath);
     for (let i = 0; i < fileNames.length; i++) {
-      const fileContent = fs.readFileSync(path.join(fixturePath, fileNames[i]));
+      const filePath = path.join(fixturePath, fileNames[i]);
+      const fileContent = fs.readFileSync(filePath, 'utf8');
 
       it(`processes component "${fileNames[i]}" without errors`, () => {
         let result;
         expect(() => {
-          result = docgen.parse(fileContent);
+          result = parse(fileContent, null, null, {
+            filename: filePath,
+            babelrc: false,
+          });
         }).not.toThrowError();
         expect(result).toMatchSnapshot();
       });

@@ -1,13 +1,10 @@
-/*
- * Copyright (c) 2015, Facebook, Inc.
- * All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- *  This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * @flow
- *
  */
 
 import * as allHandlers from './handlers';
@@ -46,7 +43,7 @@ const defaultHandlers = [
  * documentation (from a docblock).
  */
 function defaultParse(
-  src: string,
+  src: string | Buffer,
   resolver?: ?Resolver,
   handlers?: ?Array<Handler>,
   options?: Options = {},
@@ -58,7 +55,7 @@ function defaultParse(
     handlers = defaultHandlers;
   }
 
-  return parse(src, resolver, handlers, options);
+  return parse(String(src), resolver, handlers, options);
 }
 
 export {

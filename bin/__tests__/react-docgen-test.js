@@ -1,21 +1,15 @@
-/*
- *  Copyright (c) 2015, Facebook, Inc.
- *  All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
-
-/*global jasmine, describe, it, expect, afterEach*/
 
 // NOTE: This test spawns a subprocesses that load the files from dist/, not
 // src/. Before running this test run `npm run build` or `npm run watch`.
 
 const TEST_TIMEOUT = 120000;
-
-jasmine.DEFAULT_TIMEOUT_INTERVAL = TEST_TIMEOUT;
 
 const fs = require('fs');
 const path = require('path');
@@ -92,7 +86,7 @@ describe('react-docgen CLI', () => {
     tempDir = null;
     tempComponents = [];
     tempNoComponents = [];
-  });
+  }, TEST_TIMEOUT);
 
   it(
     'reads from stdin',

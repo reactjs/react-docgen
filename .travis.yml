@@ -1,9 +1,9 @@
 language: node_js
 node_js:
-  - "11"
+  - "13"
+  - "12"
   - "10"
   - "8"
-  - "6"
 cache:
   yarn: true
   directories:
@@ -22,4 +22,4 @@ deploy:
   local_dir: website/dist
   on:
     branch: master
-    node: "10"
+    node: "12"

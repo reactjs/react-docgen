@@ -1,22 +1,15 @@
-/*
- * Copyright (c) 2015, Facebook, Inc.
- * All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * @flow
- *
  */
 
+import { namedTypes as t } from 'ast-types';
 import match from './match';
-import recast from 'recast';
 import resolveToValue from './resolveToValue';
-
-const {
-  types: { namedTypes: types },
-} = recast;
 
 /**
  * Given a path (e.g. call expression, member expression or identifier),
@@ -26,30 +19,28 @@ const {
 export default function resolveToModule(path: NodePath): ?string {
   const node = path.node;
   switch (node.type) {
-    case types.VariableDeclarator.name:
+    case t.VariableDeclarator.name:
       if (node.init) {
         return resolveToModule(path.get('init'));
       }
       break;
-    case types.CallExpression.name:
-      if (
-        match(node.callee, { type: types.Identifier.name, name: 'require' })
-      ) {
+    case t.CallExpression.name:
+      if (match(node.callee, { type: t.Identifier.name, name: 'require' })) {
         return node.arguments[0].value;
       }
       return resolveToModule(path.get('callee'));
-    case types.Identifier.name:
-    case types.JSXIdentifier.name: {
+    case t.Identifier.name:
+    case t.JSXIdentifier.name: {
       const valuePath = resolveToValue(path);
       if (valuePath !== path) {
         return resolveToModule(valuePath);
       }
       break;
     }
-    case types.ImportDeclaration.name:
+    case t.ImportDeclaration.name:
       return node.source.value;
-    case types.MemberExpression.name:
-      while (path && types.MemberExpression.check(path.node)) {
+    case t.MemberExpression.name:
+      while (path && t.MemberExpression.check(path.node)) {
         path = path.get('object');
       }
       if (path) {

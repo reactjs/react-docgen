@@ -1,15 +1,13 @@
-/*
- * Copyright (c) 2015, Facebook, Inc.
- * All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * @flow
- *
  */
 
+import { namedTypes as t, visit } from 'ast-types';
 import isReactComponentClass from '../utils/isReactComponentClass';
 import isReactCreateClassCall from '../utils/isReactCreateClassCall';
 import isReactForwardRefCall from '../utils/isReactForwardRefCall';
@@ -23,9 +21,7 @@ import resolveToValue from '../utils/resolveToValue';
  */
 export default function findAllReactCreateClassCalls(
   ast: ASTNode,
-  recast: Object,
 ): Array<NodePath> {
-  const types = recast.types.namedTypes;
   const definitions = new Set();
 
   function classVisitor(path) {
@@ -43,7 +39,7 @@ export default function findAllReactCreateClassCalls(
     return false;
   }
 
-  recast.visit(ast, {
+  visit(ast, {
     visitFunctionDeclaration: statelessVisitor,
     visitFunctionExpression: statelessVisitor,
     visitArrowFunctionExpression: statelessVisitor,
@@ -56,13 +52,22 @@ export default function findAllReactCreateClassCalls(
         const inner = resolveToValue(path.get('arguments', 0));
         definitions.delete(inner);
         definitions.add(path);
+
+        // Do not traverse into arguments
+        return false;
       } else if (isReactCreateClassCall(path)) {
         const resolvedPath = resolveToValue(path.get('arguments', 0));
-        if (types.ObjectExpression.check(resolvedPath.node)) {
+        if (t.ObjectExpression.check(resolvedPath.node)) {
           definitions.add(resolvedPath);
         }
+
+        // Do not traverse into arguments
+        return false;
       }
-      return false;
+
+      // If it is neither of the above cases we need to traverse further
+      // as this call expression could be a HOC
+      this.traverse(path);
     },
   });
 

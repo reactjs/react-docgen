@@ -1,35 +1,24 @@
-/*
- * Copyright (c) 2015, Facebook, Inc.
- * All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
-
-jest.disableAutomock();
+import { expression, statement, parse } from '../../../tests/utils';
+import isReactComponentClass from '../isReactComponentClass';
 
 describe('isReactComponentClass', () => {
-  let isReactComponentClass;
-  let expression, statement, parse;
-
-  beforeEach(() => {
-    isReactComponentClass = require('../isReactComponentClass').default;
-    ({ expression, statement, parse } = require('../../../tests/utils'));
-  });
-
   describe('render method', () => {
-    it('accepts class declarations with a render method', () => {
+    it('ignores class declarations with a render method without superclass', () => {
       const def = statement('class Foo { render() {}}');
-      expect(isReactComponentClass(def)).toBe(true);
+      expect(isReactComponentClass(def)).toBe(false);
     });
 
-    it('accepts class expression with a render method', () => {
+    it('ignores class expression with a render method without superclass', () => {
       const def = expression('class { render() {}}');
-      expect(isReactComponentClass(def)).toBe(true);
+      expect(isReactComponentClass(def)).toBe(false);
     });
 
     it('ignores static render methods', () => {
@@ -57,7 +46,7 @@ describe('isReactComponentClass', () => {
         var React = require('react');
         /**
          * @class Foo
-         * @extends React.Component 
+         * @extends React.Component
          */
         class Foo extends Bar {}
       `).get('body', 1);
@@ -108,6 +97,54 @@ describe('isReactComponentClass', () => {
       const def = parse(`
         var {Component} = require('FakeReact');
         class Foo extends Component { render() {} }
+      `).get('body', 1);
+
+      expect(isReactComponentClass(def)).toBe(true);
+    });
+  });
+
+  describe('React.PureComponent inheritance', () => {
+    it('accepts class declarations extending React.PureComponent', () => {
+      const def = parse(`
+        var React = require('react');
+        class Foo extends React.PureComponent {}
+      `).get('body', 1);
+
+      expect(isReactComponentClass(def)).toBe(true);
+    });
+
+    it('accepts class expressions extending React.PureComponent', () => {
+      const def = parse(`
+        var React = require('react');
+        var Foo = class extends React.PureComponent {}
+      `).get('body', 1, 'declarations', 0, 'init');
+
+      expect(isReactComponentClass(def)).toBe(true);
+    });
+
+    it('resolves the super class reference', () => {
+      const def = parse(`
+        var {PureComponent} = require('react');
+        var C = PureComponent;
+        class Foo extends C {}
+      `).get('body', 2);
+
+      expect(isReactComponentClass(def)).toBe(true);
+    });
+
+    it('does not accept references to other modules', () => {
+      const def = parse(`
+        var {PureComponent} = require('FakeReact');
+        class Foo extends PureComponent {}
+      `).get('body', 1);
+
+      expect(isReactComponentClass(def)).toBe(false);
+    });
+
+    it('does not consider super class if render method is present', () => {
+      const def = parse(`
+        var {PureComponent} = require('FakeReact');
+        class Foo extends PureComponent { render() {} }
       `).get('body', 1);
 
       expect(isReactComponentClass(def)).toBe(true);

@@ -16,7 +16,7 @@ module.exports = {
   globals: {
     ASTNode: true,
     NodePath: true,
-    Recast: true,
+    $Exact: true,
   },
   overrides: [
     {
@@ -26,6 +26,10 @@ module.exports = {
         // conflicts with jsx
         'no-unused-vars': 'off',
       },
+    },
+    {
+      files: '@(src|bin)/**/__tests__/*-test.js',
+      env: { jest: true },
     },
   ],
 };

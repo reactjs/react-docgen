@@ -982,7 +982,11 @@ Object {
   "props": Object {
     "color": Object {
       "description": "",
-      "required": true,
+      "flowType": Object {
+        "name": "string",
+        "nullable": true,
+      },
+      "required": false,
       "type": Object {
         "name": "string",
       },
@@ -996,6 +1000,466 @@ Object {
       "required": false,
       "type": Object {
         "name": "string",
+      },
+    },
+  },
+}
+`;
+
+exports[`main fixtures processes component "component_19.js" without errors 1`] = `
+Object {
+  "composes": Array [
+    undefined,
+  ],
+  "description": "",
+  "displayName": "Component",
+  "methods": Array [],
+  "props": Object {
+    "data": Object {
+      "description": "",
+      "flowType": Object {
+        "elements": Array [
+          Object {
+            "name": "mixed",
+          },
+        ],
+        "name": "Array",
+        "raw": "Array<mixed>",
+      },
+      "required": false,
+    },
+  },
+}
+`;
+
+exports[`main fixtures processes component "component_20.js" without errors 1`] = `
+Object {
+  "description": "",
+  "displayName": "Button",
+  "methods": Array [],
+  "props": Object {
+    "@computed#children": Object {
+      "defaultValue": Object {
+        "computed": false,
+        "value": "\\"default\\"",
+      },
+      "description": "This is a test",
+      "required": false,
+      "type": Object {
+        "name": "string",
+      },
+    },
+  },
+}
+`;
+
+exports[`main fixtures processes component "component_21.tsx" without errors 1`] = `
+Object {
+  "description": "This is a typescript class component",
+  "displayName": "TSComponent",
+  "methods": Array [],
+  "props": Object {
+    "bar": Object {
+      "description": "Required prop",
+      "required": true,
+      "tsType": Object {
+        "name": "number",
+      },
+    },
+    "baz": Object {
+      "description": "Complex union prop",
+      "required": true,
+      "tsType": Object {
+        "elements": Array [
+          Object {
+            "name": "number",
+          },
+          Object {
+            "name": "signature",
+            "raw": "{ enter?: number, exit?: number }",
+            "signature": Object {
+              "properties": Array [
+                Object {
+                  "key": "enter",
+                  "value": Object {
+                    "name": "number",
+                    "required": false,
+                  },
+                },
+                Object {
+                  "key": "exit",
+                  "value": Object {
+                    "name": "number",
+                    "required": false,
+                  },
+                },
+              ],
+            },
+            "type": "object",
+          },
+          Object {
+            "name": "literal",
+            "value": "'auto'",
+          },
+        ],
+        "name": "union",
+        "raw": "number | { enter?: number, exit?: number } | 'auto'",
+      },
+    },
+    "foo": Object {
+      "description": "Optional prop",
+      "required": false,
+      "tsType": Object {
+        "name": "string",
+      },
+    },
+  },
+}
+`;
+
+exports[`main fixtures processes component "component_22.tsx" without errors 1`] = `
+Object {
+  "description": "This is a TypeScript function component",
+  "displayName": "TSFunctionComponent",
+  "methods": Array [],
+  "props": Object {
+    "align": Object {
+      "description": "",
+      "required": false,
+      "tsType": Object {
+        "elements": Array [
+          Object {
+            "name": "literal",
+            "value": "\\"left\\"",
+          },
+          Object {
+            "name": "literal",
+            "value": "\\"center\\"",
+          },
+          Object {
+            "name": "literal",
+            "value": "\\"right\\"",
+          },
+          Object {
+            "name": "literal",
+            "value": "\\"justify\\"",
+          },
+        ],
+        "name": "union",
+        "raw": "\\"left\\" | \\"center\\" | \\"right\\" | \\"justify\\"",
+      },
+    },
+    "center": Object {
+      "description": "",
+      "required": false,
+      "tsType": Object {
+        "name": "boolean",
+      },
+    },
+    "justify": Object {
+      "description": "",
+      "required": false,
+      "tsType": Object {
+        "name": "boolean",
+      },
+    },
+    "left": Object {
+      "description": "",
+      "required": false,
+      "tsType": Object {
+        "name": "boolean",
+      },
+    },
+    "right": Object {
+      "description": "",
+      "required": false,
+      "tsType": Object {
+        "name": "boolean",
+      },
+    },
+  },
+}
+`;
+
+exports[`main fixtures processes component "component_23.tsx" without errors 1`] = `
+Object {
+  "composes": Array [
+    "OtherProps",
+  ],
+  "description": "This is a typescript class component",
+  "displayName": "TSComponent",
+  "methods": Array [],
+  "props": Object {
+    "bar": Object {
+      "description": "Required prop",
+      "required": true,
+      "tsType": Object {
+        "name": "number",
+      },
+    },
+    "baz": Object {
+      "description": "Complex union prop",
+      "required": true,
+      "tsType": Object {
+        "elements": Array [
+          Object {
+            "name": "number",
+          },
+          Object {
+            "name": "signature",
+            "raw": "{ enter?: number, exit?: number }",
+            "signature": Object {
+              "properties": Array [
+                Object {
+                  "key": "enter",
+                  "value": Object {
+                    "name": "number",
+                    "required": false,
+                  },
+                },
+                Object {
+                  "key": "exit",
+                  "value": Object {
+                    "name": "number",
+                    "required": false,
+                  },
+                },
+              ],
+            },
+            "type": "object",
+          },
+          Object {
+            "name": "literal",
+            "value": "'auto'",
+          },
+        ],
+        "name": "union",
+        "raw": "number | { enter?: number, exit?: number } | 'auto'",
+      },
+    },
+    "foo": Object {
+      "description": "Optional prop",
+      "required": false,
+      "tsType": Object {
+        "name": "string",
+      },
+    },
+  },
+}
+`;
+
+exports[`main fixtures processes component "component_24.js" without errors 1`] = `
+Object {
+  "composes": Array [
+    "OtherProps",
+  ],
+  "description": "This is a flow class component with an interface as props",
+  "displayName": "FlowComponent",
+  "methods": Array [],
+  "props": Object {
+    "bar": Object {
+      "description": "Required prop",
+      "flowType": Object {
+        "name": "number",
+      },
+      "required": true,
+    },
+    "baz": Object {
+      "description": "Complex union prop",
+      "flowType": Object {
+        "elements": Array [
+          Object {
+            "name": "number",
+          },
+          Object {
+            "name": "signature",
+            "raw": "{ enter?: number, exit?: number }",
+            "signature": Object {
+              "properties": Array [
+                Object {
+                  "key": "enter",
+                  "value": Object {
+                    "name": "number",
+                    "required": false,
+                  },
+                },
+                Object {
+                  "key": "exit",
+                  "value": Object {
+                    "name": "number",
+                    "required": false,
+                  },
+                },
+              ],
+            },
+            "type": "object",
+          },
+          Object {
+            "name": "literal",
+            "value": "'auto'",
+          },
+        ],
+        "name": "union",
+        "raw": "number | { enter?: number, exit?: number } | 'auto'",
+      },
+      "required": true,
+    },
+    "foo": Object {
+      "description": "Optional prop",
+      "flowType": Object {
+        "name": "string",
+      },
+      "required": false,
+    },
+  },
+}
+`;
+
+exports[`main fixtures processes component "component_25.tsx" without errors 1`] = `
+Object {
+  "description": "This is a typescript class component",
+  "displayName": "TSComponent",
+  "methods": Array [],
+  "props": Object {
+    "bar": Object {
+      "description": "Required prop",
+      "required": true,
+      "tsType": Object {
+        "elements": Array [
+          Object {
+            "name": "Child",
+          },
+        ],
+        "name": "Array",
+        "raw": "Array<X>",
+      },
+    },
+    "baz": Object {
+      "description": "Complex union prop",
+      "required": true,
+      "tsType": Object {
+        "name": "number",
+      },
+    },
+    "foo": Object {
+      "description": "Optional prop",
+      "required": false,
+      "tsType": Object {
+        "name": "Child",
+      },
+    },
+  },
+}
+`;
+
+exports[`main fixtures processes component "component_26.js" without errors 1`] = `
+Object {
+  "description": "This is a typescript class component",
+  "displayName": "FlowComponent",
+  "methods": Array [],
+  "props": Object {
+    "bar": Object {
+      "description": "Required prop",
+      "flowType": Object {
+        "elements": Array [
+          Object {
+            "name": "Child",
+          },
+        ],
+        "name": "Array",
+        "raw": "Array<X>",
+      },
+      "required": true,
+    },
+    "baz": Object {
+      "description": "Complex union prop",
+      "flowType": Object {
+        "name": "number",
+      },
+      "required": true,
+    },
+    "foo": Object {
+      "description": "Optional prop",
+      "flowType": Object {
+        "name": "Child",
+      },
+      "required": false,
+    },
+  },
+}
+`;
+
+exports[`main fixtures processes component "component_27.tsx" without errors 1`] = `
+Object {
+  "description": "This is a typescript class component",
+  "displayName": "TSComponent",
+  "methods": Array [
+    Object {
+      "description": "This is a method",
+      "docblock": "This is a method",
+      "modifiers": Array [],
+      "name": "foo",
+      "params": Array [
+        Object {
+          "name": "a",
+          "type": Object {
+            "name": "string",
+          },
+        },
+      ],
+      "returns": Object {
+        "type": Object {
+          "name": "string",
+        },
+      },
+    },
+    Object {
+      "description": "This is a public method",
+      "docblock": "This is a public method",
+      "modifiers": Array [],
+      "name": "bar",
+      "params": Array [
+        Object {
+          "name": "a",
+          "type": Object {
+            "name": "string",
+          },
+        },
+      ],
+      "returns": Object {
+        "type": Object {
+          "name": "string",
+        },
+      },
+    },
+  ],
+  "props": Object {
+    "foo": Object {
+      "description": "",
+      "required": true,
+      "tsType": Object {
+        "name": "string",
+      },
+    },
+  },
+}
+`;
+
+exports[`main fixtures processes component "component_28.tsx" without errors 1`] = `
+Object {
+  "description": "Example component description",
+  "displayName": "ABC",
+  "methods": Array [],
+  "props": Object {
+    "foo": Object {
+      "defaultValue": Object {
+        "computed": false,
+        "value": "true",
+      },
+      "description": "Example prop description",
+      "required": false,
+      "tsType": Object {
+        "name": "boolean",
       },
     },
   },

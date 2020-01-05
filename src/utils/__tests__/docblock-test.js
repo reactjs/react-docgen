@@ -1,20 +1,13 @@
-/*
- *  Copyright (c) 2015, Facebook, Inc.
- *  All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
-/*global describe, it, expect*/
-import os from 'os';
 import { statement } from '../../../tests/utils';
-
 import { getDoclets, getDocblock } from '../docblock';
-
-const EOL = os.EOL;
 
 describe('docblock', () => {
   describe('getDoclets', () => {
@@ -52,21 +45,21 @@ describe('docblock', () => {
     ];
 
     it('gets the closest docblock of the given node', () => {
-      const node = statement(source.join(EOL));
-      expect(getDocblock(node)).toEqual(comment.join(EOL));
+      const node = statement(source.join('\n'));
+      expect(getDocblock(node)).toEqual(comment.join('\n'));
     });
 
     const terminators = [
-      '\u000A',
-      '\u000D',
+      '\u000A', // \n
+      '\u000D', // \r
       '\u2028',
       '\u2029',
-      '\u000D\u000A',
+      '\u000D\u000A', // \r\n
     ];
     terminators.forEach(t => {
       it('can handle ' + escape(t) + ' as line terminator', () => {
         const node = statement(source.join(t));
-        expect(getDocblock(node)).toEqual(comment.join(EOL));
+        expect(getDocblock(node)).toEqual(comment.join(t));
       });
     });
 

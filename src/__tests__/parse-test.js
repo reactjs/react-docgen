@@ -1,36 +1,19 @@
-/*
- *  Copyright (c) 2015, Facebook, Inc.
- *  All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
-
-const fs = require('fs');
-const temp = require('temp');
-
-jest.disableAutomock();
+import fs from 'fs';
+import temp from 'temp';
+import { expression } from '../../tests/utils';
+import parse, { ERROR_MISSING_DEFINITION } from '../parse';
 
 describe('parse', () => {
-  let utils;
-  let parse, ERROR_MISSING_DEFINITION;
-
-  beforeEach(() => {
-    utils = require('../../tests/utils');
-    // ugly but necessary because ../parse has default and named exports
-    ({ default: parse, ERROR_MISSING_DEFINITION } = require('../parse'));
-  });
-
-  function pathFromSource(source) {
-    return utils.parse(source).get('body', 0, 'expression');
-  }
-
   it('allows custom component definition resolvers', () => {
-    const path = pathFromSource('({foo: "bar"})');
+    const path = expression('{foo: "bar"}');
     const resolver = jest.fn(() => path);
     const handler = jest.fn();
     parse('//empty', resolver, [handler]);

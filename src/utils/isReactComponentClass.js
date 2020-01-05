@@ -1,28 +1,22 @@
-/*
- * Copyright (c) 2015, Facebook, Inc.
- * All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * @flow
  */
 
+import { namedTypes as t } from 'ast-types';
 import isReactModuleName from './isReactModuleName';
 import match from './match';
-import recast from 'recast';
 import resolveToModule from './resolveToModule';
 import resolveToValue from './resolveToValue';
-
-const {
-  types: { namedTypes: types },
-} = recast;
 
 function isRenderMethod(node) {
   const isProperty = node.type === 'ClassProperty';
   return (
-    (types.MethodDefinition.check(node) || isProperty) &&
+    (t.MethodDefinition.check(node) || isProperty) &&
     !node.computed &&
     !node.static &&
     (node.kind === '' || node.kind === 'method' || isProperty) &&
@@ -32,15 +26,29 @@ function isRenderMethod(node) {
 
 /**
  * Returns `true` of the path represents a class definition which either extends
- * `React.Component` or implements a `render()` method.
+ * `React.Component` or has a superclass and implements a `render()` method.
  */
 export default function isReactComponentClass(path: NodePath): boolean {
   const node = path.node;
-  if (
-    !types.ClassDeclaration.check(node) &&
-    !types.ClassExpression.check(node)
-  ) {
+  if (!t.ClassDeclaration.check(node) && !t.ClassExpression.check(node)) {
     return false;
+  }
+
+  // extends something
+  if (!node.superClass) {
+    return false;
+  }
+
+  // React.Component or React.PureComponent
+  const superClass = resolveToValue(path.get('superClass'));
+  if (
+    match(superClass.node, { property: { name: 'Component' } }) ||
+    match(superClass.node, { property: { name: 'PureComponent' } })
+  ) {
+    const module = resolveToModule(superClass);
+    if (module && isReactModuleName(module)) {
+      return true;
+    }
   }
 
   // render method
@@ -67,14 +75,5 @@ export default function isReactComponentClass(path: NodePath): boolean {
     }
   }
 
-  // extends ReactComponent?
-  if (!node.superClass) {
-    return false;
-  }
-  const superClass = resolveToValue(path.get('superClass'));
-  if (!match(superClass.node, { property: { name: 'Component' } })) {
-    return false;
-  }
-  const module = resolveToModule(superClass);
-  return !!module && isReactModuleName(module);
+  return false;
 }

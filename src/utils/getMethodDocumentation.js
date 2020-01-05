@@ -1,25 +1,20 @@
-/*
- * Copyright (c) 2015, Facebook, Inc.
- * All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * @flow
  */
 
+import { namedTypes as t } from 'ast-types';
 import { getDocblock } from './docblock';
 import getFlowType from './getFlowType';
+import getTSType from './getTSType';
 import getParameterName from './getParameterName';
 import getPropertyName from './getPropertyName';
 import getTypeAnnotation from './getTypeAnnotation';
-import recast from 'recast';
 import type { FlowTypeDescriptor } from '../types';
-
-const {
-  types: { namedTypes: types },
-} = recast;
 
 type MethodParameter = {
   name: string,
@@ -47,10 +42,15 @@ function getMethodParamsDoc(methodPath) {
   functionExpression.get('params').each(paramPath => {
     let type = null;
     const typePath = getTypeAnnotation(paramPath);
-    if (typePath) {
+    if (typePath && t.Flow.check(typePath.node)) {
       type = getFlowType(typePath);
-      if (types.GenericTypeAnnotation.check(typePath.node)) {
+      if (t.GenericTypeAnnotation.check(typePath.node)) {
         type.alias = typePath.node.id.name;
+      }
+    } else if (typePath) {
+      type = getTSType(typePath);
+      if (t.TSTypeReference.check(typePath.node)) {
+        type.alias = typePath.node.typeName.name;
       }
     }
 
@@ -72,8 +72,10 @@ function getMethodReturnDoc(methodPath) {
 
   if (functionExpression.node.returnType) {
     const returnType = getTypeAnnotation(functionExpression.get('returnType'));
-    if (returnType) {
+    if (returnType && t.Flow.check(returnType.node)) {
       return { type: getFlowType(returnType) };
+    } else if (returnType) {
+      return { type: getTSType(returnType) };
     }
   }
 
@@ -104,8 +106,14 @@ function getMethodModifiers(methodPath) {
 
 export default function getMethodDocumentation(
   methodPath: NodePath,
-): MethodDocumentation {
+): ?MethodDocumentation {
+  if (methodPath.node.accessibility === 'private') {
+    return null;
+  }
+
   const name = getPropertyName(methodPath);
+  if (!name) return null;
+
   const docblock = getDocblock(methodPath);
 
   return {

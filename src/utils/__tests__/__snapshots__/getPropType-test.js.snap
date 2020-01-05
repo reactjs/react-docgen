@@ -10,7 +10,7 @@ Object {
 exports[`getPropType detects custom validation functions for function 1`] = `
 Object {
   "name": "custom",
-  "raw": "(function() {})",
+  "raw": "function() {}",
 }
 `;
 
@@ -97,6 +97,34 @@ Object {
     "foo": Object {
       "name": "string",
       "required": true,
+    },
+  },
+}
+`;
+
+exports[`getPropType handles computed properties 1`] = `
+Object {
+  "name": "exact",
+  "value": Object {
+    "@computed#foo": Object {
+      "name": "string",
+      "required": true,
+    },
+    "bar": Object {
+      "name": "bool",
+      "required": false,
+    },
+  },
+}
+`;
+
+exports[`getPropType ignores complex computed properties 1`] = `
+Object {
+  "name": "exact",
+  "value": Object {
+    "bar": Object {
+      "name": "bool",
+      "required": false,
     },
   },
 }

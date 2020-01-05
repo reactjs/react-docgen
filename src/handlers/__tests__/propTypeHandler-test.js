@@ -1,14 +1,10 @@
-/*
- *  Copyright (c) 2015, Facebook, Inc.
- *  All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
-
-/*global jest, describe, it, expect, beforeEach*/
 
 jest.mock('../../Documentation');
 jest.mock('../../utils/getPropType', () => jest.fn(() => ({})));
@@ -121,6 +117,36 @@ describe('propTypeHandler', () => {
           required: true,
         },
       });
+    });
+
+    it('handles computed properties', () => {
+      const definition = parse(
+        getSrc(
+          `{
+          [foo]: PropTypes.array.isRequired,
+          complex_prop:
+            PropTypes.oneOfType([PropTypes.number, PropTypes.bool]).isRequired,
+        }`,
+        ),
+      );
+
+      propTypeHandler(documentation, definition);
+      expect(documentation.descriptors).toMatchSnapshot();
+    });
+
+    it('ignores complex computed properties', () => {
+      const definition = parse(
+        getSrc(
+          `{
+          [() => {}]: PropTypes.array.isRequired,
+          complex_prop:
+            PropTypes.oneOfType([PropTypes.number, PropTypes.bool]).isRequired,
+        }`,
+        ),
+      );
+
+      propTypeHandler(documentation, definition);
+      expect(documentation.descriptors).toMatchSnapshot();
     });
 
     it('only considers definitions from React or ReactPropTypes', () => {

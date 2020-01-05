@@ -1,47 +1,41 @@
-/*
- * Copyright (c) 2017, Facebook, Inc.
- * All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * @flow
- *
  */
 
-import recast from 'recast';
+import { ASTNode, NodePath, builders, namedTypes as t } from 'ast-types';
 import resolveToValue from './resolveToValue';
-
-const {
-  types: { ASTNode, NodePath, builders, namedTypes: types },
-} = recast;
 
 function isObjectKeysCall(node: ASTNode): boolean {
   return (
-    types.CallExpression.check(node) &&
+    t.CallExpression.check(node) &&
     node.arguments.length === 1 &&
-    types.MemberExpression.check(node.callee) &&
-    types.Identifier.check(node.callee.object) &&
+    t.MemberExpression.check(node.callee) &&
+    t.Identifier.check(node.callee.object) &&
     node.callee.object.name === 'Object' &&
-    types.Identifier.check(node.callee.property) &&
+    t.Identifier.check(node.callee.property) &&
     node.callee.property.name === 'keys'
   );
 }
 
 function isWhitelistedObjectProperty(prop) {
   return (
-    (types.Property.check(prop) &&
-      ((types.Identifier.check(prop.key) && !prop.computed) ||
-        types.Literal.check(prop.key))) ||
-    types.SpreadElement.check(prop)
+    (t.Property.check(prop) &&
+      ((t.Identifier.check(prop.key) && !prop.computed) ||
+        t.Literal.check(prop.key))) ||
+    t.SpreadElement.check(prop)
   );
 }
 
 function isWhiteListedObjectTypeProperty(prop) {
   return (
-    types.ObjectTypeProperty.check(prop) ||
-    types.ObjectTypeSpreadProperty.check(prop)
+    t.ObjectTypeProperty.check(prop) ||
+    t.ObjectTypeSpreadProperty.check(prop) ||
+    t.TSPropertySignature.check(prop)
   );
 }
 
@@ -51,30 +45,39 @@ export function resolveObjectToNameArray(
   raw: boolean = false,
 ): ?Array<string> {
   if (
-    (types.ObjectExpression.check(object.value) &&
+    (t.ObjectExpression.check(object.value) &&
       object.value.properties.every(isWhitelistedObjectProperty)) ||
-    (types.ObjectTypeAnnotation.check(object.value) &&
-      object.value.properties.every(isWhiteListedObjectTypeProperty))
+    (t.ObjectTypeAnnotation.check(object.value) &&
+      object.value.properties.every(isWhiteListedObjectTypeProperty)) ||
+    (t.TSTypeLiteral.check(object.value) &&
+      object.value.members.every(isWhiteListedObjectTypeProperty))
   ) {
     let values = [];
     let error = false;
-    object.get('properties').each(propPath => {
+    const properties = t.TSTypeLiteral.check(object.value)
+      ? object.get('members')
+      : object.get('properties');
+    properties.each(propPath => {
       if (error) return;
       const prop = propPath.value;
 
-      if (types.Property.check(prop) || types.ObjectTypeProperty.check(prop)) {
+      if (
+        t.Property.check(prop) ||
+        t.ObjectTypeProperty.check(prop) ||
+        t.TSPropertySignature.check(prop)
+      ) {
         // Key is either Identifier or Literal
         const name = prop.key.name || (raw ? prop.key.raw : prop.key.value);
 
         values.push(name);
       } else if (
-        types.SpreadElement.check(prop) ||
-        types.ObjectTypeSpreadProperty.check(prop)
+        t.SpreadElement.check(prop) ||
+        t.ObjectTypeSpreadProperty.check(prop)
       ) {
         let spreadObject = resolveToValue(propPath.get('argument'));
-        if (types.GenericTypeAnnotation.check(spreadObject.value)) {
+        if (t.GenericTypeAnnotation.check(spreadObject.value)) {
           const typeAlias = resolveToValue(spreadObject.get('id'));
-          if (types.ObjectTypeAnnotation.check(typeAlias.get('right').value)) {
+          if (t.ObjectTypeAnnotation.check(typeAlias.get('right').value)) {
             spreadObject = resolveToValue(typeAlias.get('right'));
           }
         }

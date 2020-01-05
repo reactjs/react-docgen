@@ -1,26 +1,21 @@
-/*
- *  Copyright (c) 2015, Facebook, Inc.
- *  All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
-/*global jest, describe, it, expect, beforeEach*/
-
-jest.disableAutomock();
 jest.mock('../../Documentation');
 
+import { expression, statement } from '../../../tests/utils';
+
 describe('flowTypeHandler', () => {
-  let statement, expression;
   let getFlowTypeMock;
   let documentation;
   let flowTypeHandler;
 
   beforeEach(() => {
-    ({ statement, expression } = require('../../../tests/utils'));
     getFlowTypeMock = jest.fn(() => ({}));
     jest.setMock('../../utils/getFlowType', getFlowTypeMock);
     jest.mock('../../utils/getFlowType');
@@ -94,6 +89,20 @@ describe('flowTypeHandler', () => {
           description: '',
         },
       });
+    });
+
+    it('ignores hash map entry', () => {
+      const flowTypesSrc = `
+      {
+        [key: string]: string,
+        bar?: number,
+      }
+      `;
+      const definition = getSrc(flowTypesSrc);
+
+      flowTypeHandler(documentation, definition);
+
+      expect(documentation.descriptors).toMatchSnapshot();
     });
 
     it('detects union types', () => {
@@ -246,6 +255,20 @@ describe('flowTypeHandler', () => {
         description: '',
       },
     });
+  });
+
+  it('does support utility types inline', () => {
+    const definition = statement(`
+      (props: $ReadOnly<Props>) => <div />;
+
+      var React = require('React');
+
+      type Props = { foo: 'fooValue' };
+    `).get('expression');
+
+    expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
+
+    expect(documentation.descriptors).toMatchSnapshot();
   });
 
   it('does not support union proptypes', () => {

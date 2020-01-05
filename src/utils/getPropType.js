@@ -1,47 +1,40 @@
-/*
- * Copyright (c) 2015, Facebook, Inc.
- * All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * @flow
- *
  */
 
 /*eslint no-use-before-define: 0*/
 
+import { namedTypes as t } from 'ast-types';
 import { getDocblock } from '../utils/docblock';
 import getMembers from './getMembers';
 import getPropertyName from './getPropertyName';
 import isRequiredPropType from '../utils/isRequiredPropType';
 import printValue from './printValue';
-import recast from 'recast';
 import resolveToValue from './resolveToValue';
 import resolveObjectKeysToArray from './resolveObjectKeysToArray';
 import resolveObjectValuesToArray from './resolveObjectValuesToArray';
 import type { PropTypeDescriptor, PropDescriptor } from '../types';
 
-const {
-  types: { namedTypes: types },
-} = recast;
-
 function getEnumValues(path) {
   const values = [];
 
   path.get('elements').each(function(elementPath) {
-    if (types.SpreadElement.check(elementPath.node)) {
+    if (t.SpreadElement.check(elementPath.node)) {
       const value = resolveToValue(elementPath.get('argument'));
 
-      if (types.ArrayExpression.check(value.node)) {
+      if (t.ArrayExpression.check(value.node)) {
         // if the SpreadElement resolved to an Array, add all their elements too
         return values.push(...getEnumValues(value));
       } else {
         // otherwise we'll just print the SpreadElement itself
         return values.push({
           value: printValue(elementPath),
-          computed: !types.Literal.check(elementPath.node),
+          computed: !t.Literal.check(elementPath.node),
         });
       }
     }
@@ -50,7 +43,7 @@ function getEnumValues(path) {
     const value = resolveToValue(elementPath);
     return values.push({
       value: printValue(value),
-      computed: !types.Literal.check(value.node),
+      computed: !t.Literal.check(value.node),
     });
   });
 
@@ -60,7 +53,7 @@ function getEnumValues(path) {
 function getPropTypeOneOf(argumentPath) {
   const type: PropTypeDescriptor = { name: 'enum' };
   let value = resolveToValue(argumentPath);
-  if (!types.ArrayExpression.check(value.node)) {
+  if (!t.ArrayExpression.check(value.node)) {
     value =
       resolveObjectKeysToArray(value) || resolveObjectValuesToArray(value);
     if (value) {
@@ -78,7 +71,7 @@ function getPropTypeOneOf(argumentPath) {
 
 function getPropTypeOneOfType(argumentPath) {
   const type: PropTypeDescriptor = { name: 'union' };
-  if (!types.ArrayExpression.check(argumentPath.node)) {
+  if (!t.ArrayExpression.check(argumentPath.node)) {
     type.computed = true;
     type.value = printValue(argumentPath);
   } else {
@@ -137,18 +130,20 @@ function getPropTypeObjectOf(argumentPath) {
  */
 function getPropTypeShapish(name, argumentPath) {
   const type: PropTypeDescriptor = { name };
-  if (!types.ObjectExpression.check(argumentPath.node)) {
+  if (!t.ObjectExpression.check(argumentPath.node)) {
     argumentPath = resolveToValue(argumentPath);
   }
 
-  if (types.ObjectExpression.check(argumentPath.node)) {
+  if (t.ObjectExpression.check(argumentPath.node)) {
     const value = {};
     argumentPath.get('properties').each(function(propertyPath) {
-      if (propertyPath.get('type').value === types.SpreadElement.name) {
+      if (propertyPath.get('type').value === t.SpreadElement.name) {
         // It is impossible to resolve a name for a spread element
         return;
       }
 
+      const propertyName = getPropertyName(propertyPath);
+      if (!propertyName) return;
       const descriptor: PropDescriptor | PropTypeDescriptor = getPropType(
         propertyPath.get('value'),
       );
@@ -157,7 +152,7 @@ function getPropTypeShapish(name, argumentPath) {
         descriptor.description = docs;
       }
       descriptor.required = isRequiredPropType(propertyPath.get('value'));
-      value[getPropertyName(propertyPath)] = descriptor;
+      value[propertyName] = descriptor;
     });
     type.value = value;
   }
@@ -188,6 +183,7 @@ const simplePropTypes = [
   'element',
   'node',
   'symbol',
+  'elementType',
 ];
 
 const propTypes = {
@@ -213,9 +209,9 @@ export default function getPropType(path: NodePath): PropTypeDescriptor {
   getMembers(path, true).some(member => {
     const node = member.path.node;
     let name;
-    if (types.Literal.check(node)) {
+    if (t.Literal.check(node)) {
       name = node.value;
-    } else if (types.Identifier.check(node) && !member.computed) {
+    } else if (t.Identifier.check(node) && !member.computed) {
       name = node.name;
     }
     if (name) {
@@ -230,11 +226,11 @@ export default function getPropType(path: NodePath): PropTypeDescriptor {
   });
   if (!descriptor) {
     const node = path.node;
-    if (types.Identifier.check(node) && simplePropTypes.includes(node.name)) {
+    if (t.Identifier.check(node) && simplePropTypes.includes(node.name)) {
       descriptor = { name: node.name };
     } else if (
-      types.CallExpression.check(node) &&
-      types.Identifier.check(node.callee) &&
+      t.CallExpression.check(node) &&
+      t.Identifier.check(node.callee) &&
       propTypes.hasOwnProperty(node.callee.name)
     ) {
       descriptor = propTypes[node.callee.name](path.get('arguments', 0));

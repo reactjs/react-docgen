@@ -1,32 +1,19 @@
-/*
- * Copyright (c) 2015, Facebook, Inc.
- * All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * @flow
- *
  */
 
-/* eslint no-labels: 0 */
-
-/**
- * Helper methods for dealing with MemberExpressions (and CallExpressions).
- */
+import { namedTypes as t } from 'ast-types';
 
 type MemberDescriptor = {
   path: NodePath,
   computed: boolean,
   argumentsPath?: ?NodePath,
 };
-
-import recast from 'recast';
-
-const {
-  types: { namedTypes: types },
-} = recast;
 
 /**
  * Given a "nested" Member/CallExpression, e.g.
@@ -49,7 +36,7 @@ export default function getMembers(
   // eslint-disable-next-line no-constant-condition
   loop: while (true) {
     switch (true) {
-      case types.MemberExpression.check(path.node):
+      case t.MemberExpression.check(path.node):
         result.push({
           path: path.get('property'),
           computed: path.node.computed,
@@ -58,7 +45,7 @@ export default function getMembers(
         argumentsPath = null;
         path = path.get('object');
         break;
-      case types.CallExpression.check(path.node):
+      case t.CallExpression.check(path.node):
         argumentsPath = path.get('arguments');
         path = path.get('callee');
         break;

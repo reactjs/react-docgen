@@ -1,19 +1,12 @@
-/*
- * Copyright (c) 2015, Facebook, Inc.
- * All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * @flow
- *
  */
-import recast from 'recast';
-
-const {
-  types: { namedTypes: types },
-} = recast;
+import { namedTypes as t } from 'ast-types';
 
 const supportedUtilityTypes = new Set(['$Exact', '$ReadOnly']);
 
@@ -22,9 +15,9 @@ const supportedUtilityTypes = new Set(['$Exact', '$ReadOnly']);
  * https://flow.org/en/docs/types/utilities/ for which types are available.
  */
 export function isSupportedUtilityType(path: NodePath): boolean {
-  if (types.GenericTypeAnnotation.check(path.node)) {
+  if (t.GenericTypeAnnotation.check(path.node)) {
     const idPath = path.get('id');
-    return Boolean(idPath) && supportedUtilityTypes.has(idPath.node.name);
+    return !!idPath && supportedUtilityTypes.has(idPath.node.name);
   }
   return false;
 }
@@ -35,5 +28,9 @@ export function isSupportedUtilityType(path: NodePath): boolean {
  *   $ReadOnly<T> => T
  */
 export function unwrapUtilityType(path: NodePath): NodePath {
-  return path.get('typeParameters', 'params', 0);
+  while (isSupportedUtilityType(path)) {
+    path = path.get('typeParameters', 'params', 0);
+  }
+
+  return path;
 }

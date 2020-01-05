@@ -1,10 +1,8 @@
-/*
- * Copyright (c) 2015, Facebook, Inc.
- * All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * @flow
  */
@@ -16,11 +14,9 @@
 const DOCLET_PATTERN = /^@(\w+)(?:$|\s((?:[^](?!^@\w))*))/gim;
 
 function parseDocblock(str) {
-  const lines = str.split('\n');
-  for (let i = 0, l = lines.length; i < l; i++) {
-    lines[i] = lines[i].replace(/^\s*\*\s?/, '');
-  }
-  return lines.join('\n').trim();
+  // Does not use \s in the regex as this would match also \n and conflicts
+  // with windows line endings.
+  return str.replace(/^[ \t]*\*[ \t]?/gm, '').trim();
 }
 
 const DOCBLOCK_HEADER = /^\*\s/;

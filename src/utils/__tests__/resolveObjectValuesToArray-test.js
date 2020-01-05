@@ -1,20 +1,14 @@
-/*
- *  Copyright (c) 2015, Facebook, Inc.
- *  All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
-/* eslint-env jest */
-
-import recast from 'recast';
-
-const builders = recast.types.builders;
-import resolveObjectValuesToArray from '../resolveObjectValuesToArray';
+import { builders } from 'ast-types';
 import * as utils from '../../../tests/utils';
+import resolveObjectValuesToArray from '../resolveObjectValuesToArray';
 
 describe('resolveObjectValuesToArray', () => {
   function parse(src) {
@@ -68,6 +62,14 @@ describe('resolveObjectValuesToArray', () => {
     expect(resolveObjectValuesToArray(path)).toEqualASTNode(
       builders.arrayExpression([builders.literal(2), builders.literal(1)]),
     );
+  });
+
+  it('does not resolve Object.values with complex computed key', () => {
+    const path = parse(
+      ['var foo = { [()=>{}]: 1, [5]: 2};', 'Object.values(foo);'].join('\n'),
+    );
+
+    expect(resolveObjectValuesToArray(path)).toBeNull();
   });
 
   it('resolves Object.values when using resolvable spread', () => {

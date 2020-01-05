@@ -1,26 +1,15 @@
-/*
- * Copyright (c) 2015, Facebook, Inc.
- * All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
-
-jest.disableAutomock();
+import { parse, statement } from '../../../tests/utils';
+import isStatelessComponent from '../isStatelessComponent';
 
 describe('isStatelessComponent', () => {
-  let isStatelessComponent;
-  let statement, parse;
-
-  beforeEach(() => {
-    isStatelessComponent = require('../isStatelessComponent').default;
-    ({ statement, parse } = require('../../../tests/utils'));
-  });
-
   const componentIdentifiers = {
     JSX: '<div />',
     JSXFragment: '<></>',
@@ -242,6 +231,16 @@ describe('isStatelessComponent', () => {
       `);
 
       expect(isStatelessComponent(def)).toBe(true);
+    });
+
+    it('handles recursive function calls', () => {
+      const def = statement(`
+        function Foo (props) {
+          return props && Foo(props);
+        }
+      `);
+
+      expect(isStatelessComponent(def)).toBe(false);
     });
 
     test(

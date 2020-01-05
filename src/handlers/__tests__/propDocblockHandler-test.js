@@ -1,28 +1,20 @@
-/*
- * Copyright (c) 2015, Facebook, Inc.
- * All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
-
-const os = require('os');
-const EOL = os.EOL;
-
-jest.disableAutomock();
 jest.mock('../../Documentation');
 
+import { expression, statement } from '../../../tests/utils';
+
 describe('propDocBlockHandler', () => {
-  let expression, statement;
   let documentation;
   let propDocBlockHandler;
 
   beforeEach(() => {
-    ({ expression, statement } = require('../../../tests/utils'));
     documentation = new (require('../../Documentation'))();
     propDocBlockHandler = require('../propDocBlockHandler').default;
   });
@@ -74,11 +66,7 @@ describe('propDocBlockHandler', () => {
       expect(documentation.descriptors).toEqual({
         foo: {
           description:
-            'Foo comment with' +
-            EOL +
-            'many lines!' +
-            EOL +
-            '\neven with empty lines in between',
+            'Foo comment with\nmany lines!\n\neven with empty lines in between',
         },
       });
     });

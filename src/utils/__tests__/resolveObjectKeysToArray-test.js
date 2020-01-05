@@ -1,20 +1,14 @@
-/*
- *  Copyright (c) 2015, Facebook, Inc.
- *  All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
-/* eslint-env jest */
-
-import recast from 'recast';
-
-const builders = recast.types.builders;
-import resolveObjectKeysToArray from '../resolveObjectKeysToArray';
+import { builders } from 'ast-types';
 import * as utils from '../../../tests/utils';
+import resolveObjectKeysToArray from '../resolveObjectKeysToArray';
 
 describe('resolveObjectKeysToArray', () => {
   function parse(src) {

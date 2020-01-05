@@ -1,26 +1,15 @@
-/*
- * Copyright (c) 2015, Facebook, Inc.
- * All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
-
-jest.disableAutomock();
+import { expression } from '../../../tests/utils';
+import getParameterName from '../getParameterName';
 
 describe('getParameterName', () => {
-  let getParameterName;
-  let expression;
-
-  beforeEach(() => {
-    getParameterName = require('../getParameterName').default;
-    ({ expression } = require('../../../tests/utils'));
-  });
-
   it('returns the name for a normal parameter', () => {
     const def = expression('function(a) {}');
     const param = def.get('params', 0);

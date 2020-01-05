@@ -1,29 +1,19 @@
-/*
- * Copyright (c) 2015, Facebook, Inc.
- * All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * @flow
- *
  */
 
+import { namedTypes as t } from 'ast-types';
 import type Documentation from '../Documentation';
-
-import recast from 'recast';
 import { getDocblock } from '../utils/docblock';
-
-const {
-  types: { namedTypes: types },
-} = recast;
 
 function isClassDefinition(nodePath) {
   const node = nodePath.node;
-  return (
-    types.ClassDeclaration.check(node) || types.ClassExpression.check(node)
-  );
+  return t.ClassDeclaration.check(node) || t.ClassExpression.check(node);
 }
 
 /**
@@ -48,14 +38,14 @@ export default function componentDocblockHandler(
   if (description == null) {
     // Find parent statement (e.g. var Component = React.createClass(<path>);)
     let searchPath = path;
-    while (searchPath && !types.Statement.check(searchPath.node)) {
+    while (searchPath && !t.Statement.check(searchPath.node)) {
       searchPath = searchPath.parent;
     }
     if (searchPath) {
       // If the parent is an export statement, we have to traverse one more up
       if (
-        types.ExportNamedDeclaration.check(searchPath.parentPath.node) ||
-        types.ExportDefaultDeclaration.check(searchPath.parentPath.node)
+        t.ExportNamedDeclaration.check(searchPath.parentPath.node) ||
+        t.ExportDefaultDeclaration.check(searchPath.parentPath.node)
       ) {
         searchPath = searchPath.parentPath;
       }

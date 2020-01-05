@@ -2,7 +2,7 @@
  * Helper methods for tests.
  */
 
-import _recast from 'recast';
+import { NodePath } from 'ast-types';
 import buildParser from '../src/babelParser';
 
 function stringify(value) {
@@ -12,21 +12,25 @@ function stringify(value) {
   return value;
 }
 
+export function getParser(options = {}) {
+  return buildParser(options);
+}
 /**
  * Returns a NodePath to the program node of the passed node
  */
-export function parse(src, recast = _recast, options = {}) {
-  return new recast.types.NodePath(
-    recast.parse(stringify(src), { parser: buildParser(options) }).program,
-  );
+export function parse(src, options = {}) {
+  const ast = getParser(options).parse(stringify(src));
+  ast.__src = src;
+
+  return new NodePath(ast).get('program');
 }
 
-export function statement(src, recast = _recast) {
-  return parse(src, recast).get('body', 0);
+export function statement(src, options) {
+  return parse(src, options).get('body', 0);
 }
 
-export function expression(src, recast = _recast) {
-  return statement('(' + src + ')', recast).get('expression');
+export function expression(src, options) {
+  return statement('(' + src + ')', options).get('expression');
 }
 
 /**

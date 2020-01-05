@@ -1,26 +1,15 @@
-/*
- * Copyright (c) 2015, Facebook, Inc.
- * All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
-
-jest.disableAutomock();
+import { statement } from '../../../tests/utils';
+import getMethodDocumentation from '../getMethodDocumentation';
 
 describe('getMethodDocumentation', () => {
-  let getMethodDocumentation;
-  let statement;
-
-  beforeEach(() => {
-    getMethodDocumentation = require('../getMethodDocumentation').default;
-    ({ statement } = require('../../../tests/utils'));
-  });
-
   describe('name', () => {
     it('extracts the method name', () => {
       const def = statement(`
@@ -36,6 +25,26 @@ describe('getMethodDocumentation', () => {
         returns: null,
         params: [],
       });
+    });
+
+    it('handles computed method name', () => {
+      const def = statement(`
+        class Foo {
+          [foo]() {}
+        }
+      `);
+      const method = def.get('body', 'body', 0);
+      expect(getMethodDocumentation(method)).toMatchSnapshot();
+    });
+
+    it('ignores complex computed method name', () => {
+      const def = statement(`
+        class Foo {
+          [() => {}]() {}
+        }
+      `);
+      const method = def.get('body', 'body', 0);
+      expect(getMethodDocumentation(method)).toMatchSnapshot();
     });
   });
 
@@ -191,6 +200,34 @@ describe('getMethodDocumentation', () => {
             type: { name: 'number' },
           }),
         );
+      });
+    });
+
+    describe('private', () => {
+      it('ignores private typescript methods', () => {
+        const def = statement(
+          `
+          class Foo {
+            private foo() {}
+          }
+        `,
+          { parserOptions: { plugins: ['typescript'] } },
+        );
+        const method = def.get('body', 'body', 0);
+        expect(getMethodDocumentation(method)).toMatchSnapshot();
+      });
+
+      it.skip('ignores private methods', () => {
+        const def = statement(
+          `
+          class Foo {
+            #foo() {}
+          }
+        `,
+          { parserOptions: { plugins: ['classPrivateMethods'] } },
+        );
+        const method = def.get('body', 'body', 0);
+        expect(getMethodDocumentation(method)).toMatchSnapshot();
       });
     });
   });

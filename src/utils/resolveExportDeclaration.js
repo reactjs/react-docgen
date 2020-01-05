@@ -1,30 +1,23 @@
-/*
- * Copyright (c) 2015, Facebook, Inc.
- * All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * @flow
  */
 
-import recast from 'recast';
+import { namedTypes as t } from 'ast-types';
 import resolveToValue from './resolveToValue';
-
-const {
-  types: { namedTypes: _types },
-} = recast;
 
 export default function resolveExportDeclaration(
   path: NodePath,
-  types: Object = _types,
 ): Array<NodePath> {
   const definitions = [];
   if (path.node.default) {
     definitions.push(path.get('declaration'));
   } else if (path.node.declaration) {
-    if (types.VariableDeclaration.check(path.node.declaration)) {
+    if (t.VariableDeclaration.check(path.node.declaration)) {
       path
         .get('declaration', 'declarations')
         .each(declarator => definitions.push(declarator));

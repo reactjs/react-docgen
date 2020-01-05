@@ -1,26 +1,15 @@
-/*
- *  Copyright (c) 2015, Facebook, Inc.
- *  All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
-
-jest.disableAutomock();
+import getClassMemberValuePath from '../getClassMemberValuePath';
+import { statement } from '../../../tests/utils';
 
 describe('getClassMemberValuePath', () => {
-  let getClassMemberValuePath;
-  let statement;
-
-  beforeEach(() => {
-    getClassMemberValuePath = require('../getClassMemberValuePath').default;
-    ({ statement } = require('../../../tests/utils'));
-  });
-
   describe('MethodDefinitions', () => {
     it('finds "normal" method definitions', () => {
       const def = statement(`
@@ -91,6 +80,31 @@ describe('getClassMemberValuePath', () => {
 
       expect(getClassMemberValuePath(def, 'foo')).toBe(
         def.get('body', 'body', 0, 'value'),
+      );
+    });
+  });
+
+  describe('PrivateClassProperty', () => {
+    it('ignores private class properties', () => {
+      const def = statement(`
+        class Foo {
+          #foo = 42;
+        }
+      `);
+
+      expect(getClassMemberValuePath(def, 'foo')).toBe(undefined);
+    });
+
+    it('finds "normal" class properties with private present', () => {
+      const def = statement(`
+        class Foo {
+          #private = 54;
+          foo = 42;
+        }
+      `);
+
+      expect(getClassMemberValuePath(def, 'foo')).toBe(
+        def.get('body', 'body', 1, 'value'),
       );
     });
   });

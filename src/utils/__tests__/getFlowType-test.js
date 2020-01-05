@@ -1,26 +1,15 @@
-/*
- *  Copyright (c) 2015, Facebook, Inc.
- *  All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
-/* global jest, describe, beforeEach, it, expect */
-
-jest.disableAutomock();
+import getFlowType from '../getFlowType';
+import { expression, statement } from '../../../tests/utils';
 
 describe('getFlowType', () => {
-  let expression, statement;
-  let getFlowType;
-
-  beforeEach(() => {
-    getFlowType = require('../getFlowType').default;
-    ({ expression, statement } = require('../../../tests/utils'));
-  });
-
   it('detects simple types', () => {
     const simplePropTypes = [
       'string',
@@ -218,7 +207,9 @@ describe('getFlowType', () => {
   });
 
   it('detects function signature type', () => {
-    const typePath = expression('x: (p1: number, p2: ?string) => boolean')
+    const typePath = expression(
+      'x: (p1: number, p2: ?string, ...rest: Array<string>) => boolean',
+    )
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getFlowType(typePath)).toEqual({
@@ -228,10 +219,19 @@ describe('getFlowType', () => {
         arguments: [
           { name: 'p1', type: { name: 'number' } },
           { name: 'p2', type: { name: 'string', nullable: true } },
+          {
+            name: 'rest',
+            rest: true,
+            type: {
+              name: 'Array',
+              elements: [{ name: 'string' }],
+              raw: 'Array<string>',
+            },
+          },
         ],
         return: { name: 'boolean' },
       },
-      raw: '(p1: number, p2: ?string) => boolean',
+      raw: '(p1: number, p2: ?string, ...rest: Array<string>) => boolean',
     });
   });
 
@@ -267,6 +267,7 @@ describe('getFlowType', () => {
       raw: 'string => boolean',
     });
   });
+
   it('detects callable signature type', () => {
     const typePath = expression('x: { (str: string): string, token: string }')
       .get('typeAnnotation')
@@ -435,6 +436,44 @@ describe('getFlowType', () => {
           name: 'any',
         },
       ],
+    });
+  });
+
+  it('handles generic types', () => {
+    const typePath = statement(`
+      var x: MyType<string> = {};
+
+      type MyType<T> = { a: T, b: Array<T> };
+    `)
+      .get('declarations', 0)
+      .get('id')
+      .get('typeAnnotation')
+      .get('typeAnnotation');
+
+    expect(getFlowType(typePath)).toEqual({
+      name: 'signature',
+      type: 'object',
+      raw: '{ a: T, b: Array<T> }',
+      signature: {
+        properties: [
+          {
+            key: 'a',
+            value: {
+              name: 'string',
+              required: true,
+            },
+          },
+          {
+            key: 'b',
+            value: {
+              name: 'Array',
+              raw: 'Array<T>',
+              required: true,
+              elements: [{ name: 'string' }],
+            },
+          },
+        ],
+      },
     });
   });
 

@@ -1,98 +1,111 @@
-/*
- * Copyright (c) 2015, Facebook, Inc.
- * All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * @flow
- *
  */
 
 const babel = require('@babel/core');
+const path = require('path');
 
-const defaultPlugins = [
-  'jsx',
-  'flow',
-  'asyncGenerators',
-  'bigInt',
-  'classProperties',
-  'classPrivateProperties',
-  'classPrivateMethods',
-  ['decorators', { decoratorsBeforeExport: false }],
-  'doExpressions',
-  'dynamicImport',
-  'exportDefaultFrom',
-  'exportNamespaceFrom',
-  'functionBind',
-  'functionSent',
-  'importMeta',
-  'logicalAssignment',
-  'nullishCoalescingOperator',
-  'numericSeparator',
-  'objectRestSpread',
-  'optionalCatchBinding',
-  'optionalChaining',
-  ['pipelineOperator', { proposal: 'minimal' }],
-  'throwExpressions',
-];
+const TYPESCRIPT_EXTS = {
+  '.ts': true,
+  '.tsx': true,
+};
+
+function getDefaultPlugins(options: BabelOptions) {
+  return [
+    'jsx',
+    TYPESCRIPT_EXTS[path.extname(options.filename || '')]
+      ? 'typescript'
+      : 'flow',
+    'asyncGenerators',
+    'bigInt',
+    'classProperties',
+    'classPrivateProperties',
+    'classPrivateMethods',
+    ['decorators', { decoratorsBeforeExport: false }],
+    'doExpressions',
+    'dynamicImport',
+    'exportDefaultFrom',
+    'exportNamespaceFrom',
+    'functionBind',
+    'functionSent',
+    'importMeta',
+    'logicalAssignment',
+    'nullishCoalescingOperator',
+    'numericSeparator',
+    'objectRestSpread',
+    'optionalCatchBinding',
+    'optionalChaining',
+    ['pipelineOperator', { proposal: 'minimal' }],
+    'throwExpressions',
+  ];
+}
+
+export type Parser = {
+  parse: (src: string) => ASTNode,
+};
 
 type ParserOptions = {
   plugins?: Array<string | [string, {}]>,
   tokens?: boolean,
 };
 
-export type Options = {
+type BabelOptions = {
   cwd?: string,
   filename?: string,
+  envName?: string,
+  babelrc?: boolean,
+  root?: string,
+  rootMode?: string,
+  configFile?: string | false,
+  babelrcRoots?: true | string | string[],
+};
+
+export type Options = BabelOptions & {
   parserOptions?: ParserOptions,
 };
 
-function buildOptions({
-  cwd,
-  filename,
-  parserOptions,
-}: Options): ParserOptions {
-  let options = {
+function buildOptions(
+  parserOptions: ?ParserOptions,
+  babelOptions: BabelOptions,
+): ParserOptions {
+  let parserOpts = {
     plugins: [],
   };
 
   if (parserOptions) {
-    options = {
+    parserOpts = {
       ...parserOptions,
       plugins: parserOptions.plugins ? [...parserOptions.plugins] : [],
     };
   }
 
-  const partialConfig = babel.loadPartialConfig({
-    cwd,
-    filename,
-  });
+  const partialConfig = babel.loadPartialConfig(babelOptions);
 
-  if (!partialConfig.hasFilesystemConfig() && options.plugins.length === 0) {
-    options.plugins = [...defaultPlugins];
+  if (!partialConfig.hasFilesystemConfig() && parserOpts.plugins.length === 0) {
+    parserOpts.plugins = getDefaultPlugins(babelOptions);
   }
 
-  // Recast needs tokens to be in the tree
-  // $FlowIssue tokens is clearly in the Options
-  options.tokens = true;
   // Ensure we always have estree plugin enabled, if we add it a second time
   // here it does not matter
-  options.plugins.push('estree');
+  parserOpts.plugins.push('estree');
 
-  return options;
+  return parserOpts;
 }
 
-export default function buildParse(options?: Options = {}) {
-  const parserOpts = buildOptions(options);
+export default function buildParse(options?: Options = {}): Parser {
+  const { parserOptions, ...babelOptions } = options;
+  const parserOpts = buildOptions(parserOptions, babelOptions);
 
   return {
-    parse(src: string) {
+    parse(src: string): ASTNode {
       return babel.parseSync(src, {
         parserOpts,
-        cwd: options.cwd,
-        filename: options.filename,
+        ...babelOptions,
       });
     },
   };

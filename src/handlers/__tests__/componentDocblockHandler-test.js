@@ -1,20 +1,16 @@
-/*
- *  Copyright (c) 2015, Facebook, Inc.
- *  All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
-
-jest.disableAutomock();
 jest.mock('../../Documentation');
 
+import { parse } from '../../../tests/utils';
+
 describe('componentDocblockHandler', () => {
-  let parse;
   let documentation;
   let componentDocblockHandler;
 
@@ -24,7 +20,6 @@ describe('componentDocblockHandler', () => {
   }
 
   beforeEach(() => {
-    ({ parse } = require('../../../tests/utils'));
     documentation = new (require('../../Documentation'))();
     componentDocblockHandler = require('../componentDocblockHandler').default;
   });

@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`componentMethodsHandler should handle and ignore computed methods 1`] = `
+Array [
+  Object {
+    "docblock": "The foo method",
+    "modifiers": Array [],
+    "name": "@computed#foo",
+    "params": Array [
+      Object {
+        "name": "bar",
+        "optional": undefined,
+        "type": Object {
+          "name": "number",
+        },
+      },
+    ],
+    "returns": Object {
+      "type": Object {
+        "name": "number",
+      },
+    },
+  },
+]
+`;

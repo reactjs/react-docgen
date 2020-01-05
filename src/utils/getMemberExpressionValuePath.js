@@ -1,26 +1,19 @@
-/*
- * Copyright (c) 2015, Facebook, Inc.
- * All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * @flow
- *
  */
 
+import { namedTypes as t, visit } from 'ast-types';
 import getNameOrValue from './getNameOrValue';
 import { String as toString } from './expressionTo';
 import isReactForwardRefCall from './isReactForwardRefCall';
-import recast from 'recast';
-
-const {
-  types: { namedTypes: types },
-} = recast;
 
 function resolveName(path) {
-  if (types.VariableDeclaration.check(path.node)) {
+  if (t.VariableDeclaration.check(path.node)) {
     const declarations = path.get('declarations');
     if (declarations.value.length && declarations.value.length !== 1) {
       throw new TypeError(
@@ -34,20 +27,20 @@ function resolveName(path) {
     return value;
   }
 
-  if (types.FunctionDeclaration.check(path.node)) {
+  if (t.FunctionDeclaration.check(path.node)) {
     return path.get('id', 'name').value;
   }
 
   if (
-    types.FunctionExpression.check(path.node) ||
-    types.ArrowFunctionExpression.check(path.node) ||
-    types.TaggedTemplateExpression.check(path.node) ||
-    types.CallExpression.check(path.node) ||
+    t.FunctionExpression.check(path.node) ||
+    t.ArrowFunctionExpression.check(path.node) ||
+    t.TaggedTemplateExpression.check(path.node) ||
+    t.CallExpression.check(path.node) ||
     isReactForwardRefCall(path)
   ) {
     let currentPath = path;
     while (currentPath.parent) {
-      if (types.VariableDeclarator.check(currentPath.parent.node)) {
+      if (t.VariableDeclarator.check(currentPath.parent.node)) {
         return currentPath.parent.get('id', 'name').value;
       }
 
@@ -87,16 +80,16 @@ export default function getMemberExpressionValuePath(
   }
 
   let result;
-  recast.visit(program, {
+  visit(program, {
     visitAssignmentExpression(path) {
       const memberPath = path.get('left');
-      if (!types.MemberExpression.check(memberPath.node)) {
+      if (!t.MemberExpression.check(memberPath.node)) {
         return this.traverse(path);
       }
 
       if (
         (!memberPath.node.computed ||
-          types.Literal.check(memberPath.node.property)) &&
+          t.Literal.check(memberPath.node.property)) &&
         getNameOrValue(memberPath.get('property')) === memberName &&
         toString(memberPath.get('object')) === localName
       ) {

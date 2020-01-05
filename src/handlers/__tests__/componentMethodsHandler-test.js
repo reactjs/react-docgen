@@ -1,25 +1,20 @@
-/*
- *  Copyright (c) 2015, Facebook, Inc.
- *  All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- *  This source code is licensed under the BSD-style license found in the
- *  LICENSE file in the root directory of this source tree. An additional grant
- *  of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
-/*global jest, describe, beforeEach, it, expect*/
-
-jest.disableAutomock();
 jest.mock('../../Documentation');
+
+import { parse } from '../../../tests/utils';
 
 describe('componentMethodsHandler', () => {
   let documentation;
   let componentMethodsHandler;
-  let parse;
 
   beforeEach(() => {
-    ({ parse } = require('../../../tests/utils'));
     documentation = new (require('../../Documentation'))();
     componentMethodsHandler = require('../componentMethodsHandler').default;
   });
@@ -99,7 +94,7 @@ describe('componentMethodsHandler', () => {
 
   it('extracts the documentation for a ClassDeclaration', () => {
     const src = `
-      class Test {
+      class Test extends React.Component {
         /**
          * The foo method
          */
@@ -130,6 +125,35 @@ describe('componentMethodsHandler', () => {
     `;
 
     test(parse(src).get('body', 0));
+  });
+
+  it('should handle and ignore computed methods', () => {
+    const src = `
+      class Test extends React.Component {
+        /**
+         * The foo method
+         */
+        [foo](bar: number): number {
+          return bar;
+        }
+
+        /**
+         * Should not show up
+         */
+        [() => {}](bar: number): number {
+          return bar;
+        }
+
+        componentDidMount() {}
+
+        render() {
+          return null;
+        }
+      }
+    `;
+
+    componentMethodsHandler(documentation, parse(src).get('body', 0));
+    expect(documentation.methods).toMatchSnapshot();
   });
 
   it('should not find methods for stateless components', () => {

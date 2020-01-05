@@ -22,7 +22,7 @@ MyComponent.propTypes = {
   /**
    * Description of prop "foo".
    */
-  foo: PropTypes.number.isRequired,
+  foo: PropTypes.number,
   /**
    * Description of prop "bar" (a custom validation function).
    */
@@ -32,7 +32,7 @@ MyComponent.propTypes = {
   baz: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.string
-  ]),
+  ]).isRequired,
 };
 
 MyComponent.defaultProps = {

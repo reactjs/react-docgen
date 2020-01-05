@@ -1,18 +1,15 @@
-/*
- * Copyright (c) 2015, Facebook, Inc.
- * All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * @flow
- *
  */
 
-type Visitor = (path: NodePath) => any;
+import { visit } from 'ast-types';
 
-import recast from 'recast';
+type Visitor = (path: NodePath) => any;
 
 /**
  * A helper function that doesn't traverse into nested blocks / statements by
@@ -22,7 +19,7 @@ export function traverseShallow(
   ast: ASTNode,
   visitors: { [key: string]: Visitor },
 ): void {
-  recast.visit(ast, { ...defaultVisitors, ...visitors });
+  visit(ast, { ...defaultVisitors, ...visitors });
 }
 
 const ignore = () => false;
@@ -39,7 +36,6 @@ const defaultVisitors = {
   visitForStatement: ignore,
   visitForInStatement: ignore,
   visitForOfStatement: ignore,
-  visitExportDeclaration: ignore,
   visitExportNamedDeclaration: ignore,
   visitExportDefaultDeclaration: ignore,
   visitConditionalExpression: ignore,

@@ -1,22 +1,18 @@
-/*
- * Copyright (c) 2015, Facebook, Inc.
- * All rights reserved.
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
-/*global describe, it, expect*/
-
-import recast from 'recast';
+import { NodePath } from 'ast-types';
 import * as utils from '../../../tests/utils';
 import findAllComponentDefinitions from '../findAllComponentDefinitions';
 
 describe('findAllComponentDefinitions', () => {
   function parse(source) {
-    return findAllComponentDefinitions(utils.parse(source, recast), recast);
+    return findAllComponentDefinitions(utils.parse(source), utils.getParser());
   }
 
   describe('React.createClass', () => {
@@ -30,7 +26,7 @@ describe('findAllComponentDefinitions', () => {
       const result = parse(source);
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(1);
-      expect(result[0] instanceof recast.types.NodePath).toBe(true);
+      expect(result[0] instanceof NodePath).toBe(true);
       expect(result[0].node.type).toBe('ObjectExpression');
     });
 
@@ -101,9 +97,9 @@ describe('findAllComponentDefinitions', () => {
       const source = `
         import React from 'React';
         class ComponentA extends React.Component {}
-        class ComponentB { render() {} }
-        var ComponentC = class extends React.Component {}
-        var ComponentD = class { render() {} }
+        class ComponentB extends Foo { render() {} }
+        var ComponentC = class extends React.PureComponent {}
+        var ComponentD = class extends Bar { render() {} }
         class NotAComponent {}
       `;
 
@@ -227,6 +223,32 @@ describe('findAllComponentDefinitions', () => {
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(1);
       expect(result[0].value.type).toEqual('CallExpression');
+    });
+  });
+
+  describe('regressions', () => {
+    it('finds component wrapped in HOC', () => {
+      const source = `
+        /**
+         * @flow
+         */
+        import * as React from 'react';
+
+        type Props = $ReadOnly<{|
+          tabs: $ReadOnlyArray<string>,
+        |}>;
+
+        const TetraAdminTabs = React.memo<Props>((props: Props) => (
+          <div></div>
+        ));
+
+        export default TetraAdminTabs;
+      `;
+
+      const result = parse(source);
+      expect(Array.isArray(result)).toBe(true);
+      expect(result.length).toBe(1);
+      expect(result[0].value.type).toEqual('ArrowFunctionExpression');
     });
   });
 });
