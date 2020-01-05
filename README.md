@@ -91,6 +91,8 @@ Type: `(ast: ASTNode, parser: { parse: (string) => ASTNode }) => (NodePath | Arr
 
 Given an AST and a reference to the parser, it returns an (array of) NodePath which represents the component definition.
 
+*Built-in resolvers are available under the `resolver` property, e.g. `reactDocgen.resolver.findAllComponentDefinitions`*
+
 #### handlers
 
 Type: `Array<(documentation: Documentation, definition: NodePath, parser: { parse: (string) => ASTNode }) => void>`
