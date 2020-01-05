@@ -202,5 +202,33 @@ describe('getMethodDocumentation', () => {
         );
       });
     });
+
+    describe('private', () => {
+      it('ignores private typescript methods', () => {
+        const def = statement(
+          `
+          class Foo {
+            private foo() {}
+          }
+        `,
+          { parserOptions: { plugins: ['typescript'] } },
+        );
+        const method = def.get('body', 'body', 0);
+        expect(getMethodDocumentation(method)).toMatchSnapshot();
+      });
+
+      it.skip('ignores private methods', () => {
+        const def = statement(
+          `
+          class Foo {
+            #foo() {}
+          }
+        `,
+          { parserOptions: { plugins: ['classPrivateMethods'] } },
+        );
+        const method = def.get('body', 'body', 0);
+        expect(getMethodDocumentation(method)).toMatchSnapshot();
+      });
+    });
   });
 });

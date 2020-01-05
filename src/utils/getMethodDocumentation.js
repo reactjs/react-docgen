@@ -93,10 +93,6 @@ function getMethodModifiers(methodPath) {
     modifiers.push(methodPath.node.kind);
   }
 
-  if (methodPath.node.accessibility === 'private') {
-    modifiers.push(methodPath.node.accessibility);
-  }
-
   const functionExpression = methodPath.get('value').node;
   if (functionExpression.generator) {
     modifiers.push('generator');
@@ -111,6 +107,10 @@ function getMethodModifiers(methodPath) {
 export default function getMethodDocumentation(
   methodPath: NodePath,
 ): ?MethodDocumentation {
+  if (methodPath.node.accessibility === 'private') {
+    return null;
+  }
+
   const name = getPropertyName(methodPath);
   if (!name) return null;
 

@@ -1432,27 +1432,6 @@ Object {
         },
       },
     },
-    Object {
-      "description": "This is a private method",
-      "docblock": "This is a private method",
-      "modifiers": Array [
-        "private",
-      ],
-      "name": "baz",
-      "params": Array [
-        Object {
-          "name": "a",
-          "type": Object {
-            "name": "string",
-          },
-        },
-      ],
-      "returns": Object {
-        "type": Object {
-          "name": "string",
-        },
-      },
-    },
   ],
   "props": Object {
     "foo": Object {
