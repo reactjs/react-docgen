@@ -219,6 +219,7 @@ export default function getPropType(path: NodePath): PropTypeDescriptor {
         descriptor = { name };
         return true;
       } else if (propTypes.has(name) && member.argumentsPath) {
+        // $FlowIssue
         descriptor = propTypes.get(name)(member.argumentsPath.get(0));
         return true;
       }
@@ -233,10 +234,12 @@ export default function getPropType(path: NodePath): PropTypeDescriptor {
       t.Identifier.check(node.callee) &&
       propTypes.has(node.callee.name)
     ) {
+      // $FlowIssue
       descriptor = propTypes.get(node.callee.name)(path.get('arguments', 0));
     } else {
       descriptor = { name: 'custom', raw: printValue(path) };
     }
   }
+  // $FlowIssue
   return descriptor;
 }
