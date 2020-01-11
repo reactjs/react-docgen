@@ -44,9 +44,9 @@
     "@babel/core": "^7.7.5",
     "@babel/runtime": "^7.7.6",
     "ast-types": "^0.13.2",
-    "async": "^2.1.4",
     "commander": "^2.19.0",
     "doctrine": "^3.0.0",
+    "neo-async": "^2.6.1",
     "node-dir": "^0.1.10",
     "strip-indent": "^3.0.0"
   },

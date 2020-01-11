@@ -55,7 +55,7 @@ argv
 
 argv.parse(process.argv);
 
-const async = require('async');
+const async = require('neo-async');
 const dir = require('node-dir');
 const fs = require('fs');
 const parser = require('../dist/main');
