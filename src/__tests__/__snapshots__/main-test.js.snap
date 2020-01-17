@@ -1465,3 +1465,22 @@ Object {
   },
 }
 `;
+
+exports[`main fixtures processes component "component_29.js" without errors 1`] = `
+Object {
+  "composes": Array [
+    "airbnb-prop-types",
+  ],
+  "description": "",
+  "displayName": "Test",
+  "methods": Array [],
+  "props": Object {
+    "foo": Object {
+      "required": false,
+      "type": Object {
+        "name": "string",
+      },
+    },
+  },
+}
+`;

@@ -27,6 +27,21 @@ function isPropTypesExpression(path) {
 }
 
 function amendPropTypes(getDescriptor, path) {
+  if (t.CallExpression.check(path.node)) {
+    // Only handle direct calls of `forbidExtraProps` (airbnb-prop-types) /
+    // `exact` (prop-types-exact) and extract the propTypes object (first
+    // and only argument)
+    const callee = path.get('callee').node;
+    const resolvedPath = resolveToValue(path.get('arguments', 0));
+    if (
+      t.Identifier.check(callee) &&
+      (callee.name === 'forbidExtraProps' || callee.name === 'exact') &&
+      t.ObjectExpression.check(resolvedPath.node)
+    ) {
+      path = resolvedPath;
+    }
+  }
+
   if (!t.ObjectExpression.check(path.node)) {
     return;
   }

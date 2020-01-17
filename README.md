@@ -166,7 +166,7 @@ For example, while the `propTypesHandler` expects the prop types definition to b
 - Modules have to export a single component, and only that component is analyzed.
 - When using `React.createClass`, the component definition (the value passed to it) must resolve to an object literal.
 - When using classes, the class must either `extend React.Component` _or_ define a `render()` method.
-- `propTypes` must be an object literal or resolve to an object literal in the same file.
+- `propTypes` must be an object literal (optionally wrapped in a `forbidExtraProps`/`exact` function call) or resolve to an object literal in the same file.
 - The `return` statement in `getDefaultProps` must contain an object literal.
 
 ## PropTypes
