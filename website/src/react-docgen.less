@@ -25,9 +25,15 @@ a {
   }
 }
 
+#root {
+  padding: 0;
+  margin: 0;
+  height: 100vh;
+}
+
 .page-header {
   height: 40px;
-  padding: .5rem 1.5rem;
+  padding: 0.5rem 1.5rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   display: flex;
   justify-content: flex-end !important;
@@ -41,10 +47,15 @@ a {
   }
 }
 
+.flavor-select {
+  vertical-align: middle;
+}
+
 .octicon {
   display: inline-block;
   vertical-align: text-top !important;
   fill: currentColor;
+  margin-left: 0.3rem;
 }
 
 .nav-link {
@@ -57,11 +68,8 @@ a {
     text-decoration: none;
   }
 }
-.view-gituhb {
-  display: inline !important;
-}
 
-#root {
+.panels {
   height: calc(100% - 41px - 1rem);
   overflow: hidden;
   display: flex;
