@@ -42,6 +42,7 @@ function getDefaultPlugins(options: BabelOptions) {
     'optionalChaining',
     ['pipelineOperator', { proposal: 'minimal' }],
     'throwExpressions',
+    'topLevelAwait',
   ];
 }
 
