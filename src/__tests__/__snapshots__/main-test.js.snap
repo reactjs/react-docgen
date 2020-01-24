@@ -1465,3 +1465,54 @@ Object {
   },
 }
 `;
+
+exports[`main fixtures processes component "component_29.js" without errors 1`] = `
+Object {
+  "description": "",
+  "displayName": "MyComponent",
+  "methods": Array [],
+  "props": Object {
+    "prop": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "T",
+      },
+      "required": true,
+    },
+  },
+}
+`;
+
+exports[`main fixtures processes component "component_30.js" without errors 1`] = `
+Object {
+  "description": "",
+  "displayName": "MyComponent",
+  "methods": Array [],
+  "props": Object {
+    "prop": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "string",
+      },
+      "required": true,
+    },
+  },
+}
+`;
+
+exports[`main fixtures processes component "component_31.js" without errors 1`] = `
+Object {
+  "description": "",
+  "displayName": "MyComponent",
+  "methods": Array [],
+  "props": Object {
+    "prop": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "T",
+      },
+      "required": true,
+    },
+  },
+}
+`;
