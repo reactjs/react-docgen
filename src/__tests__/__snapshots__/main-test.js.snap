@@ -1516,3 +1516,64 @@ Object {
   },
 }
 `;
+
+exports[`main fixtures processes component "component_32.js" without errors 1`] = `
+Object {
+  "description": "",
+  "displayName": "Segments",
+  "methods": Array [
+    Object {
+      "docblock": null,
+      "modifiers": Array [],
+      "name": "foo",
+      "params": Array [
+        Object {
+          "name": "props",
+          "optional": undefined,
+          "type": Object {
+            "alias": "Props",
+            "name": "signature",
+            "raw": "{
+  segments: Array<T>,
+}",
+            "signature": Object {
+              "properties": Array [
+                Object {
+                  "key": "segments",
+                  "value": Object {
+                    "elements": Array [
+                      Object {
+                        "name": "T",
+                      },
+                    ],
+                    "name": "Array",
+                    "raw": "Array<T>",
+                    "required": true,
+                  },
+                },
+              ],
+            },
+            "type": "object",
+          },
+        },
+      ],
+      "returns": null,
+    },
+  ],
+  "props": Object {
+    "segments": Object {
+      "description": "",
+      "flowType": Object {
+        "elements": Array [
+          Object {
+            "name": "T",
+          },
+        ],
+        "name": "Array",
+        "raw": "Array<T>",
+      },
+      "required": true,
+    },
+  },
+}
+`;
