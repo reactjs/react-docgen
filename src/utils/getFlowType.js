@@ -139,6 +139,14 @@ function handleGenericTypeAnnotation(
     );
   }
 
+  if (
+    typeParams &&
+    typeParams[type.name] &&
+    typeParams[type.name].value.type === t.GenericTypeAnnotation.name
+  ) {
+    return type;
+  }
+
   if (typeParams && typeParams[type.name]) {
     type = getFlowTypeWithResolvedTypes(resolvedPath, typeParams);
   }
