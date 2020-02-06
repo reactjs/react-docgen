@@ -6,15 +6,9 @@
  *
  */
 
-import { expression as expr, statement as stmt } from '../../../tests/utils';
+import { statement as stmt } from '../../../tests/utils';
 import getTSType from '../getTSType';
 
-function expression(code) {
-  return expr(code, {
-    filename: 'test.ts',
-    babelrc: false,
-  });
-}
 function statement(code) {
   return stmt(code, {
     filename: 'test.ts',
@@ -43,7 +37,9 @@ describe('getTSType', () => {
     ];
 
     simplePropTypes.forEach(type => {
-      const typePath = expression('x: ' + type)
+      const typePath = statement(`let x: ${type};`)
+        .get('declarations', 0)
+        .get('id')
         .get('typeAnnotation')
         .get('typeAnnotation');
       expect(getTSType(typePath)).toEqual({ name: type });
@@ -54,7 +50,9 @@ describe('getTSType', () => {
     const literalTypes = ['"foo"', 1234, true];
 
     literalTypes.forEach(value => {
-      const typePath = expression(`x: ${value}`)
+      const typePath = statement(`let x: ${value};`)
+        .get('declarations', 0)
+        .get('id')
         .get('typeAnnotation')
         .get('typeAnnotation');
       expect(getTSType(typePath)).toEqual({
@@ -65,14 +63,18 @@ describe('getTSType', () => {
   });
 
   it('detects external type', () => {
-    const typePath = expression('x: xyz')
+    const typePath = statement('let x: xyz;')
+      .get('declarations', 0)
+      .get('id')
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getTSType(typePath)).toEqual({ name: 'xyz' });
   });
 
   it('detects array type shorthand', () => {
-    const typePath = expression('x: number[]')
+    const typePath = statement('let x: number[];')
+      .get('declarations', 0)
+      .get('id')
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getTSType(typePath)).toEqual({
@@ -83,7 +85,9 @@ describe('getTSType', () => {
   });
 
   it('detects array type', () => {
-    const typePath = expression('x: Array<number>')
+    const typePath = statement('let x: Array<number>;')
+      .get('declarations', 0)
+      .get('id')
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getTSType(typePath)).toEqual({
@@ -94,7 +98,9 @@ describe('getTSType', () => {
   });
 
   it('detects array type with multiple types', () => {
-    const typePath = expression('x: Array<number, xyz>')
+    const typePath = statement('let x: Array<number, xyz>;')
+      .get('declarations', 0)
+      .get('id')
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getTSType(typePath)).toEqual({
@@ -105,7 +111,9 @@ describe('getTSType', () => {
   });
 
   it('detects class type', () => {
-    const typePath = expression('x: Class<Boolean>')
+    const typePath = statement('let x: Class<Boolean>;')
+      .get('declarations', 0)
+      .get('id')
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getTSType(typePath)).toEqual({
@@ -116,7 +124,9 @@ describe('getTSType', () => {
   });
 
   it('detects function type with subtype', () => {
-    const typePath = expression('x: Function<xyz>')
+    const typePath = statement('let x: Function<xyz>;')
+      .get('declarations', 0)
+      .get('id')
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getTSType(typePath)).toEqual({
@@ -127,7 +137,9 @@ describe('getTSType', () => {
   });
 
   it('detects object types', () => {
-    const typePath = expression('x: { a: string, b?: xyz }')
+    const typePath = statement('let x: { a: string, b?: xyz };')
+      .get('declarations', 0)
+      .get('id')
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getTSType(typePath)).toEqual({
@@ -144,7 +156,9 @@ describe('getTSType', () => {
   });
 
   it('detects union type', () => {
-    const typePath = expression('x: string | xyz | "foo" | void')
+    const typePath = statement('let x: string | xyz | "foo" | void;')
+      .get('declarations', 0)
+      .get('id')
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getTSType(typePath)).toEqual({
@@ -160,7 +174,9 @@ describe('getTSType', () => {
   });
 
   it('detects intersection type', () => {
-    const typePath = expression('x: string & xyz & "foo" & void')
+    const typePath = statement('let x: string & xyz & "foo" & void;')
+      .get('declarations', 0)
+      .get('id')
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getTSType(typePath)).toEqual({
@@ -176,9 +192,11 @@ describe('getTSType', () => {
   });
 
   it('detects function signature type', () => {
-    const typePath = expression(
-      'x: (p1: number, p2: string, ...rest: Array<string>) => boolean',
+    const typePath = statement(
+      'let x: (p1: number, p2: string, ...rest: Array<string>) => boolean;',
     )
+      .get('declarations', 0)
+      .get('id')
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getTSType(typePath)).toEqual({
@@ -205,7 +223,9 @@ describe('getTSType', () => {
   });
 
   it('detects function signature type with `this` parameter', () => {
-    const typePath = expression('x: (this: Foo, p1: number) => boolean')
+    const typePath = statement('let x: (this: Foo, p1: number) => boolean;')
+      .get('declarations', 0)
+      .get('id')
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getTSType(typePath)).toEqual({
@@ -221,7 +241,11 @@ describe('getTSType', () => {
   });
 
   it('detects callable signature type', () => {
-    const typePath = expression('x: { (str: string): string, token: string }')
+    const typePath = statement(
+      'let x: { (str: string): string, token: string };',
+    )
+      .get('declarations', 0)
+      .get('id')
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getTSType(typePath)).toEqual({
@@ -246,9 +270,11 @@ describe('getTSType', () => {
   });
 
   it('detects map signature', () => {
-    const typePath = expression(
-      'x: { [key: string]: number, [key: "xl"]: string, token: "a" | "b" }',
+    const typePath = statement(
+      'let x: { [key: string]: number, [key: "xl"]: string, token: "a" | "b" };',
     )
+      .get('declarations', 0)
+      .get('id')
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getTSType(typePath)).toEqual({
@@ -283,7 +309,9 @@ describe('getTSType', () => {
   });
 
   it('detects tuple signature', () => {
-    const typePath = expression('x: [string, number]')
+    const typePath = statement('let x: [string, number];')
+      .get('declarations', 0)
+      .get('id')
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getTSType(typePath)).toEqual({
@@ -294,7 +322,9 @@ describe('getTSType', () => {
   });
 
   it('detects tuple in union signature', () => {
-    const typePath = expression('x: [string, number] | [number, string]')
+    const typePath = statement('let x: [string, number] | [number, string];')
+      .get('declarations', 0)
+      .get('id')
       .get('typeAnnotation')
       .get('typeAnnotation');
     expect(getTSType(typePath)).toEqual({

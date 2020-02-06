@@ -43,12 +43,12 @@ describe('parse', () => {
       fs.writeFileSync(`${dir}/.babelrc`, '{}');
 
       expect(() =>
-        parse('const chained  = () => foo?.bar?.join?.()', () => {}, null, {
+        parse('const chained  = () => a |> b', () => {}, null, {
           cwd: dir,
           filename: `${dir}/component.js`,
         }),
       ).toThrowError(
-        /.*Support for the experimental syntax 'optionalChaining' isn't currently enabled.*/,
+        /.*Support for the experimental syntax 'pipelineOperator' isn't currently enabled.*/,
       );
     } finally {
       fs.unlinkSync(`${dir}/.babelrc`);
