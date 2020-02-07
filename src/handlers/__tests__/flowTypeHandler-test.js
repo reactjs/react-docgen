@@ -8,7 +8,7 @@
 
 jest.mock('../../Documentation');
 
-import { expression, statement } from '../../../tests/utils';
+import { expression, statement, parse } from '../../../tests/utils';
 
 describe('flowTypeHandler', () => {
   let getFlowTypeMock;
@@ -332,6 +332,41 @@ describe('flowTypeHandler', () => {
         var React = require('React');
         var Component = React.Component;
       `);
+    });
+  });
+
+  describe('forwardRef', () => {
+    it('resolves prop type from function expression', () => {
+      const src = `
+        import React from 'react';
+        type Props = { foo: string };
+        React.forwardRef((props: Props, ref) => <div ref={ref}>{props.foo}</div>);
+      `;
+      flowTypeHandler(documentation, parse(src).get('body', 2, 'expression'));
+      expect(documentation.descriptors).toEqual({
+        foo: {
+          flowType: {},
+          required: true,
+          description: '',
+        },
+      });
+    });
+
+    it('resolves when the function is not inline', () => {
+      const src = `
+        import React from 'react';
+        type Props = { foo: string };
+        const ComponentImpl = (props: Props, ref) => <div ref={ref}>{props.foo}</div>;
+        React.forwardRef(ComponentImpl);
+      `;
+      flowTypeHandler(documentation, parse(src).get('body', 3, 'expression'));
+      expect(documentation.descriptors).toEqual({
+        foo: {
+          flowType: {},
+          required: true,
+          description: '',
+        },
+      });
     });
   });
 });

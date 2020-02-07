@@ -299,6 +299,17 @@ Object {
 }
 `;
 
+exports[`defaultPropsHandler forwardRef resolves when the function is not inline 1`] = `
+Object {
+  "foo": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "'bar'",
+    },
+  },
+}
+`;
+
 exports[`defaultPropsHandler should only consider Property nodes, not e.g. spread properties 1`] = `
 Object {
   "bar": Object {
