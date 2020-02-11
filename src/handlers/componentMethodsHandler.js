@@ -13,6 +13,9 @@ import getMethodDocumentation from '../utils/getMethodDocumentation';
 import isReactComponentClass from '../utils/isReactComponentClass';
 import isReactComponentMethod from '../utils/isReactComponentMethod';
 import type Documentation from '../Documentation';
+import match from '../utils/match';
+import { traverseShallow } from '../utils/traverse';
+import resolveToValue from '../utils/resolveToValue';
 
 /**
  * The following values/constructs are considered methods:
@@ -29,6 +32,37 @@ function isMethod(path) {
       t.Function.check(path.get('value').node));
 
   return isProbablyMethod && !isReactComponentMethod(path);
+}
+
+function findAssignedMethods(scope, idPath) {
+  const results = [];
+
+  if (!t.Identifier.check(idPath.node)) {
+    return results;
+  }
+
+  const name = idPath.node.name;
+  const idScope = idPath.scope.lookup(idPath.node.name);
+
+  traverseShallow((scope: any).path, {
+    visitAssignmentExpression: function(path) {
+      const node = path.node;
+      if (
+        match(node.left, {
+          type: 'MemberExpression',
+          object: { type: 'Identifier', name },
+        }) &&
+        path.scope.lookup(name) === idScope &&
+        t.Function.check(resolveToValue(path.get('right')).node)
+      ) {
+        results.push(path);
+        return false;
+      }
+      return this.traverse(path);
+    },
+  });
+
+  return results;
 }
 
 /**
@@ -56,6 +90,23 @@ export default function componentMethodsHandler(
         }
       });
     }
+  } else if (
+    t.VariableDeclarator.check(path.parent.node) &&
+    path.parent.node.init === path.node &&
+    t.Identifier.check(path.parent.node.id)
+  ) {
+    methodPaths = findAssignedMethods(path.parent.scope, path.parent.get('id'));
+  } else if (
+    t.AssignmentExpression.check(path.parent.node) &&
+    path.parent.node.right === path.node &&
+    t.Identifier.check(path.parent.node.left)
+  ) {
+    methodPaths = findAssignedMethods(
+      path.parent.scope,
+      path.parent.get('left'),
+    );
+  } else if (t.FunctionDeclaration.check(path.node)) {
+    methodPaths = findAssignedMethods(path.parent.scope, path.get('id'));
   }
 
   documentation.set(
