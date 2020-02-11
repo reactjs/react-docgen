@@ -75,7 +75,7 @@ function findScopePath(paths: Array<NodePath>, path: NodePath): ?NodePath {
 function findLastAssignedValue(scope, name) {
   const results = [];
 
-  traverseShallow(scope.path.node, {
+  traverseShallow(scope.path, {
     visitAssignmentExpression: function(path) {
       const node = path.node;
       // Skip anything that is not an assignment to a variable with the
