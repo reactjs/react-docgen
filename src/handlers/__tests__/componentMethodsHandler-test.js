@@ -156,13 +156,54 @@ describe('componentMethodsHandler', () => {
     expect(documentation.methods).toMatchSnapshot();
   });
 
-  it('should not find methods for stateless components', () => {
-    const src = `
-      (props) => {}
-    `;
+  describe('function components', () => {
+    it('no methods', () => {
+      const src = `
+        (props) => {}
+      `;
 
-    const definition = parse(src).get('body', 0, 'expression');
-    componentMethodsHandler(documentation, definition);
-    expect(documentation.methods).toEqual([]);
+      const definition = parse(src).get('body', 0, 'expression');
+      componentMethodsHandler(documentation, definition);
+      expect(documentation.methods).toEqual([]);
+    });
+
+    it('finds static methods on a component in a variable declaration', () => {
+      const src = `
+        const Test = (props) => {};
+        Test.doFoo = () => {};
+        Test.doBar = () => {};
+        Test.displayName = 'Test'; // Not a method
+      `;
+
+      const definition = parse(src).get('body', 0, 'declarations', 0, 'init');
+      componentMethodsHandler(documentation, definition);
+      expect(documentation.methods).toMatchSnapshot();
+    });
+
+    it('finds static methods on a component in an assignment', () => {
+      const src = `
+        Test = (props) => {};
+        Test.doFoo = () => {};
+        Test.doBar = () => {};
+        Test.displayName = 'Test'; // Not a method
+      `;
+
+      const definition = parse(src).get('body', 0, 'expression', 'right');
+      componentMethodsHandler(documentation, definition);
+      expect(documentation.methods).toMatchSnapshot();
+    });
+
+    it('finds static methods on a function declaration', () => {
+      const src = `
+        function Test(props) {}
+        Test.doFoo = () => {};
+        Test.doBar = () => {};
+        Test.displayName = 'Test'; // Not a method
+      `;
+
+      const definition = parse(src).get('body', 0);
+      componentMethodsHandler(documentation, definition);
+      expect(documentation.methods).toMatchSnapshot();
+    });
   });
 });

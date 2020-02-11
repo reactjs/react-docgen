@@ -1,5 +1,74 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`componentMethodsHandler function components finds static methods on a component in a variable declaration 1`] = `
+Array [
+  Object {
+    "docblock": null,
+    "modifiers": Array [
+      "static",
+    ],
+    "name": "doFoo",
+    "params": Array [],
+    "returns": null,
+  },
+  Object {
+    "docblock": null,
+    "modifiers": Array [
+      "static",
+    ],
+    "name": "doBar",
+    "params": Array [],
+    "returns": null,
+  },
+]
+`;
+
+exports[`componentMethodsHandler function components finds static methods on a component in an assignment 1`] = `
+Array [
+  Object {
+    "docblock": null,
+    "modifiers": Array [
+      "static",
+    ],
+    "name": "doFoo",
+    "params": Array [],
+    "returns": null,
+  },
+  Object {
+    "docblock": null,
+    "modifiers": Array [
+      "static",
+    ],
+    "name": "doBar",
+    "params": Array [],
+    "returns": null,
+  },
+]
+`;
+
+exports[`componentMethodsHandler function components finds static methods on a function declaration 1`] = `
+Array [
+  Object {
+    "docblock": null,
+    "modifiers": Array [
+      "static",
+    ],
+    "name": "doFoo",
+    "params": Array [],
+    "returns": null,
+  },
+  Object {
+    "docblock": null,
+    "modifiers": Array [
+      "static",
+    ],
+    "name": "doBar",
+    "params": Array [],
+    "returns": null,
+  },
+]
+`;
+
 exports[`componentMethodsHandler should handle and ignore computed methods 1`] = `
 Array [
   Object {
