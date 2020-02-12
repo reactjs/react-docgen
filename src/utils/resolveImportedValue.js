@@ -49,7 +49,7 @@ export default function resolveImportedValue(
 
   // Read and parse the code
   // TODO: cache and reuse
-  const code = fs.readFileSync(resolvedSource, 'utf8');
+  const src = fs.readFileSync(resolvedSource, 'utf8');
   const parseOptions: Options = {
     ...options,
     parserOptions: {},
@@ -57,8 +57,9 @@ export default function resolveImportedValue(
   };
 
   const parser = buildParser(parseOptions);
-  const ast = parser.parse(code);
-  return findExportedValue(ast.program, name, seen);
+  const ast = parser.parse(src);
+  ast.__src = src;
+  return findExportedValue(new NodePath(ast).get('program'), name, seen);
 }
 
 // Find the root Program node, which we attached our options too in babelParser.js
@@ -71,10 +72,10 @@ function getOptions(path: NodePath): Options {
 }
 
 // Traverses the program looking for an export that matches the requested name
-function findExportedValue(ast, name, seen) {
+function findExportedValue(programPath, name, seen) {
   let resultPath: ?NodePath = null;
 
-  traverseShallow(ast, {
+  traverseShallow(programPath, {
     visitExportNamedDeclaration(path: NodePath) {
       const { declaration, specifiers, source } = path.node;
       if (declaration && declaration.id && declaration.id.name === name) {
