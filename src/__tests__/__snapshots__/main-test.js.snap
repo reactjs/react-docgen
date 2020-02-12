@@ -1800,3 +1800,100 @@ Object {
   },
 }
 `;
+
+exports[`main fixtures processes component "flow-export-type.js" without errors 1`] = `
+Object {
+  "description": "This is a Flow class component",
+  "displayName": "FlowComponent",
+  "methods": Array [
+    Object {
+      "docblock": null,
+      "modifiers": Array [],
+      "name": "foo",
+      "params": Array [
+        Object {
+          "name": "a",
+          "optional": undefined,
+          "type": Object {
+            "name": "string",
+          },
+        },
+      ],
+      "returns": Object {
+        "type": Object {
+          "name": "string",
+        },
+      },
+    },
+    Object {
+      "docblock": null,
+      "modifiers": Array [],
+      "name": "bar",
+      "params": Array [
+        Object {
+          "name": "a",
+          "optional": undefined,
+          "type": Object {
+            "name": "string",
+          },
+        },
+      ],
+      "returns": Object {
+        "type": Object {
+          "name": "string",
+        },
+      },
+    },
+  ],
+  "props": Object {
+    "foo": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "string",
+      },
+      "required": true,
+    },
+  },
+}
+`;
+
+exports[`main fixtures processes component "flow-import-type.js" without errors 1`] = `
+Object {
+  "description": "This is a Flow component with imported prop types",
+  "displayName": "ImportedComponent",
+  "methods": Array [],
+  "props": Object {
+    "foo": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "string",
+      },
+      "required": true,
+    },
+  },
+}
+`;
+
+exports[`main fixtures processes component "flow-spread-import-type.js" without errors 1`] = `
+Object {
+  "description": "This is a Flow component with imported prop types",
+  "displayName": "ImportedExtendedComponent",
+  "methods": Array [],
+  "props": Object {
+    "bar": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "number",
+      },
+      "required": true,
+    },
+    "foo": Object {
+      "description": "",
+      "flowType": Object {
+        "name": "string",
+      },
+      "required": true,
+    },
+  },
+}
+`;
