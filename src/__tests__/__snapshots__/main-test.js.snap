@@ -1876,6 +1876,9 @@ Object {
 
 exports[`main fixtures processes component "flow-spread-import-type.js" without errors 1`] = `
 Object {
+  "composes": Array [
+    "ImportedProps",
+  ],
   "description": "This is a Flow component with imported prop types",
   "displayName": "ImportedExtendedComponent",
   "methods": Array [],
@@ -1884,13 +1887,6 @@ Object {
       "description": "",
       "flowType": Object {
         "name": "number",
-      },
-      "required": true,
-    },
-    "foo": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "string",
       },
       "required": true,
     },
