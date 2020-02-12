@@ -41,7 +41,14 @@ function setPropDescriptor(
     }
 
     const name = argument.get('id').get('name');
-    const resolvedPath = resolveToValue(name);
+    const resolvedPath = resolveToValue(
+      name,
+      // As an editorial choice, do not resolve imported type aliases in a type
+      // spread, but do resolve type aliases if they are defined in the same
+      // file.
+      // TODO: Make this configurable with a pragma comment?
+      false,
+    );
 
     if (resolvedPath && t.TypeAlias.check(resolvedPath.node)) {
       const right = resolvedPath.get('right');
