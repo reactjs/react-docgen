@@ -19,6 +19,7 @@ describe('getFlowType', () => {
       'mixed',
       'null',
       'void',
+      'empty',
       'Object',
       'Function',
       'Boolean',
