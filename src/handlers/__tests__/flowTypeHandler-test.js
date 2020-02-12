@@ -368,5 +368,25 @@ describe('flowTypeHandler', () => {
         },
       });
     });
+
+    it('resolves when the function is rebound and not inline', () => {
+      const src = `
+        import React from 'react';
+        type Props = { foo: string };
+        let Component = (props: Props, ref) => <div ref={ref}>{props.foo}</div>;
+        Component = React.forwardRef(Component);
+      `;
+      flowTypeHandler(
+        documentation,
+        parse(src).get('body', 3, 'expression', 'right'),
+      );
+      expect(documentation.descriptors).toEqual({
+        foo: {
+          flowType: {},
+          required: true,
+          description: '',
+        },
+      });
+    });
   });
 });

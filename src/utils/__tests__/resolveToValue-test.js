@@ -109,6 +109,26 @@ describe('resolveToValue', () => {
 
       expect(resolveToValue(path)).toEqualASTNode(builders.literal(42));
     });
+
+    it('resolves to other assigned value if ref is in an assignment lhs', () => {
+      const path = parsePath(
+        ['var foo;', 'foo = 42;', 'foo = wrap(foo);'].join('\n'),
+      );
+
+      expect(resolveToValue(path.get('left'))).toEqualASTNode(
+        builders.literal(42),
+      );
+    });
+
+    it('resolves to other assigned value if ref is in an assignment rhs', () => {
+      const path = parsePath(
+        ['var foo;', 'foo = 42;', 'foo = wrap(foo);'].join('\n'),
+      );
+
+      expect(resolveToValue(path.get('right', 'arguments', 0))).toEqualASTNode(
+        builders.literal(42),
+      );
+    });
   });
 
   describe('ImportDeclaration', () => {
