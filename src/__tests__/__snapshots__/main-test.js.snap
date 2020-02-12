@@ -1008,9 +1008,6 @@ Object {
 
 exports[`main fixtures processes component "component_19.js" without errors 1`] = `
 Object {
-  "composes": Array [
-    undefined,
-  ],
   "description": "",
   "displayName": "Component",
   "methods": Array [],

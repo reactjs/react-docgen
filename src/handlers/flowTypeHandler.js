@@ -53,7 +53,7 @@ function setPropDescriptor(
         },
         typeParams,
       );
-    } else {
+    } else if (!argument.node.typeParameters) {
       documentation.addComposes(name.node.name);
     }
   } else if (t.ObjectTypeProperty.check(path.node)) {
