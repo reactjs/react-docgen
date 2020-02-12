@@ -101,13 +101,17 @@ function buildOptions(
 export default function buildParse(options?: Options = {}): Parser {
   const { parserOptions, ...babelOptions } = options;
   const parserOpts = buildOptions(parserOptions, babelOptions);
+  const opts = {
+    parserOpts,
+    ...babelOptions,
+  };
 
   return {
     parse(src: string): ASTNode {
-      return babel.parseSync(src, {
-        parserOpts,
-        ...babelOptions,
-      });
+      const ast = babel.parseSync(src, opts);
+      // Attach options to the Program node, for use when processing imports.
+      ast.program.options = options;
+      return ast;
     },
   };
 }

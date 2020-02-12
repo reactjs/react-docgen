@@ -128,7 +128,7 @@ describe('propDocBlockHandler', () => {
       const definition = parse(
         getSrc(
           `{
-          ...Foo.propTypes,
+          ...Bar.propTypes,
           /**
            * Foo comment
            */

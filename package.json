@@ -48,6 +48,7 @@
     "doctrine": "^3.0.0",
     "neo-async": "^2.6.1",
     "node-dir": "^0.1.10",
+    "resolve": "^1.10.1",
     "strip-indent": "^3.0.0"
   },
   "devDependencies": {
@@ -83,5 +84,8 @@
       "src"
     ],
     "testRegex": "/__tests__/.*-test\\.js$"
+  },
+  "browser": {
+    "./dist/utils/resolveImportedValue.js": "./dist/utils/resolveImportedValue.browser.js"
   }
 }
