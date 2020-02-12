@@ -40,7 +40,7 @@ export default function isReactComponentClass(path: NodePath): boolean {
   }
 
   // React.Component or React.PureComponent
-  const superClass = resolveToValue(path.get('superClass'));
+  const superClass = resolveToValue(path.get('superClass'), false);
   if (
     match(superClass.node, { property: { name: 'Component' } }) ||
     match(superClass.node, { property: { name: 'PureComponent' } })
