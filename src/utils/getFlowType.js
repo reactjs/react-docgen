@@ -32,6 +32,7 @@ const flowTypes = {
   NumberTypeAnnotation: 'number',
   StringTypeAnnotation: 'string',
   VoidTypeAnnotation: 'void',
+  EmptyTypeAnnotation: 'empty',
 };
 
 const flowLiteralTypes = {
