@@ -290,5 +290,18 @@ describe('defaultPropsHandler', () => {
       defaultPropsHandler(documentation, parse(src).get('body', 1));
       expect(documentation.descriptors).toMatchSnapshot();
     });
+
+    it('resolves when the function is not inline', () => {
+      const src = `
+        import React from 'react';
+        const ComponentImpl = ({ foo = 'bar' }, ref) => <div ref={ref}>{foo}</div>;
+        React.forwardRef(ComponentImpl);
+      `;
+      defaultPropsHandler(
+        documentation,
+        parse(src).get('body', 2, 'expression'),
+      );
+      expect(documentation.descriptors).toMatchSnapshot();
+    });
   });
 });
