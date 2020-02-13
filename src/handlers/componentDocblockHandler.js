@@ -10,19 +10,15 @@
 import { namedTypes as t } from 'ast-types';
 import type Documentation from '../Documentation';
 import { getDocblock } from '../utils/docblock';
+import isReactForwardRefCall from '../utils/isReactForwardRefCall';
+import resolveToValue from '../utils/resolveToValue';
 
 function isClassDefinition(nodePath) {
   const node = nodePath.node;
   return t.ClassDeclaration.check(node) || t.ClassExpression.check(node);
 }
 
-/**
- * Finds the nearest block comment before the component definition.
- */
-export default function componentDocblockHandler(
-  documentation: Documentation,
-  path: NodePath,
-) {
+function getDocblockFromComponent(path) {
   let description = null;
 
   if (isClassDefinition(path)) {
@@ -52,5 +48,21 @@ export default function componentDocblockHandler(
       description = getDocblock(searchPath);
     }
   }
-  documentation.set('description', description || '');
+  if (!description && isReactForwardRefCall(path)) {
+    const inner = resolveToValue(path.get('arguments', 0));
+    if (inner.node !== path.node) {
+      return getDocblockFromComponent(inner);
+    }
+  }
+  return description;
+}
+
+/**
+ * Finds the nearest block comment before the component definition.
+ */
+export default function componentDocblockHandler(
+  documentation: Documentation,
+  path: NodePath,
+) {
+  documentation.set('description', getDocblockFromComponent(path) || '');
 }
