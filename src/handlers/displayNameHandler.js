@@ -10,6 +10,7 @@
 import { namedTypes as t } from 'ast-types';
 import getMemberValuePath from '../utils/getMemberValuePath';
 import getNameOrValue from '../utils/getNameOrValue';
+import isReactForwardRefCall from '../utils/isReactForwardRefCall';
 import resolveToValue from '../utils/resolveToValue';
 import resolveFunctionDefinitionToReturnValue from '../utils/resolveFunctionDefinitionToReturnValue';
 import type Documentation from '../Documentation';
@@ -29,7 +30,8 @@ export default function displayNameHandler(
       documentation.set('displayName', getNameOrValue(path.get('id')));
     } else if (
       t.ArrowFunctionExpression.check(path.node) ||
-      t.FunctionExpression.check(path.node)
+      t.FunctionExpression.check(path.node) ||
+      isReactForwardRefCall(path)
     ) {
       let currentPath = path;
       while (currentPath.parent) {
