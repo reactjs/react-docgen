@@ -19,6 +19,11 @@ describe('componentDocblockHandler', () => {
     return programPath.get('body', programPath.node.body.length - 1);
   }
 
+  function beforeLastStatement(src) {
+    const programPath = parse(src);
+    return programPath.get('body', programPath.node.body.length - 2);
+  }
+
   beforeEach(() => {
     documentation = new (require('../../Documentation'))();
     componentDocblockHandler = require('../componentDocblockHandler').default;
@@ -226,6 +231,29 @@ describe('componentDocblockHandler', () => {
         test('export var Component = () => {}', src =>
           lastStatement(src).get('declaration'));
       });
+    });
+  });
+
+  describe('forwardRef', () => {
+    describe('inline implementation', () => {
+      test(
+        [
+          'React.forwardRef((props, ref) => {});',
+          'import React from "react";',
+        ].join('\n'),
+        src => beforeLastStatement(src).get('expression'),
+      );
+    });
+
+    describe('out of line implementation', () => {
+      test(
+        [
+          'let Component = (props, ref) => {};',
+          'React.forwardRef(Component);',
+          'import React from "react";',
+        ].join('\n'),
+        src => beforeLastStatement(src).get('expression'),
+      );
     });
   });
 });
