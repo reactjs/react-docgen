@@ -444,7 +444,7 @@ describe('componentMethodsHandler', () => {
             ? (parsed.get(path) as NodePath<ComponentNode>)
             : (parsed as unknown as NodePath<ComponentNode>);
 
-        // // reset the documentation, since we may test more than once!
+        // reset the documentation, since we may test more than once!
         documentation = new Documentation() as Documentation & DocumentationMock;
         componentMethodsHandler(documentation, componentDefinition);
         expect(documentation.methods).toEqual([
