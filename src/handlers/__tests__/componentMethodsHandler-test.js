@@ -231,7 +231,6 @@ describe('componentMethodsHandler', () => {
         // reset the documentation, since we may test more than once!
         documentation = new (require('../../Documentation'))();
         const definition = parsed.get('body', index);
-        // console.log(`def ${index}`, definition);
         if (!definition.value) {
           return;
         }
