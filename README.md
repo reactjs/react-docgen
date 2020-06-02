@@ -368,7 +368,63 @@ we are getting this output:
 }
 ```
 
-### Types
+## React Hooks support
+
+If you are using React Hooks, react-docgen will now also find component methods defined directly via the `useImperativeHandle()` hook.
+
+> **Note**: react-docgen will not be able to grab the type definition if the type is imported or declared in a different file.
+
+### Example
+
+For the following component using `useImperativeHandle`:
+
+
+```js
+import React, { useImperativeHandle } from 'react';
+
+/**
+ * General component description.
+ */
+const MyComponent = React.forwardRef((props, ref) => {
+
+  useImperativeHandle(ref, () => ({
+    /**
+     * This is my method
+     */
+    myMethod: (arg1) => {},
+  }));
+
+  return /* ... */;
+});
+
+export default MyComponent;
+```
+
+we are getting this output:
+
+```json
+{
+  "description": "General component description.",
+  "displayName": "MyComponent",
+  "methods": [
+    {
+      "name": "myMethod",
+      "docblock": "This is my method",
+      "modifiers": [],
+      "params": [
+        {
+          "name": "arg1",
+          "optional": false
+        }
+      ],
+      "returns": null,
+      "description": "This is my method"
+    }
+  ]
+}
+```
+
+## Types
 
 Here is a list of all the available types and its result structure.
 

@@ -7,8 +7,10 @@ import type {
   ClassDeclaration,
   ExportDefaultDeclaration,
   FunctionDeclaration,
+  VariableDeclaration,
 } from '@babel/types';
 import type { NodePath } from '@babel/traverse';
+import type { ComponentNode } from '../../resolver';
 
 jest.mock('../../Documentation');
 
@@ -411,6 +413,117 @@ describe('componentMethodsHandler', () => {
         parse.statement<FunctionDeclaration>(src, mockImporter),
       );
       expect(documentation.methods).toMatchSnapshot();
+    });
+  });
+
+  describe('useImperativeHandle() methods', () => {
+    // We're not worried about doc-blocks here, simply about finding method(s)
+    // defined via the useImperativeHandle() hook.
+    // To simplify the variations, each one ends up with the following in the
+    // parsed body:
+    //
+    // [0] : the initial definition/declaration
+    // [1] : a React.forwardRef wrapper (or nothing)
+    // [last]: the react import
+    //
+    // Note that in the cases where the React.forwardRef is used "inline" with
+    // the definition/declaration, there is no [1], and it will be skipped.
+    function testImperative(src, paths: Array<string | null> = [null]) {
+      const srcWithImport = `
+        ${src}
+        import React, { useImperativeHandle } from "react";
+      `;
+
+      paths.forEach((path, index) => {
+        const parsed = parse.statement<VariableDeclaration>(
+          srcWithImport,
+          index,
+        );
+        const componentDefinition =
+          path != null
+            ? (parsed.get(path) as NodePath<ComponentNode>)
+            : (parsed as unknown as NodePath<ComponentNode>);
+
+        // // reset the documentation, since we may test more than once!
+        documentation = new Documentation() as Documentation & DocumentationMock;
+        componentMethodsHandler(documentation, componentDefinition);
+        expect(documentation.methods).toEqual([
+          {
+            docblock: null,
+            modifiers: [],
+            name: 'doFoo',
+            params: [],
+            returns: null,
+          },
+        ]);
+      });
+    }
+
+    it('finds inside a component in a variable declaration', () => {
+      testImperative(
+        `
+        const Test = (props, ref) => {
+          useImperativeHandle(ref, () => ({
+            doFoo: ()=>{},
+          }));
+        };
+        React.forwardRef(Test);
+      `,
+        ['declarations.0.init', null],
+      );
+    });
+
+    it.only('finds inside a component in an assignment', () => {
+      testImperative(
+        `
+      Test = (props, ref) => {
+        useImperativeHandle(ref, () => ({
+          doFoo: ()=>{},
+        }));
+      };
+      `,
+        ['expression.right'],
+      );
+    });
+
+    it('finds inside a function declaration', () => {
+      testImperative(
+        `
+      function Test(props, ref) {
+        useImperativeHandle(ref, () => ({
+          doFoo: ()=>{},
+        }));
+      }
+      React.forwardRef(Test);
+      `,
+        [null, null],
+      );
+    });
+
+    it('finds inside an inlined React.forwardRef call with arrow function', () => {
+      testImperative(
+        `
+      React.forwardRef((props, ref) => {
+        useImperativeHandle(ref, () => ({
+          doFoo: ()=>{},
+        }));
+      });
+      `,
+        [null],
+      );
+    });
+
+    it('finds inside an inlined React.forwardRef call with plain function', () => {
+      testImperative(
+        `
+      React.forwardRef(function(props, ref) {
+        useImperativeHandle(ref, () => ({
+          doFoo: ()=>{},
+        }));
+      });
+      `,
+        [null],
+      );
     });
   });
 });
