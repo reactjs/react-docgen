@@ -70,7 +70,12 @@ export default function parse(
     }
     return executeHandlers(handlers, componentDefinitions, parser, importer);
   } else if (componentDefinitions) {
-    return executeHandlers(handlers, [componentDefinitions], parser, importer)[0];
+    return executeHandlers(
+      handlers,
+      [componentDefinitions],
+      parser,
+      importer,
+    )[0];
   }
 
   throw new Error(ERROR_MISSING_DEFINITION);

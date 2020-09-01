@@ -14,6 +14,9 @@ import type { Importer } from '../types';
  * Returns true if the expression is a function call of the form
  * `React.createElement(...)`.
  */
-export default function isReactCreateElementCall(path: NodePath, importer: Importer): boolean {
+export default function isReactCreateElementCall(
+  path: NodePath,
+  importer: Importer,
+): boolean {
   return isReactBuiltinCall(path, 'createElement', importer);
 }

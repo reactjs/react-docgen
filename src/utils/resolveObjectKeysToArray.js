@@ -110,11 +110,17 @@ export function resolveObjectToNameArray(
  *  unresolvable spreads
  *  computed identifier keys
  */
-export default function resolveObjectKeysToArray(path: NodePath, importer: Importer): ?NodePath {
+export default function resolveObjectKeysToArray(
+  path: NodePath,
+  importer: Importer,
+): ?NodePath {
   const node = path.node;
 
   if (isObjectKeysCall(node)) {
-    const objectExpression = resolveToValue(path.get('arguments').get(0), importer);
+    const objectExpression = resolveToValue(
+      path.get('arguments').get(0),
+      importer,
+    );
     const values = resolveObjectToNameArray(objectExpression, importer);
 
     if (values) {

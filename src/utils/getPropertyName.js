@@ -19,7 +19,10 @@ export const COMPUTED_PREFIX = '@computed#';
  * or a literal (or dynamic, but we don't support those). This function simply
  * returns the value of the literal or name of the identifier.
  */
-export default function getPropertyName(propertyPath: NodePath, importer: Importer): ?string {
+export default function getPropertyName(
+  propertyPath: NodePath,
+  importer: Importer,
+): ?string {
   if (t.ObjectTypeSpreadProperty.check(propertyPath.node)) {
     return getNameOrValue(propertyPath.get('argument').get('id'), false);
   } else if (propertyPath.node.computed) {

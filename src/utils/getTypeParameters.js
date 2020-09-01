@@ -35,7 +35,8 @@ export default function getTypeParameters(
         : defaultTypePath;
 
     if (typePath) {
-      let resolvedTypePath = resolveGenericTypeAnnotation(typePath, importer) || typePath;
+      let resolvedTypePath =
+        resolveGenericTypeAnnotation(typePath, importer) || typePath;
       const typeName =
         resolvedTypePath.node.typeName || resolvedTypePath.node.id;
       if (typeName && inputParams && inputParams[typeName.name]) {

@@ -66,7 +66,10 @@ export default function displayNameHandler(
   // value. In that case we try to determine the value from the return
   // statement.
   if (t.FunctionExpression.check(displayNamePath.node)) {
-    displayNamePath = resolveFunctionDefinitionToReturnValue(displayNamePath, importer);
+    displayNamePath = resolveFunctionDefinitionToReturnValue(
+      displayNamePath,
+      importer,
+    );
   }
   if (!displayNamePath || !t.Literal.check(displayNamePath.node)) {
     return;

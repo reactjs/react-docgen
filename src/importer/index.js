@@ -10,7 +10,4 @@
 import ignoreImports from './ignoreImports';
 import resolveImports from './resolveImports';
 
-export {
-  ignoreImports,
-  resolveImports,
-};
+export { ignoreImports, resolveImports };

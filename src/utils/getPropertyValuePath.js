@@ -24,6 +24,8 @@ export default function getPropertyValuePath(
 
   return path
     .get('properties')
-    .filter(propertyPath => getPropertyName(propertyPath, importer) === propertyName)
+    .filter(
+      propertyPath => getPropertyName(propertyPath, importer) === propertyName,
+    )
     .map(propertyPath => propertyPath.get('value'))[0];
 }

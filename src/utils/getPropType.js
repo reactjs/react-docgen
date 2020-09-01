@@ -55,7 +55,8 @@ function getPropTypeOneOf(argumentPath, importer) {
   let value = resolveToValue(argumentPath, importer);
   if (!t.ArrayExpression.check(value.node)) {
     value =
-      resolveObjectKeysToArray(value, importer) || resolveObjectValuesToArray(value, importer);
+      resolveObjectKeysToArray(value, importer) ||
+      resolveObjectValuesToArray(value, importer);
     if (value) {
       type.value = getEnumValues(value, importer);
     } else {

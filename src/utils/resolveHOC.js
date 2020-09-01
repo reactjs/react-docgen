@@ -19,7 +19,10 @@ import type { Importer } from '../types';
  *
  * Else the path itself is returned.
  */
-export default function resolveHOC(path: NodePath, importer: Importer): NodePath {
+export default function resolveHOC(
+  path: NodePath,
+  importer: Importer,
+): NodePath {
   const node = path.node;
   if (
     t.CallExpression.check(node) &&
@@ -39,7 +42,10 @@ export default function resolveHOC(path: NodePath, importer: Importer): NodePath
           t.SpreadElement.check(inner.node))
       ) {
         return resolveHOC(
-          resolveToValue(path.get('arguments', node.arguments.length - 1), importer),
+          resolveToValue(
+            path.get('arguments', node.arguments.length - 1),
+            importer,
+          ),
           importer,
         );
       }

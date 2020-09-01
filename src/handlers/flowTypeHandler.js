@@ -21,7 +21,6 @@ import resolveToValue from '../utils/resolveToValue';
 import setPropDescription from '../utils/setPropDescription';
 import type { Parser } from '../babelParser';
 import type { Importer } from '../types';
-import ignoreImports from '../importer/ignoreImports';
 
 function setPropDescriptor(
   documentation: Documentation,
@@ -37,7 +36,12 @@ function setPropDescriptor(
         documentation,
         argument,
         (propertyPath, innerTypeParams) => {
-          setPropDescriptor(documentation, propertyPath, innerTypeParams, importer);
+          setPropDescriptor(
+            documentation,
+            propertyPath,
+            innerTypeParams,
+            importer,
+          );
         },
         typeParams,
         importer,
@@ -49,7 +53,7 @@ function setPropDescriptor(
     const resolvedPath = resolveToValue(
       name,
       // TODO: Make this configurable with a pragma comment?
-      importer
+      importer,
     );
 
     if (resolvedPath && t.TypeAlias.check(resolvedPath.node)) {
@@ -58,7 +62,12 @@ function setPropDescriptor(
         documentation,
         right,
         (propertyPath, innerTypeParams) => {
-          setPropDescriptor(documentation, propertyPath, innerTypeParams, importer);
+          setPropDescriptor(
+            documentation,
+            propertyPath,
+            innerTypeParams,
+            importer,
+          );
         },
         typeParams,
         importer,

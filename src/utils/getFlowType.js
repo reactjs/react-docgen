@@ -66,7 +66,10 @@ function getFlowTypeWithRequirements(
   return type;
 }
 
-function handleKeysHelper(path: NodePath, importer: Importer): ?FlowElementsType {
+function handleKeysHelper(
+  path: NodePath,
+  importer: Importer,
+): ?FlowElementsType {
   let value = path.get('typeParameters', 'params', 0);
   if (t.TypeofTypeAnnotation.check(value.node)) {
     value = value.get('argument', 'id');
@@ -132,7 +135,8 @@ function handleGenericTypeAnnotation(
   }
 
   const resolvedPath =
-    (typeParams && typeParams[type.name]) || resolveToValue(path.get('id'), importer);
+    (typeParams && typeParams[type.name]) ||
+    resolveToValue(path.get('id'), importer);
 
   if (path.node.typeParameters && resolvedPath.node.typeParameters) {
     typeParams = getTypeParameters(

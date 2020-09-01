@@ -29,7 +29,10 @@ function isRenderMethod(node) {
  * Returns `true` of the path represents a class definition which either extends
  * `React.Component` or has a superclass and implements a `render()` method.
  */
-export default function isReactComponentClass(path: NodePath, importer: Importer): boolean {
+export default function isReactComponentClass(
+  path: NodePath,
+  importer: Importer,
+): boolean {
   const node = path.node;
   if (!t.ClassDeclaration.check(node) && !t.ClassExpression.check(node)) {
     return false;

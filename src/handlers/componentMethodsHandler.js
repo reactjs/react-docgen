@@ -80,9 +80,13 @@ export default function componentMethodsHandler(
   // Extract all methods from the class or object.
   let methodPaths = [];
   if (isReactComponentClass(path, importer)) {
-    methodPaths = path.get('body', 'body').filter((body) => isMethod(body, importer));
+    methodPaths = path
+      .get('body', 'body')
+      .filter(body => isMethod(body, importer));
   } else if (t.ObjectExpression.check(path.node)) {
-    methodPaths = path.get('properties').filter((props) => isMethod(props, importer));
+    methodPaths = path
+      .get('properties')
+      .filter(props => isMethod(props, importer));
 
     // Add the statics object properties.
     const statics = getMemberValuePath(path, 'statics');
@@ -99,7 +103,11 @@ export default function componentMethodsHandler(
     path.parent.node.init === path.node &&
     t.Identifier.check(path.parent.node.id)
   ) {
-    methodPaths = findAssignedMethods(path.parent.scope, path.parent.get('id'), importer);
+    methodPaths = findAssignedMethods(
+      path.parent.scope,
+      path.parent.get('id'),
+      importer,
+    );
   } else if (
     t.AssignmentExpression.check(path.parent.node) &&
     path.parent.node.right === path.node &&
@@ -111,11 +119,15 @@ export default function componentMethodsHandler(
       importer,
     );
   } else if (t.FunctionDeclaration.check(path.node)) {
-    methodPaths = findAssignedMethods(path.parent.scope, path.get('id'), importer);
+    methodPaths = findAssignedMethods(
+      path.parent.scope,
+      path.get('id'),
+      importer,
+    );
   }
 
   documentation.set(
     'methods',
-    methodPaths.map((path) => getMethodDocumentation(path, importer)).filter(Boolean),
+    methodPaths.map(p => getMethodDocumentation(p, importer)).filter(Boolean),
   );
 }

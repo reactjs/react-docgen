@@ -15,7 +15,10 @@ import type { Importer } from '../types';
  * Returns true if the expression is of form `exports.foo = ...;` or
  * `modules.exports = ...;`.
  */
-export default function isExportsOrModuleAssignment(path: NodePath, importer: Importer): boolean {
+export default function isExportsOrModuleAssignment(
+  path: NodePath,
+  importer: Importer,
+): boolean {
   if (t.ExpressionStatement.check(path.node)) {
     path = path.get('expression');
   }
