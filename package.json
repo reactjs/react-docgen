@@ -84,8 +84,5 @@
       "src"
     ],
     "testRegex": "/__tests__/.*-test\\.js$"
-  },
-  "browser": {
-    "./dist/utils/resolveImportedValue.js": "./dist/utils/resolveImportedValue.browser.js"
   }
 }

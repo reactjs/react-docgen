@@ -16,17 +16,19 @@ import resolveFunctionDefinitionToReturnValue from '../utils/resolveFunctionDefi
 import isReactComponentClass from '../utils/isReactComponentClass';
 import isReactForwardRefCall from '../utils/isReactForwardRefCall';
 import type Documentation from '../Documentation';
+import type { Parser } from '../babelParser';
+import type { Importer } from '../types';
 
-function getDefaultValue(path: NodePath) {
+function getDefaultValue(path: NodePath, importer: Importer) {
   let node = path.node;
   let defaultValue;
   if (t.Literal.check(node)) {
     defaultValue = node.raw;
   } else {
     if (t.AssignmentPattern.check(path.node)) {
-      path = resolveToValue(path.get('right'));
+      path = resolveToValue(path.get('right'), importer);
     } else {
-      path = resolveToValue(path);
+      path = resolveToValue(path, importer);
     }
     if (t.ImportDeclaration.check(path.node)) {
       defaultValue = node.name;
@@ -48,16 +50,16 @@ function getDefaultValue(path: NodePath) {
   return null;
 }
 
-function getStatelessPropsPath(componentDefinition): NodePath {
-  const value = resolveToValue(componentDefinition);
-  if (isReactForwardRefCall(value)) {
-    const inner = resolveToValue(value.get('arguments', 0));
+function getStatelessPropsPath(componentDefinition, importer): NodePath {
+  const value = resolveToValue(componentDefinition, importer);
+  if (isReactForwardRefCall(value, importer)) {
+    const inner = resolveToValue(value.get('arguments', 0), importer);
     return inner.get('params', 0);
   }
   return value.get('params', 0);
 }
 
-function getDefaultPropsPath(componentDefinition: NodePath): ?NodePath {
+function getDefaultPropsPath(componentDefinition: NodePath, importer: Importer): ?NodePath {
   let defaultPropsPath = getMemberValuePath(
     componentDefinition,
     'defaultProps',
@@ -66,7 +68,7 @@ function getDefaultPropsPath(componentDefinition: NodePath): ?NodePath {
     return null;
   }
 
-  defaultPropsPath = resolveToValue(defaultPropsPath);
+  defaultPropsPath = resolveToValue(defaultPropsPath, importer);
   if (!defaultPropsPath) {
     return null;
   }
@@ -76,6 +78,7 @@ function getDefaultPropsPath(componentDefinition: NodePath): ?NodePath {
     // an object literal.
     const returnValue = resolveFunctionDefinitionToReturnValue(
       defaultPropsPath,
+      importer,
     );
     if (returnValue && t.ObjectExpression.check(returnValue.node)) {
       defaultPropsPath = returnValue;
@@ -88,6 +91,7 @@ function getDefaultValuesFromProps(
   properties: NodePath,
   documentation: Documentation,
   isStateless: boolean,
+  importer: Importer,
 ) {
   properties
     // Don't evaluate property if component is functional and the node is not an AssignmentPattern
@@ -98,7 +102,7 @@ function getDefaultValuesFromProps(
     )
     .forEach(propertyPath => {
       if (t.Property.check(propertyPath.node)) {
-        const propName = getPropertyName(propertyPath);
+        const propName = getPropertyName(propertyPath, importer);
         if (!propName) return;
 
         const propDescriptor = documentation.getPropDescriptor(propName);
@@ -106,17 +110,19 @@ function getDefaultValuesFromProps(
           isStateless
             ? propertyPath.get('value', 'right')
             : propertyPath.get('value'),
+          importer,
         );
         if (defaultValue) {
           propDescriptor.defaultValue = defaultValue;
         }
       } else if (t.SpreadElement.check(propertyPath.node)) {
-        const resolvedValuePath = resolveToValue(propertyPath.get('argument'));
+        const resolvedValuePath = resolveToValue(propertyPath.get('argument'), importer);
         if (t.ObjectExpression.check(resolvedValuePath.node)) {
           getDefaultValuesFromProps(
             resolvedValuePath.get('properties'),
             documentation,
             isStateless,
+            importer,
           );
         }
       }
@@ -126,14 +132,16 @@ function getDefaultValuesFromProps(
 export default function defaultPropsHandler(
   documentation: Documentation,
   componentDefinition: NodePath,
+  parser: Parser,
+  importer: Importer,
 ) {
   let statelessProps = null;
-  const defaultPropsPath = getDefaultPropsPath(componentDefinition);
+  const defaultPropsPath = getDefaultPropsPath(componentDefinition, importer);
   /**
    * function, lazy, memo, forwardRef etc components can resolve default props as well
    */
-  if (!isReactComponentClass(componentDefinition)) {
-    statelessProps = getStatelessPropsPath(componentDefinition);
+  if (!isReactComponentClass(componentDefinition, importer)) {
+    statelessProps = getStatelessPropsPath(componentDefinition, importer);
   }
 
   // Do both statelessProps and defaultProps if both are available so defaultProps can override
@@ -142,6 +150,7 @@ export default function defaultPropsHandler(
       statelessProps.get('properties'),
       documentation,
       true,
+      importer,
     );
   }
   if (defaultPropsPath && t.ObjectExpression.check(defaultPropsPath.node)) {
@@ -149,6 +158,7 @@ export default function defaultPropsHandler(
       defaultPropsPath.get('properties'),
       documentation,
       false,
+      importer,
     );
   }
 }

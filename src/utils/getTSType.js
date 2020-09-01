@@ -24,6 +24,7 @@ import type {
   FlowSimpleType,
   FlowTypeDescriptor,
   TSFunctionSignatureType,
+  Importer,
 } from '../types';
 
 const tsTypes = {
@@ -70,6 +71,7 @@ function handleTSArrayType(
 function handleTSTypeReference(
   path: NodePath,
   typeParams: ?TypeParameters,
+  importer: Importer,
 ): ?FlowTypeDescriptor {
   let type: FlowTypeDescriptor;
   if (t.TSQualifiedName.check(path.node.typeName)) {
@@ -89,13 +91,14 @@ function handleTSTypeReference(
 
   const resolvedPath =
     (typeParams && typeParams[type.name]) ||
-    resolveToValue(path.get('typeName'));
+    resolveToValue(path.get('typeName'), importer);
 
   if (path.node.typeParameters && resolvedPath.node.typeParameters) {
     typeParams = getTypeParameters(
       resolvedPath.get('typeParameters'),
       path.get('typeParameters'),
       typeParams,
+      importer,
     );
   }
 
@@ -135,6 +138,7 @@ function getTSTypeWithRequirements(
 function handleTSTypeLiteral(
   path: NodePath,
   typeParams: ?TypeParameters,
+  importer: Importer,
 ): FlowTypeDescriptor {
   const type: FlowObjectSignatureType = {
     name: 'signature',
@@ -148,7 +152,7 @@ function handleTSTypeLiteral(
       t.TSPropertySignature.check(param.node) ||
       t.TSMethodSignature.check(param.node)
     ) {
-      const propName = getPropertyName(param);
+      const propName = getPropertyName(param, importer);
       if (!propName) {
         return;
       }
@@ -305,8 +309,9 @@ function handleTSTupleType(
 function handleTSTypeQuery(
   path: NodePath,
   typeParams: ?TypeParameters,
+  importer: Importer,
 ): FlowTypeDescriptor {
-  const resolvedPath = resolveToValue(path.get('exprName'));
+  const resolvedPath = resolveToValue(path.get('exprName'), importer);
   if (resolvedPath && resolvedPath.node.typeAnnotation) {
     return getTSTypeWithResolvedTypes(
       resolvedPath.get('typeAnnotation'),
@@ -317,7 +322,7 @@ function handleTSTypeQuery(
   return { name: path.node.exprName.name };
 }
 
-function handleTSTypeOperator(path: NodePath): ?FlowTypeDescriptor {
+function handleTSTypeOperator(path: NodePath, importer: Importer): ?FlowTypeDescriptor {
   if (path.node.operator !== 'keyof') {
     return null;
   }
@@ -329,13 +334,13 @@ function handleTSTypeOperator(path: NodePath): ?FlowTypeDescriptor {
     value = value.get('id');
   }
 
-  const resolvedPath = resolveToValue(value);
+  const resolvedPath = resolveToValue(value, importer);
   if (
     resolvedPath &&
     (t.ObjectExpression.check(resolvedPath.node) ||
       t.TSTypeLiteral.check(resolvedPath.node))
   ) {
-    const keys = resolveObjectToNameArray(resolvedPath, true);
+    const keys = resolveObjectToNameArray(resolvedPath, importer, true);
 
     if (keys) {
       return {

@@ -11,8 +11,9 @@ import { namedTypes as t, visit } from 'ast-types';
 import getNameOrValue from './getNameOrValue';
 import { String as toString } from './expressionTo';
 import isReactForwardRefCall from './isReactForwardRefCall';
+import type { Importer } from '../types';
 
-function resolveName(path) {
+function resolveName(path, importer) {
   if (t.VariableDeclaration.check(path.node)) {
     const declarations = path.get('declarations');
     if (declarations.value.length && declarations.value.length !== 1) {
@@ -36,7 +37,7 @@ function resolveName(path) {
     t.ArrowFunctionExpression.check(path.node) ||
     t.TaggedTemplateExpression.check(path.node) ||
     t.CallExpression.check(path.node) ||
-    isReactForwardRefCall(path)
+    isReactForwardRefCall(path, importer)
   ) {
     let currentPath = path;
     while (currentPath.parent) {
@@ -69,8 +70,9 @@ function getRoot(node) {
 export default function getMemberExpressionValuePath(
   variableDefinition: NodePath,
   memberName: string,
+  importer: Importer
 ): ?NodePath {
-  const localName = resolveName(variableDefinition);
+  const localName = resolveName(variableDefinition, importer);
   const program = getRoot(variableDefinition);
 
   if (!localName) {
@@ -91,7 +93,7 @@ export default function getMemberExpressionValuePath(
         (!memberPath.node.computed ||
           t.Literal.check(memberPath.node.property)) &&
         getNameOrValue(memberPath.get('property')) === memberName &&
-        toString(memberPath.get('object')) === localName
+        toString(memberPath.get('object'), importer) === localName
       ) {
         result = path.get('right');
         return false;

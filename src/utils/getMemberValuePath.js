@@ -18,9 +18,9 @@ const SYNONYMS = {
 };
 
 const POSTPROCESS_MEMBERS = {
-  propTypes: path =>
+  propTypes: (path, importer) =>
     t.Function.check(path.node)
-      ? resolveFunctionDefinitionToReturnValue(path)
+      ? resolveFunctionDefinitionToReturnValue(path, importer)
       : path,
 };
 

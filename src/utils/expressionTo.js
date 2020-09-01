@@ -11,12 +11,13 @@
 
 import { namedTypes as t } from 'ast-types';
 import resolveToValue from './resolveToValue';
+import type { Importer } from '../types';
 
 /**
  * Splits a MemberExpression or CallExpression into parts.
  * E.g. foo.bar.baz becomes ['foo', 'bar', 'baz']
  */
-function toArray(path: NodePath): Array<string> {
+function toArray(path: NodePath, importer: Importer): Array<string> {
   const parts = [path];
   let result = [];
 
@@ -29,9 +30,9 @@ function toArray(path: NodePath): Array<string> {
     } else if (t.MemberExpression.check(node)) {
       parts.push(path.get('object'));
       if (node.computed) {
-        const resolvedPath = resolveToValue(path.get('property'));
+        const resolvedPath = resolveToValue(path.get('property'), importer);
         if (resolvedPath !== undefined) {
-          result = result.concat(toArray(resolvedPath));
+          result = result.concat(toArray(resolvedPath, importer));
         } else {
           result.push('<computed>');
         }
@@ -51,7 +52,7 @@ function toArray(path: NodePath): Array<string> {
     } else if (t.ObjectExpression.check(node)) {
       const properties = path.get('properties').map(function(property) {
         return (
-          toString(property.get('key')) + ': ' + toString(property.get('value'))
+          toString(property.get('key'), importer) + ': ' + toString(property.get('value'), importer)
         );
       });
       result.push('{' + properties.join(', ') + '}');
@@ -61,7 +62,9 @@ function toArray(path: NodePath): Array<string> {
         '[' +
           path
             .get('elements')
-            .map(toString)
+            .map(function(el) {
+              return toString(el, importer);
+            })
             .join(', ') +
           ']',
       );
@@ -75,8 +78,8 @@ function toArray(path: NodePath): Array<string> {
 /**
  * Creates a string representation of a member expression.
  */
-function toString(path: NodePath): string {
-  return toArray(path).join('.');
+function toString(path: NodePath, importer: Importer): string {
+  return toArray(path, importer).join('.');
 }
 
 export { toString as String, toArray as Array };

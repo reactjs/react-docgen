@@ -43,7 +43,7 @@ describe('parse', () => {
       fs.writeFileSync(`${dir}/.babelrc`, '{}');
 
       expect(() =>
-        parse('const chained  = () => a |> b', () => {}, null, {
+        parse('const chained  = () => a |> b', () => {}, null, null, {
           cwd: dir,
           filename: `${dir}/component.js`,
         }),
@@ -58,7 +58,7 @@ describe('parse', () => {
 
   it('supports custom parserOptions with plugins', () => {
     expect(() =>
-      parse('const chained: Type = 1;', () => {}, null, {
+      parse('const chained: Type = 1;', () => {}, null, null, {
         parserOptions: {
           plugins: [
             // no flow
@@ -71,7 +71,7 @@ describe('parse', () => {
 
   it('supports custom parserOptions without plugins', () => {
     expect(() =>
-      parse('const chained: Type = 1;', () => {}, null, {
+      parse('const chained: Type = 1;', () => {}, null, null, {
         parserOptions: {
           allowSuperOutsideMethod: true,
         },

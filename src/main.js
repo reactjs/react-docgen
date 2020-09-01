@@ -10,10 +10,11 @@
 import * as allHandlers from './handlers';
 import parse from './parse';
 import * as AllResolver from './resolver';
+import * as AllImporter from './importer';
 import * as utils from './utils';
 import type { Options } from './babelParser';
 import type { DocumentationObject } from './Documentation';
-import type { Handler, Resolver } from './types';
+import type { Handler, Resolver, Importer } from './types';
 
 const defaultResolver = AllResolver.findExportedComponentDefinition;
 const defaultHandlers = [
@@ -29,6 +30,7 @@ const defaultHandlers = [
   allHandlers.componentMethodsHandler,
   allHandlers.componentMethodsJsDocHandler,
 ];
+const defaultImporter = AllImporter.resolveImports;
 
 /**
  * See `lib/parse.js` for more information about the arguments. This function
@@ -46,6 +48,7 @@ function defaultParse(
   src: string | Buffer,
   resolver?: ?Resolver,
   handlers?: ?Array<Handler>,
+  importer?: ?Importer,
   options?: Options = {},
 ): Array<DocumentationObject> | DocumentationObject {
   if (!resolver) {
@@ -54,8 +57,11 @@ function defaultParse(
   if (!handlers) {
     handlers = defaultHandlers;
   }
+  if (!importer) {
+    importer = defaultImporter;
+  }
 
-  return parse(String(src), resolver, handlers, options);
+  return parse(String(src), resolver, handlers, importer, options);
 }
 
 export {

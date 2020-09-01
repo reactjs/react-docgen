@@ -14,7 +14,7 @@ import getTSType from './getTSType';
 import getParameterName from './getParameterName';
 import getPropertyName from './getPropertyName';
 import getTypeAnnotation from './getTypeAnnotation';
-import type { FlowTypeDescriptor } from '../types';
+import type { FlowTypeDescriptor, Importer } from '../types';
 import resolveToValue from './resolveToValue';
 
 type MethodParameter = {
@@ -35,17 +35,17 @@ type MethodDocumentation = {
   returns: ?MethodReturn,
 };
 
-function getMethodFunctionExpression(methodPath) {
+function getMethodFunctionExpression(methodPath, importer) {
   if (t.AssignmentExpression.check(methodPath.node)) {
-    return resolveToValue(methodPath.get('right'));
+    return resolveToValue(methodPath.get('right'), importer);
   }
   // Otherwise this is a method/property node
   return methodPath.get('value');
 }
 
-function getMethodParamsDoc(methodPath) {
+function getMethodParamsDoc(methodPath, importer) {
   const params = [];
-  const functionExpression = getMethodFunctionExpression(methodPath);
+  const functionExpression = getMethodFunctionExpression(methodPath, importer);
 
   // Extract param flow types.
   functionExpression.get('params').each(paramPath => {
@@ -76,8 +76,8 @@ function getMethodParamsDoc(methodPath) {
 }
 
 // Extract flow return type.
-function getMethodReturnDoc(methodPath) {
-  const functionExpression = getMethodFunctionExpression(methodPath);
+function getMethodReturnDoc(methodPath, importer) {
+  const functionExpression = getMethodFunctionExpression(methodPath, importer);
 
   if (functionExpression.node.returnType) {
     const returnType = getTypeAnnotation(functionExpression.get('returnType'));
@@ -119,7 +119,7 @@ function getMethodModifiers(methodPath) {
   return modifiers;
 }
 
-function getMethodName(methodPath) {
+function getMethodName(methodPath, importer) {
   if (
     t.AssignmentExpression.check(methodPath.node) &&
     t.MemberExpression.check(methodPath.node.left)
@@ -134,7 +134,7 @@ function getMethodName(methodPath) {
     }
     return null;
   }
-  return getPropertyName(methodPath);
+  return getPropertyName(methodPath, importer);
 }
 
 function getMethodAccessibility(methodPath) {
@@ -167,19 +167,20 @@ function getMethodDocblock(methodPath) {
 // or as assignment expresions of the form `Component.foo = function() {}`
 export default function getMethodDocumentation(
   methodPath: NodePath,
+  importer: Importer,
 ): ?MethodDocumentation {
   if (getMethodAccessibility(methodPath) === 'private') {
     return null;
   }
 
-  const name = getMethodName(methodPath);
+  const name = getMethodName(methodPath, importer);
   if (!name) return null;
 
   return {
     name,
     docblock: getMethodDocblock(methodPath),
     modifiers: getMethodModifiers(methodPath),
-    params: getMethodParamsDoc(methodPath),
-    returns: getMethodReturnDoc(methodPath),
+    params: getMethodParamsDoc(methodPath, importer),
+    returns: getMethodReturnDoc(methodPath, importer),
   };
 }

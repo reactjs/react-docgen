@@ -14,6 +14,8 @@ import isReactForwardRefCall from '../utils/isReactForwardRefCall';
 import isStatelessComponent from '../utils/isStatelessComponent';
 import normalizeClassDefinition from '../utils/normalizeClassDefinition';
 import resolveToValue from '../utils/resolveToValue';
+import type { Parser } from '../babelParser';
+import type { Importer } from '../types';
 
 /**
  * Given an AST, this function tries to find all object expressions that are
@@ -21,11 +23,13 @@ import resolveToValue from '../utils/resolveToValue';
  */
 export default function findAllReactCreateClassCalls(
   ast: ASTNode,
+  parser: Parser,
+  importer: Importer,
 ): Array<NodePath> {
   const definitions = new Set();
 
   function classVisitor(path) {
-    if (isReactComponentClass(path)) {
+    if (isReactComponentClass(path, importer)) {
       normalizeClassDefinition(path);
       definitions.add(path);
     }
@@ -33,7 +37,7 @@ export default function findAllReactCreateClassCalls(
   }
 
   function statelessVisitor(path) {
-    if (isStatelessComponent(path)) {
+    if (isStatelessComponent(path, importer)) {
       definitions.add(path);
     }
     return false;
@@ -46,17 +50,17 @@ export default function findAllReactCreateClassCalls(
     visitClassExpression: classVisitor,
     visitClassDeclaration: classVisitor,
     visitCallExpression: function(path) {
-      if (isReactForwardRefCall(path)) {
+      if (isReactForwardRefCall(path, importer)) {
         // If the the inner function was previously identified as a component
         // replace it with the parent node
-        const inner = resolveToValue(path.get('arguments', 0));
+        const inner = resolveToValue(path.get('arguments', 0), importer);
         definitions.delete(inner);
         definitions.add(path);
 
         // Do not traverse into arguments
         return false;
-      } else if (isReactCreateClassCall(path)) {
-        const resolvedPath = resolveToValue(path.get('arguments', 0));
+      } else if (isReactCreateClassCall(path, importer)) {
+        const resolvedPath = resolveToValue(path.get('arguments', 0), importer);
         if (t.ObjectExpression.check(resolvedPath.node)) {
           definitions.add(resolvedPath);
         }

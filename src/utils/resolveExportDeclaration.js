@@ -9,9 +9,11 @@
 
 import { namedTypes as t } from 'ast-types';
 import resolveToValue from './resolveToValue';
+import type { Importer } from '../types';
 
 export default function resolveExportDeclaration(
   path: NodePath,
+  importer: Importer,
 ): Array<NodePath> {
   const definitions = [];
   if (path.node.default) {
@@ -33,5 +35,5 @@ export default function resolveExportDeclaration(
         ),
       );
   }
-  return definitions.map(definition => resolveToValue(definition));
+  return definitions.map(definition => resolveToValue(definition, importer));
 }

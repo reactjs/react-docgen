@@ -20,16 +20,16 @@ import resolveObjectKeysToArray from './resolveObjectKeysToArray';
 import resolveObjectValuesToArray from './resolveObjectValuesToArray';
 import type { PropTypeDescriptor, PropDescriptor } from '../types';
 
-function getEnumValues(path) {
+function getEnumValues(path, importer) {
   const values = [];
 
   path.get('elements').each(function(elementPath) {
     if (t.SpreadElement.check(elementPath.node)) {
-      const value = resolveToValue(elementPath.get('argument'));
+      const value = resolveToValue(elementPath.get('argument'), importer);
 
       if (t.ArrayExpression.check(value.node)) {
         // if the SpreadElement resolved to an Array, add all their elements too
-        return values.push(...getEnumValues(value));
+        return values.push(...getEnumValues(value, importer));
       } else {
         // otherwise we'll just print the SpreadElement itself
         return values.push({
@@ -40,7 +40,7 @@ function getEnumValues(path) {
     }
 
     // try to resolve the array element to it's value
-    const value = resolveToValue(elementPath);
+    const value = resolveToValue(elementPath, importer);
     return values.push({
       value: printValue(value),
       computed: !t.Literal.check(value.node),
@@ -50,21 +50,21 @@ function getEnumValues(path) {
   return values;
 }
 
-function getPropTypeOneOf(argumentPath) {
+function getPropTypeOneOf(argumentPath, importer) {
   const type: PropTypeDescriptor = { name: 'enum' };
-  let value = resolveToValue(argumentPath);
+  let value = resolveToValue(argumentPath, importer);
   if (!t.ArrayExpression.check(value.node)) {
     value =
-      resolveObjectKeysToArray(value) || resolveObjectValuesToArray(value);
+      resolveObjectKeysToArray(value, importer) || resolveObjectValuesToArray(value, importer);
     if (value) {
-      type.value = getEnumValues(value);
+      type.value = getEnumValues(value, importer);
     } else {
       // could not easily resolve to an Array, let's print the original value
       type.computed = true;
       type.value = printValue(argumentPath);
     }
   } else {
-    type.value = getEnumValues(value);
+    type.value = getEnumValues(value, importer);
   }
   return type;
 }
@@ -128,10 +128,10 @@ function getPropTypeObjectOf(argumentPath) {
 /**
  * Handles shape and exact prop types
  */
-function getPropTypeShapish(name, argumentPath) {
+function getPropTypeShapish(name, argumentPath, importer) {
   const type: PropTypeDescriptor = { name };
   if (!t.ObjectExpression.check(argumentPath.node)) {
-    argumentPath = resolveToValue(argumentPath);
+    argumentPath = resolveToValue(argumentPath, importer);
   }
 
   if (t.ObjectExpression.check(argumentPath.node)) {
@@ -142,7 +142,7 @@ function getPropTypeShapish(name, argumentPath) {
         return;
       }
 
-      const propertyName = getPropertyName(propertyPath);
+      const propertyName = getPropertyName(propertyPath, importer);
       if (!propertyName) return;
       const descriptor: PropDescriptor | PropTypeDescriptor = getPropType(
         propertyPath.get('value'),

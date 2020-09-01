@@ -10,6 +10,7 @@
 import { namedTypes as t } from 'ast-types';
 import match from './match';
 import resolveToValue from './resolveToValue';
+import ignoreImports from '../importer/ignoreImports';
 
 /**
  * Given a path (e.g. call expression, member expression or identifier),
@@ -31,7 +32,7 @@ export default function resolveToModule(path: NodePath): ?string {
       return resolveToModule(path.get('callee'));
     case t.Identifier.name:
     case t.JSXIdentifier.name: {
-      const valuePath = resolveToValue(path, false);
+      const valuePath = resolveToValue(path, ignoreImports);
       if (valuePath !== path) {
         return resolveToModule(valuePath);
       }

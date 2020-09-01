@@ -12,6 +12,7 @@ import isReactModuleName from './isReactModuleName';
 import match from './match';
 import resolveToModule from './resolveToModule';
 import resolveToValue from './resolveToValue';
+import type { Importer } from '../types';
 
 /**
  * Returns true if the expression is a function call of the form
@@ -20,6 +21,7 @@ import resolveToValue from './resolveToValue';
 export default function isReactBuiltinCall(
   path: NodePath,
   name: string,
+  importer: Importer,
 ): boolean {
   if (t.ExpressionStatement.check(path.node)) {
     path = path.get('expression');
@@ -31,7 +33,7 @@ export default function isReactBuiltinCall(
   }
 
   if (t.CallExpression.check(path.node)) {
-    const value = resolveToValue(path.get('callee'));
+    const value = resolveToValue(path.get('callee'), importer);
     if (value === path.get('callee')) return false;
 
     if (

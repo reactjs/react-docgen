@@ -22,6 +22,7 @@ import type {
   FlowObjectSignatureType,
   FlowSimpleType,
   FlowTypeDescriptor,
+  Importer,
 } from '../types';
 
 const flowTypes = {
@@ -65,20 +66,20 @@ function getFlowTypeWithRequirements(
   return type;
 }
 
-function handleKeysHelper(path: NodePath): ?FlowElementsType {
+function handleKeysHelper(path: NodePath, importer: Importer): ?FlowElementsType {
   let value = path.get('typeParameters', 'params', 0);
   if (t.TypeofTypeAnnotation.check(value.node)) {
     value = value.get('argument', 'id');
   } else if (!t.ObjectTypeAnnotation.check(value.node)) {
     value = value.get('id');
   }
-  const resolvedPath = resolveToValue(value);
+  const resolvedPath = resolveToValue(value, importer);
   if (
     resolvedPath &&
     (t.ObjectExpression.check(resolvedPath.node) ||
       t.ObjectTypeAnnotation.check(resolvedPath.node))
   ) {
-    const keys = resolveObjectToNameArray(resolvedPath, true);
+    const keys = resolveObjectToNameArray(resolvedPath, importer, true);
 
     if (keys) {
       return {
@@ -108,9 +109,10 @@ function handleArrayTypeAnnotation(
 function handleGenericTypeAnnotation(
   path: NodePath,
   typeParams: ?TypeParameters,
+  importer: Importer,
 ): ?FlowTypeDescriptor {
   if (path.node.id.name === '$Keys' && path.node.typeParameters) {
-    return handleKeysHelper(path);
+    return handleKeysHelper(path, importer);
   }
 
   let type: FlowTypeDescriptor;
@@ -130,13 +132,14 @@ function handleGenericTypeAnnotation(
   }
 
   const resolvedPath =
-    (typeParams && typeParams[type.name]) || resolveToValue(path.get('id'));
+    (typeParams && typeParams[type.name]) || resolveToValue(path.get('id'), importer);
 
   if (path.node.typeParameters && resolvedPath.node.typeParameters) {
     typeParams = getTypeParameters(
       resolvedPath.get('typeParameters'),
       path.get('typeParameters'),
       typeParams,
+      importer,
     );
   }
 
@@ -172,6 +175,7 @@ function handleGenericTypeAnnotation(
 function handleObjectTypeAnnotation(
   path: NodePath,
   typeParams: ?TypeParameters,
+  importer: Importer,
 ): FlowTypeDescriptor {
   const type: FlowObjectSignatureType = {
     name: 'signature',
@@ -198,7 +202,7 @@ function handleObjectTypeAnnotation(
     if (t.ObjectTypeProperty.check(param.node)) {
       type.signature.properties.push({
         // For ObjectTypeProperties `getPropertyName` always returns string
-        key: ((getPropertyName(param): any): string),
+        key: ((getPropertyName(param, importer): any): string),
         value: getFlowTypeWithRequirements(param.get('value'), typeParams),
       });
     }

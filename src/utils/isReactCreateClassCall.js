@@ -11,6 +11,7 @@ import { namedTypes as t } from 'ast-types';
 import match from './match';
 import resolveToModule from './resolveToModule';
 import isReactBuiltinCall from './isReactBuiltinCall';
+import type { Importer } from '../types';
 
 /**
  * Returns true if the expression is a function call of the form
@@ -39,9 +40,9 @@ function isReactCreateClassCallModular(path: NodePath): boolean {
  * createReactClass(...);
  * ```
  */
-export default function isReactCreateClassCall(path: NodePath): boolean {
+export default function isReactCreateClassCall(path: NodePath, importer: Importer): boolean {
   return (
-    isReactBuiltinCall(path, 'createClass') ||
+    isReactBuiltinCall(path, 'createClass', importer) ||
     isReactCreateClassCallModular(path)
   );
 }
