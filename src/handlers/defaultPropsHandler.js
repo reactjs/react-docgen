@@ -59,7 +59,10 @@ function getStatelessPropsPath(componentDefinition, importer): NodePath {
   return value.get('params', 0);
 }
 
-function getDefaultPropsPath(componentDefinition: NodePath, importer: Importer): ?NodePath {
+function getDefaultPropsPath(
+  componentDefinition: NodePath,
+  importer: Importer,
+): ?NodePath {
   let defaultPropsPath = getMemberValuePath(
     componentDefinition,
     'defaultProps',
@@ -116,7 +119,10 @@ function getDefaultValuesFromProps(
           propDescriptor.defaultValue = defaultValue;
         }
       } else if (t.SpreadElement.check(propertyPath.node)) {
-        const resolvedValuePath = resolveToValue(propertyPath.get('argument'), importer);
+        const resolvedValuePath = resolveToValue(
+          propertyPath.get('argument'),
+          importer,
+        );
         if (t.ObjectExpression.check(resolvedValuePath.node)) {
           getDefaultValuesFromProps(
             resolvedValuePath.get('properties'),

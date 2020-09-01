@@ -119,10 +119,7 @@ export type PropDescriptor = {
   description?: string,
 };
 
-export type Importer = (
-  path: NodePath,
-  name: string
-) => ?NodePath;
+export type Importer = (path: NodePath, name: string) => ?NodePath;
 export type Handler = (
   documentation: Documentation,
   path: NodePath,

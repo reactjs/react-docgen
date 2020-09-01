@@ -39,7 +39,10 @@ function isComponentDefinition(path, importer) {
 function resolveDefinition(definition, importer) {
   if (isReactCreateClassCall(definition, importer)) {
     // return argument
-    const resolvedPath = resolveToValue(definition.get('arguments', 0), importer);
+    const resolvedPath = resolveToValue(
+      definition.get('arguments', 0),
+      importer,
+    );
     if (t.ObjectExpression.check(resolvedPath.node)) {
       return resolvedPath;
     }
@@ -83,7 +86,10 @@ export default function findExportedComponentDefinition(
         if (isComponentDefinition(definition, importer)) {
           acc.push(definition);
         } else {
-          const resolved = resolveToValue(resolveHOC(definition, importer), importer);
+          const resolved = resolveToValue(
+            resolveHOC(definition, importer),
+            importer,
+          );
           if (isComponentDefinition(resolved, importer)) {
             acc.push(resolved);
           }

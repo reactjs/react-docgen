@@ -70,7 +70,7 @@ function getRoot(node) {
 export default function getMemberExpressionValuePath(
   variableDefinition: NodePath,
   memberName: string,
-  importer: Importer
+  importer: Importer,
 ): ?NodePath {
   const localName = resolveName(variableDefinition, importer);
   const program = getRoot(variableDefinition);

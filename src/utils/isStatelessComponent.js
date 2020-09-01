@@ -28,8 +28,10 @@ function isJSXElementOrReactCall(path, importer: Importer) {
   return (
     path.node.type === 'JSXElement' ||
     path.node.type === 'JSXFragment' ||
-    (path.node.type === 'CallExpression' && isReactCreateElementCall(path, importer)) ||
-    (path.node.type === 'CallExpression' && isReactCloneElementCall(path, importer)) ||
+    (path.node.type === 'CallExpression' &&
+      isReactCreateElementCall(path, importer)) ||
+    (path.node.type === 'CallExpression' &&
+      isReactCloneElementCall(path, importer)) ||
     (path.node.type === 'CallExpression' && isReactChildrenElementCall(path))
   );
 }
@@ -53,8 +55,16 @@ function resolvesToJSXElementOrReactCall(path, importer: Importer, seen) {
   // the two possible paths
   if (resolvedPath.node.type === 'ConditionalExpression') {
     return (
-      resolvesToJSXElementOrReactCall(resolvedPath.get('consequent'), importer, seen) ||
-      resolvesToJSXElementOrReactCall(resolvedPath.get('alternate'), importer, seen)
+      resolvesToJSXElementOrReactCall(
+        resolvedPath.get('consequent'),
+        importer,
+        seen,
+      ) ||
+      resolvesToJSXElementOrReactCall(
+        resolvedPath.get('alternate'),
+        importer,
+        seen,
+      )
     );
   }
 
@@ -62,14 +72,21 @@ function resolvesToJSXElementOrReactCall(path, importer: Importer, seen) {
   // the two possible paths
   if (resolvedPath.node.type === 'LogicalExpression') {
     return (
-      resolvesToJSXElementOrReactCall(resolvedPath.get('left'), importer, seen) ||
+      resolvesToJSXElementOrReactCall(
+        resolvedPath.get('left'),
+        importer,
+        seen,
+      ) ||
       resolvesToJSXElementOrReactCall(resolvedPath.get('right'), importer, seen)
     );
   }
 
   // Is the resolved path is already a JSX element or a call to one of the React.* functions
   // Only do this if the resolvedPath actually resolved something as otherwise we did this check already
-  if (resolvedPath !== path && isJSXElementOrReactCall(resolvedPath, importer)) {
+  if (
+    resolvedPath !== path &&
+    isJSXElementOrReactCall(resolvedPath, importer)
+  ) {
     return true;
   }
 
@@ -128,7 +145,11 @@ function resolvesToJSXElementOrReactCall(path, importer: Importer, seen) {
   return false;
 }
 
-function returnsJSXElementOrReactCall(path, importer: Importer, seen = new WeakSet()) {
+function returnsJSXElementOrReactCall(
+  path,
+  importer: Importer,
+  seen = new WeakSet(),
+) {
   let visited = false;
 
   // early exit for ArrowFunctionExpressions
@@ -151,7 +172,13 @@ function returnsJSXElementOrReactCall(path, importer: Importer, seen = new WeakS
       // Only check return statements which are part of the checked function scope
       if (returnPath.scope !== scope) return false;
 
-      if (resolvesToJSXElementOrReactCall(returnPath.get('argument'), importer, seen)) {
+      if (
+        resolvesToJSXElementOrReactCall(
+          returnPath.get('argument'),
+          importer,
+          seen,
+        )
+      ) {
         visited = true;
         return false;
       }
@@ -166,7 +193,10 @@ function returnsJSXElementOrReactCall(path, importer: Importer, seen = new WeakS
 /**
  * Returns `true` if the path represents a function which returns a JSXElement
  */
-export default function isStatelessComponent(path: NodePath, importer: Importer): boolean {
+export default function isStatelessComponent(
+  path: NodePath,
+  importer: Importer,
+): boolean {
   const node = path.node;
 
   if (validPossibleStatelessComponentTypes.indexOf(node.type) === -1) {

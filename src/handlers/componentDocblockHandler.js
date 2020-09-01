@@ -68,5 +68,8 @@ export default function componentDocblockHandler(
   parser: Parser,
   importer: Importer,
 ) {
-  documentation.set('description', getDocblockFromComponent(path, importer) || '');
+  documentation.set(
+    'description',
+    getDocblockFromComponent(path, importer) || '',
+  );
 }

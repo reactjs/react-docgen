@@ -25,7 +25,10 @@ describe('resolveExportDeclaration', () => {
     const resolved = resolveExportDeclaration(exp, ignoreImports);
 
     expect(resolved).toEqual([returnValue]);
-    expect(resolveToValue).toBeCalledWith(exp.get('declaration'), ignoreImports);
+    expect(resolveToValue).toBeCalledWith(
+      exp.get('declaration'),
+      ignoreImports,
+    );
   });
 
   it('resolves named exports', () => {
@@ -41,13 +44,19 @@ describe('resolveExportDeclaration', () => {
     resolved = resolveExportDeclaration(exp, ignoreImports);
 
     expect(resolved).toEqual([returnValue]);
-    expect(resolveToValue).toBeCalledWith(exp.get('declaration'), ignoreImports);
+    expect(resolveToValue).toBeCalledWith(
+      exp.get('declaration'),
+      ignoreImports,
+    );
 
     exp = statement('export class Foo {}');
     resolved = resolveExportDeclaration(exp, ignoreImports);
 
     expect(resolved).toEqual([returnValue]);
-    expect(resolveToValue).toBeCalledWith(exp.get('declaration'), ignoreImports);
+    expect(resolveToValue).toBeCalledWith(
+      exp.get('declaration'),
+      ignoreImports,
+    );
   });
 
   it('resolves named exports', () => {
@@ -56,8 +65,17 @@ describe('resolveExportDeclaration', () => {
 
     const specifiers = exp.get('specifiers');
     expect(resolved).toEqual([returnValue, returnValue, returnValue]);
-    expect(resolveToValue).toBeCalledWith(specifiers.get(0, 'local'), ignoreImports);
-    expect(resolveToValue).toBeCalledWith(specifiers.get(1, 'local'), ignoreImports);
-    expect(resolveToValue).toBeCalledWith(specifiers.get(2, 'local'), ignoreImports);
+    expect(resolveToValue).toBeCalledWith(
+      specifiers.get(0, 'local'),
+      ignoreImports,
+    );
+    expect(resolveToValue).toBeCalledWith(
+      specifiers.get(1, 'local'),
+      ignoreImports,
+    );
+    expect(resolveToValue).toBeCalledWith(
+      specifiers.get(2, 'local'),
+      ignoreImports,
+    );
   });
 });

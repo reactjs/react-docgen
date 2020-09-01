@@ -130,11 +130,17 @@ export function resolveObjectToPropMap(
  *  unresolvable spreads
  *  computed identifier values
  */
-export default function resolveObjectValuesToArray(path: NodePath, importer: Importer): ?NodePath {
+export default function resolveObjectValuesToArray(
+  path: NodePath,
+  importer: Importer,
+): ?NodePath {
   const node = path.node;
 
   if (isObjectValuesCall(node)) {
-    const objectExpression = resolveToValue(path.get('arguments').get(0), importer);
+    const objectExpression = resolveToValue(
+      path.get('arguments').get(0),
+      importer,
+    );
     const propMap = resolveObjectToPropMap(objectExpression, importer);
 
     if (propMap) {

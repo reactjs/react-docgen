@@ -322,7 +322,10 @@ function handleTSTypeQuery(
   return { name: path.node.exprName.name };
 }
 
-function handleTSTypeOperator(path: NodePath, importer: Importer): ?FlowTypeDescriptor {
+function handleTSTypeOperator(
+  path: NodePath,
+  importer: Importer,
+): ?FlowTypeDescriptor {
   if (path.node.operator !== 'keyof') {
     return null;
   }

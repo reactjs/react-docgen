@@ -33,10 +33,16 @@ function isComponentDefinition(path: NodePath, importer: Importer): boolean {
   );
 }
 
-function resolveDefinition(definition: NodePath, importer: Importer): ?NodePath {
+function resolveDefinition(
+  definition: NodePath,
+  importer: Importer,
+): ?NodePath {
   if (isReactCreateClassCall(definition, importer)) {
     // return argument
-    const resolvedPath = resolveToValue(definition.get('arguments', 0), importer);
+    const resolvedPath = resolveToValue(
+      definition.get('arguments', 0),
+      importer,
+    );
     if (t.ObjectExpression.check(resolvedPath.node)) {
       return resolvedPath;
     }
@@ -75,12 +81,18 @@ export default function findExportedComponentDefinitions(
   const components: Array<NodePath> = [];
 
   function exportDeclaration(path: NodePath): ?boolean {
-    const definitions: Array<?NodePath> = resolveExportDeclaration(path, importer)
+    const definitions: Array<?NodePath> = resolveExportDeclaration(
+      path,
+      importer,
+    )
       .reduce((acc, definition) => {
         if (isComponentDefinition(definition, importer)) {
           acc.push(definition);
         } else {
-          const resolved = resolveToValue(resolveHOC(definition, importer), importer);
+          const resolved = resolveToValue(
+            resolveHOC(definition, importer),
+            importer,
+          );
           if (isComponentDefinition(resolved, importer)) {
             acc.push(resolved);
           }
@@ -129,7 +141,7 @@ export default function findExportedComponentDefinitions(
       path = resolveToValue(path.get('right'), importer);
       if (!isComponentDefinition(path, importer)) {
         path = resolveToValue(resolveHOC(path, importer), importer);
-        if (!isComponentDefinition(path, importer), importer) {
+        if ((!isComponentDefinition(path, importer), importer)) {
           return false;
         }
       }

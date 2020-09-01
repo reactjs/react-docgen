@@ -53,7 +53,10 @@ function amendPropTypes(getDescriptor, path, importer) {
         break;
       }
       case t.SpreadElement.name: {
-        const resolvedValuePath = resolveToValue(propertyPath.get('argument'), importer);
+        const resolvedValuePath = resolveToValue(
+          propertyPath.get('argument'),
+          importer,
+        );
         switch (resolvedValuePath.node.type) {
           case t.ObjectExpression.name: // normal object literal
             amendPropTypes(getDescriptor, resolvedValuePath, importer);

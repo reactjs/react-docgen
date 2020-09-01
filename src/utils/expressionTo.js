@@ -52,7 +52,9 @@ function toArray(path: NodePath, importer: Importer): Array<string> {
     } else if (t.ObjectExpression.check(node)) {
       const properties = path.get('properties').map(function(property) {
         return (
-          toString(property.get('key'), importer) + ': ' + toString(property.get('value'), importer)
+          toString(property.get('key'), importer) +
+          ': ' +
+          toString(property.get('value'), importer)
         );
       });
       result.push('{' + properties.join(', ') + '}');

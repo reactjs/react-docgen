@@ -116,7 +116,13 @@ export function applyToFlowTypeProperties(
     // for the expression of union types
     const typePath = resolveGenericTypeAnnotation(path, importer);
     if (typePath) {
-      applyToFlowTypeProperties(documentation, typePath, callback, typeParams, importer);
+      applyToFlowTypeProperties(
+        documentation,
+        typePath,
+        callback,
+        typeParams,
+        importer,
+      );
     }
   }
 }
@@ -130,7 +136,7 @@ function applyExtends(documentation, path, callback, typeParams, importer) {
           resolvedPath.get('typeParameters'),
           extendsPath.get('typeParameters'),
           typeParams,
-          importer
+          importer,
         );
       }
       applyToFlowTypeProperties(
@@ -138,7 +144,7 @@ function applyExtends(documentation, path, callback, typeParams, importer) {
         resolvedPath,
         callback,
         typeParams,
-        importer
+        importer,
       );
     } else {
       const id =

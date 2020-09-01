@@ -13,7 +13,10 @@ import resolveToValue from '../utils/resolveToValue';
 import { unwrapUtilityType } from './flowUtilityTypes';
 import type { Importer } from '../types';
 
-function tryResolveGenericTypeAnnotation(path: NodePath, importer: Importer): ?NodePath {
+function tryResolveGenericTypeAnnotation(
+  path: NodePath,
+  importer: Importer,
+): ?NodePath {
   let typePath = unwrapUtilityType(path);
   let idPath;
 
@@ -34,7 +37,10 @@ function tryResolveGenericTypeAnnotation(path: NodePath, importer: Importer): ?N
     if (t.TypeAlias.check(typePath.node)) {
       return tryResolveGenericTypeAnnotation(typePath.get('right'), importer);
     } else if (t.TSTypeAliasDeclaration.check(typePath.node)) {
-      return tryResolveGenericTypeAnnotation(typePath.get('typeAnnotation'), importer);
+      return tryResolveGenericTypeAnnotation(
+        typePath.get('typeAnnotation'),
+        importer,
+      );
     }
 
     return typePath;

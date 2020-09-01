@@ -13,7 +13,11 @@ import resolveImports from '../../importer/resolveImports';
 
 describe('findAllComponentDefinitions', () => {
   function parse(source) {
-    return findAllComponentDefinitions(utils.parse(source), utils.getParser(), resolveImports);
+    return findAllComponentDefinitions(
+      utils.parse(source),
+      utils.getParser(),
+      resolveImports,
+    );
   }
 
   describe('React.createClass', () => {

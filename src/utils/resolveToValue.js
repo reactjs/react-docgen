@@ -63,10 +63,7 @@ function findScopePath(
       exportName = parentPath.node.imported.name;
     }
 
-    const resolvedPath = importer(
-      parentPath.parentPath,
-      exportName,
-    );
+    const resolvedPath = importer(parentPath.parentPath, exportName);
 
     if (resolvedPath) {
       return resolveToValue(resolvedPath, importer);
@@ -108,7 +105,7 @@ function findLastAssignedValue(scope, idPath, importer) {
   const name = idPath.node.name;
 
   traverseShallow(scope.path, {
-    visitAssignmentExpression: function (path) {
+    visitAssignmentExpression: function(path) {
       const node = path.node;
       // Skip anything that is not an assignment to a variable with the
       // passed name.
@@ -162,7 +159,11 @@ export default function resolveToValue(
       let propertyPath = resolved;
       for (const propertyName of toArray(path, importer).slice(1)) {
         if (propertyPath && t.ObjectExpression.check(propertyPath.node)) {
-          propertyPath = getPropertyValuePath(propertyPath, propertyName, importer);
+          propertyPath = getPropertyValuePath(
+            propertyPath,
+            propertyName,
+            importer,
+          );
         }
         if (!propertyPath) {
           return path;

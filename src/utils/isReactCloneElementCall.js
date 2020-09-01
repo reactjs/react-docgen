@@ -14,6 +14,9 @@ import type { Importer } from '../types';
  * Returns true if the expression is a function call of the form
  * `React.cloneElement(...)`.
  */
-export default function isReactCloneElementCall(path: NodePath, importer: Importer): boolean {
+export default function isReactCloneElementCall(
+  path: NodePath,
+  importer: Importer,
+): boolean {
   return isReactBuiltinCall(path, 'cloneElement', importer);
 }

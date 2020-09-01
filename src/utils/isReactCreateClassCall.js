@@ -40,7 +40,10 @@ function isReactCreateClassCallModular(path: NodePath): boolean {
  * createReactClass(...);
  * ```
  */
-export default function isReactCreateClassCall(path: NodePath, importer: Importer): boolean {
+export default function isReactCreateClassCall(
+  path: NodePath,
+  importer: Importer,
+): boolean {
   return (
     isReactBuiltinCall(path, 'createClass', importer) ||
     isReactCreateClassCallModular(path)

@@ -28,7 +28,10 @@ function resolveDocumentation(
     if (t.Property.check(propertyPath.node)) {
       setPropDescription(documentation, propertyPath, importer);
     } else if (t.SpreadElement.check(propertyPath.node)) {
-      const resolvedValuePath = resolveToValue(propertyPath.get('argument'), importer);
+      const resolvedValuePath = resolveToValue(
+        propertyPath.get('argument'),
+        importer,
+      );
       resolveDocumentation(documentation, resolvedValuePath, importer);
     }
   });
