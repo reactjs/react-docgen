@@ -12,10 +12,10 @@ import getMemberExpressionRoot from './getMemberExpressionRoot';
 import getPropertyValuePath from './getPropertyValuePath';
 import { Array as toArray } from './expressionTo';
 import { traverseShallow } from './traverse';
-import resolveImportedValue from './resolveImportedValue';
 import getMemberValuePath, {
   isSupportedDefinitionType,
 } from './getMemberValuePath';
+import type { Importer } from '../types';
 
 function buildMemberExpressionFromPattern(path: NodePath): ?NodePath {
   const node = path.node;
@@ -42,7 +42,7 @@ function buildMemberExpressionFromPattern(path: NodePath): ?NodePath {
 function findScopePath(
   paths: Array<NodePath>,
   path: NodePath,
-  resolveImports: boolean,
+  importer: Importer,
 ): ?NodePath {
   if (paths.length < 1) {
     return null;
@@ -52,7 +52,7 @@ function findScopePath(
 
   // Namespace imports are handled separately, at the site of a member expression access
   if (
-    resolveImports &&
+    importer &&
     (t.ImportDefaultSpecifier.check(parentPath.node) ||
       t.ImportSpecifier.check(parentPath.node))
   ) {
@@ -63,13 +63,13 @@ function findScopePath(
       exportName = parentPath.node.imported.name;
     }
 
-    const resolvedPath = resolveImportedValue(
+    const resolvedPath = importer(
       parentPath.parentPath,
       exportName,
     );
 
     if (resolvedPath) {
-      return resolveToValue(resolvedPath, resolveImports);
+      return resolveToValue(resolvedPath, importer);
     }
   }
 
@@ -93,7 +93,7 @@ function findScopePath(
   }
 
   if (resultPath.node !== path.node) {
-    return resolveToValue(resultPath, resolveImports);
+    return resolveToValue(resultPath, importer);
   }
 
   return null;
@@ -103,7 +103,7 @@ function findScopePath(
  * Tries to find the last value assigned to `name` in the scope created by
  * `scope`. We are not descending into any statements (blocks).
  */
-function findLastAssignedValue(scope, idPath, resolveImports) {
+function findLastAssignedValue(scope, idPath, importer) {
   const results = [];
   const name = idPath.node.name;
 
@@ -136,7 +136,7 @@ function findLastAssignedValue(scope, idPath, resolveImports) {
   if (results.length === 0) {
     return null;
   }
-  return resolveToValue(results.pop(), resolveImports);
+  return resolveToValue(results.pop(), importer);
 }
 
 /**
@@ -148,32 +148,32 @@ function findLastAssignedValue(scope, idPath, resolveImports) {
  */
 export default function resolveToValue(
   path: NodePath,
-  resolveImports: boolean = true,
+  importer: Importer,
 ): NodePath {
   const node = path.node;
   if (t.VariableDeclarator.check(node)) {
     if (node.init) {
-      return resolveToValue(path.get('init'), resolveImports);
+      return resolveToValue(path.get('init'), importer);
     }
   } else if (t.MemberExpression.check(node)) {
     const root = getMemberExpressionRoot(path);
-    const resolved = resolveToValue(root, resolveImports);
+    const resolved = resolveToValue(root, importer);
     if (t.ObjectExpression.check(resolved.node)) {
       let propertyPath = resolved;
-      for (const propertyName of toArray(path).slice(1)) {
+      for (const propertyName of toArray(path, importer).slice(1)) {
         if (propertyPath && t.ObjectExpression.check(propertyPath.node)) {
-          propertyPath = getPropertyValuePath(propertyPath, propertyName);
+          propertyPath = getPropertyValuePath(propertyPath, propertyName, importer);
         }
         if (!propertyPath) {
           return path;
         }
-        propertyPath = resolveToValue(propertyPath, resolveImports);
+        propertyPath = resolveToValue(propertyPath, importer);
       }
       return propertyPath;
     } else if (isSupportedDefinitionType(resolved)) {
       const memberPath = getMemberValuePath(resolved, path.node.property.name);
       if (memberPath) {
-        return resolveToValue(memberPath, resolveImports);
+        return resolveToValue(memberPath, importer);
       }
     } else if (t.ImportDeclaration.check(resolved.node)) {
       // Handle references to namespace imports, e.g. import * as foo from 'bar'.
@@ -184,12 +184,12 @@ export default function resolveToValue(
           t.ImportNamespaceSpecifier.check(specifier) &&
           specifier.local.name === root.node.name
         ) {
-          const resolvedPath = resolveImportedValue(
+          const resolvedPath = importer(
             resolved,
             root.parentPath.node.property.name,
           );
           if (resolvedPath) {
-            return resolveToValue(resolvedPath, resolveImports);
+            return resolveToValue(resolvedPath, importer);
           }
         }
       }
@@ -203,14 +203,14 @@ export default function resolveToValue(
     return path.parentPath.parentPath;
   } else if (t.AssignmentExpression.check(node)) {
     if (node.operator === '=') {
-      return resolveToValue(path.get('right'), resolveImports);
+      return resolveToValue(path.get('right'), importer);
     }
   } else if (
     t.TypeCastExpression.check(node) ||
     t.TSAsExpression.check(node) ||
     t.TSTypeAssertion.check(node)
   ) {
-    return resolveToValue(path.get('expression'), resolveImports);
+    return resolveToValue(path.get('expression'), importer);
   } else if (t.Identifier.check(node)) {
     if (
       (t.ClassDeclaration.check(path.parentPath.node) ||
@@ -227,16 +227,16 @@ export default function resolveToValue(
       // The variable may be assigned a different value after initialization.
       // We are first trying to find all assignments to the variable in the
       // block where it is defined (i.e. we are not traversing into statements)
-      resolvedPath = findLastAssignedValue(scope, path, resolveImports);
+      resolvedPath = findLastAssignedValue(scope, path, importer);
       if (!resolvedPath) {
         const bindings = scope.getBindings()[node.name];
-        resolvedPath = findScopePath(bindings, path, resolveImports);
+        resolvedPath = findScopePath(bindings, path, importer);
       }
     } else {
       scope = path.scope.lookupType(node.name);
       if (scope) {
         const typesInScope = scope.getTypes()[node.name];
-        resolvedPath = findScopePath(typesInScope, path, resolveImports);
+        resolvedPath = findScopePath(typesInScope, path, importer);
       }
     }
     return resolvedPath || path;

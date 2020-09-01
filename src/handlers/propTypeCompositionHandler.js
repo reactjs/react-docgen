@@ -12,6 +12,8 @@ import getMemberValuePath from '../utils/getMemberValuePath';
 import resolveToModule from '../utils/resolveToModule';
 import resolveToValue from '../utils/resolveToValue';
 import type Documentation from '../Documentation';
+import type { Parser } from '../babelParser';
+import type { Importer } from '../types';
 
 /**
  * It resolves the path to its module name and adds it to the "composes" entry
@@ -24,13 +26,13 @@ function amendComposes(documentation, path) {
   }
 }
 
-function processObjectExpression(documentation, path) {
+function processObjectExpression(documentation, path, importer) {
   path.get('properties').each(function(propertyPath) {
     switch (propertyPath.node.type) {
       case t.SpreadElement.name:
         amendComposes(
           documentation,
-          resolveToValue(propertyPath.get('argument')),
+          resolveToValue(propertyPath.get('argument'), importer),
         );
         break;
     }
@@ -40,19 +42,21 @@ function processObjectExpression(documentation, path) {
 export default function propTypeCompositionHandler(
   documentation: Documentation,
   path: NodePath,
+  parser: Parser,
+  importer: Importer,
 ) {
   let propTypesPath = getMemberValuePath(path, 'propTypes');
   if (!propTypesPath) {
     return;
   }
-  propTypesPath = resolveToValue(propTypesPath);
+  propTypesPath = resolveToValue(propTypesPath, importer);
   if (!propTypesPath) {
     return;
   }
 
   switch (propTypesPath.node.type) {
     case t.ObjectExpression.name:
-      processObjectExpression(documentation, propTypesPath);
+      processObjectExpression(documentation, propTypesPath, importer);
       break;
     default:
       amendComposes(documentation, propTypesPath);

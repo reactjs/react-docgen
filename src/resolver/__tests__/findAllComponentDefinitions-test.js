@@ -9,10 +9,11 @@
 import { NodePath } from 'ast-types';
 import * as utils from '../../../tests/utils';
 import findAllComponentDefinitions from '../findAllComponentDefinitions';
+import resolveImports from '../../importer/resolveImports';
 
 describe('findAllComponentDefinitions', () => {
   function parse(source) {
-    return findAllComponentDefinitions(utils.parse(source), utils.getParser());
+    return findAllComponentDefinitions(utils.parse(source), utils.getParser(), resolveImports);
   }
 
   describe('React.createClass', () => {

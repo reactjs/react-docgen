@@ -9,6 +9,7 @@
 
 import { ASTNode, NodePath, builders, namedTypes as t } from 'ast-types';
 import resolveToValue from './resolveToValue';
+import type { Importer } from '../types';
 
 type ObjectPropMap = {
   properties: Array<string>,
@@ -47,6 +48,7 @@ function isWhiteListedObjectTypeProperty(prop) {
 // Resolves an ObjectExpression or an ObjectTypeAnnotation
 export function resolveObjectToPropMap(
   object: NodePath,
+  importer: Importer,
   raw: boolean = false,
 ): ?ObjectPropMap {
   if (
@@ -89,15 +91,15 @@ export function resolveObjectToPropMap(
         t.SpreadElement.check(prop) ||
         t.ObjectTypeSpreadProperty.check(prop)
       ) {
-        let spreadObject = resolveToValue(propPath.get('argument'));
+        let spreadObject = resolveToValue(propPath.get('argument'), importer);
         if (t.GenericTypeAnnotation.check(spreadObject.value)) {
-          const typeAlias = resolveToValue(spreadObject.get('id'));
+          const typeAlias = resolveToValue(spreadObject.get('id'), importer);
           if (t.ObjectTypeAnnotation.check(typeAlias.get('right').value)) {
-            spreadObject = resolveToValue(typeAlias.get('right'));
+            spreadObject = resolveToValue(typeAlias.get('right'), importer);
           }
         }
 
-        const spreadValues = resolveObjectToPropMap(spreadObject);
+        const spreadValues = resolveObjectToPropMap(spreadObject, importer);
         if (!spreadValues) {
           error = true;
           return;
@@ -128,12 +130,12 @@ export function resolveObjectToPropMap(
  *  unresolvable spreads
  *  computed identifier values
  */
-export default function resolveObjectValuesToArray(path: NodePath): ?NodePath {
+export default function resolveObjectValuesToArray(path: NodePath, importer: Importer): ?NodePath {
   const node = path.node;
 
   if (isObjectValuesCall(node)) {
-    const objectExpression = resolveToValue(path.get('arguments').get(0));
-    const propMap = resolveObjectToPropMap(objectExpression);
+    const objectExpression = resolveToValue(path.get('arguments').get(0), importer);
+    const propMap = resolveObjectToPropMap(objectExpression, importer);
 
     if (propMap) {
       const nodes = propMap.properties.map(prop => {

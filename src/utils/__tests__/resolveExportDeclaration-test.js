@@ -14,6 +14,7 @@ import resolveExportDeclaration from '../resolveExportDeclaration';
 
 describe('resolveExportDeclaration', () => {
   const returnValue = {};
+  const ignoreImports = () => null;
 
   beforeEach(() => {
     resolveToValue.mockReturnValue(returnValue);
@@ -21,42 +22,42 @@ describe('resolveExportDeclaration', () => {
 
   it('resolves default exports', () => {
     const exp = statement('export default 42;');
-    const resolved = resolveExportDeclaration(exp);
+    const resolved = resolveExportDeclaration(exp, ignoreImports);
 
     expect(resolved).toEqual([returnValue]);
-    expect(resolveToValue).toBeCalledWith(exp.get('declaration'));
+    expect(resolveToValue).toBeCalledWith(exp.get('declaration'), ignoreImports);
   });
 
   it('resolves named exports', () => {
     let exp = statement('export var foo = 42, bar = 21;');
-    let resolved = resolveExportDeclaration(exp);
+    let resolved = resolveExportDeclaration(exp, ignoreImports);
 
     const declarations = exp.get('declaration', 'declarations');
     expect(resolved).toEqual([returnValue, returnValue]);
-    expect(resolveToValue).toBeCalledWith(declarations.get(0));
-    expect(resolveToValue).toBeCalledWith(declarations.get(1));
+    expect(resolveToValue).toBeCalledWith(declarations.get(0), ignoreImports);
+    expect(resolveToValue).toBeCalledWith(declarations.get(1), ignoreImports);
 
     exp = statement('export function foo(){}');
-    resolved = resolveExportDeclaration(exp);
+    resolved = resolveExportDeclaration(exp, ignoreImports);
 
     expect(resolved).toEqual([returnValue]);
-    expect(resolveToValue).toBeCalledWith(exp.get('declaration'));
+    expect(resolveToValue).toBeCalledWith(exp.get('declaration'), ignoreImports);
 
     exp = statement('export class Foo {}');
-    resolved = resolveExportDeclaration(exp);
+    resolved = resolveExportDeclaration(exp, ignoreImports);
 
     expect(resolved).toEqual([returnValue]);
-    expect(resolveToValue).toBeCalledWith(exp.get('declaration'));
+    expect(resolveToValue).toBeCalledWith(exp.get('declaration'), ignoreImports);
   });
 
   it('resolves named exports', () => {
     const exp = statement('export {foo, bar, baz}; var foo, bar, baz;');
-    const resolved = resolveExportDeclaration(exp);
+    const resolved = resolveExportDeclaration(exp, ignoreImports);
 
     const specifiers = exp.get('specifiers');
     expect(resolved).toEqual([returnValue, returnValue, returnValue]);
-    expect(resolveToValue).toBeCalledWith(specifiers.get(0, 'local'));
-    expect(resolveToValue).toBeCalledWith(specifiers.get(1, 'local'));
-    expect(resolveToValue).toBeCalledWith(specifiers.get(2, 'local'));
+    expect(resolveToValue).toBeCalledWith(specifiers.get(0, 'local'), ignoreImports);
+    expect(resolveToValue).toBeCalledWith(specifiers.get(1, 'local'), ignoreImports);
+    expect(resolveToValue).toBeCalledWith(specifiers.get(2, 'local'), ignoreImports);
   });
 });

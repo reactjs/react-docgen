@@ -17,6 +17,7 @@ describe('isStatelessComponent', () => {
     'React.cloneElement': 'React.cloneElement(children, null)',
     'React.Children.only()': 'React.Children.only(children, null)',
   };
+  const ignoreImports = () => null;
 
   const componentStyle = {
     ArrowExpression: [
@@ -104,7 +105,7 @@ describe('isStatelessComponent', () => {
                     ...caseSelector,
                     ...componentSelector,
                   );
-                  expect(isStatelessComponent(def)).toBe(true);
+                  expect(isStatelessComponent(def, ignoreImports)).toBe(true);
                 });
               });
 
@@ -120,7 +121,7 @@ describe('isStatelessComponent', () => {
                     ...caseSelector,
                     ...componentSelector,
                   );
-                  expect(isStatelessComponent(def)).toBe(false);
+                  expect(isStatelessComponent(def, ignoreImports)).toBe(false);
                 });
               });
             });
@@ -140,7 +141,7 @@ describe('isStatelessComponent', () => {
         .get('declarations', [0])
         .get('init');
 
-      expect(isStatelessComponent(def)).toBe(true);
+      expect(isStatelessComponent(def, ignoreImports)).toBe(true);
     });
   });
 
@@ -166,11 +167,11 @@ describe('isStatelessComponent', () => {
       const render = def.get('properties', 3);
       const world = def.get('properties', 4);
 
-      expect(isStatelessComponent(bar)).toBe(true);
-      expect(isStatelessComponent(baz)).toBe(true);
-      expect(isStatelessComponent(hello)).toBe(true);
-      expect(isStatelessComponent(render)).toBe(false);
-      expect(isStatelessComponent(world)).toBe(true);
+      expect(isStatelessComponent(bar, ignoreImports)).toBe(true);
+      expect(isStatelessComponent(baz, ignoreImports)).toBe(true);
+      expect(isStatelessComponent(hello, ignoreImports)).toBe(true);
+      expect(isStatelessComponent(render, ignoreImports)).toBe(false);
+      expect(isStatelessComponent(world, ignoreImports)).toBe(true);
     });
   });
 
@@ -183,7 +184,7 @@ describe('isStatelessComponent', () => {
           }
         }
       `);
-      expect(isStatelessComponent(def)).toBe(false);
+      expect(isStatelessComponent(def, ignoreImports)).toBe(false);
     });
 
     it('does not accept React.Component classes', () => {
@@ -196,7 +197,7 @@ describe('isStatelessComponent', () => {
         }
       `).get('body', 1);
 
-      expect(isStatelessComponent(def)).toBe(false);
+      expect(isStatelessComponent(def, ignoreImports)).toBe(false);
     });
 
     it('does not accept React.createClass calls', () => {
@@ -208,7 +209,7 @@ describe('isStatelessComponent', () => {
         });
       `);
 
-      expect(isStatelessComponent(def)).toBe(false);
+      expect(isStatelessComponent(def, ignoreImports)).toBe(false);
     });
   });
 
@@ -217,7 +218,7 @@ describe('isStatelessComponent', () => {
       it(desc, () => {
         const def = parse(code).get('body', 1);
 
-        expect(isStatelessComponent(def)).toBe(true);
+        expect(isStatelessComponent(def, ignoreImports)).toBe(true);
       });
     }
 
@@ -230,7 +231,7 @@ describe('isStatelessComponent', () => {
         }
       `);
 
-      expect(isStatelessComponent(def)).toBe(true);
+      expect(isStatelessComponent(def, ignoreImports)).toBe(true);
     });
 
     it('handles recursive function calls', () => {
@@ -240,7 +241,7 @@ describe('isStatelessComponent', () => {
         }
       `);
 
-      expect(isStatelessComponent(def)).toBe(false);
+      expect(isStatelessComponent(def, ignoreImports)).toBe(false);
     });
 
     test(

@@ -8,7 +8,7 @@
  */
 
 import {namedTypes as t, NodePath} from 'ast-types';
-import { traverseShallow } from './traverse';
+import { traverseShallow } from '../utils/traverse';
 import resolve from 'resolve';
 import { dirname } from 'path';
 import buildParser, { type Options } from '../babelParser';

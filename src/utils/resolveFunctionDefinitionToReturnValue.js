@@ -9,16 +9,18 @@
 
 import resolveToValue from './resolveToValue';
 import { traverseShallow } from './traverse';
+import type { Importer } from '../types';
 
 export default function resolveFunctionDefinitionToReturnValue(
   path: NodePath,
+  importer: Importer,
 ): ?NodePath {
   let returnPath = null;
 
   traverseShallow(path.get('body'), {
     visitFunction: () => false,
     visitReturnStatement: nodePath => {
-      returnPath = resolveToValue(nodePath.get('argument'));
+      returnPath = resolveToValue(nodePath.get('argument'), importer);
       return false;
     },
   });
