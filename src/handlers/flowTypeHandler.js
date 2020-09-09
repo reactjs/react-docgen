@@ -89,7 +89,7 @@ function setPropDescriptor(
     // imported types that are spread in to props.
     setPropDescription(documentation, path, importer);
   } else if (t.TSPropertySignature.check(path.node)) {
-    const type = getTSType(path.get('typeAnnotation'), typeParams);
+    const type = getTSType(path.get('typeAnnotation'), typeParams, importer);
 
     const propName = getPropertyName(path, importer);
     if (!propName) return;

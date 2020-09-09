@@ -57,7 +57,7 @@ function getMethodParamsDoc(methodPath, importer) {
         type.alias = typePath.node.id.name;
       }
     } else if (typePath) {
-      type = getTSType(typePath);
+      type = getTSType(typePath, null, importer);
       if (t.TSTypeReference.check(typePath.node)) {
         type.alias = typePath.node.typeName.name;
       }
@@ -84,7 +84,7 @@ function getMethodReturnDoc(methodPath, importer) {
     if (returnType && t.Flow.check(returnType.node)) {
       return { type: getFlowType(returnType, null, importer) };
     } else if (returnType) {
-      return { type: getTSType(returnType) };
+      return { type: getTSType(returnType, null, importer) };
     }
   }
 
