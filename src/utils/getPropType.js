@@ -18,9 +18,9 @@ import printValue from './printValue';
 import resolveToValue from './resolveToValue';
 import resolveObjectKeysToArray from './resolveObjectKeysToArray';
 import resolveObjectValuesToArray from './resolveObjectValuesToArray';
-import type { PropTypeDescriptor, PropDescriptor } from '../types';
+import type { PropTypeDescriptor, PropDescriptor, Importer } from '../types';
 
-function getEnumValues(path, importer) {
+function getEnumValues(path: NodePath, importer: Importer) {
   const values = [];
 
   path.get('elements').each(function(elementPath) {
@@ -50,7 +50,7 @@ function getEnumValues(path, importer) {
   return values;
 }
 
-function getPropTypeOneOf(argumentPath, importer) {
+function getPropTypeOneOf(argumentPath: NodePath, importer: Importer) {
   const type: PropTypeDescriptor = { name: 'enum' };
   let value = resolveToValue(argumentPath, importer);
   if (!t.ArrayExpression.check(value.node)) {
@@ -70,14 +70,14 @@ function getPropTypeOneOf(argumentPath, importer) {
   return type;
 }
 
-function getPropTypeOneOfType(argumentPath) {
+function getPropTypeOneOfType(argumentPath: NodePath, importer: Importer) {
   const type: PropTypeDescriptor = { name: 'union' };
   if (!t.ArrayExpression.check(argumentPath.node)) {
     type.computed = true;
     type.value = printValue(argumentPath);
   } else {
     type.value = argumentPath.get('elements').map(function(itemPath) {
-      const descriptor: PropTypeDescriptor = getPropType(itemPath);
+      const descriptor: PropTypeDescriptor = getPropType(itemPath, importer);
       const docs = getDocblock(itemPath);
       if (docs) {
         descriptor.description = docs;
@@ -88,7 +88,7 @@ function getPropTypeOneOfType(argumentPath) {
   return type;
 }
 
-function getPropTypeArrayOf(argumentPath) {
+function getPropTypeArrayOf(argumentPath: NodePath, importer: Importer) {
   const type: PropTypeDescriptor = { name: 'arrayOf' };
 
   const docs = getDocblock(argumentPath);
@@ -96,7 +96,7 @@ function getPropTypeArrayOf(argumentPath) {
     type.description = docs;
   }
 
-  const subType = getPropType(argumentPath);
+  const subType = getPropType(argumentPath, importer);
 
   if (subType.name === 'unknown') {
     type.value = printValue(argumentPath);
@@ -107,7 +107,7 @@ function getPropTypeArrayOf(argumentPath) {
   return type;
 }
 
-function getPropTypeObjectOf(argumentPath) {
+function getPropTypeObjectOf(argumentPath: NodePath, importer: Importer) {
   const type: PropTypeDescriptor = { name: 'objectOf' };
 
   const docs = getDocblock(argumentPath);
@@ -115,7 +115,7 @@ function getPropTypeObjectOf(argumentPath) {
     type.description = docs;
   }
 
-  const subType = getPropType(argumentPath);
+  const subType = getPropType(argumentPath, importer);
 
   if (subType.name === 'unknown') {
     type.value = printValue(argumentPath);
@@ -129,7 +129,11 @@ function getPropTypeObjectOf(argumentPath) {
 /**
  * Handles shape and exact prop types
  */
-function getPropTypeShapish(name, argumentPath, importer) {
+function getPropTypeShapish(
+  name: 'shape' | 'exact',
+  argumentPath: NodePath,
+  importer: Importer,
+) {
   const type: PropTypeDescriptor = { name };
   if (!t.ObjectExpression.check(argumentPath.node)) {
     argumentPath = resolveToValue(argumentPath, importer);
@@ -147,6 +151,7 @@ function getPropTypeShapish(name, argumentPath, importer) {
       if (!propertyName) return;
       const descriptor: PropDescriptor | PropTypeDescriptor = getPropType(
         propertyPath.get('value'),
+        importer,
       );
       const docs = getDocblock(propertyPath);
       if (docs) {
@@ -166,7 +171,8 @@ function getPropTypeShapish(name, argumentPath, importer) {
   return type;
 }
 
-function getPropTypeInstanceOf(argumentPath) {
+// eslint-disable-next-line no-unused-vars
+function getPropTypeInstanceOf(argumentPath: NodePath, importer: Importer) {
   return {
     name: 'instanceOf',
     value: printValue(argumentPath),
@@ -205,7 +211,10 @@ const propTypes = new Map([
  *
  * If there is no match, "custom" is returned.
  */
-export default function getPropType(path: NodePath): PropTypeDescriptor {
+export default function getPropType(
+  path: NodePath,
+  importer: Importer,
+): PropTypeDescriptor {
   let descriptor;
   getMembers(path, true).some(member => {
     const node = member.path.node;
@@ -221,7 +230,7 @@ export default function getPropType(path: NodePath): PropTypeDescriptor {
         return true;
       } else if (propTypes.has(name) && member.argumentsPath) {
         // $FlowIssue
-        descriptor = propTypes.get(name)(member.argumentsPath.get(0));
+        descriptor = propTypes.get(name)(member.argumentsPath.get(0), importer);
         return true;
       }
     }
