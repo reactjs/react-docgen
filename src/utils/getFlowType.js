@@ -105,7 +105,11 @@ function handleArrayTypeAnnotation(
   return {
     name: 'Array',
     elements: [
-      getFlowTypeWithResolvedTypes(path.get('elementType'), typeParams, importer),
+      getFlowTypeWithResolvedTypes(
+        path.get('elementType'),
+        typeParams,
+        importer,
+      ),
     ],
     raw: printValue(path),
   };
@@ -162,7 +166,11 @@ function handleGenericTypeAnnotation(
   }
 
   if (resolvedPath && resolvedPath.node.right) {
-    type = getFlowTypeWithResolvedTypes(resolvedPath.get('right'), typeParams, importer);
+    type = getFlowTypeWithResolvedTypes(
+      resolvedPath.get('right'),
+      typeParams,
+      importer,
+    );
   } else if (path.node.typeParameters) {
     const params = path.get('typeParameters').get('params');
 
@@ -201,7 +209,11 @@ function handleObjectTypeAnnotation(
   path.get('indexers').each(param => {
     type.signature.properties.push({
       key: getFlowTypeWithResolvedTypes(param.get('key'), typeParams, importer),
-      value: getFlowTypeWithRequirements(param.get('value'), typeParams, importer),
+      value: getFlowTypeWithRequirements(
+        param.get('value'),
+        typeParams,
+        importer,
+      ),
     });
   });
 
@@ -210,7 +222,11 @@ function handleObjectTypeAnnotation(
       type.signature.properties.push({
         // For ObjectTypeProperties `getPropertyName` always returns string
         key: ((getPropertyName(param, importer): any): string),
-        value: getFlowTypeWithRequirements(param.get('value'), typeParams, importer),
+        value: getFlowTypeWithRequirements(
+          param.get('value'),
+          typeParams,
+          importer,
+        ),
       });
     }
   });
@@ -236,7 +252,9 @@ function handleUnionTypeAnnotation(
     raw: printValue(path),
     elements: path
       .get('types')
-      .map(subType => getFlowTypeWithResolvedTypes(subType, typeParams, importer)),
+      .map(subType =>
+        getFlowTypeWithResolvedTypes(subType, typeParams, importer),
+      ),
   };
 }
 
@@ -250,7 +268,9 @@ function handleIntersectionTypeAnnotation(
     raw: printValue(path),
     elements: path
       .get('types')
-      .map(subType => getFlowTypeWithResolvedTypes(subType, typeParams, importer)),
+      .map(subType =>
+        getFlowTypeWithResolvedTypes(subType, typeParams, importer),
+      ),
   };
 }
 
@@ -263,7 +283,11 @@ function handleNullableTypeAnnotation(
 
   if (!typeAnnotation) return null;
 
-  const type = getFlowTypeWithResolvedTypes(typeAnnotation, typeParams, importer);
+  const type = getFlowTypeWithResolvedTypes(
+    typeAnnotation,
+    typeParams,
+    importer,
+  );
   type.nullable = true;
 
   return type;
@@ -280,7 +304,11 @@ function handleFunctionTypeAnnotation(
     raw: printValue(path),
     signature: {
       arguments: [],
-      return: getFlowTypeWithResolvedTypes(path.get('returnType'), typeParams, importer),
+      return: getFlowTypeWithResolvedTypes(
+        path.get('returnType'),
+        typeParams,
+        importer,
+      ),
     },
   };
 
@@ -323,7 +351,9 @@ function handleTupleTypeAnnotation(
   };
 
   path.get('types').each(param => {
-    type.elements.push(getFlowTypeWithResolvedTypes(param, typeParams, importer));
+    type.elements.push(
+      getFlowTypeWithResolvedTypes(param, typeParams, importer),
+    );
   });
 
   return type;
@@ -334,7 +364,11 @@ function handleTypeofTypeAnnotation(
   typeParams: ?TypeParameters,
   importer: Importer,
 ): FlowTypeDescriptor {
-  return getFlowTypeWithResolvedTypes(path.get('argument'), typeParams, importer);
+  return getFlowTypeWithResolvedTypes(
+    path.get('argument'),
+    typeParams,
+    importer,
+  );
 }
 
 let visitedTypes = {};
