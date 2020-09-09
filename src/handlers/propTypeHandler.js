@@ -42,7 +42,7 @@ function amendPropTypes(getDescriptor, path, importer) {
         const propDescriptor = getDescriptor(propName);
         const valuePath = propertyPath.get('value');
         const type = isPropTypesExpression(valuePath)
-          ? getPropType(valuePath)
+          ? getPropType(valuePath, importer)
           : { name: 'custom', raw: printValue(valuePath) };
 
         if (type) {
