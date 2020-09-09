@@ -76,7 +76,7 @@ function setPropDescriptor(
       documentation.addComposes(name.node.name);
     }
   } else if (t.ObjectTypeProperty.check(path.node)) {
-    const type = getFlowType(path.get('value'), typeParams);
+    const type = getFlowType(path.get('value'), typeParams, importer);
     const propName = getPropertyName(path, importer);
     if (!propName) return;
 

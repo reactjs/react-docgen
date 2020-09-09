@@ -52,7 +52,7 @@ function getMethodParamsDoc(methodPath, importer) {
     let type = null;
     const typePath = getTypeAnnotation(paramPath);
     if (typePath && t.Flow.check(typePath.node)) {
-      type = getFlowType(typePath);
+      type = getFlowType(typePath, null, importer);
       if (t.GenericTypeAnnotation.check(typePath.node)) {
         type.alias = typePath.node.id.name;
       }
@@ -82,7 +82,7 @@ function getMethodReturnDoc(methodPath, importer) {
   if (functionExpression.node.returnType) {
     const returnType = getTypeAnnotation(functionExpression.get('returnType'));
     if (returnType && t.Flow.check(returnType.node)) {
-      return { type: getFlowType(returnType) };
+      return { type: getFlowType(returnType, null, importer) };
     } else if (returnType) {
       return { type: getTSType(returnType) };
     }
