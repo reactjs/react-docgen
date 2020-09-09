@@ -64,7 +64,9 @@ function handleTSArrayType(
 ): FlowElementsType {
   return {
     name: 'Array',
-    elements: [getTSTypeWithResolvedTypes(path.get('elementType'), typeParams, importer)],
+    elements: [
+      getTSTypeWithResolvedTypes(path.get('elementType'), typeParams, importer),
+    ],
     raw: printValue(path),
   };
 }
@@ -169,7 +171,11 @@ function handleTSTypeLiteral(
         ),
       });
     } else if (t.TSCallSignatureDeclaration.check(param.node)) {
-      type.signature.constructor = handleTSFunctionType(param, typeParams, importer);
+      type.signature.constructor = handleTSFunctionType(
+        param,
+        typeParams,
+        importer,
+      );
     } else if (t.TSIndexSignature.check(param.node)) {
       type.signature.properties.push({
         key: getTSTypeWithResolvedTypes(
@@ -192,11 +198,7 @@ function handleTSTypeLiteral(
   return type;
 }
 
-function handleTSInterfaceDeclaration(
-  path: NodePath,
-  typeParams: ?TypeParameters,
-  importer: Importer,
-): FlowSimpleType {
+function handleTSInterfaceDeclaration(path: NodePath): FlowSimpleType {
   // Interfaces are handled like references which would be documented separately,
   // rather than inlined like type aliases.
   return {
@@ -214,7 +216,9 @@ function handleTSUnionType(
     raw: printValue(path),
     elements: path
       .get('types')
-      .map(subType => getTSTypeWithResolvedTypes(subType, typeParams, importer)),
+      .map(subType =>
+        getTSTypeWithResolvedTypes(subType, typeParams, importer),
+      ),
   };
 }
 
@@ -228,7 +232,9 @@ function handleTSIntersectionType(
     raw: printValue(path),
     elements: path
       .get('types')
-      .map(subType => getTSTypeWithResolvedTypes(subType, typeParams, importer)),
+      .map(subType =>
+        getTSTypeWithResolvedTypes(subType, typeParams, importer),
+      ),
   };
 }
 
