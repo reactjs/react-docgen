@@ -19,7 +19,6 @@ import getTSType from '../utils/getTSType';
 import { type TypeParameters } from '../utils/getTypeParameters';
 import resolveToValue from '../utils/resolveToValue';
 import setPropDescription from '../utils/setPropDescription';
-import type { Parser } from '../babelParser';
 import type { Importer } from '../types';
 
 function setPropDescriptor(
@@ -113,7 +112,6 @@ function setPropDescriptor(
 export default function flowTypeHandler(
   documentation: Documentation,
   path: NodePath,
-  parser: Parser,
   importer: Importer,
 ) {
   const flowTypesPath = getFlowTypeFromReactComponent(path, importer);

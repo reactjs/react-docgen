@@ -16,7 +16,6 @@ import type Documentation from '../Documentation';
 import match from '../utils/match';
 import { traverseShallow } from '../utils/traverse';
 import resolveToValue from '../utils/resolveToValue';
-import type { Parser } from '../babelParser';
 import type { Importer } from '../types';
 
 /**
@@ -74,7 +73,6 @@ function findAssignedMethods(scope, idPath, importer) {
 export default function componentMethodsHandler(
   documentation: Documentation,
   path: NodePath,
-  parser: Parser,
   importer: Importer,
 ) {
   // Extract all methods from the class or object.

@@ -16,7 +16,6 @@ import resolveFunctionDefinitionToReturnValue from '../utils/resolveFunctionDefi
 import isReactComponentClass from '../utils/isReactComponentClass';
 import isReactForwardRefCall from '../utils/isReactForwardRefCall';
 import type Documentation from '../Documentation';
-import type { Parser } from '../babelParser';
 import type { Importer } from '../types';
 
 function getDefaultValue(path: NodePath, importer: Importer) {
@@ -138,7 +137,6 @@ function getDefaultValuesFromProps(
 export default function defaultPropsHandler(
   documentation: Documentation,
   componentDefinition: NodePath,
-  parser: Parser,
   importer: Importer,
 ) {
   let statelessProps = null;

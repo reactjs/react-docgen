@@ -12,7 +12,6 @@ import getMemberValuePath from '../utils/getMemberValuePath';
 import resolveToValue from '../utils/resolveToValue';
 import setPropDescription from '../utils/setPropDescription';
 import type Documentation from '../Documentation';
-import type { Parser } from '../babelParser';
 import type { Importer } from '../types';
 
 function resolveDocumentation(
@@ -40,7 +39,6 @@ function resolveDocumentation(
 export default function propDocBlockHandler(
   documentation: Documentation,
   path: NodePath,
-  parser: Parser,
   importer: Importer,
 ) {
   let propTypesPath = getMemberValuePath(path, 'propTypes');

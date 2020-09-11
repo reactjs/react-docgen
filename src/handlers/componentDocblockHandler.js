@@ -12,7 +12,6 @@ import type Documentation from '../Documentation';
 import { getDocblock } from '../utils/docblock';
 import isReactForwardRefCall from '../utils/isReactForwardRefCall';
 import resolveToValue from '../utils/resolveToValue';
-import type { Parser } from '../babelParser';
 import type { Importer } from '../types';
 
 function isClassDefinition(nodePath) {
@@ -65,7 +64,6 @@ function getDocblockFromComponent(path, importer) {
 export default function componentDocblockHandler(
   documentation: Documentation,
   path: NodePath,
-  parser: Parser,
   importer: Importer,
 ) {
   documentation.set(
