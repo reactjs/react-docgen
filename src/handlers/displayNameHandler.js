@@ -14,13 +14,11 @@ import isReactForwardRefCall from '../utils/isReactForwardRefCall';
 import resolveToValue from '../utils/resolveToValue';
 import resolveFunctionDefinitionToReturnValue from '../utils/resolveFunctionDefinitionToReturnValue';
 import type Documentation from '../Documentation';
-import type { Parser } from '../babelParser';
 import type { Importer } from '../types';
 
 export default function displayNameHandler(
   documentation: Documentation,
   path: NodePath,
-  parser: Parser,
   importer: Importer,
 ) {
   let displayNamePath = getMemberValuePath(path, 'displayName');

@@ -17,7 +17,6 @@ import printValue from '../utils/printValue';
 import resolveToModule from '../utils/resolveToModule';
 import resolveToValue from '../utils/resolveToValue';
 import type Documentation from '../Documentation';
-import type { Parser } from '../babelParser';
 import type { Importer } from '../types';
 
 function isPropTypesExpression(path) {
@@ -72,7 +71,6 @@ function getPropTypeHandler(propName: string) {
   return function(
     documentation: Documentation,
     path: NodePath,
-    parser: Parser,
     importer: Importer,
   ) {
     let propTypesPath = getMemberValuePath(path, propName);

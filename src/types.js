@@ -120,10 +120,10 @@ export type PropDescriptor = {
 };
 
 export type Importer = (path: NodePath, name: string) => ?NodePath;
+
 export type Handler = (
   documentation: Documentation,
   path: NodePath,
-  parser: Parser,
   importer: Importer,
 ) => void;
 export type Resolver = (

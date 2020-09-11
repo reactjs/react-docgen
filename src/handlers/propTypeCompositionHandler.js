@@ -12,7 +12,6 @@ import getMemberValuePath from '../utils/getMemberValuePath';
 import resolveToModule from '../utils/resolveToModule';
 import resolveToValue from '../utils/resolveToValue';
 import type Documentation from '../Documentation';
-import type { Parser } from '../babelParser';
 import type { Importer } from '../types';
 
 /**
@@ -42,7 +41,6 @@ function processObjectExpression(documentation, path, importer) {
 export default function propTypeCompositionHandler(
   documentation: Documentation,
   path: NodePath,
-  parser: Parser,
   importer: Importer,
 ) {
   let propTypesPath = getMemberValuePath(path, 'propTypes');

@@ -24,7 +24,7 @@ function executeHandlers(
     (componentDefinition: NodePath): DocumentationObject => {
       const documentation = new Documentation();
       handlers.forEach(handler =>
-        handler(documentation, componentDefinition, parser, importer),
+        handler(documentation, componentDefinition, importer),
       );
       return postProcessDocumentation(documentation.toObject());
     },
