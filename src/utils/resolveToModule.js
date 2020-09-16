@@ -32,6 +32,7 @@ export default function resolveToModule(path: NodePath): ?string {
       return resolveToModule(path.get('callee'));
     case t.Identifier.name:
     case t.JSXIdentifier.name: {
+      // TODO: Do we want to resolve imports here?
       const valuePath = resolveToValue(path, ignoreImports);
       if (valuePath !== path) {
         return resolveToModule(valuePath);
