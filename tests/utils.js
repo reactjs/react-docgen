@@ -56,3 +56,10 @@ export const MODULE_TEMPLATE = [
   'var Component = React.createClass(%s);',
   'module.exports = Component',
 ].join('\n');
+
+/**
+ * Importer that doesn't resolve any values
+ */
+export function noopImporter() {
+  return null;
+}
