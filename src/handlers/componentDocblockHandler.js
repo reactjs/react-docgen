@@ -50,7 +50,9 @@ function getDocblockFromComponent(path, importer) {
     }
   }
   if (!description) {
-    const searchPath = isReactForwardRefCall(path, importer) ? path.get('arguments', 0) : path;
+    const searchPath = isReactForwardRefCall(path, importer)
+      ? path.get('arguments', 0)
+      : path;
     const inner = resolveToValue(searchPath, importer);
     if (inner.node !== path.node) {
       return getDocblockFromComponent(inner, importer);

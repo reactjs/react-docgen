@@ -30,7 +30,7 @@ function isMethod(path, importer) {
   const isProbablyMethod =
     (t.MethodDefinition.check(path.node) && path.node.kind !== 'constructor') ||
     ((t.ClassProperty.check(path.node) || t.Property.check(path.node)) &&
-      t.Function.check(path.get('value').node));
+      t.Function.check(resolveToValue(path.get('value'), importer).node));
 
   return isProbablyMethod && !isReactComponentMethod(path, importer);
 }

@@ -8,7 +8,7 @@
 
 jest.mock('../../Documentation');
 
-import { parse } from '../../../tests/utils';
+import { parse, noopImporter } from '../../../tests/utils';
 
 describe('componentMethodsHandler', () => {
   let documentation;
@@ -19,8 +19,31 @@ describe('componentMethodsHandler', () => {
     componentMethodsHandler = require('../componentMethodsHandler').default;
   });
 
-  function test(definition) {
-    componentMethodsHandler(documentation, definition);
+  function mockImporter(path) {
+    const source = path.node.source.value;
+    if (source === './test1') {
+      return parse(`
+        export default (foo: string): string => {};
+      `).get('body', 0, 'declaration');
+    }
+
+    if (source === './test2') {
+      return parse(`
+        export default function(bar: number): number {
+          return bar;
+        }
+      `).get('body', 0, 'declaration');
+    }
+
+    if (source === './test3') {
+      return parse(`
+        export default () => {};
+      `).get('body', 0, 'declaration');
+    }
+  }
+
+  function test(definition, importer) {
+    componentMethodsHandler(documentation, definition, importer);
     expect(documentation.methods).toEqual([
       {
         name: 'foo',
@@ -89,7 +112,37 @@ describe('componentMethodsHandler', () => {
       })
     `;
 
-    test(parse(src).get('body', 0, 'expression'));
+    test(parse(src).get('body', 0, 'expression'), noopImporter);
+
+    const srcWithImports = `
+      import baz from './test1';
+      ({
+        /**
+         * The foo method
+         */
+        foo(bar: number): number {
+          return bar;
+        },
+        /**
+         * "arrow function method"
+         */
+        baz: baz,
+        statics: {
+          /**
+           * Static function
+           */
+          bar() {}
+        },
+        state: {
+          foo: 'foo',
+        },
+        componentDidMount() {},
+        render() {
+          return null;
+        },
+      })
+    `;
+    test(parse(srcWithImports).get('body', 1, 'expression'), mockImporter);
   });
 
   it('extracts the documentation for a ClassDeclaration', () => {
@@ -124,7 +177,41 @@ describe('componentMethodsHandler', () => {
       }
     `;
 
-    test(parse(src).get('body', 0));
+    test(parse(src).get('body', 0), noopImporter);
+
+    const srcWithImports = `
+      import baz from './test1';
+      class Test extends React.Component {
+        /**
+         * The foo method
+         */
+        foo(bar: number): number {
+          return bar;
+        }
+
+        /**
+         * "arrow function method"
+         */
+        baz = baz;
+
+        /**
+         * Static function
+         */
+        static bar() {}
+
+        state = {
+          foo: 'foo',
+        };
+
+        componentDidMount() {}
+
+        render() {
+          return null;
+        }
+      }
+    `;
+
+    test(parse(srcWithImports).get('body', 1), mockImporter);
   });
 
   it('should handle and ignore computed methods', () => {
@@ -152,7 +239,41 @@ describe('componentMethodsHandler', () => {
       }
     `;
 
-    componentMethodsHandler(documentation, parse(src).get('body', 0));
+    componentMethodsHandler(
+      documentation,
+      parse(src).get('body', 0),
+      noopImporter,
+    );
+    expect(documentation.methods).toMatchSnapshot();
+
+    const srcWithImports = `
+      import foo from './test2';
+      class Test extends React.Component {
+        /**
+         * The foo method
+         */
+        [foo] = foo;
+
+        /**
+         * Should not show up
+         */
+        [() => {}](bar: number): number {
+          return bar;
+        }
+
+        componentDidMount() {}
+
+        render() {
+          return null;
+        }
+      }
+    `;
+
+    componentMethodsHandler(
+      documentation,
+      parse(srcWithImports).get('body', 1),
+      mockImporter,
+    );
     expect(documentation.methods).toMatchSnapshot();
   });
 
@@ -163,7 +284,7 @@ describe('componentMethodsHandler', () => {
       `;
 
       const definition = parse(src).get('body', 0, 'expression');
-      componentMethodsHandler(documentation, definition);
+      componentMethodsHandler(documentation, definition, noopImporter);
       expect(documentation.methods).toEqual([]);
     });
 
@@ -175,8 +296,24 @@ describe('componentMethodsHandler', () => {
         Test.displayName = 'Test'; // Not a method
       `;
 
-      const definition = parse(src).get('body', 0, 'declarations', 0, 'init');
-      componentMethodsHandler(documentation, definition);
+      componentMethodsHandler(
+        documentation,
+        parse(src).get('body', 0, 'declarations', 0, 'init'),
+        noopImporter,
+      );
+      expect(documentation.methods).toMatchSnapshot();
+
+      const srcWithImports = `
+        const Test = (props) => {};
+        import doFoo from './test3';
+        Test.doFoo = doFoo;
+      `;
+
+      componentMethodsHandler(
+        documentation,
+        parse(srcWithImports).get('body', 0, 'declarations', 0, 'init'),
+        mockImporter,
+      );
       expect(documentation.methods).toMatchSnapshot();
     });
 
@@ -188,8 +325,24 @@ describe('componentMethodsHandler', () => {
         Test.displayName = 'Test'; // Not a method
       `;
 
-      const definition = parse(src).get('body', 0, 'expression', 'right');
-      componentMethodsHandler(documentation, definition);
+      componentMethodsHandler(
+        documentation,
+        parse(src).get('body', 0, 'expression', 'right'),
+        noopImporter,
+      );
+      expect(documentation.methods).toMatchSnapshot();
+
+      const srcWithImports = `
+        Test = (props) => {};
+        import doFoo from './test3';
+        Test.doFoo = doFoo;
+      `;
+
+      componentMethodsHandler(
+        documentation,
+        parse(srcWithImports).get('body', 0, 'expression', 'right'),
+        mockImporter,
+      );
       expect(documentation.methods).toMatchSnapshot();
     });
 
@@ -201,8 +354,24 @@ describe('componentMethodsHandler', () => {
         Test.displayName = 'Test'; // Not a method
       `;
 
-      const definition = parse(src).get('body', 0);
-      componentMethodsHandler(documentation, definition);
+      componentMethodsHandler(
+        documentation,
+        parse(src).get('body', 0),
+        noopImporter,
+      );
+      expect(documentation.methods).toMatchSnapshot();
+
+      const srcWithImports = `
+        function Test(props) {}
+        import doFoo from './test3';
+        Test.doFoo = doFoo;
+      `;
+
+      componentMethodsHandler(
+        documentation,
+        parse(srcWithImports).get('body', 0),
+        mockImporter,
+      );
       expect(documentation.methods).toMatchSnapshot();
     });
   });
