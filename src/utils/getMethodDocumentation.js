@@ -36,11 +36,10 @@ type MethodDocumentation = {
 };
 
 function getMethodFunctionExpression(methodPath, importer) {
-  if (t.AssignmentExpression.check(methodPath.node)) {
-    return resolveToValue(methodPath.get('right'), importer);
-  }
-  // Otherwise this is a method/property node
-  return methodPath.get('value');
+  const exprPath = t.AssignmentExpression.check(methodPath.node)
+    ? methodPath.get('right')
+    : methodPath.get('value');
+  return resolveToValue(exprPath, importer);
 }
 
 function getMethodParamsDoc(methodPath, importer) {

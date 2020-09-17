@@ -29,7 +29,7 @@ describe('componentDocblockHandler', () => {
     componentDocblockHandler = require('../componentDocblockHandler').default;
   });
 
-  function test(definitionSrc, parseFunc: (string) => NodePath) {
+  function test(definitionSrc, parseFunc: string => NodePath) {
     it('finds docblocks for component definitions', () => {
       const definition = parseFunc(`
         import something from 'somewhere';
@@ -127,7 +127,7 @@ describe('componentDocblockHandler', () => {
   }
 
   function testImports(exportSrc, parseFunc, importName, useDefault = false) {
-    function mockImporter(path, name) {
+    function mockImporter(path) {
       const source = path.node.source.value;
       if (source === './test1') {
         return parseFunc(`
@@ -319,28 +319,27 @@ describe('componentDocblockHandler', () => {
     describe('inline implementation', () => {
       test(`
         React.forwardRef((props, ref) => {});
-        import React from "react";`,
-        src => beforeLastStatement(src).get('expression'),
-      );
+        import React from "react";`, src =>
+        beforeLastStatement(src).get('expression'));
 
-      testImports(`
+      testImports(
+        `
         export default React.forwardRef((props, ref) => {});
         import React from 'react';`,
         src => beforeLastStatement(src).get('declaration'),
         'RefComponent',
         useDefault,
-      )
+      );
     });
 
     describe('out of line implementation', () => {
       test(`let Component = (props, ref) => {};
         React.forwardRef(Component);
         import React from "react";
-        `,
-        src => beforeLastStatement(src).get('expression'),
-      );
+        `, src => beforeLastStatement(src).get('expression'));
 
-      testImports(`
+      testImports(
+        `
         let Component = (props, ref) => {};
         export default React.forwardRef(Component);
         import React from 'react';
