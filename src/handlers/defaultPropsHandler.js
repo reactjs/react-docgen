@@ -75,7 +75,10 @@ function getDefaultPropsPath(
     return null;
   }
 
-  if (t.FunctionExpression.check(defaultPropsPath.node)) {
+  if (
+    t.FunctionExpression.check(defaultPropsPath.node) ||
+    t.FunctionDeclaration.check(defaultPropsPath.node)
+  ) {
     // Find the value that is returned from the function and process it if it is
     // an object literal.
     const returnValue = resolveFunctionDefinitionToReturnValue(
