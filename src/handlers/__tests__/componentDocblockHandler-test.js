@@ -8,7 +8,7 @@
 
 jest.mock('../../Documentation');
 
-import { parse, noopImporter } from '../../../tests/utils';
+import { parse, noopImporter, makeMockImporter } from '../../../tests/utils';
 
 describe('componentDocblockHandler', () => {
   let documentation;
@@ -127,32 +127,27 @@ describe('componentDocblockHandler', () => {
   }
 
   function testImports(exportSrc, parseFunc, importName, useDefault = false) {
-    function mockImporter(path) {
-      const source = path.node.source.value;
-      if (source === './test1') {
-        return parseFunc(`
-          /**
-          * Component description
-          */
-          ${exportSrc}
-        `);
-      }
+    const importDef = useDefault ? `${importName}` : `{ ${importName} }`;
 
-      if (source === './test2') {
-        const importDef = useDefault ? `${importName}` : `{ ${importName} }`;
-        return lastStatement(`
-          import ${importDef} from './test1';
+    const mockImporter = makeMockImporter({
+      test1: parseFunc(`
+        /**
+        * Component description
+        */
+        ${exportSrc}
+      `),
 
-          export default ${importName};
-        `).get('declaration');
-      }
-    }
+      test2: lastStatement(`
+        import ${importDef} from 'test1';
+
+        export default ${importName};
+      `).get('declaration'),
+    });
 
     describe('imports', () => {
       it('can use a custom importer to resolve docblocks on imported components', () => {
-        const importDef = useDefault ? `${importName}` : `{ ${importName} }`;
         const program = lastStatement(`
-          import ${importDef} from './test1';
+          import ${importDef} from 'test1';
 
           export default ${importName};
         `).get('declaration');
@@ -163,9 +158,8 @@ describe('componentDocblockHandler', () => {
     });
 
     it('traverses multiple imports', () => {
-      const importDef = useDefault ? `${importName}` : `{ ${importName} }`;
       const program = lastStatement(`
-        import ${importDef} from './test2';
+        import ${importDef} from 'test2';
 
         export default ${importName};
       `).get('declaration');
