@@ -23,20 +23,6 @@ Array [
 ]
 `;
 
-exports[`componentMethodsHandler function components finds static methods on a component in a variable declaration 2`] = `
-Array [
-  Object {
-    "docblock": null,
-    "modifiers": Array [
-      "static",
-    ],
-    "name": "doFoo",
-    "params": Array [],
-    "returns": null,
-  },
-]
-`;
-
 exports[`componentMethodsHandler function components finds static methods on a component in an assignment 1`] = `
 Array [
   Object {
@@ -54,20 +40,6 @@ Array [
       "static",
     ],
     "name": "doBar",
-    "params": Array [],
-    "returns": null,
-  },
-]
-`;
-
-exports[`componentMethodsHandler function components finds static methods on a component in an assignment 2`] = `
-Array [
-  Object {
-    "docblock": null,
-    "modifiers": Array [
-      "static",
-    ],
-    "name": "doFoo",
     "params": Array [],
     "returns": null,
   },
@@ -97,7 +69,7 @@ Array [
 ]
 `;
 
-exports[`componentMethodsHandler function components finds static methods on a function declaration 2`] = `
+exports[`componentMethodsHandler function components resolves imported methods assigned on a component in an assignment 1`] = `
 Array [
   Object {
     "docblock": null,
@@ -111,7 +83,35 @@ Array [
 ]
 `;
 
-exports[`componentMethodsHandler should handle and ignore computed methods 1`] = `
+exports[`componentMethodsHandler function components resolves imported methods assigned to static properties on a component 1`] = `
+Array [
+  Object {
+    "docblock": null,
+    "modifiers": Array [
+      "static",
+    ],
+    "name": "doFoo",
+    "params": Array [],
+    "returns": null,
+  },
+]
+`;
+
+exports[`componentMethodsHandler function components resolves imported methods on a function declaration 1`] = `
+Array [
+  Object {
+    "docblock": null,
+    "modifiers": Array [
+      "static",
+    ],
+    "name": "doFoo",
+    "params": Array [],
+    "returns": null,
+  },
+]
+`;
+
+exports[`componentMethodsHandler resolves imported methods assigned to computed properties 1`] = `
 Array [
   Object {
     "docblock": "The foo method",
@@ -135,7 +135,7 @@ Array [
 ]
 `;
 
-exports[`componentMethodsHandler should handle and ignore computed methods 2`] = `
+exports[`componentMethodsHandler should handle and ignore computed methods 1`] = `
 Array [
   Object {
     "docblock": "The foo method",

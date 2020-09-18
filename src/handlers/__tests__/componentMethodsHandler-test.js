@@ -8,7 +8,7 @@
 
 jest.mock('../../Documentation');
 
-import { parse, noopImporter } from '../../../tests/utils';
+import { parse, noopImporter, makeMockImporter } from '../../../tests/utils';
 
 describe('componentMethodsHandler', () => {
   let documentation;
@@ -19,28 +19,21 @@ describe('componentMethodsHandler', () => {
     componentMethodsHandler = require('../componentMethodsHandler').default;
   });
 
-  function mockImporter(path) {
-    const source = path.node.source.value;
-    if (source === './test1') {
-      return parse(`
-        export default (foo: string): string => {};
-      `).get('body', 0, 'declaration');
-    }
+  const mockImporter = makeMockImporter({
+    baz: parse(`
+      export default (foo: string): string => {};
+    `).get('body', 0, 'declaration'),
 
-    if (source === './test2') {
-      return parse(`
-        export default function(bar: number): number {
-          return bar;
-        }
-      `).get('body', 0, 'declaration');
-    }
+    foo: parse(`
+      export default function(bar: number): number {
+        return bar;
+      }
+    `).get('body', 0, 'declaration'),
 
-    if (source === './test3') {
-      return parse(`
-        export default () => {};
-      `).get('body', 0, 'declaration');
-    }
-  }
+    doFoo: parse(`
+      export default () => {};
+    `).get('body', 0, 'declaration'),
+  });
 
   function test(definition, importer) {
     componentMethodsHandler(documentation, definition, importer);
@@ -113,9 +106,11 @@ describe('componentMethodsHandler', () => {
     `;
 
     test(parse(src).get('body', 0, 'expression'), noopImporter);
+  });
 
-    const srcWithImports = `
-      import baz from './test1';
+  it('can resolve an imported method on an ObjectExpression', () => {
+    const src = `
+      import baz from 'baz';
       ({
         /**
          * The foo method
@@ -142,7 +137,8 @@ describe('componentMethodsHandler', () => {
         },
       })
     `;
-    test(parse(srcWithImports).get('body', 1, 'expression'), mockImporter);
+
+    test(parse(src).get('body', 1, 'expression'), mockImporter);
   });
 
   it('extracts the documentation for a ClassDeclaration', () => {
@@ -178,9 +174,11 @@ describe('componentMethodsHandler', () => {
     `;
 
     test(parse(src).get('body', 0), noopImporter);
+  });
 
-    const srcWithImports = `
-      import baz from './test1';
+  it('can resolve an imported method on a ClassDeclaration', () => {
+    const src = `
+      import baz from 'baz';
       class Test extends React.Component {
         /**
          * The foo method
@@ -211,7 +209,7 @@ describe('componentMethodsHandler', () => {
       }
     `;
 
-    test(parse(srcWithImports).get('body', 1), mockImporter);
+    test(parse(src).get('body', 1), mockImporter);
   });
 
   it('should handle and ignore computed methods', () => {
@@ -245,9 +243,11 @@ describe('componentMethodsHandler', () => {
       noopImporter,
     );
     expect(documentation.methods).toMatchSnapshot();
+  });
 
-    const srcWithImports = `
-      import foo from './test2';
+  it('resolves imported methods assigned to computed properties', () => {
+    const src = `
+      import foo from 'foo';
       class Test extends React.Component {
         /**
          * The foo method
@@ -271,7 +271,7 @@ describe('componentMethodsHandler', () => {
 
     componentMethodsHandler(
       documentation,
-      parse(srcWithImports).get('body', 1),
+      parse(src).get('body', 1),
       mockImporter,
     );
     expect(documentation.methods).toMatchSnapshot();
@@ -302,16 +302,18 @@ describe('componentMethodsHandler', () => {
         noopImporter,
       );
       expect(documentation.methods).toMatchSnapshot();
+    });
 
-      const srcWithImports = `
+    it('resolves imported methods assigned to static properties on a component', () => {
+      const src = `
         const Test = (props) => {};
-        import doFoo from './test3';
+        import doFoo from 'doFoo';
         Test.doFoo = doFoo;
       `;
 
       componentMethodsHandler(
         documentation,
-        parse(srcWithImports).get('body', 0, 'declarations', 0, 'init'),
+        parse(src).get('body', 0, 'declarations', 0, 'init'),
         mockImporter,
       );
       expect(documentation.methods).toMatchSnapshot();
@@ -331,16 +333,18 @@ describe('componentMethodsHandler', () => {
         noopImporter,
       );
       expect(documentation.methods).toMatchSnapshot();
+    });
 
-      const srcWithImports = `
+    it('resolves imported methods assigned on a component in an assignment', () => {
+      const src = `
         Test = (props) => {};
-        import doFoo from './test3';
+        import doFoo from 'doFoo';
         Test.doFoo = doFoo;
       `;
 
       componentMethodsHandler(
         documentation,
-        parse(srcWithImports).get('body', 0, 'expression', 'right'),
+        parse(src).get('body', 0, 'expression', 'right'),
         mockImporter,
       );
       expect(documentation.methods).toMatchSnapshot();
@@ -360,16 +364,18 @@ describe('componentMethodsHandler', () => {
         noopImporter,
       );
       expect(documentation.methods).toMatchSnapshot();
+    });
 
-      const srcWithImports = `
+    it('resolves imported methods on a function declaration', () => {
+      const src = `
         function Test(props) {}
-        import doFoo from './test3';
+        import doFoo from 'doFoo';
         Test.doFoo = doFoo;
       `;
 
       componentMethodsHandler(
         documentation,
-        parse(srcWithImports).get('body', 0),
+        parse(src).get('body', 0),
         mockImporter,
       );
       expect(documentation.methods).toMatchSnapshot();
