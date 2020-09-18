@@ -59,3 +59,73 @@ Object {
   },
 }
 `;
+
+exports[`flowTypeHandler imported prop types imported 1`] = `
+Object {
+  "abc": Object {
+    "description": "",
+    "flowType": Object {},
+    "required": true,
+  },
+  "bar": Object {
+    "description": "",
+    "flowType": Object {},
+    "required": false,
+  },
+  "def": Object {
+    "description": "",
+    "flowType": Object {},
+    "required": true,
+  },
+  "foo": Object {
+    "description": "",
+    "flowType": Object {},
+    "required": true,
+  },
+  "foobar": Object {
+    "description": "",
+    "flowType": Object {},
+    "required": true,
+  },
+  "hal": Object {
+    "description": "",
+    "flowType": Object {},
+    "required": true,
+  },
+}
+`;
+
+exports[`flowTypeHandler imported prop types type imported 1`] = `
+Object {
+  "abc": Object {
+    "description": "",
+    "flowType": Object {},
+    "required": true,
+  },
+  "bar": Object {
+    "description": "",
+    "flowType": Object {},
+    "required": false,
+  },
+  "def": Object {
+    "description": "",
+    "flowType": Object {},
+    "required": true,
+  },
+  "foo": Object {
+    "description": "",
+    "flowType": Object {},
+    "required": true,
+  },
+  "foobar": Object {
+    "description": "",
+    "flowType": Object {},
+    "required": true,
+  },
+  "hal": Object {
+    "description": "",
+    "flowType": Object {},
+    "required": true,
+  },
+}
+`;
