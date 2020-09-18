@@ -8,7 +8,12 @@
 
 jest.mock('../../Documentation');
 
-import { expression, statement, noopImporter, makeMockImporter } from '../../../tests/utils';
+import {
+  expression,
+  statement,
+  noopImporter,
+  makeMockImporter,
+} from '../../../tests/utils';
 
 describe('defaultPropsHandler', () => {
   let documentation;
@@ -101,7 +106,9 @@ describe('defaultPropsHandler', () => {
 
   it('ignores non-literal names', () => {
     let definition = expression('({displayName: foo.bar})');
-    expect(() => displayNameHandler(documentation, definition, noopImporter)).not.toThrow();
+    expect(() =>
+      displayNameHandler(documentation, definition, noopImporter),
+    ).not.toThrow();
     expect(documentation.displayName).not.toBeDefined();
 
     definition = statement(`
@@ -109,7 +116,9 @@ describe('defaultPropsHandler', () => {
         static displayName = foo.bar;
       }
     `);
-    expect(() => displayNameHandler(documentation, definition, noopImporter)).not.toThrow();
+    expect(() =>
+      displayNameHandler(documentation, definition, noopImporter),
+    ).not.toThrow();
     expect(documentation.displayName).not.toBeDefined();
   });
 
@@ -137,7 +146,9 @@ describe('defaultPropsHandler', () => {
         class Foo {
         }
       `);
-      expect(() => displayNameHandler(documentation, definition, noopImporter)).not.toThrow();
+      expect(() =>
+        displayNameHandler(documentation, definition, noopImporter),
+      ).not.toThrow();
       expect(documentation.displayName).toBe('Foo');
     });
 
@@ -147,7 +158,9 @@ describe('defaultPropsHandler', () => {
           static displayName = 'foo';
         }
       `);
-      expect(() => displayNameHandler(documentation, definition, noopImporter)).not.toThrow();
+      expect(() =>
+        displayNameHandler(documentation, definition, noopImporter),
+      ).not.toThrow();
       expect(documentation.displayName).toBe('foo');
     });
 
@@ -159,7 +172,9 @@ describe('defaultPropsHandler', () => {
           }
         }
       `);
-      expect(() => displayNameHandler(documentation, definition, noopImporter)).not.toThrow();
+      expect(() =>
+        displayNameHandler(documentation, definition, noopImporter),
+      ).not.toThrow();
       expect(documentation.displayName).toBe('foo');
     });
 
@@ -172,7 +187,9 @@ describe('defaultPropsHandler', () => {
         }
         const abc = 'bar';
       `);
-      expect(() => displayNameHandler(documentation, definition, noopImporter)).not.toThrow();
+      expect(() =>
+        displayNameHandler(documentation, definition, noopImporter),
+      ).not.toThrow();
       expect(documentation.displayName).toBe('bar');
     });
 
@@ -204,7 +221,9 @@ describe('defaultPropsHandler', () => {
   describe('FunctionDeclaration', () => {
     it('considers the function name', () => {
       const definition = statement('function Foo () {}');
-      expect(() => displayNameHandler(documentation, definition, noopImporter)).not.toThrow();
+      expect(() =>
+        displayNameHandler(documentation, definition, noopImporter),
+      ).not.toThrow();
       expect(documentation.displayName).toBe('Foo');
     });
 
@@ -213,7 +232,9 @@ describe('defaultPropsHandler', () => {
         function Foo () {}
         Foo.displayName = 'Bar';
       `);
-      expect(() => displayNameHandler(documentation, definition, noopImporter)).not.toThrow();
+      expect(() =>
+        displayNameHandler(documentation, definition, noopImporter),
+      ).not.toThrow();
       expect(documentation.displayName).toBe('Bar');
     });
 
@@ -253,7 +274,9 @@ describe('defaultPropsHandler', () => {
         0,
         'init',
       );
-      expect(() => displayNameHandler(documentation, definition, noopImporter)).not.toThrow();
+      expect(() =>
+        displayNameHandler(documentation, definition, noopImporter),
+      ).not.toThrow();
       expect(documentation.displayName).toBe('Foo');
     });
 
@@ -262,7 +285,9 @@ describe('defaultPropsHandler', () => {
         'expression',
         'right',
       );
-      expect(() => displayNameHandler(documentation, definition, noopImporter)).not.toThrow();
+      expect(() =>
+        displayNameHandler(documentation, definition, noopImporter),
+      ).not.toThrow();
       expect(documentation.displayName).toBe('Foo');
     });
 
@@ -271,7 +296,9 @@ describe('defaultPropsHandler', () => {
         var Foo = function () {};
         Foo.displayName = 'Bar';
       `);
-      expect(() => displayNameHandler(documentation, definition, noopImporter)).not.toThrow();
+      expect(() =>
+        displayNameHandler(documentation, definition, noopImporter),
+      ).not.toThrow();
       expect(documentation.displayName).toBe('Bar');
     });
 
@@ -311,7 +338,9 @@ describe('defaultPropsHandler', () => {
         0,
         'init',
       );
-      expect(() => displayNameHandler(documentation, definition, noopImporter)).not.toThrow();
+      expect(() =>
+        displayNameHandler(documentation, definition, noopImporter),
+      ).not.toThrow();
       expect(documentation.displayName).toBe('Foo');
     });
 
@@ -323,7 +352,9 @@ describe('defaultPropsHandler', () => {
         'arguments',
         0,
       );
-      expect(() => displayNameHandler(documentation, definition, noopImporter)).not.toThrow();
+      expect(() =>
+        displayNameHandler(documentation, definition, noopImporter),
+      ).not.toThrow();
       expect(documentation.displayName).toBe('Foo');
     });
 
@@ -332,7 +363,9 @@ describe('defaultPropsHandler', () => {
         var Foo = React.forwardRef(() => {});
         import React from "react";
       `).get('declarations', 0, 'init');
-      expect(() => displayNameHandler(documentation, definition, noopImporter)).not.toThrow();
+      expect(() =>
+        displayNameHandler(documentation, definition, noopImporter),
+      ).not.toThrow();
       expect(documentation.displayName).toBe('Foo');
     });
 
@@ -341,7 +374,9 @@ describe('defaultPropsHandler', () => {
         'expression',
         'right',
       );
-      expect(() => displayNameHandler(documentation, definition, noopImporter)).not.toThrow();
+      expect(() =>
+        displayNameHandler(documentation, definition, noopImporter),
+      ).not.toThrow();
       expect(documentation.displayName).toBe('Foo');
     });
 
@@ -352,7 +387,9 @@ describe('defaultPropsHandler', () => {
         'arguments',
         0,
       );
-      expect(() => displayNameHandler(documentation, definition, noopImporter)).not.toThrow();
+      expect(() =>
+        displayNameHandler(documentation, definition, noopImporter),
+      ).not.toThrow();
       expect(documentation.displayName).toBe('Foo');
     });
 
@@ -361,7 +398,9 @@ describe('defaultPropsHandler', () => {
         Foo = React.forwardRef(() => {});
         import React from "react";
       `).get('expression', 'right');
-      expect(() => displayNameHandler(documentation, definition, noopImporter)).not.toThrow();
+      expect(() =>
+        displayNameHandler(documentation, definition, noopImporter),
+      ).not.toThrow();
       expect(documentation.displayName).toBe('Foo');
     });
 
@@ -370,7 +409,9 @@ describe('defaultPropsHandler', () => {
         var Foo = () => {};
         Foo.displayName = 'Bar';
       `);
-      expect(() => displayNameHandler(documentation, definition, noopImporter)).not.toThrow();
+      expect(() =>
+        displayNameHandler(documentation, definition, noopImporter),
+      ).not.toThrow();
       expect(documentation.displayName).toBe('Bar');
     });
 
@@ -380,7 +421,9 @@ describe('defaultPropsHandler', () => {
         Foo.displayName = bar;
         var bar = 'Bar';
       `);
-      expect(() => displayNameHandler(documentation, definition, noopImporter)).not.toThrow();
+      expect(() =>
+        displayNameHandler(documentation, definition, noopImporter),
+      ).not.toThrow();
       expect(documentation.displayName).toBe('Bar');
     });
 
@@ -390,7 +433,9 @@ describe('defaultPropsHandler', () => {
         import foobarbaz from 'foobarbaz';
         Foo.displayName = foobarbaz;
       `);
-      expect(() => displayNameHandler(documentation, definition, mockImporter)).not.toThrow();
+      expect(() =>
+        displayNameHandler(documentation, definition, mockImporter),
+      ).not.toThrow();
       expect(documentation.displayName).toBe('FooBarBaz');
 
       definition = statement(`
@@ -398,7 +443,9 @@ describe('defaultPropsHandler', () => {
         import foo from 'foo';
         Foo.displayName = foo.bar;
       `);
-      expect(() => displayNameHandler(documentation, definition, mockImporter)).not.toThrow();
+      expect(() =>
+        displayNameHandler(documentation, definition, mockImporter),
+      ).not.toThrow();
       expect(documentation.displayName).toBe('baz');
     });
 
@@ -407,7 +454,9 @@ describe('defaultPropsHandler', () => {
         var Foo = React.forwardRef(() => {});
         Foo.displayName = 'Bar';
       `);
-      expect(() => displayNameHandler(documentation, definition, noopImporter)).not.toThrow();
+      expect(() =>
+        displayNameHandler(documentation, definition, noopImporter),
+      ).not.toThrow();
       expect(documentation.displayName).toBe('Bar');
     });
 
@@ -417,7 +466,9 @@ describe('defaultPropsHandler', () => {
         Foo.displayName = bar;
         var bar = 'Bar';
       `);
-      expect(() => displayNameHandler(documentation, definition, noopImporter)).not.toThrow();
+      expect(() =>
+        displayNameHandler(documentation, definition, noopImporter),
+      ).not.toThrow();
       expect(documentation.displayName).toBe('Bar');
     });
 
@@ -427,7 +478,9 @@ describe('defaultPropsHandler', () => {
         import foobarbaz from 'foobarbaz';
         Foo.displayName = foobarbaz;
       `);
-      expect(() => displayNameHandler(documentation, definition, mockImporter)).not.toThrow();
+      expect(() =>
+        displayNameHandler(documentation, definition, mockImporter),
+      ).not.toThrow();
       expect(documentation.displayName).toBe('FooBarBaz');
 
       definition = statement(`
@@ -435,7 +488,9 @@ describe('defaultPropsHandler', () => {
         import foo from 'foo';
         Foo.displayName = foo.bar;
       `);
-      expect(() => displayNameHandler(documentation, definition, mockImporter)).not.toThrow();
+      expect(() =>
+        displayNameHandler(documentation, definition, mockImporter),
+      ).not.toThrow();
       expect(documentation.displayName).toBe('baz');
     });
 
@@ -444,7 +499,9 @@ describe('defaultPropsHandler', () => {
         'expression',
         'right',
       );
-      expect(() => displayNameHandler(documentation, definition, noopImporter)).not.toThrow();
+      expect(() =>
+        displayNameHandler(documentation, definition, noopImporter),
+      ).not.toThrow();
       expect(documentation.displayName).not.toBeDefined();
     });
   });
