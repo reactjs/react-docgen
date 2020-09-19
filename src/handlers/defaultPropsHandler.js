@@ -65,6 +65,7 @@ function getDefaultPropsPath(
   let defaultPropsPath = getMemberValuePath(
     componentDefinition,
     'defaultProps',
+    importer,
   );
   if (!defaultPropsPath) {
     return null;

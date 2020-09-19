@@ -87,7 +87,7 @@ export default function componentMethodsHandler(
       .filter(props => isMethod(props, importer));
 
     // Add the statics object properties.
-    const statics = getMemberValuePath(path, 'statics');
+    const statics = getMemberValuePath(path, 'statics', importer);
     if (statics) {
       statics.get('properties').each(p => {
         if (isMethod(p, importer)) {

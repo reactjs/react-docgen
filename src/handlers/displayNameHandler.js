@@ -21,7 +21,7 @@ export default function displayNameHandler(
   path: NodePath,
   importer: Importer,
 ) {
-  let displayNamePath = getMemberValuePath(path, 'displayName');
+  let displayNamePath = getMemberValuePath(path, 'displayName', importer);
   if (!displayNamePath) {
     // Function and class declarations need special treatment. The name of the
     // function / class is the displayName
