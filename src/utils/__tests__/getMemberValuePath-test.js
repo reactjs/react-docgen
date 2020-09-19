@@ -36,7 +36,11 @@ describe('getMemberValuePath', () => {
     const path = expression('foo``');
 
     getMemberValuePath(path, 'foo', noopImporter);
-    expect(getMemberExpressionValuePath).toBeCalledWith(path, 'foo', noopImporter);
+    expect(getMemberExpressionValuePath).toBeCalledWith(
+      path,
+      'foo',
+      noopImporter,
+    );
   });
 
   it('handles ClassExpressions', () => {
@@ -50,21 +54,41 @@ describe('getMemberValuePath', () => {
     const path = expression('system({is: "button"}, "space")');
 
     getMemberValuePath(path, 'foo', noopImporter);
-    expect(getMemberExpressionValuePath).toBeCalledWith(path, 'foo', noopImporter);
+    expect(getMemberExpressionValuePath).toBeCalledWith(
+      path,
+      'foo',
+      noopImporter,
+    );
   });
 
   it('tries synonyms', () => {
     let path = expression('{}');
 
     getMemberValuePath(path, 'defaultProps', noopImporter);
-    expect(getPropertyValuePath).toBeCalledWith(path, 'defaultProps', noopImporter);
-    expect(getPropertyValuePath).toBeCalledWith(path, 'getDefaultProps', noopImporter);
+    expect(getPropertyValuePath).toBeCalledWith(
+      path,
+      'defaultProps',
+      noopImporter,
+    );
+    expect(getPropertyValuePath).toBeCalledWith(
+      path,
+      'getDefaultProps',
+      noopImporter,
+    );
 
     path = statement('class Foo {}');
 
     getMemberValuePath(path, 'defaultProps', noopImporter);
-    expect(getClassMemberValuePath).toBeCalledWith(path, 'defaultProps', noopImporter);
-    expect(getClassMemberValuePath).toBeCalledWith(path, 'getDefaultProps', noopImporter);
+    expect(getClassMemberValuePath).toBeCalledWith(
+      path,
+      'defaultProps',
+      noopImporter,
+    );
+    expect(getClassMemberValuePath).toBeCalledWith(
+      path,
+      'getDefaultProps',
+      noopImporter,
+    );
   });
 
   it('returns the result of getPropertyValuePath and getClassMemberValuePath', () => {
