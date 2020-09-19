@@ -1,5 +1,30 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`propTypeHandler React.createClass can resolve individual imported variables assigned to props 1`] = `
+Object {
+  "@computed#bar": Object {
+    "required": false,
+    "type": Object {},
+  },
+  "baz": Object {
+    "required": false,
+    "type": Object {},
+  },
+  "complex_prop": Object {
+    "required": true,
+    "type": Object {},
+  },
+  "foo": Object {
+    "required": false,
+    "type": Object {},
+  },
+  "simple_prop": Object {
+    "required": true,
+    "type": Object {},
+  },
+}
+`;
+
 exports[`propTypeHandler React.createClass handles computed properties 1`] = `
 Object {
   "@computed#foo": Object {
@@ -16,6 +41,31 @@ Object {
 exports[`propTypeHandler React.createClass ignores complex computed properties 1`] = `
 Object {
   "complex_prop": Object {
+    "required": true,
+    "type": Object {},
+  },
+}
+`;
+
+exports[`propTypeHandler class definition class property can resolve individual imported variables assigned to props 1`] = `
+Object {
+  "@computed#bar": Object {
+    "required": false,
+    "type": Object {},
+  },
+  "baz": Object {
+    "required": false,
+    "type": Object {},
+  },
+  "complex_prop": Object {
+    "required": true,
+    "type": Object {},
+  },
+  "foo": Object {
+    "required": false,
+    "type": Object {},
+  },
+  "simple_prop": Object {
     "required": true,
     "type": Object {},
   },
@@ -44,6 +94,31 @@ Object {
 }
 `;
 
+exports[`propTypeHandler class definition static getter can resolve individual imported variables assigned to props 1`] = `
+Object {
+  "@computed#bar": Object {
+    "required": false,
+    "type": Object {},
+  },
+  "baz": Object {
+    "required": false,
+    "type": Object {},
+  },
+  "complex_prop": Object {
+    "required": true,
+    "type": Object {},
+  },
+  "foo": Object {
+    "required": false,
+    "type": Object {},
+  },
+  "simple_prop": Object {
+    "required": true,
+    "type": Object {},
+  },
+}
+`;
+
 exports[`propTypeHandler class definition static getter handles computed properties 1`] = `
 Object {
   "@computed#foo": Object {
@@ -60,6 +135,31 @@ Object {
 exports[`propTypeHandler class definition static getter ignores complex computed properties 1`] = `
 Object {
   "complex_prop": Object {
+    "required": true,
+    "type": Object {},
+  },
+}
+`;
+
+exports[`propTypeHandler stateless component can resolve individual imported variables assigned to props 1`] = `
+Object {
+  "@computed#bar": Object {
+    "required": false,
+    "type": Object {},
+  },
+  "baz": Object {
+    "required": false,
+    "type": Object {},
+  },
+  "complex_prop": Object {
+    "required": true,
+    "type": Object {},
+  },
+  "foo": Object {
+    "required": false,
+    "type": Object {},
+  },
+  "simple_prop": Object {
     "required": true,
     "type": Object {},
   },

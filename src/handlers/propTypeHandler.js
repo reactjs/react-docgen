@@ -39,7 +39,7 @@ function amendPropTypes(getDescriptor, path, importer) {
         if (!propName) return;
 
         const propDescriptor = getDescriptor(propName);
-        const valuePath = propertyPath.get('value');
+        const valuePath = resolveToValue(propertyPath.get('value'), importer);
         const type = isPropTypesExpression(valuePath, importer)
           ? getPropType(valuePath, importer)
           : { name: 'custom', raw: printValue(valuePath) };
