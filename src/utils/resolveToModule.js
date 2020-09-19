@@ -10,32 +10,31 @@
 import { namedTypes as t } from 'ast-types';
 import match from './match';
 import resolveToValue from './resolveToValue';
-import ignoreImports from '../importer/ignoreImports';
+import type { Importer } from '../types';
 
 /**
  * Given a path (e.g. call expression, member expression or identifier),
  * this function tries to find the name of module from which the "root value"
  * was imported.
  */
-export default function resolveToModule(path: NodePath): ?string {
+export default function resolveToModule(path: NodePath, importer: Importer): ?string {
   const node = path.node;
   switch (node.type) {
     case t.VariableDeclarator.name:
       if (node.init) {
-        return resolveToModule(path.get('init'));
+        return resolveToModule(path.get('init'), importer);
       }
       break;
     case t.CallExpression.name:
       if (match(node.callee, { type: t.Identifier.name, name: 'require' })) {
         return node.arguments[0].value;
       }
-      return resolveToModule(path.get('callee'));
+      return resolveToModule(path.get('callee'), importer);
     case t.Identifier.name:
     case t.JSXIdentifier.name: {
-      // TODO: Do we want to resolve imports here?
-      const valuePath = resolveToValue(path, ignoreImports);
+      const valuePath = resolveToValue(path, importer);
       if (valuePath !== path) {
-        return resolveToModule(valuePath);
+        return resolveToModule(valuePath, importer);
       }
       break;
     }
@@ -46,7 +45,7 @@ export default function resolveToModule(path: NodePath): ?string {
         path = path.get('object');
       }
       if (path) {
-        return resolveToModule(path);
+        return resolveToModule(path, importer);
       }
   }
 
