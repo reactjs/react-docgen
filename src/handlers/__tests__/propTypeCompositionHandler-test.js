@@ -8,7 +8,12 @@
 
 jest.mock('../../Documentation');
 
-import { expression, statement } from '../../../tests/utils';
+import {
+  expression,
+  statement,
+  noopImporter,
+  makeMockImporter,
+} from '../../../tests/utils';
 
 describe('propTypeCompositionHandler', () => {
   let getPropTypeMock;
@@ -25,6 +30,22 @@ describe('propTypeCompositionHandler', () => {
       .default;
   });
 
+  const mockImporter = makeMockImporter({
+    'Foo.react': statement(`
+      export default Component;
+      function Component() {}
+      Component.propTypes = {
+        foo: 'bar'
+      };
+    `).get('declaration'),
+
+    SharedProps: statement(`
+      export default {
+        bar: 'baz'
+      };
+    `).get('declaration'),
+  });
+
   function test(getSrc, parse) {
     it('understands assignment from module', () => {
       let definition = parse(`
@@ -32,7 +53,7 @@ describe('propTypeCompositionHandler', () => {
         var Foo = require("Foo.react");
       `);
 
-      propTypeCompositionHandler(documentation, definition);
+      propTypeCompositionHandler(documentation, definition, noopImporter);
       expect(documentation.composes).toEqual(['Foo.react']);
 
       documentation = new (require('../../Documentation'))();
@@ -41,7 +62,7 @@ describe('propTypeCompositionHandler', () => {
         var SharedProps = require("SharedProps");
       `);
 
-      propTypeCompositionHandler(documentation, definition);
+      propTypeCompositionHandler(documentation, definition, noopImporter);
       expect(documentation.composes).toEqual(['SharedProps']);
     });
 
@@ -58,8 +79,42 @@ describe('propTypeCompositionHandler', () => {
         var SharedProps = require("SharedProps");
       `);
 
-      propTypeCompositionHandler(documentation, definition);
+      propTypeCompositionHandler(documentation, definition, noopImporter);
       expect(documentation.composes).toEqual(['Foo.react', 'SharedProps']);
+    });
+
+    it('does not add any composes if spreads can be fully resolved with the importer', () => {
+      const definitionSrc = getSrc(
+        `{
+          ...Foo.propTypes,
+          ...SharedProps,
+        }`,
+      );
+      const definition = parse(`
+        ${definitionSrc}
+        import Foo from "Foo.react";
+        import SharedProps from "SharedProps";
+      `);
+
+      propTypeCompositionHandler(documentation, definition, mockImporter);
+      expect(documentation.composes).toEqual([]);
+    });
+
+    it('still adds a composes if the importer cannot resolve a value', () => {
+      const definitionSrc = getSrc(
+        `{
+          ...Foo.propTypes,
+          ...NotFound,
+        }`,
+      );
+      const definition = parse(`
+        ${definitionSrc}
+        import Foo from "Foo.react";
+        import NotFound from "NotFound";
+      `);
+
+      propTypeCompositionHandler(documentation, definition, mockImporter);
+      expect(documentation.composes).toEqual(['NotFound']);
     });
   }
 
