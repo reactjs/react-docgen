@@ -73,7 +73,7 @@ function getPropTypeHandler(propName: string) {
     path: NodePath,
     importer: Importer,
   ) {
-    let propTypesPath = getMemberValuePath(path, propName);
+    let propTypesPath = getMemberValuePath(path, propName, importer);
     if (!propTypesPath) {
       return;
     }

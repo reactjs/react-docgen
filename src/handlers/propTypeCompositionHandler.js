@@ -43,7 +43,7 @@ export default function propTypeCompositionHandler(
   path: NodePath,
   importer: Importer,
 ) {
-  let propTypesPath = getMemberValuePath(path, 'propTypes');
+  let propTypesPath = getMemberValuePath(path, 'propTypes', importer);
   if (!propTypesPath) {
     return;
   }

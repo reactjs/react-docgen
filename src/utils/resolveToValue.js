@@ -172,7 +172,7 @@ export default function resolveToValue(
       }
       return propertyPath;
     } else if (isSupportedDefinitionType(resolved)) {
-      const memberPath = getMemberValuePath(resolved, path.node.property.name);
+      const memberPath = getMemberValuePath(resolved, path.node.property.name, importer);
       if (memberPath) {
         return resolveToValue(memberPath, importer);
       }

@@ -45,7 +45,7 @@ export default (path: NodePath, importer: Importer): ?NodePath => {
         typePath = params.get(0);
       }
     } else {
-      const propsMemberPath = getMemberValuePath(path, 'props');
+      const propsMemberPath = getMemberValuePath(path, 'props', importer);
       if (!propsMemberPath) {
         return null;
       }
