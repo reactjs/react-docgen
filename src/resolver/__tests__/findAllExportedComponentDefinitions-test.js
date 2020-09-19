@@ -15,8 +15,8 @@ describe('findAllExportedComponentDefinitions', () => {
     return utils.parse(source);
   }
 
-  function findComponents(path) {
-    return findAllExportedComponentDefinitions(path, utils.getParser());
+  function findComponents(path, importer = utils.noopImporter) {
+    return findAllExportedComponentDefinitions(path, utils.getParser(), importer);
   }
 
   describe('CommonJS module exports', () => {
