@@ -18,8 +18,8 @@ import type { Importer } from '../types';
  * It resolves the path to its module name and adds it to the "composes" entry
  * in the documentation.
  */
-function amendComposes(documentation, path) {
-  const moduleName = resolveToModule(path);
+function amendComposes(documentation, path, importer) {
+  const moduleName = resolveToModule(path, importer);
   if (moduleName) {
     documentation.addComposes(moduleName);
   }
@@ -32,6 +32,7 @@ function processObjectExpression(documentation, path, importer) {
         amendComposes(
           documentation,
           resolveToValue(propertyPath.get('argument'), importer),
+          importer
         );
         break;
     }
@@ -57,7 +58,7 @@ export default function propTypeCompositionHandler(
       processObjectExpression(documentation, propTypesPath, importer);
       break;
     default:
-      amendComposes(documentation, propTypesPath);
+      amendComposes(documentation, propTypesPath, importer);
       break;
   }
 }

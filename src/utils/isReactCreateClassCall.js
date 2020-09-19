@@ -20,7 +20,7 @@ import type { Importer } from '../types';
  * createReactClass(...);
  * ```
  */
-function isReactCreateClassCallModular(path: NodePath): boolean {
+function isReactCreateClassCallModular(path: NodePath, importer: Importer): boolean {
   if (t.ExpressionStatement.check(path.node)) {
     path = path.get('expression');
   }
@@ -28,7 +28,7 @@ function isReactCreateClassCallModular(path: NodePath): boolean {
   if (!match(path.node, { type: 'CallExpression' })) {
     return false;
   }
-  const module = resolveToModule(path);
+  const module = resolveToModule(path, importer);
   return Boolean(module && module === 'create-react-class');
 }
 
@@ -46,6 +46,6 @@ export default function isReactCreateClassCall(
 ): boolean {
   return (
     isReactBuiltinCall(path, 'createClass', importer) ||
-    isReactCreateClassCallModular(path)
+    isReactCreateClassCallModular(path, importer)
   );
 }

@@ -28,7 +28,7 @@ export default function isReactBuiltinCall(
   }
 
   if (match(path.node, { callee: { property: { name } } })) {
-    const module = resolveToModule(path.get('callee', 'object'));
+    const module = resolveToModule(path.get('callee', 'object'), importer);
     return Boolean(module && isReactModuleName(module));
   }
 
@@ -47,7 +47,7 @@ export default function isReactBuiltinCall(
           specifier => specifier.imported && specifier.imported.name === name,
         ))
     ) {
-      const module = resolveToModule(value);
+      const module = resolveToModule(value, importer);
       return Boolean(module && isReactModuleName(module));
     }
   }

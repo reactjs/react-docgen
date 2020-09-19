@@ -19,8 +19,8 @@ import resolveToValue from '../utils/resolveToValue';
 import type Documentation from '../Documentation';
 import type { Importer } from '../types';
 
-function isPropTypesExpression(path) {
-  const moduleName = resolveToModule(path);
+function isPropTypesExpression(path, importer) {
+  const moduleName = resolveToModule(path, importer);
   if (moduleName) {
     return isReactModuleName(moduleName) || moduleName === 'ReactPropTypes';
   }
@@ -40,7 +40,7 @@ function amendPropTypes(getDescriptor, path, importer) {
 
         const propDescriptor = getDescriptor(propName);
         const valuePath = propertyPath.get('value');
-        const type = isPropTypesExpression(valuePath)
+        const type = isPropTypesExpression(valuePath, importer)
           ? getPropType(valuePath, importer)
           : { name: 'custom', raw: printValue(valuePath) };
 

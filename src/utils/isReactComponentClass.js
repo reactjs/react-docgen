@@ -49,7 +49,7 @@ export default function isReactComponentClass(
     match(superClass.node, { property: { name: 'Component' } }) ||
     match(superClass.node, { property: { name: 'PureComponent' } })
   ) {
-    const module = resolveToModule(superClass);
+    const module = resolveToModule(superClass, importer);
     if (module && isReactModuleName(module)) {
       return true;
     }
