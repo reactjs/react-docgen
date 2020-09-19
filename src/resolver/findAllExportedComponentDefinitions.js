@@ -141,7 +141,7 @@ export default function findExportedComponentDefinitions(
       path = resolveToValue(path.get('right'), importer);
       if (!isComponentDefinition(path, importer)) {
         path = resolveToValue(resolveHOC(path, importer), importer);
-        if ((!isComponentDefinition(path, importer), importer)) {
+        if (!isComponentDefinition(path, importer)) {
           return false;
         }
       }
