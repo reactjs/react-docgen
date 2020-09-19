@@ -20,7 +20,10 @@ import type { Importer } from '../types';
  * createReactClass(...);
  * ```
  */
-function isReactCreateClassCallModular(path: NodePath, importer: Importer): boolean {
+function isReactCreateClassCallModular(
+  path: NodePath,
+  importer: Importer,
+): boolean {
   if (t.ExpressionStatement.check(path.node)) {
     path = path.get('expression');
   }
