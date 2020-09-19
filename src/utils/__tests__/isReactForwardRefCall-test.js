@@ -6,7 +6,7 @@
  *
  */
 
-import { parse } from '../../../tests/utils';
+import { parse, noopImporter } from '../../../tests/utils';
 import isReactForwardRefCall from '../isReactForwardRefCall';
 
 describe('isReactForwardRefCall', () => {
@@ -23,7 +23,7 @@ describe('isReactForwardRefCall', () => {
           render() {}
         });
       `);
-      expect(isReactForwardRefCall(def)).toBe(true);
+      expect(isReactForwardRefCall(def, noopImporter)).toBe(true);
     });
 
     it('accepts forwardRef called on aliased React', () => {
@@ -33,7 +33,7 @@ describe('isReactForwardRefCall', () => {
           render() {}
         });
       `);
-      expect(isReactForwardRefCall(def)).toBe(true);
+      expect(isReactForwardRefCall(def, noopImporter)).toBe(true);
     });
 
     it('ignores other React calls', () => {
@@ -41,7 +41,7 @@ describe('isReactForwardRefCall', () => {
         var React = require("React");
         React.isValidElement({});
       `);
-      expect(isReactForwardRefCall(def)).toBe(false);
+      expect(isReactForwardRefCall(def, noopImporter)).toBe(false);
     });
 
     it('ignores non React calls to forwardRef', () => {
@@ -51,7 +51,7 @@ describe('isReactForwardRefCall', () => {
           render() {}
         });
       `);
-      expect(isReactForwardRefCall(def)).toBe(false);
+      expect(isReactForwardRefCall(def, noopImporter)).toBe(false);
     });
 
     it('accepts forwardRef called on destructed value', () => {
@@ -59,7 +59,7 @@ describe('isReactForwardRefCall', () => {
         var { forwardRef } = require("react");
         forwardRef({});
       `);
-      expect(isReactForwardRefCall(def)).toBe(true);
+      expect(isReactForwardRefCall(def, noopImporter)).toBe(true);
     });
 
     it('accepts forwardRef called on destructed aliased value', () => {
@@ -67,7 +67,7 @@ describe('isReactForwardRefCall', () => {
         var { forwardRef: foo } = require("react");
         foo({});
       `);
-      expect(isReactForwardRefCall(def)).toBe(true);
+      expect(isReactForwardRefCall(def, noopImporter)).toBe(true);
     });
 
     it('accepts forwardRef called on imported value', () => {
@@ -75,7 +75,7 @@ describe('isReactForwardRefCall', () => {
         import { forwardRef } from "react";
         forwardRef({});
       `);
-      expect(isReactForwardRefCall(def)).toBe(true);
+      expect(isReactForwardRefCall(def, noopImporter)).toBe(true);
     });
 
     it('accepts forwardRef called on imported aliased value', () => {
@@ -83,7 +83,7 @@ describe('isReactForwardRefCall', () => {
         import { forwardRef as foo } from "react";
         foo({});
       `);
-      expect(isReactForwardRefCall(def)).toBe(true);
+      expect(isReactForwardRefCall(def, noopImporter)).toBe(true);
     });
   });
 });

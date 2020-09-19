@@ -6,7 +6,7 @@
  *
  */
 
-import { parse } from '../../../tests/utils';
+import { parse, noopImporter } from '../../../tests/utils';
 import isReactCreateClassCall from '../isReactCreateClassCall';
 
 describe('isReactCreateClassCall', () => {
@@ -23,7 +23,7 @@ describe('isReactCreateClassCall', () => {
           render() {}
         });
       `);
-      expect(isReactCreateClassCall(def)).toBe(true);
+      expect(isReactCreateClassCall(def, noopImporter)).toBe(true);
     });
 
     it('accepts createClass called on aliased React', () => {
@@ -33,7 +33,7 @@ describe('isReactCreateClassCall', () => {
           render() {}
         });
       `);
-      expect(isReactCreateClassCall(def)).toBe(true);
+      expect(isReactCreateClassCall(def, noopImporter)).toBe(true);
     });
 
     it('ignores other React calls', () => {
@@ -41,7 +41,7 @@ describe('isReactCreateClassCall', () => {
         var React = require("React");
         React.isValidElement({});
       `);
-      expect(isReactCreateClassCall(def)).toBe(false);
+      expect(isReactCreateClassCall(def, noopImporter)).toBe(false);
     });
 
     it('ignores non React calls to createClass', () => {
@@ -51,7 +51,7 @@ describe('isReactCreateClassCall', () => {
           render() {}
         });
       `);
-      expect(isReactCreateClassCall(def)).toBe(false);
+      expect(isReactCreateClassCall(def, noopImporter)).toBe(false);
     });
 
     it('accepts createClass called on destructed value', () => {
@@ -59,7 +59,7 @@ describe('isReactCreateClassCall', () => {
         var { createClass } = require("react");
         createClass({});
       `);
-      expect(isReactCreateClassCall(def)).toBe(true);
+      expect(isReactCreateClassCall(def, noopImporter)).toBe(true);
     });
 
     it('accepts createClass called on destructed aliased value', () => {
@@ -67,7 +67,7 @@ describe('isReactCreateClassCall', () => {
         var { createClass: foo } = require("react");
         foo({});
       `);
-      expect(isReactCreateClassCall(def)).toBe(true);
+      expect(isReactCreateClassCall(def, noopImporter)).toBe(true);
     });
 
     it('accepts createClass called on imported value', () => {
@@ -75,7 +75,7 @@ describe('isReactCreateClassCall', () => {
         import { createClass } from "react";
         createClass({});
       `);
-      expect(isReactCreateClassCall(def)).toBe(true);
+      expect(isReactCreateClassCall(def, noopImporter)).toBe(true);
     });
 
     it('accepts createClass called on imported aliased value', () => {
@@ -83,7 +83,7 @@ describe('isReactCreateClassCall', () => {
         import { createClass as foo } from "react";
         foo({});
       `);
-      expect(isReactCreateClassCall(def)).toBe(true);
+      expect(isReactCreateClassCall(def, noopImporter)).toBe(true);
     });
   });
 
@@ -95,7 +95,7 @@ describe('isReactCreateClassCall', () => {
           render() {}
         });
       `);
-      expect(isReactCreateClassCall(def)).toBe(true);
+      expect(isReactCreateClassCall(def, noopImporter)).toBe(true);
     });
 
     it('accepts create-react-class calls on another name', () => {
@@ -105,7 +105,7 @@ describe('isReactCreateClassCall', () => {
           render() {}
         });
       `);
-      expect(isReactCreateClassCall(def)).toBe(true);
+      expect(isReactCreateClassCall(def, noopImporter)).toBe(true);
     });
 
     it('ignores non create-react-class calls to createReactClass', () => {
@@ -115,7 +115,7 @@ describe('isReactCreateClassCall', () => {
           render() {}
         });
       `);
-      expect(isReactCreateClassCall(def)).toBe(false);
+      expect(isReactCreateClassCall(def, noopImporter)).toBe(false);
     });
   });
 });
