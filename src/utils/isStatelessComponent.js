@@ -32,7 +32,8 @@ function isJSXElementOrReactCall(path, importer: Importer) {
       isReactCreateElementCall(path, importer)) ||
     (path.node.type === 'CallExpression' &&
       isReactCloneElementCall(path, importer)) ||
-    (path.node.type === 'CallExpression' && isReactChildrenElementCall(path, importer))
+    (path.node.type === 'CallExpression' &&
+      isReactChildrenElementCall(path, importer))
   );
 }
 

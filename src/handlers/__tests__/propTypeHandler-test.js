@@ -9,7 +9,12 @@
 jest.mock('../../Documentation');
 jest.mock('../../utils/getPropType', () => jest.fn(() => ({})));
 
-import { statement, expression, noopImporter, makeMockImporter } from '../../../tests/utils';
+import {
+  statement,
+  expression,
+  noopImporter,
+  makeMockImporter,
+} from '../../../tests/utils';
 import Documentation from '../../Documentation';
 import { propTypeHandler } from '../propTypeHandler';
 

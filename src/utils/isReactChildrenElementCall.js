@@ -17,7 +17,10 @@ import type { Importer } from '../types';
  * Returns true if the expression is a function call of the form
  * `React.Children.only(...)`.
  */
-export default function isReactChildrenElementCall(path: NodePath, importer: Importer): boolean {
+export default function isReactChildrenElementCall(
+  path: NodePath,
+  importer: Importer,
+): boolean {
   if (t.ExpressionStatement.check(path.node)) {
     path = path.get('expression');
   }

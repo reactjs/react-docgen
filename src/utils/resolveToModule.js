@@ -17,7 +17,10 @@ import type { Importer } from '../types';
  * this function tries to find the name of module from which the "root value"
  * was imported.
  */
-export default function resolveToModule(path: NodePath, importer: Importer): ?string {
+export default function resolveToModule(
+  path: NodePath,
+  importer: Importer,
+): ?string {
   const node = path.node;
   switch (node.type) {
     case t.VariableDeclarator.name:

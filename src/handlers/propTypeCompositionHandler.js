@@ -32,7 +32,7 @@ function processObjectExpression(documentation, path, importer) {
         amendComposes(
           documentation,
           resolveToValue(propertyPath.get('argument'), importer),
-          importer
+          importer,
         );
         break;
     }
