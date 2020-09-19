@@ -69,5 +69,6 @@ export {
   defaultHandlers,
   allHandlers as handlers,
   AllResolver as resolver,
+  AllImporter as importers,
   utils,
 };
