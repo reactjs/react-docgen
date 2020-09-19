@@ -10,10 +10,11 @@ import * as utils from '../../../tests/utils';
 import findExportedComponentDefinition from '../findExportedComponentDefinition';
 
 describe('findExportedComponentDefinition', () => {
-  function parse(source) {
+  function parse(source, importer = utils.noopImporter) {
     return findExportedComponentDefinition(
       utils.parse(source),
       utils.getParser(),
+      importer,
     );
   }
 
