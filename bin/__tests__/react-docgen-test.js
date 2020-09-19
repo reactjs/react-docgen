@@ -220,8 +220,7 @@ describe('react-docgen CLI', () => {
     TEST_TIMEOUT,
   );
 
-  // TODO(phated): Not sure why this is writing to stdout
-  it.skip(
+  it(
     'writes to a file if provided',
     () => {
       const outFile = temp.openSync();
