@@ -6,7 +6,7 @@
  *
  */
 
-import { parse } from '../../../tests/utils';
+import { parse, noopImporter } from '../../../tests/utils';
 import resolveToModule from '../resolveToModule';
 
 describe('resolveToModule', () => {
@@ -20,7 +20,7 @@ describe('resolveToModule', () => {
       var foo = require("Foo");
       foo;
     `);
-    expect(resolveToModule(path)).toBe('Foo');
+    expect(resolveToModule(path, noopImporter)).toBe('Foo');
   });
 
   it('resolves function calls', () => {
@@ -28,7 +28,7 @@ describe('resolveToModule', () => {
       var foo = require("Foo");
       foo();
     `);
-    expect(resolveToModule(path)).toBe('Foo');
+    expect(resolveToModule(path, noopImporter)).toBe('Foo');
   });
 
   it('resolves member expressions', () => {
@@ -36,7 +36,7 @@ describe('resolveToModule', () => {
       var foo = require("Foo");
       foo.bar().baz;
     `);
-    expect(resolveToModule(path)).toBe('Foo');
+    expect(resolveToModule(path, noopImporter)).toBe('Foo');
   });
 
   it('understands destructuring', () => {
@@ -44,7 +44,7 @@ describe('resolveToModule', () => {
       var {foo} = require("Foo");
       foo;
     `);
-    expect(resolveToModule(path)).toBe('Foo');
+    expect(resolveToModule(path, noopImporter)).toBe('Foo');
   });
 
   describe('ES6 import declarations', () => {
@@ -53,13 +53,13 @@ describe('resolveToModule', () => {
         import foo from "Foo";
         foo;
       `);
-      expect(resolveToModule(path)).toBe('Foo');
+      expect(resolveToModule(path, noopImporter)).toBe('Foo');
 
       path = parsePath(`
         import foo, {createElement} from "Foo";
         foo;
       `);
-      expect(resolveToModule(path)).toBe('Foo');
+      expect(resolveToModule(path, noopImporter)).toBe('Foo');
     });
 
     it('resolves ImportSpecifier', () => {
@@ -67,7 +67,7 @@ describe('resolveToModule', () => {
         import {foo, bar} from "Foo";
         bar;
       `);
-      expect(resolveToModule(path)).toBe('Foo');
+      expect(resolveToModule(path, noopImporter)).toBe('Foo');
     });
 
     it('resolves aliased ImportSpecifier', () => {
@@ -75,7 +75,7 @@ describe('resolveToModule', () => {
         import {foo, bar as baz} from "Foo";
         baz;
       `);
-      expect(resolveToModule(path)).toBe('Foo');
+      expect(resolveToModule(path, noopImporter)).toBe('Foo');
     });
 
     it('resolves ImportNamespaceSpecifier', () => {
@@ -83,7 +83,7 @@ describe('resolveToModule', () => {
         import * as foo from "Foo";
         foo;
       `);
-      expect(resolveToModule(path)).toBe('Foo');
+      expect(resolveToModule(path, noopImporter)).toBe('Foo');
     });
   });
 });

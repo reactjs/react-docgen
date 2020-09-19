@@ -6,7 +6,7 @@
  *
  */
 
-import { parse } from '../../../tests/utils';
+import { parse, noopImporter } from '../../../tests/utils';
 import isReactCloneElementCall from '../isReactCloneElementCall';
 
 describe('isReactCloneElementCall', () => {
@@ -21,7 +21,7 @@ describe('isReactCloneElementCall', () => {
         var React = require("React");
         React.cloneElement({});
       `);
-      expect(isReactCloneElementCall(def)).toBe(true);
+      expect(isReactCloneElementCall(def, noopImporter)).toBe(true);
     });
 
     it('accepts cloneElement called on aliased React', () => {
@@ -29,7 +29,7 @@ describe('isReactCloneElementCall', () => {
         var other = require("React");
         other.cloneElement({});
       `);
-      expect(isReactCloneElementCall(def)).toBe(true);
+      expect(isReactCloneElementCall(def, noopImporter)).toBe(true);
     });
 
     it('ignores other React calls', () => {
@@ -37,7 +37,7 @@ describe('isReactCloneElementCall', () => {
         var React = require("React");
         React.isValidElement({});
       `);
-      expect(isReactCloneElementCall(def)).toBe(false);
+      expect(isReactCloneElementCall(def, noopImporter)).toBe(false);
     });
 
     it('ignores non React calls to cloneElement', () => {
@@ -45,7 +45,7 @@ describe('isReactCloneElementCall', () => {
         var React = require("bob");
         React.cloneElement({});
       `);
-      expect(isReactCloneElementCall(def)).toBe(false);
+      expect(isReactCloneElementCall(def, noopImporter)).toBe(false);
     });
 
     it('accepts cloneElement called on destructed value', () => {
@@ -53,7 +53,7 @@ describe('isReactCloneElementCall', () => {
         var { cloneElement } = require("react");
         cloneElement({});
       `);
-      expect(isReactCloneElementCall(def)).toBe(true);
+      expect(isReactCloneElementCall(def, noopImporter)).toBe(true);
     });
 
     it('accepts cloneElement called on destructed aliased value', () => {
@@ -61,7 +61,7 @@ describe('isReactCloneElementCall', () => {
         var { cloneElement: foo } = require("react");
         foo({});
       `);
-      expect(isReactCloneElementCall(def)).toBe(true);
+      expect(isReactCloneElementCall(def, noopImporter)).toBe(true);
     });
 
     it('accepts cloneElement called on imported value', () => {
@@ -69,7 +69,7 @@ describe('isReactCloneElementCall', () => {
         import { cloneElement } from "react";
         cloneElement({});
       `);
-      expect(isReactCloneElementCall(def)).toBe(true);
+      expect(isReactCloneElementCall(def, noopImporter)).toBe(true);
     });
 
     it('accepts cloneElement called on imported aliased value', () => {
@@ -77,7 +77,7 @@ describe('isReactCloneElementCall', () => {
         import { cloneElement as foo } from "react";
         foo({});
       `);
-      expect(isReactCloneElementCall(def)).toBe(true);
+      expect(isReactCloneElementCall(def, noopImporter)).toBe(true);
     });
   });
 });
