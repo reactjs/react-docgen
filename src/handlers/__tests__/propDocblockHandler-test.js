@@ -8,7 +8,12 @@
 
 jest.mock('../../Documentation');
 
-import { expression, statement, noopImporter, makeMockImporter } from '../../../tests/utils';
+import {
+  expression,
+  statement,
+  noopImporter,
+  makeMockImporter,
+} from '../../../tests/utils';
 
 describe('propDocBlockHandler', () => {
   let documentation;
@@ -249,9 +254,13 @@ describe('propDocBlockHandler', () => {
 
   it('does not error if propTypes cannot be found', () => {
     let definition = expression('{fooBar: 42}');
-    expect(() => propDocBlockHandler(documentation, definition, noopImporter)).not.toThrow();
+    expect(() =>
+      propDocBlockHandler(documentation, definition, noopImporter),
+    ).not.toThrow();
 
     definition = statement('class Foo {}');
-    expect(() => propDocBlockHandler(documentation, definition, noopImporter)).not.toThrow();
+    expect(() =>
+      propDocBlockHandler(documentation, definition, noopImporter),
+    ).not.toThrow();
   });
 });

@@ -14,7 +14,7 @@ import type { Importer } from '../types';
 export default function getClassMemberValuePath(
   classDefinition: NodePath,
   memberName: string,
-  _importer: Importer,
+  _importer: Importer, // eslint-disable-line no-unused-vars
 ): ?NodePath {
   // Fortunately it seems like that all members of a class body, be it
   // ClassProperty or MethodDefinition, have the same structure: They have a

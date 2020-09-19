@@ -18,14 +18,12 @@ const SYNONYMS = {
   defaultProps: 'getDefaultProps',
 };
 
-let postprocessPropTypes = (path, importer) =>
+const postprocessPropTypes = (path, importer) =>
   t.Function.check(path.node)
     ? resolveFunctionDefinitionToReturnValue(path, importer)
     : path;
 
-const POSTPROCESS_MEMBERS = new Map([
-  ['propTypes', postprocessPropTypes]
-]);
+const POSTPROCESS_MEMBERS = new Map([['propTypes', postprocessPropTypes]]);
 
 const LOOKUP_METHOD = new Map([
   [t.ArrowFunctionExpression.name, getMemberExpressionValuePath],
