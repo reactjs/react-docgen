@@ -6,22 +6,58 @@
  *
  */
 
-import * as utils from '../../../tests/utils';
+import {
+  getParser,
+  parse as parseSource,
+  statement,
+  noopImporter,
+  makeMockImporter,
+} from '../../../tests/utils';
 
 import findAllExportedComponentDefinitions from '../findAllExportedComponentDefinitions';
 
 describe('findAllExportedComponentDefinitions', () => {
   function parse(source) {
-    return utils.parse(source);
+    return parseSource(source);
   }
 
-  function findComponents(path, importer = utils.noopImporter) {
-    return findAllExportedComponentDefinitions(
-      path,
-      utils.getParser(),
-      importer,
-    );
+  function findComponents(path, importer = noopImporter) {
+    return findAllExportedComponentDefinitions(path, getParser(), importer);
   }
+
+  const mockImporter = makeMockImporter({
+    createClass: statement(`
+      export default React.createClass({});
+      import React from 'react';
+    `).get('declaration'),
+
+    classDec: statement(`
+      export default class Component extends React.Component {};
+      import React from 'react';
+    `).get('declaration'),
+
+    classExpr: statement(`
+      export default Component;
+      var Component = class extends React.Component {};
+      import React from 'react';
+    `).get('declaration'),
+
+    statelessJsx: statement(`
+      export default () => <div />;
+    `).get('declaration'),
+
+    statelessCreateElement: statement(`
+      export default () => React.createElement('div', {});
+      import React from 'react';
+    `).get('declaration'),
+
+    forwardRef: statement(`
+      export default React.forwardRef((props, ref) => (
+        <div ref={ref} style={{backgroundColor: props.color}} />
+      ));
+      import React from 'react';
+    `).get('declaration'),
+  });
 
   describe('CommonJS module exports', () => {
     describe('React.createClass', () => {
@@ -67,6 +103,16 @@ describe('findAllExportedComponentDefinitions', () => {
 
         expect(actual.length).toBe(0);
       });
+
+      it('resolves an imported variable to React.createClass', () => {
+        const parsed = parse(`
+          import Component from 'createClass';
+          module.exports = Component;
+        `);
+        const actual = findComponents(parsed, mockImporter);
+
+        expect(actual.length).toBe(1);
+      });
     });
 
     describe('class definitions', () => {
@@ -101,6 +147,26 @@ describe('findAllExportedComponentDefinitions', () => {
           module.exports = Component;
         `);
         const actual = findComponents(parsed);
+
+        expect(actual.length).toBe(1);
+      });
+
+      it('resolves an imported variable to class declaration', () => {
+        const parsed = parse(`
+          import Component from 'classDec';
+          module.exports = Component;
+        `);
+        const actual = findComponents(parsed, mockImporter);
+
+        expect(actual.length).toBe(1);
+      });
+
+      it('resolves an imported variable to class expression', () => {
+        const parsed = parse(`
+          import Component from 'classExpr';
+          module.exports = Component;
+        `);
+        const actual = findComponents(parsed, mockImporter);
 
         expect(actual.length).toBe(1);
       });
@@ -140,6 +206,26 @@ describe('findAllExportedComponentDefinitions', () => {
         const actual = findComponents(parsed);
 
         expect(actual.length).toBe(0);
+      });
+
+      it('resolves an imported stateless component with JSX', () => {
+        const parsed = parse(`
+          import Component from 'statelessJsx';
+          module.exports = Component;
+        `);
+        const actual = findComponents(parsed, mockImporter);
+
+        expect(actual.length).toBe(1);
+      });
+
+      it('resolves an imported stateless component with React.createElement', () => {
+        const parsed = parse(`
+          import Component from 'statelessCreateElement';
+          module.exports = Component;
+        `);
+        const actual = findComponents(parsed, mockImporter);
+
+        expect(actual.length).toBe(1);
       });
     });
 
@@ -181,6 +267,17 @@ describe('findAllExportedComponentDefinitions', () => {
 
         const parsed = parse(source);
         const actual = findComponents(parsed);
+
+        expect(actual.length).toBe(1);
+        expect(actual[0].value.type).toEqual('CallExpression');
+      });
+
+      it('resolves an imported forwardRef component', () => {
+        const parsed = parse(`
+          import Component from 'forwardRef';
+          module.exports = Component;
+        `);
+        const actual = findComponents(parsed, mockImporter);
 
         expect(actual.length).toBe(1);
         expect(actual[0].value.type).toEqual('CallExpression');
@@ -310,6 +407,17 @@ describe('findAllExportedComponentDefinitions', () => {
 
           expect(actual.length).toBe(1);
         });
+
+        it('supports imported components', () => {
+          const parsed = parse(`
+            import Component from 'createClass';
+            exports.ComponentA = Component;
+            exports.ComponentB = Component;
+          `);
+          const actual = findComponents(parsed, mockImporter);
+
+          expect(actual.length).toBe(1);
+        });
       });
 
       describe('class definition', () => {
@@ -374,6 +482,17 @@ describe('findAllExportedComponentDefinitions', () => {
             exports.ComponentB = ComponentA;
           `);
           const actual = findComponents(parsed);
+
+          expect(actual.length).toBe(1);
+        });
+
+        it('supports imported components', () => {
+          const parsed = parse(`
+            import Component from 'classDec';
+            exports.ComponentA = Component;
+            exports.ComponentB = Component;
+          `);
+          const actual = findComponents(parsed, mockImporter);
 
           expect(actual.length).toBe(1);
         });
@@ -463,6 +582,16 @@ describe('findAllExportedComponentDefinitions', () => {
 
           expect(actual.length).toBe(1);
         });
+
+        it('supports imported components', () => {
+          const parsed = parse(`
+            import Component from 'createClass';
+            export default Component;
+          `);
+          const actual = findComponents(parsed, mockImporter);
+
+          expect(actual.length).toBe(1);
+        });
       });
 
       describe('class definition', () => {
@@ -529,6 +658,16 @@ describe('findAllExportedComponentDefinitions', () => {
 
           expect(actual.length).toBe(1);
         });
+
+        it('supports imported components', () => {
+          const parsed = parse(`
+            import Component from 'classDec';
+            export default Component;
+          `);
+          const actual = findComponents(parsed, mockImporter);
+
+          expect(actual.length).toBe(1);
+        });
       });
 
       describe('forwardRef components', () => {
@@ -572,6 +711,16 @@ describe('findAllExportedComponentDefinitions', () => {
 
           expect(actual.length).toBe(1);
           expect(actual[0].value.type).toEqual('CallExpression');
+        });
+
+        it('supports imported components', () => {
+          const parsed = parse(`
+            import Component from 'forwardRef';
+            export default Component;
+          `);
+          const actual = findComponents(parsed, mockImporter);
+
+          expect(actual.length).toBe(1);
         });
       });
     });
@@ -654,6 +803,17 @@ describe('findAllExportedComponentDefinitions', () => {
             export let ComponentB = R.createClass({});
           `);
           const actual = findComponents(parsed);
+
+          expect(actual.length).toBe(1);
+        });
+
+        it('supports imported components', () => {
+          const parsed = parse(`
+            import Component from 'createClass';
+            export let ComponentA = Component;
+            export let ComponentB = Component;
+          `);
+          const actual = findComponents(parsed, mockImporter);
 
           expect(actual.length).toBe(1);
         });
@@ -743,6 +903,17 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(actual.length).toBe(1);
           expect(actual[0].node.type).toBe('ClassExpression');
         });
+
+        it('supports imported components', () => {
+          const parsed = parse(`
+            import Component from 'classDec';
+            export let ComponentA = Component;
+            export let ComponentB = Component;
+          `);
+          const actual = findComponents(parsed, mockImporter);
+
+          expect(actual.length).toBe(1);
+        });
       });
 
       describe('stateless components', () => {
@@ -821,6 +992,17 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(actual.length).toBe(1);
           expect(actual[0].node.type).toBe('FunctionExpression');
         });
+
+        it('supports imported components', () => {
+          const parsed = parse(`
+            import Component1 from 'statelessJsx';
+            import Component2 from 'statelessCreateElement';
+            export var ComponentA = Component1, ComponentB = Component2;
+          `);
+          const actual = findComponents(parsed, mockImporter);
+
+          expect(actual.length).toBe(2);
+        });
       });
 
       describe('forwardRef components', () => {
@@ -840,6 +1022,17 @@ describe('findAllExportedComponentDefinitions', () => {
 
           expect(actual.length).toBe(1);
           expect(actual[0].value.type).toEqual('CallExpression');
+        });
+
+        it('supports imported components', () => {
+          const parsed = parse(`
+            import Component from 'forwardRef';
+            export let ComponentA = Component;
+            export let ComponentB = Component;
+          `);
+          const actual = findComponents(parsed, mockImporter);
+
+          expect(actual.length).toBe(1);
         });
       });
     });
@@ -935,6 +1128,16 @@ describe('findAllExportedComponentDefinitions', () => {
 
           expect(actual.length).toBe(1);
         });
+
+        it('supports imported components', () => {
+          const parsed = parse(`
+            import Component from 'createClass';
+            export { Component, Component as ComponentB };
+          `);
+          const actual = findComponents(parsed, mockImporter);
+
+          expect(actual.length).toBe(1);
+        });
       });
 
       describe('class definition', () => {
@@ -1025,6 +1228,16 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(actual.length).toBe(1);
           expect(actual[0].node.type).toBe('ClassExpression');
         });
+
+        it('supports imported components', () => {
+          const parsed = parse(`
+            import Component from 'classDec';
+            export { Component, Component as ComponentB };
+          `);
+          const actual = findComponents(parsed, mockImporter);
+
+          expect(actual.length).toBe(1);
+        });
       });
 
       describe('stateless components', () => {
@@ -1101,6 +1314,17 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(actual.length).toBe(1);
           expect(actual[0].node.type).toBe('ArrowFunctionExpression');
         });
+
+        it('supports imported components', () => {
+          const parsed = parse(`
+            import ComponentA from 'statelessJsx';
+            import ComponentB from 'statelessCreateElement';
+            export { ComponentA, ComponentB };
+          `);
+          const actual = findComponents(parsed, mockImporter);
+
+          expect(actual.length).toBe(2);
+        });
       });
 
       describe('forwardRef components', () => {
@@ -1122,6 +1346,16 @@ describe('findAllExportedComponentDefinitions', () => {
 
           expect(actual.length).toBe(1);
           expect(actual[0].value.type).toEqual('CallExpression');
+        });
+
+        it('supports imported components', () => {
+          const parsed = parse(`
+            import Component from 'forwardRef';
+            export { Component, Component as ComponentB };
+          `);
+          const actual = findComponents(parsed, mockImporter);
+
+          expect(actual.length).toBe(1);
         });
       });
     });
