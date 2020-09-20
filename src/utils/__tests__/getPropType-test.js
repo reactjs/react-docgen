@@ -26,26 +26,34 @@ describe('getPropType', () => {
     ];
 
     simplePropTypes.forEach(type =>
-      expect(getPropType(expression('React.PropTypes.' + type), noopImporter)).toEqual({
+      expect(
+        getPropType(expression('React.PropTypes.' + type), noopImporter),
+      ).toEqual({
         name: type,
       }),
     );
 
     // It doesn't actually matter what the MemberExpression is
     simplePropTypes.forEach(type =>
-      expect(getPropType(expression('Foo.' + type + '.bar'), noopImporter)).toEqual({
+      expect(
+        getPropType(expression('Foo.' + type + '.bar'), noopImporter),
+      ).toEqual({
         name: type,
       }),
     );
 
     // Doesn't even have to be a MemberExpression
     simplePropTypes.forEach(type =>
-      expect(getPropType(expression(type), noopImporter)).toEqual({ name: type }),
+      expect(getPropType(expression(type), noopImporter)).toEqual({
+        name: type,
+      }),
     );
   });
 
   it('detects complex prop types', () => {
-    expect(getPropType(expression('oneOf(["foo", "bar"])'), noopImporter)).toEqual({
+    expect(
+      getPropType(expression('oneOf(["foo", "bar"])'), noopImporter),
+    ).toEqual({
       name: 'enum',
       value: [
         { value: '"foo"', computed: false },
@@ -54,7 +62,9 @@ describe('getPropType', () => {
     });
 
     // line comments are ignored
-    expect(getPropType(expression('oneOf(["foo", // baz\n"bar"])'), noopImporter)).toEqual({
+    expect(
+      getPropType(expression('oneOf(["foo", // baz\n"bar"])'), noopImporter),
+    ).toEqual({
       name: 'enum',
       value: [
         { value: '"foo"', computed: false },
@@ -62,7 +72,9 @@ describe('getPropType', () => {
       ],
     });
 
-    expect(getPropType(expression('oneOfType([number, bool])'), noopImporter)).toEqual({
+    expect(
+      getPropType(expression('oneOfType([number, bool])'), noopImporter),
+    ).toEqual({
       name: 'union',
       value: [{ name: 'number' }, { name: 'bool' }],
     });
@@ -88,7 +100,9 @@ describe('getPropType', () => {
       value: { name: 'string' },
     });
 
-    expect(getPropType(expression('shape({foo: string, bar: bool})'), noopImporter)).toEqual({
+    expect(
+      getPropType(expression('shape({foo: string, bar: bool})'), noopImporter),
+    ).toEqual({
       name: 'shape',
       value: {
         foo: {
@@ -102,7 +116,9 @@ describe('getPropType', () => {
       },
     });
 
-    expect(getPropType(expression('exact({foo: string, bar: bool})'), noopImporter)).toEqual({
+    expect(
+      getPropType(expression('exact({foo: string, bar: bool})'), noopImporter),
+    ).toEqual({
       name: 'exact',
       value: {
         foo: {
@@ -141,14 +157,18 @@ describe('getPropType', () => {
     });
 
     // computed
-    expect(getPropType(expression('shape(Child.propTypes)'), noopImporter)).toEqual({
+    expect(
+      getPropType(expression('shape(Child.propTypes)'), noopImporter),
+    ).toEqual({
       name: 'shape',
       value: 'Child.propTypes',
       computed: true,
     });
 
     // computed
-    expect(getPropType(expression('exact(Child.propTypes)'), noopImporter)).toEqual({
+    expect(
+      getPropType(expression('exact(Child.propTypes)'), noopImporter),
+    ).toEqual({
       name: 'exact',
       value: 'Child.propTypes',
       computed: true,
@@ -181,7 +201,9 @@ describe('getPropType', () => {
         var BAR = "bar";
       `).get('expression');
 
-      expect(getPropType(identifierInsideArray, noopImporter)).toMatchSnapshot();
+      expect(
+        getPropType(identifierInsideArray, noopImporter),
+      ).toMatchSnapshot();
     });
 
     it('resolves memberExpressions', () => {
@@ -241,7 +263,9 @@ describe('getPropType', () => {
   });
 
   it('detects custom validation functions for function', () => {
-    expect(getPropType(expression('(function() {})'), noopImporter)).toMatchSnapshot();
+    expect(
+      getPropType(expression('(function() {})'), noopImporter),
+    ).toMatchSnapshot();
   });
 
   it('detects custom validation functions for arrow function', () => {
@@ -257,7 +281,7 @@ describe('getPropType', () => {
        */
       string
     )`),
-      noopImporter,
+        noopImporter,
       ),
     ).toMatchSnapshot();
   });
@@ -271,7 +295,7 @@ describe('getPropType', () => {
        */
       string
     )`),
-    noopImporter,
+        noopImporter,
       ),
     ).toMatchSnapshot();
   });
@@ -289,7 +313,7 @@ describe('getPropType', () => {
        */
       bar: bool
     })`),
-    noopImporter,
+        noopImporter,
       ),
     ).toMatchSnapshot();
   });
@@ -301,7 +325,7 @@ describe('getPropType', () => {
       foo: string.isRequired,
       bar: bool
     })`),
-    noopImporter,
+        noopImporter,
       ),
     ).toMatchSnapshot();
   });
@@ -319,7 +343,7 @@ describe('getPropType', () => {
        */
       bar: bool
     })`),
-    noopImporter,
+        noopImporter,
       ),
     ).toMatchSnapshot();
   });
@@ -331,7 +355,7 @@ describe('getPropType', () => {
       foo: string.isRequired,
       bar: bool
     })`),
-    noopImporter,
+        noopImporter,
       ),
     ).toMatchSnapshot();
   });
@@ -343,7 +367,7 @@ describe('getPropType', () => {
       [foo]: string.isRequired,
       bar: bool
     })`),
-    noopImporter,
+        noopImporter,
       ),
     ).toMatchSnapshot();
   });
@@ -355,7 +379,7 @@ describe('getPropType', () => {
       [() => {}]: string.isRequired,
       bar: bool
     })`),
-    noopImporter,
+        noopImporter,
       ),
     ).toMatchSnapshot();
   });
