@@ -7,9 +7,61 @@
  */
 
 import getFlowType from '../getFlowType';
-import { expression, statement } from '../../../tests/utils';
+import {
+  expression,
+  statement,
+  noopImporter,
+  makeMockImporter,
+} from '../../../tests/utils';
 
 describe('getFlowType', () => {
+  const mockImporter = makeMockImporter({
+    abc: statement(`
+      export type abc = number;
+    `).get('declaration'),
+
+    def: statement(`
+      export type def = boolean;
+    `).get('declaration'),
+
+    xyz: statement(`
+      export type xyz = string;
+    `).get('declaration'),
+
+    maybe: statement(`
+      export type maybe = ?string;
+    `).get('declaration'),
+
+    barbaz: statement(`
+      export type barbaz = "bar" | "baz";
+    `).get('declaration'),
+
+    recTup: statement(`
+      export type recTup = [abc, xyz];
+      import abc from 'abc';
+      import xyz from 'xyz';
+    `).get('declaration'),
+
+    MyType: statement(`
+      export type MyType = { a: string, b: ?notImported };
+    `).get('declaration'),
+
+    MyGenericType: statement(`
+      export type MyType<T> = { a: T, b: Array<T> };
+    `).get('declaration'),
+
+    fruits: statement(`
+      export default {
+        'apple': '🍎',
+        'banana': '🍌',
+      };
+    `).get('declaration'),
+
+    otherFruits: statement(`
+      export type OtherFruits = { orange: string };
+    `).get('declaration'),
+  });
+
   it('detects simple types', () => {
     const simplePropTypes = [
       'string',
@@ -31,7 +83,7 @@ describe('getFlowType', () => {
       const typePath = expression('x: ' + type)
         .get('typeAnnotation')
         .get('typeAnnotation');
-      expect(getFlowType(typePath)).toEqual({ name: type });
+      expect(getFlowType(typePath, null, noopImporter)).toEqual({ name: type });
     });
   });
 
@@ -42,7 +94,7 @@ describe('getFlowType', () => {
       const typePath = expression(`x: ${value}`)
         .get('typeAnnotation')
         .get('typeAnnotation');
-      expect(getFlowType(typePath)).toEqual({
+      expect(getFlowType(typePath, null, noopImporter)).toEqual({
         name: 'literal',
         value: `${value}`,
       });
@@ -53,21 +105,45 @@ describe('getFlowType', () => {
     const typePath = expression('x: xyz')
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({ name: 'xyz' });
+    expect(getFlowType(typePath, null, noopImporter)).toEqual({ name: 'xyz' });
+  });
+
+  it('resolves an imported type', () => {
+    const typePath = statement(`
+      (x: xyz);
+      import type { xyz } from 'xyz';
+    `).get('expression', 'typeAnnotation', 'typeAnnotation');
+    expect(getFlowType(typePath, null, mockImporter)).toEqual({
+      name: 'string',
+    });
   });
 
   it('detects external nullable type', () => {
     const typePath = expression('x: ?xyz')
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({ name: 'xyz', nullable: true });
+    expect(getFlowType(typePath, null, noopImporter)).toEqual({
+      name: 'xyz',
+      nullable: true,
+    });
+  });
+
+  it('resolves an imported nullable type', () => {
+    const typePath = statement(`
+      (x: ?xyz);
+      import type { xyz } from 'xyz';
+    `).get('expression', 'typeAnnotation', 'typeAnnotation');
+    expect(getFlowType(typePath, null, mockImporter)).toEqual({
+      name: 'string',
+      nullable: true,
+    });
   });
 
   it('detects array type shorthand optional', () => {
     const typePath = expression('x: ?number[]')
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
+    expect(getFlowType(typePath, null, noopImporter)).toEqual({
       name: 'Array',
       elements: [{ name: 'number' }],
       raw: 'number[]',
@@ -79,7 +155,7 @@ describe('getFlowType', () => {
     const typePath = expression('x: (?number)[]')
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
+    expect(getFlowType(typePath, null, noopImporter)).toEqual({
       name: 'Array',
       elements: [{ name: 'number', nullable: true }],
       raw: '(?number)[]',
@@ -90,7 +166,7 @@ describe('getFlowType', () => {
     const typePath = expression('x: number[]')
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
+    expect(getFlowType(typePath, null, noopImporter)).toEqual({
       name: 'Array',
       elements: [{ name: 'number' }],
       raw: 'number[]',
@@ -101,10 +177,53 @@ describe('getFlowType', () => {
     const typePath = expression('x: Array<number>')
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
+    expect(getFlowType(typePath, null, noopImporter)).toEqual({
       name: 'Array',
       elements: [{ name: 'number' }],
       raw: 'Array<number>',
+    });
+  });
+
+  it('resolves imported types used for arrays', () => {
+    let typePath = statement(`
+      (x: Array<xyz>);
+      import type { xyz } from 'xyz';
+    `).get('expression', 'typeAnnotation', 'typeAnnotation');
+    expect(getFlowType(typePath, null, mockImporter)).toEqual({
+      name: 'Array',
+      elements: [{ name: 'string' }],
+      raw: 'Array<xyz>',
+    });
+
+    typePath = statement(`
+      (x: xyz[]);
+      import type { xyz } from 'xyz';
+    `).get('expression', 'typeAnnotation', 'typeAnnotation');
+    expect(getFlowType(typePath, null, mockImporter)).toEqual({
+      name: 'Array',
+      elements: [{ name: 'string' }],
+      raw: 'xyz[]',
+    });
+
+    typePath = statement(`
+      (x: ?xyz[]);
+      import type { xyz } from 'xyz';
+    `).get('expression', 'typeAnnotation', 'typeAnnotation');
+    expect(getFlowType(typePath, null, mockImporter)).toEqual({
+      name: 'Array',
+      elements: [{ name: 'string' }],
+      raw: 'xyz[]',
+      nullable: true,
+    });
+
+    typePath = statement(`
+      (x: (?xyz)[]);
+      import type { xyz } from 'xyz';
+    `).get('expression', 'typeAnnotation', 'typeAnnotation');
+    expect(getFlowType(typePath, null, mockImporter)).toEqual({
+      name: 'Array',
+      elements: [{ name: 'string', nullable: true }],
+      raw: '(?xyz)[]',
     });
   });
 
@@ -112,10 +231,23 @@ describe('getFlowType', () => {
     const typePath = expression('x: Array<number, xyz>')
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
+    expect(getFlowType(typePath, null, noopImporter)).toEqual({
       name: 'Array',
       elements: [{ name: 'number' }, { name: 'xyz' }],
       raw: 'Array<number, xyz>',
+    });
+  });
+
+  it('resolves array type with multiple imported types', () => {
+    const typePath = statement(`
+      (x: Array<abc, xyz>);
+      import type { abc } from 'abc';
+      import type { xyz } from 'xyz';
+    `).get('expression', 'typeAnnotation', 'typeAnnotation');
+    expect(getFlowType(typePath, null, mockImporter)).toEqual({
+      name: 'Array',
+      elements: [{ name: 'number' }, { name: 'string' }],
+      raw: 'Array<abc, xyz>',
     });
   });
 
@@ -123,10 +255,22 @@ describe('getFlowType', () => {
     const typePath = expression('x: Class<Boolean>')
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
+    expect(getFlowType(typePath, null, noopImporter)).toEqual({
       name: 'Class',
       elements: [{ name: 'Boolean' }],
       raw: 'Class<Boolean>',
+    });
+  });
+
+  it('resolves imported subtype for class type', () => {
+    const typePath = statement(`
+      (x: Class<xyz>);
+      import type { xyz } from 'xyz';
+    `).get('expression', 'typeAnnotation', 'typeAnnotation');
+    expect(getFlowType(typePath, null, mockImporter)).toEqual({
+      name: 'Class',
+      elements: [{ name: 'string' }],
+      raw: 'Class<xyz>',
     });
   });
 
@@ -134,9 +278,21 @@ describe('getFlowType', () => {
     const typePath = expression('x: Function<xyz>')
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
+    expect(getFlowType(typePath, null, noopImporter)).toEqual({
       name: 'Function',
       elements: [{ name: 'xyz' }],
+      raw: 'Function<xyz>',
+    });
+  });
+
+  it('resolves imported subtype for function type', () => {
+    const typePath = statement(`
+      (x: Function<xyz>);
+      import type { xyz } from 'xyz';
+    `).get('expression', 'typeAnnotation', 'typeAnnotation');
+    expect(getFlowType(typePath, null, mockImporter)).toEqual({
+      name: 'Function',
+      elements: [{ name: 'string' }],
       raw: 'Function<xyz>',
     });
   });
@@ -145,7 +301,7 @@ describe('getFlowType', () => {
     const typePath = expression('x: { a: string, b?: xyz }')
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
+    expect(getFlowType(typePath, null, noopImporter)).toEqual({
       name: 'signature',
       type: 'object',
       signature: {
@@ -162,7 +318,7 @@ describe('getFlowType', () => {
     const typePath = expression('x: { a: string, b: ?xyz }')
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
+    expect(getFlowType(typePath, null, noopImporter)).toEqual({
       name: 'signature',
       type: 'object',
       signature: {
@@ -175,11 +331,46 @@ describe('getFlowType', () => {
     });
   });
 
+  it('resolves imported types used for objects', () => {
+    const typePath = statement(`
+      (x: { a: abc, b: ?xyz, c?: xyz, d: maybe, e?: maybe });
+      import type { abc } from 'abc';
+      import type { xyz } from 'xyz';
+      import type { maybe } from 'maybe';
+    `).get('expression', 'typeAnnotation', 'typeAnnotation');
+    expect(getFlowType(typePath, null, mockImporter)).toEqual({
+      name: 'signature',
+      type: 'object',
+      signature: {
+        properties: [
+          { key: 'a', value: { name: 'number', required: true } },
+          {
+            key: 'b',
+            value: { name: 'string', nullable: true, required: false },
+          },
+          {
+            key: 'c',
+            value: { name: 'string', nullable: true, required: false },
+          },
+          {
+            key: 'd',
+            value: { name: 'string', nullable: true, required: false },
+          },
+          {
+            key: 'e',
+            value: { name: 'string', nullable: true, required: false },
+          },
+        ],
+      },
+      raw: '{ a: abc, b: ?xyz, c?: xyz, d: maybe, e?: maybe }',
+    });
+  });
+
   it('detects union type', () => {
     const typePath = expression('x: string | xyz | "foo" | void')
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
+    expect(getFlowType(typePath, null, noopImporter)).toEqual({
       name: 'union',
       elements: [
         { name: 'string' },
@@ -191,11 +382,35 @@ describe('getFlowType', () => {
     });
   });
 
+  it('resolves imported types within union type', () => {
+    const typePath = statement(`
+      (x: string | barbaz | "foo" | void);
+      import type { barbaz } from 'barbaz';
+    `).get('expression', 'typeAnnotation', 'typeAnnotation');
+    expect(getFlowType(typePath, null, mockImporter)).toEqual({
+      name: 'union',
+      elements: [
+        { name: 'string' },
+        {
+          name: 'union',
+          elements: [
+            { name: 'literal', value: '"bar"' },
+            { name: 'literal', value: '"baz"' },
+          ],
+          raw: '"bar" | "baz"',
+        },
+        { name: 'literal', value: '"foo"' },
+        { name: 'void' },
+      ],
+      raw: 'string | barbaz | "foo" | void',
+    });
+  });
+
   it('detects intersection type', () => {
     const typePath = expression('x: string & xyz & "foo" & void')
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
+    expect(getFlowType(typePath, null, noopImporter)).toEqual({
       name: 'intersection',
       elements: [
         { name: 'string' },
@@ -207,13 +422,37 @@ describe('getFlowType', () => {
     });
   });
 
+  it('resolves imported types within intersection type', () => {
+    const typePath = statement(`
+      (x: string & barbaz & "foo" & void);
+      import type { barbaz } from 'barbaz';
+    `).get('expression', 'typeAnnotation', 'typeAnnotation');
+    expect(getFlowType(typePath, null, mockImporter)).toEqual({
+      name: 'intersection',
+      elements: [
+        { name: 'string' },
+        {
+          name: 'union',
+          elements: [
+            { name: 'literal', value: '"bar"' },
+            { name: 'literal', value: '"baz"' },
+          ],
+          raw: '"bar" | "baz"',
+        },
+        { name: 'literal', value: '"foo"' },
+        { name: 'void' },
+      ],
+      raw: 'string & barbaz & "foo" & void',
+    });
+  });
+
   it('detects function signature type', () => {
     const typePath = expression(
       'x: (p1: number, p2: ?string, ...rest: Array<string>) => boolean',
     )
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
+    expect(getFlowType(typePath, null, noopImporter)).toEqual({
       name: 'signature',
       type: 'function',
       signature: {
@@ -240,7 +479,7 @@ describe('getFlowType', () => {
     const typePath = expression('x: (number, ?string) => boolean')
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
+    expect(getFlowType(typePath, null, noopImporter)).toEqual({
       name: 'signature',
       type: 'function',
       signature: {
@@ -258,7 +497,7 @@ describe('getFlowType', () => {
     const typePath = expression('x: string => boolean')
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
+    expect(getFlowType(typePath, null, noopImporter)).toEqual({
       name: 'signature',
       type: 'function',
       signature: {
@@ -273,7 +512,7 @@ describe('getFlowType', () => {
     const typePath = expression('x: { (str: string): string, token: string }')
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
+    expect(getFlowType(typePath, null, noopImporter)).toEqual({
       name: 'signature',
       type: 'object',
       signature: {
@@ -294,13 +533,107 @@ describe('getFlowType', () => {
     });
   });
 
+  it('resolves function signature types with imported types', () => {
+    let typePath = statement(`
+      (x: (p1: abc, p2: ?xyz, ...rest: Array<xyz>) => def);
+      import type { abc } from 'abc';
+      import type { def } from 'def';
+      import type { xyz } from 'xyz';
+    `).get('expression', 'typeAnnotation', 'typeAnnotation');
+
+    expect(getFlowType(typePath, null, mockImporter)).toEqual({
+      name: 'signature',
+      type: 'function',
+      signature: {
+        arguments: [
+          { name: 'p1', type: { name: 'number' } },
+          { name: 'p2', type: { name: 'string', nullable: true } },
+          {
+            name: 'rest',
+            rest: true,
+            type: {
+              name: 'Array',
+              elements: [{ name: 'string', nullable: true }],
+              raw: 'Array<xyz>',
+            },
+          },
+        ],
+        return: { name: 'boolean' },
+      },
+      raw: '(p1: abc, p2: ?xyz, ...rest: Array<xyz>) => def',
+    });
+
+    typePath = statement(`
+      (x: (abc, ?xyz) => def);
+      import type { abc } from 'abc';
+      import type { def } from 'def';
+      import type { xyz } from 'xyz';
+    `).get('expression', 'typeAnnotation', 'typeAnnotation');
+
+    expect(getFlowType(typePath, null, mockImporter)).toEqual({
+      name: 'signature',
+      type: 'function',
+      signature: {
+        arguments: [
+          { name: '', type: { name: 'number' } },
+          { name: '', type: { name: 'string', nullable: true } },
+        ],
+        return: { name: 'boolean' },
+      },
+      raw: '(abc, ?xyz) => def',
+    });
+
+    typePath = statement(`
+      (x: xyz => def);
+      import type { def } from 'def';
+      import type { xyz } from 'xyz';
+    `).get('expression', 'typeAnnotation', 'typeAnnotation');
+
+    expect(getFlowType(typePath, null, mockImporter)).toEqual({
+      name: 'signature',
+      type: 'function',
+      signature: {
+        arguments: [{ name: '', type: { name: 'string' } }],
+        return: { name: 'boolean' },
+      },
+      raw: 'xyz => def',
+    });
+
+    typePath = statement(`
+      (x: { (str: xyz): abc, token: def });
+      import type { abc } from 'abc';
+      import type { def } from 'def';
+      import type { xyz } from 'xyz';
+    `).get('expression', 'typeAnnotation', 'typeAnnotation');
+
+    expect(getFlowType(typePath, null, mockImporter)).toEqual({
+      name: 'signature',
+      type: 'object',
+      signature: {
+        constructor: {
+          name: 'signature',
+          type: 'function',
+          signature: {
+            arguments: [{ name: 'str', type: { name: 'string' } }],
+            return: { name: 'number' },
+          },
+          raw: '(str: xyz): abc',
+        },
+        properties: [
+          { key: 'token', value: { name: 'boolean', required: true } },
+        ],
+      },
+      raw: '{ (str: xyz): abc, token: def }',
+    });
+  });
+
   it('detects map signature', () => {
     const typePath = expression(
       'x: { [key: string]: number, [key: "xl"]: string, token: "a" | "b" }',
     )
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
+    expect(getFlowType(typePath, null, noopImporter)).toEqual({
       name: 'signature',
       type: 'object',
       signature: {
@@ -331,11 +664,50 @@ describe('getFlowType', () => {
     });
   });
 
+  it('resolves imported types in map signature', () => {
+    const typePath = statement(`
+      (x: { [key: xyz]: abc, [key: "xl"]: def, token: barbaz });
+      import type { abc } from 'abc';
+      import type { def } from 'def';
+      import type { xyz } from 'xyz';
+      import type { barbaz } from 'barbaz';
+    `).get('expression', 'typeAnnotation', 'typeAnnotation');
+    expect(getFlowType(typePath, null, mockImporter)).toEqual({
+      name: 'signature',
+      type: 'object',
+      signature: {
+        properties: [
+          {
+            key: { name: 'string' },
+            value: { name: 'number', required: true },
+          },
+          {
+            key: { name: 'literal', value: '"xl"' },
+            value: { name: 'boolean', required: true },
+          },
+          {
+            key: 'token',
+            value: {
+              name: 'union',
+              required: true,
+              raw: '"bar" | "baz"',
+              elements: [
+                { name: 'literal', value: '"bar"' },
+                { name: 'literal', value: '"baz"' },
+              ],
+            },
+          },
+        ],
+      },
+      raw: '{ [key: xyz]: abc, [key: "xl"]: def, token: barbaz }',
+    });
+  });
+
   it('detects tuple signature', () => {
     const typePath = expression('x: [string, number]')
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
+    expect(getFlowType(typePath, null, noopImporter)).toEqual({
       name: 'tuple',
       elements: [{ name: 'string' }, { name: 'number' }],
       raw: '[string, number]',
@@ -346,7 +718,7 @@ describe('getFlowType', () => {
     const typePath = expression('x: [string, number] | [number, string]')
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getFlowType(typePath)).toEqual({
+    expect(getFlowType(typePath, null, noopImporter)).toEqual({
       name: 'union',
       elements: [
         {
@@ -364,6 +736,44 @@ describe('getFlowType', () => {
     });
   });
 
+  it('resolves imported types used in tuple signature', () => {
+    let typePath = statement(`
+      (x: [xyz, abc]);
+      import type { abc } from 'abc';
+      import type { xyz } from 'xyz';
+    `).get('expression', 'typeAnnotation', 'typeAnnotation');
+
+    expect(getFlowType(typePath, null, mockImporter)).toEqual({
+      name: 'tuple',
+      elements: [{ name: 'string' }, { name: 'number' }],
+      raw: '[xyz, abc]',
+    });
+
+    typePath = statement(`
+      (x: [xyz, abc] | recTup);
+      import type { abc } from 'abc';
+      import type { xyz } from 'xyz';
+      import type { recTup } from 'recTup';
+    `).get('expression', 'typeAnnotation', 'typeAnnotation');
+
+    expect(getFlowType(typePath, null, mockImporter)).toEqual({
+      name: 'union',
+      elements: [
+        {
+          name: 'tuple',
+          elements: [{ name: 'string' }, { name: 'number' }],
+          raw: '[xyz, abc]',
+        },
+        {
+          name: 'tuple',
+          elements: [{ name: 'number' }, { name: 'string' }],
+          raw: '[abc, xyz]',
+        },
+      ],
+      raw: '[xyz, abc] | recTup',
+    });
+  });
+
   it('resolves types in scope', () => {
     const typePath = statement(`
       var x: MyType = 2;
@@ -375,7 +785,9 @@ describe('getFlowType', () => {
       .get('typeAnnotation')
       .get('typeAnnotation');
 
-    expect(getFlowType(typePath)).toEqual({ name: 'string' });
+    expect(getFlowType(typePath, null, noopImporter)).toEqual({
+      name: 'string',
+    });
   });
 
   it('handles typeof types', () => {
@@ -389,7 +801,7 @@ describe('getFlowType', () => {
       .get('typeAnnotation')
       .get('typeAnnotation');
 
-    expect(getFlowType(typePath)).toEqual({
+    expect(getFlowType(typePath, null, noopImporter)).toEqual({
       name: 'signature',
       type: 'object',
       signature: {
@@ -399,6 +811,32 @@ describe('getFlowType', () => {
         ],
       },
       raw: '{ a: string, b: ?xyz }',
+    });
+  });
+
+  it('resolves typeof of imported types', () => {
+    const typePath = statement(`
+      var x: typeof MyType = {};
+      import type { MyType } from 'MyType';
+    `)
+      .get('declarations', 0)
+      .get('id')
+      .get('typeAnnotation')
+      .get('typeAnnotation');
+
+    expect(getFlowType(typePath, null, mockImporter)).toEqual({
+      name: 'signature',
+      type: 'object',
+      signature: {
+        properties: [
+          { key: 'a', value: { name: 'string', required: true } },
+          {
+            key: 'b',
+            value: { name: 'notImported', nullable: true, required: true },
+          },
+        ],
+      },
+      raw: '{ a: string, b: ?notImported }',
     });
   });
 
@@ -413,7 +851,7 @@ describe('getFlowType', () => {
       .get('typeAnnotation')
       .get('typeAnnotation');
 
-    expect(getFlowType(typePath)).toEqual({
+    expect(getFlowType(typePath, null, noopImporter)).toEqual({
       name: 'MyType.x',
     });
   });
@@ -429,7 +867,7 @@ describe('getFlowType', () => {
       .get('typeAnnotation')
       .get('typeAnnotation');
 
-    expect(getFlowType(typePath)).toEqual({
+    expect(getFlowType(typePath, null, noopImporter)).toEqual({
       name: 'MyType.x',
       raw: 'MyType.x<any>',
       elements: [
@@ -451,7 +889,44 @@ describe('getFlowType', () => {
       .get('typeAnnotation')
       .get('typeAnnotation');
 
-    expect(getFlowType(typePath)).toEqual({
+    expect(getFlowType(typePath, null, noopImporter)).toEqual({
+      name: 'signature',
+      type: 'object',
+      raw: '{ a: T, b: Array<T> }',
+      signature: {
+        properties: [
+          {
+            key: 'a',
+            value: {
+              name: 'string',
+              required: true,
+            },
+          },
+          {
+            key: 'b',
+            value: {
+              name: 'Array',
+              raw: 'Array<T>',
+              required: true,
+              elements: [{ name: 'string' }],
+            },
+          },
+        ],
+      },
+    });
+  });
+
+  it('resolves imported types that need subtypes', () => {
+    const typePath = statement(`
+      var x: MyGenericType<string> = {};
+      import type { MyGenericType } from 'MyGenericType';
+    `)
+      .get('declarations', 0)
+      .get('id')
+      .get('typeAnnotation')
+      .get('typeAnnotation');
+
+    expect(getFlowType(typePath, null, mockImporter)).toEqual({
       name: 'signature',
       type: 'object',
       raw: '{ a: T, b: Array<T> }',
@@ -490,7 +965,7 @@ describe('getFlowType', () => {
         .get('typeAnnotation')
         .get('typeAnnotation');
 
-      expect(getFlowType(typePath)).toEqual({
+      expect(getFlowType(typePath, null, noopImporter)).toEqual({
         ...expected,
         name: type.replace('.', '').replace(/<.+>/, ''),
         raw: type,
@@ -543,7 +1018,7 @@ describe('getFlowType', () => {
       .get('typeAnnotation')
       .get('typeAnnotation');
 
-    expect(getFlowType(typePath)).toEqual({
+    expect(getFlowType(typePath, null, noopImporter)).toEqual({
       name: 'union',
       elements: [
         { name: 'literal', value: "'apple'" },
@@ -566,7 +1041,7 @@ describe('getFlowType', () => {
       .get('typeAnnotation')
       .get('typeAnnotation');
 
-    expect(getFlowType(typePath)).toEqual({
+    expect(getFlowType(typePath, null, noopImporter)).toEqual({
       name: 'union',
       elements: [
         { name: 'literal', value: "'apple'" },
@@ -585,7 +1060,7 @@ describe('getFlowType', () => {
       .get('typeAnnotation')
       .get('typeAnnotation');
 
-    expect(getFlowType(typePath)).toEqual({
+    expect(getFlowType(typePath, null, noopImporter)).toEqual({
       name: 'union',
       elements: [
         { name: 'literal', value: 'apple' },
@@ -605,7 +1080,64 @@ describe('getFlowType', () => {
       .get('typeAnnotation')
       .get('typeAnnotation');
 
-    expect(getFlowType(typePath)).toEqual({
+    expect(getFlowType(typePath, null, noopImporter)).toEqual({
+      name: 'union',
+      elements: [
+        { name: 'literal', value: 'apple' },
+        { name: 'literal', value: 'banana' },
+        { name: 'literal', value: 'orange' },
+      ],
+      raw: '$Keys<{| apple: string, banana: string, ...OtherFruits |}>',
+    });
+  });
+
+  it('resolves $Keys to imported types', () => {
+    let typePath = statement(`
+      var x: $Keys<typeof CONTENTS> = 2;
+      import CONTENTS from 'fruits';
+    `)
+      .get('declarations', 0)
+      .get('id')
+      .get('typeAnnotation')
+      .get('typeAnnotation');
+
+    expect(getFlowType(typePath, null, mockImporter)).toEqual({
+      name: 'union',
+      elements: [
+        { name: 'literal', value: "'apple'" },
+        { name: 'literal', value: "'banana'" },
+      ],
+      raw: '$Keys<typeof CONTENTS>',
+    });
+
+    typePath = statement(`
+      var x: $Keys<CONTENTS> = 2;
+      import CONTENTS from 'fruits';
+    `)
+      .get('declarations', 0)
+      .get('id')
+      .get('typeAnnotation')
+      .get('typeAnnotation');
+
+    expect(getFlowType(typePath, null, mockImporter)).toEqual({
+      name: 'union',
+      elements: [
+        { name: 'literal', value: "'apple'" },
+        { name: 'literal', value: "'banana'" },
+      ],
+      raw: '$Keys<CONTENTS>',
+    });
+
+    typePath = statement(`
+      var x: $Keys<{| apple: string, banana: string, ...OtherFruits |}> = 2;
+      import type { OtherFruits } from 'otherFruits';
+    `)
+      .get('declarations', 0)
+      .get('id')
+      .get('typeAnnotation')
+      .get('typeAnnotation');
+
+    expect(getFlowType(typePath, null, mockImporter)).toEqual({
       name: 'union',
       elements: [
         { name: 'literal', value: 'apple' },
@@ -626,7 +1158,7 @@ describe('getFlowType', () => {
       .get('typeAnnotation')
       .get('typeAnnotation');
 
-    expect(getFlowType(typePath)).toEqual({
+    expect(getFlowType(typePath, null, noopImporter)).toEqual({
       name: 'signature',
       type: 'object',
       signature: {
@@ -667,7 +1199,7 @@ describe('getFlowType', () => {
       .get('typeAnnotation')
       .get('typeAnnotation');
 
-    expect(getFlowType(typePath)).toEqual({
+    expect(getFlowType(typePath, null, noopImporter)).toEqual({
       name: 'signature',
       type: 'object',
       signature: {
@@ -692,7 +1224,7 @@ describe('getFlowType', () => {
       .get('typeAnnotation')
       .get('typeAnnotation');
 
-    expect(getFlowType(typePath)).toEqual({
+    expect(getFlowType(typePath, null, noopImporter)).toEqual({
       name: 'signature',
       type: 'object',
       signature: {
