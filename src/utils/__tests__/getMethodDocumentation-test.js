@@ -6,10 +6,28 @@
  *
  */
 
-import { statement, noopImporter } from '../../../tests/utils';
+import {
+  statement,
+  noopImporter,
+  makeMockImporter,
+} from '../../../tests/utils';
 import getMethodDocumentation from '../getMethodDocumentation';
 
 describe('getMethodDocumentation', () => {
+  const mockImporter = makeMockImporter({
+    hello: statement(`
+      export default () => {};
+    `).get('declaration'),
+
+    bar: statement(`
+      export default (bar: number) => {};
+    `).get('declaration'),
+
+    baz: statement(`
+      export default (): number => {};
+    `).get('declaration'),
+  });
+
   describe('name', () => {
     it('extracts the method name', () => {
       const def = statement(`
@@ -61,6 +79,23 @@ describe('getMethodDocumentation', () => {
       `);
       const method = def.get('body', 'body', 0);
       expect(getMethodDocumentation(method, noopImporter)).toMatchSnapshot();
+    });
+
+    it('resolves assignment of imported function', () => {
+      const def = statement(`
+        class Foo {
+          hello = hello;
+        }
+        import hello from 'hello';
+      `);
+      const method = def.get('body', 'body', 0);
+      expect(getMethodDocumentation(method, mockImporter)).toEqual({
+        name: 'hello',
+        docblock: null,
+        modifiers: [],
+        returns: null,
+        params: [],
+      });
     });
   });
 
@@ -140,6 +175,24 @@ describe('getMethodDocumentation', () => {
       `);
       const method = def.get('body', 'body', 0);
       expect(getMethodDocumentation(method, noopImporter)).toEqual(
+        methodParametersDoc([
+          {
+            name: 'bar',
+            type: { name: 'number' },
+          },
+        ]),
+      );
+    });
+
+    it('resolves flow type info on imported functions', () => {
+      const def = statement(`
+        class Foo {
+          foo = bar
+        }
+        import bar from 'bar';
+      `);
+      const method = def.get('body', 'body', 0);
+      expect(getMethodDocumentation(method, mockImporter)).toEqual(
         methodParametersDoc([
           {
             name: 'bar',
@@ -266,6 +319,21 @@ describe('getMethodDocumentation', () => {
         `);
         const method = def.get('body', 'body', 0);
         expect(getMethodDocumentation(method, noopImporter)).toEqual(
+          methodReturnDoc({
+            type: { name: 'number' },
+          }),
+        );
+      });
+
+      it('resolves flow types on imported functions', () => {
+        const def = statement(`
+          class Foo {
+            foo = baz
+          }
+          import baz from 'baz';
+        `);
+        const method = def.get('body', 'body', 0);
+        expect(getMethodDocumentation(method, mockImporter)).toEqual(
           methodReturnDoc({
             type: { name: 'number' },
           }),
