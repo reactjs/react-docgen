@@ -52,8 +52,8 @@ function findScopePath(
 
   // Namespace imports are handled separately, at the site of a member expression access
   if (
-    (t.ImportDefaultSpecifier.check(parentPath.node) ||
-      t.ImportSpecifier.check(parentPath.node))
+    t.ImportDefaultSpecifier.check(parentPath.node) ||
+    t.ImportSpecifier.check(parentPath.node)
   ) {
     let exportName;
     if (t.ImportDefaultSpecifier.check(parentPath.node)) {

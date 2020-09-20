@@ -18,7 +18,9 @@ describe('resolveToValue', () => {
 
   it('resolves simple variable declarations', () => {
     const path = parsePath(['var foo  = 42;', 'foo;'].join('\n'));
-    expect(resolveToValue(path, noopImporter)).toEqualASTNode(builders.literal(42));
+    expect(resolveToValue(path, noopImporter)).toEqualASTNode(
+      builders.literal(42),
+    );
   });
 
   it('resolves object destructuring', () => {
@@ -53,7 +55,9 @@ describe('resolveToValue', () => {
   it('resolves variable declarators to their init value', () => {
     const path = parse('var foo = 42;').get('body', 0, 'declarations', 0);
 
-    expect(resolveToValue(path, noopImporter)).toEqualASTNode(builders.literal(42));
+    expect(resolveToValue(path, noopImporter)).toEqualASTNode(
+      builders.literal(42),
+    );
   });
 
   it('resolves to class declarations', () => {
@@ -61,7 +65,9 @@ describe('resolveToValue', () => {
       class Foo {}
       Foo;
     `);
-    expect(resolveToValue(path, noopImporter).node.type).toBe('ClassDeclaration');
+    expect(resolveToValue(path, noopImporter).node.type).toBe(
+      'ClassDeclaration',
+    );
   });
 
   it('resolves to class function declaration', () => {
@@ -69,7 +75,9 @@ describe('resolveToValue', () => {
       function foo() {}
       foo;
     `);
-    expect(resolveToValue(path, noopImporter).node.type).toBe('FunctionDeclaration');
+    expect(resolveToValue(path, noopImporter).node.type).toBe(
+      'FunctionDeclaration',
+    );
   });
 
   describe('flow', () => {
@@ -78,7 +86,9 @@ describe('resolveToValue', () => {
       function foo() {}
       (foo: any);
     `);
-      expect(resolveToValue(path, noopImporter).node.type).toBe('FunctionDeclaration');
+      expect(resolveToValue(path, noopImporter).node.type).toBe(
+        'FunctionDeclaration',
+      );
     });
   });
 
@@ -91,7 +101,9 @@ describe('resolveToValue', () => {
       function foo() {}
       (foo as any);
     `);
-      expect(resolveToValue(path, noopImporter).node.type).toBe('FunctionDeclaration');
+      expect(resolveToValue(path, noopImporter).node.type).toBe(
+        'FunctionDeclaration',
+      );
     });
 
     it('resolves type assertions', () => {
@@ -99,7 +111,9 @@ describe('resolveToValue', () => {
       function foo() {}
       (<any> foo);
     `);
-      expect(resolveToValue(path, noopImporter).node.type).toBe('FunctionDeclaration');
+      expect(resolveToValue(path, noopImporter).node.type).toBe(
+        'FunctionDeclaration',
+      );
     });
   });
 
@@ -107,7 +121,9 @@ describe('resolveToValue', () => {
     it('resolves to assigned values', () => {
       const path = parsePath(['var foo;', 'foo = 42;', 'foo;'].join('\n'));
 
-      expect(resolveToValue(path, noopImporter)).toEqualASTNode(builders.literal(42));
+      expect(resolveToValue(path, noopImporter)).toEqualASTNode(
+        builders.literal(42),
+      );
     });
 
     it('resolves to other assigned value if ref is in an assignment lhs', () => {
@@ -125,9 +141,9 @@ describe('resolveToValue', () => {
         ['var foo;', 'foo = 42;', 'foo = wrap(foo);'].join('\n'),
       );
 
-      expect(resolveToValue(path.get('right', 'arguments', 0), noopImporter)).toEqualASTNode(
-        builders.literal(42),
-      );
+      expect(
+        resolveToValue(path.get('right', 'arguments', 0), noopImporter),
+      ).toEqualASTNode(builders.literal(42));
     });
   });
 
@@ -171,7 +187,9 @@ describe('resolveToValue', () => {
     it("resolves a MemberExpression to it's init value", () => {
       const path = parsePath(['var foo = { bar: 1 };', 'foo.bar;'].join('\n'));
 
-      expect(resolveToValue(path, noopImporter)).toEqualASTNode(builders.literal(1));
+      expect(resolveToValue(path, noopImporter)).toEqualASTNode(
+        builders.literal(1),
+      );
     });
 
     it('resolves a MemberExpression in the scope chain', () => {
@@ -179,7 +197,9 @@ describe('resolveToValue', () => {
         ['var foo = 1;', 'var bar = { baz: foo };', 'bar.baz;'].join('\n'),
       );
 
-      expect(resolveToValue(path, noopImporter)).toEqualASTNode(builders.literal(1));
+      expect(resolveToValue(path, noopImporter)).toEqualASTNode(
+        builders.literal(1),
+      );
     });
 
     it('resolves a nested MemberExpression in the scope chain', () => {
@@ -191,7 +211,9 @@ describe('resolveToValue', () => {
         ].join('\n'),
       );
 
-      expect(resolveToValue(path, noopImporter)).toEqualASTNode(builders.literal(1));
+      expect(resolveToValue(path, noopImporter)).toEqualASTNode(
+        builders.literal(1),
+      );
     });
 
     it('returns the last resolvable MemberExpression', () => {
