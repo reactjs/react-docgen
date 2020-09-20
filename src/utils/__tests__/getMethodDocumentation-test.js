@@ -27,6 +27,22 @@ describe('getMethodDocumentation', () => {
       });
     });
 
+    it('handles function assignment', () => {
+      const def = statement(`
+        class Foo {
+          hello = () => {}
+        }
+      `);
+      const method = def.get('body', 'body', 0);
+      expect(getMethodDocumentation(method)).toEqual({
+        name: 'hello',
+        docblock: null,
+        modifiers: [],
+        returns: null,
+        params: [],
+      });
+    });
+
     it('handles computed method name', () => {
       const def = statement(`
         class Foo {
@@ -67,6 +83,25 @@ describe('getMethodDocumentation', () => {
         params: [],
       });
     });
+
+    it('extracts docblock on function assignment', () => {
+      const def = statement(`
+        class Foo {
+          /**
+           * Don't use this!
+           */
+          foo = () => {}
+        }
+      `);
+      const method = def.get('body', 'body', 0);
+      expect(getMethodDocumentation(method)).toEqual({
+        name: 'foo',
+        docblock: "Don't use this!",
+        modifiers: [],
+        returns: null,
+        params: [],
+      });
+    });
   });
 
   describe('parameters', () => {
@@ -84,6 +119,23 @@ describe('getMethodDocumentation', () => {
       const def = statement(`
         class Foo {
           foo(bar: number) {}
+        }
+      `);
+      const method = def.get('body', 'body', 0);
+      expect(getMethodDocumentation(method)).toEqual(
+        methodParametersDoc([
+          {
+            name: 'bar',
+            type: { name: 'number' },
+          },
+        ]),
+      );
+    });
+
+    it('extracts flow type info on function assignment', () => {
+      const def = statement(`
+        class Foo {
+          foo = (bar: number) => {}
         }
       `);
       const method = def.get('body', 'body', 0);
@@ -192,6 +244,20 @@ describe('getMethodDocumentation', () => {
         const def = statement(`
           class Foo {
             foo (): number {}
+          }
+        `);
+        const method = def.get('body', 'body', 0);
+        expect(getMethodDocumentation(method)).toEqual(
+          methodReturnDoc({
+            type: { name: 'number' },
+          }),
+        );
+      });
+
+      it('extracts flow types on function assignment', () => {
+        const def = statement(`
+          class Foo {
+            foo = (): number => {}
           }
         `);
         const method = def.get('body', 'body', 0);
