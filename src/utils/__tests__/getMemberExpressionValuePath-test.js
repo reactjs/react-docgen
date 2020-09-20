@@ -51,7 +51,9 @@ describe('getMemberExpressionValuePath', () => {
         Foo[imComputed] = () => {};
       `);
 
-      expect(getMemberExpressionValuePath(def, 'imComputed', noopImporter)).not.toBeDefined();
+      expect(
+        getMemberExpressionValuePath(def, 'imComputed', noopImporter),
+      ).not.toBeDefined();
     });
   });
   describe('TaggedTemplateLiteral', () => {
