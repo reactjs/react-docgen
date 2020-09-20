@@ -6,7 +6,7 @@
  *
  */
 
-import { statement } from '../../../tests/utils';
+import { statement, noopImporter } from '../../../tests/utils';
 import getMethodDocumentation from '../getMethodDocumentation';
 
 describe('getMethodDocumentation', () => {
@@ -18,7 +18,7 @@ describe('getMethodDocumentation', () => {
         }
       `);
       const method = def.get('body', 'body', 0);
-      expect(getMethodDocumentation(method)).toEqual({
+      expect(getMethodDocumentation(method, noopImporter)).toEqual({
         name: 'hello',
         docblock: null,
         modifiers: [],
@@ -34,7 +34,7 @@ describe('getMethodDocumentation', () => {
         }
       `);
       const method = def.get('body', 'body', 0);
-      expect(getMethodDocumentation(method)).toEqual({
+      expect(getMethodDocumentation(method, noopImporter)).toEqual({
         name: 'hello',
         docblock: null,
         modifiers: [],
@@ -50,7 +50,7 @@ describe('getMethodDocumentation', () => {
         }
       `);
       const method = def.get('body', 'body', 0);
-      expect(getMethodDocumentation(method)).toMatchSnapshot();
+      expect(getMethodDocumentation(method, noopImporter)).toMatchSnapshot();
     });
 
     it('ignores complex computed method name', () => {
@@ -60,7 +60,7 @@ describe('getMethodDocumentation', () => {
         }
       `);
       const method = def.get('body', 'body', 0);
-      expect(getMethodDocumentation(method)).toMatchSnapshot();
+      expect(getMethodDocumentation(method, noopImporter)).toMatchSnapshot();
     });
   });
 
@@ -75,7 +75,7 @@ describe('getMethodDocumentation', () => {
         }
       `);
       const method = def.get('body', 'body', 0);
-      expect(getMethodDocumentation(method)).toEqual({
+      expect(getMethodDocumentation(method, noopImporter)).toEqual({
         name: 'foo',
         docblock: "Don't use this!",
         modifiers: [],
@@ -94,7 +94,7 @@ describe('getMethodDocumentation', () => {
         }
       `);
       const method = def.get('body', 'body', 0);
-      expect(getMethodDocumentation(method)).toEqual({
+      expect(getMethodDocumentation(method, noopImporter)).toEqual({
         name: 'foo',
         docblock: "Don't use this!",
         modifiers: [],
@@ -122,7 +122,7 @@ describe('getMethodDocumentation', () => {
         }
       `);
       const method = def.get('body', 'body', 0);
-      expect(getMethodDocumentation(method)).toEqual(
+      expect(getMethodDocumentation(method, noopImporter)).toEqual(
         methodParametersDoc([
           {
             name: 'bar',
@@ -139,7 +139,7 @@ describe('getMethodDocumentation', () => {
         }
       `);
       const method = def.get('body', 'body', 0);
-      expect(getMethodDocumentation(method)).toEqual(
+      expect(getMethodDocumentation(method, noopImporter)).toEqual(
         methodParametersDoc([
           {
             name: 'bar',
@@ -167,7 +167,9 @@ describe('getMethodDocumentation', () => {
           }
         `);
         const method = def.get('body', 'body', 0);
-        expect(getMethodDocumentation(method)).toEqual(methodModifiersDoc([]));
+        expect(getMethodDocumentation(method, noopImporter)).toEqual(
+          methodModifiersDoc([]),
+        );
       });
 
       it('detects static functions', () => {
@@ -177,7 +179,7 @@ describe('getMethodDocumentation', () => {
           }
         `);
         const method = def.get('body', 'body', 0);
-        expect(getMethodDocumentation(method)).toEqual(
+        expect(getMethodDocumentation(method, noopImporter)).toEqual(
           methodModifiersDoc(['static']),
         );
       });
@@ -189,7 +191,7 @@ describe('getMethodDocumentation', () => {
           }
         `);
         const method = def.get('body', 'body', 0);
-        expect(getMethodDocumentation(method)).toEqual(
+        expect(getMethodDocumentation(method, noopImporter)).toEqual(
           methodModifiersDoc(['generator']),
         );
       });
@@ -201,7 +203,7 @@ describe('getMethodDocumentation', () => {
           }
         `);
         const method = def.get('body', 'body', 0);
-        expect(getMethodDocumentation(method)).toEqual(
+        expect(getMethodDocumentation(method, noopImporter)).toEqual(
           methodModifiersDoc(['async']),
         );
       });
@@ -213,7 +215,7 @@ describe('getMethodDocumentation', () => {
           }
         `);
         const method = def.get('body', 'body', 0);
-        expect(getMethodDocumentation(method)).toEqual(
+        expect(getMethodDocumentation(method, noopImporter)).toEqual(
           methodModifiersDoc(['static', 'async']),
         );
       });
@@ -237,7 +239,9 @@ describe('getMethodDocumentation', () => {
           }
         `);
         const method = def.get('body', 'body', 0);
-        expect(getMethodDocumentation(method)).toEqual(methodReturnDoc(null));
+        expect(getMethodDocumentation(method, noopImporter)).toEqual(
+          methodReturnDoc(null),
+        );
       });
 
       it('extracts flow types', () => {
@@ -247,7 +251,7 @@ describe('getMethodDocumentation', () => {
           }
         `);
         const method = def.get('body', 'body', 0);
-        expect(getMethodDocumentation(method)).toEqual(
+        expect(getMethodDocumentation(method, noopImporter)).toEqual(
           methodReturnDoc({
             type: { name: 'number' },
           }),
@@ -261,7 +265,7 @@ describe('getMethodDocumentation', () => {
           }
         `);
         const method = def.get('body', 'body', 0);
-        expect(getMethodDocumentation(method)).toEqual(
+        expect(getMethodDocumentation(method, noopImporter)).toEqual(
           methodReturnDoc({
             type: { name: 'number' },
           }),
@@ -280,7 +284,7 @@ describe('getMethodDocumentation', () => {
           { parserOptions: { plugins: ['typescript'] } },
         );
         const method = def.get('body', 'body', 0);
-        expect(getMethodDocumentation(method)).toMatchSnapshot();
+        expect(getMethodDocumentation(method, noopImporter)).toMatchSnapshot();
       });
 
       it.skip('ignores private methods', () => {
@@ -293,7 +297,7 @@ describe('getMethodDocumentation', () => {
           { parserOptions: { plugins: ['classPrivateMethods'] } },
         );
         const method = def.get('body', 'body', 0);
-        expect(getMethodDocumentation(method)).toMatchSnapshot();
+        expect(getMethodDocumentation(method, noopImporter)).toMatchSnapshot();
       });
     });
   });
