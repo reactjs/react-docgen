@@ -7,17 +7,58 @@
  */
 
 import { NodePath } from 'ast-types';
-import * as utils from '../../../tests/utils';
+import {
+  getParser,
+  parse as parseSource,
+  statement,
+  noopImporter,
+  makeMockImporter,
+} from '../../../tests/utils';
 import findAllComponentDefinitions from '../findAllComponentDefinitions';
 
 describe('findAllComponentDefinitions', () => {
-  function parse(source, importer = utils.noopImporter) {
+  function parse(source, importer = noopImporter) {
     return findAllComponentDefinitions(
-      utils.parse(source),
-      utils.getParser(),
+      parseSource(source),
+      getParser(),
       importer,
     );
   }
+
+  const mockImporter = makeMockImporter({
+    obj: statement(`
+      export default {};
+    `).get('declaration'),
+
+    reactComponent: statement(`
+      export default React.Component;
+      import React from 'react';
+    `).get('declaration'),
+
+    reactPureComponent: statement(`
+      export default React.PureComponent;
+      import React from 'react';
+    `).get('declaration'),
+
+    jsxDiv: statement(`
+      export default <div />;
+    `).get('declaration'),
+
+    createElement: statement(`
+      export default React.createElement('div', null);
+      import React from 'react';
+    `).get('declaration'),
+
+    arrowJsx: statement(`
+      export default (props) => <div>{props.children}</div>;
+    `).get('declaration'),
+
+    coloredView: statement(`
+      export default function ColoredView(props, ref) {
+        return <div ref={ref} style={{backgroundColor: props.color}} />
+      };
+    `).get('declaration'),
+  });
 
   describe('React.createClass', () => {
     it('finds React.createClass', () => {
@@ -28,6 +69,21 @@ describe('findAllComponentDefinitions', () => {
       `;
 
       const result = parse(source);
+      expect(Array.isArray(result)).toBe(true);
+      expect(result.length).toBe(1);
+      expect(result[0] instanceof NodePath).toBe(true);
+      expect(result[0].node.type).toBe('ObjectExpression');
+    });
+
+    it('resolves imported values inside React.createClass', () => {
+      const source = `
+        import obj from 'obj';
+        var React = require("React");
+        var Component = React.createClass(obj);
+        module.exports = Component;
+      `;
+
+      const result = parse(source, mockImporter);
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(1);
       expect(result[0] instanceof NodePath).toBe(true);
@@ -112,7 +168,20 @@ describe('findAllComponentDefinitions', () => {
       expect(result.length).toBe(4);
     });
 
-    it('finds React.createClass, independent of the var name', () => {
+    it('resolves extends React.Component/React.PureComponent from import', () => {
+      const source = `
+        import Component from 'reactComponent';
+        import PureComponent from 'reactPureComponent';
+        class ComponentA extends Component {}
+        var ComponentC = class extends PureComponent {}
+      `;
+
+      const result = parse(source, mockImporter);
+      expect(Array.isArray(result)).toBe(true);
+      expect(result.length).toBe(2);
+    });
+
+    it('finds React.Component, independent of the var name', () => {
       const source = `
         import R from 'React';
         class Component extends R.Component {};
@@ -123,7 +192,7 @@ describe('findAllComponentDefinitions', () => {
       expect(result.length).toBe(1);
     });
 
-    it('does not process X.createClass of other modules', () => {
+    it('does not process X.Component of other modules', () => {
       const source = `
         import R from 'FakeReact';
         class Component extends R.Component {};
@@ -166,6 +235,21 @@ describe('findAllComponentDefinitions', () => {
       expect(result.length).toBe(7);
     });
 
+    it('resolve renders from imports', () => {
+      const source = `
+        import jsxDiv from 'jsxDiv';
+        import createElement from 'createElement';
+        import arrowJsx from 'arrowJsx';
+        let ComponentA = () => jsxDiv;
+        function ComponentB () { return createElement; }
+        const ComponentC = function(props) { return arrowJsx(props); };
+      `;
+
+      const result = parse(source, mockImporter);
+      expect(Array.isArray(result)).toBe(true);
+      expect(result.length).toBe(3);
+    });
+
     it('finds React.createElement, independent of the var name', () => {
       const source = `
         import AlphaBetters from 'react';
@@ -178,7 +262,7 @@ describe('findAllComponentDefinitions', () => {
       expect(result.length).toBe(1);
     });
 
-    it('does not process X.createClass of other modules', () => {
+    it('does not process X.createElement of other modules', () => {
       const source = `
         import R from 'FakeReact';
         const ComponentA = () => R.createElement('div', null);
@@ -224,6 +308,19 @@ describe('findAllComponentDefinitions', () => {
       `;
 
       const result = parse(source);
+      expect(Array.isArray(result)).toBe(true);
+      expect(result.length).toBe(1);
+      expect(result[0].value.type).toEqual('CallExpression');
+    });
+
+    it('resolves imported component wrapped with forwardRef', () => {
+      const source = `
+        import React from 'react';
+        import ColoredView from 'coloredView';
+        const ForwardedColoredView = React.forwardRef(ColoredView);
+      `;
+
+      const result = parse(source, mockImporter);
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(1);
       expect(result[0].value.type).toEqual('CallExpression');
