@@ -6,7 +6,12 @@
  *
  */
 
-import { parse, noopImporter } from '../../../tests/utils';
+import {
+  parse,
+  statement,
+  noopImporter,
+  makeMockImporter,
+} from '../../../tests/utils';
 import isReactCreateElementCall from '../isReactCreateElementCall';
 
 describe('isReactCreateElementCall', () => {
@@ -14,6 +19,13 @@ describe('isReactCreateElementCall', () => {
     const root = parse(src);
     return root.get('body', root.node.body.length - 1, 'expression');
   }
+
+  const mockImporter = makeMockImporter({
+    foo: statement(`
+      export default React.createElement;
+      import React from 'react';
+    `).get('declaration'),
+  });
 
   describe('built in React.createElement', () => {
     it('accepts createElement called on React', () => {
@@ -84,6 +96,14 @@ describe('isReactCreateElementCall', () => {
         foo({});
       `);
       expect(isReactCreateElementCall(def, noopImporter)).toBe(true);
+    });
+
+    it('can resolve createElement imported from an intermediate module', () => {
+      const def = parsePath(`
+        import foo from "foo";
+        foo({});
+      `);
+      expect(isReactCreateElementCall(def, mockImporter)).toBe(true);
     });
   });
 });
