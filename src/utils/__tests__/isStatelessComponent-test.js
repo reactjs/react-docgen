@@ -6,7 +6,12 @@
  *
  */
 
-import { parse, statement, noopImporter } from '../../../tests/utils';
+import {
+  parse,
+  statement,
+  noopImporter,
+  makeMockImporter,
+} from '../../../tests/utils';
 import isStatelessComponent from '../isStatelessComponent';
 
 describe('isStatelessComponent', () => {
@@ -213,13 +218,19 @@ describe('isStatelessComponent', () => {
   });
 
   describe('resolving return values', () => {
-    function test(desc, code) {
+    function test(desc, code, importer = noopImporter) {
       it(desc, () => {
         const def = parse(code).get('body', 1);
 
-        expect(isStatelessComponent(def, noopImporter)).toBe(true);
+        expect(isStatelessComponent(def, importer)).toBe(true);
       });
     }
+
+    const mockImporter = makeMockImporter({
+      bar: statement(`
+        export default <div />;
+      `).get('declaration'),
+    });
 
     it('does not see ifs as separate block', () => {
       const def = statement(`
@@ -337,6 +348,17 @@ describe('isStatelessComponent', () => {
         return obj.external.member();
       }
     `,
+    );
+
+    test(
+      'resolves imported values as return',
+      `
+      import bar from 'bar';
+      function Foo (props) {
+        return bar;
+      }
+      `,
+      mockImporter,
     );
   });
 });
