@@ -226,7 +226,7 @@ describe('main', () => {
       it(`processes component "${fileNames[i]}" without errors`, () => {
         let result;
         expect(() => {
-          result = parse(fileContent, null, null, null, {
+          result = parse(fileContent, null, null, {
             filename: filePath,
             babelrc: false,
           });

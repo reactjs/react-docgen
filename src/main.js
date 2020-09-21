@@ -48,8 +48,8 @@ function defaultParse(
   src: string | Buffer,
   resolver?: ?Resolver,
   handlers?: ?Array<Handler>,
-  importer?: ?Importer,
-  options?: Options = {},
+  // Used for backwards compatibility of this method
+  options?: Options & { importer?: Importer } = {},
 ): Array<DocumentationObject> | DocumentationObject {
   if (!resolver) {
     resolver = defaultResolver;
@@ -57,9 +57,8 @@ function defaultParse(
   if (!handlers) {
     handlers = defaultHandlers;
   }
-  if (!importer) {
-    importer = defaultImporter;
-  }
+
+  const { importer = defaultImporter } = options;
 
   return parse(String(src), resolver, handlers, importer, options);
 }
