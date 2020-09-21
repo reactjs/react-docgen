@@ -48,7 +48,7 @@
     "doctrine": "^3.0.0",
     "neo-async": "^2.6.1",
     "node-dir": "^0.1.10",
-    "resolve": "^1.10.1",
+    "resolve": "^1.17.0",
     "strip-indent": "^3.0.0"
   },
   "devDependencies": {
