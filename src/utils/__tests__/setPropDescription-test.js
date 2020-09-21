@@ -8,7 +8,12 @@
 
 jest.mock('../../Documentation');
 
-import { expression } from '../../../tests/utils';
+import {
+  expression,
+  statement,
+  noopImporter,
+  makeMockImporter,
+} from '../../../tests/utils';
 
 describe('setPropDescription', () => {
   let defaultDocumentation;
@@ -19,10 +24,16 @@ describe('setPropDescription', () => {
     setPropDescription = require('../setPropDescription').default;
   });
 
+  const mockImporter = makeMockImporter({
+    foo: statement(`
+      export default 'foo';
+    `).get('declaration'),
+  });
+
   function getDescriptors(src, documentation = defaultDocumentation) {
     const node = expression(src).get('properties', 0);
 
-    setPropDescription(documentation, node);
+    setPropDescription(documentation, node, noopImporter);
 
     return documentation.descriptors;
   }
@@ -69,6 +80,28 @@ describe('setPropDescription', () => {
     expect(descriptors).toEqual({
       hal: {
         description: '',
+      },
+    });
+  });
+
+  it('resolves computed props to imported values', () => {
+    const src = `
+      ({
+        /**
+        * my description 3
+        */
+
+        [a]: boolean,
+      });
+      import a from 'foo';
+    `;
+    const node = statement(src).get('expression', 'properties', 0);
+
+    setPropDescription(defaultDocumentation, node, mockImporter);
+
+    expect(defaultDocumentation.descriptors).toEqual({
+      foo: {
+        description: 'my description 3',
       },
     });
   });
