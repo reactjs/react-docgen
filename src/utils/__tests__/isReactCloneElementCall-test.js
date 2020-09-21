@@ -6,7 +6,12 @@
  *
  */
 
-import { parse, noopImporter } from '../../../tests/utils';
+import {
+  parse,
+  statement,
+  noopImporter,
+  makeMockImporter,
+} from '../../../tests/utils';
 import isReactCloneElementCall from '../isReactCloneElementCall';
 
 describe('isReactCloneElementCall', () => {
@@ -14,6 +19,13 @@ describe('isReactCloneElementCall', () => {
     const root = parse(src);
     return root.get('body', root.node.body.length - 1, 'expression');
   }
+
+  const mockImporter = makeMockImporter({
+    foo: statement(`
+      export default React.cloneElement;
+      import React from 'react';
+    `).get('declaration'),
+  });
 
   describe('built in React.createClass', () => {
     it('accepts cloneElement called on React', () => {
@@ -78,6 +90,14 @@ describe('isReactCloneElementCall', () => {
         foo({});
       `);
       expect(isReactCloneElementCall(def, noopImporter)).toBe(true);
+    });
+
+    it('can resolve cloneElement imported from an intermediate module', () => {
+      const def = parsePath(`
+        import foo from "foo";
+        foo({});
+      `);
+      expect(isReactCloneElementCall(def, mockImporter)).toBe(true);
     });
   });
 });
