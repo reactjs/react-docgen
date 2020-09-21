@@ -8,7 +8,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import { handlers, parse } from '../main';
+import { handlers, parse, importers } from '../main';
 import { ERROR_MISSING_DEFINITION } from '../parse';
 
 describe('main', () => {
@@ -216,6 +216,7 @@ describe('main', () => {
     });
   });
 
+  // Fixures uses the resolveImports importer even though it is not the default
   describe('fixtures', () => {
     const fixturePath = path.join(__dirname, 'fixtures');
     const fileNames = fs.readdirSync(fixturePath);
@@ -227,6 +228,7 @@ describe('main', () => {
         let result;
         expect(() => {
           result = parse(fileContent, null, null, {
+            importer: importers.resolveImports,
             filename: filePath,
             babelrc: false,
           });

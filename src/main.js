@@ -30,7 +30,7 @@ const defaultHandlers = [
   allHandlers.componentMethodsHandler,
   allHandlers.componentMethodsJsDocHandler,
 ];
-const defaultImporter = AllImporter.resolveImports;
+const defaultImporter = AllImporter.ignoreImports;
 
 /**
  * See `lib/parse.js` for more information about the arguments. This function
@@ -58,9 +58,9 @@ function defaultParse(
     handlers = defaultHandlers;
   }
 
-  const { importer = defaultImporter } = options;
+  const { importer = defaultImporter, ...opts } = options;
 
-  return parse(String(src), resolver, handlers, importer, options);
+  return parse(String(src), resolver, handlers, importer, opts);
 }
 
 export {
