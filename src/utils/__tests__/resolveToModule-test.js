@@ -6,7 +6,12 @@
  *
  */
 
-import { parse, noopImporter } from '../../../tests/utils';
+import {
+  parse,
+  statement,
+  noopImporter,
+  makeMockImporter,
+} from '../../../tests/utils';
 import resolveToModule from '../resolveToModule';
 
 describe('resolveToModule', () => {
@@ -14,6 +19,18 @@ describe('resolveToModule', () => {
     const root = parse(src);
     return root.get('body', root.node.body.length - 1, 'expression');
   }
+
+  const mockImporter = makeMockImporter({
+    Foo: statement(`
+      export default bar;
+      import bar from 'Bar';
+    `).get('declaration'),
+
+    Bar: statement(`
+      export default baz;
+      import baz from 'Baz';
+    `).get('declaration'),
+  });
 
   it('resolves identifiers', () => {
     const path = parsePath(`
@@ -84,6 +101,14 @@ describe('resolveToModule', () => {
         foo;
       `);
       expect(resolveToModule(path, noopImporter)).toBe('Foo');
+    });
+
+    it('can resolve imports until one not expanded', () => {
+      const path = parsePath(`
+        import foo from "Foo";
+        foo;
+      `);
+      expect(resolveToModule(path, mockImporter)).toBe('Baz');
     });
   });
 });
