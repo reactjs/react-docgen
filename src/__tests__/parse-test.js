@@ -8,7 +8,7 @@
 
 import fs from 'fs';
 import temp from 'temp';
-import { expression } from '../../tests/utils';
+import { expression, noopImporter } from '../../tests/utils';
 import parse, { ERROR_MISSING_DEFINITION } from '../parse';
 
 describe('parse', () => {
@@ -16,7 +16,7 @@ describe('parse', () => {
     const path = expression('{foo: "bar"}');
     const resolver = jest.fn(() => path);
     const handler = jest.fn();
-    parse('//empty', resolver, [handler]);
+    parse('//empty', resolver, [handler], noopImporter);
 
     expect(resolver).toBeCalled();
     expect(handler.mock.calls[0][1]).toBe(path);
@@ -24,12 +24,12 @@ describe('parse', () => {
 
   it('errors if component definition is not found', () => {
     const resolver = jest.fn();
-    expect(() => parse('//empty', resolver)).toThrowError(
+    expect(() => parse('//empty', resolver, [], noopImporter)).toThrowError(
       ERROR_MISSING_DEFINITION,
     );
     expect(resolver).toBeCalled();
 
-    expect(() => parse('//empty', resolver)).toThrowError(
+    expect(() => parse('//empty', resolver, [], noopImporter)).toThrowError(
       ERROR_MISSING_DEFINITION,
     );
     expect(resolver).toBeCalled();
@@ -43,7 +43,7 @@ describe('parse', () => {
       fs.writeFileSync(`${dir}/.babelrc`, '{}');
 
       expect(() =>
-        parse('const chained  = () => a |> b', () => {}, null, null, {
+        parse('const chained  = () => a |> b', () => {}, [], noopImporter, {
           cwd: dir,
           filename: `${dir}/component.js`,
         }),
@@ -58,7 +58,7 @@ describe('parse', () => {
 
   it('supports custom parserOptions with plugins', () => {
     expect(() =>
-      parse('const chained: Type = 1;', () => {}, null, null, {
+      parse('const chained: Type = 1;', () => {}, [], noopImporter, {
         parserOptions: {
           plugins: [
             // no flow
@@ -71,7 +71,7 @@ describe('parse', () => {
 
   it('supports custom parserOptions without plugins', () => {
     expect(() =>
-      parse('const chained: Type = 1;', () => {}, null, null, {
+      parse('const chained: Type = 1;', () => {}, [], noopImporter, {
         parserOptions: {
           allowSuperOutsideMethod: true,
         },
