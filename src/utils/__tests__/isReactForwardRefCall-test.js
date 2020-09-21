@@ -6,7 +6,12 @@
  *
  */
 
-import { parse, noopImporter } from '../../../tests/utils';
+import {
+  parse,
+  statement,
+  noopImporter,
+  makeMockImporter,
+} from '../../../tests/utils';
 import isReactForwardRefCall from '../isReactForwardRefCall';
 
 describe('isReactForwardRefCall', () => {
@@ -14,6 +19,13 @@ describe('isReactForwardRefCall', () => {
     const root = parse(src);
     return root.get('body', root.node.body.length - 1, 'expression');
   }
+
+  const mockImporter = makeMockImporter({
+    foo: statement(`
+      export default React.forwardRef;
+      import React from 'react';
+    `).get('declaration'),
+  });
 
   describe('built in React.forwardRef', () => {
     it('accepts forwardRef called on React', () => {
@@ -84,6 +96,14 @@ describe('isReactForwardRefCall', () => {
         foo({});
       `);
       expect(isReactForwardRefCall(def, noopImporter)).toBe(true);
+    });
+
+    it('can resolve forwardRef imported from an intermediate module', () => {
+      const def = parsePath(`
+        import foo from "foo";
+        foo({});
+      `);
+      expect(isReactForwardRefCall(def, mockImporter)).toBe(true);
     });
   });
 });
