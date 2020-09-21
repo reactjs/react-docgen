@@ -103,7 +103,7 @@ if (argv.resolver) {
 }
 
 function parse(source, filename) {
-  return parser.parse(source, resolver, null, null, {
+  return parser.parse(source, resolver, null, {
     filename,
   });
 }
