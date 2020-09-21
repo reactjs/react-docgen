@@ -146,6 +146,22 @@ Object {
 }
 `;
 
+exports[`getPropType resolve identifier to their values correctly resolves SpreadElements in arrays from imported values 1`] = `
+Object {
+  "name": "enum",
+  "value": Array [
+    Object {
+      "computed": false,
+      "value": "\\"foo\\"",
+    },
+    Object {
+      "computed": false,
+      "value": "\\"bar\\"",
+    },
+  ],
+}
+`;
+
 exports[`getPropType resolve identifier to their values correctly resolves nested SpreadElements in arrays 1`] = `
 Object {
   "name": "enum",
@@ -162,7 +178,7 @@ Object {
 }
 `;
 
-exports[`getPropType resolve identifier to their values does not resolve external values 1`] = `
+exports[`getPropType resolve identifier to their values does not resolve external values without proper importer 1`] = `
 Object {
   "computed": true,
   "name": "enum",
@@ -202,7 +218,67 @@ Object {
 }
 `;
 
+exports[`getPropType resolve identifier to their values resolves imported identifier to their initialization value in array 1`] = `
+Object {
+  "name": "enum",
+  "value": Array [
+    Object {
+      "computed": false,
+      "value": "\\"foo\\"",
+    },
+    Object {
+      "computed": false,
+      "value": "\\"bar\\"",
+    },
+  ],
+}
+`;
+
+exports[`getPropType resolve identifier to their values resolves imported variables to their values 1`] = `
+Object {
+  "name": "shape",
+  "value": Object {
+    "bar": Object {
+      "name": "string",
+      "required": false,
+    },
+  },
+}
+`;
+
+exports[`getPropType resolve identifier to their values resolves importer identifier to initialization value 1`] = `
+Object {
+  "name": "enum",
+  "value": Array [
+    Object {
+      "computed": false,
+      "value": "\\"foo\\"",
+    },
+    Object {
+      "computed": false,
+      "value": "\\"bar\\"",
+    },
+  ],
+}
+`;
+
 exports[`getPropType resolve identifier to their values resolves memberExpressions 1`] = `
+Object {
+  "name": "enum",
+  "value": Array [
+    Object {
+      "computed": false,
+      "value": "\\"foo\\"",
+    },
+    Object {
+      "computed": false,
+      "value": "\\"bar\\"",
+    },
+  ],
+}
+`;
+
+exports[`getPropType resolve identifier to their values resolves memberExpressions from imported objects 1`] = `
 Object {
   "name": "enum",
   "value": Array [
@@ -245,6 +321,38 @@ Object {
     Object {
       "computed": false,
       "value": "\\"bar\\"",
+    },
+  ],
+}
+`;
+
+exports[`getPropType resolve identifier to their values resolves values from imported Object.keys call 1`] = `
+Object {
+  "name": "enum",
+  "value": Array [
+    Object {
+      "computed": false,
+      "value": "\\"FOO\\"",
+    },
+    Object {
+      "computed": false,
+      "value": "\\"BAR\\"",
+    },
+  ],
+}
+`;
+
+exports[`getPropType resolve identifier to their values resolves values from imported Object.values call 1`] = `
+Object {
+  "name": "enum",
+  "value": Array [
+    Object {
+      "computed": false,
+      "value": "\\"bar\\"",
+    },
+    Object {
+      "computed": false,
+      "value": "\\"foo\\"",
     },
   ],
 }
