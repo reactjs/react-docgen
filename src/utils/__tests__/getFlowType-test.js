@@ -38,8 +38,8 @@ describe('getFlowType', () => {
 
     recTup: statement(`
       export type recTup = [abc, xyz];
-      import abc from 'abc';
-      import xyz from 'xyz';
+      import type { abc } from 'abc';
+      import type { xyz } from 'xyz';
     `).get('declaration'),
 
     MyType: statement(`
