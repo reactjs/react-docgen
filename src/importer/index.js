@@ -8,6 +8,6 @@
  */
 
 import ignoreImports from './ignoreImports';
-import resolveImports from './resolveImports';
+import makeFsImporter from './makeFsImporter';
 
-export { ignoreImports, resolveImports };
+export { ignoreImports, makeFsImporter };
