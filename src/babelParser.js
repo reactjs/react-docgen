@@ -66,8 +66,9 @@ type BabelOptions = {
   babelrcRoots?: true | string | string[],
 };
 
-export type Options = BabelOptions & {
-  parserOptions?: ParserOptions,
+export type Options = {
+  ...$Exact<BabelOptions>,
+  ...{| parserOptions?: ParserOptions |},
 };
 
 function buildOptions(
