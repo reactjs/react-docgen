@@ -216,7 +216,8 @@ describe('main', () => {
     });
   });
 
-  // Fixures uses the resolveImports importer even though it is not the default
+  // Fixures uses the filesystem importer for easier e2e tests
+  // even though it is not the default
   describe('fixtures', () => {
     const fixturePath = path.join(__dirname, 'fixtures');
     const fileNames = fs.readdirSync(fixturePath);
@@ -228,7 +229,7 @@ describe('main', () => {
         let result;
         expect(() => {
           result = parse(fileContent, null, null, {
-            importer: importers.resolveImports,
+            importer: importers.makeFsImporter(),
             filename: filePath,
             babelrc: false,
           });
