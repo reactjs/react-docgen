@@ -6,7 +6,12 @@
  *
  */
 
-import { parse, noopImporter } from '../../../tests/utils';
+import {
+  parse,
+  statement,
+  noopImporter,
+  makeMockImporter,
+} from '../../../tests/utils';
 import isReactCreateClassCall from '../isReactCreateClassCall';
 
 describe('isReactCreateClassCall', () => {
@@ -14,6 +19,18 @@ describe('isReactCreateClassCall', () => {
     const root = parse(src);
     return root.get('body', root.node.body.length - 1, 'expression');
   }
+
+  const mockImporter = makeMockImporter({
+    foo: statement(`
+      export default React.createClass;
+      import React from 'react';
+    `).get('declaration'),
+
+    bar: statement(`
+      export default makeClass;
+      import makeClass from "create-react-class";
+    `).get('declaration'),
+  });
 
   describe('built in React.createClass', () => {
     it('accepts createClass called on React', () => {
@@ -85,6 +102,14 @@ describe('isReactCreateClassCall', () => {
       `);
       expect(isReactCreateClassCall(def, noopImporter)).toBe(true);
     });
+
+    it('resolves createClass imported from intermediate module', () => {
+      const def = parsePath(`
+        import foo from "foo";
+        foo({});
+      `);
+      expect(isReactCreateClassCall(def, mockImporter)).toBe(true);
+    });
   });
 
   describe('modular in create-react-class', () => {
@@ -116,6 +141,14 @@ describe('isReactCreateClassCall', () => {
         });
       `);
       expect(isReactCreateClassCall(def, noopImporter)).toBe(false);
+    });
+
+    it('resolves create-react-class imported from intermediate module', () => {
+      const def = parsePath(`
+        import bar from "bar";
+        bar({});
+      `);
+      expect(isReactCreateClassCall(def, mockImporter)).toBe(true);
     });
   });
 });
