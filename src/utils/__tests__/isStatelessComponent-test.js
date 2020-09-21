@@ -6,7 +6,7 @@
  *
  */
 
-import { parse, statement } from '../../../tests/utils';
+import { parse, statement, noopImporter } from '../../../tests/utils';
 import isStatelessComponent from '../isStatelessComponent';
 
 describe('isStatelessComponent', () => {
@@ -17,7 +17,6 @@ describe('isStatelessComponent', () => {
     'React.cloneElement': 'React.cloneElement(children, null)',
     'React.Children.only()': 'React.Children.only(children, null)',
   };
-  const ignoreImports = () => null;
 
   const componentStyle = {
     ArrowExpression: [
@@ -105,7 +104,7 @@ describe('isStatelessComponent', () => {
                     ...caseSelector,
                     ...componentSelector,
                   );
-                  expect(isStatelessComponent(def, ignoreImports)).toBe(true);
+                  expect(isStatelessComponent(def, noopImporter)).toBe(true);
                 });
               });
 
@@ -121,7 +120,7 @@ describe('isStatelessComponent', () => {
                     ...caseSelector,
                     ...componentSelector,
                   );
-                  expect(isStatelessComponent(def, ignoreImports)).toBe(false);
+                  expect(isStatelessComponent(def, noopImporter)).toBe(false);
                 });
               });
             });
@@ -141,7 +140,7 @@ describe('isStatelessComponent', () => {
         .get('declarations', [0])
         .get('init');
 
-      expect(isStatelessComponent(def, ignoreImports)).toBe(true);
+      expect(isStatelessComponent(def, noopImporter)).toBe(true);
     });
   });
 
@@ -167,11 +166,11 @@ describe('isStatelessComponent', () => {
       const render = def.get('properties', 3);
       const world = def.get('properties', 4);
 
-      expect(isStatelessComponent(bar, ignoreImports)).toBe(true);
-      expect(isStatelessComponent(baz, ignoreImports)).toBe(true);
-      expect(isStatelessComponent(hello, ignoreImports)).toBe(true);
-      expect(isStatelessComponent(render, ignoreImports)).toBe(false);
-      expect(isStatelessComponent(world, ignoreImports)).toBe(true);
+      expect(isStatelessComponent(bar, noopImporter)).toBe(true);
+      expect(isStatelessComponent(baz, noopImporter)).toBe(true);
+      expect(isStatelessComponent(hello, noopImporter)).toBe(true);
+      expect(isStatelessComponent(render, noopImporter)).toBe(false);
+      expect(isStatelessComponent(world, noopImporter)).toBe(true);
     });
   });
 
@@ -184,7 +183,7 @@ describe('isStatelessComponent', () => {
           }
         }
       `);
-      expect(isStatelessComponent(def, ignoreImports)).toBe(false);
+      expect(isStatelessComponent(def, noopImporter)).toBe(false);
     });
 
     it('does not accept React.Component classes', () => {
@@ -197,7 +196,7 @@ describe('isStatelessComponent', () => {
         }
       `).get('body', 1);
 
-      expect(isStatelessComponent(def, ignoreImports)).toBe(false);
+      expect(isStatelessComponent(def, noopImporter)).toBe(false);
     });
 
     it('does not accept React.createClass calls', () => {
@@ -209,7 +208,7 @@ describe('isStatelessComponent', () => {
         });
       `);
 
-      expect(isStatelessComponent(def, ignoreImports)).toBe(false);
+      expect(isStatelessComponent(def, noopImporter)).toBe(false);
     });
   });
 
@@ -218,7 +217,7 @@ describe('isStatelessComponent', () => {
       it(desc, () => {
         const def = parse(code).get('body', 1);
 
-        expect(isStatelessComponent(def, ignoreImports)).toBe(true);
+        expect(isStatelessComponent(def, noopImporter)).toBe(true);
       });
     }
 
@@ -231,7 +230,7 @@ describe('isStatelessComponent', () => {
         }
       `);
 
-      expect(isStatelessComponent(def, ignoreImports)).toBe(true);
+      expect(isStatelessComponent(def, noopImporter)).toBe(true);
     });
 
     it('handles recursive function calls', () => {
@@ -241,7 +240,7 @@ describe('isStatelessComponent', () => {
         }
       `);
 
-      expect(isStatelessComponent(def, ignoreImports)).toBe(false);
+      expect(isStatelessComponent(def, noopImporter)).toBe(false);
     });
 
     test(
