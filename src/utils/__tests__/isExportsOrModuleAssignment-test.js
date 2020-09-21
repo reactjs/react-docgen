@@ -6,26 +6,32 @@
  *
  */
 
-import { statement } from '../../../tests/utils';
+import { statement, noopImporter } from '../../../tests/utils';
 import isExportsOrModuleAssignment from '../isExportsOrModuleAssignment';
 
 describe('isExportsOrModuleAssignment', () => {
   it('detects "module.exports = ...;"', () => {
     expect(
-      isExportsOrModuleAssignment(statement('module.exports = foo;')),
+      isExportsOrModuleAssignment(
+        statement('module.exports = foo;'),
+        noopImporter,
+      ),
     ).toBe(true);
   });
 
   it('detects "exports.foo = ..."', () => {
-    expect(isExportsOrModuleAssignment(statement('exports.foo = foo;'))).toBe(
-      true,
-    );
+    expect(
+      isExportsOrModuleAssignment(
+        statement('exports.foo = foo;'),
+        noopImporter,
+      ),
+    ).toBe(true);
   });
 
   it('does not accept "exports = foo;"', () => {
     // That doesn't actually export anything
-    expect(isExportsOrModuleAssignment(statement('exports = foo;'))).toBe(
-      false,
-    );
+    expect(
+      isExportsOrModuleAssignment(statement('exports = foo;'), noopImporter),
+    ).toBe(false);
   });
 });
