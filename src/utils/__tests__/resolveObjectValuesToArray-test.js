@@ -7,21 +7,47 @@
  */
 
 import { builders } from 'ast-types';
-import * as utils from '../../../tests/utils';
+import {
+  parse as parseSource,
+  statement,
+  noopImporter,
+  makeMockImporter,
+} from '../../../tests/utils';
 import resolveObjectValuesToArray from '../resolveObjectValuesToArray';
 
 describe('resolveObjectValuesToArray', () => {
   function parse(src) {
-    const root = utils.parse(src);
+    const root = parseSource(src);
     return root.get('body', root.node.body.length - 1, 'expression');
   }
+
+  const mockImporter = makeMockImporter({
+    foo: statement(`
+      export default {
+        1: "bar",
+        2: "foo",
+        3: 0,
+        4: 5,
+        5: undefined,
+        6: null,
+        [7]: 7,
+        ['foo']: "foo",
+      };
+    `).get('declaration'),
+
+    bar: statement(`
+      export default {
+        bar: 'bar',
+      };
+    `).get('declaration'),
+  });
 
   it('resolves Object.values with strings', () => {
     const path = parse(
       ['var foo = { 1: "bar", 2: "foo" };', 'Object.values(foo);'].join('\n'),
     );
 
-    expect(resolveObjectValuesToArray(path)).toEqualASTNode(
+    expect(resolveObjectValuesToArray(path, noopImporter)).toEqualASTNode(
       builders.arrayExpression([
         builders.literal('bar'),
         builders.literal('foo'),
@@ -34,7 +60,7 @@ describe('resolveObjectValuesToArray', () => {
       ['var foo = { 1: 0, 2: 5 };', 'Object.values(foo);'].join('\n'),
     );
 
-    expect(resolveObjectValuesToArray(path)).toEqualASTNode(
+    expect(resolveObjectValuesToArray(path, noopImporter)).toEqualASTNode(
       builders.arrayExpression([builders.literal(0), builders.literal(5)]),
     );
   });
@@ -46,7 +72,7 @@ describe('resolveObjectValuesToArray', () => {
       ),
     );
 
-    expect(resolveObjectValuesToArray(path)).toEqualASTNode(
+    expect(resolveObjectValuesToArray(path, noopImporter)).toEqualASTNode(
       builders.arrayExpression([
         builders.literal(null),
         builders.literal(null),
@@ -59,7 +85,7 @@ describe('resolveObjectValuesToArray', () => {
       ['var foo = { ["bar"]: 1, [5]: 2};', 'Object.values(foo);'].join('\n'),
     );
 
-    expect(resolveObjectValuesToArray(path)).toEqualASTNode(
+    expect(resolveObjectValuesToArray(path, noopImporter)).toEqualASTNode(
       builders.arrayExpression([builders.literal(2), builders.literal(1)]),
     );
   });
@@ -69,7 +95,7 @@ describe('resolveObjectValuesToArray', () => {
       ['var foo = { [()=>{}]: 1, [5]: 2};', 'Object.values(foo);'].join('\n'),
     );
 
-    expect(resolveObjectValuesToArray(path)).toBeNull();
+    expect(resolveObjectValuesToArray(path, noopImporter)).toBeNull();
   });
 
   it('resolves Object.values when using resolvable spread', () => {
@@ -81,7 +107,7 @@ describe('resolveObjectValuesToArray', () => {
       ].join('\n'),
     );
 
-    expect(resolveObjectValuesToArray(path)).toEqualASTNode(
+    expect(resolveObjectValuesToArray(path, noopImporter)).toEqualASTNode(
       builders.arrayExpression([
         builders.literal(1),
         builders.literal(4),
@@ -98,7 +124,7 @@ describe('resolveObjectValuesToArray', () => {
       ].join('\n'),
     );
 
-    expect(resolveObjectValuesToArray(path)).toEqualASTNode(
+    expect(resolveObjectValuesToArray(path, noopImporter)).toEqualASTNode(
       builders.arrayExpression([builders.literal(1), builders.literal(2)]),
     );
   });
@@ -111,7 +137,7 @@ describe('resolveObjectValuesToArray', () => {
       ].join('\n'),
     );
 
-    expect(resolveObjectValuesToArray(path)).toEqualASTNode(
+    expect(resolveObjectValuesToArray(path, noopImporter)).toEqualASTNode(
       builders.arrayExpression([builders.literal(1), builders.literal(2)]),
     );
   });
@@ -125,7 +151,7 @@ describe('resolveObjectValuesToArray', () => {
       ].join('\n'),
     );
 
-    expect(resolveObjectValuesToArray(path)).toEqualASTNode(
+    expect(resolveObjectValuesToArray(path, noopImporter)).toEqualASTNode(
       builders.arrayExpression([
         builders.literal(1),
         builders.literal(5),
@@ -141,7 +167,7 @@ describe('resolveObjectValuesToArray', () => {
       ),
     );
 
-    expect(resolveObjectValuesToArray(path)).toEqualASTNode(
+    expect(resolveObjectValuesToArray(path, noopImporter)).toEqualASTNode(
       builders.arrayExpression([]),
     );
   });
@@ -153,6 +179,42 @@ describe('resolveObjectValuesToArray', () => {
       ),
     );
 
-    expect(resolveObjectValuesToArray(path)).toBeNull();
+    expect(resolveObjectValuesToArray(path, noopImporter)).toBeNull();
+  });
+
+  it('can resolve imported objects passed to Object.values', () => {
+    const path = parse(`
+      import foo from 'foo';
+      Object.values(foo);
+    `);
+
+    expect(resolveObjectValuesToArray(path, mockImporter)).toEqualASTNode(
+      builders.arrayExpression([
+        builders.literal('bar'),
+        builders.literal('foo'),
+        builders.literal(0),
+        builders.literal(5),
+        builders.literal(null),
+        builders.literal(null),
+        builders.literal(7),
+        builders.literal('foo'),
+      ]),
+    );
+  });
+
+  it('can resolve spreads from imported objects', () => {
+    const path = parse(`
+      import bar from 'bar';
+      var abc = { foo: 'foo', baz: 'baz', ...bar };
+      Object.values(abc);
+    `);
+
+    expect(resolveObjectValuesToArray(path, mockImporter)).toEqualASTNode(
+      builders.arrayExpression([
+        builders.literal('bar'),
+        builders.literal('baz'),
+        builders.literal('foo'),
+      ]),
+    );
   });
 });
