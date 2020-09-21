@@ -6,7 +6,12 @@
  *
  */
 
-import { expression, statement, noopImporter } from '../../../tests/utils';
+import {
+  expression,
+  statement,
+  noopImporter,
+  makeMockImporter,
+} from '../../../tests/utils';
 import getPropType from '../getPropType';
 
 describe('getPropType', () => {
@@ -176,6 +181,42 @@ describe('getPropType', () => {
   });
 
   describe('resolve identifier to their values', () => {
+    const mockImporter = makeMockImporter({
+      shape: statement(`
+        export default {bar: PropTypes.string};
+      `).get('declaration'),
+
+      types: statement(`
+        export default ["foo", "bar"];
+      `).get('declaration'),
+
+      foo: statement(`
+        export default "foo";
+      `).get('declaration'),
+
+      bar: statement(`
+        export default "bar";
+      `).get('declaration'),
+
+      obj: statement(`
+        export default { FOO: "foo", BAR: "bar" };
+      `).get('declaration'),
+
+      arr: statement(`
+        export default ["foo", "bar"];
+      `).get('declaration'),
+
+      keys: statement(`
+        export default Object.keys(obj);
+        import obj from 'obj';
+      `).get('declaration'),
+
+      values: statement(`
+        export default Object.values(obj);
+        import obj from 'obj';
+      `).get('declaration'),
+    });
+
     it('resolves variables to their values', () => {
       const propTypeExpression = statement(`
         PropTypes.shape(shape);
@@ -185,6 +226,15 @@ describe('getPropType', () => {
       expect(getPropType(propTypeExpression, noopImporter)).toMatchSnapshot();
     });
 
+    it('resolves imported variables to their values', () => {
+      const propTypeExpression = statement(`
+        PropTypes.shape(shape);
+        import shape from 'shape';
+      `).get('expression');
+
+      expect(getPropType(propTypeExpression, mockImporter)).toMatchSnapshot();
+    });
+
     it('resolves simple identifier to their initialization value', () => {
       const propTypeIdentifier = statement(`
         PropTypes.oneOf(TYPES);
@@ -192,6 +242,15 @@ describe('getPropType', () => {
       `).get('expression');
 
       expect(getPropType(propTypeIdentifier, noopImporter)).toMatchSnapshot();
+    });
+
+    it('resolves importer identifier to initialization value', () => {
+      const propTypeIdentifier = statement(`
+        PropTypes.oneOf(TYPES);
+        import TYPES from 'types';
+      `).get('expression');
+
+      expect(getPropType(propTypeIdentifier, mockImporter)).toMatchSnapshot();
     });
 
     it('resolves simple identifier to their initialization value in array', () => {
@@ -206,6 +265,18 @@ describe('getPropType', () => {
       ).toMatchSnapshot();
     });
 
+    it('resolves imported identifier to their initialization value in array', () => {
+      const identifierInsideArray = statement(`
+        PropTypes.oneOf([FOO, BAR]);
+        import FOO from 'foo';
+        import BAR from 'bar';
+      `).get('expression');
+
+      expect(
+        getPropType(identifierInsideArray, mockImporter),
+      ).toMatchSnapshot();
+    });
+
     it('resolves memberExpressions', () => {
       const propTypeExpression = statement(`
         PropTypes.oneOf([TYPES.FOO, TYPES.BAR]);
@@ -215,6 +286,15 @@ describe('getPropType', () => {
       expect(getPropType(propTypeExpression, noopImporter)).toMatchSnapshot();
     });
 
+    it('resolves memberExpressions from imported objects', () => {
+      const propTypeExpression = statement(`
+        PropTypes.oneOf([TYPES.FOO, TYPES.BAR]);
+        import TYPES from 'obj';
+      `).get('expression');
+
+      expect(getPropType(propTypeExpression, mockImporter)).toMatchSnapshot();
+    });
+
     it('correctly resolves SpreadElements in arrays', () => {
       const propTypeExpression = statement(`
         PropTypes.oneOf([...TYPES]);
@@ -222,6 +302,15 @@ describe('getPropType', () => {
       `).get('expression');
 
       expect(getPropType(propTypeExpression, noopImporter)).toMatchSnapshot();
+    });
+
+    it('correctly resolves SpreadElements in arrays from imported values', () => {
+      const propTypeExpression = statement(`
+        PropTypes.oneOf([...TYPES]);
+        import TYPES from 'arr';
+      `).get('expression');
+
+      expect(getPropType(propTypeExpression, mockImporter)).toMatchSnapshot();
     });
 
     it('correctly resolves nested SpreadElements in arrays', () => {
@@ -243,6 +332,15 @@ describe('getPropType', () => {
       expect(getPropType(propTypeExpression, noopImporter)).toMatchSnapshot();
     });
 
+    it('resolves values from imported Object.keys call', () => {
+      const propTypeExpression = statement(`
+        PropTypes.oneOf(keys);
+        import keys from 'keys';
+      `).get('expression');
+
+      expect(getPropType(propTypeExpression, mockImporter)).toMatchSnapshot();
+    });
+
     it('does resolve object values', () => {
       const propTypeExpression = statement(`
         PropTypes.oneOf(Object.values(TYPES));
@@ -252,7 +350,16 @@ describe('getPropType', () => {
       expect(getPropType(propTypeExpression, noopImporter)).toMatchSnapshot();
     });
 
-    it('does not resolve external values', () => {
+    it('resolves values from imported Object.values call', () => {
+      const propTypeExpression = statement(`
+        PropTypes.oneOf(values);
+        import values from 'values';
+      `).get('expression');
+
+      expect(getPropType(propTypeExpression, mockImporter)).toMatchSnapshot();
+    });
+
+    it('does not resolve external values without proper importer', () => {
       const propTypeExpression = statement(`
         PropTypes.oneOf(TYPES);
         import { TYPES } from './foo';
