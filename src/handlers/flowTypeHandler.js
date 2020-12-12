@@ -19,11 +19,13 @@ import getTSType from '../utils/getTSType';
 import { type TypeParameters } from '../utils/getTypeParameters';
 import resolveToValue from '../utils/resolveToValue';
 import setPropDescription from '../utils/setPropDescription';
+import type { Importer } from '../types';
 
 function setPropDescriptor(
   documentation: Documentation,
   path: NodePath,
   typeParams: ?TypeParameters,
+  importer: Importer,
 ): void {
   if (t.ObjectTypeSpreadProperty.check(path.node)) {
     const argument = unwrapUtilityType(path.get('argument'));
@@ -33,15 +35,25 @@ function setPropDescriptor(
         documentation,
         argument,
         (propertyPath, innerTypeParams) => {
-          setPropDescriptor(documentation, propertyPath, innerTypeParams);
+          setPropDescriptor(
+            documentation,
+            propertyPath,
+            innerTypeParams,
+            importer,
+          );
         },
         typeParams,
+        importer,
       );
       return;
     }
 
     const name = argument.get('id').get('name');
-    const resolvedPath = resolveToValue(name);
+    const resolvedPath = resolveToValue(
+      name,
+      // TODO: Make this configurable with a pragma comment?
+      importer,
+    );
 
     if (resolvedPath && t.TypeAlias.check(resolvedPath.node)) {
       const right = resolvedPath.get('right');
@@ -49,16 +61,22 @@ function setPropDescriptor(
         documentation,
         right,
         (propertyPath, innerTypeParams) => {
-          setPropDescriptor(documentation, propertyPath, innerTypeParams);
+          setPropDescriptor(
+            documentation,
+            propertyPath,
+            innerTypeParams,
+            importer,
+          );
         },
         typeParams,
+        importer,
       );
-    } else {
+    } else if (!argument.node.typeParameters) {
       documentation.addComposes(name.node.name);
     }
   } else if (t.ObjectTypeProperty.check(path.node)) {
-    const type = getFlowType(path.get('value'), typeParams);
-    const propName = getPropertyName(path);
+    const type = getFlowType(path.get('value'), typeParams, importer);
+    const propName = getPropertyName(path, importer);
     if (!propName) return;
 
     const propDescriptor = documentation.getPropDescriptor(propName);
@@ -68,11 +86,11 @@ function setPropDescriptor(
     // We are doing this here instead of in a different handler
     // to not need to duplicate the logic for checking for
     // imported types that are spread in to props.
-    setPropDescription(documentation, path);
+    setPropDescription(documentation, path, importer);
   } else if (t.TSPropertySignature.check(path.node)) {
-    const type = getTSType(path.get('typeAnnotation'), typeParams);
+    const type = getTSType(path.get('typeAnnotation'), typeParams, importer);
 
-    const propName = getPropertyName(path);
+    const propName = getPropertyName(path, importer);
     if (!propName) return;
 
     const propDescriptor = documentation.getPropDescriptor(propName);
@@ -82,7 +100,7 @@ function setPropDescriptor(
     // We are doing this here instead of in a different handler
     // to not need to duplicate the logic for checking for
     // imported types that are spread in to props.
-    setPropDescription(documentation, path);
+    setPropDescription(documentation, path, importer);
   }
 }
 
@@ -94,8 +112,9 @@ function setPropDescriptor(
 export default function flowTypeHandler(
   documentation: Documentation,
   path: NodePath,
+  importer: Importer,
 ) {
-  const flowTypesPath = getFlowTypeFromReactComponent(path);
+  const flowTypesPath = getFlowTypeFromReactComponent(path, importer);
 
   if (!flowTypesPath) {
     return;
@@ -105,7 +124,9 @@ export default function flowTypeHandler(
     documentation,
     flowTypesPath,
     (propertyPath, typeParams) => {
-      setPropDescriptor(documentation, propertyPath, typeParams);
+      setPropDescriptor(documentation, propertyPath, typeParams, importer);
     },
+    null,
+    importer,
   );
 }

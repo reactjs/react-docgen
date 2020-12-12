@@ -1,5 +1,62 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`defaultPropsHandler ClassDeclaration with static defaultProps can resolve default props that are imported given a custom importer 1`] = `
+Object {
+  "baz": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "[\\"foo\\", \\"bar\\"]",
+    },
+  },
+}
+`;
+
+exports[`defaultPropsHandler ClassDeclaration with static defaultProps resolves imported spreads 1`] = `
+Object {
+  "bar": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "\\"foo\\"",
+    },
+  },
+  "foo": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "\\"bar\\"",
+    },
+  },
+}
+`;
+
+exports[`defaultPropsHandler ClassDeclaration with static defaultProps resolves imported values assigned as default props 1`] = `
+Object {
+  "abc": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "{xyz: abc.def, 123: 42}",
+    },
+  },
+  "bar": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "42",
+    },
+  },
+  "baz": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "[\\"foo\\", \\"bar\\"]",
+    },
+  },
+  "foo": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "\\"bar\\"",
+    },
+  },
+}
+`;
+
 exports[`defaultPropsHandler ClassDeclaration with static defaultProps should find prop default values that are imported variables 1`] = `
 Object {
   "foo": Object {
@@ -57,6 +114,35 @@ Object {
 }
 `;
 
+exports[`defaultPropsHandler ClassExpression with static defaultProps resolves imported values assigned as default props 1`] = `
+Object {
+  "abc": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "{xyz: abc.def, 123: 42}",
+    },
+  },
+  "bar": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "42",
+    },
+  },
+  "baz": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "[\\"foo\\", \\"bar\\"]",
+    },
+  },
+  "foo": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "\\"bar\\"",
+    },
+  },
+}
+`;
+
 exports[`defaultPropsHandler ClassExpression with static defaultProps should find prop default values that are literals 1`] = `
 Object {
   "abc": Object {
@@ -75,6 +161,56 @@ Object {
     "defaultValue": Object {
       "computed": false,
       "value": "[\\"foo\\", \\"bar\\"]",
+    },
+  },
+  "foo": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "\\"bar\\"",
+    },
+  },
+}
+`;
+
+exports[`defaultPropsHandler Functional components with default params allows imported defaults to be aliased 1`] = `
+Object {
+  "foo": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "[\\"foo\\", \\"bar\\"]",
+    },
+  },
+}
+`;
+
+exports[`defaultPropsHandler Functional components with default params can use imported values as default props 1`] = `
+Object {
+  "bar": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "[\\"foo\\", \\"bar\\"]",
+    },
+  },
+}
+`;
+
+exports[`defaultPropsHandler Functional components with default params overrides with imported defaultProps 1`] = `
+Object {
+  "bar": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "\\"foo\\"",
+    },
+  },
+}
+`;
+
+exports[`defaultPropsHandler Functional components with default params resolves imported spreads 1`] = `
+Object {
+  "bar": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "\\"foo\\"",
     },
   },
   "foo": Object {
@@ -203,6 +339,35 @@ Object {
 
 exports[`defaultPropsHandler Functional components with default params should work with no defaults 1`] = `Object {}`;
 
+exports[`defaultPropsHandler ObjectExpression can resolve declared functions 1`] = `
+Object {
+  "abc": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "{xyz: abc.def, 123: 42}",
+    },
+  },
+  "bar": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "42",
+    },
+  },
+  "baz": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "[\\"foo\\", \\"bar\\"]",
+    },
+  },
+  "foo": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "\\"bar\\"",
+    },
+  },
+}
+`;
+
 exports[`defaultPropsHandler ObjectExpression handles computed properties 1`] = `
 Object {
   "@computed#bar": Object {
@@ -220,8 +385,53 @@ Object {
 }
 `;
 
+exports[`defaultPropsHandler ObjectExpression handles imported values assigned to computed properties 1`] = `
+Object {
+  "@computed#bar": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "[\\"foo\\", \\"bar\\"]",
+    },
+  },
+  "foo": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "\\"bar\\"",
+    },
+  },
+}
+`;
+
 exports[`defaultPropsHandler ObjectExpression ignores complex computed properties 1`] = `
 Object {
+  "foo": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "\\"bar\\"",
+    },
+  },
+}
+`;
+
+exports[`defaultPropsHandler ObjectExpression ignores imported values assigned to complex computed properties 1`] = `
+Object {
+  "foo": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "\\"bar\\"",
+    },
+  },
+}
+`;
+
+exports[`defaultPropsHandler ObjectExpression resolves imported spreads 1`] = `
+Object {
+  "bar": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "\\"foo\\"",
+    },
+  },
   "foo": Object {
     "defaultValue": Object {
       "computed": false,
@@ -277,6 +487,69 @@ Object {
 }
 `;
 
+exports[`defaultPropsHandler ObjectExpression should find prop default values that are literals from imported functions 1`] = `
+Object {
+  "abc": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "{xyz: abc.def, 123: 42}",
+    },
+  },
+  "bar": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "42",
+    },
+  },
+  "baz": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "[\\"foo\\", \\"bar\\"]",
+    },
+  },
+  "foo": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "\\"bar\\"",
+    },
+  },
+}
+`;
+
+exports[`defaultPropsHandler can have an importer that resolves spread properties 1`] = `
+Object {
+  "123": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "42",
+    },
+  },
+  "bar": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "42",
+    },
+  },
+  "xyz": Object {
+    "defaultValue": Object {
+      "computed": true,
+      "value": "abc.def",
+    },
+  },
+}
+`;
+
+exports[`defaultPropsHandler forwardRef also resolves imports when the function is not inline 1`] = `
+Object {
+  "bar": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "[\\"foo\\", \\"bar\\"]",
+    },
+  },
+}
+`;
+
 exports[`defaultPropsHandler forwardRef resolves default props in the parameters 1`] = `
 Object {
   "foo": Object {
@@ -294,6 +567,28 @@ Object {
     "defaultValue": Object {
       "computed": false,
       "value": "'baz'",
+    },
+  },
+}
+`;
+
+exports[`defaultPropsHandler forwardRef resolves imported default props in the parameters 1`] = `
+Object {
+  "bar": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "[\\"foo\\", \\"bar\\"]",
+    },
+  },
+}
+`;
+
+exports[`defaultPropsHandler forwardRef resolves imported defaultProps 1`] = `
+Object {
+  "bar": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "\\"foo\\"",
     },
   },
 }

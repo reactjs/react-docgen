@@ -6,7 +6,12 @@
  *
  */
 
-import { parse } from '../../../tests/utils';
+import {
+  parse,
+  statement,
+  noopImporter,
+  makeMockImporter,
+} from '../../../tests/utils';
 import isReactCreateElementCall from '../isReactCreateElementCall';
 
 describe('isReactCreateElementCall', () => {
@@ -14,6 +19,13 @@ describe('isReactCreateElementCall', () => {
     const root = parse(src);
     return root.get('body', root.node.body.length - 1, 'expression');
   }
+
+  const mockImporter = makeMockImporter({
+    foo: statement(`
+      export default React.createElement;
+      import React from 'react';
+    `).get('declaration'),
+  });
 
   describe('built in React.createElement', () => {
     it('accepts createElement called on React', () => {
@@ -23,7 +35,7 @@ describe('isReactCreateElementCall', () => {
           render() {}
         });
       `);
-      expect(isReactCreateElementCall(def)).toBe(true);
+      expect(isReactCreateElementCall(def, noopImporter)).toBe(true);
     });
 
     it('accepts createElement called on aliased React', () => {
@@ -33,7 +45,7 @@ describe('isReactCreateElementCall', () => {
           render() {}
         });
       `);
-      expect(isReactCreateElementCall(def)).toBe(true);
+      expect(isReactCreateElementCall(def, noopImporter)).toBe(true);
     });
 
     it('ignores other React calls', () => {
@@ -41,7 +53,7 @@ describe('isReactCreateElementCall', () => {
         var React = require("React");
         React.isValidElement({});
       `);
-      expect(isReactCreateElementCall(def)).toBe(false);
+      expect(isReactCreateElementCall(def, noopImporter)).toBe(false);
     });
 
     it('ignores non React calls to createElement', () => {
@@ -51,7 +63,7 @@ describe('isReactCreateElementCall', () => {
           render() {}
         });
       `);
-      expect(isReactCreateElementCall(def)).toBe(false);
+      expect(isReactCreateElementCall(def, noopImporter)).toBe(false);
     });
 
     it('accepts createElement called on destructed value', () => {
@@ -59,7 +71,7 @@ describe('isReactCreateElementCall', () => {
         var { createElement } = require("react");
         createElement({});
       `);
-      expect(isReactCreateElementCall(def)).toBe(true);
+      expect(isReactCreateElementCall(def, noopImporter)).toBe(true);
     });
 
     it('accepts createElement called on destructed aliased value', () => {
@@ -67,7 +79,7 @@ describe('isReactCreateElementCall', () => {
         var { createElement: foo } = require("react");
         foo({});
       `);
-      expect(isReactCreateElementCall(def)).toBe(true);
+      expect(isReactCreateElementCall(def, noopImporter)).toBe(true);
     });
 
     it('accepts createElement called on imported value', () => {
@@ -75,7 +87,7 @@ describe('isReactCreateElementCall', () => {
         import { createElement } from "react";
         createElement({});
       `);
-      expect(isReactCreateElementCall(def)).toBe(true);
+      expect(isReactCreateElementCall(def, noopImporter)).toBe(true);
     });
 
     it('accepts createElement called on imported aliased value', () => {
@@ -83,7 +95,15 @@ describe('isReactCreateElementCall', () => {
         import { createElement as foo } from "react";
         foo({});
       `);
-      expect(isReactCreateElementCall(def)).toBe(true);
+      expect(isReactCreateElementCall(def, noopImporter)).toBe(true);
+    });
+
+    it('can resolve createElement imported from an intermediate module', () => {
+      const def = parsePath(`
+        import foo from "foo";
+        foo({});
+      `);
+      expect(isReactCreateElementCall(def, mockImporter)).toBe(true);
     });
   });
 });

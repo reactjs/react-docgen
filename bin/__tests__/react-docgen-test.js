@@ -198,7 +198,6 @@ describe('react-docgen CLI', () => {
     },
     TEST_TIMEOUT,
   );
-
   it(
     'writes to stdout',
     () => {

@@ -6,7 +6,7 @@
  *
  */
 
-import { statement } from '../../../tests/utils';
+import { statement, noopImporter } from '../../../tests/utils';
 import getMemberExpressionValuePath from '../getMemberExpressionValuePath';
 
 describe('getMemberExpressionValuePath', () => {
@@ -17,7 +17,7 @@ describe('getMemberExpressionValuePath', () => {
         Foo.propTypes = {};
       `);
 
-      expect(getMemberExpressionValuePath(def, 'propTypes')).toBe(
+      expect(getMemberExpressionValuePath(def, 'propTypes', noopImporter)).toBe(
         def.parent.get('body', 1, 'expression', 'right'),
       );
     });
@@ -29,7 +29,7 @@ describe('getMemberExpressionValuePath', () => {
         Bar.propTypes = { unrelated: true };
       `);
 
-      expect(getMemberExpressionValuePath(def, 'propTypes')).toBe(
+      expect(getMemberExpressionValuePath(def, 'propTypes', noopImporter)).toBe(
         def.parent.get('body', 1, 'expression', 'right'),
       );
     });
@@ -40,7 +40,7 @@ describe('getMemberExpressionValuePath', () => {
         Foo['render'] = () => {};
       `);
 
-      expect(getMemberExpressionValuePath(def, 'render')).toBe(
+      expect(getMemberExpressionValuePath(def, 'render', noopImporter)).toBe(
         def.parent.get('body', 1, 'expression', 'right'),
       );
     });
@@ -51,7 +51,9 @@ describe('getMemberExpressionValuePath', () => {
         Foo[imComputed] = () => {};
       `);
 
-      expect(getMemberExpressionValuePath(def, 'imComputed')).not.toBeDefined();
+      expect(
+        getMemberExpressionValuePath(def, 'imComputed', noopImporter),
+      ).not.toBeDefined();
     });
   });
   describe('TaggedTemplateLiteral', () => {
@@ -61,7 +63,7 @@ describe('getMemberExpressionValuePath', () => {
         Foo.propTypes = {};
       `);
 
-      expect(getMemberExpressionValuePath(def, 'propTypes')).toBe(
+      expect(getMemberExpressionValuePath(def, 'propTypes', noopImporter)).toBe(
         def.parent.get('body', 1, 'expression', 'right'),
       );
     });
@@ -73,7 +75,7 @@ describe('getMemberExpressionValuePath', () => {
         Foo.propTypes = {};
       `);
 
-      expect(getMemberExpressionValuePath(def, 'propTypes')).toBe(
+      expect(getMemberExpressionValuePath(def, 'propTypes', noopImporter)).toBe(
         def.parent.get('body', 1, 'expression', 'right'),
       );
     });

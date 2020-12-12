@@ -9,6 +9,7 @@
 
 import { namedTypes as t } from 'ast-types';
 import getPropertyName from './getPropertyName';
+import type { Importer } from '../types';
 
 const componentMethods = [
   'componentDidMount',
@@ -35,7 +36,7 @@ const componentMethods = [
 /**
  * Returns if the method path is a Component method.
  */
-export default function(methodPath: NodePath): boolean {
+export default function(methodPath: NodePath, importer: Importer): boolean {
   if (
     !t.MethodDefinition.check(methodPath.node) &&
     !t.Property.check(methodPath.node)
@@ -43,6 +44,6 @@ export default function(methodPath: NodePath): boolean {
     return false;
   }
 
-  const name = getPropertyName(methodPath);
+  const name = getPropertyName(methodPath, importer);
   return !!name && componentMethods.indexOf(name) !== -1;
 }

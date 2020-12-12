@@ -69,6 +69,72 @@ Array [
 ]
 `;
 
+exports[`componentMethodsHandler function components resolves imported methods assigned on a component in an assignment 1`] = `
+Array [
+  Object {
+    "docblock": null,
+    "modifiers": Array [
+      "static",
+    ],
+    "name": "doFoo",
+    "params": Array [],
+    "returns": null,
+  },
+]
+`;
+
+exports[`componentMethodsHandler function components resolves imported methods assigned to static properties on a component 1`] = `
+Array [
+  Object {
+    "docblock": null,
+    "modifiers": Array [
+      "static",
+    ],
+    "name": "doFoo",
+    "params": Array [],
+    "returns": null,
+  },
+]
+`;
+
+exports[`componentMethodsHandler function components resolves imported methods on a function declaration 1`] = `
+Array [
+  Object {
+    "docblock": null,
+    "modifiers": Array [
+      "static",
+    ],
+    "name": "doFoo",
+    "params": Array [],
+    "returns": null,
+  },
+]
+`;
+
+exports[`componentMethodsHandler resolves imported methods assigned to computed properties 1`] = `
+Array [
+  Object {
+    "docblock": "The foo method",
+    "modifiers": Array [],
+    "name": "@computed#foo",
+    "params": Array [
+      Object {
+        "name": "bar",
+        "optional": undefined,
+        "type": Object {
+          "name": "number",
+        },
+      },
+    ],
+    "returns": Object {
+      "type": Object {
+        "name": "number",
+      },
+    },
+  },
+]
+`;
+
 exports[`componentMethodsHandler should handle and ignore computed methods 1`] = `
 Array [
   Object {

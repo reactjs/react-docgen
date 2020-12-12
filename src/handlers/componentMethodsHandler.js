@@ -16,6 +16,7 @@ import type Documentation from '../Documentation';
 import match from '../utils/match';
 import { traverseShallow } from '../utils/traverse';
 import resolveToValue from '../utils/resolveToValue';
+import type { Importer } from '../types';
 
 function isPublicClassProperty(path) {
   return (
@@ -30,16 +31,16 @@ function isPublicClassProperty(path) {
  * - Public class fields in classes whose value are a functions
  * - Object properties whose values are functions
  */
-function isMethod(path) {
+function isMethod(path, importer) {
   const isProbablyMethod =
     (t.MethodDefinition.check(path.node) && path.node.kind !== 'constructor') ||
     ((isPublicClassProperty(path) || t.Property.check(path.node)) &&
-      t.Function.check(path.get('value').node));
+      t.Function.check(resolveToValue(path.get('value'), importer).node));
 
-  return isProbablyMethod && !isReactComponentMethod(path);
+  return isProbablyMethod && !isReactComponentMethod(path, importer);
 }
 
-function findAssignedMethods(scope, idPath) {
+function findAssignedMethods(scope, idPath, importer) {
   const results = [];
 
   if (!t.Identifier.check(idPath.node)) {
@@ -58,7 +59,7 @@ function findAssignedMethods(scope, idPath) {
           object: { type: 'Identifier', name },
         }) &&
         path.scope.lookup(name) === idScope &&
-        t.Function.check(resolveToValue(path.get('right')).node)
+        t.Function.check(resolveToValue(path.get('right'), importer).node)
       ) {
         results.push(path);
         return false;
@@ -77,19 +78,24 @@ function findAssignedMethods(scope, idPath) {
 export default function componentMethodsHandler(
   documentation: Documentation,
   path: NodePath,
+  importer: Importer,
 ) {
   // Extract all methods from the class or object.
   let methodPaths = [];
-  if (isReactComponentClass(path)) {
-    methodPaths = path.get('body', 'body').filter(isMethod);
+  if (isReactComponentClass(path, importer)) {
+    methodPaths = path
+      .get('body', 'body')
+      .filter(body => isMethod(body, importer));
   } else if (t.ObjectExpression.check(path.node)) {
-    methodPaths = path.get('properties').filter(isMethod);
+    methodPaths = path
+      .get('properties')
+      .filter(props => isMethod(props, importer));
 
     // Add the statics object properties.
-    const statics = getMemberValuePath(path, 'statics');
+    const statics = getMemberValuePath(path, 'statics', importer);
     if (statics) {
       statics.get('properties').each(p => {
-        if (isMethod(p)) {
+        if (isMethod(p, importer)) {
           p.node.static = true;
           methodPaths.push(p);
         }
@@ -100,7 +106,11 @@ export default function componentMethodsHandler(
     path.parent.node.init === path.node &&
     t.Identifier.check(path.parent.node.id)
   ) {
-    methodPaths = findAssignedMethods(path.parent.scope, path.parent.get('id'));
+    methodPaths = findAssignedMethods(
+      path.parent.scope,
+      path.parent.get('id'),
+      importer,
+    );
   } else if (
     t.AssignmentExpression.check(path.parent.node) &&
     path.parent.node.right === path.node &&
@@ -109,13 +119,18 @@ export default function componentMethodsHandler(
     methodPaths = findAssignedMethods(
       path.parent.scope,
       path.parent.get('left'),
+      importer,
     );
   } else if (t.FunctionDeclaration.check(path.node)) {
-    methodPaths = findAssignedMethods(path.parent.scope, path.get('id'));
+    methodPaths = findAssignedMethods(
+      path.parent.scope,
+      path.get('id'),
+      importer,
+    );
   }
 
   documentation.set(
     'methods',
-    methodPaths.map(getMethodDocumentation).filter(Boolean),
+    methodPaths.map(p => getMethodDocumentation(p, importer)).filter(Boolean),
   );
 }

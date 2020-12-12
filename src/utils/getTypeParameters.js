@@ -8,6 +8,7 @@
  */
 
 import resolveGenericTypeAnnotation from '../utils/resolveGenericTypeAnnotation';
+import type { Importer } from '../types';
 
 export type TypeParameters = {
   [string]: NodePath,
@@ -17,6 +18,7 @@ export default function getTypeParameters(
   declaration: NodePath,
   instantiation: NodePath,
   inputParams: ?TypeParameters,
+  importer: Importer,
 ): TypeParameters {
   const params = {};
   const numInstantiationParams = instantiation.node.params.length;
@@ -33,7 +35,8 @@ export default function getTypeParameters(
         : defaultTypePath;
 
     if (typePath) {
-      let resolvedTypePath = resolveGenericTypeAnnotation(typePath) || typePath;
+      let resolvedTypePath =
+        resolveGenericTypeAnnotation(typePath, importer) || typePath;
       const typeName =
         resolvedTypePath.node.typeName || resolvedTypePath.node.id;
       if (typeName && inputParams && inputParams[typeName.name]) {

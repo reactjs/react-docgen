@@ -9,6 +9,7 @@
 
 import { ASTNode, NodePath, builders, namedTypes as t } from 'ast-types';
 import resolveToValue from './resolveToValue';
+import type { Importer } from '../types';
 
 function isObjectKeysCall(node: ASTNode): boolean {
   return (
@@ -42,6 +43,7 @@ function isWhiteListedObjectTypeProperty(prop) {
 // Resolves an ObjectExpression or an ObjectTypeAnnotation
 export function resolveObjectToNameArray(
   object: NodePath,
+  importer: Importer,
   raw: boolean = false,
 ): ?Array<string> {
   if (
@@ -74,15 +76,15 @@ export function resolveObjectToNameArray(
         t.SpreadElement.check(prop) ||
         t.ObjectTypeSpreadProperty.check(prop)
       ) {
-        let spreadObject = resolveToValue(propPath.get('argument'));
+        let spreadObject = resolveToValue(propPath.get('argument'), importer);
         if (t.GenericTypeAnnotation.check(spreadObject.value)) {
-          const typeAlias = resolveToValue(spreadObject.get('id'));
+          const typeAlias = resolveToValue(spreadObject.get('id'), importer);
           if (t.ObjectTypeAnnotation.check(typeAlias.get('right').value)) {
-            spreadObject = resolveToValue(typeAlias.get('right'));
+            spreadObject = resolveToValue(typeAlias.get('right'), importer);
           }
         }
 
-        const spreadValues = resolveObjectToNameArray(spreadObject);
+        const spreadValues = resolveObjectToNameArray(spreadObject, importer);
         if (!spreadValues) {
           error = true;
           return;
@@ -108,12 +110,18 @@ export function resolveObjectToNameArray(
  *  unresolvable spreads
  *  computed identifier keys
  */
-export default function resolveObjectKeysToArray(path: NodePath): ?NodePath {
+export default function resolveObjectKeysToArray(
+  path: NodePath,
+  importer: Importer,
+): ?NodePath {
   const node = path.node;
 
   if (isObjectKeysCall(node)) {
-    const objectExpression = resolveToValue(path.get('arguments').get(0));
-    const values = resolveObjectToNameArray(objectExpression);
+    const objectExpression = resolveToValue(
+      path.get('arguments').get(0),
+      importer,
+    );
+    const values = resolveObjectToNameArray(objectExpression, importer);
 
     if (values) {
       const nodes = values

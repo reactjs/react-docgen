@@ -10,6 +10,7 @@
 import { namedTypes as t } from 'ast-types';
 import getNameOrValue from './getNameOrValue';
 import resolveToValue from './resolveToValue';
+import type { Importer } from '../types';
 
 export const COMPUTED_PREFIX = '@computed#';
 
@@ -18,7 +19,10 @@ export const COMPUTED_PREFIX = '@computed#';
  * or a literal (or dynamic, but we don't support those). This function simply
  * returns the value of the literal or name of the identifier.
  */
-export default function getPropertyName(propertyPath: NodePath): ?string {
+export default function getPropertyName(
+  propertyPath: NodePath,
+  importer: Importer,
+): ?string {
   if (t.ObjectTypeSpreadProperty.check(propertyPath.node)) {
     return getNameOrValue(propertyPath.get('argument').get('id'), false);
   } else if (propertyPath.node.computed) {
@@ -26,7 +30,7 @@ export default function getPropertyName(propertyPath: NodePath): ?string {
 
     // Try to resolve variables and member expressions
     if (t.Identifier.check(key.node) || t.MemberExpression.check(key.node)) {
-      const value = resolveToValue(key).node;
+      const value = resolveToValue(key, importer).node;
 
       if (
         t.Literal.check(value) &&

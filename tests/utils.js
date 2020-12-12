@@ -56,3 +56,20 @@ export const MODULE_TEMPLATE = [
   'var Component = React.createClass(%s);',
   'module.exports = Component',
 ].join('\n');
+
+/**
+ * Importer that doesn't resolve any values
+ */
+export function noopImporter() {
+  return null;
+}
+
+/**
+ * Builds an importer where the keys are import paths and the values are AST nodes
+ */
+export function makeMockImporter(mocks = {}) {
+  return path => {
+    const source = path.node.source.value;
+    return mocks[source];
+  };
+}

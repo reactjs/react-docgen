@@ -6,7 +6,12 @@
  *
  */
 
-import { parse, statement } from '../../../tests/utils';
+import {
+  parse,
+  statement,
+  noopImporter,
+  makeMockImporter,
+} from '../../../tests/utils';
 import isStatelessComponent from '../isStatelessComponent';
 
 describe('isStatelessComponent', () => {
@@ -104,7 +109,7 @@ describe('isStatelessComponent', () => {
                     ...caseSelector,
                     ...componentSelector,
                   );
-                  expect(isStatelessComponent(def)).toBe(true);
+                  expect(isStatelessComponent(def, noopImporter)).toBe(true);
                 });
               });
 
@@ -120,7 +125,7 @@ describe('isStatelessComponent', () => {
                     ...caseSelector,
                     ...componentSelector,
                   );
-                  expect(isStatelessComponent(def)).toBe(false);
+                  expect(isStatelessComponent(def, noopImporter)).toBe(false);
                 });
               });
             });
@@ -140,7 +145,7 @@ describe('isStatelessComponent', () => {
         .get('declarations', [0])
         .get('init');
 
-      expect(isStatelessComponent(def)).toBe(true);
+      expect(isStatelessComponent(def, noopImporter)).toBe(true);
     });
   });
 
@@ -166,11 +171,11 @@ describe('isStatelessComponent', () => {
       const render = def.get('properties', 3);
       const world = def.get('properties', 4);
 
-      expect(isStatelessComponent(bar)).toBe(true);
-      expect(isStatelessComponent(baz)).toBe(true);
-      expect(isStatelessComponent(hello)).toBe(true);
-      expect(isStatelessComponent(render)).toBe(false);
-      expect(isStatelessComponent(world)).toBe(true);
+      expect(isStatelessComponent(bar, noopImporter)).toBe(true);
+      expect(isStatelessComponent(baz, noopImporter)).toBe(true);
+      expect(isStatelessComponent(hello, noopImporter)).toBe(true);
+      expect(isStatelessComponent(render, noopImporter)).toBe(false);
+      expect(isStatelessComponent(world, noopImporter)).toBe(true);
     });
   });
 
@@ -183,7 +188,7 @@ describe('isStatelessComponent', () => {
           }
         }
       `);
-      expect(isStatelessComponent(def)).toBe(false);
+      expect(isStatelessComponent(def, noopImporter)).toBe(false);
     });
 
     it('does not accept React.Component classes', () => {
@@ -196,7 +201,7 @@ describe('isStatelessComponent', () => {
         }
       `).get('body', 1);
 
-      expect(isStatelessComponent(def)).toBe(false);
+      expect(isStatelessComponent(def, noopImporter)).toBe(false);
     });
 
     it('does not accept React.createClass calls', () => {
@@ -208,18 +213,24 @@ describe('isStatelessComponent', () => {
         });
       `);
 
-      expect(isStatelessComponent(def)).toBe(false);
+      expect(isStatelessComponent(def, noopImporter)).toBe(false);
     });
   });
 
   describe('resolving return values', () => {
-    function test(desc, code) {
+    function test(desc, code, importer = noopImporter) {
       it(desc, () => {
         const def = parse(code).get('body', 1);
 
-        expect(isStatelessComponent(def)).toBe(true);
+        expect(isStatelessComponent(def, importer)).toBe(true);
       });
     }
+
+    const mockImporter = makeMockImporter({
+      bar: statement(`
+        export default <div />;
+      `).get('declaration'),
+    });
 
     it('does not see ifs as separate block', () => {
       const def = statement(`
@@ -230,7 +241,7 @@ describe('isStatelessComponent', () => {
         }
       `);
 
-      expect(isStatelessComponent(def)).toBe(true);
+      expect(isStatelessComponent(def, noopImporter)).toBe(true);
     });
 
     it('handles recursive function calls', () => {
@@ -240,7 +251,7 @@ describe('isStatelessComponent', () => {
         }
       `);
 
-      expect(isStatelessComponent(def)).toBe(false);
+      expect(isStatelessComponent(def, noopImporter)).toBe(false);
     });
 
     test(
@@ -337,6 +348,17 @@ describe('isStatelessComponent', () => {
         return obj.external.member();
       }
     `,
+    );
+
+    test(
+      'resolves imported values as return',
+      `
+      import bar from 'bar';
+      function Foo (props) {
+        return bar;
+      }
+      `,
+      mockImporter,
     );
   });
 });

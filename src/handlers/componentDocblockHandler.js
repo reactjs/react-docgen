@@ -12,13 +12,14 @@ import type Documentation from '../Documentation';
 import { getDocblock } from '../utils/docblock';
 import isReactForwardRefCall from '../utils/isReactForwardRefCall';
 import resolveToValue from '../utils/resolveToValue';
+import type { Importer } from '../types';
 
 function isClassDefinition(nodePath) {
   const node = nodePath.node;
   return t.ClassDeclaration.check(node) || t.ClassExpression.check(node);
 }
 
-function getDocblockFromComponent(path) {
+function getDocblockFromComponent(path, importer) {
   let description = null;
 
   if (isClassDefinition(path)) {
@@ -48,10 +49,13 @@ function getDocblockFromComponent(path) {
       description = getDocblock(searchPath);
     }
   }
-  if (!description && isReactForwardRefCall(path)) {
-    const inner = resolveToValue(path.get('arguments', 0));
+  if (!description) {
+    const searchPath = isReactForwardRefCall(path, importer)
+      ? path.get('arguments', 0)
+      : path;
+    const inner = resolveToValue(searchPath, importer);
     if (inner.node !== path.node) {
-      return getDocblockFromComponent(inner);
+      return getDocblockFromComponent(inner, importer);
     }
   }
   return description;
@@ -63,6 +67,10 @@ function getDocblockFromComponent(path) {
 export default function componentDocblockHandler(
   documentation: Documentation,
   path: NodePath,
+  importer: Importer,
 ) {
-  documentation.set('description', getDocblockFromComponent(path) || '');
+  documentation.set(
+    'description',
+    getDocblockFromComponent(path, importer) || '',
+  );
 }

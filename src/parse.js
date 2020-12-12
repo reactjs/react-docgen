@@ -10,7 +10,7 @@
 import Documentation, { type DocumentationObject } from './Documentation';
 import postProcessDocumentation from './utils/postProcessDocumentation';
 import buildParser, { type Options, type Parser } from './babelParser';
-import type { Handler, Resolver } from './types';
+import type { Handler, Resolver, Importer } from './types';
 
 const ERROR_MISSING_DEFINITION = 'No suitable component definition found.';
 
@@ -18,12 +18,13 @@ function executeHandlers(
   handlers: Array<Handler>,
   componentDefinitions: Array<NodePath>,
   parser: Parser,
+  importer: Importer,
 ): Array<DocumentationObject> {
   return componentDefinitions.map(
     (componentDefinition: NodePath): DocumentationObject => {
       const documentation = new Documentation();
       handlers.forEach(handler =>
-        handler(documentation, componentDefinition, parser),
+        handler(documentation, componentDefinition, importer),
       );
       return postProcessDocumentation(documentation.toObject());
     },
@@ -55,20 +56,26 @@ export default function parse(
   src: string,
   resolver: Resolver,
   handlers: Array<Handler>,
+  importer: Importer,
   options: Options,
 ): Array<DocumentationObject> | DocumentationObject {
   const parser = buildParser(options);
   const ast = parser.parse(src);
   ast.__src = src;
-  const componentDefinitions = resolver(ast, parser);
+  const componentDefinitions = resolver(ast, parser, importer);
 
   if (Array.isArray(componentDefinitions)) {
     if (componentDefinitions.length === 0) {
       throw new Error(ERROR_MISSING_DEFINITION);
     }
-    return executeHandlers(handlers, componentDefinitions, parser);
+    return executeHandlers(handlers, componentDefinitions, parser, importer);
   } else if (componentDefinitions) {
-    return executeHandlers(handlers, [componentDefinitions], parser)[0];
+    return executeHandlers(
+      handlers,
+      [componentDefinitions],
+      parser,
+      importer,
+    )[0];
   }
 
   throw new Error(ERROR_MISSING_DEFINITION);

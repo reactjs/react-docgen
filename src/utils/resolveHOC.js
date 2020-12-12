@@ -11,6 +11,7 @@ import { namedTypes as t } from 'ast-types';
 import isReactCreateClassCall from './isReactCreateClassCall';
 import isReactForwardRefCall from './isReactForwardRefCall';
 import resolveToValue from './resolveToValue';
+import type { Importer } from '../types';
 
 /**
  * If the path is a call expression, it recursively resolves to the
@@ -18,12 +19,15 @@ import resolveToValue from './resolveToValue';
  *
  * Else the path itself is returned.
  */
-export default function resolveHOC(path: NodePath): NodePath {
+export default function resolveHOC(
+  path: NodePath,
+  importer: Importer,
+): NodePath {
   const node = path.node;
   if (
     t.CallExpression.check(node) &&
-    !isReactCreateClassCall(path) &&
-    !isReactForwardRefCall(path)
+    !isReactCreateClassCall(path, importer) &&
+    !isReactForwardRefCall(path, importer)
   ) {
     if (node.arguments.length) {
       const inner = path.get('arguments', 0);
@@ -38,11 +42,15 @@ export default function resolveHOC(path: NodePath): NodePath {
           t.SpreadElement.check(inner.node))
       ) {
         return resolveHOC(
-          resolveToValue(path.get('arguments', node.arguments.length - 1)),
+          resolveToValue(
+            path.get('arguments', node.arguments.length - 1),
+            importer,
+          ),
+          importer,
         );
       }
 
-      return resolveHOC(resolveToValue(inner));
+      return resolveHOC(resolveToValue(inner, importer), importer);
     }
   }
 

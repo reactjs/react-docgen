@@ -17,33 +17,41 @@ import normalizeClassDefinition from '../utils/normalizeClassDefinition';
 import resolveExportDeclaration from '../utils/resolveExportDeclaration';
 import resolveToValue from '../utils/resolveToValue';
 import resolveHOC from '../utils/resolveHOC';
+import type { Parser } from '../babelParser';
+import type { Importer } from '../types';
 
 function ignore(): false {
   return false;
 }
 
-function isComponentDefinition(path: NodePath): boolean {
+function isComponentDefinition(path: NodePath, importer: Importer): boolean {
   return (
-    isReactCreateClassCall(path) ||
-    isReactComponentClass(path) ||
-    isStatelessComponent(path) ||
-    isReactForwardRefCall(path)
+    isReactCreateClassCall(path, importer) ||
+    isReactComponentClass(path, importer) ||
+    isStatelessComponent(path, importer) ||
+    isReactForwardRefCall(path, importer)
   );
 }
 
-function resolveDefinition(definition: NodePath): ?NodePath {
-  if (isReactCreateClassCall(definition)) {
+function resolveDefinition(
+  definition: NodePath,
+  importer: Importer,
+): ?NodePath {
+  if (isReactCreateClassCall(definition, importer)) {
     // return argument
-    const resolvedPath = resolveToValue(definition.get('arguments', 0));
+    const resolvedPath = resolveToValue(
+      definition.get('arguments', 0),
+      importer,
+    );
     if (t.ObjectExpression.check(resolvedPath.node)) {
       return resolvedPath;
     }
-  } else if (isReactComponentClass(definition)) {
+  } else if (isReactComponentClass(definition, importer)) {
     normalizeClassDefinition(definition);
     return definition;
   } else if (
-    isStatelessComponent(definition) ||
-    isReactForwardRefCall(definition)
+    isStatelessComponent(definition, importer) ||
+    isReactForwardRefCall(definition, importer)
   ) {
     return definition;
   }
@@ -67,23 +75,31 @@ function resolveDefinition(definition: NodePath): ?NodePath {
  */
 export default function findExportedComponentDefinitions(
   ast: ASTNode,
+  parser: Parser,
+  importer: Importer,
 ): Array<NodePath> {
   const components: Array<NodePath> = [];
 
   function exportDeclaration(path: NodePath): ?boolean {
-    const definitions: Array<?NodePath> = resolveExportDeclaration(path)
+    const definitions: Array<?NodePath> = resolveExportDeclaration(
+      path,
+      importer,
+    )
       .reduce((acc, definition) => {
-        if (isComponentDefinition(definition)) {
+        if (isComponentDefinition(definition, importer)) {
           acc.push(definition);
         } else {
-          const resolved = resolveToValue(resolveHOC(definition));
-          if (isComponentDefinition(resolved)) {
+          const resolved = resolveToValue(
+            resolveHOC(definition, importer),
+            importer,
+          );
+          if (isComponentDefinition(resolved, importer)) {
             acc.push(resolved);
           }
         }
         return acc;
       }, [])
-      .map(definition => resolveDefinition(definition));
+      .map(definition => resolveDefinition(definition, importer));
 
     if (definitions.length === 0) {
       return false;
@@ -117,19 +133,19 @@ export default function findExportedComponentDefinitions(
     visitAssignmentExpression: function(path: NodePath): ?boolean {
       // Ignore anything that is not `exports.X = ...;` or
       // `module.exports = ...;`
-      if (!isExportsOrModuleAssignment(path)) {
+      if (!isExportsOrModuleAssignment(path, importer)) {
         return false;
       }
       // Resolve the value of the right hand side. It should resolve to a call
       // expression, something like React.createClass
-      path = resolveToValue(path.get('right'));
-      if (!isComponentDefinition(path)) {
-        path = resolveToValue(resolveHOC(path));
-        if (!isComponentDefinition(path)) {
+      path = resolveToValue(path.get('right'), importer);
+      if (!isComponentDefinition(path, importer)) {
+        path = resolveToValue(resolveHOC(path, importer), importer);
+        if (!isComponentDefinition(path, importer)) {
           return false;
         }
       }
-      const definition = resolveDefinition(path);
+      const definition = resolveDefinition(path, importer);
       if (definition && components.indexOf(definition) === -1) {
         components.push(definition);
       }

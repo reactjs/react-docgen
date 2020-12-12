@@ -7,7 +7,7 @@
  */
 
 import { builders } from 'ast-types';
-import { parse } from '../../../tests/utils';
+import { parse, noopImporter } from '../../../tests/utils';
 import resolveToValue from '../resolveToValue';
 
 describe('resolveToValue', () => {
@@ -18,14 +18,16 @@ describe('resolveToValue', () => {
 
   it('resolves simple variable declarations', () => {
     const path = parsePath(['var foo  = 42;', 'foo;'].join('\n'));
-    expect(resolveToValue(path)).toEqualASTNode(builders.literal(42));
+    expect(resolveToValue(path, noopImporter)).toEqualASTNode(
+      builders.literal(42),
+    );
   });
 
   it('resolves object destructuring', () => {
     const path = parsePath(['var {foo: {bar: baz}} = bar;', 'baz;'].join('\n'));
 
     // Node should be equal to bar.foo.bar
-    expect(resolveToValue(path)).toEqualASTNode(
+    expect(resolveToValue(path, noopImporter)).toEqualASTNode(
       builders.memberExpression(
         builders.memberExpression(
           builders.identifier('bar'),
@@ -41,19 +43,21 @@ describe('resolveToValue', () => {
       ['var {foo: {bar}, ...baz} = bar;', 'baz;'].join('\n'),
     );
 
-    expect(resolveToValue(path)).toEqualASTNode(path);
+    expect(resolveToValue(path, noopImporter)).toEqualASTNode(path);
   });
 
   it('returns the original path if it cannot be resolved', () => {
     const path = parsePath(['function foo() {}', 'foo()'].join('\n'));
 
-    expect(resolveToValue(path)).toEqualASTNode(path);
+    expect(resolveToValue(path, noopImporter)).toEqualASTNode(path);
   });
 
   it('resolves variable declarators to their init value', () => {
     const path = parse('var foo = 42;').get('body', 0, 'declarations', 0);
 
-    expect(resolveToValue(path)).toEqualASTNode(builders.literal(42));
+    expect(resolveToValue(path, noopImporter)).toEqualASTNode(
+      builders.literal(42),
+    );
   });
 
   it('resolves to class declarations', () => {
@@ -61,7 +65,9 @@ describe('resolveToValue', () => {
       class Foo {}
       Foo;
     `);
-    expect(resolveToValue(path).node.type).toBe('ClassDeclaration');
+    expect(resolveToValue(path, noopImporter).node.type).toBe(
+      'ClassDeclaration',
+    );
   });
 
   it('resolves to class function declaration', () => {
@@ -69,7 +75,9 @@ describe('resolveToValue', () => {
       function foo() {}
       foo;
     `);
-    expect(resolveToValue(path).node.type).toBe('FunctionDeclaration');
+    expect(resolveToValue(path, noopImporter).node.type).toBe(
+      'FunctionDeclaration',
+    );
   });
 
   describe('flow', () => {
@@ -78,7 +86,9 @@ describe('resolveToValue', () => {
       function foo() {}
       (foo: any);
     `);
-      expect(resolveToValue(path).node.type).toBe('FunctionDeclaration');
+      expect(resolveToValue(path, noopImporter).node.type).toBe(
+        'FunctionDeclaration',
+      );
     });
   });
 
@@ -91,7 +101,9 @@ describe('resolveToValue', () => {
       function foo() {}
       (foo as any);
     `);
-      expect(resolveToValue(path).node.type).toBe('FunctionDeclaration');
+      expect(resolveToValue(path, noopImporter).node.type).toBe(
+        'FunctionDeclaration',
+      );
     });
 
     it('resolves type assertions', () => {
@@ -99,7 +111,9 @@ describe('resolveToValue', () => {
       function foo() {}
       (<any> foo);
     `);
-      expect(resolveToValue(path).node.type).toBe('FunctionDeclaration');
+      expect(resolveToValue(path, noopImporter).node.type).toBe(
+        'FunctionDeclaration',
+      );
     });
   });
 
@@ -107,7 +121,9 @@ describe('resolveToValue', () => {
     it('resolves to assigned values', () => {
       const path = parsePath(['var foo;', 'foo = 42;', 'foo;'].join('\n'));
 
-      expect(resolveToValue(path)).toEqualASTNode(builders.literal(42));
+      expect(resolveToValue(path, noopImporter)).toEqualASTNode(
+        builders.literal(42),
+      );
     });
 
     it('resolves to other assigned value if ref is in an assignment lhs', () => {
@@ -115,7 +131,7 @@ describe('resolveToValue', () => {
         ['var foo;', 'foo = 42;', 'foo = wrap(foo);'].join('\n'),
       );
 
-      expect(resolveToValue(path.get('left'))).toEqualASTNode(
+      expect(resolveToValue(path.get('left'), noopImporter)).toEqualASTNode(
         builders.literal(42),
       );
     });
@@ -125,16 +141,16 @@ describe('resolveToValue', () => {
         ['var foo;', 'foo = 42;', 'foo = wrap(foo);'].join('\n'),
       );
 
-      expect(resolveToValue(path.get('right', 'arguments', 0))).toEqualASTNode(
-        builders.literal(42),
-      );
+      expect(
+        resolveToValue(path.get('right', 'arguments', 0), noopImporter),
+      ).toEqualASTNode(builders.literal(42));
     });
   });
 
   describe('ImportDeclaration', () => {
     it('resolves default import references to the import declaration', () => {
       const path = parsePath(['import foo from "Foo"', 'foo;'].join('\n'));
-      const value = resolveToValue(path);
+      const value = resolveToValue(path, noopImporter);
 
       expect(Array.isArray(value.value)).toBe(false);
       expect(value.node.type).toBe('ImportDeclaration');
@@ -142,7 +158,7 @@ describe('resolveToValue', () => {
 
     it('resolves named import references to the import declaration', () => {
       const path = parsePath(['import {foo} from "Foo"', 'foo;'].join('\n'));
-      const value = resolveToValue(path);
+      const value = resolveToValue(path, noopImporter);
 
       expect(Array.isArray(value.value)).toBe(false);
       expect(value.node.type).toBe('ImportDeclaration');
@@ -152,7 +168,7 @@ describe('resolveToValue', () => {
       const path = parsePath(
         ['import {foo as bar} from "Foo"', 'bar;'].join('\n'),
       );
-      const value = resolveToValue(path);
+      const value = resolveToValue(path, noopImporter);
 
       expect(Array.isArray(value.value)).toBe(false);
       expect(value.node.type).toBe('ImportDeclaration');
@@ -160,7 +176,7 @@ describe('resolveToValue', () => {
 
     it('resolves namespace import references to the import declaration', () => {
       const path = parsePath(['import * as bar from "Foo"', 'bar;'].join('\n'));
-      const value = resolveToValue(path);
+      const value = resolveToValue(path, noopImporter);
 
       expect(Array.isArray(value.value)).toBe(false);
       expect(value.node.type).toBe('ImportDeclaration');
@@ -171,7 +187,9 @@ describe('resolveToValue', () => {
     it("resolves a MemberExpression to it's init value", () => {
       const path = parsePath(['var foo = { bar: 1 };', 'foo.bar;'].join('\n'));
 
-      expect(resolveToValue(path)).toEqualASTNode(builders.literal(1));
+      expect(resolveToValue(path, noopImporter)).toEqualASTNode(
+        builders.literal(1),
+      );
     });
 
     it('resolves a MemberExpression in the scope chain', () => {
@@ -179,7 +197,9 @@ describe('resolveToValue', () => {
         ['var foo = 1;', 'var bar = { baz: foo };', 'bar.baz;'].join('\n'),
       );
 
-      expect(resolveToValue(path)).toEqualASTNode(builders.literal(1));
+      expect(resolveToValue(path, noopImporter)).toEqualASTNode(
+        builders.literal(1),
+      );
     });
 
     it('resolves a nested MemberExpression in the scope chain', () => {
@@ -191,7 +211,9 @@ describe('resolveToValue', () => {
         ].join('\n'),
       );
 
-      expect(resolveToValue(path)).toEqualASTNode(builders.literal(1));
+      expect(resolveToValue(path, noopImporter)).toEqualASTNode(
+        builders.literal(1),
+      );
     });
 
     it('returns the last resolvable MemberExpression', () => {
@@ -203,7 +225,7 @@ describe('resolveToValue', () => {
         ].join('\n'),
       );
 
-      expect(resolveToValue(path)).toEqualASTNode(
+      expect(resolveToValue(path, noopImporter)).toEqualASTNode(
         builders.memberExpression(
           builders.identifier('foo'),
           builders.identifier('bar'),
@@ -216,7 +238,7 @@ describe('resolveToValue', () => {
         ['var foo = {};', 'foo.bar = 1;', 'foo.bar;'].join('\n'),
       );
 
-      expect(resolveToValue(path)).toEqualASTNode(path);
+      expect(resolveToValue(path, noopImporter)).toEqualASTNode(path);
     });
   });
 });

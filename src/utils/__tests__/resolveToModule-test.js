@@ -6,7 +6,12 @@
  *
  */
 
-import { parse } from '../../../tests/utils';
+import {
+  parse,
+  statement,
+  noopImporter,
+  makeMockImporter,
+} from '../../../tests/utils';
 import resolveToModule from '../resolveToModule';
 
 describe('resolveToModule', () => {
@@ -15,12 +20,24 @@ describe('resolveToModule', () => {
     return root.get('body', root.node.body.length - 1, 'expression');
   }
 
+  const mockImporter = makeMockImporter({
+    Foo: statement(`
+      export default bar;
+      import bar from 'Bar';
+    `).get('declaration'),
+
+    Bar: statement(`
+      export default baz;
+      import baz from 'Baz';
+    `).get('declaration'),
+  });
+
   it('resolves identifiers', () => {
     const path = parsePath(`
       var foo = require("Foo");
       foo;
     `);
-    expect(resolveToModule(path)).toBe('Foo');
+    expect(resolveToModule(path, noopImporter)).toBe('Foo');
   });
 
   it('resolves function calls', () => {
@@ -28,7 +45,7 @@ describe('resolveToModule', () => {
       var foo = require("Foo");
       foo();
     `);
-    expect(resolveToModule(path)).toBe('Foo');
+    expect(resolveToModule(path, noopImporter)).toBe('Foo');
   });
 
   it('resolves member expressions', () => {
@@ -36,7 +53,7 @@ describe('resolveToModule', () => {
       var foo = require("Foo");
       foo.bar().baz;
     `);
-    expect(resolveToModule(path)).toBe('Foo');
+    expect(resolveToModule(path, noopImporter)).toBe('Foo');
   });
 
   it('understands destructuring', () => {
@@ -44,7 +61,7 @@ describe('resolveToModule', () => {
       var {foo} = require("Foo");
       foo;
     `);
-    expect(resolveToModule(path)).toBe('Foo');
+    expect(resolveToModule(path, noopImporter)).toBe('Foo');
   });
 
   describe('ES6 import declarations', () => {
@@ -53,13 +70,13 @@ describe('resolveToModule', () => {
         import foo from "Foo";
         foo;
       `);
-      expect(resolveToModule(path)).toBe('Foo');
+      expect(resolveToModule(path, noopImporter)).toBe('Foo');
 
       path = parsePath(`
         import foo, {createElement} from "Foo";
         foo;
       `);
-      expect(resolveToModule(path)).toBe('Foo');
+      expect(resolveToModule(path, noopImporter)).toBe('Foo');
     });
 
     it('resolves ImportSpecifier', () => {
@@ -67,7 +84,7 @@ describe('resolveToModule', () => {
         import {foo, bar} from "Foo";
         bar;
       `);
-      expect(resolveToModule(path)).toBe('Foo');
+      expect(resolveToModule(path, noopImporter)).toBe('Foo');
     });
 
     it('resolves aliased ImportSpecifier', () => {
@@ -75,7 +92,7 @@ describe('resolveToModule', () => {
         import {foo, bar as baz} from "Foo";
         baz;
       `);
-      expect(resolveToModule(path)).toBe('Foo');
+      expect(resolveToModule(path, noopImporter)).toBe('Foo');
     });
 
     it('resolves ImportNamespaceSpecifier', () => {
@@ -83,7 +100,15 @@ describe('resolveToModule', () => {
         import * as foo from "Foo";
         foo;
       `);
-      expect(resolveToModule(path)).toBe('Foo');
+      expect(resolveToModule(path, noopImporter)).toBe('Foo');
+    });
+
+    it('can resolve imports until one not expanded', () => {
+      const path = parsePath(`
+        import foo from "Foo";
+        foo;
+      `);
+      expect(resolveToModule(path, mockImporter)).toBe('Baz');
     });
   });
 });

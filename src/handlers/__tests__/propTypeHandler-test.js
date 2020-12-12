@@ -9,7 +9,12 @@
 jest.mock('../../Documentation');
 jest.mock('../../utils/getPropType', () => jest.fn(() => ({})));
 
-import { statement, expression } from '../../../tests/utils';
+import {
+  statement,
+  expression,
+  noopImporter,
+  makeMockImporter,
+} from '../../../tests/utils';
 import Documentation from '../../Documentation';
 import { propTypeHandler } from '../propTypeHandler';
 
@@ -20,6 +25,39 @@ describe('propTypeHandler', () => {
   beforeEach(() => {
     getPropTypeMock = require('../../utils/getPropType');
     documentation = new Documentation();
+  });
+
+  const mockImporter = makeMockImporter({
+    props: statement(`
+      export default {bar: PropTypes.bool};
+      import { PropTypes } from 'react';
+    `).get('declaration'),
+
+    simpleProp: statement(`
+      export default PropTypes.array.isRequired;
+      import { PropTypes } from 'react';
+    `).get('declaration'),
+
+    complexProp: statement(`
+      export default prop;
+      var prop = PropTypes.oneOfType([PropTypes.number, PropTypes.bool]).isRequired;
+      import { PropTypes } from 'react';
+    `).get('declaration'),
+
+    foo: statement(`
+      export default PropTypes.bool;
+      import { PropTypes } from 'react';
+    `).get('declaration'),
+
+    bar: statement(`
+      export default PropTypes.bool;
+      import { PropTypes } from 'react';
+    `).get('declaration'),
+
+    baz: statement(`
+      export default OtherPropTypes.bool;
+      import { PropTypes as OtherPropTypes } from 'react';
+    `).get('declaration'),
   });
 
   function template(src) {
@@ -43,7 +81,7 @@ describe('propTypeHandler', () => {
       const fooPath = propTypesAST.get('properties', 0, 'value');
       const xyzPath = propTypesAST.get('properties', 1, 'value');
 
-      propTypeHandler(documentation, definition);
+      propTypeHandler(documentation, definition, noopImporter);
 
       expect(getPropTypeMock.mock.calls[0][0]).toEqualASTNode(fooPath);
       expect(getPropTypeMock.mock.calls[1][0]).toEqualASTNode(xyzPath);
@@ -60,7 +98,7 @@ describe('propTypeHandler', () => {
         ),
       );
 
-      propTypeHandler(documentation, definition);
+      propTypeHandler(documentation, definition, noopImporter);
       expect(documentation.descriptors).toEqual({
         foo: {
           type: {},
@@ -86,7 +124,7 @@ describe('propTypeHandler', () => {
         ),
       );
 
-      propTypeHandler(documentation, definition);
+      propTypeHandler(documentation, definition, noopImporter);
       expect(documentation.descriptors).toEqual({
         foo: {
           type: {},
@@ -106,7 +144,7 @@ describe('propTypeHandler', () => {
         ),
       );
 
-      propTypeHandler(documentation, definition);
+      propTypeHandler(documentation, definition, noopImporter);
       expect(documentation.descriptors).toEqual({
         simple_prop: {
           type: {},
@@ -130,7 +168,7 @@ describe('propTypeHandler', () => {
         ),
       );
 
-      propTypeHandler(documentation, definition);
+      propTypeHandler(documentation, definition, noopImporter);
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
@@ -145,7 +183,7 @@ describe('propTypeHandler', () => {
         ),
       );
 
-      propTypeHandler(documentation, definition);
+      propTypeHandler(documentation, definition, noopImporter);
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
@@ -159,7 +197,7 @@ describe('propTypeHandler', () => {
         ),
       );
 
-      propTypeHandler(documentation, definition);
+      propTypeHandler(documentation, definition, noopImporter);
       expect(documentation.descriptors).toEqual({
         custom_propA: {
           type: {},
@@ -182,13 +220,50 @@ describe('propTypeHandler', () => {
         var props = {bar: PropTypes.bool};
       `);
 
-      propTypeHandler(documentation, definition);
+      propTypeHandler(documentation, definition, noopImporter);
       expect(documentation.descriptors).toEqual({
         bar: {
           type: {},
           required: false,
         },
       });
+    });
+
+    it('resolves imported variables', () => {
+      const definitionSrc = getSrc('props');
+      const definition = parse(`
+        ${definitionSrc}
+        import props from 'props';
+      `);
+
+      propTypeHandler(documentation, definition, mockImporter);
+      expect(documentation.descriptors).toEqual({
+        bar: {
+          type: {},
+          required: false,
+        },
+      });
+    });
+
+    it('can resolve individual imported variables assigned to props', () => {
+      const definitionSrc = getSrc(`{
+        foo: foo,
+        [bar]: bar,
+        baz: baz,
+        simple_prop: simpleProp,
+        complex_prop: complexProp,
+      }`);
+      const definition = parse(`
+        ${definitionSrc}
+        import foo from 'foo';
+        import bar from 'bar';
+        import baz from 'baz';
+        import simpleProp from 'simpleProp';
+        import complexProp from 'complexProp';
+      `);
+
+      propTypeHandler(documentation, definition, mockImporter);
+      expect(documentation.descriptors).toMatchSnapshot();
     });
   }
 

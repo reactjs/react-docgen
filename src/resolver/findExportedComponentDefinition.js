@@ -17,6 +17,8 @@ import normalizeClassDefinition from '../utils/normalizeClassDefinition';
 import resolveExportDeclaration from '../utils/resolveExportDeclaration';
 import resolveToValue from '../utils/resolveToValue';
 import resolveHOC from '../utils/resolveHOC';
+import type { Parser } from '../babelParser';
+import type { Importer } from '../types';
 
 const ERROR_MULTIPLE_DEFINITIONS =
   'Multiple exported component definitions found.';
@@ -25,28 +27,31 @@ function ignore() {
   return false;
 }
 
-function isComponentDefinition(path) {
+function isComponentDefinition(path, importer) {
   return (
-    isReactCreateClassCall(path) ||
-    isReactComponentClass(path) ||
-    isStatelessComponent(path) ||
-    isReactForwardRefCall(path)
+    isReactCreateClassCall(path, importer) ||
+    isReactComponentClass(path, importer) ||
+    isStatelessComponent(path, importer) ||
+    isReactForwardRefCall(path, importer)
   );
 }
 
-function resolveDefinition(definition) {
-  if (isReactCreateClassCall(definition)) {
+function resolveDefinition(definition, importer) {
+  if (isReactCreateClassCall(definition, importer)) {
     // return argument
-    const resolvedPath = resolveToValue(definition.get('arguments', 0));
+    const resolvedPath = resolveToValue(
+      definition.get('arguments', 0),
+      importer,
+    );
     if (t.ObjectExpression.check(resolvedPath.node)) {
       return resolvedPath;
     }
-  } else if (isReactComponentClass(definition)) {
+  } else if (isReactComponentClass(definition, importer)) {
     normalizeClassDefinition(definition);
     return definition;
   } else if (
-    isStatelessComponent(definition) ||
-    isReactForwardRefCall(definition)
+    isStatelessComponent(definition, importer) ||
+    isReactForwardRefCall(definition, importer)
   ) {
     return definition;
   }
@@ -70,17 +75,22 @@ function resolveDefinition(definition) {
  */
 export default function findExportedComponentDefinition(
   ast: ASTNode,
+  parser: Parser,
+  importer: Importer,
 ): ?NodePath {
   let foundDefinition;
 
   function exportDeclaration(path) {
-    const definitions = resolveExportDeclaration(path).reduce(
+    const definitions = resolveExportDeclaration(path, importer).reduce(
       (acc, definition) => {
-        if (isComponentDefinition(definition)) {
+        if (isComponentDefinition(definition, importer)) {
           acc.push(definition);
         } else {
-          const resolved = resolveToValue(resolveHOC(definition));
-          if (isComponentDefinition(resolved)) {
+          const resolved = resolveToValue(
+            resolveHOC(definition, importer),
+            importer,
+          );
+          if (isComponentDefinition(resolved, importer)) {
             acc.push(resolved);
           }
         }
@@ -96,7 +106,7 @@ export default function findExportedComponentDefinition(
       // If a file exports multiple components, ... complain!
       throw new Error(ERROR_MULTIPLE_DEFINITIONS);
     }
-    foundDefinition = resolveDefinition(definitions[0]);
+    foundDefinition = resolveDefinition(definitions[0], importer);
     return false;
   }
 
@@ -121,15 +131,15 @@ export default function findExportedComponentDefinition(
     visitAssignmentExpression: function(path) {
       // Ignore anything that is not `exports.X = ...;` or
       // `module.exports = ...;`
-      if (!isExportsOrModuleAssignment(path)) {
+      if (!isExportsOrModuleAssignment(path, importer)) {
         return false;
       }
       // Resolve the value of the right hand side. It should resolve to a call
       // expression, something like React.createClass
-      path = resolveToValue(path.get('right'));
-      if (!isComponentDefinition(path)) {
-        path = resolveToValue(resolveHOC(path));
-        if (!isComponentDefinition(path)) {
+      path = resolveToValue(path.get('right'), importer);
+      if (!isComponentDefinition(path, importer)) {
+        path = resolveToValue(resolveHOC(path, importer), importer);
+        if (!isComponentDefinition(path, importer)) {
           return false;
         }
       }
@@ -137,7 +147,7 @@ export default function findExportedComponentDefinition(
         // If a file exports multiple components, ... complain!
         throw new Error(ERROR_MULTIPLE_DEFINITIONS);
       }
-      foundDefinition = resolveDefinition(path);
+      foundDefinition = resolveDefinition(path, importer);
       return false;
     },
   });

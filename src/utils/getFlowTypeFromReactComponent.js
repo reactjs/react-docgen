@@ -15,11 +15,12 @@ import isReactComponentClass from './isReactComponentClass';
 import isReactForwardRefCall from './isReactForwardRefCall';
 import resolveGenericTypeAnnotation from './resolveGenericTypeAnnotation';
 import resolveToValue from './resolveToValue';
+import type { Importer } from '../types';
 
-function getStatelessPropsPath(componentDefinition): NodePath {
-  const value = resolveToValue(componentDefinition);
-  if (isReactForwardRefCall(value)) {
-    const inner = resolveToValue(value.get('arguments', 0));
+function getStatelessPropsPath(componentDefinition, importer): NodePath {
+  const value = resolveToValue(componentDefinition, importer);
+  if (isReactForwardRefCall(value, importer)) {
+    const inner = resolveToValue(value.get('arguments', 0), importer);
     return inner.get('params', 0);
   }
   return value.get('params', 0);
@@ -30,10 +31,10 @@ function getStatelessPropsPath(componentDefinition): NodePath {
  * flow type for the props. If not found or not one of the supported
  * component types returns null.
  */
-export default (path: NodePath): ?NodePath => {
+export default (path: NodePath, importer: Importer): ?NodePath => {
   let typePath: ?NodePath = null;
 
-  if (isReactComponentClass(path)) {
+  if (isReactComponentClass(path, importer)) {
     const superTypes = path.get('superTypeParameters');
 
     if (superTypes.value) {
@@ -44,7 +45,7 @@ export default (path: NodePath): ?NodePath => {
         typePath = params.get(0);
       }
     } else {
-      const propsMemberPath = getMemberValuePath(path, 'props');
+      const propsMemberPath = getMemberValuePath(path, 'props', importer);
       if (!propsMemberPath) {
         return null;
       }
@@ -55,7 +56,7 @@ export default (path: NodePath): ?NodePath => {
     return typePath;
   }
 
-  const propsParam = getStatelessPropsPath(path);
+  const propsParam = getStatelessPropsPath(path, importer);
 
   if (propsParam) {
     typePath = getTypeAnnotation(propsParam);
@@ -69,6 +70,7 @@ export function applyToFlowTypeProperties(
   path: NodePath,
   callback: (propertyPath: NodePath, typeParams: ?TypeParameters) => void,
   typeParams?: ?TypeParameters,
+  importer: Importer,
 ) {
   if (path.node.properties) {
     path
@@ -80,7 +82,7 @@ export function applyToFlowTypeProperties(
       .each(propertyPath => callback(propertyPath, typeParams));
   } else if (path.node.type === 'InterfaceDeclaration') {
     if (path.node.extends) {
-      applyExtends(documentation, path, callback, typeParams);
+      applyExtends(documentation, path, callback, typeParams, importer);
     }
 
     path
@@ -88,7 +90,7 @@ export function applyToFlowTypeProperties(
       .each(propertyPath => callback(propertyPath, typeParams));
   } else if (path.node.type === 'TSInterfaceDeclaration') {
     if (path.node.extends) {
-      applyExtends(documentation, path, callback, typeParams);
+      applyExtends(documentation, path, callback, typeParams, importer);
     }
 
     path
@@ -106,27 +108,35 @@ export function applyToFlowTypeProperties(
           typesPath,
           callback,
           typeParams,
+          importer,
         ),
       );
   } else if (path.node.type !== 'UnionTypeAnnotation') {
     // The react-docgen output format does not currently allow
     // for the expression of union types
-    const typePath = resolveGenericTypeAnnotation(path);
+    const typePath = resolveGenericTypeAnnotation(path, importer);
     if (typePath) {
-      applyToFlowTypeProperties(documentation, typePath, callback, typeParams);
+      applyToFlowTypeProperties(
+        documentation,
+        typePath,
+        callback,
+        typeParams,
+        importer,
+      );
     }
   }
 }
 
-function applyExtends(documentation, path, callback, typeParams) {
+function applyExtends(documentation, path, callback, typeParams, importer) {
   path.get('extends').each((extendsPath: NodePath) => {
-    const resolvedPath = resolveGenericTypeAnnotation(extendsPath);
+    const resolvedPath = resolveGenericTypeAnnotation(extendsPath, importer);
     if (resolvedPath) {
       if (resolvedPath.node.typeParameters && extendsPath.node.typeParameters) {
         typeParams = getTypeParameters(
           resolvedPath.get('typeParameters'),
           extendsPath.get('typeParameters'),
           typeParams,
+          importer,
         );
       }
       applyToFlowTypeProperties(
@@ -134,6 +144,7 @@ function applyExtends(documentation, path, callback, typeParams) {
         resolvedPath,
         callback,
         typeParams,
+        importer,
       );
     } else {
       const id =

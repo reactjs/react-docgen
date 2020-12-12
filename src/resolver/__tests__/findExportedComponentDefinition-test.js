@@ -6,16 +6,57 @@
  *
  */
 
-import * as utils from '../../../tests/utils';
+import {
+  getParser,
+  parse as parseSource,
+  statement,
+  noopImporter,
+  makeMockImporter,
+} from '../../../tests/utils';
 import findExportedComponentDefinition from '../findExportedComponentDefinition';
 
 describe('findExportedComponentDefinition', () => {
-  function parse(source) {
+  function parse(source, importer = noopImporter) {
     return findExportedComponentDefinition(
-      utils.parse(source),
-      utils.getParser(),
+      parseSource(source),
+      getParser(),
+      importer,
     );
   }
+
+  const mockImporter = makeMockImporter({
+    createClass: statement(`
+      export default React.createClass({});
+      import React from 'react';
+    `).get('declaration'),
+
+    classDec: statement(`
+      export default class Component extends React.Component {};
+      import React from 'react';
+    `).get('declaration'),
+
+    classExpr: statement(`
+      export default Component;
+      var Component = class extends React.Component {};
+      import React from 'react';
+    `).get('declaration'),
+
+    statelessJsx: statement(`
+      export default () => <div />;
+    `).get('declaration'),
+
+    statelessCreateElement: statement(`
+      export default () => React.createElement('div', {});
+      import React from 'react';
+    `).get('declaration'),
+
+    forwardRef: statement(`
+      export default React.forwardRef((props, ref) => (
+        <div ref={ref} style={{backgroundColor: props.color}} />
+      ));
+      import React from 'react';
+    `).get('declaration'),
+  });
 
   describe('CommonJS module exports', () => {
     describe('React.createClass', () => {
@@ -94,6 +135,15 @@ describe('findExportedComponentDefinition', () => {
 
         expect(parse(source)).toBeUndefined();
       });
+
+      it('resolves an imported variable to React.createClass', () => {
+        const source = `
+          import Component from 'createClass';
+          module.exports = Component;
+        `;
+
+        expect(parse(source, mockImporter)).toBeDefined();
+      });
     });
 
     describe('class definitions', () => {
@@ -132,6 +182,28 @@ describe('findExportedComponentDefinition', () => {
         expect(result).toBeDefined();
         expect(result.node.type).toBe('ClassDeclaration');
       });
+
+      it('resolves an imported variable to class declaration', () => {
+        const source = `
+          import Component from 'classDec';
+          module.exports = Component;
+        `;
+
+        const result = parse(source, mockImporter);
+        expect(result).toBeDefined();
+        expect(result.node.type).toBe('ClassDeclaration');
+      });
+
+      it('resolves an imported variable to class expression', () => {
+        const source = `
+          import Component from 'classExpr';
+          module.exports = Component;
+        `;
+
+        const result = parse(source, mockImporter);
+        expect(result).toBeDefined();
+        expect(result.node.type).toBe('ClassExpression');
+      });
     });
 
     describe('stateless components', () => {
@@ -163,6 +235,24 @@ describe('findExportedComponentDefinition', () => {
         `;
 
         expect(parse(source)).toBeUndefined();
+      });
+
+      it('resolves an imported stateless component with JSX', () => {
+        const source = `
+          import Component from 'statelessJsx';
+          module.exports = Component;
+        `;
+
+        expect(parse(source, mockImporter)).toBeDefined();
+      });
+
+      it('resolves an imported stateless component with React.createElement', () => {
+        const source = `
+          import Component from 'statelessCreateElement';
+          module.exports = Component;
+        `;
+
+        expect(parse(source, mockImporter)).toBeDefined();
       });
     });
 
@@ -209,6 +299,15 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           expect(parse(source)).toBeDefined();
+        });
+
+        it('supports imported components', () => {
+          const source = `
+            import Component from 'createClass';
+            exports.ComponentB = Component;
+          `;
+
+          expect(parse(source, mockImporter)).toBeDefined();
         });
       });
 
@@ -261,6 +360,17 @@ describe('findExportedComponentDefinition', () => {
           expect(result).toBeDefined();
           expect(result.node.type).toBe('ClassDeclaration');
         });
+
+        it('supports imported components', () => {
+          const source = `
+            import Component from 'classDec';
+            exports.ComponentB = Component;
+          `;
+
+          const result = parse(source, mockImporter);
+          expect(result).toBeDefined();
+          expect(result.node.type).toBe('ClassDeclaration');
+        });
       });
     });
   });
@@ -310,6 +420,15 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           expect(parse(source)).toBeDefined();
+        });
+
+        it('supports imported components', () => {
+          const source = `
+            import Component from 'createClass';
+            export default Component;
+          `;
+
+          expect(parse(source, mockImporter)).toBeDefined();
         });
       });
 
@@ -401,6 +520,17 @@ describe('findExportedComponentDefinition', () => {
           expect(result).toBeDefined();
           expect(result.node.type).toBe('ClassDeclaration');
         });
+
+        it('supports imported components', () => {
+          const source = `
+            import Component from 'classDec';
+            export default Component;
+          `;
+
+          const result = parse(source, mockImporter);
+          expect(result).toBeDefined();
+          expect(result.node.type).toBe('ClassDeclaration');
+        });
       });
     });
 
@@ -462,6 +592,15 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           expect(parse(source)).toBeDefined();
+        });
+
+        it('supports imported components', () => {
+          const source = `
+            import Component from 'createClass';
+            export let ComponentB = Component;
+          `;
+
+          expect(parse(source, mockImporter)).toBeDefined();
         });
       });
 
@@ -532,6 +671,17 @@ describe('findExportedComponentDefinition', () => {
           expect(result).toBeDefined();
           expect(result.node.type).toBe('ClassExpression');
         });
+
+        it('supports imported components', () => {
+          const source = `
+            import Component from 'classDec';
+            export let ComponentB = Component;
+          `;
+
+          const result = parse(source, mockImporter);
+          expect(result).toBeDefined();
+          expect(result.node.type).toBe('ClassDeclaration');
+        });
       });
 
       describe('stateless components', () => {
@@ -601,6 +751,26 @@ describe('findExportedComponentDefinition', () => {
           expect(result).toBeDefined();
           expect(result.node.type).toBe('FunctionExpression');
         });
+
+        it('supports imported components', () => {
+          let source = `
+            import Component from 'statelessJsx';
+            export var ComponentA = Component;
+          `;
+
+          let result = parse(source, mockImporter);
+          expect(result).toBeDefined();
+          expect(result.node.type).toBe('ArrowFunctionExpression');
+
+          source = `
+            import Component from 'statelessCreateElement';
+            export var ComponentB = Component;
+          `;
+
+          result = parse(source, mockImporter);
+          expect(result).toBeDefined();
+          expect(result.node.type).toBe('ArrowFunctionExpression');
+        });
       });
     });
 
@@ -653,6 +823,15 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           expect(parse(source)).toBeDefined();
+        });
+
+        it('supports imported components', () => {
+          const source = `
+            import Component from 'createClass';
+            export { Component };
+          `;
+
+          expect(parse(source, mockImporter)).toBeDefined();
         });
       });
 
@@ -712,6 +891,17 @@ describe('findExportedComponentDefinition', () => {
           expect(result).toBeDefined();
           expect(result.node.type).toBe('ClassExpression');
         });
+
+        it('supports imported components', () => {
+          const source = `
+            import Component from 'classDec';
+            export { Component };
+          `;
+
+          const result = parse(source, mockImporter);
+          expect(result).toBeDefined();
+          expect(result.node.type).toBe('ClassDeclaration');
+        });
       });
 
       describe('stateless components', () => {
@@ -767,6 +957,26 @@ describe('findExportedComponentDefinition', () => {
             export {ComponentA};
           `;
           const result = parse(source);
+          expect(result).toBeDefined();
+          expect(result.node.type).toBe('ArrowFunctionExpression');
+        });
+
+        it('supports imported components', () => {
+          let source = `
+            import Component from 'statelessJsx';
+            export { Component as ComponentA };
+          `;
+
+          let result = parse(source, mockImporter);
+          expect(result).toBeDefined();
+          expect(result.node.type).toBe('ArrowFunctionExpression');
+
+          source = `
+            import Component from 'statelessCreateElement';
+            export { Component as ComponentB };
+          `;
+
+          result = parse(source, mockImporter);
           expect(result).toBeDefined();
           expect(result.node.type).toBe('ArrowFunctionExpression');
         });

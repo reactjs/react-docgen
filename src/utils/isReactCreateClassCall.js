@@ -11,6 +11,7 @@ import { namedTypes as t } from 'ast-types';
 import match from './match';
 import resolveToModule from './resolveToModule';
 import isReactBuiltinCall from './isReactBuiltinCall';
+import type { Importer } from '../types';
 
 /**
  * Returns true if the expression is a function call of the form
@@ -19,7 +20,10 @@ import isReactBuiltinCall from './isReactBuiltinCall';
  * createReactClass(...);
  * ```
  */
-function isReactCreateClassCallModular(path: NodePath): boolean {
+function isReactCreateClassCallModular(
+  path: NodePath,
+  importer: Importer,
+): boolean {
   if (t.ExpressionStatement.check(path.node)) {
     path = path.get('expression');
   }
@@ -27,7 +31,7 @@ function isReactCreateClassCallModular(path: NodePath): boolean {
   if (!match(path.node, { type: 'CallExpression' })) {
     return false;
   }
-  const module = resolveToModule(path);
+  const module = resolveToModule(path, importer);
   return Boolean(module && module === 'create-react-class');
 }
 
@@ -39,9 +43,12 @@ function isReactCreateClassCallModular(path: NodePath): boolean {
  * createReactClass(...);
  * ```
  */
-export default function isReactCreateClassCall(path: NodePath): boolean {
+export default function isReactCreateClassCall(
+  path: NodePath,
+  importer: Importer,
+): boolean {
   return (
-    isReactBuiltinCall(path, 'createClass') ||
-    isReactCreateClassCallModular(path)
+    isReactBuiltinCall(path, 'createClass', importer) ||
+    isReactCreateClassCallModular(path, importer)
   );
 }

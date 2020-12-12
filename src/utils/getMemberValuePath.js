@@ -11,31 +11,32 @@ import getClassMemberValuePath from './getClassMemberValuePath';
 import getMemberExpressionValuePath from './getMemberExpressionValuePath';
 import getPropertyValuePath from './getPropertyValuePath';
 import resolveFunctionDefinitionToReturnValue from '../utils/resolveFunctionDefinitionToReturnValue';
+import type { Importer } from '../types';
 
 const SYNONYMS = {
   getDefaultProps: 'defaultProps',
   defaultProps: 'getDefaultProps',
 };
 
-const POSTPROCESS_MEMBERS = {
-  propTypes: path =>
-    t.Function.check(path.node)
-      ? resolveFunctionDefinitionToReturnValue(path)
-      : path,
-};
+const postprocessPropTypes = (path, importer) =>
+  t.Function.check(path.node)
+    ? resolveFunctionDefinitionToReturnValue(path, importer)
+    : path;
 
-const LOOKUP_METHOD = {
-  [t.ArrowFunctionExpression.name]: getMemberExpressionValuePath,
-  [t.CallExpression.name]: getMemberExpressionValuePath,
-  [t.FunctionExpression.name]: getMemberExpressionValuePath,
-  [t.FunctionDeclaration.name]: getMemberExpressionValuePath,
-  [t.VariableDeclaration.name]: getMemberExpressionValuePath,
-  [t.ObjectExpression.name]: getPropertyValuePath,
-  [t.ClassDeclaration.name]: getClassMemberValuePath,
-  [t.ClassExpression.name]: getClassMemberValuePath,
-};
+const POSTPROCESS_MEMBERS = new Map([['propTypes', postprocessPropTypes]]);
 
-function isSupportedDefinitionType({ node }) {
+const LOOKUP_METHOD = new Map([
+  [t.ArrowFunctionExpression.name, getMemberExpressionValuePath],
+  [t.CallExpression.name, getMemberExpressionValuePath],
+  [t.FunctionExpression.name, getMemberExpressionValuePath],
+  [t.FunctionDeclaration.name, getMemberExpressionValuePath],
+  [t.VariableDeclaration.name, getMemberExpressionValuePath],
+  [t.ObjectExpression.name, getPropertyValuePath],
+  [t.ClassDeclaration.name, getClassMemberValuePath],
+  [t.ClassExpression.name, getClassMemberValuePath],
+]);
+
+export function isSupportedDefinitionType({ node }: NodePath) {
   return (
     t.ObjectExpression.check(node) ||
     t.ClassDeclaration.check(node) ||
@@ -86,6 +87,7 @@ function isSupportedDefinitionType({ node }) {
 export default function getMemberValuePath(
   componentDefinition: NodePath,
   memberName: string,
+  importer: Importer,
 ): ?NodePath {
   if (!isSupportedDefinitionType(componentDefinition)) {
     throw new TypeError(
@@ -99,14 +101,15 @@ export default function getMemberValuePath(
   }
 
   const lookupMethod =
-    LOOKUP_METHOD[componentDefinition.node.type] ||
+    LOOKUP_METHOD.get(componentDefinition.node.type) ||
     getMemberExpressionValuePath;
-  let result = lookupMethod(componentDefinition, memberName);
+  let result = lookupMethod(componentDefinition, memberName, importer);
   if (!result && SYNONYMS[memberName]) {
-    result = lookupMethod(componentDefinition, SYNONYMS[memberName]);
+    result = lookupMethod(componentDefinition, SYNONYMS[memberName], importer);
   }
-  if (result && POSTPROCESS_MEMBERS[memberName]) {
-    result = POSTPROCESS_MEMBERS[memberName](result);
+  const postprocessMethod = POSTPROCESS_MEMBERS.get(memberName);
+  if (result && postprocessMethod) {
+    result = postprocessMethod(result, importer);
   }
 
   return result;

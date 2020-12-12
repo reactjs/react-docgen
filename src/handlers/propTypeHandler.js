@@ -17,16 +17,17 @@ import printValue from '../utils/printValue';
 import resolveToModule from '../utils/resolveToModule';
 import resolveToValue from '../utils/resolveToValue';
 import type Documentation from '../Documentation';
+import type { Importer } from '../types';
 
-function isPropTypesExpression(path) {
-  const moduleName = resolveToModule(path);
+function isPropTypesExpression(path, importer) {
+  const moduleName = resolveToModule(path, importer);
   if (moduleName) {
     return isReactModuleName(moduleName) || moduleName === 'ReactPropTypes';
   }
   return false;
 }
 
-function amendPropTypes(getDescriptor, path) {
+function amendPropTypes(getDescriptor, path, importer) {
   if (!t.ObjectExpression.check(path.node)) {
     return;
   }
@@ -34,13 +35,13 @@ function amendPropTypes(getDescriptor, path) {
   path.get('properties').each(propertyPath => {
     switch (propertyPath.node.type) {
       case t.Property.name: {
-        const propName = getPropertyName(propertyPath);
+        const propName = getPropertyName(propertyPath, importer);
         if (!propName) return;
 
         const propDescriptor = getDescriptor(propName);
-        const valuePath = propertyPath.get('value');
-        const type = isPropTypesExpression(valuePath)
-          ? getPropType(valuePath)
+        const valuePath = resolveToValue(propertyPath.get('value'), importer);
+        const type = isPropTypesExpression(valuePath, importer)
+          ? getPropType(valuePath, importer)
           : { name: 'custom', raw: printValue(valuePath) };
 
         if (type) {
@@ -51,10 +52,13 @@ function amendPropTypes(getDescriptor, path) {
         break;
       }
       case t.SpreadElement.name: {
-        const resolvedValuePath = resolveToValue(propertyPath.get('argument'));
+        const resolvedValuePath = resolveToValue(
+          propertyPath.get('argument'),
+          importer,
+        );
         switch (resolvedValuePath.node.type) {
           case t.ObjectExpression.name: // normal object literal
-            amendPropTypes(getDescriptor, resolvedValuePath);
+            amendPropTypes(getDescriptor, resolvedValuePath, importer);
             break;
         }
         break;
@@ -64,12 +68,16 @@ function amendPropTypes(getDescriptor, path) {
 }
 
 function getPropTypeHandler(propName: string) {
-  return function(documentation: Documentation, path: NodePath) {
-    let propTypesPath = getMemberValuePath(path, propName);
+  return function(
+    documentation: Documentation,
+    path: NodePath,
+    importer: Importer,
+  ) {
+    let propTypesPath = getMemberValuePath(path, propName, importer);
     if (!propTypesPath) {
       return;
     }
-    propTypesPath = resolveToValue(propTypesPath);
+    propTypesPath = resolveToValue(propTypesPath, importer);
     if (!propTypesPath) {
       return;
     }
@@ -84,7 +92,7 @@ function getPropTypeHandler(propName: string) {
       default:
         getDescriptor = documentation.getPropDescriptor;
     }
-    amendPropTypes(getDescriptor.bind(documentation), propTypesPath);
+    amendPropTypes(getDescriptor.bind(documentation), propTypesPath, importer);
   };
 }
 

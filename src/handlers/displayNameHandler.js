@@ -14,12 +14,14 @@ import isReactForwardRefCall from '../utils/isReactForwardRefCall';
 import resolveToValue from '../utils/resolveToValue';
 import resolveFunctionDefinitionToReturnValue from '../utils/resolveFunctionDefinitionToReturnValue';
 import type Documentation from '../Documentation';
+import type { Importer } from '../types';
 
 export default function displayNameHandler(
   documentation: Documentation,
   path: NodePath,
+  importer: Importer,
 ) {
-  let displayNamePath = getMemberValuePath(path, 'displayName');
+  let displayNamePath = getMemberValuePath(path, 'displayName', importer);
   if (!displayNamePath) {
     // Function and class declarations need special treatment. The name of the
     // function / class is the displayName
@@ -31,7 +33,7 @@ export default function displayNameHandler(
     } else if (
       t.ArrowFunctionExpression.check(path.node) ||
       t.FunctionExpression.check(path.node) ||
-      isReactForwardRefCall(path)
+      isReactForwardRefCall(path, importer)
     ) {
       let currentPath = path;
       while (currentPath.parent) {
@@ -56,13 +58,16 @@ export default function displayNameHandler(
     }
     return;
   }
-  displayNamePath = resolveToValue(displayNamePath);
+  displayNamePath = resolveToValue(displayNamePath, importer);
 
   // If display name is defined as a getter we get a function expression as
   // value. In that case we try to determine the value from the return
   // statement.
   if (t.FunctionExpression.check(displayNamePath.node)) {
-    displayNamePath = resolveFunctionDefinitionToReturnValue(displayNamePath);
+    displayNamePath = resolveFunctionDefinitionToReturnValue(
+      displayNamePath,
+      importer,
+    );
   }
   if (!displayNamePath || !t.Literal.check(displayNamePath.node)) {
     return;
