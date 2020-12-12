@@ -1811,7 +1811,7 @@ Object {
       "description": "String value of a number",
       "required": false,
       "tsType": Object {
-        "name": "STRING_VALS[undefined]",
+        "name": "STRING_VALS[number]",
         "raw": "typeof STRING_VALS[number]",
       },
     },
