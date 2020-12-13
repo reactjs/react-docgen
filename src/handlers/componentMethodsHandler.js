@@ -18,6 +18,11 @@ import { traverseShallow } from '../utils/traverse';
 import resolveToValue from '../utils/resolveToValue';
 import type { Importer } from '../types';
 
+function isPublicClassProperty(path) {
+  return (
+    t.ClassProperty.check(path.node) && !t.ClassPrivateProperty.check(path.node)
+  );
+}
 /**
  * The following values/constructs are considered methods:
  *
@@ -29,7 +34,7 @@ import type { Importer } from '../types';
 function isMethod(path, importer) {
   const isProbablyMethod =
     (t.MethodDefinition.check(path.node) && path.node.kind !== 'constructor') ||
-    ((t.ClassProperty.check(path.node) || t.Property.check(path.node)) &&
+    ((isPublicClassProperty(path) || t.Property.check(path.node)) &&
       t.Function.check(resolveToValue(path.get('value'), importer).node));
 
   return isProbablyMethod && !isReactComponentMethod(path, importer);

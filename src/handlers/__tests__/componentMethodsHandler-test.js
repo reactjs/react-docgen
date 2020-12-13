@@ -277,6 +277,25 @@ describe('componentMethodsHandler', () => {
     expect(documentation.methods).toMatchSnapshot();
   });
 
+  it('should handle and ignore private properties', () => {
+    const src = `
+      class Test extends React.Component {
+        #privateProperty = () => {
+          console.log('Do something');
+        }
+
+        componentDidMount() {}
+
+        render() {
+          return null;
+        }
+      }
+    `;
+
+    componentMethodsHandler(documentation, parse(src).get('body', 0));
+    expect(documentation.methods.length).toBe(0);
+  });
+
   describe('function components', () => {
     it('no methods', () => {
       const src = `
