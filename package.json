@@ -12,6 +12,10 @@
   "bin": {
     "react-docgen": "bin/react-docgen.js"
   },
+  "browser": {
+    "./src/importer/makeFsImporter.js": "./src/importer/ignoreImports.js",
+    "./dist/importer/makeFsImporter.js": "./dist/importer/ignoreImports.js"
+  },
   "files": [
     "bin",
     "dist"
