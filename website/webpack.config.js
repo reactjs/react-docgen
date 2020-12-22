@@ -25,15 +25,19 @@ const plugins = [
     filename: '[name]-[contenthash].css',
     chunkFilename: '[name]-[contenthash].css',
   }),
+  new webpack.DefinePlugin({
+    'process.env.NODE_ENV': JSON.stringify(
+      process.env.NODE_ENV || 'development',
+    ),
+    'process.env.BABEL_ENV': JSON.stringify(
+      process.env.NODE_ENV || 'development',
+    ),
+    'process.env.NODE_DEBUG': 'false',
+  }),
+  new webpack.ProvidePlugin({
+    process: 'process',
+  }),
 ];
-
-if (!isDev) {
-  plugins.push(
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production'),
-    }),
-  );
-}
 
 module.exports = {
   mode: isDev ? 'development' : 'production',
@@ -42,13 +46,7 @@ module.exports = {
     app: './index.js',
   },
   optimization: {
-    minimizer: [
-      new TerserJsPlugin({
-        parallel: true,
-        sourceMap: false,
-      }),
-      new OptimizeCSSAssetsPlugin({}),
-    ],
+    minimizer: [new TerserJsPlugin(), new OptimizeCSSAssetsPlugin({})],
   },
   output: {
     path: targetDirectory,
@@ -59,11 +57,6 @@ module.exports = {
   devServer: {
     contentBase: sourceDirectory,
     port: 8000,
-  },
-  node: {
-    fs: 'empty',
-    module: 'empty',
-    net: 'empty',
   },
   module: {
     rules: [
@@ -92,6 +85,15 @@ module.exports = {
     ],
   },
   resolve: {
+    fallback: {
+      assert: require.resolve('assert/'),
+      buffer: require.resolve('buffer/'),
+      fs: false,
+      module: false,
+      net: false,
+      path: require.resolve('path-browserify'),
+      process: require.resolve('process/browser'),
+    },
     alias: {
       'react-docgen': path.resolve(__dirname, '../src/main'),
     },
