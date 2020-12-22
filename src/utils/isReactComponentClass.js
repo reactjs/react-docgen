@@ -63,7 +63,7 @@ export default function isReactComponentClass(
   // check for @extends React.Component in docblock
   if (path.parentPath && path.parentPath.value) {
     const classDeclaration = Array.isArray(path.parentPath.value)
-      ? path.parentPath.value.find(function(declaration) {
+      ? path.parentPath.value.find(function (declaration) {
           return declaration.type === 'ClassDeclaration';
         })
       : path.parentPath.value;
@@ -71,7 +71,7 @@ export default function isReactComponentClass(
     if (
       classDeclaration &&
       classDeclaration.leadingComments &&
-      classDeclaration.leadingComments.some(function(comment) {
+      classDeclaration.leadingComments.some(function (comment) {
         return /@extends\s+React\.Component/.test(comment.value);
       })
     ) {

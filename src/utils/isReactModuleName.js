@@ -20,7 +20,7 @@ const reactModules = [
  * module name.
  */
 export default function isReactModuleName(moduleName: string): boolean {
-  return reactModules.some(function(reactModuleName) {
+  return reactModules.some(function (reactModuleName) {
     return reactModuleName === moduleName.toLowerCase();
   });
 }

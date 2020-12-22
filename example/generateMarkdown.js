@@ -28,7 +28,7 @@ function generatePropType(type) {
     values =
       '(' +
       type.value
-        .map(function(typeValue) {
+        .map(function (typeValue) {
           return typeValue.name || typeValue.value;
         })
         .join('|') +
@@ -71,7 +71,7 @@ function generateProps(props) {
     '\n' +
     Object.keys(props)
       .sort()
-      .map(function(propName) {
+      .map(function (propName) {
         return generateProp(propName, props[propName]);
       })
       .join('\n')

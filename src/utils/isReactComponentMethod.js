@@ -36,7 +36,7 @@ const componentMethods = [
 /**
  * Returns if the method path is a Component method.
  */
-export default function(methodPath: NodePath, importer: Importer): boolean {
+export default function (methodPath: NodePath, importer: Importer): boolean {
   if (
     !t.MethodDefinition.check(methodPath.node) &&
     !t.Property.check(methodPath.node)

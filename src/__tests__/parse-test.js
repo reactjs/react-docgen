@@ -66,7 +66,7 @@ describe('parse', () => {
           ],
         },
       }),
-    ).toThrowError(/.*Unexpected token \(1:13\).*/);
+    ).toThrowError(/.*\(1:13\).*/);
   });
 
   it('supports custom parserOptions without plugins', () => {

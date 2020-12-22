@@ -50,7 +50,7 @@ function toArray(path: NodePath, importer: Importer): Array<string> {
       result.push('this');
       continue;
     } else if (t.ObjectExpression.check(node)) {
-      const properties = path.get('properties').map(function(property) {
+      const properties = path.get('properties').map(function (property) {
         return (
           toString(property.get('key'), importer) +
           ': ' +
@@ -64,7 +64,7 @@ function toArray(path: NodePath, importer: Importer): Array<string> {
         '[' +
           path
             .get('elements')
-            .map(function(el) {
+            .map(function (el) {
               return toString(el, importer);
             })
             .join(', ') +

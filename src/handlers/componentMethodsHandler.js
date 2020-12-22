@@ -51,7 +51,7 @@ function findAssignedMethods(scope, idPath, importer) {
   const idScope = idPath.scope.lookup(idPath.node.name);
 
   traverseShallow((scope: any).path, {
-    visitAssignmentExpression: function(path) {
+    visitAssignmentExpression: function (path) {
       const node = path.node;
       if (
         match(node.left, {

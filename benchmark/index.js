@@ -37,14 +37,14 @@ files.forEach(file => {
     parse(code, null, null, options);
   });
   const result = [suite.name];
-  suite.on('cycle', function(event) {
+  suite.on('cycle', function (event) {
     {
       // separate scope so we can cleanup all this afterwards
       const bench = event.target;
       const factor = bench.hz < 100 ? 100 : 1;
-      const msg = `${Math.round(bench.hz * factor) /
-        factor} ops/sec ±${Math.round(bench.stats.rme * 100) /
-        100}% (${Math.round(bench.stats.mean * 1000)}ms)`;
+      const msg = `${Math.round(bench.hz * factor) / factor} ops/sec ±${
+        Math.round(bench.stats.rme * 100) / 100
+      }% (${Math.round(bench.stats.mean * 1000)}ms)`;
       result.push(msg);
     }
     global.gc();

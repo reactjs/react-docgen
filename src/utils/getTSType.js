@@ -179,10 +179,7 @@ function handleTSTypeLiteral(
     } else if (t.TSIndexSignature.check(param.node)) {
       type.signature.properties.push({
         key: getTSTypeWithResolvedTypes(
-          param
-            .get('parameters')
-            .get(0)
-            .get('typeAnnotation'),
+          param.get('parameters').get(0).get('typeAnnotation'),
           typeParams,
           importer,
         ),

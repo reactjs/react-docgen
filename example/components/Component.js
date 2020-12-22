@@ -15,13 +15,13 @@ const Component = React.createClass({
     bar: React.PropTypes.number,
   },
 
-  getDefaultProps: function() {
+  getDefaultProps: function () {
     return {
       bar: 21,
     };
   },
 
-  render: function() {
+  render: function () {
     // ...
   },
 });

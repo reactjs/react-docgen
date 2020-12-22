@@ -68,7 +68,7 @@ function amendPropTypes(getDescriptor, path, importer) {
 }
 
 function getPropTypeHandler(propName: string) {
-  return function(
+  return function (
     documentation: Documentation,
     path: NodePath,
     importer: Importer,

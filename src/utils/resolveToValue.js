@@ -104,7 +104,7 @@ function findLastAssignedValue(scope, idPath, importer) {
   const name = idPath.node.name;
 
   traverseShallow(scope.path, {
-    visitAssignmentExpression: function(path) {
+    visitAssignmentExpression: function (path) {
       const node = path.node;
       // Skip anything that is not an assignment to a variable with the
       // passed name.

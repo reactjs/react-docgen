@@ -75,7 +75,7 @@ export default function normalizeClassDefinition(
     visitClassExpression: ignore,
     visitForInStatement: ignore,
     visitForStatement: ignore,
-    visitAssignmentExpression: function(path) {
+    visitAssignmentExpression: function (path) {
       if (t.MemberExpression.check(path.node.left)) {
         const first = getMemberExpressionRoot(path.get('left'));
         if (
