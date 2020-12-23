@@ -141,6 +141,17 @@ describe('defaultPropsHandler', () => {
   });
 
   describe('ClassDeclaration', () => {
+    it('ignores classes without name', () => {
+      const definition = statement(`
+        export default class {
+        }
+      `).get('declaration');
+      expect(() =>
+        displayNameHandler(documentation, definition, noopImporter),
+      ).not.toThrow();
+      expect(documentation.displayName).not.toBeDefined();
+    });
+
     it('considers the class name', () => {
       const definition = statement(`
         class Foo {

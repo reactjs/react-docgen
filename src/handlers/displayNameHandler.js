@@ -26,8 +26,9 @@ export default function displayNameHandler(
     // Function and class declarations need special treatment. The name of the
     // function / class is the displayName
     if (
-      t.ClassDeclaration.check(path.node) ||
-      t.FunctionDeclaration.check(path.node)
+      (t.ClassDeclaration.check(path.node) ||
+        t.FunctionDeclaration.check(path.node)) &&
+      path.node.id != null
     ) {
       documentation.set('displayName', getNameOrValue(path.get('id')));
     } else if (

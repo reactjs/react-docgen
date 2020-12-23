@@ -1801,6 +1801,22 @@ Object {
 }
 `;
 
+exports[`main fixtures processes component "component_41.tsx" without errors 1`] = `
+Object {
+  "description": "",
+  "methods": Array [],
+  "props": Object {
+    "value": Object {
+      "description": "",
+      "required": true,
+      "tsType": Object {
+        "name": "string",
+      },
+    },
+  },
+}
+`;
+
 exports[`main fixtures processes component "flow-export-type.js" without errors 1`] = `
 Object {
   "description": "This is a Flow class component",
