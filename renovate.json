@@ -1,0 +1,36 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "labels": ["dependencies"],
+  "extends": [
+    "config:base"
+  ],
+  "lockFileMaintenance": {
+    "enabled": true,
+    "semanticCommitType": "chore",
+    "automerge": true
+  },
+  "postUpdateOptions": [
+    "yarnDedupeHighest"
+  ],
+  "semanticCommits": true,
+  "semanticCommitType": "fix",
+  "automergeType": "branch",
+  "packageRules": [
+    {
+      "depTypeList": [
+        "devDependencies"
+      ],
+      "semanticCommitType": "chore"
+    },
+    {
+      "depTypeList": [
+        "devDependencies"
+      ],
+      "updateTypes": [
+        "minor",
+        "patch"
+      ],
+      "automerge": true
+    }
+  ]
+}
