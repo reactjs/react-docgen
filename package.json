@@ -65,7 +65,7 @@
     "benchmark": "2.1.4",
     "cli-table": "0.3.4",
     "cross-spawn": "7.0.3",
-    "eslint": "7.17.0",
+    "eslint": "7.18.0",
     "eslint-config-prettier": "7.1.0",
     "eslint-plugin-prettier": "3.3.1",
     "flow-bin": "0.98.1",
