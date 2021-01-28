@@ -8,6 +8,8 @@
  */
 
 import strip from 'strip-indent';
+import toBabel from 'estree-to-babel';
+import generate from '@babel/generator';
 
 function deindent(code: string): string {
   const firstNewLine = code.indexOf('\n');
@@ -35,15 +37,28 @@ function getSrcFromAst(path: NodePath): string {
  */
 export default function printValue(path: NodePath): string {
   if (path.node.start == null) {
-    // This only happens when we use AST builders to create nodes that do not actually
-    // exist in the source (e.g. when resolving Object.keys()). We might need to enhance
-    // this if we start using builders from `ast-types` more.
-    if (path.node.type === 'Literal') {
-      return `"${path.node.value}"`;
+    try {
+      const nodeCopy = {
+        ...path.node,
+      };
+
+      // `estree-to-babel` expects the `comments` property to exist on the top-level node
+      if (!nodeCopy.comments) {
+        nodeCopy.comments = [];
+      }
+
+      return generate(toBabel(nodeCopy), {
+        comments: false,
+        concise: true,
+      }).code;
+    } catch (err) {
+      throw new Error(
+        `Cannot print raw value for type '${path.node.type}'. Please report this with an example at https://github.com/reactjs/react-docgen/issues.
+
+Original error:
+${err.stack}`,
+      );
     }
-    throw new Error(
-      `Cannot print raw value for type '${path.node.type}'. Please report this with an example at https://github.com/reactjs/react-docgen/issues`,
-    );
   }
   const src = getSrcFromAst(path);
 
