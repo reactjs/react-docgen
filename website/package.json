@@ -18,11 +18,11 @@
     "process": "0.11.10"
   },
   "devDependencies": {
-    "@babel/core": "7.12.10",
-    "@babel/plugin-proposal-class-properties": "7.12.1",
-    "@babel/preset-env": "7.12.11",
-    "@babel/preset-flow": "7.12.1",
-    "@babel/preset-react": "7.12.10",
+    "@babel/core": "7.12.13",
+    "@babel/plugin-proposal-class-properties": "7.12.13",
+    "@babel/preset-env": "7.12.13",
+    "@babel/preset-flow": "7.12.13",
+    "@babel/preset-react": "7.12.13",
     "babel-loader": "8.2.2",
     "codemirror": "5.59.2",
     "css-loader": "5.0.1",
