@@ -57,7 +57,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.12.13",
-    "@babel/plugin-transform-runtime": "7.12.13",
+    "@babel/plugin-transform-runtime": "7.12.15",
     "@babel/preset-env": "7.12.13",
     "@babel/preset-flow": "7.12.13",
     "babel-eslint": "10.1.0",
