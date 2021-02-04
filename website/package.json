@@ -35,7 +35,7 @@
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "terser-webpack-plugin": "5.1.1",
-    "webpack": "5.20.1",
+    "webpack": "5.20.2",
     "webpack-cli": "4.5.0",
     "webpack-dev-server": "3.11.2"
   }
