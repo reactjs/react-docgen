@@ -46,10 +46,12 @@
   "license": "MIT",
   "dependencies": {
     "@babel/core": "^7.7.5",
+    "@babel/generator": "^7.12.11",
     "@babel/runtime": "^7.7.6",
     "ast-types": "^0.14.2",
     "commander": "^2.19.0",
     "doctrine": "^3.0.0",
+    "estree-to-babel": "^3.1.0",
     "neo-async": "^2.6.1",
     "node-dir": "^0.1.10",
     "resolve": "^1.17.0",
