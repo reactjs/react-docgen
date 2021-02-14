@@ -37,6 +37,9 @@ const plugins = [
   new webpack.ProvidePlugin({
     process: 'process',
   }),
+  new webpack.ProvidePlugin({
+    Buffer: ['buffer', 'Buffer'],
+  }),
 ];
 
 module.exports = {
