@@ -13,27 +13,29 @@
     "react-docgen": "bin/react-docgen.js"
   },
   "browser": {
-    "./src/importer/makeFsImporter.js": "./src/importer/ignoreImports.js",
-    "./dist/importer/makeFsImporter.js": "./dist/importer/ignoreImports.js"
+    "./src/importer/makeFsImporter.ts": "./src/importer/ignoreImports.ts",
+    "./lib/importer/makeFsImporter.js": "./lib/importer/ignoreImports.js"
   },
   "files": [
     "bin",
-    "dist"
+    "lib"
   ],
   "engines": {
-    "node": ">=8.10.0"
+    "node": ">=12.0.0"
   },
-  "main": "dist/main.js",
+  "main": "lib/main.js",
+  "typings": "lib/main.d.ts",
   "scripts": {
-    "build": "rimraf dist/ && babel src/ --out-dir dist/ --ignore **/__tests__,**/__mocks__,**/src/types.js",
+    "build": "rimraf lib/ && yarn build:ts",
+    "build:ts": "tsc",
     "build:website": "cd website/ && yarn && yarn build",
-    "lint": "eslint . --report-unused-disable-directives",
-    "fix": "eslint . --fix --report-unused-disable-directives",
-    "prepare": "yarn build",
+    "lint": "eslint . --ext .js,.ts --report-unused-disable-directives",
+    "fix": "eslint . --ext .js,.ts --fix --report-unused-disable-directives",
+    "prepare_X": "yarn build",
     "preversion": "yarn lint",
     "start": "cd website && yarn && yarn start",
     "test": "jest",
-    "test:ci": "yarn lint && yarn flow && yarn test --runInBand",
+    "test:ci": "yarn lint && yarn test --runInBand",
     "watch": "yarn build --watch"
   },
   "keywords": [
@@ -47,7 +49,6 @@
   "dependencies": {
     "@babel/core": "^7.7.5",
     "@babel/generator": "^7.12.11",
-    "@babel/runtime": "^7.7.6",
     "ast-types": "^0.14.2",
     "commander": "^2.19.0",
     "doctrine": "^3.0.0",
@@ -58,37 +59,23 @@
     "strip-indent": "^3.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "7.13.16",
-    "@babel/plugin-transform-runtime": "7.13.15",
-    "@babel/preset-env": "7.14.1",
-    "@babel/preset-flow": "7.13.13",
-    "babel-eslint": "10.1.0",
-    "babel-jest": "26.6.3",
-    "benchmark": "2.1.4",
-    "cli-table": "0.3.6",
+    "@types/cross-spawn": "6.0.2",
+    "@types/doctrine": "0.0.3",
+    "@types/jest": "26.0.20",
+    "@types/rimraf": "3.0.0",
+    "@typescript-eslint/eslint-plugin": "4.15.2",
+    "@typescript-eslint/parser": "4.15.2",
     "cross-spawn": "7.0.3",
     "eslint": "7.26.0",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-prettier": "3.4.0",
-    "flow-bin": "0.98.1",
     "jest": "26.6.3",
     "jest-diff": "26.6.2",
     "jest-matcher-utils": "26.6.2",
     "prettier": "2.2.1",
     "rimraf": "3.0.2",
-    "temp": "0.9.4"
-  },
-  "jest": {
-    "snapshotSerializers": [
-      "./tests/NodePathSerializer.js"
-    ],
-    "setupFilesAfterEnv": [
-      "<rootDir>/tests/setupTestFramework.js"
-    ],
-    "roots": [
-      "bin",
-      "src"
-    ],
-    "testRegex": "/__tests__/.*-test\\.js$"
+    "tempy": "1.0.0",
+    "ts-jest": "26.5.1",
+    "typescript": "4.1.5"
   }
 }

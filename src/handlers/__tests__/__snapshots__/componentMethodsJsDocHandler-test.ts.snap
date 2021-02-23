@@ -1,0 +1,88 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`componentMethodsJsDocHandler adds descriptions 1`] = `
+Array [
+  Object {
+    "description": "The foo method.",
+    "docblock": "
+        The foo method.
+        @param test The test
+        @returns The number
+      ",
+    "modifiers": Array [],
+    "name": "foo",
+    "params": Array [
+      Object {
+        "description": "The test",
+        "name": "test",
+        "optional": false,
+        "type": null,
+      },
+    ],
+    "returns": Object {
+      "description": "The number",
+      "type": null,
+    },
+  },
+]
+`;
+
+exports[`componentMethodsJsDocHandler adds js doc types when no flow types 1`] = `
+Array [
+  Object {
+    "description": null,
+    "docblock": "
+        @param {string} test
+        @returns {string}
+      ",
+    "modifiers": Array [],
+    "name": "foo",
+    "params": Array [
+      Object {
+        "description": null,
+        "name": "test",
+        "optional": false,
+        "type": Object {
+          "name": "string",
+        },
+      },
+    ],
+    "returns": Object {
+      "description": null,
+      "type": Object {
+        "name": "string",
+      },
+    },
+  },
+]
+`;
+
+exports[`componentMethodsJsDocHandler keeps flow types over js doc types 1`] = `
+Array [
+  Object {
+    "description": null,
+    "docblock": "
+        @param {string} test
+        @returns {string}
+      ",
+    "modifiers": Array [],
+    "name": "foo",
+    "params": Array [
+      Object {
+        "description": null,
+        "name": "test",
+        "optional": false,
+        "type": Object {
+          "name": "number",
+        },
+      },
+    ],
+    "returns": Object {
+      "description": null,
+      "type": Object {
+        "name": "number",
+      },
+    },
+  },
+]
+`;
