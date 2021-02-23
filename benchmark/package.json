@@ -1,0 +1,13 @@
+{
+  "name": "react-docgen-benchmark",
+  "private": true,
+  "description": "Generate benchmarks for react-docgen",
+  "scripts": {
+    "start": "node --expose-gc ./index.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "benchmark": "2.1.4",
+    "cli-table": "0.3.5"
+  }
+}
