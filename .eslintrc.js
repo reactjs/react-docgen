@@ -1,5 +1,7 @@
+'use strict';
+
 module.exports = {
-  parser: 'babel-eslint',
+  root: true,
   extends: ['eslint:recommended', 'plugin:prettier/recommended'],
   parserOptions: {
     ecmaVersion: 2020,
@@ -15,18 +17,25 @@ module.exports = {
     node: true,
     es6: true,
   },
-  globals: {
-    ASTNode: true,
-    NodePath: true,
-    $Exact: true,
-  },
   overrides: [
     {
-      files: 'website/**/*.js',
-      env: { browser: true },
+      files: ['*rc.js', '*.config.js'],
+      parserOptions: {
+        ecmaVersion: 2019,
+        sourceType: 'script',
+      },
       rules: {
-        // conflicts with jsx
-        'no-unused-vars': 'off',
+        strict: ['error', 'global'],
+      },
+    },
+    {
+      files: '**/*.ts',
+      parser: '@typescript-eslint/parser',
+      plugins: ['@typescript-eslint'],
+      extends: ['plugin:@typescript-eslint/recommended'],
+      rules: {
+        '@typescript-eslint/array-type': ['error', { default: 'array-simple' }],
+        '@typescript-eslint/ban-ts-comment': 'off',
       },
     },
     {

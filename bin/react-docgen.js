@@ -1,12 +1,4 @@
 #!/usr/bin/env node
-/**
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- *
- */
-
 const argv = require('commander');
 
 function collect(val, memo) {
@@ -58,7 +50,7 @@ argv.parse(process.argv);
 const async = require('neo-async');
 const dir = require('node-dir');
 const fs = require('fs');
-const parser = require('../dist/main');
+const parser = require('../lib/main');
 const path = require('path');
 
 const output = argv.out;
@@ -81,7 +73,7 @@ if (
 if (argv.resolver) {
   try {
     // Look for built-in resolver
-    resolver = require(`../dist/resolver/${argv.resolver}`).default;
+    resolver = require(`../lib/resolver/${argv.resolver}`).default;
   } catch (error) {
     if (error.code !== 'MODULE_NOT_FOUND') {
       throw error;
