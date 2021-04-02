@@ -21,11 +21,7 @@ export default function resolveExportDeclaration(
   } else if (path.node.specifiers) {
     path
       .get('specifiers')
-      .each(specifier =>
-        definitions.push(
-          specifier.node.id ? specifier.get('id') : specifier.get('local'),
-        ),
-      );
+      .each(specifier => definitions.push(specifier.get('local')));
   }
   return definitions.map(definition => resolveToValue(definition, importer));
 }

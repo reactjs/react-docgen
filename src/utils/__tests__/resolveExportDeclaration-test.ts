@@ -1,46 +1,39 @@
-import { mocked } from 'ts-jest/utils';
 import { statement, noopImporter } from '../../../tests/utils';
-import resolveToValue from '../resolveToValue';
 import resolveExportDeclaration from '../resolveExportDeclaration';
-import { NodePath } from 'ast-types';
+import { NodePath } from 'ast-types/lib/node-path';
 
-jest.mock('../resolveToValue');
+jest.mock('../resolveToValue', () => {
+  return (path: NodePath) => path;
+});
 
 describe('resolveExportDeclaration', () => {
-  const returnValue = new NodePath({});
-
-  beforeEach(() => {
-    mocked(resolveToValue).mockReturnValue(returnValue);
-  });
-
   it('resolves default exports', () => {
     const exp = statement('export default 42;');
     const resolved = resolveExportDeclaration(exp, noopImporter);
 
-    expect(resolved).toEqual([returnValue]);
-    expect(resolveToValue).toBeCalledWith(exp.get('declaration'), noopImporter);
+    expect(resolved).toEqual([exp.get('declaration')]);
   });
 
-  it('resolves named exports', () => {
-    let exp = statement('export var foo = 42, bar = 21;');
-    let resolved = resolveExportDeclaration(exp, noopImporter);
+  it('resolves named variable exports', () => {
+    const exp = statement('export var foo = 42, bar = 21;');
+    const resolved = resolveExportDeclaration(exp, noopImporter);
 
     const declarations = exp.get('declaration', 'declarations');
-    expect(resolved).toEqual([returnValue, returnValue]);
-    expect(resolveToValue).toBeCalledWith(declarations.get(0), noopImporter);
-    expect(resolveToValue).toBeCalledWith(declarations.get(1), noopImporter);
+    expect(resolved).toEqual([declarations.get(0), declarations.get(1)]);
+  });
 
-    exp = statement('export function foo(){}');
-    resolved = resolveExportDeclaration(exp, noopImporter);
+  it('resolves named function exports', () => {
+    const exp = statement('export function foo(){}');
+    const resolved = resolveExportDeclaration(exp, noopImporter);
 
-    expect(resolved).toEqual([returnValue]);
-    expect(resolveToValue).toBeCalledWith(exp.get('declaration'), noopImporter);
+    expect(resolved).toEqual([exp.get('declaration')]);
+  });
 
-    exp = statement('export class Foo {}');
-    resolved = resolveExportDeclaration(exp, noopImporter);
+  it('resolves named class exports', () => {
+    const exp = statement('export class Foo {}');
+    const resolved = resolveExportDeclaration(exp, noopImporter);
 
-    expect(resolved).toEqual([returnValue]);
-    expect(resolveToValue).toBeCalledWith(exp.get('declaration'), noopImporter);
+    expect(resolved).toEqual([exp.get('declaration')]);
   });
 
   it('resolves named exports', () => {
@@ -48,18 +41,22 @@ describe('resolveExportDeclaration', () => {
     const resolved = resolveExportDeclaration(exp, noopImporter);
 
     const specifiers = exp.get('specifiers');
-    expect(resolved).toEqual([returnValue, returnValue, returnValue]);
-    expect(resolveToValue).toBeCalledWith(
+    expect(resolved).toEqual([
       specifiers.get(0, 'local'),
-      noopImporter,
-    );
-    expect(resolveToValue).toBeCalledWith(
       specifiers.get(1, 'local'),
-      noopImporter,
-    );
-    expect(resolveToValue).toBeCalledWith(
       specifiers.get(2, 'local'),
-      noopImporter,
-    );
+    ]);
+  });
+
+  it('resolves named exports from', () => {
+    const exp = statement('export {foo, bar, baz} from "";');
+    const resolved = resolveExportDeclaration(exp, noopImporter);
+
+    const specifiers = exp.get('specifiers');
+    expect(resolved).toEqual([
+      specifiers.get(0, 'local'),
+      specifiers.get(1, 'local'),
+      specifiers.get(2, 'local'),
+    ]);
   });
 });
