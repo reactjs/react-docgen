@@ -1,4 +1,4 @@
-/dist
+/lib
 node_modules/
 .idea/
 coverage/

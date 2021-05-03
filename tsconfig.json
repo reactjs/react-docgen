@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "declaration": true,
+    "target": "ES2018",
+    "module": "commonjs",
+    "outDir": "./lib",
+    "strict": true,
+    "strictNullChecks": true,
+    "noImplicitThis": true,
+    "noImplicitAny": false,
+    "noImplicitReturns": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "exclude": ["**/__tests__/**/*", "**/__mocks__/**/*"],
+  "include": ["src/**/*"]
+}

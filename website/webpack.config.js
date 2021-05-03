@@ -1,3 +1,5 @@
+'use strict';
+
 const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -62,7 +64,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(j|t)s$/,
         exclude: [/node_modules/],
         use: [
           {
@@ -86,6 +88,7 @@ module.exports = {
     ],
   },
   resolve: {
+    extensions: ['.ts', '.js', '.json'],
     fallback: {
       assert: require.resolve('assert/'),
       buffer: require.resolve('buffer/'),
@@ -96,7 +99,7 @@ module.exports = {
       process: require.resolve('process/browser'),
     },
     alias: {
-      'react-docgen': path.resolve(__dirname, '../src/main'),
+      'react-docgen': path.resolve(__dirname, '../src/main.ts'),
     },
   },
   plugins,

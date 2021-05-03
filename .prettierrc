@@ -11,7 +11,7 @@
     "overrides": [{
       "files": [
         "bin/react-docgen.js",
-        "bin/__tests__/example/**/*.js"
+        "bin/__tests__/__fixtures__/**/*.js"
       ],
       "options": {
         "trailingComma": "es5"

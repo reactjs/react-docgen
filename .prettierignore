@@ -1,2 +1,3 @@
 src/__tests__/fixtures/
-dist/
+benchmark/fixtures/
+lib/
