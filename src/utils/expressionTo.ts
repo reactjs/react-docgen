@@ -40,16 +40,23 @@ function toArray(path: NodePath, importer: Importer): string[] {
       // @ts-ignore
       result.push(node.raw);
       continue;
+    } else if (t.FunctionExpression.check(node)) {
+      result.push('<function>');
+      continue;
     } else if (t.ThisExpression.check(node)) {
       result.push('this');
       continue;
     } else if (t.ObjectExpression.check(node)) {
       const properties = path.get('properties').map(function (property) {
-        return (
-          toString(property.get('key'), importer) +
-          ': ' +
-          toString(property.get('value'), importer)
-        );
+        if (t.SpreadElement.check(property.node)) {
+          return `...${toString(property.get('argument'), importer)}`;
+        } else {
+          return (
+            toString(property.get('key'), importer) +
+            ': ' +
+            toString(property.get('value'), importer)
+          );
+        }
       });
       result.push('{' + properties.join(', ') + '}');
       continue;
