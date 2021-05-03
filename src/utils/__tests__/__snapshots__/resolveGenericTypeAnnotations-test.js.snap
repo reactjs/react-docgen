@@ -1,0 +1,86 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`resolveGenericTypeAnnotation resolves type 1`] = `
+Node {
+  "callProperties": Array [],
+  "end": 57,
+  "exact": false,
+  "indexers": Array [],
+  "inexact": false,
+  "internalSlots": Array [],
+  "loc": SourceLocation {
+    "end": Position {
+      "column": 34,
+      "line": 3,
+    },
+    "filename": undefined,
+    "identifierName": undefined,
+    "start": Position {
+      "column": 21,
+      "line": 3,
+    },
+  },
+  "properties": Array [
+    Node {
+      "end": 55,
+      "key": Node {
+        "end": 47,
+        "loc": SourceLocation {
+          "end": Position {
+            "column": 24,
+            "line": 3,
+          },
+          "filename": undefined,
+          "identifierName": "x",
+          "start": Position {
+            "column": 23,
+            "line": 3,
+          },
+        },
+        "name": "x",
+        "start": 46,
+        "type": "Identifier",
+      },
+      "kind": "init",
+      "loc": SourceLocation {
+        "end": Position {
+          "column": 32,
+          "line": 3,
+        },
+        "filename": undefined,
+        "identifierName": undefined,
+        "start": Position {
+          "column": 23,
+          "line": 3,
+        },
+      },
+      "method": false,
+      "optional": false,
+      "proto": false,
+      "start": 46,
+      "static": false,
+      "type": "ObjectTypeProperty",
+      "value": Node {
+        "end": 55,
+        "loc": SourceLocation {
+          "end": Position {
+            "column": 32,
+            "line": 3,
+          },
+          "filename": undefined,
+          "identifierName": undefined,
+          "start": Position {
+            "column": 26,
+            "line": 3,
+          },
+        },
+        "start": 49,
+        "type": "StringTypeAnnotation",
+      },
+      "variance": null,
+    },
+  ],
+  "start": 44,
+  "type": "ObjectTypeAnnotation",
+}
+`;

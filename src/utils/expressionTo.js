@@ -50,14 +50,23 @@ function toArray(path: NodePath): Array<string> {
     } else if (t.Literal.check(node)) {
       result.push(node.raw);
       continue;
+    } else if (t.FunctionExpression.check(node)) {
+      result.push('<function>');
+      continue;
     } else if (t.ThisExpression.check(node)) {
       result.push('this');
       continue;
     } else if (t.ObjectExpression.check(node)) {
       const properties = path.get('properties').map(function (property) {
-        return (
-          toString(property.get('key')) + ': ' + toString(property.get('value'))
-        );
+        if (t.SpreadElement.check(property.node)) {
+          return `...${toString(property.get('argument'))}`;
+        } else {
+          return (
+            toString(property.get('key')) +
+            ': ' +
+            toString(property.get('value'))
+          );
+        }
       });
       result.push('{' + properties.join(', ') + '}');
       continue;
