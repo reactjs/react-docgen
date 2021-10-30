@@ -31,11 +31,11 @@
     "build:website": "cd website/ && yarn && yarn build",
     "lint": "eslint . --ext .js,.ts --report-unused-disable-directives",
     "fix": "eslint . --ext .js,.ts --fix --report-unused-disable-directives",
-    "prepare_X": "yarn build",
+    "prepare": "yarn build",
     "preversion": "yarn lint",
     "start": "cd website && yarn && yarn start",
-    "test": "jest",
-    "test:ci": "yarn lint && yarn test --runInBand",
+    "test": "yarn build && jest",
+    "test:ci": "yarn lint && yarn build && yarn test --runInBand",
     "watch": "yarn build --watch"
   },
   "keywords": [
