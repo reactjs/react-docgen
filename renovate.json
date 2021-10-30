@@ -4,7 +4,7 @@
   "extends": [
     "config:base"
   ],
-  "enabled": false,
+  "enabled": true,
   "lockFileMaintenance": {
     "enabled": true,
     "semanticCommitType": "chore",
