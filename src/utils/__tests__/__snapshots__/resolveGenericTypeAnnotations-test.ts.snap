@@ -5,12 +5,9 @@ Node {
   "callProperties": Array [],
   "end": 57,
   "exact": false,
-  "extra": undefined,
   "indexers": Array [],
   "inexact": false,
-  "innerComments": undefined,
   "internalSlots": Array [],
-  "leadingComments": undefined,
   "loc": SourceLocation {
     "end": Position {
       "column": 34,
@@ -26,13 +23,8 @@ Node {
   "properties": Array [
     Node {
       "end": 55,
-      "extra": undefined,
-      "innerComments": undefined,
       "key": Node {
         "end": 47,
-        "extra": undefined,
-        "innerComments": undefined,
-        "leadingComments": undefined,
         "loc": SourceLocation {
           "end": Position {
             "column": 24,
@@ -46,13 +38,10 @@ Node {
           },
         },
         "name": "x",
-        "range": undefined,
         "start": 46,
-        "trailingComments": undefined,
         "type": "Identifier",
       },
       "kind": "init",
-      "leadingComments": undefined,
       "loc": SourceLocation {
         "end": Position {
           "column": 32,
@@ -68,16 +57,11 @@ Node {
       "method": false,
       "optional": false,
       "proto": false,
-      "range": undefined,
       "start": 46,
       "static": false,
-      "trailingComments": undefined,
       "type": "ObjectTypeProperty",
       "value": Node {
         "end": 55,
-        "extra": undefined,
-        "innerComments": undefined,
-        "leadingComments": undefined,
         "loc": SourceLocation {
           "end": Position {
             "column": 32,
@@ -90,17 +74,13 @@ Node {
             "line": 3,
           },
         },
-        "range": undefined,
         "start": 49,
-        "trailingComments": undefined,
         "type": "StringTypeAnnotation",
       },
       "variance": null,
     },
   ],
-  "range": undefined,
   "start": 44,
-  "trailingComments": undefined,
   "type": "ObjectTypeAnnotation",
 }
 `;

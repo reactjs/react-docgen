@@ -7,8 +7,6 @@ Array [
       "arguments": Array [
         Node {
           "end": 12,
-          "innerComments": undefined,
-          "leadingComments": undefined,
           "loc": SourceLocation {
             "end": Position {
               "column": 12,
@@ -21,10 +19,8 @@ Array [
               "line": 1,
             },
           },
-          "range": undefined,
           "raw": "123",
           "start": 9,
-          "trailingComments": undefined,
           "type": "Literal",
           "value": 123,
         },
@@ -32,9 +28,6 @@ Array [
       "callee": Node {
         "computed": false,
         "end": 8,
-        "extra": undefined,
-        "innerComments": undefined,
-        "leadingComments": undefined,
         "loc": SourceLocation {
           "end": Position {
             "column": 8,
@@ -49,9 +42,6 @@ Array [
         },
         "object": Node {
           "end": 4,
-          "extra": undefined,
-          "innerComments": undefined,
-          "leadingComments": undefined,
           "loc": SourceLocation {
             "end": Position {
               "column": 4,
@@ -65,17 +55,12 @@ Array [
             },
           },
           "name": "foo",
-          "range": undefined,
           "start": 1,
-          "trailingComments": undefined,
           "type": "Identifier",
         },
         "optional": false,
         "property": Node {
           "end": 8,
-          "extra": undefined,
-          "innerComments": undefined,
-          "leadingComments": undefined,
           "loc": SourceLocation {
             "end": Position {
               "column": 8,
@@ -89,20 +74,13 @@ Array [
             },
           },
           "name": "bar",
-          "range": undefined,
           "start": 5,
-          "trailingComments": undefined,
           "type": "Identifier",
         },
-        "range": undefined,
         "start": 1,
-        "trailingComments": undefined,
         "type": "MemberExpression",
       },
       "end": 13,
-      "extra": undefined,
-      "innerComments": undefined,
-      "leadingComments": undefined,
       "loc": SourceLocation {
         "end": Position {
           "column": 13,
@@ -116,17 +94,12 @@ Array [
         },
       },
       "optional": false,
-      "range": undefined,
       "start": 1,
-      "trailingComments": undefined,
       "type": "CallExpression",
     },
     "computed": false,
     "path": Node {
       "end": 8,
-      "extra": undefined,
-      "innerComments": undefined,
-      "leadingComments": undefined,
       "loc": SourceLocation {
         "end": Position {
           "column": 8,
@@ -140,9 +113,7 @@ Array [
         },
       },
       "name": "bar",
-      "range": undefined,
       "start": 5,
-      "trailingComments": undefined,
       "type": "Identifier",
     },
   },
@@ -151,9 +122,6 @@ Array [
     "computed": true,
     "path": Node {
       "end": 22,
-      "extra": undefined,
-      "innerComments": undefined,
-      "leadingComments": undefined,
       "loc": SourceLocation {
         "end": Position {
           "column": 22,
@@ -167,9 +135,7 @@ Array [
         },
       },
       "name": "baz",
-      "range": undefined,
       "start": 19,
-      "trailingComments": undefined,
       "type": "Identifier",
     },
   },
@@ -178,8 +144,6 @@ Array [
     "computed": true,
     "path": Node {
       "end": 26,
-      "innerComments": undefined,
-      "leadingComments": undefined,
       "loc": SourceLocation {
         "end": Position {
           "column": 26,
@@ -192,10 +156,8 @@ Array [
           "line": 1,
         },
       },
-      "range": undefined,
       "raw": "42",
       "start": 24,
-      "trailingComments": undefined,
       "type": "Literal",
       "value": 42,
     },
