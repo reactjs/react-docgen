@@ -28,7 +28,6 @@
   "scripts": {
     "build": "rimraf lib/ && yarn build:ts",
     "build:ts": "tsc",
-    "build:website": "cd website/ && yarn && yarn build",
     "lint": "eslint . --ext .js,.ts --report-unused-disable-directives",
     "fix": "eslint . --ext .js,.ts --fix --report-unused-disable-directives",
     "prepare": "yarn build",
