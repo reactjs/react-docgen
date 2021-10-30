@@ -15,7 +15,7 @@ jobs:
   tests:
     strategy:
       matrix:
-        node: [ '10', '12', '14', '16' ]
+        node: [ '12', '14', '16' ]
     name: Unit tests (Node v${{ matrix.node }})
     runs-on: ubuntu-latest
 
