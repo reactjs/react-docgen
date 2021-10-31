@@ -44,7 +44,7 @@ export default function printValue(path: NodePath): string {
         comments: false,
         concise: true,
       }).code;
-    } catch (err) {
+    } catch (err: any) {
       throw new Error(
         `Cannot print raw value for type '${path.node.type}'. Please report this with an example at https://github.com/reactjs/react-docgen/issues.
 
