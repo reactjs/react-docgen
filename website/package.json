@@ -28,7 +28,7 @@
     "codemirror": "5.63.3",
     "css-loader": "5.2.7",
     "html-loader": "2.1.2",
-    "html-webpack-plugin": "5.3.1",
+    "html-webpack-plugin": "5.5.0",
     "less": "4.1.2",
     "less-loader": "8.1.1",
     "mini-css-extract-plugin": "1.6.2",
