@@ -55,7 +55,7 @@ describe('react-docgen CLI', () => {
       dir = path.join(tempDir, dir);
       try {
         await mkdir(dir);
-      } catch (error) {
+      } catch (error: any) {
         if (error.message.indexOf('EEXIST') === -1) {
           throw error;
         }
