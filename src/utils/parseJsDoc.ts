@@ -42,7 +42,7 @@ function getType(tagType: Type | undefined | null): JsDocType | null {
         name: 'union',
         elements: tagType.elements
           .map(element => getType(element))
-          .filter((Boolean as unknown) as ExcludesNullish),
+          .filter(Boolean as unknown as ExcludesNullish),
       };
     case 'AllLiteral':
       // {*}
@@ -53,7 +53,7 @@ function getType(tagType: Type | undefined | null): JsDocType | null {
         name: 'name' in tagType.expression ? tagType.expression.name : '',
         elements: tagType.applications
           .map(element => getType(element))
-          .filter((Boolean as unknown) as ExcludesNullish),
+          .filter(Boolean as unknown as ExcludesNullish),
       };
     case 'ArrayType':
       // {[number, string]}
@@ -61,7 +61,7 @@ function getType(tagType: Type | undefined | null): JsDocType | null {
         name: 'tuple',
         elements: tagType.elements
           .map(element => getType(element))
-          .filter((Boolean as unknown) as ExcludesNullish),
+          .filter(Boolean as unknown as ExcludesNullish),
       };
     default: {
       const typeName =
