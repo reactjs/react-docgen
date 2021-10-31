@@ -54,7 +54,7 @@
     "neo-async": "^2.6.1",
     "node-dir": "^0.1.10",
     "resolve": "^1.17.0",
-    "strip-indent": "^3.0.0"
+    "strip-indent": "^4.0.0"
   },
   "devDependencies": {
     "@types/cross-spawn": "6.0.2",
