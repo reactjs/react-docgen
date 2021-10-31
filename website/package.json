@@ -35,7 +35,7 @@
     "optimize-css-assets-webpack-plugin": "5.0.8",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "terser-webpack-plugin": "5.1.1",
+    "terser-webpack-plugin": "5.2.4",
     "webpack": "5.36.2",
     "webpack-cli": "4.7.0",
     "webpack-dev-server": "3.11.2"
