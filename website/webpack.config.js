@@ -58,7 +58,10 @@ module.exports = {
     hashDigestLength: 8,
   },
   devServer: {
-    contentBase: sourceDirectory,
+    allowedHosts: 'all',
+    static: {
+      directory: sourceDirectory,
+    },
     port: 8000,
   },
   module: {
