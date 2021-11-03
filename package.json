@@ -67,13 +67,13 @@
     "eslint": "8.1.0",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-prettier": "4.0.0",
-    "jest": "26.6.3",
-    "jest-diff": "26.6.2",
-    "jest-matcher-utils": "26.6.2",
+    "jest": "27.3.1",
+    "jest-diff": "27.3.1",
+    "jest-matcher-utils": "27.3.1",
     "prettier": "2.4.1",
     "rimraf": "3.0.2",
     "tempy": "1.0.1",
-    "ts-jest": "26.5.6",
+    "ts-jest": "27.0.7",
     "typescript": "4.4.4"
   }
 }
