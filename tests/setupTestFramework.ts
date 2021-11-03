@@ -6,8 +6,8 @@ import {
   ASTNode,
 } from 'ast-types';
 import { NodePath } from 'ast-types/lib/node-path';
-import diff from 'jest-diff';
-import utils from 'jest-matcher-utils';
+import { diff } from 'jest-diff';
+import { printExpected, printReceived } from 'jest-matcher-utils';
 
 const matchers = {
   toEqualASTNode: function (received: NodePath, expected: NodePath | ASTNode) {
@@ -37,9 +37,9 @@ const matchers = {
 
         return (
           'Expected value to be (using ast-types):\n' +
-          `  ${utils.printExpected(expectedNode)}\n` +
+          `  ${printExpected(expectedNode)}\n` +
           'Received:\n' +
-          `  ${utils.printReceived(receivedNode)}` +
+          `  ${printReceived(receivedNode)}` +
           (diffString ? `\n\nDifference:\n\n${diffString}` : '')
         );
       },
