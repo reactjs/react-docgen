@@ -70,7 +70,7 @@
     "jest": "27.3.1",
     "jest-diff": "27.3.1",
     "jest-matcher-utils": "27.3.1",
-    "prettier": "2.4.1",
+    "prettier": "2.5.0",
     "rimraf": "3.0.2",
     "tempy": "1.0.1",
     "ts-jest": "27.0.7",
