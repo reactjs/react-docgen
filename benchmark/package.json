@@ -8,6 +8,6 @@
   "license": "MIT",
   "dependencies": {
     "benchmark": "2.1.4",
-    "cli-table": "0.3.9"
+    "cli-table": "0.3.11"
   }
 }
