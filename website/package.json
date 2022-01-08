@@ -27,7 +27,7 @@
     "babel-loader": "8.2.3",
     "codemirror": "5.65.0",
     "css-loader": "6.5.1",
-    "html-loader": "3.0.1",
+    "html-loader": "3.1.0",
     "html-webpack-plugin": "5.5.0",
     "less": "4.1.2",
     "less-loader": "10.2.0",
