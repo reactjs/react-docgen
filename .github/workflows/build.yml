@@ -144,7 +144,7 @@ jobs:
       working-directory: ./website
 
     - name: Deploy
-      uses: JamesIves/github-pages-deploy-action@4.2.0
+      uses: JamesIves/github-pages-deploy-action@v4.2.2
       with:
         branch: gh-pages
         folder: website/dist
