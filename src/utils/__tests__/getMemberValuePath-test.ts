@@ -3,7 +3,6 @@ import getPropertyValuePath from '../getPropertyValuePath';
 import getClassMemberValuePath from '../getClassMemberValuePath';
 import getMemberValuePath from '../getMemberValuePath';
 import getMemberExpressionValuePath from '../getMemberExpressionValuePath';
-import { mocked } from 'ts-jest/utils';
 import { NodePath } from 'ast-types';
 
 jest.mock('../getPropertyValuePath');
@@ -87,8 +86,8 @@ describe('getMemberValuePath', () => {
   it('returns the result of getPropertyValuePath and getClassMemberValuePath', () => {
     const mockPath = new NodePath(42);
     const mockPath2 = new NodePath(21);
-    mocked(getPropertyValuePath).mockReturnValue(mockPath);
-    mocked(getClassMemberValuePath).mockReturnValue(mockPath2);
+    jest.mocked(getPropertyValuePath).mockReturnValue(mockPath);
+    jest.mocked(getClassMemberValuePath).mockReturnValue(mockPath2);
     let path = expression('{}');
 
     expect(getMemberValuePath(path, 'defaultProps', noopImporter)).toBe(
