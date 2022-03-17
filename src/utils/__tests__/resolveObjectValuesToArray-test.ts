@@ -1,4 +1,3 @@
-import { builders } from 'ast-types';
 import {
   statement,
   noopImporter,
@@ -34,12 +33,7 @@ describe('resolveObjectValuesToArray', () => {
       ['var foo = { 1: "bar", 2: "foo" };', 'Object.values(foo);'].join('\n'),
     );
 
-    expect(resolveObjectValuesToArray(path, noopImporter)).toEqualASTNode(
-      builders.arrayExpression([
-        builders.literal('bar'),
-        builders.literal('foo'),
-      ]),
-    );
+    expect(resolveObjectValuesToArray(path, noopImporter)).toMatchSnapshot();
   });
 
   it('resolves Object.values with numbers', () => {
@@ -47,9 +41,7 @@ describe('resolveObjectValuesToArray', () => {
       ['var foo = { 1: 0, 2: 5 };', 'Object.values(foo);'].join('\n'),
     );
 
-    expect(resolveObjectValuesToArray(path, noopImporter)).toEqualASTNode(
-      builders.arrayExpression([builders.literal(0), builders.literal(5)]),
-    );
+    expect(resolveObjectValuesToArray(path, noopImporter)).toMatchSnapshot();
   });
 
   it('resolves Object.values with undefined or null', () => {
@@ -59,12 +51,7 @@ describe('resolveObjectValuesToArray', () => {
       ),
     );
 
-    expect(resolveObjectValuesToArray(path, noopImporter)).toEqualASTNode(
-      builders.arrayExpression([
-        builders.literal(null),
-        builders.literal(null),
-      ]),
-    );
+    expect(resolveObjectValuesToArray(path, noopImporter)).toMatchSnapshot();
   });
 
   it('resolves Object.values with literals as computed key', () => {
@@ -72,9 +59,7 @@ describe('resolveObjectValuesToArray', () => {
       ['var foo = { ["bar"]: 1, [5]: 2};', 'Object.values(foo);'].join('\n'),
     );
 
-    expect(resolveObjectValuesToArray(path, noopImporter)).toEqualASTNode(
-      builders.arrayExpression([builders.literal(2), builders.literal(1)]),
-    );
+    expect(resolveObjectValuesToArray(path, noopImporter)).toMatchSnapshot();
   });
 
   it('does not resolve Object.values with complex computed key', () => {
@@ -94,13 +79,7 @@ describe('resolveObjectValuesToArray', () => {
       ].join('\n'),
     );
 
-    expect(resolveObjectValuesToArray(path, noopImporter)).toEqualASTNode(
-      builders.arrayExpression([
-        builders.literal(1),
-        builders.literal(4),
-        builders.literal(2),
-      ]),
-    );
+    expect(resolveObjectValuesToArray(path, noopImporter)).toMatchSnapshot();
   });
 
   it('resolves Object.values when using getters', () => {
@@ -111,9 +90,7 @@ describe('resolveObjectValuesToArray', () => {
       ].join('\n'),
     );
 
-    expect(resolveObjectValuesToArray(path, noopImporter)).toEqualASTNode(
-      builders.arrayExpression([builders.literal(1), builders.literal(2)]),
-    );
+    expect(resolveObjectValuesToArray(path, noopImporter)).toMatchSnapshot();
   });
 
   it('resolves Object.values when using setters', () => {
@@ -124,9 +101,7 @@ describe('resolveObjectValuesToArray', () => {
       ].join('\n'),
     );
 
-    expect(resolveObjectValuesToArray(path, noopImporter)).toEqualASTNode(
-      builders.arrayExpression([builders.literal(1), builders.literal(2)]),
-    );
+    expect(resolveObjectValuesToArray(path, noopImporter)).toMatchSnapshot();
   });
 
   it('resolves Object.values but ignores duplicates', () => {
@@ -138,13 +113,7 @@ describe('resolveObjectValuesToArray', () => {
       ].join('\n'),
     );
 
-    expect(resolveObjectValuesToArray(path, noopImporter)).toEqualASTNode(
-      builders.arrayExpression([
-        builders.literal(1),
-        builders.literal(5),
-        builders.literal(2),
-      ]),
-    );
+    expect(resolveObjectValuesToArray(path, noopImporter)).toMatchSnapshot();
   });
 
   it('resolves Object.values but ignores duplicates with getter and setter', () => {
@@ -154,9 +123,7 @@ describe('resolveObjectValuesToArray', () => {
       ),
     );
 
-    expect(resolveObjectValuesToArray(path, noopImporter)).toEqualASTNode(
-      builders.arrayExpression([]),
-    );
+    expect(resolveObjectValuesToArray(path, noopImporter)).toMatchSnapshot();
   });
 
   it('does not resolve Object.values when using unresolvable spread', () => {
@@ -175,18 +142,7 @@ describe('resolveObjectValuesToArray', () => {
       Object.values(foo);
     `);
 
-    expect(resolveObjectValuesToArray(path, mockImporter)).toEqualASTNode(
-      builders.arrayExpression([
-        builders.literal('bar'),
-        builders.literal('foo'),
-        builders.literal(0),
-        builders.literal(5),
-        builders.literal(null),
-        builders.literal(null),
-        builders.literal(7),
-        builders.literal('foo'),
-      ]),
-    );
+    expect(resolveObjectValuesToArray(path, mockImporter)).toMatchSnapshot();
   });
 
   it('can resolve spreads from imported objects', () => {
@@ -196,12 +152,6 @@ describe('resolveObjectValuesToArray', () => {
       Object.values(abc);
     `);
 
-    expect(resolveObjectValuesToArray(path, mockImporter)).toEqualASTNode(
-      builders.arrayExpression([
-        builders.literal('bar'),
-        builders.literal('baz'),
-        builders.literal('foo'),
-      ]),
-    );
+    expect(resolveObjectValuesToArray(path, mockImporter)).toMatchSnapshot();
   });
 });

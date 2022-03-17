@@ -1,4 +1,3 @@
-import { builders } from 'ast-types';
 import {
   statement,
   noopImporter,
@@ -32,12 +31,7 @@ describe('resolveObjectKeysToArray', () => {
       ['var foo = { bar: 1, foo: 2 };', 'Object.keys(foo);'].join('\n'),
     );
 
-    expect(resolveObjectKeysToArray(path, noopImporter)).toEqualASTNode(
-      builders.arrayExpression([
-        builders.literal('bar'),
-        builders.literal('foo'),
-      ]),
-    );
+    expect(resolveObjectKeysToArray(path, noopImporter)).toMatchSnapshot();
   });
 
   it('resolves Object.keys with literals', () => {
@@ -45,12 +39,7 @@ describe('resolveObjectKeysToArray', () => {
       ['var foo = { "bar": 1, 5: 2 };', 'Object.keys(foo);'].join('\n'),
     );
 
-    expect(resolveObjectKeysToArray(path, noopImporter)).toEqualASTNode(
-      builders.arrayExpression([
-        builders.literal('bar'),
-        builders.literal('5'),
-      ]),
-    );
+    expect(resolveObjectKeysToArray(path, noopImporter)).toMatchSnapshot();
   });
 
   it('resolves Object.keys with literals as computed key', () => {
@@ -58,12 +47,7 @@ describe('resolveObjectKeysToArray', () => {
       ['var foo = { ["bar"]: 1, [5]: 2};', 'Object.keys(foo);'].join('\n'),
     );
 
-    expect(resolveObjectKeysToArray(path, noopImporter)).toEqualASTNode(
-      builders.arrayExpression([
-        builders.literal('bar'),
-        builders.literal('5'),
-      ]),
-    );
+    expect(resolveObjectKeysToArray(path, noopImporter)).toMatchSnapshot();
   });
 
   it('resolves Object.keys when using resolvable spread', () => {
@@ -75,13 +59,7 @@ describe('resolveObjectKeysToArray', () => {
       ].join('\n'),
     );
 
-    expect(resolveObjectKeysToArray(path, noopImporter)).toEqualASTNode(
-      builders.arrayExpression([
-        builders.literal('boo'),
-        builders.literal('foo'),
-        builders.literal('doo'),
-      ]),
-    );
+    expect(resolveObjectKeysToArray(path, noopImporter)).toMatchSnapshot();
   });
 
   it('resolves Object.keys when using getters', () => {
@@ -91,13 +69,7 @@ describe('resolveObjectKeysToArray', () => {
       ),
     );
 
-    expect(resolveObjectKeysToArray(path, noopImporter)).toEqualASTNode(
-      builders.arrayExpression([
-        builders.literal('boo'),
-        builders.literal('foo'),
-        builders.literal('bar'),
-      ]),
-    );
+    expect(resolveObjectKeysToArray(path, noopImporter)).toMatchSnapshot();
   });
 
   it('resolves Object.keys when using setters', () => {
@@ -108,13 +80,7 @@ describe('resolveObjectKeysToArray', () => {
       ].join('\n'),
     );
 
-    expect(resolveObjectKeysToArray(path, noopImporter)).toEqualASTNode(
-      builders.arrayExpression([
-        builders.literal('boo'),
-        builders.literal('foo'),
-        builders.literal('bar'),
-      ]),
-    );
+    expect(resolveObjectKeysToArray(path, noopImporter)).toMatchSnapshot();
   });
 
   it('resolves Object.keys but ignores duplicates', () => {
@@ -126,13 +92,7 @@ describe('resolveObjectKeysToArray', () => {
       ].join('\n'),
     );
 
-    expect(resolveObjectKeysToArray(path, noopImporter)).toEqualASTNode(
-      builders.arrayExpression([
-        builders.literal('boo'),
-        builders.literal('foo'),
-        builders.literal('doo'),
-      ]),
-    );
+    expect(resolveObjectKeysToArray(path, noopImporter)).toMatchSnapshot();
   });
 
   it('resolves Object.keys but ignores duplicates with getter and setter', () => {
@@ -142,9 +102,7 @@ describe('resolveObjectKeysToArray', () => {
       ),
     );
 
-    expect(resolveObjectKeysToArray(path, noopImporter)).toEqualASTNode(
-      builders.arrayExpression([builders.literal('x')]),
-    );
+    expect(resolveObjectKeysToArray(path, noopImporter)).toMatchSnapshot();
   });
 
   it('does not resolve Object.keys when using unresolvable spread', () => {
@@ -169,16 +127,7 @@ describe('resolveObjectKeysToArray', () => {
       Object.keys(foo);
     `);
 
-    expect(resolveObjectKeysToArray(path, mockImporter)).toEqualASTNode(
-      builders.arrayExpression([
-        builders.literal('bar'),
-        builders.literal('foo'),
-        builders.literal(1),
-        builders.literal(2),
-        builders.literal(3),
-        builders.literal('baz'),
-      ]),
-    );
+    expect(resolveObjectKeysToArray(path, mockImporter)).toMatchSnapshot();
   });
 
   it('can resolve spreads from imported objects', () => {
@@ -188,12 +137,6 @@ describe('resolveObjectKeysToArray', () => {
       Object.keys(abc);
     `);
 
-    expect(resolveObjectKeysToArray(path, mockImporter)).toEqualASTNode(
-      builders.arrayExpression([
-        builders.literal('foo'),
-        builders.literal('baz'),
-        builders.literal('bar'),
-      ]),
-    );
+    expect(resolveObjectKeysToArray(path, mockImporter)).toMatchSnapshot();
   });
 });

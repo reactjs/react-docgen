@@ -1,9 +1,4 @@
-import {
-  ASTNode,
-  builders,
-  NodePath as NodePathConstructor,
-  namedTypes as t,
-} from 'ast-types';
+import { ASTNode, namedTypes as t } from 'ast-types';
 import type { NodePath } from 'ast-types/lib/node-path';
 import resolveToValue from './resolveToValue';
 import type { Importer } from '../parse';
@@ -111,7 +106,7 @@ export function resolveObjectToNameArray(
 export default function resolveObjectKeysToArray(
   path: NodePath,
   importer: Importer,
-): NodePath | null {
+): string[] | null {
   const node = path.node;
 
   if (isObjectKeysCall(node)) {
@@ -124,9 +119,9 @@ export default function resolveObjectKeysToArray(
     if (values) {
       const nodes = values
         .filter((value, index, array) => array.indexOf(value) === index)
-        .map(value => builders.literal(value));
+        .map(value => `"${value}"`);
 
-      return new NodePathConstructor(builders.arrayExpression(nodes));
+      return nodes;
     }
   }
 
