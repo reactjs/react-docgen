@@ -2,7 +2,6 @@ import { ASTNode, namedTypes as t } from 'ast-types';
 import resolveToValue from './resolveToValue';
 import type { Importer } from '../parse';
 import type { NodePath } from 'ast-types/lib/node-path';
-import { LiteralBuilder } from 'ast-types/gen/builders';
 
 interface ObjectPropMap {
   properties: string[];
@@ -139,7 +138,7 @@ export default function resolveObjectValuesToArray(
 
     if (propMap) {
       const nodes = propMap.properties.map(prop => {
-        const value = propMap.values[prop] as Parameters<LiteralBuilder>[0];
+        const value = propMap.values[prop];
 
         return typeof value === 'undefined'
           ? 'null'
