@@ -51,13 +51,16 @@ function getPropTypeOneOf(
   importer: Importer,
 ): PropTypeDescriptor {
   const type: PropTypeDescriptor = { name: 'enum' };
-  let value: NodePath | null = resolveToValue(argumentPath, importer);
+  const value: NodePath | null = resolveToValue(argumentPath, importer);
   if (!t.ArrayExpression.check(value.node)) {
-    value =
+    const objectValues =
       resolveObjectKeysToArray(value, importer) ||
       resolveObjectValuesToArray(value, importer);
-    if (value) {
-      type.value = getEnumValues(value, importer);
+    if (objectValues) {
+      type.value = objectValues.map(objectValue => ({
+        value: objectValue,
+        computed: false,
+      }));
     } else {
       // could not easily resolve to an Array, let's print the original value
       type.computed = true;
