@@ -5,6 +5,7 @@ import resolveToModule from './resolveToModule';
 import resolveToValue from './resolveToValue';
 import type { Importer } from '../parse';
 import type { NodePath } from 'ast-types/lib/node-path';
+import isDestructuringAssignment from './isDestructuringAssignment';
 
 /**
  * Returns true if the expression is a function call of the form
@@ -28,7 +29,12 @@ export default function isReactBuiltinCall(
     const value = resolveToValue(path.get('callee'), importer);
     if (value === path.get('callee')) return false;
 
-    if (
+    // Check if this is a destructuring assignment
+    // const { x } = require('react')
+    if (isDestructuringAssignment(value, name)) {
+      const module = resolveToModule(value, importer);
+      return Boolean(module && isReactModuleName(module));
+    } else if (
       // `require('react').createElement`
       (t.MemberExpression.check(value.node) &&
         t.Identifier.check(value.get('property').node) &&

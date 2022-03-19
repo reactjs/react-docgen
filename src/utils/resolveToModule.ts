@@ -37,9 +37,15 @@ export default function resolveToModule(
       if (valuePath !== path) {
         return resolveToModule(valuePath, importer);
       }
-      break;
+      if (!t.Property.check(path.parentPath.node)) {
+        break;
+      }
     }
 
+    // @ts-ignore // fall through
+    case t.Property.name: // @ts-ignore
+    case t.ObjectPattern.name:
+      return resolveToModule(path.parentPath, importer);
     // @ts-ignore
     case t.ImportDeclaration.name:
       return node.source.value;

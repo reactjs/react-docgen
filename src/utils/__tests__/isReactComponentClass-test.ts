@@ -86,7 +86,7 @@ describe('isReactComponentClass', () => {
 
     it('resolves the super class reference', () => {
       const def = parse(`
-        var {Component} = require('react');
+        var { Component } = require('react');
         var C = Component;
         class Foo extends C {}
       `).get('body', 2);
@@ -94,9 +94,18 @@ describe('isReactComponentClass', () => {
       expect(isReactComponentClass(def, noopImporter)).toBe(true);
     });
 
+    it('resolves the super class reference with alias', () => {
+      const def = parse(`
+        var { Component: C } = require('react');
+        class Foo extends C {}
+      `).get('body', 1);
+
+      expect(isReactComponentClass(def, noopImporter)).toBe(true);
+    });
+
     it('does not accept references to other modules', () => {
       const def = parse(`
-        var {Component} = require('FakeReact');
+        var { Component } = require('FakeReact');
         class Foo extends Component {}
       `).get('body', 1);
 

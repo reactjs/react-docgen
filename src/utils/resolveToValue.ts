@@ -1,4 +1,4 @@
-import { NodePath as Path, builders, namedTypes as t } from 'ast-types';
+import { namedTypes as t } from 'ast-types';
 import getMemberExpressionRoot from './getMemberExpressionRoot';
 import getPropertyValuePath from './getPropertyValuePath';
 import { Array as toArray } from './expressionTo';
@@ -10,28 +10,6 @@ import type { Importer } from '../parse';
 import type { NodePath } from 'ast-types/lib/node-path';
 import { Scope } from 'ast-types/lib/scope';
 import { Context } from 'ast-types/lib/path-visitor';
-
-function buildMemberExpressionFromPattern(path: NodePath): NodePath | null {
-  const node = path.node;
-  if (t.Property.check(node)) {
-    const objPath = buildMemberExpressionFromPattern(path.parent);
-    if (objPath) {
-      return new Path(
-        builders.memberExpression(
-          objPath.node,
-          node.key,
-          t.Literal.check(node.key),
-        ),
-        objPath,
-      );
-    }
-  } else if (t.ObjectPattern.check(node)) {
-    return buildMemberExpressionFromPattern(path.parent);
-  } else if (t.VariableDeclarator.check(node)) {
-    return path.get('init');
-  }
-  return null;
-}
 
 function findScopePath(
   paths: NodePath[],
@@ -74,12 +52,6 @@ function findScopePath(
     t.TSInterfaceDeclaration.check(parentPath.node)
   ) {
     resultPath = parentPath;
-  } else if (t.Property.check(parentPath.node)) {
-    // must be inside a pattern
-    const memberExpressionPath = buildMemberExpressionFromPattern(parentPath);
-    if (memberExpressionPath) {
-      return memberExpressionPath;
-    }
   }
 
   if (resultPath.node !== path.node) {

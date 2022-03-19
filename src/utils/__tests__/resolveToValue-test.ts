@@ -15,15 +15,9 @@ describe('resolveToValue', () => {
       ['var {foo: {bar: baz}} = bar;', 'baz;'].join('\n'),
     );
 
-    // Node should be equal to bar.foo.bar
+    // Resolves to identifier in destructuring
     expect(resolveToValue(path, noopImporter)).toEqualASTNode(
-      builders.memberExpression(
-        builders.memberExpression(
-          builders.identifier('bar'),
-          builders.identifier('foo'),
-        ),
-        builders.identifier('bar'),
-      ),
+      builders.identifier('baz'),
     );
   });
 

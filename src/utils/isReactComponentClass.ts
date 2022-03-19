@@ -5,6 +5,7 @@ import resolveToModule from './resolveToModule';
 import resolveToValue from './resolveToValue';
 import type { Importer } from '../parse';
 import type { NodePath } from 'ast-types/lib/node-path';
+import isDestructuringAssignment from './isDestructuringAssignment';
 
 function isRenderMethod(node: ASTNode): boolean {
   const isProperty = node.type === 'ClassProperty';
@@ -43,7 +44,9 @@ export default function isReactComponentClass(
   const superClass = resolveToValue(path.get('superClass'), importer);
   if (
     match(superClass.node, { property: { name: 'Component' } }) ||
-    match(superClass.node, { property: { name: 'PureComponent' } })
+    match(superClass.node, { property: { name: 'PureComponent' } }) ||
+    isDestructuringAssignment(superClass, 'Component') ||
+    isDestructuringAssignment(superClass, 'PureComponent')
   ) {
     const module = resolveToModule(superClass, importer);
     if (module && isReactModuleName(module)) {
