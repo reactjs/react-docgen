@@ -50,7 +50,7 @@ argv.parse(process.argv);
 const async = require('neo-async');
 const dir = require('node-dir');
 const fs = require('fs');
-const parser = require('../lib/main');
+const parser = require('../dist/main');
 const path = require('path');
 
 const output = argv.out;
@@ -73,7 +73,7 @@ if (
 if (argv.resolver) {
   try {
     // Look for built-in resolver
-    resolver = require(`../lib/resolver/${argv.resolver}`).default;
+    resolver = require(`../dist/resolver/${argv.resolver}`).default;
   } catch (error) {
     if (error.code !== 'MODULE_NOT_FOUND') {
       throw error;

@@ -4,7 +4,7 @@
     "declaration": true,
     "target": "ES2018",
     "module": "commonjs",
-    "outDir": "./lib",
+    "outDir": "./dist",
     "strict": true,
     "strictNullChecks": true,
     "noImplicitThis": true,

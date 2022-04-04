@@ -14,19 +14,19 @@
   },
   "browser": {
     "./src/importer/makeFsImporter.ts": "./src/importer/ignoreImports.ts",
-    "./lib/importer/makeFsImporter.js": "./lib/importer/ignoreImports.js"
+    "./dist/importer/makeFsImporter.js": "./dist/importer/ignoreImports.js"
   },
   "files": [
     "bin",
-    "lib"
+    "dist"
   ],
   "engines": {
     "node": ">=12.0.0"
   },
-  "main": "lib/main.js",
-  "typings": "lib/main.d.ts",
+  "main": "dist/main.js",
+  "typings": "dist/main.d.ts",
   "scripts": {
-    "build": "rimraf lib/ && yarn build:ts",
+    "build": "rimraf dist/ && yarn build:ts",
     "build:ts": "tsc",
     "lint": "eslint . --ext .js,.ts --report-unused-disable-directives",
     "fix": "eslint . --ext .js,.ts --fix --report-unused-disable-directives",

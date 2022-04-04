@@ -24,7 +24,7 @@ const defaultHandlers: Handler[] = [
 const defaultImporter: Importer = AllImporter.ignoreImports;
 
 /**
- * See `lib/parse.js` for more information about the arguments. This function
+ * See `parse.js` for more information about the arguments. This function
  * simply sets default values for convenience.
  *
  * The default resolver looks for *exported* `React.createClass(def)` calls

@@ -1,4 +1,4 @@
-// NOTE: This test spawns a subprocesses that load the files from lib/, not
+// NOTE: This test spawns a subprocesses that load the files from dist/, not
 // src/. Before running this test run `npm run build` or `npm run watch`.
 
 const TEST_TIMEOUT = 120000;
