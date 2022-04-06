@@ -116,6 +116,18 @@ describe('resolveObjectValuesToArray', () => {
     );
   });
 
+  it('resolves Object.values when using methods', () => {
+    const path = parse(
+      ['var foo = { boo: 1, foo: 2, bar(e) {} };', 'Object.values(foo);'].join(
+        '\n',
+      ),
+    );
+
+    expect(resolveObjectValuesToArray(path)).toEqualASTNode(
+      builders.arrayExpression([builders.literal(1), builders.literal(2)]),
+    );
+  });
+
   it('resolves Object.values but ignores duplicates', () => {
     const path = parse(
       [

@@ -67,7 +67,9 @@ export function resolveObjectToPropMap(
       if (error) return;
       const prop = propPath.value;
 
-      if (prop.kind === 'get' || prop.kind === 'set') return;
+      if (prop.kind === 'get' || prop.kind === 'set' || prop.method === true) {
+        return;
+      }
 
       if (
         t.Property.check(prop) ||
