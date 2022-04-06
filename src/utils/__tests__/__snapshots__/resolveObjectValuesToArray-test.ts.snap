@@ -38,6 +38,13 @@ Array [
 ]
 `;
 
+exports[`resolveObjectValuesToArray resolves Object.values when using methods 1`] = `
+Array [
+  "1",
+  "2",
+]
+`;
+
 exports[`resolveObjectValuesToArray resolves Object.values when using resolvable spread 1`] = `
 Array [
   "1",
