@@ -2017,6 +2017,52 @@ exports[`integration fixtures processes component "component_43.tsx" without err
 ]
 `;
 
+exports[`integration fixtures processes component "component_44.tsx" without errors 1`] = `
+[
+  {
+    "description": "This is a TypeScript function component",
+    "methods": [
+      {
+        "description": "this is a method on a component",
+        "docblock": "this is a method on a component",
+        "modifiers": [],
+        "name": "focus",
+        "params": [],
+        "returns": null,
+      },
+    ],
+    "props": {
+      "align": {
+        "description": "",
+        "required": false,
+        "tsType": {
+          "elements": [
+            {
+              "name": "literal",
+              "value": ""left"",
+            },
+            {
+              "name": "literal",
+              "value": ""center"",
+            },
+            {
+              "name": "literal",
+              "value": ""right"",
+            },
+            {
+              "name": "literal",
+              "value": ""justify"",
+            },
+          ],
+          "name": "union",
+          "raw": ""left" | "center" | "right" | "justify"",
+        },
+      },
+    },
+  },
+]
+`;
+
 exports[`integration fixtures processes component "flow-export-type.js" without errors 1`] = `
 [
   {
