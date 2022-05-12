@@ -1269,4 +1269,46 @@ describe('getFlowType', () => {
       raw: '{ subAction: SubAction }',
     });
   });
+
+  it('handles ObjectTypeSpreadProperty', () => {
+    const typePath = statement(`
+      var x: {| apple: string, banana: string, ...OtherFruits |} = 2;
+      type OtherFruits = { orange: string }
+    `)
+      .get('declarations', 0)
+      .get('id')
+      .get('typeAnnotation')
+      .get('typeAnnotation');
+
+    expect(getFlowType(typePath, null, noopImporter)).toEqual({
+      name: 'signature',
+      type: 'object',
+      signature: {
+        properties: [
+          {
+            key: 'apple',
+            value: {
+              name: 'string',
+              required: true,
+            },
+          },
+          {
+            key: 'banana',
+            value: {
+              name: 'string',
+              required: true,
+            },
+          },
+          {
+            key: 'orange',
+            value: {
+              name: 'string',
+              required: true,
+            },
+          },
+        ],
+      },
+      raw: '{| apple: string, banana: string, ...OtherFruits |}',
+    });
+  });
 });
