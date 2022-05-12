@@ -9,6 +9,7 @@ import isReactForwardRefCall from '../utils/isReactForwardRefCall';
 import type Documentation from '../Documentation';
 import type { Importer } from '../parse';
 import type { NodePath } from 'ast-types/lib/node-path';
+import isReactBuiltinCall from '../utils/isReactBuiltinCall';
 
 function getDefaultValue(path: NodePath, importer: Importer) {
   let node = path.node;
@@ -46,12 +47,21 @@ function getStatelessPropsPath(
   componentDefinition: NodePath,
   importer: Importer,
 ): NodePath {
-  const value = resolveToValue(componentDefinition, importer);
-  if (isReactForwardRefCall(value, importer)) {
-    const inner = resolveToValue(value.get('arguments', 0), importer);
-    return inner.get('params', 0);
-  }
-  return value.get('params', 0);
+  let actPath = componentDefinition;
+  let changed = false;
+  do {
+    changed = false;
+    const value = resolveToValue(actPath, importer);
+    if (
+      isReactBuiltinCall(value, 'memo', importer) ||
+      isReactForwardRefCall(value, importer)
+    ) {
+      actPath = resolveToValue(actPath.get('arguments', 0), importer);
+      changed = true;
+    }
+  } while (changed);
+
+  return actPath.get('params', 0);
 }
 
 function getDefaultPropsPath(
