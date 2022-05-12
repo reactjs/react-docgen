@@ -219,6 +219,16 @@ function handleObjectTypeAnnotation(
           importer,
         ),
       });
+    } else if (t.ObjectTypeSpreadProperty.check(param.node)) {
+      let spreadObject = resolveToValue(param.get('argument'), importer);
+      if (t.GenericTypeAnnotation.check(spreadObject.value)) {
+        const typeAlias = resolveToValue(spreadObject.get('id'), importer);
+        if (t.ObjectTypeAnnotation.check(typeAlias.get('right').value)) {
+          spreadObject = resolveToValue(typeAlias.get('right'), importer);
+        }
+      }
+      const props = handleObjectTypeAnnotation(spreadObject, typeParams, importer) as ObjectSignatureType;
+      type.signature.properties.push(...props.signature.properties);
     }
   });
 

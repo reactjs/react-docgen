@@ -1311,4 +1311,55 @@ describe('getFlowType', () => {
       raw: '{| apple: string, banana: string, ...OtherFruits |}',
     });
   });
+
+
+  it('handles ObjectTypeSpreadProperty from imported types', () => {
+    const typePath = statement(`
+      var x: {| apple: string, banana: string, ...MyType |} = 2;
+      import type { MyType } from 'MyType';
+    `)
+      .get('declarations', 0)
+      .get('id')
+      .get('typeAnnotation')
+      .get('typeAnnotation');
+
+    expect(getFlowType(typePath, null, mockImporter)).toEqual({
+      name: 'signature',
+      type: 'object',
+      signature: {
+        properties: [
+          {
+            key: 'apple',
+            value: {
+              name: 'string',
+              required: true,
+            },
+          },
+          {
+            key: 'banana',
+            value: {
+              name: 'string',
+              required: true,
+            },
+          },
+          {
+            key: 'a',
+            value: {
+              name: 'string',
+              required: true,
+            },
+          },
+          {
+            key: 'b',
+            value: {
+              name: 'notImported',
+              nullable: true,
+              required: true,
+            },
+          },
+        ],
+      },
+      raw: '{| apple: string, banana: string, ...MyType |}',
+    });
+  });
 });
