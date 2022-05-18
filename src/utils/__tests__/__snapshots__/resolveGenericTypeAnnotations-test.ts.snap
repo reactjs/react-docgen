@@ -11,14 +11,12 @@ Node {
   "loc": SourceLocation {
     "end": Position {
       "column": 34,
-      "index": undefined,
       "line": 3,
     },
     "filename": undefined,
     "identifierName": undefined,
     "start": Position {
       "column": 21,
-      "index": undefined,
       "line": 3,
     },
   },
@@ -30,14 +28,12 @@ Node {
         "loc": SourceLocation {
           "end": Position {
             "column": 24,
-            "index": undefined,
             "line": 3,
           },
           "filename": undefined,
           "identifierName": "x",
           "start": Position {
             "column": 23,
-            "index": undefined,
             "line": 3,
           },
         },
@@ -49,14 +45,12 @@ Node {
       "loc": SourceLocation {
         "end": Position {
           "column": 32,
-          "index": undefined,
           "line": 3,
         },
         "filename": undefined,
         "identifierName": undefined,
         "start": Position {
           "column": 23,
-          "index": undefined,
           "line": 3,
         },
       },
@@ -71,14 +65,12 @@ Node {
         "loc": SourceLocation {
           "end": Position {
             "column": 32,
-            "index": undefined,
             "line": 3,
           },
           "filename": undefined,
           "identifierName": undefined,
           "start": Position {
             "column": 26,
-            "index": undefined,
             "line": 3,
           },
         },
