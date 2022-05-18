@@ -59,10 +59,10 @@
   "devDependencies": {
     "@types/cross-spawn": "6.0.2",
     "@types/doctrine": "0.0.5",
-    "@types/jest": "27.5.0",
+    "@types/jest": "27.5.1",
     "@types/rimraf": "3.0.2",
-    "@typescript-eslint/eslint-plugin": "5.23.0",
-    "@typescript-eslint/parser": "5.23.0",
+    "@typescript-eslint/eslint-plugin": "5.25.0",
+    "@typescript-eslint/parser": "5.25.0",
     "cross-spawn": "7.0.3",
     "eslint": "8.15.0",
     "eslint-config-prettier": "8.5.0",
