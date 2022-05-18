@@ -227,7 +227,11 @@ function handleObjectTypeAnnotation(
           spreadObject = resolveToValue(typeAlias.get('right'), importer);
         }
       }
-      const props = handleObjectTypeAnnotation(spreadObject, typeParams, importer) as ObjectSignatureType;
+      const props = handleObjectTypeAnnotation(
+        spreadObject,
+        typeParams,
+        importer,
+      ) as ObjectSignatureType;
       type.signature.properties.push(...props.signature.properties);
     }
   });

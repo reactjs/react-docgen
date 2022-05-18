@@ -1312,7 +1312,6 @@ describe('getFlowType', () => {
     });
   });
 
-
   it('handles ObjectTypeSpreadProperty from imported types', () => {
     const typePath = statement(`
       var x: {| apple: string, banana: string, ...MyType |} = 2;
