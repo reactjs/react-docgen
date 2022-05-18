@@ -10,14 +10,12 @@ Array [
           "loc": SourceLocation {
             "end": Position {
               "column": 12,
-              "index": undefined,
               "line": 1,
             },
             "filename": undefined,
             "identifierName": undefined,
             "start": Position {
               "column": 9,
-              "index": undefined,
               "line": 1,
             },
           },
@@ -33,14 +31,12 @@ Array [
         "loc": SourceLocation {
           "end": Position {
             "column": 8,
-            "index": undefined,
             "line": 1,
           },
           "filename": undefined,
           "identifierName": undefined,
           "start": Position {
             "column": 1,
-            "index": undefined,
             "line": 1,
           },
         },
@@ -49,14 +45,12 @@ Array [
           "loc": SourceLocation {
             "end": Position {
               "column": 4,
-              "index": undefined,
               "line": 1,
             },
             "filename": undefined,
             "identifierName": "foo",
             "start": Position {
               "column": 1,
-              "index": undefined,
               "line": 1,
             },
           },
@@ -70,14 +64,12 @@ Array [
           "loc": SourceLocation {
             "end": Position {
               "column": 8,
-              "index": undefined,
               "line": 1,
             },
             "filename": undefined,
             "identifierName": "bar",
             "start": Position {
               "column": 5,
-              "index": undefined,
               "line": 1,
             },
           },
@@ -92,14 +84,12 @@ Array [
       "loc": SourceLocation {
         "end": Position {
           "column": 13,
-          "index": undefined,
           "line": 1,
         },
         "filename": undefined,
         "identifierName": undefined,
         "start": Position {
           "column": 1,
-          "index": undefined,
           "line": 1,
         },
       },
@@ -113,14 +103,12 @@ Array [
       "loc": SourceLocation {
         "end": Position {
           "column": 8,
-          "index": undefined,
           "line": 1,
         },
         "filename": undefined,
         "identifierName": "bar",
         "start": Position {
           "column": 5,
-          "index": undefined,
           "line": 1,
         },
       },
@@ -137,14 +125,12 @@ Array [
       "loc": SourceLocation {
         "end": Position {
           "column": 22,
-          "index": undefined,
           "line": 1,
         },
         "filename": undefined,
         "identifierName": "baz",
         "start": Position {
           "column": 19,
-          "index": undefined,
           "line": 1,
         },
       },
@@ -161,14 +147,12 @@ Array [
       "loc": SourceLocation {
         "end": Position {
           "column": 26,
-          "index": undefined,
           "line": 1,
         },
         "filename": undefined,
         "identifierName": undefined,
         "start": Position {
           "column": 24,
-          "index": undefined,
           "line": 1,
         },
       },
