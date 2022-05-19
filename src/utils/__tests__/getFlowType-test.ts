@@ -1280,36 +1280,38 @@ describe('getFlowType', () => {
       .get('typeAnnotation')
       .get('typeAnnotation');
 
-    expect(getFlowType(typePath, null, noopImporter)).toEqual({
-      name: 'signature',
-      type: 'object',
-      signature: {
-        properties: [
-          {
-            key: 'apple',
-            value: {
-              name: 'string',
-              required: true,
+    expect(getFlowType(typePath, null, noopImporter)).toMatchInlineSnapshot(`
+      Object {
+        "name": "signature",
+        "raw": "{| apple: string, banana: string, ...OtherFruits |}",
+        "signature": Object {
+          "properties": Array [
+            Object {
+              "key": "apple",
+              "value": Object {
+                "name": "string",
+                "required": true,
+              },
             },
-          },
-          {
-            key: 'banana',
-            value: {
-              name: 'string',
-              required: true,
+            Object {
+              "key": "banana",
+              "value": Object {
+                "name": "string",
+                "required": true,
+              },
             },
-          },
-          {
-            key: 'orange',
-            value: {
-              name: 'string',
-              required: true,
+            Object {
+              "key": "orange",
+              "value": Object {
+                "name": "string",
+                "required": true,
+              },
             },
-          },
-        ],
-      },
-      raw: '{| apple: string, banana: string, ...OtherFruits |}',
-    });
+          ],
+        },
+        "type": "object",
+      }
+    `);
   });
 
   it('handles ObjectTypeSpreadProperty from imported types', () => {
@@ -1322,43 +1324,45 @@ describe('getFlowType', () => {
       .get('typeAnnotation')
       .get('typeAnnotation');
 
-    expect(getFlowType(typePath, null, mockImporter)).toEqual({
-      name: 'signature',
-      type: 'object',
-      signature: {
-        properties: [
-          {
-            key: 'apple',
-            value: {
-              name: 'string',
-              required: true,
+    expect(getFlowType(typePath, null, mockImporter)).toMatchInlineSnapshot(`
+      Object {
+        "name": "signature",
+        "raw": "{| apple: string, banana: string, ...MyType |}",
+        "signature": Object {
+          "properties": Array [
+            Object {
+              "key": "apple",
+              "value": Object {
+                "name": "string",
+                "required": true,
+              },
             },
-          },
-          {
-            key: 'banana',
-            value: {
-              name: 'string',
-              required: true,
+            Object {
+              "key": "banana",
+              "value": Object {
+                "name": "string",
+                "required": true,
+              },
             },
-          },
-          {
-            key: 'a',
-            value: {
-              name: 'string',
-              required: true,
+            Object {
+              "key": "a",
+              "value": Object {
+                "name": "string",
+                "required": true,
+              },
             },
-          },
-          {
-            key: 'b',
-            value: {
-              name: 'notImported',
-              nullable: true,
-              required: true,
+            Object {
+              "key": "b",
+              "value": Object {
+                "name": "notImported",
+                "nullable": true,
+                "required": true,
+              },
             },
-          },
-        ],
-      },
-      raw: '{| apple: string, banana: string, ...MyType |}',
-    });
+          ],
+        },
+        "type": "object",
+      }
+    `);
   });
 });
