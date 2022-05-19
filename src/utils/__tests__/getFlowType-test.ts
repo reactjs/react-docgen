@@ -1365,4 +1365,63 @@ describe('getFlowType', () => {
       }
     `);
   });
+
+  it('handles nested ObjectTypeSpreadProperty', () => {
+    const typePath = statement(`
+      var x: {| apple: string, banana: string, ...BreakfastFruits |} = 2;
+      type BreakfastFruits = { mango: string, ...CitrusFruits };
+      type CitrusFruits = { orange: string, lemon: string };
+    `)
+      .get('declarations', 0)
+      .get('id')
+      .get('typeAnnotation')
+      .get('typeAnnotation');
+
+    expect(getFlowType(typePath, null, mockImporter)).toMatchInlineSnapshot(`
+      Object {
+        "name": "signature",
+        "raw": "{| apple: string, banana: string, ...BreakfastFruits |}",
+        "signature": Object {
+          "properties": Array [
+            Object {
+              "key": "apple",
+              "value": Object {
+                "name": "string",
+                "required": true,
+              },
+            },
+            Object {
+              "key": "banana",
+              "value": Object {
+                "name": "string",
+                "required": true,
+              },
+            },
+            Object {
+              "key": "mango",
+              "value": Object {
+                "name": "string",
+                "required": true,
+              },
+            },
+            Object {
+              "key": "orange",
+              "value": Object {
+                "name": "string",
+                "required": true,
+              },
+            },
+            Object {
+              "key": "lemon",
+              "value": Object {
+                "name": "string",
+                "required": true,
+              },
+            },
+          ],
+        },
+        "type": "object",
+      }
+    `);
+  });
 });
