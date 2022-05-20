@@ -1280,38 +1280,7 @@ describe('getFlowType', () => {
       .get('typeAnnotation')
       .get('typeAnnotation');
 
-    expect(getFlowType(typePath, null, noopImporter)).toMatchInlineSnapshot(`
-      Object {
-        "name": "signature",
-        "raw": "{| apple: string, banana: string, ...OtherFruits |}",
-        "signature": Object {
-          "properties": Array [
-            Object {
-              "key": "apple",
-              "value": Object {
-                "name": "string",
-                "required": true,
-              },
-            },
-            Object {
-              "key": "banana",
-              "value": Object {
-                "name": "string",
-                "required": true,
-              },
-            },
-            Object {
-              "key": "orange",
-              "value": Object {
-                "name": "string",
-                "required": true,
-              },
-            },
-          ],
-        },
-        "type": "object",
-      }
-    `);
+    expect(getFlowType(typePath, null, noopImporter)).toMatchSnapshot();
   });
 
   it('handles ObjectTypeSpreadProperty from imported types', () => {
@@ -1324,46 +1293,7 @@ describe('getFlowType', () => {
       .get('typeAnnotation')
       .get('typeAnnotation');
 
-    expect(getFlowType(typePath, null, mockImporter)).toMatchInlineSnapshot(`
-      Object {
-        "name": "signature",
-        "raw": "{| apple: string, banana: string, ...MyType |}",
-        "signature": Object {
-          "properties": Array [
-            Object {
-              "key": "apple",
-              "value": Object {
-                "name": "string",
-                "required": true,
-              },
-            },
-            Object {
-              "key": "banana",
-              "value": Object {
-                "name": "string",
-                "required": true,
-              },
-            },
-            Object {
-              "key": "a",
-              "value": Object {
-                "name": "string",
-                "required": true,
-              },
-            },
-            Object {
-              "key": "b",
-              "value": Object {
-                "name": "notImported",
-                "nullable": true,
-                "required": true,
-              },
-            },
-          ],
-        },
-        "type": "object",
-      }
-    `);
+    expect(getFlowType(typePath, null, mockImporter)).toMatchSnapshot();
   });
 
   it('handles nested ObjectTypeSpreadProperty', () => {
@@ -1377,51 +1307,6 @@ describe('getFlowType', () => {
       .get('typeAnnotation')
       .get('typeAnnotation');
 
-    expect(getFlowType(typePath, null, mockImporter)).toMatchInlineSnapshot(`
-      Object {
-        "name": "signature",
-        "raw": "{| apple: string, banana: string, ...BreakfastFruits |}",
-        "signature": Object {
-          "properties": Array [
-            Object {
-              "key": "apple",
-              "value": Object {
-                "name": "string",
-                "required": true,
-              },
-            },
-            Object {
-              "key": "banana",
-              "value": Object {
-                "name": "string",
-                "required": true,
-              },
-            },
-            Object {
-              "key": "mango",
-              "value": Object {
-                "name": "string",
-                "required": true,
-              },
-            },
-            Object {
-              "key": "orange",
-              "value": Object {
-                "name": "string",
-                "required": true,
-              },
-            },
-            Object {
-              "key": "lemon",
-              "value": Object {
-                "name": "string",
-                "required": true,
-              },
-            },
-          ],
-        },
-        "type": "object",
-      }
-    `);
+    expect(getFlowType(typePath, null, mockImporter)).toMatchSnapshot();
   });
 });
