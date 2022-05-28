@@ -753,6 +753,26 @@ describe('getTSType', () => {
     });
   });
 
+  it('resolves indexed access of array', () => {
+    const typePath = statement(`
+      var x: typeof STRING_VALS[number];
+
+      const STRING_VALS = [
+        'one',
+        'two',
+        'three'
+      ];
+    `)
+      .get('declarations', 0)
+      .get('id')
+      .get('typeAnnotation')
+      .get('typeAnnotation');
+    expect(getTSType(typePath, null, noopImporter)).toEqual({
+      name: 'STRING_VALS[number]',
+      raw: 'typeof STRING_VALS[number]',
+    });
+  });
+
   it('can resolve indexed access to imported type', () => {
     const typePath = statement(`
       var x: A["x"] = 2;
