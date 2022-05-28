@@ -201,6 +201,18 @@ function handleObjectTypeAnnotation(
         key: ((getPropertyName(param): any): string),
         value: getFlowTypeWithRequirements(param.get('value'), typeParams),
       });
+    } else if (t.ObjectTypeSpreadProperty.check(param.node)) {
+      let spreadObject = resolveToValue(param.get('argument'));
+      if (t.GenericTypeAnnotation.check(spreadObject.node)) {
+        const typeAlias = resolveToValue(spreadObject.get('id'));
+        if (t.ObjectTypeAnnotation.check(typeAlias.get('right').node)) {
+          spreadObject = resolveToValue(typeAlias.get('right'));
+        }
+      }
+      if (t.ObjectTypeAnnotation.check(spreadObject.node)) {
+        const props = handleObjectTypeAnnotation(spreadObject, typeParams);
+        type.signature.properties.push(...props.signature.properties);
+      }
     }
   });
 

@@ -1,0 +1,107 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getFlowType handles ObjectTypeSpreadProperty 1`] = `
+Object {
+  "name": "signature",
+  "raw": "{| apple: string, banana: string, ...OtherFruits |}",
+  "signature": Object {
+    "properties": Array [
+      Object {
+        "key": "apple",
+        "value": Object {
+          "name": "string",
+          "required": true,
+        },
+      },
+      Object {
+        "key": "banana",
+        "value": Object {
+          "name": "string",
+          "required": true,
+        },
+      },
+      Object {
+        "key": "orange",
+        "value": Object {
+          "name": "string",
+          "required": true,
+        },
+      },
+    ],
+  },
+  "type": "object",
+}
+`;
+
+exports[`getFlowType handles nested ObjectTypeSpreadProperty 1`] = `
+Object {
+  "name": "signature",
+  "raw": "{| apple: string, banana: string, ...BreakfastFruits |}",
+  "signature": Object {
+    "properties": Array [
+      Object {
+        "key": "apple",
+        "value": Object {
+          "name": "string",
+          "required": true,
+        },
+      },
+      Object {
+        "key": "banana",
+        "value": Object {
+          "name": "string",
+          "required": true,
+        },
+      },
+      Object {
+        "key": "mango",
+        "value": Object {
+          "name": "string",
+          "required": true,
+        },
+      },
+      Object {
+        "key": "orange",
+        "value": Object {
+          "name": "string",
+          "required": true,
+        },
+      },
+      Object {
+        "key": "lemon",
+        "value": Object {
+          "name": "string",
+          "required": true,
+        },
+      },
+    ],
+  },
+  "type": "object",
+}
+`;
+
+exports[`getFlowType handles unresolved ObjectTypeSpreadProperty 1`] = `
+Object {
+  "name": "signature",
+  "raw": "{| apple: string, banana: string, ...MyType |}",
+  "signature": Object {
+    "properties": Array [
+      Object {
+        "key": "apple",
+        "value": Object {
+          "name": "string",
+          "required": true,
+        },
+      },
+      Object {
+        "key": "banana",
+        "value": Object {
+          "name": "string",
+          "required": true,
+        },
+      },
+    ],
+  },
+  "type": "object",
+}
+`;
