@@ -120,3 +120,29 @@ Object {
   "type": "object",
 }
 `;
+
+exports[`getFlowType handles unresolved ObjectTypeSpreadProperty 1`] = `
+Object {
+  "name": "signature",
+  "raw": "{| apple: string, banana: string, ...MyType |}",
+  "signature": Object {
+    "properties": Array [
+      Object {
+        "key": "apple",
+        "value": Object {
+          "name": "string",
+          "required": true,
+        },
+      },
+      Object {
+        "key": "banana",
+        "value": Object {
+          "name": "string",
+          "required": true,
+        },
+      },
+    ],
+  },
+  "type": "object",
+}
+`;

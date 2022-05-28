@@ -1296,6 +1296,18 @@ describe('getFlowType', () => {
     expect(getFlowType(typePath, null, mockImporter)).toMatchSnapshot();
   });
 
+  it('handles unresolved ObjectTypeSpreadProperty', () => {
+    const typePath = statement(`
+      var x: {| apple: string, banana: string, ...MyType |} = 2;
+    `)
+      .get('declarations', 0)
+      .get('id')
+      .get('typeAnnotation')
+      .get('typeAnnotation');
+
+    expect(getFlowType(typePath, null, mockImporter)).toMatchSnapshot();
+  });
+
   it('handles nested ObjectTypeSpreadProperty', () => {
     const typePath = statement(`
       var x: {| apple: string, banana: string, ...BreakfastFruits |} = 2;
