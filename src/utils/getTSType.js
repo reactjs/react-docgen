@@ -365,12 +365,14 @@ function handleTSIndexedAccessType(
   // We only get the signature if the objectType is a type (vs interface)
   if (!objectType.signature)
     return {
-      name: `${objectType.name}[${indexType.value.toString()}]`,
+      name: `${objectType.name}[${
+        indexType.value ? indexType.value.toString() : indexType.name
+      }]`,
       raw: printValue(path),
     };
   const resolvedType = objectType.signature.properties.find(p => {
     // indexType.value = "'foo'"
-    return p.key === indexType.value.replace(/['"]+/g, '');
+    return indexType.value && p.key === indexType.value.replace(/['"]+/g, '');
   });
   if (!resolvedType) {
     return { name: 'unknown' };
