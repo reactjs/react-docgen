@@ -12,6 +12,8 @@ Array [
               "column": 12,
               "line": 1,
             },
+            "filename": undefined,
+            "identifierName": undefined,
             "start": Position {
               "column": 9,
               "line": 1,
@@ -31,6 +33,8 @@ Array [
             "column": 8,
             "line": 1,
           },
+          "filename": undefined,
+          "identifierName": undefined,
           "start": Position {
             "column": 1,
             "line": 1,
@@ -43,6 +47,7 @@ Array [
               "column": 4,
               "line": 1,
             },
+            "filename": undefined,
             "identifierName": "foo",
             "start": Position {
               "column": 1,
@@ -53,6 +58,7 @@ Array [
           "start": 1,
           "type": "Identifier",
         },
+        "optional": false,
         "property": Node {
           "end": 8,
           "loc": SourceLocation {
@@ -60,6 +66,7 @@ Array [
               "column": 8,
               "line": 1,
             },
+            "filename": undefined,
             "identifierName": "bar",
             "start": Position {
               "column": 5,
@@ -79,11 +86,14 @@ Array [
           "column": 13,
           "line": 1,
         },
+        "filename": undefined,
+        "identifierName": undefined,
         "start": Position {
           "column": 1,
           "line": 1,
         },
       },
+      "optional": false,
       "start": 1,
       "type": "CallExpression",
     },
@@ -95,6 +105,7 @@ Array [
           "column": 8,
           "line": 1,
         },
+        "filename": undefined,
         "identifierName": "bar",
         "start": Position {
           "column": 5,
@@ -116,6 +127,7 @@ Array [
           "column": 22,
           "line": 1,
         },
+        "filename": undefined,
         "identifierName": "baz",
         "start": Position {
           "column": 19,
@@ -137,6 +149,8 @@ Array [
           "column": 26,
           "line": 1,
         },
+        "filename": undefined,
+        "identifierName": undefined,
         "start": Position {
           "column": 24,
           "line": 1,
