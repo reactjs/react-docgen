@@ -377,6 +377,26 @@ describe('getTSType', () => {
     });
   });
 
+  it('resolves indexed access of array', () => {
+    const typePath = statement(`
+      var x: typeof STRING_VALS[number];
+
+      const STRING_VALS = [
+        'one',
+        'two',
+        'three'
+      ];
+    `)
+      .get('declarations', 0)
+      .get('id')
+      .get('typeAnnotation')
+      .get('typeAnnotation');
+    expect(getTSType(typePath)).toEqual({
+      name: 'STRING_VALS[number]',
+      raw: 'typeof STRING_VALS[number]',
+    });
+  });
+
   it('resolves types in scope', () => {
     const typePath = statement(`
       var x: MyType = 2;
