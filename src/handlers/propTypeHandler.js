@@ -64,7 +64,7 @@ function amendPropTypes(getDescriptor, path) {
 }
 
 function getPropTypeHandler(propName: string) {
-  return function(documentation: Documentation, path: NodePath) {
+  return function (documentation: Documentation, path: NodePath) {
     let propTypesPath = getMemberValuePath(path, propName);
     if (!propTypesPath) {
       return;

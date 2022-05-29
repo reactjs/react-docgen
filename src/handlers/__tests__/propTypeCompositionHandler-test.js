@@ -21,8 +21,8 @@ describe('propTypeCompositionHandler', () => {
     jest.mock('../../utils/getPropType');
 
     documentation = new (require('../../Documentation'))();
-    propTypeCompositionHandler = require('../propTypeCompositionHandler')
-      .default;
+    propTypeCompositionHandler =
+      require('../propTypeCompositionHandler').default;
   });
 
   function test(getSrc, parse) {

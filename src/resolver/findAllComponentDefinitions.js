@@ -45,7 +45,7 @@ export default function findAllReactCreateClassCalls(
     visitArrowFunctionExpression: statelessVisitor,
     visitClassExpression: classVisitor,
     visitClassDeclaration: classVisitor,
-    visitCallExpression: function(path) {
+    visitCallExpression: function (path) {
       if (isReactForwardRefCall(path)) {
         // If the the inner function was previously identified as a component
         // replace it with the parent node

@@ -164,10 +164,7 @@ function handleTSTypeLiteral(
     } else if (t.TSIndexSignature.check(param.node)) {
       type.signature.properties.push({
         key: getTSTypeWithResolvedTypes(
-          param
-            .get('parameters')
-            .get(0)
-            .get('typeAnnotation'),
+          param.get('parameters').get(0).get('typeAnnotation'),
           typeParams,
         ),
         value: getTSTypeWithRequirements(
@@ -352,10 +349,8 @@ function handleTSIndexedAccessType(
   typeParams: ?TypeParameters,
 ): FlowSimpleType {
   // eslint-disable-next-line no-undef
-  const objectType: $Shape<FlowObjectSignatureType> = getTSTypeWithResolvedTypes(
-    path.get('objectType'),
-    typeParams,
-  );
+  const objectType: $Shape<FlowObjectSignatureType> =
+    getTSTypeWithResolvedTypes(path.get('objectType'), typeParams);
   // eslint-disable-next-line no-undef
   const indexType: $Shape<FlowLiteralType> = getTSTypeWithResolvedTypes(
     path.get('indexType'),

@@ -49,7 +49,7 @@ function toArray(path: NodePath): Array<string> {
       result.push('this');
       continue;
     } else if (t.ObjectExpression.check(node)) {
-      const properties = path.get('properties').map(function(property) {
+      const properties = path.get('properties').map(function (property) {
         return (
           toString(property.get('key')) + ': ' + toString(property.get('value'))
         );
@@ -57,14 +57,7 @@ function toArray(path: NodePath): Array<string> {
       result.push('{' + properties.join(', ') + '}');
       continue;
     } else if (t.ArrayExpression.check(node)) {
-      result.push(
-        '[' +
-          path
-            .get('elements')
-            .map(toString)
-            .join(', ') +
-          ']',
-      );
+      result.push('[' + path.get('elements').map(toString).join(', ') + ']');
       continue;
     }
   }

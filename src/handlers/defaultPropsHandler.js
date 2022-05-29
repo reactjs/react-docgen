@@ -74,9 +74,8 @@ function getDefaultPropsPath(componentDefinition: NodePath): ?NodePath {
   if (t.FunctionExpression.check(defaultPropsPath.node)) {
     // Find the value that is returned from the function and process it if it is
     // an object literal.
-    const returnValue = resolveFunctionDefinitionToReturnValue(
-      defaultPropsPath,
-    );
+    const returnValue =
+      resolveFunctionDefinitionToReturnValue(defaultPropsPath);
     if (returnValue && t.ObjectExpression.check(returnValue.node)) {
       defaultPropsPath = returnValue;
     }

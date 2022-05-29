@@ -23,7 +23,7 @@ import type { PropTypeDescriptor, PropDescriptor } from '../types';
 function getEnumValues(path) {
   const values = [];
 
-  path.get('elements').each(function(elementPath) {
+  path.get('elements').each(function (elementPath) {
     if (t.SpreadElement.check(elementPath.node)) {
       const value = resolveToValue(elementPath.get('argument'));
 
@@ -75,7 +75,7 @@ function getPropTypeOneOfType(argumentPath) {
     type.computed = true;
     type.value = printValue(argumentPath);
   } else {
-    type.value = argumentPath.get('elements').map(function(itemPath) {
+    type.value = argumentPath.get('elements').map(function (itemPath) {
       const descriptor: PropTypeDescriptor = getPropType(itemPath);
       const docs = getDocblock(itemPath);
       if (docs) {
@@ -136,7 +136,7 @@ function getPropTypeShapish(name, argumentPath) {
 
   if (t.ObjectExpression.check(argumentPath.node)) {
     const value = {};
-    argumentPath.get('properties').each(function(propertyPath) {
+    argumentPath.get('properties').each(function (propertyPath) {
       if (propertyPath.get('type').value === t.SpreadElement.name) {
         // It is impossible to resolve a name for a spread element
         return;

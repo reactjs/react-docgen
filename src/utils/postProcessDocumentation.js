@@ -20,7 +20,7 @@ function postProcessProps(props) {
   });
 }
 
-export default function(
+export default function (
   documentation: DocumentationObject,
 ): DocumentationObject {
   const props = documentation.props;
