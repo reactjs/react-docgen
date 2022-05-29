@@ -22,12 +22,10 @@
   "main": "dist/main.js",
   "scripts": {
     "build": "rimraf dist/ && babel src/ --out-dir dist/ --ignore **/__tests__,**/__mocks__,**/src/types.js",
-    "build:website": "cd website/ && yarn && yarn build",
     "lint": "eslint . --report-unused-disable-directives",
     "fix": "eslint . --fix --report-unused-disable-directives",
     "prepare": "yarn build",
     "preversion": "yarn lint",
-    "start": "cd website && yarn && yarn start",
     "test": "jest",
     "test:ci": "yarn lint && yarn flow && yarn test --runInBand",
     "watch": "yarn build --watch"
@@ -59,8 +57,6 @@
     "@babel/preset-flow": "7.17.12",
     "babel-eslint": "10.1.0",
     "babel-jest": "25.5.1",
-    "benchmark": "2.1.4",
-    "cli-table": "0.3.11",
     "cross-spawn": "7.0.3",
     "eslint": "6.8.0",
     "eslint-config-prettier": "6.15.0",

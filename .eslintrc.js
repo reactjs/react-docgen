@@ -24,14 +24,6 @@ module.exports = {
   },
   overrides: [
     {
-      files: 'website/**/*.js',
-      env: { browser: true },
-      rules: {
-        // conflicts with jsx
-        'no-unused-vars': 'off',
-      },
-    },
-    {
       files: '@(src|bin)/**/__tests__/*-test.js',
       env: { jest: true },
     },

@@ -72,9 +72,5 @@ jobs:
         if: steps.cache-nodemodules.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile --non-interactive
 
-      - name: Install website dependencies
-        run: yarn install --frozen-lockfile --non-interactive
-        working-directory: ./website
-
       - name: Lint
         run: yarn lint
