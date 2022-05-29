@@ -1,10 +1,10 @@
 module.exports = {
-  parser: 'babel-eslint',
+  parser: '@babel/eslint-parser',
   extends: ['eslint:recommended', 'prettier'],
   plugins: ['prettier'],
   parserOptions: {
     ecmaVersion: 2020,
-    sourceType: "module"
+    sourceType: 'module',
   },
   rules: {
     strict: ['error', 'never'],
