@@ -35,9 +35,7 @@ function run(args, stdin) {
   });
 }
 
-const component = fs.readFileSync(
-  path.join(__dirname, '../../example/components/Component.js'),
-);
+const component = fs.readFileSync(path.join(__dirname, 'example/Component.js'));
 
 describe('react-docgen CLI', () => {
   let tempDir;
@@ -246,22 +244,22 @@ describe('react-docgen CLI', () => {
       () => {
         return Promise.all([
           // No option passed: same as --resolver=findExportedComponentDefinition
-          run([
-            path.join(__dirname, '../../example/components/Component.js'),
-          ]).then(([stdout]) => {
-            expect(stdout).toContain('Component');
-          }),
+          run([path.join(__dirname, 'example/Component.js')]).then(
+            ([stdout]) => {
+              expect(stdout).toContain('Component');
+            },
+          ),
 
           run([
             '--resolver=findExportedComponentDefinition',
-            path.join(__dirname, '../../example/components/Component.js'),
+            path.join(__dirname, 'example/Component.js'),
           ]).then(([stdout]) => {
             expect(stdout).toContain('Component');
           }),
 
           run([
             '--resolver=findAllComponentDefinitions',
-            path.join(__dirname, './example/MultipleComponents.js'),
+            path.join(__dirname, 'example/MultipleComponents.js'),
           ]).then(([stdout]) => {
             expect(stdout).toContain('ComponentA');
             expect(stdout).toContain('ComponentB');
@@ -277,7 +275,7 @@ describe('react-docgen CLI', () => {
         return Promise.all([
           run([
             '--resolver=' + path.join(__dirname, 'example/customResolver.js'),
-            path.join(__dirname, '../../example/components/Component.js'),
+            path.join(__dirname, 'example/Component.js'),
           ]).then(([stdout]) => {
             expect(stdout).toContain('Custom');
           }),
