@@ -1,17 +1,15 @@
 module.exports = {
   parser: 'babel-eslint',
-  extends: ['eslint:recommended', 'prettier'],
-  plugins: ['prettier'],
+  extends: ['eslint:recommended', 'plugin:prettier/recommended'],
   parserOptions: {
     ecmaVersion: 2020,
-    sourceType: "module"
+    sourceType: 'module',
   },
   rules: {
     strict: ['error', 'never'],
     'no-shadow': 'error',
     'no-var': 'error',
     'prefer-const': 'error',
-    'prettier/prettier': 'error',
   },
   env: {
     node: true,
@@ -23,6 +21,16 @@ module.exports = {
     $Exact: true,
   },
   overrides: [
+    {
+      files: ['*rc.js', '*.config.js'],
+      parserOptions: {
+        ecmaVersion: 2019,
+        sourceType: 'script',
+      },
+      rules: {
+        strict: ['error', 'global'],
+      },
+    },
     {
       files: '@(src|bin)/**/__tests__/*-test.js',
       env: { jest: true },
