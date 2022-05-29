@@ -137,7 +137,7 @@ function traverseDir(filePath, result, done) {
       exclude: excludePatterns,
       excludeDir: ignoreDir,
     },
-    function(error, content, filename, next) {
+    function (error, content, filename, next) {
       if (error) {
         throw error;
       }
@@ -148,7 +148,7 @@ function traverseDir(filePath, result, done) {
       }
       next();
     },
-    function(error) {
+    function (error) {
       if (error) {
         throw error;
       }
@@ -170,14 +170,14 @@ if (errorMessage) {
   let source = '';
   process.stdin.setEncoding('utf8');
   process.stdin.resume();
-  const timer = setTimeout(function() {
+  const timer = setTimeout(function () {
     process.stderr.write('Still waiting for std input...');
   }, 5000);
-  process.stdin.on('data', function(chunk) {
+  process.stdin.on('data', function (chunk) {
     clearTimeout(timer);
     source += chunk;
   });
-  process.stdin.on('end', function() {
+  process.stdin.on('end', function () {
     try {
       writeResult(parse(source));
     } catch (error) {
@@ -191,8 +191,8 @@ if (errorMessage) {
   const result = Object.create(null);
   async.eachSeries(
     paths,
-    function(filePath, done) {
-      fs.stat(filePath, function(error, stats) {
+    function (filePath, done) {
+      fs.stat(filePath, function (error, stats) {
         if (error) {
           writeError(error, filePath);
           done();
@@ -216,14 +216,14 @@ if (errorMessage) {
         }
       });
     },
-    function() {
+    function () {
       const resultsPaths = Object.keys(result);
       if (resultsPaths.length === 0) {
         // we must have gotten an error
         process.exitCode = 1;
       } else if (paths.length === 1) {
         // a single path?
-        fs.stat(paths[0], function(error, stats) {
+        fs.stat(paths[0], function (error, stats) {
           writeResult(stats.isDirectory() ? result : result[resultsPaths[0]]);
         });
       } else {

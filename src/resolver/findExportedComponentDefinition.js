@@ -118,7 +118,7 @@ export default function findExportedComponentDefinition(
     visitExportNamedDeclaration: exportDeclaration,
     visitExportDefaultDeclaration: exportDeclaration,
 
-    visitAssignmentExpression: function(path) {
+    visitAssignmentExpression: function (path) {
       // Ignore anything that is not `exports.X = ...;` or
       // `module.exports = ...;`
       if (!isExportsOrModuleAssignment(path)) {

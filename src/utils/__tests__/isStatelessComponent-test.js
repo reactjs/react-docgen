@@ -88,9 +88,8 @@ describe('isStatelessComponent', () => {
         const returnExpr = componentIdentifiers[componentIdentifierName];
         describe(componentIdentifierName, () => {
           Object.keys(componentStyle).forEach(componentName => {
-            const [componentFactory, componentSelector] = componentStyle[
-              componentName
-            ];
+            const [componentFactory, componentSelector] =
+              componentStyle[componentName];
             describe(componentName, () => {
               Object.keys(modifiers).forEach(modifierName => {
                 const modifierFactory = modifiers[modifierName];

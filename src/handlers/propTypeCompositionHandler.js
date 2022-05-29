@@ -25,7 +25,7 @@ function amendComposes(documentation, path) {
 }
 
 function processObjectExpression(documentation, path) {
-  path.get('properties').each(function(propertyPath) {
+  path.get('properties').each(function (propertyPath) {
     switch (propertyPath.node.type) {
       case t.SpreadElement.name:
         amendComposes(

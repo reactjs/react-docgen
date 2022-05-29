@@ -5,7 +5,7 @@ const diff = require('jest-diff');
 const utils = require('jest-matcher-utils');
 
 const matchers = {
-  toEqualASTNode: function(received, expected) {
+  toEqualASTNode: function (received, expected) {
     if (!expected || typeof expected !== 'object') {
       throw new Error(
         'Expected value must be an object representing an AST node.\n' +
