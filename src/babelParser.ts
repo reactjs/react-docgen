@@ -3,8 +3,8 @@ import {
   parseSync,
   ParserOptions,
   TransformOptions,
+  ParseResult,
 } from '@babel/core';
-import * as t from '@babel/types';
 import path from 'path';
 
 const TYPESCRIPT_EXTS = {
@@ -46,7 +46,7 @@ function getDefaultPlugins(
 }
 
 export type Options = TransformOptions & { parserOptions?: ParserOptions };
-export type FileNodeWithOptions = t.File & {
+export type FileNodeWithOptions = ParseResult & {
   program: { options: Options };
   __src: string;
 };
@@ -104,7 +104,11 @@ export default function buildParse(options: Options = {}): Parser {
 
   return {
     parse(src: string): FileNodeWithOptions {
-      const ast = parseSync(src, opts) as FileNodeWithOptions;
+      const ast = parseSync(src, opts) as FileNodeWithOptions | null;
+
+      if (!ast) {
+        throw new Error('Unable to parse source code.');
+      }
       // Attach options to the Program node, for use when processing imports.
       ast.program.options = options;
       return ast;
