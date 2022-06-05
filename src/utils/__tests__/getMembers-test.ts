@@ -7,4 +7,22 @@ describe('getMembers', () => {
 
     expect(members).toMatchSnapshot();
   });
+
+  it('includes the root if option set to true', () => {
+    const members = getMembers(expression('foo.bar(123)[baz]'), true);
+
+    expect(members).toMatchSnapshot();
+  });
+
+  it('does work with custom expressions in chain', () => {
+    const members = getMembers(expression('foo.bar(123)["" + ""]'));
+
+    expect(members).toMatchSnapshot();
+  });
+
+  it('does work with custom expressions in arguments', () => {
+    const members = getMembers(expression('foo.bar(123 + 123)["baz"]'));
+
+    expect(members).toMatchSnapshot();
+  });
 });
