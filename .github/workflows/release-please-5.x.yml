@@ -1,0 +1,42 @@
+on:
+  push:
+    branches:
+      - 5.x
+name: release-please-5.x
+env:
+  NODE_VERSION: 18
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: google-github-actions/release-please-action@v3
+        id: release
+        with:
+          release-type: node
+          package-name: react-docgen
+          default-branch: 5.x
+
+      - name: Checkout
+        if: ${{ steps.release.outputs.release_created }}
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        if: ${{ steps.release.outputs.release_created }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'yarn'
+
+      - name: Install dependencies
+        if: ${{ steps.release.outputs.release_created }}
+        run: yarn install --frozen-lockfile --non-interactive
+
+      - name: Install website dependencies
+        if: ${{ steps.release.outputs.release_created }}
+        run: yarn install --frozen-lockfile --non-interactive
+        working-directory: ./website
+
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+        if: ${{ steps.release.outputs.release_created }}
