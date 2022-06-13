@@ -49,11 +49,11 @@ function getDefaultValue(path: NodePath) {
 }
 
 function getStatelessPropsPath(componentDefinition): NodePath {
-  const value = resolveToValue(componentDefinition);
+  let value = resolveToValue(componentDefinition);
   if (isReactForwardRefCall(value)) {
-    const inner = resolveToValue(value.get('arguments', 0));
-    return inner.get('params', 0);
+    value = resolveToValue(value.get('arguments', 0));
   }
+
   return value.get('params', 0);
 }
 

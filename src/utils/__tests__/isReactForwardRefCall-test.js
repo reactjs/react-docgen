@@ -78,6 +78,14 @@ describe('isReactForwardRefCall', () => {
       expect(isReactForwardRefCall(def)).toBe(true);
     });
 
+    it('does not accept forwardRef if not outer call', () => {
+      const def = parsePath(`
+        import { forwardRef, memo } from "react";
+        memo(forwardRef({}));
+      `);
+      expect(isReactForwardRefCall(def)).toBe(false);
+    });
+
     it('accepts forwardRef called on imported aliased value', () => {
       const def = parsePath(`
         import { forwardRef as foo } from "react";
