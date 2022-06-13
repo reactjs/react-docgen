@@ -1269,4 +1269,56 @@ describe('getFlowType', () => {
       raw: '{ subAction: SubAction }',
     });
   });
+
+  it('handles ObjectTypeSpreadProperty', () => {
+    const typePath = statement(`
+      var x: {| apple: string, banana: string, ...OtherFruits |} = 2;
+      type OtherFruits = { orange: string }
+    `)
+      .get('declarations', 0)
+      .get('id')
+      .get('typeAnnotation')
+      .get('typeAnnotation');
+
+    expect(getFlowType(typePath, null, noopImporter)).toMatchSnapshot();
+  });
+
+  it('handles ObjectTypeSpreadProperty from imported types', () => {
+    const typePath = statement(`
+      var x: {| apple: string, banana: string, ...MyType |} = 2;
+      import type { MyType } from 'MyType';
+    `)
+      .get('declarations', 0)
+      .get('id')
+      .get('typeAnnotation')
+      .get('typeAnnotation');
+
+    expect(getFlowType(typePath, null, mockImporter)).toMatchSnapshot();
+  });
+
+  it('handles unresolved ObjectTypeSpreadProperty', () => {
+    const typePath = statement(`
+      var x: {| apple: string, banana: string, ...MyType |} = 2;
+    `)
+      .get('declarations', 0)
+      .get('id')
+      .get('typeAnnotation')
+      .get('typeAnnotation');
+
+    expect(getFlowType(typePath, null, mockImporter)).toMatchSnapshot();
+  });
+
+  it('handles nested ObjectTypeSpreadProperty', () => {
+    const typePath = statement(`
+      var x: {| apple: string, banana: string, ...BreakfastFruits |} = 2;
+      type BreakfastFruits = { mango: string, ...CitrusFruits };
+      type CitrusFruits = { orange: string, lemon: string };
+    `)
+      .get('declarations', 0)
+      .get('id')
+      .get('typeAnnotation')
+      .get('typeAnnotation');
+
+    expect(getFlowType(typePath, null, mockImporter)).toMatchSnapshot();
+  });
 });

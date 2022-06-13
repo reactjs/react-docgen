@@ -2,6 +2,7 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "labels": ["dependencies"],
   "extends": ["config:base"],
+  "baseBranches": ["main", "5.x"],
   "enabled": true,
   "lockFileMaintenance": {
     "enabled": true,

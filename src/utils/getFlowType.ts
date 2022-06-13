@@ -219,6 +219,23 @@ function handleObjectTypeAnnotation(
           importer,
         ),
       });
+    } else if (t.ObjectTypeSpreadProperty.check(param.node)) {
+      let spreadObject = resolveToValue(param.get('argument'), importer);
+      if (t.GenericTypeAnnotation.check(spreadObject.node)) {
+        const typeAlias = resolveToValue(spreadObject.get('id'), importer);
+        if (t.ObjectTypeAnnotation.check(typeAlias.get('right').node)) {
+          spreadObject = resolveToValue(typeAlias.get('right'), importer);
+        }
+      }
+
+      if (t.ObjectTypeAnnotation.check(spreadObject.node)) {
+        const props = handleObjectTypeAnnotation(
+          spreadObject,
+          typeParams,
+          importer,
+        ) as ObjectSignatureType;
+        type.signature.properties.push(...props.signature.properties);
+      }
     }
   });
 
