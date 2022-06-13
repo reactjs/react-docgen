@@ -31,10 +31,8 @@ export default function isReactBuiltinCall(
 
     // Check if this is a destructuring assignment
     // const { x } = require('react')
-    if (isDestructuringAssignment(value, name)) {
-      const module = resolveToModule(value, importer);
-      return Boolean(module && isReactModuleName(module));
-    } else if (
+    if (
+      isDestructuringAssignment(value, name) ||
       // `require('react').createElement`
       (t.MemberExpression.check(value.node) &&
         t.Identifier.check(value.get('property').node) &&
@@ -43,11 +41,14 @@ export default function isReactBuiltinCall(
       (t.ImportDeclaration.check(value.node) &&
         value.node.specifiers &&
         value.node.specifiers.some(
-          // @ts-ignore
-          specifier => specifier.imported && specifier.imported.name === name,
+          specifier =>
+            // @ts-ignore
+            specifier.imported?.name === name &&
+            specifier.local?.name === path.node.callee.name,
         ))
     ) {
       const module = resolveToModule(value, importer);
+
       return Boolean(module && isReactModuleName(module));
     }
   }

@@ -46,11 +46,12 @@ function getStatelessPropsPath(
   componentDefinition: NodePath,
   importer: Importer,
 ): NodePath {
-  const value = resolveToValue(componentDefinition, importer);
+  let value = resolveToValue(componentDefinition, importer);
+
   if (isReactForwardRefCall(value, importer)) {
-    const inner = resolveToValue(value.get('arguments', 0), importer);
-    return inner.get('params', 0);
+    value = resolveToValue(value.get('arguments', 0), importer);
   }
+
   return value.get('params', 0);
 }
 

@@ -1819,6 +1819,22 @@ Object {
 }
 `;
 
+exports[`main fixtures processes component "component_42.js" without errors 1`] = `
+Object {
+  "description": "",
+  "methods": Array [],
+  "props": Object {
+    "foo": Object {
+      "defaultValue": Object {
+        "computed": false,
+        "value": "'bar'",
+      },
+      "required": false,
+    },
+  },
+}
+`;
+
 exports[`main fixtures processes component "flow-export-type.js" without errors 1`] = `
 Object {
   "description": "This is a Flow class component",
