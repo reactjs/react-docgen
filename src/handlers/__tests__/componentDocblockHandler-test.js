@@ -245,6 +245,13 @@ describe('componentDocblockHandler', () => {
       );
     });
 
+    describe('inline implementation with memo', () => {
+      test(`
+        React.memo(React.forwardRef((props, ref) => {}));
+        import React from "react";`, src =>
+        beforeLastStatement(src).get('expression'));
+    });
+
     describe('out of line implementation', () => {
       test(
         [

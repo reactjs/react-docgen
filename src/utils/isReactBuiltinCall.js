@@ -42,10 +42,13 @@ export default function isReactBuiltinCall(
       // `import { createElement } from 'react'`
       (t.ImportDeclaration.check(value.node) &&
         value.node.specifiers.some(
-          specifier => specifier.imported && specifier.imported.name === name,
+          specifier =>
+            specifier.imported?.name === name &&
+            specifier.local?.name === path.node.callee.name,
         ))
     ) {
       const module = resolveToModule(value);
+
       return Boolean(module && isReactModuleName(module));
     }
   }
