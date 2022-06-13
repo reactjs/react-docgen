@@ -14,6 +14,7 @@ jobs:
         with:
           release-type: node
           package-name: react-docgen
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
 
       - name: Checkout
         if: ${{ steps.release.outputs.release_created }}
@@ -37,5 +38,5 @@ jobs:
 
       - run: npm publish --tag=next
         env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         if: ${{ steps.release.outputs.release_created }}
