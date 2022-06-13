@@ -77,6 +77,14 @@ describe('isReactForwardRefCall', () => {
       expect(isReactForwardRefCall(def, noopImporter)).toBe(true);
     });
 
+    it('does not accept forwardRef if not outer call', () => {
+      const def = expressionLast(`
+        import { forwardRef, memo } from "react";
+        memo(forwardRef({}));
+      `);
+      expect(isReactForwardRefCall(def, noopImporter)).toBe(false);
+    });
+
     it('accepts forwardRef called on imported aliased value', () => {
       const def = expressionLast(`
         import { forwardRef as foo } from "react";

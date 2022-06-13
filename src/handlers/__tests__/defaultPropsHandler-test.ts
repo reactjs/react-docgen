@@ -573,19 +573,6 @@ describe('defaultPropsHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('resolves default props when memo used', () => {
-      const src = `
-        import React, {memo, forwardRef} from 'react';
-        memo(forwardRef(({ foo = 'bar' }, ref) => <div ref={ref}>{foo}</div>));
-      `;
-      defaultPropsHandler(
-        documentation,
-        parse(src).get('body', 1, 'expression'),
-        noopImporter,
-      );
-      expect(documentation.descriptors).toMatchSnapshot();
-    });
-
     it('resolves imported default props in the parameters', () => {
       const src = `
         import baz from 'baz';

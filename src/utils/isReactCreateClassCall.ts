@@ -1,5 +1,4 @@
 import { namedTypes as t } from 'ast-types';
-import match from './match';
 import resolveToModule from './resolveToModule';
 import isReactBuiltinCall from './isReactBuiltinCall';
 import type { Importer } from '../parse';
@@ -20,7 +19,7 @@ function isReactCreateClassCallModular(
     path = path.get('expression');
   }
 
-  if (!match(path.node, { type: 'CallExpression' })) {
+  if (!t.CallExpression.check(path.node)) {
     return false;
   }
   const module = resolveToModule(path, importer);
