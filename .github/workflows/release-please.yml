@@ -33,11 +33,6 @@ jobs:
         if: ${{ steps.release.outputs.release_created }}
         run: yarn install --frozen-lockfile --non-interactive
 
-      - name: Install website dependencies
-        if: ${{ steps.release.outputs.release_created }}
-        run: yarn install --frozen-lockfile --non-interactive
-        working-directory: ./website
-
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
