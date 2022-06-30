@@ -60,7 +60,7 @@
     "cross-spawn": "7.0.3",
     "eslint": "8.18.0",
     "eslint-config-prettier": "8.5.0",
-    "eslint-plugin-prettier": "4.1.0",
+    "eslint-plugin-prettier": "4.2.1",
     "flow-bin": "0.181.2",
     "jest": "28.1.2",
     "jest-diff": "28.1.1",
