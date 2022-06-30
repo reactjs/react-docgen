@@ -61,7 +61,7 @@
     "eslint": "8.18.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-prettier": "4.1.0",
-    "flow-bin": "0.181.1",
+    "flow-bin": "0.181.2",
     "jest": "28.1.2",
     "jest-diff": "28.1.1",
     "jest-matcher-utils": "28.1.1",
