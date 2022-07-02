@@ -42,6 +42,11 @@ function toArray(path: NodePath): Array<string> {
     } else if (t.Identifier.check(node)) {
       result.push(node.name);
       continue;
+    } else if (t.TSAsExpression.check(node)) {
+      if (t.Identifier.check(node.expression)) {
+        result.push(node.expression.name);
+      }
+      continue;
     } else if (t.Literal.check(node)) {
       result.push(node.raw);
       continue;
