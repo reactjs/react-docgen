@@ -1835,6 +1835,44 @@ Object {
 }
 `;
 
+exports[`main fixtures processes component "component_43.tsx" without errors 1`] = `
+Object {
+  "description": "",
+  "displayName": "MenuItem",
+  "methods": Array [],
+  "props": Object {
+    "children": Object {
+      "description": "Menu item contents.",
+      "required": false,
+      "type": Object {
+        "name": "node",
+      },
+    },
+    "classes": Object {
+      "description": "Override or extend the styles applied to the component. See CSS API below for more details.",
+      "required": false,
+      "type": Object {
+        "name": "object",
+      },
+    },
+    "component": Object {
+      "defaultValue": Object {
+        "computed": false,
+        "value": "'li'",
+      },
+      "required": false,
+    },
+    "disableGutters": Object {
+      "defaultValue": Object {
+        "computed": false,
+        "value": "false",
+      },
+      "required": false,
+    },
+  },
+}
+`;
+
 exports[`main fixtures processes component "flow-export-type.js" without errors 1`] = `
 Object {
   "description": "This is a Flow class component",
