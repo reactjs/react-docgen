@@ -38,5 +38,17 @@ describe('expressionTo', () => {
         expressionToArray(expression('foo[{ a(){} }].baz'), noopImporter),
       ).toEqual(['foo', '{a: <function>}', 'baz']);
     });
+
+    it('with TSAsExpression', () => {
+      expect(
+        expressionToArray(
+          expression('(baz as X).prop', {
+            filename: 'file.ts',
+            parserOptions: { plugins: ['typescript'] },
+          }),
+          noopImporter,
+        ),
+      ).toEqual(['baz', 'prop']);
+    });
   });
 });
