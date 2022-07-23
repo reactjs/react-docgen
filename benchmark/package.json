@@ -8,6 +8,9 @@
   "license": "MIT",
   "dependencies": {
     "benchmark": "2.1.4",
-    "cli-table": "0.3.11"
+    "cli-table": "0.3.11",
+    "microtime": "3.1.0",
+    "react-docgen5": "npm:react-docgen@5.4.3",
+    "react-docgen6pre": "npm:react-docgen@6.0.0-alpha.3"
   }
 }
