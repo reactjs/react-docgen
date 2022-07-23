@@ -199,9 +199,5 @@ export default function isStatelessComponent(path: NodePath): boolean {
     return false;
   }
 
-  if (returnsJSXElementOrReactCall(path)) {
-    return true;
-  }
-
-  return false;
+  return returnsJSXElementOrReactCall(path);
 }
