@@ -1,11 +1,10 @@
 import getPropertyValuePath from './getPropertyValuePath';
-import isReactCreateClassCall from './isReactCreateClassCall';
 import isReactCreateElementCall from './isReactCreateElementCall';
 import isReactCloneElementCall from './isReactCloneElementCall';
 import isReactChildrenElementCall from './isReactChildrenElementCall';
 import resolveToValue from './resolveToValue';
 import type { NodePath } from '@babel/traverse';
-import type { Expression, ObjectExpression } from '@babel/types';
+import type { Expression } from '@babel/types';
 
 const validPossibleStatelessComponentTypes = [
   'ObjectMethod',
@@ -198,17 +197,6 @@ function returnsJSXElementOrReactCall(
 export default function isStatelessComponent(path: NodePath): boolean {
   if (!path.inType(...validPossibleStatelessComponentTypes)) {
     return false;
-  }
-
-  if (path.isObjectMethod()) {
-    // TODO check this, I think this does not work as expected, need to go up 2 parents
-    // Also property/ObjectMethod is not part of classes?!?
-    if (
-      isReactCreateClassCall(path.parentPath as NodePath<ObjectExpression>) //||
-      //isReactComponentClass(path.parent)
-    ) {
-      return false;
-    }
   }
 
   if (returnsJSXElementOrReactCall(path)) {

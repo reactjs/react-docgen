@@ -74,10 +74,10 @@ describe('isStatelessComponent', () => {
   });
 
   const negativeModifiers = {
-    //'nested ArrowExpression': (expr: string): string => `() => ${expr}`,
-    //'nested ArrowBlock': (expr: string): string => `() => { return ${expr} }`,
-    //'nested FunctionExpression': (expr: string): string =>
-    //  `function () { return ${expr} }`,
+    'nested ArrowExpression': (expr: string): string => `() => ${expr}`,
+    'nested ArrowBlock': (expr: string): string => `() => { return ${expr} }`,
+    'nested FunctionExpression': (expr: string): string =>
+      `function () { return ${expr} }`,
   };
 
   Object.keys(cases).forEach(name => {
