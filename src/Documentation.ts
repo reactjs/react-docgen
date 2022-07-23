@@ -9,14 +9,14 @@ export interface DocumentationObject {
 export interface MethodParameter {
   name: string;
   type?: TypeDescriptor<FunctionSignatureType> | null;
-  optional?: boolean;
+  optional: boolean;
 }
 
 export interface MethodReturn {
   type: TypeDescriptor<FunctionSignatureType> | undefined;
 }
 
-export type MethodModifier = 'static' | 'generator' | 'async' | 'get' | 'set';
+export type MethodModifier = 'async' | 'generator' | 'get' | 'set' | 'static';
 
 export interface MethodDescriptor {
   name: string;
@@ -29,25 +29,25 @@ export interface MethodDescriptor {
 
 export interface PropTypeDescriptor {
   name:
-    | 'arrayOf'
-    | 'custom'
-    | 'enum'
+    | 'any'
     | 'array'
+    | 'arrayOf'
     | 'bool'
+    | 'custom'
+    | 'element'
+    | 'elementType'
+    | 'enum'
+    | 'exact'
     | 'func'
+    | 'instanceOf'
+    | 'node'
     | 'number'
     | 'object'
-    | 'string'
-    | 'any'
-    | 'element'
-    | 'node'
-    | 'symbol'
     | 'objectOf'
     | 'shape'
-    | 'exact'
-    | 'union'
-    | 'elementType'
-    | 'instanceOf';
+    | 'string'
+    | 'symbol'
+    | 'union';
   value?: unknown;
   raw?: string;
   computed?: boolean;
@@ -55,6 +55,11 @@ export interface PropTypeDescriptor {
   // Consider consolidating PropTypeDescriptor and PropDescriptor
   description?: string;
   required?: boolean;
+}
+
+export interface DefaultValueDescriptor {
+  value: unknown;
+  computed: boolean;
 }
 
 export interface BaseType {
@@ -91,14 +96,14 @@ export interface FunctionSignatureType extends BaseType {
   raw: string;
   signature: {
     arguments: Array<FunctionArgumentType<FunctionSignatureType>>;
-    return: TypeDescriptor<FunctionSignatureType>;
+    return?: TypeDescriptor<FunctionSignatureType>;
   };
 }
 
 export interface TSFunctionSignatureType extends FunctionSignatureType {
   signature: {
     arguments: Array<FunctionArgumentType<TSFunctionSignatureType>>;
-    return: TypeDescriptor<TSFunctionSignatureType>;
+    return?: TypeDescriptor<TSFunctionSignatureType>;
     this?: TypeDescriptor<TSFunctionSignatureType>;
   };
 }
@@ -110,7 +115,7 @@ export interface ObjectSignatureType<T = FunctionSignatureType>
   raw: string;
   signature: {
     properties: Array<{
-      key: string | TypeDescriptor<T>;
+      key: TypeDescriptor<T> | string;
       value: TypeDescriptor<T>;
     }>;
     constructor?: TypeDescriptor<T>;
@@ -118,10 +123,10 @@ export interface ObjectSignatureType<T = FunctionSignatureType>
 }
 
 export type TypeDescriptor<T = FunctionSignatureType> =
-  | SimpleType
-  | LiteralType
   | ElementsType<T>
+  | LiteralType
   | ObjectSignatureType<T>
+  | SimpleType
   | T;
 
 export interface PropDescriptor {
@@ -129,7 +134,7 @@ export interface PropDescriptor {
   flowType?: TypeDescriptor<FunctionSignatureType>;
   tsType?: TypeDescriptor<TSFunctionSignatureType>;
   required?: boolean;
-  defaultValue?: unknown;
+  defaultValue?: DefaultValueDescriptor;
   description?: string;
 }
 

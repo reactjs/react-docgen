@@ -2,8 +2,8 @@
  * Helper functions to work with docblock comments.
  */
 
-import { CommentKind } from 'ast-types/gen/kinds';
-import type { NodePath } from 'ast-types/lib/node-path';
+import type { NodePath } from '@babel/traverse';
+import type { CommentBlock, CommentLine } from '@babel/types';
 
 const DOCLET_PATTERN = /^@(\w+)(?:$|\s((?:[^](?!^@\w))*))/gim;
 
@@ -20,7 +20,7 @@ const DOCBLOCK_HEADER = /^\*\s/;
  * exists.
  */
 export function getDocblock(path: NodePath, trailing = false): string | null {
-  let comments: CommentKind[] = [];
+  let comments: Array<CommentBlock | CommentLine> = [];
   if (trailing && path.node.trailingComments) {
     comments = path.node.trailingComments.filter(
       comment =>
@@ -30,13 +30,6 @@ export function getDocblock(path: NodePath, trailing = false): string | null {
     comments = path.node.leadingComments.filter(
       comment =>
         comment.type === 'CommentBlock' && DOCBLOCK_HEADER.test(comment.value),
-    );
-  } else if (path.node.comments) {
-    comments = path.node.comments.filter(
-      comment =>
-        comment.leading &&
-        comment.type === 'CommentBlock' &&
-        DOCBLOCK_HEADER.test(comment.value),
     );
   }
 
@@ -50,11 +43,11 @@ export function getDocblock(path: NodePath, trailing = false): string | null {
  * Given a string, this functions returns an object with doclet names as keys
  * and their "content" as values.
  */
-export function getDoclets(str: string): Record<string, unknown> {
+export function getDoclets(str: string): Record<string, string> {
   const doclets = Object.create(null);
-  let match = DOCLET_PATTERN.exec(str);
+  let match: RegExpExecArray | null;
 
-  for (; match; match = DOCLET_PATTERN.exec(str)) {
+  while ((match = DOCLET_PATTERN.exec(str))) {
     doclets[match[1]] = match[2] || true;
   }
 

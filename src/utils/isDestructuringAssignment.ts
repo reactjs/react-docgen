@@ -1,5 +1,4 @@
-import { namedTypes as t } from 'ast-types';
-import type { NodePath } from 'ast-types/lib/node-path';
+import type { NodePath } from '@babel/traverse';
 
 /**
  * Checks if the input Identifier is part of a destructuring Assignment
@@ -9,10 +8,15 @@ export default function isDestructuringAssignment(
   path: NodePath,
   name: string,
 ): boolean {
+  if (!path.isObjectProperty()) {
+    return false;
+  }
+
+  const id = path.get('key');
+
   return (
-    t.Identifier.check(path.node) &&
-    t.Property.check(path.parentPath.node) &&
-    path.parentPath.node.key.name === name &&
-    t.ObjectPattern.check(path.parentPath.parentPath.node)
+    id.isIdentifier() &&
+    id.node.name === name &&
+    path.parentPath.isObjectPattern()
   );
 }

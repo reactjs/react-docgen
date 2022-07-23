@@ -2,7 +2,8 @@
   "compilerOptions": {
     "jsx": "react",
     "declaration": true,
-    "target": "ES2018",
+    "lib": ["es2020"],
+    "target": "es2020",
     "module": "commonjs",
     "outDir": "./dist",
     "strict": true,
@@ -14,7 +15,9 @@
     "noUnusedLocals": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "inlineSourceMap": false,
+    "skipLibCheck": true
   },
   "exclude": ["**/__tests__/**/*", "**/__mocks__/**/*"],
   "include": ["src/**/*"]

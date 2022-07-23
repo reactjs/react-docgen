@@ -1,6 +1,8 @@
-import { parse, noopImporter, makeMockImporter } from '../../../tests/utils';
+import type { NodePath } from '@babel/traverse';
+import type { ObjectExpression } from '@babel/types';
+import { parse, makeMockImporter } from '../../../tests/utils';
 import Documentation from '../../Documentation';
-import DocumentationMock from '../../__mocks__/Documentation';
+import type DocumentationMock from '../../__mocks__/Documentation';
 import defaultPropsHandler from '../defaultPropsHandler';
 
 jest.mock('../../Documentation');
@@ -12,7 +14,8 @@ describe('defaultPropsHandler', () => {
   });
 
   const mockImporter = makeMockImporter({
-    getDefaultProps: parse(`
+    getDefaultProps: stmtLast =>
+      stmtLast(`
       import baz from 'baz';
       export default function() {
         return {
@@ -22,44 +25,68 @@ describe('defaultPropsHandler', () => {
           abc: {xyz: abc.def, 123: 42}
         };
       }
-    `).get('body', 1, 'declaration'),
+    `).get('declaration'),
 
-    baz: parse(`
+    baz: stmtLast =>
+      stmtLast(`
       export default ["foo", "bar"];
-    `).get('body', 0, 'declaration'),
+    `).get('declaration'),
 
-    other: parse(`
+    other: stmtLast =>
+      stmtLast(`
       export default { bar: "foo" };
-    `).get('body', 0, 'declaration'),
+    `).get('declaration'),
 
-    defaultProps: parse(`
+    defaultProps: stmtLast =>
+      stmtLast(`
       export default {
         foo: "bar",
         bar: 42,
         baz: ["foo", "bar"],
         abc: {xyz: abc.def, 123: 42}
       };
-    `).get('body', 0, 'declaration'),
+    `).get('declaration'),
   });
 
   describe('ObjectExpression', () => {
     it('should find prop default values that are literals', () => {
       const src = `
-        ({
+        {
           getDefaultProps: function() {
             return {
               foo: "bar",
               bar: 42,
+              falseliteral: false,
+              trueliteral: true,
+              nullliteral: null,
+              regex: /./,
+              bigint: 1n,
               baz: ["foo", "bar"],
               abc: {xyz: abc.def, 123: 42}
             };
           }
-        })
+        }
       `;
       defaultPropsHandler(
         documentation,
-        parse(src).get('body', 0, 'expression'),
-        noopImporter,
+        parse.expression<ObjectExpression>(src),
+      );
+      expect(documentation.descriptors).toMatchSnapshot();
+    });
+
+    it('can resolve object methods', () => {
+      const src = `
+        {
+          getDefaultProps() {
+            return {
+              foo: "bar",
+            };
+          }
+        }
+      `;
+      defaultPropsHandler(
+        documentation,
+        parse.expression<ObjectExpression>(src),
       );
       expect(documentation.descriptors).toMatchSnapshot();
     });
@@ -78,11 +105,7 @@ describe('defaultPropsHandler', () => {
           getDefaultProps: getDefaultProps
         })
       `;
-      defaultPropsHandler(
-        documentation,
-        parse(src).get('body', 1, 'expression'),
-        noopImporter,
-      );
+      defaultPropsHandler(documentation, parse.expressionLast(src));
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
@@ -96,8 +119,7 @@ describe('defaultPropsHandler', () => {
       `;
       defaultPropsHandler(
         documentation,
-        parse(src).get('body', 1, 'expression'),
-        mockImporter,
+        parse.expressionLast(src, mockImporter),
       );
       expect(documentation.descriptors).toMatchSnapshot();
     });
@@ -115,8 +137,7 @@ describe('defaultPropsHandler', () => {
       `;
       defaultPropsHandler(
         documentation,
-        parse(src).get('body', 0, 'expression'),
-        noopImporter,
+        parse(src).get('body.0.expression') as NodePath,
       );
       expect(documentation.descriptors).toMatchSnapshot();
     });
@@ -135,8 +156,7 @@ describe('defaultPropsHandler', () => {
       `;
       defaultPropsHandler(
         documentation,
-        parse(src).get('body', 1, 'expression'),
-        mockImporter,
+        parse.expressionLast(src, mockImporter),
       );
       expect(documentation.descriptors).toMatchSnapshot();
     });
@@ -152,11 +172,7 @@ describe('defaultPropsHandler', () => {
           }
         })
       `;
-      defaultPropsHandler(
-        documentation,
-        parse(src).get('body', 0, 'expression'),
-        noopImporter,
-      );
+      defaultPropsHandler(documentation, parse.expressionLast(src));
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
@@ -174,8 +190,7 @@ describe('defaultPropsHandler', () => {
       `;
       defaultPropsHandler(
         documentation,
-        parse(src).get('body', 1, 'expression'),
-        mockImporter,
+        parse.expressionLast(src, mockImporter),
       );
       expect(documentation.descriptors).toMatchSnapshot();
     });
@@ -193,11 +208,7 @@ describe('defaultPropsHandler', () => {
           }
         })
       `;
-      defaultPropsHandler(
-        documentation,
-        parse(src).get('body', 1, 'expression'),
-        noopImporter,
-      );
+      defaultPropsHandler(documentation, parse.expressionLast(src));
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
@@ -215,8 +226,7 @@ describe('defaultPropsHandler', () => {
       `;
       defaultPropsHandler(
         documentation,
-        parse(src).get('body', 1, 'expression'),
-        mockImporter,
+        parse.expressionLast(src, mockImporter),
       );
       expect(documentation.descriptors).toMatchSnapshot();
     });
@@ -234,11 +244,21 @@ describe('defaultPropsHandler', () => {
           };
         }
       `;
-      defaultPropsHandler(
-        documentation,
-        parse(src).get('body', 0),
-        noopImporter,
-      );
+      defaultPropsHandler(documentation, parse(src).get('body')[0]);
+      expect(documentation.descriptors).toMatchSnapshot();
+    });
+
+    it('should find prop default values that are literals', () => {
+      const src = `
+        class Foo {
+          static get defaultProps() {
+            return {
+              foo: "bar",
+            };
+          }
+        }
+      `;
+      defaultPropsHandler(documentation, parse(src).get('body')[0]);
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
@@ -251,8 +271,7 @@ describe('defaultPropsHandler', () => {
       `;
       defaultPropsHandler(
         documentation,
-        parse(src).get('body', 1),
-        mockImporter,
+        parse.statementLast(src, mockImporter),
       );
       expect(documentation.descriptors).toMatchSnapshot();
     });
@@ -268,11 +287,7 @@ describe('defaultPropsHandler', () => {
           };
         }
       `;
-      defaultPropsHandler(
-        documentation,
-        parse(src).get('body', 1),
-        noopImporter,
-      );
+      defaultPropsHandler(documentation, parse.statementLast(src));
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
@@ -288,8 +303,7 @@ describe('defaultPropsHandler', () => {
       `;
       defaultPropsHandler(
         documentation,
-        parse(src).get('body', 1),
-        mockImporter,
+        parse.statementLast(src, mockImporter),
       );
       expect(documentation.descriptors).toMatchSnapshot();
     });
@@ -304,11 +318,7 @@ describe('defaultPropsHandler', () => {
           };
         }
       `;
-      defaultPropsHandler(
-        documentation,
-        parse(src).get('body', 1),
-        noopImporter,
-      );
+      defaultPropsHandler(documentation, parse.statementLast(src));
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
@@ -324,8 +334,7 @@ describe('defaultPropsHandler', () => {
       `;
       defaultPropsHandler(
         documentation,
-        parse(src).get('body', 1),
-        mockImporter,
+        parse.statementLast(src, mockImporter),
       );
       expect(documentation.descriptors).toMatchSnapshot();
     });
@@ -344,8 +353,7 @@ describe('defaultPropsHandler', () => {
       }`;
       defaultPropsHandler(
         documentation,
-        parse(src).get('body', 0, 'declarations', 0, 'init'),
-        noopImporter,
+        parse.statement(src).get('declarations.0.init') as NodePath,
       );
       expect(documentation.descriptors).toMatchSnapshot();
     });
@@ -359,8 +367,9 @@ describe('defaultPropsHandler', () => {
       `;
       defaultPropsHandler(
         documentation,
-        parse(src).get('body', 1, 'declarations', 0, 'init'),
-        mockImporter,
+        parse
+          .statementLast(src, mockImporter)
+          .get('declarations.0.init') as NodePath,
       );
       expect(documentation.descriptors).toMatchSnapshot();
     });
@@ -368,19 +377,17 @@ describe('defaultPropsHandler', () => {
 
   it('should only consider Property nodes, not e.g. spread properties', () => {
     const src = `
-      ({
+      {
         getDefaultProps: function() {
           return {
             ...Foo.bar,
             bar: 42,
           };
         }
-      })
+      }
     `;
-    const definition = parse(src).get('body', 0, 'expression');
-    expect(() =>
-      defaultPropsHandler(documentation, definition, noopImporter),
-    ).not.toThrow();
+    const definition = parse.expression(src);
+    expect(() => defaultPropsHandler(documentation, definition)).not.toThrow();
     expect(documentation.descriptors).toMatchSnapshot();
   });
 
@@ -396,10 +403,8 @@ describe('defaultPropsHandler', () => {
         }
       })
     `;
-    const definition = parse(src).get('body', 1, 'expression');
-    expect(() =>
-      defaultPropsHandler(documentation, definition, mockImporter),
-    ).not.toThrow();
+    const definition = parse.expressionLast(src, mockImporter);
+    expect(() => defaultPropsHandler(documentation, definition)).not.toThrow();
     expect(documentation.descriptors).toMatchSnapshot();
   });
 
@@ -413,11 +418,7 @@ describe('defaultPropsHandler', () => {
           abc = {xyz: abc.def, 123: 42}
         }) => <div />
       `;
-      defaultPropsHandler(
-        documentation,
-        parse(src).get('body', 0, 'expression'),
-        noopImporter,
-      );
+      defaultPropsHandler(documentation, parse.expressionLast(src));
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
@@ -430,8 +431,7 @@ describe('defaultPropsHandler', () => {
       `;
       defaultPropsHandler(
         documentation,
-        parse(src).get('body', 1, 'expression'),
-        mockImporter,
+        parse.expressionLast(src, mockImporter),
       );
       expect(documentation.descriptors).toMatchSnapshot();
     });
@@ -448,8 +448,7 @@ describe('defaultPropsHandler', () => {
       `;
       defaultPropsHandler(
         documentation,
-        parse(src).get('body', 0, 'declarations', 0, 'init'),
-        noopImporter,
+        parse.statement(src).get('declarations.0.init') as NodePath,
       );
       expect(documentation.descriptors).toMatchSnapshot();
     });
@@ -464,8 +463,9 @@ describe('defaultPropsHandler', () => {
       `;
       defaultPropsHandler(
         documentation,
-        parse(src).get('body', 1, 'declarations', 0, 'init'),
-        mockImporter,
+        parse
+          .statement(src, mockImporter, 1)
+          .get('declarations.0.init') as NodePath,
       );
       expect(documentation.descriptors).toMatchSnapshot();
     });
@@ -478,8 +478,7 @@ describe('defaultPropsHandler', () => {
       `;
       defaultPropsHandler(
         documentation,
-        parse(src).get('body', 1, 'declarations', 0, 'init'),
-        noopImporter,
+        parse.statement(src, 1).get('declarations.0.init') as NodePath,
       );
       expect(documentation.descriptors).toMatchSnapshot();
     });
@@ -492,8 +491,9 @@ describe('defaultPropsHandler', () => {
       `;
       defaultPropsHandler(
         documentation,
-        parse(src).get('body', 1, 'declarations', 0, 'init'),
-        mockImporter,
+        parse
+          .statement(src, mockImporter, 1)
+          .get('declarations.0.init') as NodePath,
       );
       expect(documentation.descriptors).toMatchSnapshot();
     });
@@ -507,11 +507,7 @@ describe('defaultPropsHandler', () => {
           abc: defg = {xyz: abc.def, 123: 42}
         }) => <div />
       `;
-      defaultPropsHandler(
-        documentation,
-        parse(src).get('body', 0, 'expression'),
-        noopImporter,
-      );
+      defaultPropsHandler(documentation, parse.expressionLast(src));
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
@@ -524,8 +520,7 @@ describe('defaultPropsHandler', () => {
       `;
       defaultPropsHandler(
         documentation,
-        parse(src).get('body', 1, 'expression'),
-        mockImporter,
+        parse.expressionLast(src, mockImporter),
       );
       expect(documentation.descriptors).toMatchSnapshot();
     });
@@ -538,23 +533,14 @@ describe('defaultPropsHandler', () => {
           foo = ImportedComponent,
         }) => <div />
       `;
-      defaultPropsHandler(
-        documentation,
-        parse(src).get('body', 1, 'expression'),
-        noopImporter,
-      );
+      defaultPropsHandler(documentation, parse.expressionLast(src));
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
     it('should work with no defaults', () => {
-      const src = `
-        ({ foo }) => <div />
-      `;
-      defaultPropsHandler(
-        documentation,
-        parse(src).get('body', 0, 'expression'),
-        noopImporter,
-      );
+      const src = `({ foo }) => <div />`;
+
+      defaultPropsHandler(documentation, parse.expressionLast(src));
       expect(documentation.descriptors).toMatchSnapshot();
     });
   });
@@ -565,11 +551,7 @@ describe('defaultPropsHandler', () => {
         import React from 'react';
         React.forwardRef(({ foo = 'bar' }, ref) => <div ref={ref}>{foo}</div>);
       `;
-      defaultPropsHandler(
-        documentation,
-        parse(src).get('body', 1, 'expression'),
-        noopImporter,
-      );
+      defaultPropsHandler(documentation, parse.expressionLast(src));
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
@@ -581,8 +563,7 @@ describe('defaultPropsHandler', () => {
       `;
       defaultPropsHandler(
         documentation,
-        parse(src).get('body', 2, 'expression'),
-        mockImporter,
+        parse.expressionLast(src, mockImporter),
       );
       expect(documentation.descriptors).toMatchSnapshot();
     });
@@ -593,11 +574,7 @@ describe('defaultPropsHandler', () => {
         const Component = React.forwardRef(({ foo }, ref) => <div ref={ref}>{foo}</div>);
         Component.defaultProps = { foo: 'baz' };
       `;
-      defaultPropsHandler(
-        documentation,
-        parse(src).get('body', 1),
-        noopImporter,
-      );
+      defaultPropsHandler(documentation, parse.statement(src, 1));
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
@@ -608,11 +585,7 @@ describe('defaultPropsHandler', () => {
         const Component = React.forwardRef(({ bar }, ref) => <div ref={ref}>{bar}</div>);
         Component.defaultProps = other;
       `;
-      defaultPropsHandler(
-        documentation,
-        parse(src).get('body', 2),
-        mockImporter,
-      );
+      defaultPropsHandler(documentation, parse.statement(src, mockImporter, 2));
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
@@ -622,11 +595,7 @@ describe('defaultPropsHandler', () => {
         const ComponentImpl = ({ foo = 'bar' }, ref) => <div ref={ref}>{foo}</div>;
         React.forwardRef(ComponentImpl);
       `;
-      defaultPropsHandler(
-        documentation,
-        parse(src).get('body', 2, 'expression'),
-        noopImporter,
-      );
+      defaultPropsHandler(documentation, parse.expressionLast(src));
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
@@ -639,8 +608,7 @@ describe('defaultPropsHandler', () => {
       `;
       defaultPropsHandler(
         documentation,
-        parse(src).get('body', 3, 'expression'),
-        mockImporter,
+        parse.expressionLast(src, mockImporter),
       );
       expect(documentation.descriptors).toMatchSnapshot();
     });

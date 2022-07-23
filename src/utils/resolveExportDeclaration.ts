@@ -1,27 +1,33 @@
-import { namedTypes as t } from 'ast-types';
 import resolveToValue from './resolveToValue';
-import type { Importer } from '../parse';
-import type { NodePath } from 'ast-types/lib/node-path';
+import type {
+  ExportDefaultDeclaration,
+  ExportNamedDeclaration,
+} from '@babel/types';
+import type { NodePath } from '@babel/traverse';
 
 export default function resolveExportDeclaration(
-  path: NodePath,
-  importer: Importer,
+  path: NodePath<ExportDefaultDeclaration | ExportNamedDeclaration>,
 ): NodePath[] {
   const definitions: NodePath[] = [];
-  if (path.node.default) {
+  if (path.isExportDefaultDeclaration()) {
     definitions.push(path.get('declaration'));
-  } else if (path.node.declaration) {
-    if (t.VariableDeclaration.check(path.node.declaration)) {
+  } else if (path.isExportNamedDeclaration()) {
+    if (path.has('declaration')) {
+      const declaration = path.get('declaration');
+      if (declaration.isVariableDeclaration()) {
+        declaration
+          .get('declarations')
+          .forEach(declarator => definitions.push(declarator));
+      } else if (declaration.isDeclaration()) {
+        definitions.push(declaration);
+      }
+    } else if (path.has('specifiers')) {
       path
-        .get('declaration', 'declarations')
-        .each(declarator => definitions.push(declarator));
-    } else {
-      definitions.push(path.get('declaration'));
+        .get('specifiers')
+        .forEach(specifier =>
+          definitions.push(specifier.get('local') as NodePath),
+        );
     }
-  } else if (path.node.specifiers) {
-    path
-      .get('specifiers')
-      .each(specifier => definitions.push(specifier.get('local')));
   }
-  return definitions.map(definition => resolveToValue(definition, importer));
+  return definitions.map(definition => resolveToValue(definition));
 }

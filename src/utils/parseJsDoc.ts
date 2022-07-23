@@ -1,7 +1,7 @@
-import doctrine, { Type } from 'doctrine';
-import type { Annotation, Tag } from 'doctrine';
+import doctrine from 'doctrine';
+import type { Type, Annotation, Tag } from 'doctrine';
 
-type ExcludesNullish = <T>(x: T | null | undefined | false | 0) => x is T;
+type ExcludesNullish = <T>(x: T | 0 | false | null | undefined) => x is T;
 type JsDocType = JsDocBaseType | JsDocElementsType;
 
 interface JsDocBaseType {
@@ -27,7 +27,7 @@ interface JsDoc {
   returns: JsDocProperty | null;
 }
 
-function getType(tagType: Type | undefined | null): JsDocType | null {
+function getType(tagType: Type | null | undefined): JsDocType | null {
   if (!tagType) {
     return null;
   }

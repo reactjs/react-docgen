@@ -1,14 +1,10 @@
-import {
-  statement,
-  noopImporter,
-  makeMockImporter,
-  expressionLast,
-} from '../../../tests/utils';
+import { makeMockImporter, parse } from '../../../tests/utils';
 import resolveObjectKeysToArray from '../resolveObjectKeysToArray';
 
 describe('resolveObjectKeysToArray', () => {
   const mockImporter = makeMockImporter({
-    foo: statement(`
+    foo: stmtLast =>
+      stmtLast(`
       export default {
         bar: "bar",
         "foo": "foo",
@@ -19,7 +15,8 @@ describe('resolveObjectKeysToArray', () => {
       };
     `).get('declaration'),
 
-    bar: statement(`
+    bar: stmtLast =>
+      stmtLast(`
       export default {
         bar: 'bar',
       };
@@ -27,31 +24,31 @@ describe('resolveObjectKeysToArray', () => {
   });
 
   it('resolves Object.keys with identifiers', () => {
-    const path = expressionLast(
+    const path = parse.expressionLast(
       ['var foo = { bar: 1, foo: 2 };', 'Object.keys(foo);'].join('\n'),
     );
 
-    expect(resolveObjectKeysToArray(path, noopImporter)).toMatchSnapshot();
+    expect(resolveObjectKeysToArray(path)).toMatchSnapshot();
   });
 
   it('resolves Object.keys with literals', () => {
-    const path = expressionLast(
+    const path = parse.expressionLast(
       ['var foo = { "bar": 1, 5: 2 };', 'Object.keys(foo);'].join('\n'),
     );
 
-    expect(resolveObjectKeysToArray(path, noopImporter)).toMatchSnapshot();
+    expect(resolveObjectKeysToArray(path)).toMatchSnapshot();
   });
 
   it('resolves Object.keys with literals as computed key', () => {
-    const path = expressionLast(
+    const path = parse.expressionLast(
       ['var foo = { ["bar"]: 1, [5]: 2};', 'Object.keys(foo);'].join('\n'),
     );
 
-    expect(resolveObjectKeysToArray(path, noopImporter)).toMatchSnapshot();
+    expect(resolveObjectKeysToArray(path)).toMatchSnapshot();
   });
 
   it('resolves Object.keys when using resolvable spread', () => {
-    const path = expressionLast(
+    const path = parse.expressionLast(
       [
         'var bar = { doo: 4 }',
         'var foo = { boo: 1, foo: 2, ...bar };',
@@ -59,32 +56,32 @@ describe('resolveObjectKeysToArray', () => {
       ].join('\n'),
     );
 
-    expect(resolveObjectKeysToArray(path, noopImporter)).toMatchSnapshot();
+    expect(resolveObjectKeysToArray(path)).toMatchSnapshot();
   });
 
   it('resolves Object.keys when using getters', () => {
-    const path = expressionLast(
+    const path = parse.expressionLast(
       ['var foo = { boo: 1, foo: 2, get bar() {} };', 'Object.keys(foo);'].join(
         '\n',
       ),
     );
 
-    expect(resolveObjectKeysToArray(path, noopImporter)).toMatchSnapshot();
+    expect(resolveObjectKeysToArray(path)).toMatchSnapshot();
   });
 
   it('resolves Object.keys when using setters', () => {
-    const path = expressionLast(
+    const path = parse.expressionLast(
       [
         'var foo = { boo: 1, foo: 2, set bar(e) {} };',
         'Object.keys(foo);',
       ].join('\n'),
     );
 
-    expect(resolveObjectKeysToArray(path, noopImporter)).toMatchSnapshot();
+    expect(resolveObjectKeysToArray(path)).toMatchSnapshot();
   });
 
   it('resolves Object.keys but ignores duplicates', () => {
-    const path = expressionLast(
+    const path = parse.expressionLast(
       [
         'var bar = { doo: 4, doo: 5 }',
         'var foo = { boo: 1, foo: 2, doo: 1, ...bar };',
@@ -92,51 +89,53 @@ describe('resolveObjectKeysToArray', () => {
       ].join('\n'),
     );
 
-    expect(resolveObjectKeysToArray(path, noopImporter)).toMatchSnapshot();
+    expect(resolveObjectKeysToArray(path)).toMatchSnapshot();
   });
 
   it('resolves Object.keys but ignores duplicates with getter and setter', () => {
-    const path = expressionLast(
+    const path = parse.expressionLast(
       ['var foo = { get x() {}, set x(a) {} };', 'Object.keys(foo);'].join(
         '\n',
       ),
     );
 
-    expect(resolveObjectKeysToArray(path, noopImporter)).toMatchSnapshot();
+    expect(resolveObjectKeysToArray(path)).toMatchSnapshot();
   });
 
   it('does not resolve Object.keys when using unresolvable spread', () => {
-    const path = expressionLast(
+    const path = parse.expressionLast(
       ['var foo = { bar: 1, foo: 2, ...bar };', 'Object.keys(foo);'].join('\n'),
     );
 
-    expect(resolveObjectKeysToArray(path, noopImporter)).toBeNull();
+    expect(resolveObjectKeysToArray(path)).toBeNull();
   });
 
   it('does not resolve Object.keys when using computed keys', () => {
-    const path = expressionLast(
+    const path = parse.expressionLast(
       ['var foo = { [bar]: 1, foo: 2 };', 'Object.keys(foo);'].join('\n'),
     );
 
-    expect(resolveObjectKeysToArray(path, noopImporter)).toBeNull();
+    expect(resolveObjectKeysToArray(path)).toBeNull();
   });
 
   it('can resolve imported objects passed to Object.keys', () => {
-    const path = expressionLast(`
-      import foo from 'foo';
-      Object.keys(foo);
-    `);
+    const path = parse.expressionLast(
+      `import foo from 'foo';
+       Object.keys(foo);`,
+      mockImporter,
+    );
 
-    expect(resolveObjectKeysToArray(path, mockImporter)).toMatchSnapshot();
+    expect(resolveObjectKeysToArray(path)).toMatchSnapshot();
   });
 
   it('can resolve spreads from imported objects', () => {
-    const path = expressionLast(`
-      import bar from 'bar';
-      var abc = { foo: 'foo', baz: 'baz', ...bar };
-      Object.keys(abc);
-    `);
+    const path = parse.expressionLast(
+      `import bar from 'bar';
+       var abc = { foo: 'foo', baz: 'baz', ...bar };
+       Object.keys(abc);`,
+      mockImporter,
+    );
 
-    expect(resolveObjectKeysToArray(path, mockImporter)).toMatchSnapshot();
+    expect(resolveObjectKeysToArray(path)).toMatchSnapshot();
   });
 });

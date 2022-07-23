@@ -1,8 +1,18 @@
-import { namedTypes as t } from 'ast-types';
+import type { NodePath } from '@babel/traverse';
+import type {
+  ClassMethod,
+  ClassProperty,
+  Expression,
+  ObjectMethod,
+  ObjectProperty,
+  ObjectTypeProperty,
+  ObjectTypeSpreadProperty,
+  SpreadElement,
+  TSMethodSignature,
+  TSPropertySignature,
+} from '@babel/types';
 import getNameOrValue from './getNameOrValue';
 import resolveToValue from './resolveToValue';
-import type { Importer } from '../parse';
-import type { NodePath } from 'ast-types/lib/node-path';
 
 export const COMPUTED_PREFIX = '@computed#';
 
@@ -12,40 +22,48 @@ export const COMPUTED_PREFIX = '@computed#';
  * returns the value of the literal or name of the identifier.
  */
 export default function getPropertyName(
-  propertyPath: NodePath,
-  importer: Importer,
+  propertyPath: NodePath<
+    | ClassMethod
+    | ClassProperty
+    | ObjectMethod
+    | ObjectProperty
+    | ObjectTypeProperty
+    | ObjectTypeSpreadProperty
+    | SpreadElement
+    | TSMethodSignature
+    | TSPropertySignature
+  >,
 ): string | null {
-  if (t.ObjectTypeSpreadProperty.check(propertyPath.node)) {
-    return getNameOrValue(propertyPath.get('argument').get('id'), false);
-  } else if (propertyPath.node.computed) {
-    const key = propertyPath.get('key');
+  if (propertyPath.isObjectTypeSpreadProperty()) {
+    const argument = propertyPath.get('argument');
+    if (argument.isGenericTypeAnnotation()) {
+      // TODO test qualified type identifier
+      return getNameOrValue(argument.get('id')) as string;
+    }
+    return null;
+  } else if (propertyPath.has('computed')) {
+    const key = propertyPath.get('key') as NodePath<Expression>;
 
     // Try to resolve variables and member expressions
-    if (t.Identifier.check(key.node) || t.MemberExpression.check(key.node)) {
-      const value = resolveToValue(key, importer).node;
+    if (key.isIdentifier() || key.isMemberExpression()) {
+      const valuePath = resolveToValue(key);
 
-      if (
-        t.Literal.check(value) &&
-        (typeof value.value === 'string' || typeof value.value === 'number')
-      ) {
-        return `${value.value}`;
+      if (valuePath.isStringLiteral() || valuePath.isNumericLiteral()) {
+        return `${valuePath.node.value}`;
       }
     }
 
     // generate name for identifier
-    if (t.Identifier.check(key.node)) {
+    if (key.isIdentifier()) {
       return `${COMPUTED_PREFIX}${key.node.name}`;
     }
 
-    if (
-      t.Literal.check(key.node) &&
-      (typeof key.node.value === 'string' || typeof key.node.value === 'number')
-    ) {
+    if (key.isStringLiteral() || key.isNumericLiteral()) {
       return `${key.node.value}`;
     }
 
     return null;
   }
 
-  return getNameOrValue(propertyPath.get('key'), false);
+  return `${getNameOrValue(propertyPath.get('key') as NodePath)}`;
 }

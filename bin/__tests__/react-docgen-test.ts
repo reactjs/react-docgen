@@ -36,7 +36,7 @@ const component = fs.readFileSync(
   path.join(__dirname, '__fixtures__/Component.js'),
 );
 
-describe('react-docgen CLI', () => {
+describe.skip('react-docgen CLI', () => {
   let tempDir = '';
   let tempComponents: string[] = [];
   let tempNoComponents: string[] = [];

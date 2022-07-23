@@ -1,9 +1,14 @@
-import { builders, namedTypes as t, visit } from 'ast-types';
-import type { NodePath } from 'ast-types/lib/node-path';
+import { classProperty } from '@babel/types';
 import getMemberExpressionRoot from '../utils/getMemberExpressionRoot';
 import getMembers from '../utils/getMembers';
+import type { NodePath } from '@babel/traverse';
+import type {
+  ClassDeclaration,
+  ClassExpression,
+  Expression,
+} from '@babel/types';
 
-const ignore = () => false;
+const ignore = (path: NodePath) => path.skip();
 
 /**
  * Given a class definition (i.e. `class` declaration or expression), this
@@ -25,32 +30,33 @@ const ignore = () => false;
  * }
  */
 export default function normalizeClassDefinition(
-  classDefinition: NodePath,
+  classDefinition: NodePath<ClassDeclaration | ClassExpression>,
 ): void {
   let variableName;
-  if (t.ClassDeclaration.check(classDefinition.node)) {
-    // Class declarations don't have an id, e.g.: `export default class extends React.Component {}`
+  if (classDefinition.isClassDeclaration()) {
+    // Class declarations may not have an id, e.g.: `export default class extends React.Component {}`
     if (classDefinition.node.id) {
       variableName = classDefinition.node.id.name;
     }
-  } else if (t.ClassExpression.check(classDefinition.node)) {
-    let { parentPath } = classDefinition;
+  } else if (classDefinition.isClassExpression()) {
+    let parentPath: NodePath | null = classDefinition.parentPath;
     while (
-      parentPath.node !== classDefinition.scope.node &&
-      !t.BlockStatement.check(parentPath.node)
+      parentPath &&
+      parentPath.node !== classDefinition.scope.block &&
+      !parentPath.isBlockStatement()
     ) {
-      if (
-        t.VariableDeclarator.check(parentPath.node) &&
-        t.Identifier.check(parentPath.node.id)
-      ) {
-        variableName = parentPath.node.id.name;
-        break;
-      } else if (
-        t.AssignmentExpression.check(parentPath.node) &&
-        t.Identifier.check(parentPath.node.left)
-      ) {
-        variableName = parentPath.node.left.name;
-        break;
+      if (parentPath.isVariableDeclarator()) {
+        const idPath = parentPath.get('id');
+        if (idPath.isIdentifier()) {
+          variableName = idPath.node.name;
+          break;
+        }
+      } else if (parentPath.isAssignmentExpression()) {
+        const leftPath = parentPath.get('left');
+        if (leftPath.isIdentifier()) {
+          variableName = leftPath.node.name;
+          break;
+        }
       }
       parentPath = parentPath.parentPath;
     }
@@ -60,38 +66,40 @@ export default function normalizeClassDefinition(
     return;
   }
 
-  const scopeRoot = classDefinition.scope;
-  visit(scopeRoot.node, {
-    visitFunction: ignore,
-    visitClassDeclaration: ignore,
-    visitClassExpression: ignore,
-    visitForInStatement: ignore,
-    visitForStatement: ignore,
-    visitAssignmentExpression: function (path) {
-      if (t.MemberExpression.check(path.node.left)) {
-        const first = getMemberExpressionRoot(path.get('left'));
-        if (
-          t.Identifier.check(first.node) &&
-          first.node.name === variableName
-        ) {
-          const [member] = getMembers(path.get('left'));
-          if (member && !member.path.node.computed) {
-            const classProperty = builders.classProperty(
-              member.path.node,
+  const scopeBlock = classDefinition.parentPath.scope.block;
+  classDefinition.parentPath.scope.traverse(scopeBlock, {
+    Function: ignore,
+    ClassDeclaration: ignore,
+    ClassExpression: ignore,
+    ForInStatement: ignore,
+    ForStatement: ignore,
+    AssignmentExpression(path) {
+      const left = path.get('left');
+      if (left.isMemberExpression()) {
+        const first = getMemberExpressionRoot(left);
+        if (first.isIdentifier() && first.node.name === variableName) {
+          const [member] = getMembers(left);
+          if (
+            member &&
+            !member.path.has('computed') &&
+            !member.path.isPrivateName()
+          ) {
+            const property = classProperty(
+              member.path.node as Expression,
               path.node.right,
               null,
+              null,
+              false,
               true,
             );
-            classDefinition.get('body', 'body').value.push(classProperty);
-            return false;
+            classDefinition.get('body').unshiftContainer('body', property);
+            path.skip();
+            path.remove();
           }
         }
-        this.traverse(path);
       } else {
-        return false;
+        path.skip();
       }
-
-      return undefined;
     },
   });
 }

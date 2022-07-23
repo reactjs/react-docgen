@@ -1,67 +1,69 @@
-import { namedTypes as t } from 'ast-types';
 import getMemberValuePath from '../utils/getMemberValuePath';
 import getNameOrValue from '../utils/getNameOrValue';
 import isReactForwardRefCall from '../utils/isReactForwardRefCall';
 import resolveToValue from '../utils/resolveToValue';
 import resolveFunctionDefinitionToReturnValue from '../utils/resolveFunctionDefinitionToReturnValue';
 import type Documentation from '../Documentation';
-import type { Importer } from '../parse';
-import type { NodePath } from 'ast-types/lib/node-path';
+import type { Node, NodePath } from '@babel/traverse';
 
 export default function displayNameHandler(
   documentation: Documentation,
   path: NodePath,
-  importer: Importer,
 ): void {
-  let displayNamePath = getMemberValuePath(path, 'displayName', importer);
+  let displayNamePath: NodePath<Node> | null = getMemberValuePath(
+    path,
+    'displayName',
+  );
   if (!displayNamePath) {
     // Function and class declarations need special treatment. The name of the
     // function / class is the displayName
-    if (
-      t.ClassDeclaration.check(path.node) ||
-      t.FunctionDeclaration.check(path.node)
-    ) {
-      documentation.set('displayName', getNameOrValue(path.get('id')));
+    // TODO test class declaration without id
+    if (path.isClassDeclaration() || path.isFunctionDeclaration()) {
+      documentation.set(
+        'displayName',
+        getNameOrValue(path.get('id') as NodePath<Node>),
+      );
     } else if (
-      t.ArrowFunctionExpression.check(path.node) ||
-      t.FunctionExpression.check(path.node) ||
-      isReactForwardRefCall(path, importer)
+      path.isArrowFunctionExpression() ||
+      path.isFunctionExpression() ||
+      isReactForwardRefCall(path)
     ) {
       let currentPath = path;
-      while (currentPath.parent) {
-        if (t.VariableDeclarator.check(currentPath.parent.node)) {
+      while (currentPath.parentPath) {
+        if (currentPath.parentPath.isVariableDeclarator()) {
           documentation.set(
             'displayName',
-            getNameOrValue(currentPath.parent.get('id')),
+            getNameOrValue(currentPath.parentPath.get('id')),
           );
           return;
-        } else if (t.AssignmentExpression.check(currentPath.parent.node)) {
-          const leftPath = currentPath.parent.get('left');
-          if (
-            t.Identifier.check(leftPath.node) ||
-            t.Literal.check(leftPath.node)
-          ) {
+        } else if (currentPath.parentPath.isAssignmentExpression()) {
+          const leftPath = currentPath.parentPath.get('left');
+          if (leftPath.isIdentifier() || leftPath.isLiteral()) {
             documentation.set('displayName', getNameOrValue(leftPath));
             return;
           }
         }
-        currentPath = currentPath.parent;
+        currentPath = currentPath.parentPath;
       }
     }
     return;
   }
-  displayNamePath = resolveToValue(displayNamePath, importer);
+  displayNamePath = resolveToValue(displayNamePath);
 
   // If display name is defined as a getter we get a function expression as
   // value. In that case we try to determine the value from the return
   // statement.
-  if (t.FunctionExpression.check(displayNamePath.node)) {
-    displayNamePath = resolveFunctionDefinitionToReturnValue(
-      displayNamePath,
-      importer,
-    );
+  if (
+    displayNamePath.isFunctionExpression() ||
+    displayNamePath.isClassMethod() ||
+    displayNamePath.isObjectMethod() // TODO test objectmethod? Do we need it?
+  ) {
+    displayNamePath = resolveFunctionDefinitionToReturnValue(displayNamePath);
   }
-  if (!displayNamePath || !t.Literal.check(displayNamePath.node)) {
+  if (
+    !displayNamePath ||
+    (!displayNamePath.isStringLiteral() && !displayNamePath.isNumericLiteral())
+  ) {
     return;
   }
   documentation.set('displayName', displayNamePath.node.value);

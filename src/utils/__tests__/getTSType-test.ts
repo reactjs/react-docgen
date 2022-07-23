@@ -1,60 +1,89 @@
-import { NodePath } from 'ast-types/lib/node-path';
+import type { NodePath } from '@babel/traverse';
+import type {
+  Declaration,
+  ExportNamedDeclaration,
+  TSInterfaceDeclaration,
+  TSTypeAnnotation,
+  TypeScript,
+  VariableDeclaration,
+} from '@babel/types';
 import {
-  statement as stmt,
-  noopImporter,
+  parseTypescript,
   makeMockImporter,
+  noopImporter,
 } from '../../../tests/utils';
+import type { Importer } from '../../importer';
 import getTSType from '../getTSType';
 
-function statement(src: string): NodePath {
-  return stmt(src, {
-    filename: 'test.ts',
-    babelrc: false,
-  });
+function typeAlias(
+  stmt: string,
+  importer: Importer = noopImporter,
+): NodePath<TypeScript> {
+  return parseTypescript
+    .statement<VariableDeclaration>(stmt, importer)
+    .get(
+      'declarations.0.id.typeAnnotation.typeAnnotation',
+    ) as NodePath<TypeScript>;
 }
 
 const mockImporter = makeMockImporter({
-  abc: statement(`
-    export type abc = number;
-  `).get('declaration'),
+  abc: stmtLast =>
+    stmtLast<ExportNamedDeclaration>(`export type abc = number;`, true).get(
+      'declaration',
+    ) as NodePath<Declaration>,
 
-  def: statement(`
-    export type def = boolean;
-  `).get('declaration'),
+  def: stmtLast =>
+    stmtLast<ExportNamedDeclaration>(`export type def = boolean;`, true).get(
+      'declaration',
+    ) as NodePath<Declaration>,
 
-  xyz: statement(`
-    export type xyz = string;
-  `).get('declaration'),
+  xyz: stmtLast =>
+    stmtLast<ExportNamedDeclaration>(`export type xyz = string;`, true).get(
+      'declaration',
+    ) as NodePath<Declaration>,
 
-  barbaz: statement(`
-    export type barbaz = "bar" | "baz";
-  `).get('declaration'),
+  barbaz: stmtLast =>
+    stmtLast<ExportNamedDeclaration>(
+      `export type barbaz = "bar" | "baz";`,
+      true,
+    ).get('declaration') as NodePath<Declaration>,
 
-  recTup: statement(`
-    export type recTup = [abc, xyz];
-    import { abc } from 'abc';
-    import { xyz } from 'xyz';
-  `).get('declaration'),
+  recTup: stmtLast =>
+    stmtLast<ExportNamedDeclaration>(
+      `import { abc } from 'abc';
+       import { xyz } from 'xyz';
+       export type recTup = [abc, xyz];`,
+      true,
+    ).get('declaration') as NodePath<Declaration>,
 
-  obj: statement(`
-    export type A = { x: string };
-  `).get('declaration'),
+  obj: stmtLast =>
+    stmtLast<ExportNamedDeclaration>(
+      `export type A = { x: string };`,
+      true,
+    ).get('declaration') as NodePath<Declaration>,
 
-  MyType: statement(`
-    export type MyType = { a: number, b: xyz };
-    import { xyz } from 'xyz';
-  `).get('declaration'),
+  MyType: stmtLast =>
+    stmtLast<ExportNamedDeclaration>(
+      `import { xyz } from 'xyz';
+       export type MyType = { a: number, b: xyz };`,
+      true,
+    ).get('declaration') as NodePath<Declaration>,
 
-  MyGenericType: statement(`
-    export type MyGenericType<T> = { a: T, b: Array<T> };
-  `).get('declaration'),
+  MyGenericType: stmtLast =>
+    stmtLast<ExportNamedDeclaration>(
+      `export type MyGenericType<T> = { a: T, b: Array<T> };`,
+      true,
+    ).get('declaration') as NodePath<Declaration>,
 
-  fruits: statement(`
+  fruits: stmtLast =>
+    stmtLast(
+      `
     export default {
       'apple': '🍎',
       'banana': '🍌',
     };
-  `).get('declaration'),
+  `,
+    ).get('declaration'),
 });
 
 describe('getTSType', () => {
@@ -78,12 +107,8 @@ describe('getTSType', () => {
     ];
 
     simplePropTypes.forEach(type => {
-      const typePath = statement(`let x: ${type};`)
-        .get('declarations', 0)
-        .get('id')
-        .get('typeAnnotation')
-        .get('typeAnnotation');
-      expect(getTSType(typePath, null, noopImporter)).toEqual({ name: type });
+      const typePath = typeAlias(`let x: ${type};`);
+      expect(getTSType(typePath)).toEqual({ name: type });
     });
   });
 
@@ -91,12 +116,8 @@ describe('getTSType', () => {
     const literalTypes = ['"foo"', 1234, true];
 
     literalTypes.forEach(value => {
-      const typePath = statement(`let x: ${value};`)
-        .get('declarations', 0)
-        .get('id')
-        .get('typeAnnotation')
-        .get('typeAnnotation');
-      expect(getTSType(typePath, null, noopImporter)).toEqual({
+      const typePath = typeAlias(`let x: ${value};`);
+      expect(getTSType(typePath)).toEqual({
         name: 'literal',
         value: `${value}`,
       });
@@ -104,33 +125,24 @@ describe('getTSType', () => {
   });
 
   it('detects external type', () => {
-    const typePath = statement('let x: xyz;')
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getTSType(typePath, null, noopImporter)).toEqual({ name: 'xyz' });
+    const typePath = typeAlias('let x: xyz;');
+    expect(getTSType(typePath)).toEqual({ name: 'xyz' });
   });
 
   it('resolves external type', () => {
-    const typePath = statement(`
+    const typePath = typeAlias(
+      `
       let x: xyz;
       import { xyz } from 'xyz';
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getTSType(typePath, null, mockImporter)).toEqual({ name: 'string' });
+    `,
+      mockImporter,
+    );
+    expect(getTSType(typePath)).toEqual({ name: 'string' });
   });
 
   it('detects array type shorthand', () => {
-    const typePath = statement('let x: number[];')
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getTSType(typePath, null, noopImporter)).toEqual({
+    const typePath = typeAlias('let x: number[];');
+    expect(getTSType(typePath)).toEqual({
       name: 'Array',
       elements: [{ name: 'number' }],
       raw: 'number[]',
@@ -138,12 +150,8 @@ describe('getTSType', () => {
   });
 
   it('detects array type', () => {
-    const typePath = statement('let x: Array<number>;')
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getTSType(typePath, null, noopImporter)).toEqual({
+    const typePath = typeAlias('let x: Array<number>;');
+    expect(getTSType(typePath)).toEqual({
       name: 'Array',
       elements: [{ name: 'number' }],
       raw: 'Array<number>',
@@ -151,12 +159,8 @@ describe('getTSType', () => {
   });
 
   it('detects array type with multiple types', () => {
-    const typePath = statement('let x: Array<number, xyz>;')
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getTSType(typePath, null, noopImporter)).toEqual({
+    const typePath = typeAlias('let x: Array<number, xyz>;');
+    expect(getTSType(typePath)).toEqual({
       name: 'Array',
       elements: [{ name: 'number' }, { name: 'xyz' }],
       raw: 'Array<number, xyz>',
@@ -164,43 +168,40 @@ describe('getTSType', () => {
   });
 
   it('resolves imported types used for arrays', () => {
-    let typePath = statement(`
+    let typePath = typeAlias(
+      `
       let x: xyz[];
       import { xyz } from 'xyz';
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getTSType(typePath, null, mockImporter)).toEqual({
+    `,
+      mockImporter,
+    );
+    expect(getTSType(typePath)).toEqual({
       name: 'Array',
       elements: [{ name: 'string' }],
       raw: 'xyz[]',
     });
 
-    typePath = statement(`
+    typePath = typeAlias(
+      `
       let x: Array<xyz>;
       import { xyz } from 'xyz';
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getTSType(typePath, null, mockImporter)).toEqual({
+    `,
+      mockImporter,
+    );
+    expect(getTSType(typePath)).toEqual({
       name: 'Array',
       elements: [{ name: 'string' }],
       raw: 'Array<xyz>',
     });
 
-    typePath = statement(`
+    typePath = typeAlias(
+      `
       let x: Array<number, xyz>;
       import { xyz } from 'xyz';
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getTSType(typePath, null, mockImporter)).toEqual({
+    `,
+      mockImporter,
+    );
+    expect(getTSType(typePath)).toEqual({
       name: 'Array',
       elements: [{ name: 'number' }, { name: 'string' }],
       raw: 'Array<number, xyz>',
@@ -208,12 +209,8 @@ describe('getTSType', () => {
   });
 
   it('detects class type', () => {
-    const typePath = statement('let x: Class<Boolean>;')
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getTSType(typePath, null, noopImporter)).toEqual({
+    const typePath = typeAlias('let x: Class<Boolean>;');
+    expect(getTSType(typePath)).toEqual({
       name: 'Class',
       elements: [{ name: 'Boolean' }],
       raw: 'Class<Boolean>',
@@ -221,15 +218,14 @@ describe('getTSType', () => {
   });
 
   it('resolves imported subtype for class type', () => {
-    const typePath = statement(`
+    const typePath = typeAlias(
+      `
       let x: Class<xyz>;
       import { xyz } from 'xyz'
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getTSType(typePath, null, mockImporter)).toEqual({
+    `,
+      mockImporter,
+    );
+    expect(getTSType(typePath)).toEqual({
       name: 'Class',
       elements: [{ name: 'string' }],
       raw: 'Class<xyz>',
@@ -237,12 +233,8 @@ describe('getTSType', () => {
   });
 
   it('detects function type with subtype', () => {
-    const typePath = statement('let x: Function<xyz>;')
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getTSType(typePath, null, noopImporter)).toEqual({
+    const typePath = typeAlias('let x: Function<xyz>;');
+    expect(getTSType(typePath)).toEqual({
       name: 'Function',
       elements: [{ name: 'xyz' }],
       raw: 'Function<xyz>',
@@ -250,15 +242,14 @@ describe('getTSType', () => {
   });
 
   it('resolves imported subtype for function type', () => {
-    const typePath = statement(`
+    const typePath = typeAlias(
+      `
       let x: Function<xyz>;
       import { xyz } from 'xyz';
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getTSType(typePath, null, mockImporter)).toEqual({
+    `,
+      mockImporter,
+    );
+    expect(getTSType(typePath)).toEqual({
       name: 'Function',
       elements: [{ name: 'string' }],
       raw: 'Function<xyz>',
@@ -266,12 +257,8 @@ describe('getTSType', () => {
   });
 
   it('detects object types', () => {
-    const typePath = statement('let x: { a: string, b?: xyz };')
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getTSType(typePath, null, noopImporter)).toEqual({
+    const typePath = typeAlias('let x: { a: string, b?: xyz };');
+    expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'object',
       signature: {
@@ -285,15 +272,14 @@ describe('getTSType', () => {
   });
 
   it('resolves imported types for object property types', () => {
-    const typePath = statement(`
+    const typePath = typeAlias(
+      `
       let x: { a: number, b?: xyz };
       import { xyz } from 'xyz';
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getTSType(typePath, null, mockImporter)).toEqual({
+    `,
+      mockImporter,
+    );
+    expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'object',
       signature: {
@@ -307,12 +293,8 @@ describe('getTSType', () => {
   });
 
   it('detects union type', () => {
-    const typePath = statement('let x: string | xyz | "foo" | void;')
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getTSType(typePath, null, noopImporter)).toEqual({
+    const typePath = typeAlias('let x: string | xyz | "foo" | void;');
+    expect(getTSType(typePath)).toEqual({
       name: 'union',
       elements: [
         { name: 'string' },
@@ -325,15 +307,14 @@ describe('getTSType', () => {
   });
 
   it('resolves imported types within union type', () => {
-    const typePath = statement(`
+    const typePath = typeAlias(
+      `
       let x: string | barbaz | "foo" | void;
       import { barbaz } from 'barbaz';
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getTSType(typePath, null, mockImporter)).toEqual({
+    `,
+      mockImporter,
+    );
+    expect(getTSType(typePath)).toEqual({
       name: 'union',
       elements: [
         { name: 'string' },
@@ -353,12 +334,8 @@ describe('getTSType', () => {
   });
 
   it('detects intersection type', () => {
-    const typePath = statement('let x: string & xyz & "foo" & void;')
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getTSType(typePath, null, noopImporter)).toEqual({
+    const typePath = typeAlias('let x: string & xyz & "foo" & void;');
+    expect(getTSType(typePath)).toEqual({
       name: 'intersection',
       elements: [
         { name: 'string' },
@@ -371,15 +348,14 @@ describe('getTSType', () => {
   });
 
   it('resolves imported types within intersection type', () => {
-    const typePath = statement(`
+    const typePath = typeAlias(
+      `
       let x: string & barbaz & "foo" & void;
       import { barbaz } from 'barbaz';
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getTSType(typePath, null, mockImporter)).toEqual({
+    `,
+      mockImporter,
+    );
+    expect(getTSType(typePath)).toEqual({
       name: 'intersection',
       elements: [
         { name: 'string' },
@@ -399,14 +375,10 @@ describe('getTSType', () => {
   });
 
   it('detects function signature type', () => {
-    const typePath = statement(
+    const typePath = typeAlias(
       'let x: (p1: number, p2: string, ...rest: Array<string>) => boolean;',
-    )
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getTSType(typePath, null, noopImporter)).toEqual({
+    );
+    expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'function',
       signature: {
@@ -430,12 +402,8 @@ describe('getTSType', () => {
   });
 
   it('detects function signature type with `this` parameter', () => {
-    const typePath = statement('let x: (this: Foo, p1: number) => boolean;')
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getTSType(typePath, null, noopImporter)).toEqual({
+    const typePath = typeAlias('let x: (this: Foo, p1: number) => boolean;');
+    expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'function',
       signature: {
@@ -448,14 +416,10 @@ describe('getTSType', () => {
   });
 
   it('detects callable signature type', () => {
-    const typePath = statement(
+    const typePath = typeAlias(
       'let x: { (str: string): string, token: string };',
-    )
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getTSType(typePath, null, noopImporter)).toEqual({
+    );
+    expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'object',
       signature: {
@@ -477,17 +441,16 @@ describe('getTSType', () => {
   });
 
   it('resolves function signature types with imported types', () => {
-    let typePath = statement(`
+    let typePath = typeAlias(
+      `
       let x: (p1: abc, p2: xyz, ...rest: Array<xyz>) => def;
       import { abc } from 'abc';
       import { def } from 'def';
       import { xyz } from 'xyz';
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getTSType(typePath, null, mockImporter)).toEqual({
+    `,
+      mockImporter,
+    );
+    expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'function',
       signature: {
@@ -509,15 +472,14 @@ describe('getTSType', () => {
       raw: '(p1: abc, p2: xyz, ...rest: Array<xyz>) => def',
     });
 
-    typePath = statement(`
+    typePath = typeAlias(
+      `
       let x: (this: xyz, p1: number) => boolean;
       import { xyz } from 'xyz';
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getTSType(typePath, null, mockImporter)).toEqual({
+    `,
+      mockImporter,
+    );
+    expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'function',
       signature: {
@@ -528,17 +490,16 @@ describe('getTSType', () => {
       raw: '(this: xyz, p1: number) => boolean',
     });
 
-    typePath = statement(`
+    typePath = typeAlias(
+      `
       let x: { (str: xyz): abc, token: def };
       import { abc } from 'abc';
       import { def } from 'def';
       import { xyz } from 'xyz';
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getTSType(typePath, null, mockImporter)).toEqual({
+    `,
+      mockImporter,
+    );
+    expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'object',
       signature: {
@@ -560,14 +521,10 @@ describe('getTSType', () => {
   });
 
   it('detects map signature', () => {
-    const typePath = statement(
+    const typePath = typeAlias(
       'let x: { [key: string]: number, [key: "xl"]: string, token: "a" | "b" };',
-    )
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getTSType(typePath, null, noopImporter)).toEqual({
+    );
+    expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'object',
       signature: {
@@ -599,17 +556,16 @@ describe('getTSType', () => {
   });
 
   it('resolves imported types in map signature', () => {
-    const typePath = statement(`
+    const typePath = typeAlias(
+      `
       let x: { [key: xyz]: abc, [key: "xl"]: xyz, token: barbaz };
       import { abc } from 'abc';
       import { xyz } from 'xyz';
       import { barbaz } from 'barbaz';
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getTSType(typePath, null, mockImporter)).toEqual({
+    `,
+      mockImporter,
+    );
+    expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'object',
       signature: {
@@ -641,12 +597,8 @@ describe('getTSType', () => {
   });
 
   it('detects tuple signature', () => {
-    const typePath = statement('let x: [string, number];')
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getTSType(typePath, null, noopImporter)).toEqual({
+    const typePath = typeAlias('let x: [string, number];');
+    expect(getTSType(typePath)).toEqual({
       name: 'tuple',
       elements: [{ name: 'string' }, { name: 'number' }],
       raw: '[string, number]',
@@ -654,12 +606,8 @@ describe('getTSType', () => {
   });
 
   it('detects tuple in union signature', () => {
-    const typePath = statement('let x: [string, number] | [number, string];')
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getTSType(typePath, null, noopImporter)).toEqual({
+    const typePath = typeAlias('let x: [string, number] | [number, string];');
+    expect(getTSType(typePath)).toEqual({
       name: 'union',
       elements: [
         {
@@ -678,32 +626,30 @@ describe('getTSType', () => {
   });
 
   it('resolves imported types in tuple signatures', () => {
-    let typePath = statement(`
+    let typePath = typeAlias(
+      `
       let x: [xyz, abc];
       import { abc } from 'abc';
       import { xyz } from 'xyz';
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getTSType(typePath, null, mockImporter)).toEqual({
+    `,
+      mockImporter,
+    );
+    expect(getTSType(typePath)).toEqual({
       name: 'tuple',
       elements: [{ name: 'string' }, { name: 'number' }],
       raw: '[xyz, abc]',
     });
 
-    typePath = statement(`
+    typePath = typeAlias(
+      `
       let x: [xyz, abc] | recTup;
       import { abc } from 'abc';
       import { xyz } from 'xyz';
       import { recTup } from 'recTup';
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getTSType(typePath, null, mockImporter)).toEqual({
+    `,
+      mockImporter,
+    );
+    expect(getTSType(typePath)).toEqual({
       name: 'union',
       elements: [
         {
@@ -722,39 +668,33 @@ describe('getTSType', () => {
   });
 
   it('detects indexed access', () => {
-    const typePath = statement(`
+    const typePath = typeAlias(`
       var x: A["x"] = 2;
 
       interface A { x: string };
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getTSType(typePath, null, noopImporter)).toEqual({
+    `);
+    expect(getTSType(typePath)).toEqual({
       name: 'A["x"]',
       raw: 'A["x"]',
     });
   });
 
   it('resolves indexed access', () => {
-    const typePath = statement(`
+    const typePath = typeAlias(`
       var x: A["x"] = 2;
 
       type A = { x: string };
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getTSType(typePath, null, noopImporter)).toEqual({
+    `);
+    expect(getTSType(typePath)).toEqual({
       name: 'string',
       raw: 'A["x"]',
     });
   });
 
   it('resolves indexed access of array', () => {
-    const typePath = statement(`
+    const typePath = parseTypescript
+      .statement(
+        `
       var x: typeof STRING_VALS[number];
 
       const STRING_VALS = [
@@ -762,58 +702,50 @@ describe('getTSType', () => {
         'two',
         'three'
       ];
-    `)
-      .get('declarations', 0)
+    `,
+      )
+      .get('declarations')[0]
       .get('id')
       .get('typeAnnotation')
       .get('typeAnnotation');
-    expect(getTSType(typePath, null, noopImporter)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'STRING_VALS[number]',
       raw: 'typeof STRING_VALS[number]',
     });
   });
 
   it('can resolve indexed access to imported type', () => {
-    const typePath = statement(`
+    const typePath = typeAlias(
+      `
       var x: A["x"] = 2;
       import { A } from 'obj';
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
-    expect(getTSType(typePath, null, mockImporter)).toEqual({
+    `,
+      mockImporter,
+    );
+    expect(getTSType(typePath)).toEqual({
       name: 'string',
       raw: 'A["x"]',
     });
   });
 
   it('resolves types in scope', () => {
-    const typePath = statement(`
+    const typePath = typeAlias(`
       var x: MyType = 2;
 
       type MyType = string;
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
+    `);
 
-    expect(getTSType(typePath, null, noopImporter)).toEqual({ name: 'string' });
+    expect(getTSType(typePath)).toEqual({ name: 'string' });
   });
 
   it('handles typeof types', () => {
-    const typePath = statement(`
+    const typePath = typeAlias(`
       var x: typeof MyType = {};
 
       type MyType = { a: string, b: xyz };
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
+    `);
 
-    expect(getTSType(typePath, null, noopImporter)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'object',
       signature: {
@@ -827,16 +759,15 @@ describe('getTSType', () => {
   });
 
   it('resolves typeof of imported types', () => {
-    const typePath = statement(`
+    const typePath = typeAlias(
+      `
       var x: typeof MyType = {};
       import { MyType } from 'MyType';
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
+    `,
+      mockImporter,
+    );
 
-    expect(getTSType(typePath, null, mockImporter)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'object',
       signature: {
@@ -850,33 +781,25 @@ describe('getTSType', () => {
   });
 
   it('handles qualified type identifiers', () => {
-    const typePath = statement(`
+    const typePath = typeAlias(`
       var x: MyType.x = {};
 
       type MyType = { a: string, b: xyz };
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
+    `);
 
-    expect(getTSType(typePath, null, noopImporter)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'MyType.x',
     });
   });
 
   it('handles qualified type identifiers with params', () => {
-    const typePath = statement(`
+    const typePath = typeAlias(`
       var x: MyType.x<any> = {};
 
       type MyType = { a: string, b: xyz };
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
+    `);
 
-    expect(getTSType(typePath, null, noopImporter)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'MyType.x',
       raw: 'MyType.x<any>',
       elements: [
@@ -888,17 +811,13 @@ describe('getTSType', () => {
   });
 
   it('handles generic types', () => {
-    const typePath = statement(`
+    const typePath = typeAlias(`
       var x: MyType<string> = {};
 
       type MyType<T> = { a: T, b: Array<T> };
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
+    `);
 
-    expect(getTSType(typePath, null, noopImporter)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'object',
       raw: '{ a: T, b: Array<T> }',
@@ -926,16 +845,15 @@ describe('getTSType', () => {
   });
 
   it('resolves imported types that need subtypes', () => {
-    const typePath = statement(`
+    const typePath = typeAlias(
+      `
       var x: MyGenericType<string> = {};
       import { MyGenericType } from 'MyGenericType';
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
+    `,
+      mockImporter,
+    );
 
-    expect(getTSType(typePath, null, mockImporter)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'object',
       raw: '{ a: T, b: Array<T> }',
@@ -963,15 +881,11 @@ describe('getTSType', () => {
   });
 
   it('handles mapped types', () => {
-    const typePath = statement(`
+    const typePath = typeAlias(`
       var x: { [key in 'x' | 'y']: boolean};
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
+    `);
 
-    expect(getTSType(typePath, null, noopImporter)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'object',
       raw: "{ [key in 'x' | 'y']: boolean}",
@@ -1003,16 +917,15 @@ describe('getTSType', () => {
   });
 
   it('resolves imported types applied to mapped types', () => {
-    const typePath = statement(`
+    const typePath = typeAlias(
+      `
       var x: { [key in barbaz]: boolean};
       import { barbaz } from 'barbaz';
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
+    `,
+      mockImporter,
+    );
 
-    expect(getTSType(typePath, null, mockImporter)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'object',
       raw: '{ [key in barbaz]: boolean}',
@@ -1045,17 +958,13 @@ describe('getTSType', () => {
 
   describe('React types', () => {
     function test(type, expected) {
-      const typePath = statement(`
+      const typePath = typeAlias(`
         var x: ${type} = 2;
 
         type Props = { x: string };
-      `)
-        .get('declarations', 0)
-        .get('id')
-        .get('typeAnnotation')
-        .get('typeAnnotation');
+      `);
 
-      expect(getTSType(typePath, null, noopImporter)).toEqual({
+      expect(getTSType(typePath)).toEqual({
         ...expected,
         name: type.replace('.', '').replace(/<.+>/, ''),
         raw: type,
@@ -1096,19 +1005,15 @@ describe('getTSType', () => {
   });
 
   it('resolves keyof to union', () => {
-    const typePath = statement(`
+    const typePath = typeAlias(`
       var x: keyof typeof CONTENTS = 2;
       const CONTENTS = {
         'apple': '🍎',
         'banana': '🍌',
       };
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
+    `);
 
-    expect(getTSType(typePath, null, noopImporter)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'union',
       elements: [
         { name: 'literal', value: "'apple'" },
@@ -1119,16 +1024,15 @@ describe('getTSType', () => {
   });
 
   it('resolves keyof with imported types', () => {
-    const typePath = statement(`
+    const typePath = typeAlias(
+      `
       var x: keyof typeof CONTENTS = 2;
       import CONTENTS from 'fruits';
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
+    `,
+      mockImporter,
+    );
 
-    expect(getTSType(typePath, null, mockImporter)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'union',
       elements: [
         { name: 'literal', value: "'apple'" },
@@ -1139,15 +1043,11 @@ describe('getTSType', () => {
   });
 
   it('resolves keyof with inline object to union', () => {
-    const typePath = statement(`
+    const typePath = typeAlias(`
       var x: keyof { apple: string, banana: string } = 2;
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
+    `);
 
-    expect(getTSType(typePath, null, noopImporter)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'union',
       elements: [
         { name: 'literal', value: 'apple' },
@@ -1158,16 +1058,12 @@ describe('getTSType', () => {
   });
 
   it('handles multiple references to one type', () => {
-    const typePath = statement(`
+    const typePath = typeAlias(`
       let action: { a: Action, b: Action };
       type Action = {};
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
+    `);
 
-    expect(getTSType(typePath, null, noopImporter)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'object',
       signature: {
@@ -1199,32 +1095,30 @@ describe('getTSType', () => {
   });
 
   it('handles generics of the same Name', () => {
-    const typePath = statement(`
+    const typePath = parseTypescript
+      .statement<TSInterfaceDeclaration>(
+        `
       interface Props {
         baz: Foo<T>
       }
 
       type Foo<T> = Bar<T>
-
-    `)
+    `,
+      )
       .get('body')
-      .get('body', 0)
+      .get('body')[0]
       .get('typeAnnotation');
 
-    getTSType(typePath, null, noopImporter);
+    getTSType(typePath as NodePath<TSTypeAnnotation>, null);
   });
 
   it('handles self-referencing type cycles', () => {
-    const typePath = statement(`
+    const typePath = typeAlias(`
       let action: Action;
       type Action = { subAction: Action };
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
+    `);
 
-    expect(getTSType(typePath, null, noopImporter)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'object',
       signature: {
@@ -1237,19 +1131,15 @@ describe('getTSType', () => {
   });
 
   it('handles long type cycles', () => {
-    const typePath = statement(`
+    const typePath = typeAlias(`
       let action: Action;
       type Action = { subAction: SubAction };
       type SubAction = { subAction: SubSubAction };
       type SubSubAction = { subAction: SubSubSubAction };
       type SubSubSubAction = { rootAction: Action };
-    `)
-      .get('declarations', 0)
-      .get('id')
-      .get('typeAnnotation')
-      .get('typeAnnotation');
+    `);
 
-    expect(getTSType(typePath, null, noopImporter)).toEqual({
+    expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'object',
       signature: {

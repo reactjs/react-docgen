@@ -1,6 +1,10 @@
-import { statement, noopImporter } from '../../../tests/utils';
+import type { NodePath } from '@babel/traverse';
+import type {
+  ExportDefaultDeclaration,
+  ExportNamedDeclaration,
+} from '@babel/types';
+import { parse } from '../../../tests/utils';
 import resolveExportDeclaration from '../resolveExportDeclaration';
-import { NodePath } from 'ast-types/lib/node-path';
 
 jest.mock('../resolveToValue', () => {
   return (path: NodePath) => path;
@@ -8,55 +12,63 @@ jest.mock('../resolveToValue', () => {
 
 describe('resolveExportDeclaration', () => {
   it('resolves default exports', () => {
-    const exp = statement('export default 42;');
-    const resolved = resolveExportDeclaration(exp, noopImporter);
+    const exp = parse.statement<ExportDefaultDeclaration>('export default 42;');
+    const resolved = resolveExportDeclaration(exp);
 
     expect(resolved).toEqual([exp.get('declaration')]);
   });
 
   it('resolves named variable exports', () => {
-    const exp = statement('export var foo = 42, bar = 21;');
-    const resolved = resolveExportDeclaration(exp, noopImporter);
+    const exp = parse.statement<ExportNamedDeclaration>(
+      'export var foo = 42, bar = 21;',
+    );
+    const resolved = resolveExportDeclaration(exp);
 
-    const declarations = exp.get('declaration', 'declarations');
-    expect(resolved).toEqual([declarations.get(0), declarations.get(1)]);
+    const declarations = exp.get('declaration').get('declarations');
+    expect(resolved).toEqual([declarations[0], declarations[1]]);
   });
 
   it('resolves named function exports', () => {
-    const exp = statement('export function foo(){}');
-    const resolved = resolveExportDeclaration(exp, noopImporter);
+    const exp = parse.statement<ExportNamedDeclaration>(
+      'export function foo(){}',
+    );
+    const resolved = resolveExportDeclaration(exp);
 
     expect(resolved).toEqual([exp.get('declaration')]);
   });
 
   it('resolves named class exports', () => {
-    const exp = statement('export class Foo {}');
-    const resolved = resolveExportDeclaration(exp, noopImporter);
+    const exp = parse.statement<ExportNamedDeclaration>('export class Foo {}');
+    const resolved = resolveExportDeclaration(exp);
 
     expect(resolved).toEqual([exp.get('declaration')]);
   });
 
   it('resolves named exports', () => {
-    const exp = statement('export {foo, bar, baz}; var foo, bar, baz;');
-    const resolved = resolveExportDeclaration(exp, noopImporter);
+    const exp = parse.statement<ExportNamedDeclaration>(
+      'export {foo, bar, baz}; var foo, bar, baz;',
+    );
+    const resolved = resolveExportDeclaration(exp);
 
     const specifiers = exp.get('specifiers');
     expect(resolved).toEqual([
-      specifiers.get(0, 'local'),
-      specifiers.get(1, 'local'),
-      specifiers.get(2, 'local'),
+      specifiers[0].get('local'),
+      specifiers[1].get('local'),
+      specifiers[2].get('local'),
     ]);
   });
 
   it('resolves named exports from', () => {
-    const exp = statement('export {foo, bar, baz} from "";');
-    const resolved = resolveExportDeclaration(exp, noopImporter);
+    const exp = parse.statement<ExportNamedDeclaration>(
+      'export {foo, bar, baz} from "";',
+    );
+    const resolved = resolveExportDeclaration(exp);
 
     const specifiers = exp.get('specifiers');
     expect(resolved).toEqual([
-      specifiers.get(0, 'local'),
-      specifiers.get(1, 'local'),
-      specifiers.get(2, 'local'),
+      specifiers[0].get('local'),
+      specifiers[1].get('local'),
+      specifiers[2].get('local'),
     ]);
   });
 });

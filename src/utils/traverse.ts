@@ -1,35 +1,37 @@
-import { visit } from 'ast-types';
-import type { NodePath } from 'ast-types/lib/node-path';
+import type { NodePath, Scope, Visitor } from '@babel/traverse';
+import { default as babelTraverse } from '@babel/traverse';
+import type { Node } from '@babel/types';
 
-type Visitor = (path: NodePath) => unknown;
+export function ignore<T>(path: NodePath<T>): void {
+  path.skip();
+}
 
 /**
  * A helper function that doesn't traverse into nested blocks / statements by
  * default.
  */
 export function traverseShallow(
-  path: NodePath,
-  visitors: { [key: string]: Visitor },
+  node: Node,
+  visitors: Visitor,
+  scope?: Scope | undefined,
 ): void {
-  // @ts-ignore
-  visit(path, { ...defaultVisitors, ...visitors });
+  babelTraverse(node, { ...defaultVisitors, ...visitors }, scope);
 }
 
-const ignore = () => false;
 const defaultVisitors = {
-  visitFunctionDeclaration: ignore,
-  visitFunctionExpression: ignore,
-  visitClassDeclaration: ignore,
-  visitClassExpression: ignore,
-  visitIfStatement: ignore,
-  visitWithStatement: ignore,
-  visitSwitchStatement: ignore,
-  visitWhileStatement: ignore,
-  visitDoWhileStatement: ignore,
-  visitForStatement: ignore,
-  visitForInStatement: ignore,
-  visitForOfStatement: ignore,
-  visitExportNamedDeclaration: ignore,
-  visitExportDefaultDeclaration: ignore,
-  visitConditionalExpression: ignore,
+  FunctionDeclaration: ignore,
+  FunctionExpression: ignore,
+  ClassDeclaration: ignore,
+  ClassExpression: ignore,
+  IfStatement: ignore,
+  WithStatement: ignore,
+  SwitchStatement: ignore,
+  WhileStatement: ignore,
+  DoWhileStatement: ignore,
+  ForStatement: ignore,
+  ForInStatement: ignore,
+  ForOfStatement: ignore,
+  ExportNamedDeclaration: ignore,
+  ExportDefaultDeclaration: ignore,
+  ConditionalExpression: ignore,
 };

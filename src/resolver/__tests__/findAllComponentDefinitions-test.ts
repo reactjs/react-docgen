@@ -1,60 +1,47 @@
-import { NodePath as NodePathConstructor } from 'ast-types';
-import { NodePath } from 'ast-types/lib/node-path';
-import {
-  getParser,
-  parse as parseSource,
-  statement,
-  noopImporter,
-  makeMockImporter,
-} from '../../../tests/utils';
-import { Importer } from '../../parse';
+import { NodePath } from '@babel/traverse';
+import { parse, makeMockImporter, noopImporter } from '../../../tests/utils';
 import findAllComponentDefinitions from '../findAllComponentDefinitions';
 
 describe('findAllComponentDefinitions', () => {
-  function parse(
+  function findComponentsInSource(
     source: string,
-    importer: Importer = noopImporter,
+    importer = noopImporter,
   ): NodePath[] {
-    return findAllComponentDefinitions(
-      parseSource(source).node,
-      getParser(),
-      importer,
-    );
+    return findAllComponentDefinitions(parse(source, {}, importer, true));
   }
 
   const mockImporter = makeMockImporter({
-    obj: statement(`
-      export default {};
-    `).get('declaration'),
+    obj: stmtLast => stmtLast(`export default {};`).get('declaration'),
 
-    reactComponent: statement(`
+    reactComponent: stmtLast =>
+      stmtLast(`
+      import React from 'react';
       export default React.Component;
-      import React from 'react';
     `).get('declaration'),
 
-    reactPureComponent: statement(`
+    reactPureComponent: stmtLast =>
+      stmtLast(`
+      import React from 'react';
       export default React.PureComponent;
+    `).get('declaration'),
+
+    jsxDiv: stmtLast => stmtLast(`export default <div />;`).get('declaration'),
+
+    createElement: stmtLast =>
+      stmtLast(`
       import React from 'react';
-    `).get('declaration'),
-
-    jsxDiv: statement(`
-      export default <div />;
-    `).get('declaration'),
-
-    createElement: statement(`
       export default React.createElement('div', null);
-      import React from 'react';
     `).get('declaration'),
 
-    arrowJsx: statement(`
-      export default (props) => <div>{props.children}</div>;
-    `).get('declaration'),
+    arrowJsx: stmtLast =>
+      stmtLast(`export default (props) => <div>{props.children}</div>;`).get(
+        'declaration',
+      ),
 
-    coloredView: statement(`
-      export default function ColoredView(props, ref) {
+    coloredView: stmtLast =>
+      stmtLast(`export default function ColoredView(props, ref) {
         return <div ref={ref} style={{backgroundColor: props.color}} />
-      };
-    `).get('declaration'),
+      };`).get('declaration'),
   });
 
   describe('React.createClass', () => {
@@ -65,10 +52,10 @@ describe('findAllComponentDefinitions', () => {
         module.exports = Component;
       `;
 
-      const result = parse(source);
+      const result = findComponentsInSource(source);
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(1);
-      expect(result[0] instanceof NodePathConstructor).toBe(true);
+      expect(result[0] instanceof NodePath).toBe(true);
       expect(result[0].node.type).toBe('ObjectExpression');
     });
 
@@ -80,10 +67,10 @@ describe('findAllComponentDefinitions', () => {
         module.exports = Component;
       `;
 
-      const result = parse(source, mockImporter);
+      const result = findComponentsInSource(source, mockImporter);
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(1);
-      expect(result[0] instanceof NodePathConstructor).toBe(true);
+      expect(result[0] instanceof NodePath).toBe(true);
       expect(result[0].node.type).toBe('ObjectExpression');
     });
 
@@ -94,7 +81,7 @@ describe('findAllComponentDefinitions', () => {
         module.exports = Component;
       `;
 
-      const result = parse(source);
+      const result = findComponentsInSource(source);
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(1);
     });
@@ -106,7 +93,7 @@ describe('findAllComponentDefinitions', () => {
         module.exports = Component;
       `;
 
-      const result = parse(source);
+      const result = findComponentsInSource(source);
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(0);
     });
@@ -119,7 +106,7 @@ describe('findAllComponentDefinitions', () => {
         exports.Component = Component;
       `;
 
-      const result = parse(source);
+      const result = findComponentsInSource(source);
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(1);
     });
@@ -132,7 +119,7 @@ describe('findAllComponentDefinitions', () => {
         exports.ComponentB = ComponentB;
       `;
 
-      let result = parse(source);
+      let result = findComponentsInSource(source);
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(2);
 
@@ -143,7 +130,7 @@ describe('findAllComponentDefinitions', () => {
         module.exports = ComponentB;
       `;
 
-      result = parse(source);
+      result = findComponentsInSource(source);
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(2);
     });
@@ -160,7 +147,7 @@ describe('findAllComponentDefinitions', () => {
         class NotAComponent {}
       `;
 
-      const result = parse(source);
+      const result = findComponentsInSource(source);
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(4);
     });
@@ -173,7 +160,7 @@ describe('findAllComponentDefinitions', () => {
         var ComponentC = class extends PureComponent {}
       `;
 
-      const result = parse(source, mockImporter);
+      const result = findComponentsInSource(source, mockImporter);
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(2);
     });
@@ -184,7 +171,7 @@ describe('findAllComponentDefinitions', () => {
         class Component extends R.Component {};
       `;
 
-      const result = parse(source);
+      const result = findComponentsInSource(source);
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(1);
     });
@@ -195,7 +182,7 @@ describe('findAllComponentDefinitions', () => {
         class Component extends R.Component {};
       `;
 
-      const result = parse(source);
+      const result = findComponentsInSource(source);
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(0);
     });
@@ -227,7 +214,7 @@ describe('findAllComponentDefinitions', () => {
         };
       `;
 
-      const result = parse(source);
+      const result = findComponentsInSource(source);
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(7);
     });
@@ -242,7 +229,7 @@ describe('findAllComponentDefinitions', () => {
         const ComponentC = function(props) { return arrowJsx(props); };
       `;
 
-      const result = parse(source, mockImporter);
+      const result = findComponentsInSource(source, mockImporter);
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(3);
     });
@@ -254,7 +241,7 @@ describe('findAllComponentDefinitions', () => {
         function ComponentB () { return 7; }
       `;
 
-      const result = parse(source);
+      const result = findComponentsInSource(source);
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(1);
     });
@@ -265,7 +252,7 @@ describe('findAllComponentDefinitions', () => {
         const ComponentA = () => R.createElement('div', null);
       `;
 
-      const result = parse(source);
+      const result = findComponentsInSource(source);
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(0);
     });
@@ -285,10 +272,10 @@ describe('findAllComponentDefinitions', () => {
         extendStyles(ColoredView);
       `;
 
-      const result = parse(source);
+      const result = findComponentsInSource(source);
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(1);
-      expect(result[0].value.type).toEqual('CallExpression');
+      expect(result[0].node.type).toEqual('CallExpression');
     });
 
     it('finds none inline forwardRef components', () => {
@@ -304,10 +291,10 @@ describe('findAllComponentDefinitions', () => {
         const ForwardedColoredView = React.forwardRef(ColoredView);
       `;
 
-      const result = parse(source);
+      const result = findComponentsInSource(source);
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(1);
-      expect(result[0].value.type).toEqual('CallExpression');
+      expect(result[0].node.type).toEqual('CallExpression');
     });
 
     it('resolves imported component wrapped with forwardRef', () => {
@@ -317,10 +304,10 @@ describe('findAllComponentDefinitions', () => {
         const ForwardedColoredView = React.forwardRef(ColoredView);
       `;
 
-      const result = parse(source, mockImporter);
+      const result = findComponentsInSource(source, mockImporter);
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(1);
-      expect(result[0].value.type).toEqual('CallExpression');
+      expect(result[0].node.type).toEqual('CallExpression');
     });
   });
 
@@ -343,10 +330,10 @@ describe('findAllComponentDefinitions', () => {
         export default TetraAdminTabs;
       `;
 
-      const result = parse(source);
+      const result = findComponentsInSource(source);
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(1);
-      expect(result[0].value.type).toEqual('ArrowFunctionExpression');
+      expect(result[0].node.type).toEqual('ArrowFunctionExpression');
     });
   });
 });

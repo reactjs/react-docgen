@@ -1,9 +1,5 @@
-import {
-  expression,
-  statement,
-  noopImporter,
-  makeMockImporter,
-} from '../../../tests/utils';
+import type { ExpressionStatement } from '@babel/types';
+import { parse, makeMockImporter } from '../../../tests/utils';
 import getPropType from '../getPropType';
 
 describe('getPropType', () => {
@@ -23,34 +19,28 @@ describe('getPropType', () => {
     ];
 
     simplePropTypes.forEach(type =>
-      expect(
-        getPropType(expression('React.PropTypes.' + type), noopImporter),
-      ).toEqual({
+      expect(getPropType(parse.expression('React.PropTypes.' + type))).toEqual({
         name: type,
       }),
     );
 
     // It doesn't actually matter what the MemberExpression is
     simplePropTypes.forEach(type =>
-      expect(
-        getPropType(expression('Foo.' + type + '.bar'), noopImporter),
-      ).toEqual({
+      expect(getPropType(parse.expression('Foo.' + type + '.bar'))).toEqual({
         name: type,
       }),
     );
 
     // Doesn't even have to be a MemberExpression
     simplePropTypes.forEach(type =>
-      expect(getPropType(expression(type), noopImporter)).toEqual({
+      expect(getPropType(parse.expression(type))).toEqual({
         name: type,
       }),
     );
   });
 
   it('detects complex prop types', () => {
-    expect(
-      getPropType(expression('oneOf(["foo", "bar"])'), noopImporter),
-    ).toEqual({
+    expect(getPropType(parse.expression('oneOf(["foo", "bar"])'))).toEqual({
       name: 'enum',
       value: [
         { value: '"foo"', computed: false },
@@ -60,7 +50,7 @@ describe('getPropType', () => {
 
     // line comments are ignored
     expect(
-      getPropType(expression('oneOf(["foo", // baz\n"bar"])'), noopImporter),
+      getPropType(parse.expression('oneOf(["foo", // baz\n"bar"])')),
     ).toEqual({
       name: 'enum',
       value: [
@@ -69,36 +59,34 @@ describe('getPropType', () => {
       ],
     });
 
-    expect(
-      getPropType(expression('oneOfType([number, bool])'), noopImporter),
-    ).toEqual({
+    expect(getPropType(parse.expression('oneOfType([number, bool])'))).toEqual({
       name: 'union',
       value: [{ name: 'number' }, { name: 'bool' }],
     });
 
     // custom type
-    expect(getPropType(expression('oneOfType([foo])'), noopImporter)).toEqual({
+    expect(getPropType(parse.expression('oneOfType([foo])'))).toEqual({
       name: 'union',
       value: [{ name: 'custom', raw: 'foo' }],
     });
 
-    expect(getPropType(expression('instanceOf(Foo)'), noopImporter)).toEqual({
+    expect(getPropType(parse.expression('instanceOf(Foo)'))).toEqual({
       name: 'instanceOf',
       value: 'Foo',
     });
 
-    expect(getPropType(expression('arrayOf(string)'), noopImporter)).toEqual({
+    expect(getPropType(parse.expression('arrayOf(string)'))).toEqual({
       name: 'arrayOf',
       value: { name: 'string' },
     });
 
-    expect(getPropType(expression('objectOf(string)'), noopImporter)).toEqual({
+    expect(getPropType(parse.expression('objectOf(string)'))).toEqual({
       name: 'objectOf',
       value: { name: 'string' },
     });
 
     expect(
-      getPropType(expression('shape({foo: string, bar: bool})'), noopImporter),
+      getPropType(parse.expression('shape({foo: string, bar: bool})')),
     ).toEqual({
       name: 'shape',
       value: {
@@ -114,7 +102,7 @@ describe('getPropType', () => {
     });
 
     expect(
-      getPropType(expression('exact({foo: string, bar: bool})'), noopImporter),
+      getPropType(parse.expression('exact({foo: string, bar: bool})')),
     ).toEqual({
       name: 'exact',
       value: {
@@ -130,7 +118,7 @@ describe('getPropType', () => {
     });
 
     // custom
-    expect(getPropType(expression('shape({foo: xyz})'), noopImporter)).toEqual({
+    expect(getPropType(parse.expression('shape({foo: xyz})'))).toEqual({
       name: 'shape',
       value: {
         foo: {
@@ -142,7 +130,7 @@ describe('getPropType', () => {
     });
 
     // custom
-    expect(getPropType(expression('exact({foo: xyz})'), noopImporter)).toEqual({
+    expect(getPropType(parse.expression('exact({foo: xyz})'))).toEqual({
       name: 'exact',
       value: {
         foo: {
@@ -154,18 +142,14 @@ describe('getPropType', () => {
     });
 
     // computed
-    expect(
-      getPropType(expression('shape(Child.propTypes)'), noopImporter),
-    ).toEqual({
+    expect(getPropType(parse.expression('shape(Child.propTypes)'))).toEqual({
       name: 'shape',
       value: 'Child.propTypes',
       computed: true,
     });
 
     // computed
-    expect(
-      getPropType(expression('exact(Child.propTypes)'), noopImporter),
-    ).toEqual({
+    expect(getPropType(parse.expression('exact(Child.propTypes)'))).toEqual({
       name: 'exact',
       value: 'Child.propTypes',
       computed: true,
@@ -174,213 +158,285 @@ describe('getPropType', () => {
 
   describe('resolve identifier to their values', () => {
     const mockImporter = makeMockImporter({
-      shape: statement(`
+      shape: stmt =>
+        stmt(`
         export default {bar: PropTypes.string};
       `).get('declaration'),
 
-      types: statement(`
+      types: stmt =>
+        stmt(`
         export default ["foo", "bar"];
       `).get('declaration'),
 
-      foo: statement(`
+      foo: stmt =>
+        stmt(`
         export default "foo";
       `).get('declaration'),
 
-      bar: statement(`
+      bar: stmt =>
+        stmt(`
         export default "bar";
       `).get('declaration'),
 
-      obj: statement(`
+      obj: stmt =>
+        stmt(`
         export default { FOO: "foo", BAR: "bar" };
       `).get('declaration'),
 
-      arr: statement(`
+      arr: stmt =>
+        stmt(`
         export default ["foo", "bar"];
       `).get('declaration'),
 
-      keys: statement(`
-        export default Object.keys(obj);
+      keys: stmt =>
+        stmt(`
         import obj from 'obj';
+        export default Object.keys(obj);
       `).get('declaration'),
 
-      values: statement(`
-        export default Object.values(obj);
+      values: stmt =>
+        stmt(`
         import obj from 'obj';
+        export default Object.values(obj);
       `).get('declaration'),
     });
 
     it('resolves variables to their values', () => {
-      const propTypeExpression = statement(`
+      const propTypeExpression = parse
+        .statement<ExpressionStatement>(
+          `
         PropTypes.shape(shape);
         var shape = {bar: PropTypes.string};
-      `).get('expression');
+      `,
+        )
+        .get('expression');
 
-      expect(getPropType(propTypeExpression, noopImporter)).toMatchSnapshot();
+      expect(getPropType(propTypeExpression)).toMatchSnapshot();
     });
 
     it('resolves imported variables to their values', () => {
-      const propTypeExpression = statement(`
+      const propTypeExpression = parse
+        .statement<ExpressionStatement>(
+          `
         PropTypes.shape(shape);
         import shape from 'shape';
-      `).get('expression');
+      `,
+          mockImporter,
+        )
+        .get('expression');
 
-      expect(getPropType(propTypeExpression, mockImporter)).toMatchSnapshot();
+      expect(getPropType(propTypeExpression)).toMatchSnapshot();
     });
 
     it('resolves simple identifier to their initialization value', () => {
-      const propTypeIdentifier = statement(`
+      const propTypeIdentifier = parse
+        .statement<ExpressionStatement>(
+          `
         PropTypes.oneOf(TYPES);
         var TYPES = ["foo", "bar"];
-      `).get('expression');
+      `,
+        )
+        .get('expression');
 
-      expect(getPropType(propTypeIdentifier, noopImporter)).toMatchSnapshot();
+      expect(getPropType(propTypeIdentifier)).toMatchSnapshot();
     });
 
     it('resolves importer identifier to initialization value', () => {
-      const propTypeIdentifier = statement(`
+      const propTypeIdentifier = parse
+        .statement<ExpressionStatement>(
+          `
         PropTypes.oneOf(TYPES);
         import TYPES from 'types';
-      `).get('expression');
+      `,
+          mockImporter,
+        )
+        .get('expression');
 
-      expect(getPropType(propTypeIdentifier, mockImporter)).toMatchSnapshot();
+      expect(getPropType(propTypeIdentifier)).toMatchSnapshot();
     });
 
     it('resolves simple identifier to their initialization value in array', () => {
-      const identifierInsideArray = statement(`
+      const identifierInsideArray = parse
+        .statement<ExpressionStatement>(
+          `
         PropTypes.oneOf([FOO, BAR]);
         var FOO = "foo";
         var BAR = "bar";
-      `).get('expression');
+      `,
+        )
+        .get('expression');
 
-      expect(
-        getPropType(identifierInsideArray, noopImporter),
-      ).toMatchSnapshot();
+      expect(getPropType(identifierInsideArray)).toMatchSnapshot();
     });
 
     it('resolves imported identifier to their initialization value in array', () => {
-      const identifierInsideArray = statement(`
+      const identifierInsideArray = parse
+        .statement<ExpressionStatement>(
+          `
         PropTypes.oneOf([FOO, BAR]);
         import FOO from 'foo';
         import BAR from 'bar';
-      `).get('expression');
+      `,
+          mockImporter,
+        )
+        .get('expression');
 
-      expect(
-        getPropType(identifierInsideArray, mockImporter),
-      ).toMatchSnapshot();
+      expect(getPropType(identifierInsideArray)).toMatchSnapshot();
     });
 
     it('resolves memberExpressions', () => {
-      const propTypeExpression = statement(`
+      const propTypeExpression = parse
+        .statement<ExpressionStatement>(
+          `
         PropTypes.oneOf([TYPES.FOO, TYPES.BAR]);
         var TYPES = { FOO: "foo", BAR: "bar" };
-      `).get('expression');
+      `,
+        )
+        .get('expression');
 
-      expect(getPropType(propTypeExpression, noopImporter)).toMatchSnapshot();
+      expect(getPropType(propTypeExpression)).toMatchSnapshot();
     });
 
     it('resolves memberExpressions from imported objects', () => {
-      const propTypeExpression = statement(`
+      const propTypeExpression = parse
+        .statement<ExpressionStatement>(
+          `
         PropTypes.oneOf([TYPES.FOO, TYPES.BAR]);
         import TYPES from 'obj';
-      `).get('expression');
+      `,
+          mockImporter,
+        )
+        .get('expression');
 
-      expect(getPropType(propTypeExpression, mockImporter)).toMatchSnapshot();
+      expect(getPropType(propTypeExpression)).toMatchSnapshot();
     });
 
     it('correctly resolves SpreadElements in arrays', () => {
-      const propTypeExpression = statement(`
+      const propTypeExpression = parse
+        .statement<ExpressionStatement>(
+          `
         PropTypes.oneOf([...TYPES]);
         var TYPES = ["foo", "bar"];
-      `).get('expression');
+      `,
+        )
+        .get('expression');
 
-      expect(getPropType(propTypeExpression, noopImporter)).toMatchSnapshot();
+      expect(getPropType(propTypeExpression)).toMatchSnapshot();
     });
 
     it('correctly resolves SpreadElements in arrays from imported values', () => {
-      const propTypeExpression = statement(`
+      const propTypeExpression = parse
+        .statement<ExpressionStatement>(
+          `
         PropTypes.oneOf([...TYPES]);
         import TYPES from 'arr';
-      `).get('expression');
+      `,
+          mockImporter,
+        )
+        .get('expression');
 
-      expect(getPropType(propTypeExpression, mockImporter)).toMatchSnapshot();
+      expect(getPropType(propTypeExpression)).toMatchSnapshot();
     });
 
     it('correctly resolves nested SpreadElements in arrays', () => {
-      const propTypeExpression = statement(`
+      const propTypeExpression = parse
+        .statement<ExpressionStatement>(
+          `
         PropTypes.oneOf([...TYPES]);
         var TYPES = ["foo", ...TYPES2];
         var TYPES2 = ["bar"];
-      `).get('expression');
+      `,
+        )
+        .get('expression');
 
-      expect(getPropType(propTypeExpression, noopImporter)).toMatchSnapshot();
+      expect(getPropType(propTypeExpression)).toMatchSnapshot();
     });
 
     it('does resolve object keys values', () => {
-      const propTypeExpression = statement(`
+      const propTypeExpression = parse
+        .statement<ExpressionStatement>(
+          `
         PropTypes.oneOf(Object.keys(TYPES));
         var TYPES = { FOO: "foo", BAR: "bar" };
-      `).get('expression');
+      `,
+        )
+        .get('expression');
 
-      expect(getPropType(propTypeExpression, noopImporter)).toMatchSnapshot();
+      expect(getPropType(propTypeExpression)).toMatchSnapshot();
     });
 
     it('resolves values from imported Object.keys call', () => {
-      const propTypeExpression = statement(`
+      const propTypeExpression = parse
+        .statement<ExpressionStatement>(
+          `
         PropTypes.oneOf(keys);
         import keys from 'keys';
-      `).get('expression');
+      `,
+          mockImporter,
+        )
+        .get('expression');
 
-      expect(getPropType(propTypeExpression, mockImporter)).toMatchSnapshot();
+      expect(getPropType(propTypeExpression)).toMatchSnapshot();
     });
 
     it('does resolve object values', () => {
-      const propTypeExpression = statement(`
+      const propTypeExpression = parse
+        .statement<ExpressionStatement>(
+          `
         PropTypes.oneOf(Object.values(TYPES));
         var TYPES = { FOO: "foo", BAR: "bar" };
-      `).get('expression');
+      `,
+        )
+        .get('expression');
 
-      expect(getPropType(propTypeExpression, noopImporter)).toMatchSnapshot();
+      expect(getPropType(propTypeExpression)).toMatchSnapshot();
     });
 
     it('resolves values from imported Object.values call', () => {
-      const propTypeExpression = statement(`
+      const propTypeExpression = parse
+        .statement<ExpressionStatement>(
+          `
         PropTypes.oneOf(values);
         import values from 'values';
-      `).get('expression');
+      `,
+          mockImporter,
+        )
+        .get('expression');
 
-      expect(getPropType(propTypeExpression, mockImporter)).toMatchSnapshot();
+      expect(getPropType(propTypeExpression)).toMatchSnapshot();
     });
 
     it('does not resolve external values without proper importer', () => {
-      const propTypeExpression = statement(`
+      const propTypeExpression = parse
+        .statement<ExpressionStatement>(
+          `
         PropTypes.oneOf(TYPES);
         import { TYPES } from './foo';
-      `).get('expression');
+      `,
+        )
+        .get('expression');
 
-      expect(getPropType(propTypeExpression, noopImporter)).toMatchSnapshot();
+      expect(getPropType(propTypeExpression)).toMatchSnapshot();
     });
   });
 
   it('detects custom validation functions for function', () => {
-    expect(
-      getPropType(expression('(function() {})'), noopImporter),
-    ).toMatchSnapshot();
+    expect(getPropType(parse.expression('(function() {})'))).toMatchSnapshot();
   });
 
   it('detects custom validation functions for arrow function', () => {
-    expect(getPropType(expression('() => {}'), noopImporter)).toMatchSnapshot();
+    expect(getPropType(parse.expression('() => {}'))).toMatchSnapshot();
   });
 
   it('detects descriptions on nested types in arrayOf', () => {
     expect(
       getPropType(
-        expression(`arrayOf(
+        parse.expression(`arrayOf(
       /**
        * test2
        */
       string
     )`),
-        noopImporter,
       ),
     ).toMatchSnapshot();
   });
@@ -388,13 +444,12 @@ describe('getPropType', () => {
   it('detects descriptions on nested types in objectOf', () => {
     expect(
       getPropType(
-        expression(`objectOf(
+        parse.expression(`objectOf(
       /**
        * test2
        */
       string
     )`),
-        noopImporter,
       ),
     ).toMatchSnapshot();
   });
@@ -402,7 +457,7 @@ describe('getPropType', () => {
   it('detects descriptions on nested types in shapes', () => {
     expect(
       getPropType(
-        expression(`shape({
+        parse.expression(`shape({
       /**
        * test1
        */
@@ -412,7 +467,6 @@ describe('getPropType', () => {
        */
       bar: bool
     })`),
-        noopImporter,
       ),
     ).toMatchSnapshot();
   });
@@ -420,11 +474,10 @@ describe('getPropType', () => {
   it('detects required notations of nested types in shapes', () => {
     expect(
       getPropType(
-        expression(`shape({
+        parse.expression(`shape({
       foo: string.isRequired,
       bar: bool
     })`),
-        noopImporter,
       ),
     ).toMatchSnapshot();
   });
@@ -432,7 +485,7 @@ describe('getPropType', () => {
   it('detects descriptions on nested types in exacts', () => {
     expect(
       getPropType(
-        expression(`exact({
+        parse.expression(`exact({
       /**
        * test1
        */
@@ -442,7 +495,6 @@ describe('getPropType', () => {
        */
       bar: bool
     })`),
-        noopImporter,
       ),
     ).toMatchSnapshot();
   });
@@ -450,11 +502,10 @@ describe('getPropType', () => {
   it('detects required notations of nested types in exacts', () => {
     expect(
       getPropType(
-        expression(`exact({
+        parse.expression(`exact({
       foo: string.isRequired,
       bar: bool
     })`),
-        noopImporter,
       ),
     ).toMatchSnapshot();
   });
@@ -462,11 +513,10 @@ describe('getPropType', () => {
   it('handles computed properties', () => {
     expect(
       getPropType(
-        expression(`exact({
+        parse.expression(`exact({
       [foo]: string.isRequired,
       bar: bool
     })`),
-        noopImporter,
       ),
     ).toMatchSnapshot();
   });
@@ -474,11 +524,10 @@ describe('getPropType', () => {
   it('ignores complex computed properties', () => {
     expect(
       getPropType(
-        expression(`exact({
+        parse.expression(`exact({
       [() => {}]: string.isRequired,
       bar: bool
     })`),
-        noopImporter,
       ),
     ).toMatchSnapshot();
   });

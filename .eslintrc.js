@@ -8,10 +8,10 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
-    strict: ['error', 'never'],
     'no-shadow': 'error',
     'no-var': 'error',
     'prefer-const': 'error',
+    strict: ['error', 'never'],
   },
   env: {
     node: true,
@@ -36,6 +36,9 @@ module.exports = {
       rules: {
         '@typescript-eslint/array-type': ['error', { default: 'array-simple' }],
         '@typescript-eslint/ban-ts-comment': 'off',
+        '@typescript-eslint/consistent-type-imports': 'error',
+        '@typescript-eslint/no-duplicate-imports': 'error',
+        '@typescript-eslint/sort-type-union-intersection-members': 'error',
       },
     },
     {

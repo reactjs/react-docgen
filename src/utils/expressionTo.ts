@@ -1,77 +1,78 @@
 /*eslint no-loop-func: 0, no-use-before-define: 0*/
 
-import { namedTypes as t } from 'ast-types';
 import resolveToValue from './resolveToValue';
-import type { Importer } from '../parse';
-import type { NodePath } from 'ast-types/lib/node-path';
+import type { Node, NodePath } from '@babel/traverse';
 
 /**
  * Splits a MemberExpression or CallExpression into parts.
  * E.g. foo.bar.baz becomes ['foo', 'bar', 'baz']
  */
-function toArray(path: NodePath, importer: Importer): string[] {
+function toArray(path: NodePath<Node | null>): string[] {
   const parts = [path];
   let result: string[] = [];
 
   while (parts.length > 0) {
     path = parts.shift() as NodePath;
-    const node = path.node;
-    if (t.CallExpression.check(node)) {
+    if (path.isCallExpression()) {
       parts.push(path.get('callee'));
       continue;
-    } else if (t.MemberExpression.check(node)) {
+    } else if (path.isMemberExpression()) {
       parts.push(path.get('object'));
-      if (node.computed) {
-        const resolvedPath = resolveToValue(path.get('property'), importer);
+      const property = path.get('property');
+      if (path.node.computed) {
+        const resolvedPath = resolveToValue(property);
         if (resolvedPath !== undefined) {
-          result = result.concat(toArray(resolvedPath, importer));
+          result = result.concat(toArray(resolvedPath));
         } else {
           result.push('<computed>');
         }
-      } else {
-        // @ts-ignore
-        result.push(node.property.name);
+      } else if (property.isIdentifier()) {
+        result.push(property.node.name);
+      } else if (property.isPrivateName()) {
+        // new test
+        result.push(`#${property.get('id').node.name}`);
       }
       continue;
-    } else if (t.Identifier.check(node)) {
-      result.push(node.name);
+    } else if (path.isIdentifier()) {
+      result.push(path.node.name);
       continue;
-    } else if (t.TSAsExpression.check(node)) {
-      if (t.Identifier.check(node.expression)) {
-        result.push(node.expression.name);
+    } else if (path.isTSAsExpression()) {
+      const expression = path.get('expression');
+      if (expression.isIdentifier()) {
+        result.push(expression.node.name);
       }
       continue;
-    } else if (t.Literal.check(node)) {
-      // @ts-ignore
-      result.push(node.raw);
+    } else if (path.isLiteral() && path.node.extra?.raw) {
+      result.push(path.node.extra.raw as string);
       continue;
-    } else if (t.FunctionExpression.check(node)) {
-      result.push('<function>');
-      continue;
-    } else if (t.ThisExpression.check(node)) {
+    } else if (path.isThisExpression()) {
       result.push('this');
       continue;
-    } else if (t.ObjectExpression.check(node)) {
+    } else if (path.isObjectExpression()) {
       const properties = path.get('properties').map(function (property) {
-        if (t.SpreadElement.check(property.node)) {
-          return `...${toString(property.get('argument'), importer)}`;
-        } else {
+        if (property.isSpreadElement()) {
+          return `...${toString(property.get('argument'))}`;
+        } else if (property.isObjectProperty()) {
           return (
-            toString(property.get('key'), importer) +
+            toString(property.get('key')) +
             ': ' +
-            toString(property.get('value'), importer)
+            toString(property.get('value'))
           );
+        } else if (property.isObjectMethod()) {
+          return toString(property.get('key')) + ': <function>';
+        } else {
+          throw new Error('Unrecognized object property type');
         }
       });
       result.push('{' + properties.join(', ') + '}');
       continue;
-    } else if (t.ArrayExpression.check(node)) {
+    } else if (path.isArrayExpression()) {
       result.push(
         '[' +
           path
             .get('elements')
             .map(function (el) {
-              return toString(el, importer);
+              return toString(el);
             })
             .join(', ') +
           ']',
@@ -86,8 +87,8 @@ function toArray(path: NodePath, importer: Importer): string[] {
 /**
  * Creates a string representation of a member expression.
  */
-function toString(path: NodePath, importer: Importer): string {
-  return toArray(path, importer).join('.');
+function toString(path: NodePath<Node | null>): string {
+  return toArray(path).join('.');
 }
 
 export { toString as String, toArray as Array };

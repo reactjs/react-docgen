@@ -1,97 +1,98 @@
-import { namedTypes as t, visit } from 'ast-types';
+import type { NodePath } from '@babel/traverse';
+import type { Expression } from '@babel/types';
 import getNameOrValue from './getNameOrValue';
 import { String as toString } from './expressionTo';
 import isReactForwardRefCall from './isReactForwardRefCall';
-import type { Importer } from '../parse';
-import type { NodePath } from 'ast-types/lib/node-path';
 
-function resolveName(path: NodePath, importer: Importer): string | undefined {
-  if (t.VariableDeclaration.check(path.node)) {
+function resolveName(path: NodePath): string | undefined {
+  if (path.isVariableDeclaration()) {
     const declarations = path.get('declarations');
-    if (declarations.value.length && declarations.value.length !== 1) {
+    if (declarations.length > 1) {
       throw new TypeError(
         'Got unsupported VariableDeclaration. VariableDeclaration must only ' +
           'have a single VariableDeclarator. Got ' +
-          declarations.value.length +
+          declarations.length +
           ' declarations.',
       );
     }
-    const value = declarations.get(0, 'id', 'name').value;
-    return value;
+    const id = declarations[0].get('id');
+    if (id.isIdentifier()) {
+      return id.node.name;
+    }
+
+    return;
   }
 
-  if (t.FunctionDeclaration.check(path.node)) {
-    return path.get('id', 'name').value;
+  if (path.isFunctionDeclaration()) {
+    const id = path.get('id');
+    if (id.isIdentifier()) {
+      return id.node.name;
+    }
+
+    return;
   }
 
   if (
-    t.FunctionExpression.check(path.node) ||
-    t.ArrowFunctionExpression.check(path.node) ||
-    t.TaggedTemplateExpression.check(path.node) ||
-    t.CallExpression.check(path.node) ||
-    isReactForwardRefCall(path, importer)
+    path.isFunctionExpression() ||
+    path.isArrowFunctionExpression() ||
+    path.isTaggedTemplateExpression() ||
+    path.isCallExpression() ||
+    isReactForwardRefCall(path)
   ) {
-    let currentPath = path;
-    while (currentPath.parent) {
-      if (t.VariableDeclarator.check(currentPath.parent.node)) {
-        return currentPath.parent.get('id', 'name').value;
+    let currentPath: NodePath = path;
+    while (currentPath.parentPath) {
+      if (currentPath.parentPath.isVariableDeclarator()) {
+        const id = currentPath.parentPath.get('id');
+        if (id.isIdentifier()) {
+          return id.node.name;
+        }
+        return;
       }
 
-      currentPath = currentPath.parent;
+      currentPath = currentPath.parentPath;
     }
 
     return;
   }
 
   throw new TypeError(
-    'Attempted to resolveName for an unsupported path. resolveName accepts a ' +
-      'VariableDeclaration, FunctionDeclaration, FunctionExpression or CallExpression. Got "' +
+    'Attempted to resolveName for an unsupported path. resolveName does not accept ' +
       path.node.type +
       '".',
   );
 }
 
-function getRoot(node) {
-  let root = node.parent;
-  while (root.parent) {
-    root = root.parent;
-  }
-  return root;
-}
-
 export default function getMemberExpressionValuePath(
   variableDefinition: NodePath,
   memberName: string,
-  importer: Importer,
-): NodePath | null {
-  const localName = resolveName(variableDefinition, importer);
-  const program = getRoot(variableDefinition);
+): NodePath<Expression> | null {
+  const localName = resolveName(variableDefinition);
+  const program = variableDefinition.findParent(path => path.isProgram());
 
-  if (!localName) {
+  if (!localName || !program) {
     // likely an immediately exported and therefore nameless/anonymous node
     // passed in
     return null;
   }
 
-  let result;
-  visit(program, {
-    visitAssignmentExpression(path) {
+  let result: NodePath<Expression> | null = null;
+  program.traverse({
+    AssignmentExpression(path) {
       const memberPath = path.get('left');
-      if (!t.MemberExpression.check(memberPath.node)) {
-        return this.traverse(path);
+      if (!memberPath.isMemberExpression()) {
+        return;
       }
+      const property = memberPath.get('property');
 
       if (
-        (!memberPath.node.computed ||
-          t.Literal.check(memberPath.node.property)) &&
-        getNameOrValue(memberPath.get('property')) === memberName &&
-        toString(memberPath.get('object'), importer) === localName
+        (!memberPath.node.computed || property.isLiteral()) &&
+        getNameOrValue(property) === memberName &&
+        toString(memberPath.get('object')) === localName
       ) {
         result = path.get('right');
-        return false;
+        path.skip();
+        return;
       }
-
-      this.traverse(memberPath);
     },
   });
 

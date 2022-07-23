@@ -4,34 +4,17 @@ import { handlers, parse, importers } from '../main';
 import { ERROR_MISSING_DEFINITION } from '../parse';
 
 describe('main', () => {
-  function test(source) {
+  function test(source: string) {
     it('parses with default resolver/handlers', () => {
       const docs = parse(source);
-      expect(docs).toEqual({
-        displayName: 'ABC',
-        description: 'Example component description',
-        methods: [],
-        props: {
-          foo: {
-            type: {
-              name: 'bool',
-            },
-            defaultValue: {
-              computed: false,
-              value: 'true',
-            },
-            description: 'Example prop description',
-            required: false,
-          },
-        },
-      });
+      expect(docs).toMatchSnapshot();
     });
 
     it('parses with custom handlers', () => {
-      const docs = parse(source, null, [handlers.componentDocblockHandler]);
-      expect(docs).toEqual({
-        description: 'Example component description',
-      });
+      const docs = parse(source, undefined, [
+        handlers.componentDocblockHandler,
+      ]);
+      expect(docs).toMatchSnapshot();
     });
   }
 
@@ -220,11 +203,16 @@ describe('main', () => {
       it(`processes component "${fileNames[i]}" without errors`, () => {
         let result;
         expect(() => {
-          result = parse(fileContent, null, null, {
-            importer: importers.makeFsImporter(),
-            filename: filePath,
-            babelrc: false,
-          });
+          result = parse(
+            fileContent,
+            undefined,
+            undefined,
+            importers.makeFsImporter(),
+            {
+              filename: filePath,
+              babelrc: false,
+            },
+          );
         }).not.toThrowError();
         expect(result).toMatchSnapshot();
       });

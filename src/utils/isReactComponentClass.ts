@@ -1,25 +1,34 @@
-import { ASTNode, namedTypes as t } from 'ast-types';
+import type { NodePath } from '@babel/traverse';
+import type {
+  ClassBody,
+  ClassDeclaration,
+  ClassExpression,
+  ClassMethod,
+} from '@babel/types';
 import isReactModuleName from './isReactModuleName';
 import match from './match';
 import resolveToModule from './resolveToModule';
 import resolveToValue from './resolveToValue';
-import type { Importer } from '../parse';
-import type { NodePath } from 'ast-types/lib/node-path';
 import isDestructuringAssignment from './isDestructuringAssignment';
 
-function isRenderMethod(node: ASTNode): boolean {
-  const isProperty = node.type === 'ClassProperty';
-  return Boolean(
-    (t.MethodDefinition.check(node) || isProperty) &&
-      // @ts-ignore
-      !node.computed &&
-      // @ts-ignore
-      !node.static &&
-      // @ts-ignore
-      (node.kind === '' || node.kind === 'method' || isProperty) &&
-      // @ts-ignore
-      node.key.name === 'render',
-  );
+function isRenderMethod(path: NodePath): boolean {
+  if (
+    (!path.isClassMethod() || path.node.kind !== 'method') &&
+    !path.isClassProperty()
+  ) {
+    return false;
+  }
+
+  if (path.node.computed || path.node.static) {
+    return false;
+  }
+
+  const key = path.get('key') as NodePath<ClassMethod['key']>;
+  if (!key.isIdentifier() || key.node.name !== 'render') {
+    return false;
+  }
+
+  return true;
 }
 
 /**
@@ -28,54 +37,46 @@ function isRenderMethod(node: ASTNode): boolean {
  */
 export default function isReactComponentClass(
   path: NodePath,
-  importer: Importer,
-): boolean {
-  const node = path.node;
-  if (!t.ClassDeclaration.check(node) && !t.ClassExpression.check(node)) {
+): path is NodePath<ClassDeclaration | ClassExpression> {
+  if (!path.isClassDeclaration() && !path.isClassExpression()) {
     return false;
   }
 
   // extends something
-  if (!node.superClass) {
+  if (!path.node.superClass) {
     return false;
   }
 
   // React.Component or React.PureComponent
-  const superClass = resolveToValue(path.get('superClass'), importer);
+  const superClass = resolveToValue(path.get('superClass') as NodePath);
+
   if (
     match(superClass.node, { property: { name: 'Component' } }) ||
     match(superClass.node, { property: { name: 'PureComponent' } }) ||
     isDestructuringAssignment(superClass, 'Component') ||
     isDestructuringAssignment(superClass, 'PureComponent')
   ) {
-    const module = resolveToModule(superClass, importer);
+    const module = resolveToModule(superClass);
     if (module && isReactModuleName(module)) {
       return true;
     }
   }
 
   // render method
-  if (node.body.body.some(isRenderMethod)) {
+  if (
+    (path.get('body') as NodePath<ClassBody>).get('body').some(isRenderMethod)
+  ) {
     return true;
   }
 
   // check for @extends React.Component in docblock
-  if (path.parentPath && path.parentPath.value) {
-    const classDeclaration = Array.isArray(path.parentPath.value)
-      ? path.parentPath.value.find(function (declaration) {
-          return declaration.type === 'ClassDeclaration';
-        })
-      : path.parentPath.value;
-
-    if (
-      classDeclaration &&
-      classDeclaration.leadingComments &&
-      classDeclaration.leadingComments.some(function (comment) {
-        return /@extends\s+React\.Component/.test(comment.value);
-      })
-    ) {
-      return true;
-    }
+  if (
+    path.node.leadingComments &&
+    path.node.leadingComments.some(function (comment) {
+      return /@extends\s+React\.Component/.test(comment.value);
+    })
+  ) {
+    return true;
   }
 
   return false;

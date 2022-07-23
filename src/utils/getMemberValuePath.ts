@@ -1,75 +1,51 @@
-import { namedTypes as t } from 'ast-types';
+import type { NodePath } from '@babel/traverse';
 import getClassMemberValuePath from './getClassMemberValuePath';
 import getMemberExpressionValuePath from './getMemberExpressionValuePath';
 import getPropertyValuePath from './getPropertyValuePath';
 import resolveFunctionDefinitionToReturnValue from '../utils/resolveFunctionDefinitionToReturnValue';
-import type { Importer } from '../parse';
-import type { NodePath } from 'ast-types/lib/node-path';
+import type { ClassMethod, Expression, ObjectMethod } from '@babel/types';
 
-const SYNONYMS = {
-  getDefaultProps: 'defaultProps',
-  defaultProps: 'getDefaultProps',
-};
-
-const postprocessPropTypes = (path, importer) =>
-  t.Function.check(path.node)
-    ? resolveFunctionDefinitionToReturnValue(path, importer)
-    : path;
+const postprocessPropTypes = (
+  path: NodePath<ClassMethod | Expression | ObjectMethod>,
+) => (path.isFunction() ? resolveFunctionDefinitionToReturnValue(path) : path);
 
 const POSTPROCESS_MEMBERS = new Map([['propTypes', postprocessPropTypes]]);
 
-const LOOKUP_METHOD = new Map([
-  // @ts-ignore
-  [t.ArrowFunctionExpression.name, getMemberExpressionValuePath],
-  // @ts-ignore
-  [t.CallExpression.name, getMemberExpressionValuePath],
-  // @ts-ignore
-  [t.FunctionExpression.name, getMemberExpressionValuePath],
-  // @ts-ignore
-  [t.FunctionDeclaration.name, getMemberExpressionValuePath],
-  // @ts-ignore
-  [t.VariableDeclaration.name, getMemberExpressionValuePath],
-  // @ts-ignore
-  [t.ObjectExpression.name, getPropertyValuePath],
-  // @ts-ignore
-  [t.ClassDeclaration.name, getClassMemberValuePath],
-  // @ts-ignore
-  [t.ClassExpression.name, getClassMemberValuePath],
-]);
+const SUPPORTED_DEFINITION_TYPES = [
+  'ObjectExpression',
+  'ClassDeclaration',
+  'ClassExpression',
+  /**
+   * Adds support for libraries such as
+   * [styled components]{@link https://github.com/styled-components} that use
+   * TaggedTemplateExpression's to generate components.
+   *
+   * While react-docgen's built-in resolvers do not support resolving
+   * TaggedTemplateExpression definitions, third-party resolvers (such as
+   * https://github.com/Jmeyering/react-docgen-annotation-resolver) could be
+   * used to add these definitions.
+   */
+  'TaggedTemplateExpression',
+  // potential stateless function component
+  'VariableDeclaration',
+  'ArrowFunctionExpression',
+  'FunctionDeclaration',
+  'FunctionExpression',
+  /**
+   * Adds support for libraries such as
+   * [system-components]{@link https://jxnblk.com/styled-system/system-components} that use
+   * CallExpressions to generate components.
+   *
+   * While react-docgen's built-in resolvers do not support resolving
+   * CallExpressions definitions, third-party resolvers (such as
+   * https://github.com/Jmeyering/react-docgen-annotation-resolver) could be
+   * used to add these definitions.
+   */
+  'CallExpression',
+];
 
-export function isSupportedDefinitionType({ node }: NodePath): boolean {
-  return (
-    t.ObjectExpression.check(node) ||
-    t.ClassDeclaration.check(node) ||
-    t.ClassExpression.check(node) ||
-    /**
-     * Adds support for libraries such as
-     * [styled components]{@link https://github.com/styled-components} that use
-     * TaggedTemplateExpression's to generate components.
-     *
-     * While react-docgen's built-in resolvers do not support resolving
-     * TaggedTemplateExpression definitions, third-party resolvers (such as
-     * https://github.com/Jmeyering/react-docgen-annotation-resolver) could be
-     * used to add these definitions.
-     */
-    t.TaggedTemplateExpression.check(node) ||
-    // potential stateless function component
-    t.VariableDeclaration.check(node) ||
-    t.ArrowFunctionExpression.check(node) ||
-    t.FunctionDeclaration.check(node) ||
-    t.FunctionExpression.check(node) ||
-    /**
-     * Adds support for libraries such as
-     * [system-components]{@link https://jxnblk.com/styled-system/system-components} that use
-     * CallExpressions to generate components.
-     *
-     * While react-docgen's built-in resolvers do not support resolving
-     * CallExpressions definitions, third-party resolvers (such as
-     * https://github.com/Jmeyering/react-docgen-annotation-resolver) could be
-     * used to add these definitions.
-     */
-    t.CallExpression.check(node)
-  );
+export function isSupportedDefinitionType(path: NodePath): boolean {
+  return SUPPORTED_DEFINITION_TYPES.includes(path.node.type);
 }
 
 /**
@@ -88,29 +64,43 @@ export function isSupportedDefinitionType({ node }: NodePath): boolean {
 export default function getMemberValuePath(
   componentDefinition: NodePath,
   memberName: string,
-  importer: Importer,
-): NodePath | null {
+): NodePath<ClassMethod | Expression | ObjectMethod> | null {
+  // TODO test error message
   if (!isSupportedDefinitionType(componentDefinition)) {
     throw new TypeError(
-      'Got unsupported definition type. Definition must be one of ' +
-        'ObjectExpression, ClassDeclaration, ClassExpression,' +
-        'VariableDeclaration, ArrowFunctionExpression, FunctionExpression, ' +
-        'TaggedTemplateExpression, FunctionDeclaration or CallExpression. Got "' +
-        componentDefinition.node.type +
-        '" instead.',
+      `Got unsupported definition type. Definition must be one of ${SUPPORTED_DEFINITION_TYPES.join(
+        ', ',
+      )}. Got "${componentDefinition.node.type}" instead.`,
     );
   }
 
-  const lookupMethod =
-    LOOKUP_METHOD.get(componentDefinition.node.type) ||
-    getMemberExpressionValuePath;
-  let result = lookupMethod(componentDefinition, memberName, importer);
-  if (!result && SYNONYMS[memberName]) {
-    result = lookupMethod(componentDefinition, SYNONYMS[memberName], importer);
+  let result: NodePath<ClassMethod | Expression | ObjectMethod> | null;
+  if (componentDefinition.isObjectExpression()) {
+    result = getPropertyValuePath(componentDefinition, memberName);
+    if (!result && memberName === 'defaultProps') {
+      result = getPropertyValuePath(componentDefinition, 'getDefaultProps');
+    }
+  } else if (
+    componentDefinition.isClassDeclaration() ||
+    componentDefinition.isClassExpression()
+  ) {
+    result = getClassMemberValuePath(componentDefinition, memberName);
+    if (!result && memberName === 'defaultProps') {
+      result = getClassMemberValuePath(componentDefinition, 'getDefaultProps');
+    }
+  } else {
+    result = getMemberExpressionValuePath(componentDefinition, memberName);
+    if (!result && memberName === 'defaultProps') {
+      result = getMemberExpressionValuePath(
+        componentDefinition,
+        'getDefaultProps',
+      );
+    }
   }
+
   const postprocessMethod = POSTPROCESS_MEMBERS.get(memberName);
   if (result && postprocessMethod) {
-    result = postprocessMethod(result, importer);
+    result = postprocessMethod(result);
   }
 
   return result;

@@ -1,36 +1,61 @@
 import resolveGenericTypeAnnotation from '../utils/resolveGenericTypeAnnotation';
-import type { Importer } from '../parse';
-import type { NodePath } from 'ast-types/lib/node-path';
+import type { NodePath } from '@babel/traverse';
+import type {
+  FlowType,
+  Identifier,
+  QualifiedTypeIdentifier,
+  TSQualifiedName,
+  TSTypeParameterDeclaration,
+  TSTypeParameterInstantiation,
+  TypeParameterDeclaration,
+  TypeParameterInstantiation,
+} from '@babel/types';
+
+// TODO needs tests TS && flow
 
 export type TypeParameters = Record<string, NodePath>;
 
 export default function getTypeParameters(
-  declaration: NodePath,
-  instantiation: NodePath,
+  declaration: NodePath<TSTypeParameterDeclaration | TypeParameterDeclaration>,
+  instantiation: NodePath<
+    TSTypeParameterInstantiation | TypeParameterInstantiation
+  >,
   inputParams: TypeParameters | null | undefined,
-  importer: Importer,
 ): TypeParameters {
-  const params = {};
+  const params: TypeParameters = {};
   const numInstantiationParams = instantiation.node.params.length;
 
   let i = 0;
-  declaration.get('params').each((paramPath: NodePath) => {
+  declaration.get('params').forEach(paramPath => {
     const key = paramPath.node.name;
     const defaultTypePath = paramPath.node.default
-      ? paramPath.get('default')
+      ? (paramPath.get('default') as NodePath<FlowType>)
       : null;
     const typePath =
       i < numInstantiationParams
-        ? instantiation.get('params', i++)
+        ? instantiation.get('params')[i++]
         : defaultTypePath;
 
     if (typePath) {
-      let resolvedTypePath =
-        resolveGenericTypeAnnotation(typePath, importer) || typePath;
-      const typeName =
-        resolvedTypePath.node.typeName || resolvedTypePath.node.id;
-      if (typeName && inputParams && inputParams[typeName.name]) {
-        resolvedTypePath = inputParams[typeName.name];
+      let resolvedTypePath: NodePath =
+        resolveGenericTypeAnnotation(typePath) || typePath;
+      let typeName:
+        | NodePath<Identifier | QualifiedTypeIdentifier | TSQualifiedName>
+        | undefined;
+
+      if (resolvedTypePath.isTSTypeReference()) {
+        typeName = resolvedTypePath.get('typeName');
+      } else if (resolvedTypePath.isGenericTypeAnnotation()) {
+        typeName = resolvedTypePath.get('id');
+      }
+
+      if (
+        typeName &&
+        inputParams &&
+        typeName.isIdentifier() &&
+        inputParams[typeName.node.name]
+      ) {
+        resolvedTypePath = inputParams[typeName.node.name];
       }
 
       params[key] = resolvedTypePath;

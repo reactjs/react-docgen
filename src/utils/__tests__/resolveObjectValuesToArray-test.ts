@@ -1,14 +1,10 @@
-import {
-  statement,
-  noopImporter,
-  makeMockImporter,
-  expressionLast,
-} from '../../../tests/utils';
+import { makeMockImporter, parse } from '../../../tests/utils';
 import resolveObjectValuesToArray from '../resolveObjectValuesToArray';
 
 describe('resolveObjectValuesToArray', () => {
   const mockImporter = makeMockImporter({
-    foo: statement(`
+    foo: stmtLast =>
+      stmtLast(`
       export default {
         1: "bar",
         2: "foo",
@@ -21,7 +17,8 @@ describe('resolveObjectValuesToArray', () => {
       };
     `).get('declaration'),
 
-    bar: statement(`
+    bar: stmtLast =>
+      stmtLast(`
       export default {
         bar: 'bar',
       };
@@ -29,49 +26,49 @@ describe('resolveObjectValuesToArray', () => {
   });
 
   it('resolves Object.values with strings', () => {
-    const path = expressionLast(
+    const path = parse.expressionLast(
       ['var foo = { 1: "bar", 2: "foo" };', 'Object.values(foo);'].join('\n'),
     );
 
-    expect(resolveObjectValuesToArray(path, noopImporter)).toMatchSnapshot();
+    expect(resolveObjectValuesToArray(path)).toMatchSnapshot();
   });
 
   it('resolves Object.values with numbers', () => {
-    const path = expressionLast(
+    const path = parse.expressionLast(
       ['var foo = { 1: 0, 2: 5 };', 'Object.values(foo);'].join('\n'),
     );
 
-    expect(resolveObjectValuesToArray(path, noopImporter)).toMatchSnapshot();
+    expect(resolveObjectValuesToArray(path)).toMatchSnapshot();
   });
 
   it('resolves Object.values with undefined or null', () => {
-    const path = expressionLast(
+    const path = parse.expressionLast(
       ['var foo = { 1: null, 2: undefined };', 'Object.values(foo);'].join(
         '\n',
       ),
     );
 
-    expect(resolveObjectValuesToArray(path, noopImporter)).toMatchSnapshot();
+    expect(resolveObjectValuesToArray(path)).toMatchSnapshot();
   });
 
   it('resolves Object.values with literals as computed key', () => {
-    const path = expressionLast(
+    const path = parse.expressionLast(
       ['var foo = { ["bar"]: 1, [5]: 2};', 'Object.values(foo);'].join('\n'),
     );
 
-    expect(resolveObjectValuesToArray(path, noopImporter)).toMatchSnapshot();
+    expect(resolveObjectValuesToArray(path)).toMatchSnapshot();
   });
 
   it('does not resolve Object.values with complex computed key', () => {
-    const path = expressionLast(
+    const path = parse.expressionLast(
       ['var foo = { [()=>{}]: 1, [5]: 2};', 'Object.values(foo);'].join('\n'),
     );
 
-    expect(resolveObjectValuesToArray(path, noopImporter)).toBeNull();
+    expect(resolveObjectValuesToArray(path)).toBeNull();
   });
 
   it('resolves Object.values when using resolvable spread', () => {
-    const path = expressionLast(
+    const path = parse.expressionLast(
       [
         'var bar = { doo: 4 }',
         'var foo = { boo: 1, foo: 2, ...bar };',
@@ -79,43 +76,43 @@ describe('resolveObjectValuesToArray', () => {
       ].join('\n'),
     );
 
-    expect(resolveObjectValuesToArray(path, noopImporter)).toMatchSnapshot();
+    expect(resolveObjectValuesToArray(path)).toMatchSnapshot();
   });
 
   it('resolves Object.values when using getters', () => {
-    const path = expressionLast(
+    const path = parse.expressionLast(
       [
         'var foo = { boo: 1, foo: 2, get bar() {} };',
         'Object.values(foo);',
       ].join('\n'),
     );
 
-    expect(resolveObjectValuesToArray(path, noopImporter)).toMatchSnapshot();
+    expect(resolveObjectValuesToArray(path)).toMatchSnapshot();
   });
 
   it('resolves Object.values when using setters', () => {
-    const path = expressionLast(
+    const path = parse.expressionLast(
       [
         'var foo = { boo: 1, foo: 2, set bar(e) {} };',
         'Object.values(foo);',
       ].join('\n'),
     );
 
-    expect(resolveObjectValuesToArray(path, noopImporter)).toMatchSnapshot();
+    expect(resolveObjectValuesToArray(path)).toMatchSnapshot();
   });
 
   it('resolves Object.values when using methods', () => {
-    const path = expressionLast(
+    const path = parse.expressionLast(
       ['var foo = { boo: 1, foo: 2, bar(e) {} };', 'Object.values(foo);'].join(
         '\n',
       ),
     );
 
-    expect(resolveObjectValuesToArray(path, noopImporter)).toMatchSnapshot();
+    expect(resolveObjectValuesToArray(path)).toMatchSnapshot();
   });
 
   it('resolves Object.values but ignores duplicates', () => {
-    const path = expressionLast(
+    const path = parse.expressionLast(
       [
         'var bar = { doo: 4, doo: 5 }',
         'var foo = { boo: 1, foo: 2, doo: 1, ...bar };',
@@ -123,45 +120,47 @@ describe('resolveObjectValuesToArray', () => {
       ].join('\n'),
     );
 
-    expect(resolveObjectValuesToArray(path, noopImporter)).toMatchSnapshot();
+    expect(resolveObjectValuesToArray(path)).toMatchSnapshot();
   });
 
   it('resolves Object.values but ignores duplicates with getter and setter', () => {
-    const path = expressionLast(
+    const path = parse.expressionLast(
       ['var foo = { get x() {}, set x(a) {} };', 'Object.values(foo);'].join(
         '\n',
       ),
     );
 
-    expect(resolveObjectValuesToArray(path, noopImporter)).toMatchSnapshot();
+    expect(resolveObjectValuesToArray(path)).toMatchSnapshot();
   });
 
   it('does not resolve Object.values when using unresolvable spread', () => {
-    const path = expressionLast(
+    const path = parse.expressionLast(
       ['var foo = { bar: 1, foo: 2, ...bar };', 'Object.values(foo);'].join(
         '\n',
       ),
     );
 
-    expect(resolveObjectValuesToArray(path, noopImporter)).toBeNull();
+    expect(resolveObjectValuesToArray(path)).toBeNull();
   });
 
   it('can resolve imported objects passed to Object.values', () => {
-    const path = expressionLast(`
-      import foo from 'foo';
-      Object.values(foo);
-    `);
+    const path = parse.expressionLast(
+      `import foo from 'foo';
+       Object.values(foo);`,
+      mockImporter,
+    );
 
-    expect(resolveObjectValuesToArray(path, mockImporter)).toMatchSnapshot();
+    expect(resolveObjectValuesToArray(path)).toMatchSnapshot();
   });
 
   it('can resolve spreads from imported objects', () => {
-    const path = expressionLast(`
-      import bar from 'bar';
-      var abc = { foo: 'foo', baz: 'baz', ...bar };
-      Object.values(abc);
-    `);
+    const path = parse.expressionLast(
+      `import bar from 'bar';
+       var abc = { foo: 'foo', baz: 'baz', ...bar };
+       Object.values(abc);`,
+      mockImporter,
+    );
 
-    expect(resolveObjectValuesToArray(path, mockImporter)).toMatchSnapshot();
+    expect(resolveObjectValuesToArray(path)).toMatchSnapshot();
   });
 });

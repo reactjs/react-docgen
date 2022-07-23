@@ -12,4 +12,103 @@ Object {
 
 exports[`getMethodDocumentation name ignores complex computed method name 1`] = `null`;
 
+exports[`getMethodDocumentation parameters does not add type parameters to alias 1`] = `
+Object {
+  "docblock": null,
+  "modifiers": Array [],
+  "name": "foo",
+  "params": Array [
+    Object {
+      "name": "bar",
+      "optional": false,
+      "type": Object {
+        "alias": "Foo",
+        "elements": Array [
+          Object {
+            "name": "T",
+          },
+        ],
+        "name": "Foo",
+        "raw": "Foo<T>",
+      },
+    },
+  ],
+  "returns": null,
+}
+`;
+
+exports[`getMethodDocumentation parameters extracts flow type info 1`] = `
+Object {
+  "docblock": null,
+  "modifiers": Array [],
+  "name": "foo",
+  "params": Array [
+    Object {
+      "name": "bar",
+      "optional": false,
+      "type": Object {
+        "name": "number",
+      },
+    },
+  ],
+  "returns": null,
+}
+`;
+
+exports[`getMethodDocumentation parameters extracts flow type info 2`] = `
+Object {
+  "docblock": null,
+  "modifiers": Array [],
+  "name": "foo",
+  "params": Array [
+    Object {
+      "name": "bar",
+      "optional": false,
+      "type": Object {
+        "name": "number",
+      },
+    },
+  ],
+  "returns": null,
+}
+`;
+
+exports[`getMethodDocumentation parameters extracts flow type info on function assignment 1`] = `
+Object {
+  "docblock": null,
+  "modifiers": Array [],
+  "name": "foo",
+  "params": Array [
+    Object {
+      "name": "bar",
+      "optional": false,
+      "type": Object {
+        "name": "number",
+      },
+    },
+  ],
+  "returns": null,
+}
+`;
+
+exports[`getMethodDocumentation parameters private ignores private methods 1`] = `null`;
+
 exports[`getMethodDocumentation parameters private ignores private typescript methods 1`] = `null`;
+
+exports[`getMethodDocumentation parameters resolves flow type info on imported functions 1`] = `
+Object {
+  "docblock": null,
+  "modifiers": Array [],
+  "name": "foo",
+  "params": Array [
+    Object {
+      "name": "bar",
+      "optional": false,
+      "type": Object {
+        "name": "number",
+      },
+    },
+  ],
+  "returns": null,
+}
+`;

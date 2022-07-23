@@ -1,5 +1,5 @@
-import { namedTypes as t } from 'ast-types';
-import type { NodePath } from 'ast-types/lib/node-path';
+import type { NodePath } from '@babel/traverse';
+import type { Expression, MemberExpression } from '@babel/types';
 
 /**
  * Returns the path to the first part of the MemberExpression. I.e. given a
@@ -10,10 +10,12 @@ import type { NodePath } from 'ast-types/lib/node-path';
  * it returns the path of/to `foo`.
  */
 export default function getMemberExpressionRoot(
-  memberExpressionPath: NodePath,
-): NodePath {
-  do {
-    memberExpressionPath = memberExpressionPath.get('object');
-  } while (t.MemberExpression.check(memberExpressionPath.node));
-  return memberExpressionPath;
+  memberExpressionPath: NodePath<MemberExpression>,
+): NodePath<Expression> {
+  let path: NodePath<Expression> = memberExpressionPath;
+  while (path.isMemberExpression()) {
+    path = path.get('object');
+  }
+
+  return path;
 }

@@ -1,7 +1,5 @@
-import { namedTypes as t } from 'ast-types';
+import type { NodePath } from '@babel/traverse';
 import getPropertyName from './getPropertyName';
-import type { Importer } from '../parse';
-import type { NodePath } from 'ast-types/lib/node-path';
 
 const componentMethods = [
   'componentDidMount',
@@ -28,14 +26,11 @@ const componentMethods = [
 /**
  * Returns if the method path is a Component method.
  */
-export default function (methodPath: NodePath, importer: Importer): boolean {
-  if (
-    !t.MethodDefinition.check(methodPath.node) &&
-    !t.Property.check(methodPath.node)
-  ) {
+export default function (methodPath: NodePath): boolean {
+  if (!methodPath.isClassMethod() && !methodPath.isObjectMethod()) {
     return false;
   }
 
-  const name = getPropertyName(methodPath, importer);
-  return !!name && componentMethods.indexOf(name) !== -1;
+  const name = getPropertyName(methodPath);
+  return Boolean(name && componentMethods.indexOf(name) !== -1);
 }

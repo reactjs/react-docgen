@@ -1,6 +1,5 @@
 /*eslint no-use-before-define: 0*/
-
-import { namedTypes as t } from 'ast-types';
+import type { NodePath } from '@babel/traverse';
 import { getDocblock } from '../utils/docblock';
 import getMembers from './getMembers';
 import getPropertyName from './getPropertyName';
@@ -9,53 +8,57 @@ import printValue from './printValue';
 import resolveToValue from './resolveToValue';
 import resolveObjectKeysToArray from './resolveObjectKeysToArray';
 import resolveObjectValuesToArray from './resolveObjectValuesToArray';
-import type { Importer } from '../parse';
 import type { PropTypeDescriptor, PropDescriptor } from '../Documentation';
-import type { NodePath } from 'ast-types/lib/node-path';
+import type {
+  ArrayExpression,
+  Expression,
+  ObjectProperty,
+  SpreadElement,
+} from '@babel/types';
 
-function getEnumValues(
-  path: NodePath,
-  importer: Importer,
+function getEnumValuesFromArrayExpression(
+  path: NodePath<ArrayExpression>,
 ): Array<Record<string, unknown>> {
   const values: Array<Record<string, unknown>> = [];
 
-  path.get('elements').each(function (elementPath) {
-    if (t.SpreadElement.check(elementPath.node)) {
-      const value = resolveToValue(elementPath.get('argument'), importer);
+  path.get('elements').forEach(elementPath => {
+    // Array holes TODO test
+    if (elementPath.node == null) return;
 
-      if (t.ArrayExpression.check(value.node)) {
+    if (elementPath.isSpreadElement()) {
+      const value = resolveToValue(elementPath.get('argument'));
+
+      if (value.isArrayExpression()) {
         // if the SpreadElement resolved to an Array, add all their elements too
-        return values.push(...getEnumValues(value, importer));
+        return values.push(...getEnumValuesFromArrayExpression(value));
       } else {
         // otherwise we'll just print the SpreadElement itself
         return values.push({
           value: printValue(elementPath),
-          computed: !t.Literal.check(elementPath.node),
+          computed: !elementPath.isLiteral(),
         });
       }
     }
 
     // try to resolve the array element to it's value
-    const value = resolveToValue(elementPath, importer);
+    const value = resolveToValue(elementPath as NodePath<Expression>);
     return values.push({
       value: printValue(value),
-      computed: !t.Literal.check(value.node),
+      computed: !value.isLiteral(),
     });
   });
 
   return values;
 }
 
-function getPropTypeOneOf(
-  argumentPath: NodePath,
-  importer: Importer,
-): PropTypeDescriptor {
+// TODO
+function getPropTypeOneOf(argumentPath: NodePath): PropTypeDescriptor {
   const type: PropTypeDescriptor = { name: 'enum' };
-  const value: NodePath | null = resolveToValue(argumentPath, importer);
-  if (!t.ArrayExpression.check(value.node)) {
+  const value: NodePath = resolveToValue(argumentPath);
+  if (!value.isArrayExpression()) {
     const objectValues =
-      resolveObjectKeysToArray(value, importer) ||
-      resolveObjectValuesToArray(value, importer);
+      resolveObjectKeysToArray(value) || //TODO return array of names and not ArrayExpression anymore
+      resolveObjectValuesToArray(value);
     if (objectValues) {
       type.value = objectValues.map(objectValue => ({
         value: objectValue,
@@ -67,23 +70,24 @@ function getPropTypeOneOf(
       type.value = printValue(argumentPath);
     }
   } else {
-    type.value = getEnumValues(value, importer);
+    type.value = getEnumValuesFromArrayExpression(value);
   }
   return type;
 }
 
-function getPropTypeOneOfType(
-  argumentPath: NodePath,
-  importer: Importer,
-): PropTypeDescriptor {
+function getPropTypeOneOfType(argumentPath: NodePath): PropTypeDescriptor {
   const type: PropTypeDescriptor = { name: 'union' };
-  if (!t.ArrayExpression.check(argumentPath.node)) {
+  if (!argumentPath.isArrayExpression()) {
     type.computed = true;
     type.value = printValue(argumentPath);
   } else {
-    type.value = argumentPath.get('elements').map(function (itemPath) {
-      const descriptor: PropTypeDescriptor = getPropType(itemPath, importer);
-      const docs = getDocblock(itemPath);
+    type.value = argumentPath.get('elements').map(elementPath => {
+      // Array holes TODO test
+      if (!elementPath.hasNode()) return;
+      const descriptor: PropTypeDescriptor = getPropType(elementPath);
+      const docs = getDocblock(
+        elementPath as NodePath<Expression | SpreadElement>,
+      );
       if (docs) {
         descriptor.description = docs;
       }
@@ -93,7 +97,7 @@ function getPropTypeOneOfType(
   return type;
 }
 
-function getPropTypeArrayOf(argumentPath: NodePath, importer: Importer) {
+function getPropTypeArrayOf(argumentPath: NodePath) {
   const type: PropTypeDescriptor = { name: 'arrayOf' };
 
   const docs = getDocblock(argumentPath);
@@ -101,7 +105,7 @@ function getPropTypeArrayOf(argumentPath: NodePath, importer: Importer) {
     type.description = docs;
   }
 
-  const subType = getPropType(argumentPath, importer);
+  const subType = getPropType(argumentPath);
 
   // @ts-ignore
   if (subType.name === 'unknown') {
@@ -113,7 +117,7 @@ function getPropTypeArrayOf(argumentPath: NodePath, importer: Importer) {
   return type;
 }
 
-function getPropTypeObjectOf(argumentPath: NodePath, importer: Importer) {
+function getPropTypeObjectOf(argumentPath: NodePath) {
   const type: PropTypeDescriptor = { name: 'objectOf' };
 
   const docs = getDocblock(argumentPath);
@@ -121,7 +125,7 @@ function getPropTypeObjectOf(argumentPath: NodePath, importer: Importer) {
     type.description = docs;
   }
 
-  const subType = getPropType(argumentPath, importer);
+  const subType = getPropType(argumentPath);
 
   // @ts-ignore
   if (subType.name === 'unknown') {
@@ -136,36 +140,32 @@ function getPropTypeObjectOf(argumentPath: NodePath, importer: Importer) {
 /**
  * Handles shape and exact prop types
  */
-function getPropTypeShapish(
-  name: 'shape' | 'exact',
-  argumentPath: NodePath,
-  importer: Importer,
-) {
+function getPropTypeShapish(name: 'exact' | 'shape', argumentPath: NodePath) {
   const type: PropTypeDescriptor = { name };
-  if (!t.ObjectExpression.check(argumentPath.node)) {
-    argumentPath = resolveToValue(argumentPath, importer);
+  if (!argumentPath.isObjectExpression()) {
+    argumentPath = resolveToValue(argumentPath);
   }
 
-  if (t.ObjectExpression.check(argumentPath.node)) {
+  if (argumentPath.isObjectExpression()) {
     const value = {};
-    argumentPath.get('properties').each(function (propertyPath) {
-      // @ts-ignore
-      if (propertyPath.get('type').value === t.SpreadElement.name) {
+    argumentPath.get('properties').forEach(propertyPath => {
+      if (propertyPath.isSpreadElement() || propertyPath.isObjectMethod()) {
         // It is impossible to resolve a name for a spread element
         return;
       }
 
-      const propertyName = getPropertyName(propertyPath, importer);
+      const propertyName = getPropertyName(propertyPath);
       if (!propertyName) return;
-      const descriptor: PropDescriptor | PropTypeDescriptor = getPropType(
-        propertyPath.get('value'),
-        importer,
-      );
+
+      const valuePath = (propertyPath as NodePath<ObjectProperty>).get('value');
+
+      const descriptor: PropDescriptor | PropTypeDescriptor =
+        getPropType(valuePath);
       const docs = getDocblock(propertyPath);
       if (docs) {
         descriptor.description = docs;
       }
-      descriptor.required = isRequiredPropType(propertyPath.get('value'));
+      descriptor.required = isRequiredPropType(valuePath);
       value[propertyName] = descriptor;
     });
     type.value = value;
@@ -179,11 +179,7 @@ function getPropTypeShapish(
   return type;
 }
 
-function getPropTypeInstanceOf(
-  argumentPath: NodePath,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _importer: Importer,
-): PropTypeDescriptor {
+function getPropTypeInstanceOf(argumentPath: NodePath): PropTypeDescriptor {
   return {
     name: 'instanceOf',
     value: printValue(argumentPath),
@@ -204,10 +200,13 @@ const simplePropTypes = [
   'elementType',
 ] as const;
 
-const propTypes = new Map<
-  string,
-  (path: NodePath, importer: Importer) => PropTypeDescriptor
->([
+function isSimplePropType(
+  name: string,
+): name is typeof simplePropTypes[number] {
+  return simplePropTypes.includes(name as typeof simplePropTypes[number]);
+}
+
+const propTypes = new Map<string, (path: NodePath) => PropTypeDescriptor>([
   ['oneOf', getPropTypeOneOf],
   ['oneOfType', getPropTypeOneOfType],
   ['instanceOf', getPropTypeInstanceOf],
@@ -225,49 +224,42 @@ const propTypes = new Map<
  *
  * If there is no match, "custom" is returned.
  */
-export default function getPropType(
-  path: NodePath,
-  importer: Importer,
-): PropTypeDescriptor {
+export default function getPropType(path: NodePath): PropTypeDescriptor {
   let descriptor: PropTypeDescriptor | null = null;
   getMembers(path, true).some(member => {
-    const node = member.path.node;
+    const memberPath = member.path;
     let name: string | null = null;
-    if (t.Literal.check(node)) {
-      name = node.value as string;
-    } else if (t.Identifier.check(node) && !member.computed) {
-      name = node.name;
+    if (memberPath.isStringLiteral()) {
+      name = memberPath.node.value;
+    } else if (memberPath.isIdentifier() && !member.computed) {
+      name = memberPath.node.name;
     }
     if (name) {
-      if (simplePropTypes.includes(name as typeof simplePropTypes[number])) {
-        descriptor = { name: name as typeof simplePropTypes[number] };
+      if (isSimplePropType(name)) {
+        descriptor = { name };
         return true;
-      } else if (propTypes.has(name) && member.argumentsPath) {
-        // @ts-ignore
-        descriptor = propTypes.get(name)(member.argumentsPath.get(0), importer);
+      } else if (propTypes.has(name) && member.argumentPaths.length) {
+        descriptor = propTypes.get(name)!(member.argumentPaths[0]);
         return true;
       }
     }
 
     return;
   });
-  if (!descriptor) {
-    const node = path.node;
-    if (
-      t.Identifier.check(node) &&
-      simplePropTypes.includes(node.name as typeof simplePropTypes[number])
-    ) {
-      descriptor = { name: node.name as typeof simplePropTypes[number] };
-    } else if (
-      t.CallExpression.check(node) &&
-      t.Identifier.check(node.callee) &&
-      propTypes.has(node.callee.name)
-    ) {
-      // @ts-ignore
-      descriptor = propTypes.get(node.callee.name)(path.get('arguments', 0));
-    } else {
-      descriptor = { name: 'custom', raw: printValue(path) };
+
+  if (descriptor) {
+    return descriptor;
+  }
+
+  if (path.isIdentifier() && isSimplePropType(path.node.name)) {
+    return { name: path.node.name };
+  } else if (path.isCallExpression()) {
+    const callee = path.get('callee');
+
+    if (callee.isIdentifier() && propTypes.has(callee.node.name)) {
+      return propTypes.get(callee.node.name)!(path.get('arguments')[0]);
     }
   }
-  return descriptor;
+
+  return { name: 'custom', raw: printValue(path) };
 }

@@ -1,9 +1,7 @@
-import { namedTypes as t } from 'ast-types';
-import type { NodePath } from 'ast-types/lib/node-path';
+import type { NodePath } from '@babel/traverse';
 import isReactCreateClassCall from './isReactCreateClassCall';
 import isReactForwardRefCall from './isReactForwardRefCall';
 import resolveToValue from './resolveToValue';
-import type { Importer } from '../parse';
 
 /**
  * If the path is a call expression, it recursively resolves to the
@@ -11,38 +9,31 @@ import type { Importer } from '../parse';
  *
  * Else the path itself is returned.
  */
-export default function resolveHOC(
-  path: NodePath,
-  importer: Importer,
-): NodePath {
-  const node = path.node;
+export default function resolveHOC(path: NodePath): NodePath {
   if (
-    t.CallExpression.check(node) &&
-    !isReactCreateClassCall(path, importer) &&
-    !isReactForwardRefCall(path, importer)
+    path.isCallExpression() &&
+    !isReactCreateClassCall(path) &&
+    !isReactForwardRefCall(path)
   ) {
-    if (node.arguments.length) {
-      const inner = path.get('arguments', 0);
+    const node = path.node;
+    const argumentLength = node.arguments.length;
+    if (argumentLength && argumentLength > 0) {
+      const args = path.get('arguments');
+      const firstArg = args[0];
 
       // If the first argument is one of these types then the component might be the last argument
       // If there are all identifiers then we cannot figure out exactly and have to assume it is the first
       if (
-        node.arguments.length > 1 &&
-        (t.Literal.check(inner.node) ||
-          t.ObjectExpression.check(inner.node) ||
-          t.ArrayExpression.check(inner.node) ||
-          t.SpreadElement.check(inner.node))
+        argumentLength > 1 &&
+        (firstArg.isLiteral() ||
+          firstArg.isObjectExpression() ||
+          firstArg.isArrayExpression() ||
+          firstArg.isSpreadElement())
       ) {
-        return resolveHOC(
-          resolveToValue(
-            path.get('arguments', node.arguments.length - 1),
-            importer,
-          ),
-          importer,
-        );
+        return resolveHOC(resolveToValue(args[argumentLength - 1]));
       }
 
-      return resolveHOC(resolveToValue(inner, importer), importer);
+      return resolveHOC(resolveToValue(firstArg));
     }
   }
 
