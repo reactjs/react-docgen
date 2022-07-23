@@ -18,28 +18,21 @@ function getDefaultPlugins(
     TYPESCRIPT_EXTS[path.extname(options.filename || '')]
       ? 'typescript'
       : 'flow',
-    'asyncGenerators',
-    'bigInt',
-    'classProperties',
-    'classPrivateProperties',
-    'classPrivateMethods',
+    'asyncDoExpressions',
+    'decimal',
     ['decorators', { decoratorsBeforeExport: false }],
+    'decoratorAutoAccessors',
+    'destructuringPrivate',
     'doExpressions',
-    'dynamicImport',
     'exportDefaultFrom',
-    'exportNamespaceFrom',
     'functionBind',
-    'functionSent',
-    'importMeta',
-    'logicalAssignment',
-    'nullishCoalescingOperator',
-    'numericSeparator',
-    'objectRestSpread',
-    'optionalCatchBinding',
-    'optionalChaining',
+    'importAssertions',
+    'moduleBlocks',
+    'partialApplication',
     ['pipelineOperator', { proposal: 'minimal' }],
+    ['recordAndTuple', { syntaxType: 'bar' }],
+    'regexpUnicodeSets',
     'throwExpressions',
-    'topLevelAwait',
   ];
 }
 
@@ -84,6 +77,8 @@ function buildOptions(
   const plugins = buildPluginList(parserOptions, babelOptions);
 
   return {
+    sourceType: 'unambiguous',
+    tokens: false,
     ...(parserOptions || {}),
     plugins,
   };
