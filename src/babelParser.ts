@@ -4,6 +4,8 @@ import type { File } from '@babel/types';
 import path from 'path';
 
 const TYPESCRIPT_EXTS = {
+  '.cts': true,
+  '.mts': true,
   '.ts': true,
   '.tsx': true,
 };
