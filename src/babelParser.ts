@@ -60,14 +60,8 @@ function buildPluginList(
   }
 
   // Ensure that the estree plugin is never active
-  if (plugins.includes('estree')) {
-    throw new Error(
-      //TODO not throw, just remove
-      'The estree plugin is active for @babel/parser. As of version 6 react-docgen must have this plugin disabled.',
-    );
-  }
-
-  return plugins;
+  // TODO add test
+  return plugins.filter(plugin => plugin !== 'estree');
 }
 
 function buildOptions(
