@@ -39,8 +39,9 @@ export default function normalizeClassDefinition(
       variableName = classDefinition.node.id.name;
     }
   } else if (classDefinition.isClassExpression()) {
-    let parentPath: NodePath = classDefinition.parentPath;
+    let parentPath: NodePath | null = classDefinition.parentPath;
     while (
+      parentPath &&
       parentPath.node !== classDefinition.scope.block &&
       !parentPath.isBlockStatement()
     ) {
