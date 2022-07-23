@@ -1,285 +1,467 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`main Class definition parses with custom handlers 1`] = `
+Array [
+  Object {
+    "description": "Example component description",
+  },
+]
+`;
+
+exports[`main Class definition parses with default resolver/handlers 1`] = `
+Array [
+  Object {
+    "description": "Example component description",
+    "displayName": "ABC",
+    "methods": Array [],
+    "props": Object {
+      "foo": Object {
+        "defaultValue": Object {
+          "computed": false,
+          "value": "true",
+        },
+        "description": "Example prop description",
+        "required": false,
+        "type": Object {
+          "name": "bool",
+        },
+      },
+    },
+  },
+]
+`;
+
+exports[`main React.createClass parses with custom handlers 1`] = `
+Array [
+  Object {
+    "description": "Example component description",
+  },
+]
+`;
+
+exports[`main React.createClass parses with default resolver/handlers 1`] = `
+Array [
+  Object {
+    "description": "Example component description",
+    "displayName": "ABC",
+    "methods": Array [
+      Object {
+        "docblock": null,
+        "modifiers": Array [],
+        "name": "getDefaultProps",
+        "params": Array [],
+        "returns": null,
+      },
+    ],
+    "props": Object {
+      "foo": Object {
+        "defaultValue": Object {
+          "computed": false,
+          "value": "true",
+        },
+        "description": "Example prop description",
+        "required": false,
+        "type": Object {
+          "name": "bool",
+        },
+      },
+    },
+  },
+]
+`;
+
+exports[`main Stateless Component definition: ArrowFunctionExpression parses with custom handlers 1`] = `
+Array [
+  Object {
+    "description": "Example component description",
+  },
+]
+`;
+
+exports[`main Stateless Component definition: ArrowFunctionExpression parses with default resolver/handlers 1`] = `
+Array [
+  Object {
+    "description": "Example component description",
+    "displayName": "ABC",
+    "methods": Array [],
+    "props": Object {
+      "foo": Object {
+        "defaultValue": Object {
+          "computed": false,
+          "value": "true",
+        },
+        "description": "Example prop description",
+        "required": false,
+        "type": Object {
+          "name": "bool",
+        },
+      },
+    },
+  },
+]
+`;
+
+exports[`main Stateless Component definition: FunctionDeclaration parses with custom handlers 1`] = `
+Array [
+  Object {
+    "description": "Example component description",
+  },
+]
+`;
+
+exports[`main Stateless Component definition: FunctionDeclaration parses with default resolver/handlers 1`] = `
+Array [
+  Object {
+    "description": "Example component description",
+    "displayName": "ABC",
+    "methods": Array [],
+    "props": Object {
+      "foo": Object {
+        "defaultValue": Object {
+          "computed": false,
+          "value": "true",
+        },
+        "description": "Example prop description",
+        "required": false,
+        "type": Object {
+          "name": "bool",
+        },
+      },
+    },
+  },
+]
+`;
+
+exports[`main Stateless Component definition: FunctionExpression parses with custom handlers 1`] = `
+Array [
+  Object {
+    "description": "Example component description",
+  },
+]
+`;
+
+exports[`main Stateless Component definition: FunctionExpression parses with default resolver/handlers 1`] = `
+Array [
+  Object {
+    "description": "Example component description",
+    "displayName": "ABC",
+    "methods": Array [],
+    "props": Object {
+      "foo": Object {
+        "defaultValue": Object {
+          "computed": false,
+          "value": "true",
+        },
+        "description": "Example prop description",
+        "required": false,
+        "type": Object {
+          "name": "bool",
+        },
+      },
+    },
+  },
+]
+`;
+
 exports[`main fixtures processes component "component_1.js" without errors 1`] = `
-Object {
-  "description": "The is a component to test the document generation",
-  "displayName": "Component",
-  "methods": Array [],
-}
+Array [
+  Object {
+    "description": "The is a component to test the document generation",
+    "displayName": "Component",
+    "methods": Array [],
+  },
+]
 `;
 
 exports[`main fixtures processes component "component_2.js" without errors 1`] = `
-Object {
-  "description": "",
-  "displayName": "button",
-  "methods": Array [
-    Object {
-      "docblock": null,
-      "modifiers": Array [
-        "static",
-        "get",
-      ],
-      "name": "displayName",
-      "params": Array [],
-      "returns": null,
-    },
-    Object {
-      "docblock": null,
-      "modifiers": Array [
-        "static",
-        "get",
-      ],
-      "name": "defaultProps",
-      "params": Array [],
-      "returns": null,
-    },
-  ],
-  "props": Object {
-    "type": Object {
-      "defaultValue": Object {
-        "computed": false,
-        "value": "\\"primary\\"",
+Array [
+  Object {
+    "description": "",
+    "displayName": "button",
+    "methods": Array [
+      Object {
+        "docblock": null,
+        "modifiers": Array [
+          "static",
+          "get",
+        ],
+        "name": "displayName",
+        "params": Array [],
+        "returns": null,
       },
-      "required": false,
+      Object {
+        "docblock": null,
+        "modifiers": Array [
+          "static",
+          "get",
+        ],
+        "name": "defaultProps",
+        "params": Array [],
+        "returns": null,
+      },
+    ],
+    "props": Object {
+      "type": Object {
+        "defaultValue": Object {
+          "computed": false,
+          "value": "\\"primary\\"",
+        },
+        "required": false,
+      },
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_3.js" without errors 1`] = `
-Object {
-  "description": "",
-  "displayName": "Test",
-  "methods": Array [],
-  "props": Object {
-    "style": Object {
-      "description": "",
-      "required": false,
-      "type": Object {
-        "name": "object",
+Array [
+  Object {
+    "description": "",
+    "displayName": "Test",
+    "methods": Array [],
+    "props": Object {
+      "style": Object {
+        "description": "",
+        "required": false,
+        "type": Object {
+          "name": "object",
+        },
       },
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_4.js" without errors 1`] = `
-Object {
-  "description": "",
-  "displayName": "Parent",
-  "methods": Array [],
-  "props": Object {
-    "child": Object {
-      "description": "",
-      "required": true,
-      "type": Object {
-        "computed": true,
-        "name": "shape",
-        "value": "Child.propTypes",
+Array [
+  Object {
+    "description": "",
+    "displayName": "Parent",
+    "methods": Array [],
+    "props": Object {
+      "child": Object {
+        "description": "",
+        "required": true,
+        "type": Object {
+          "computed": true,
+          "name": "shape",
+          "value": "Child.propTypes",
+        },
       },
-    },
-    "childExact": Object {
-      "description": "",
-      "required": true,
-      "type": Object {
-        "computed": true,
-        "name": "exact",
-        "value": "Child.propTypes",
+      "childExact": Object {
+        "description": "",
+        "required": true,
+        "type": Object {
+          "computed": true,
+          "name": "exact",
+          "value": "Child.propTypes",
+        },
       },
-    },
-    "extendedChild": Object {
-      "description": "",
-      "required": true,
-      "type": Object {
-        "name": "shape",
-        "value": Object {
-          "adopted": Object {
-            "name": "bool",
-            "required": true,
+      "extendedChild": Object {
+        "description": "",
+        "required": true,
+        "type": Object {
+          "name": "shape",
+          "value": Object {
+            "adopted": Object {
+              "name": "bool",
+              "required": true,
+            },
           },
         },
       },
-    },
-    "extendedChildExact": Object {
-      "description": "",
-      "required": true,
-      "type": Object {
-        "name": "exact",
-        "value": Object {
-          "adopted": Object {
-            "name": "bool",
-            "required": true,
+      "extendedChildExact": Object {
+        "description": "",
+        "required": true,
+        "type": Object {
+          "name": "exact",
+          "value": Object {
+            "adopted": Object {
+              "name": "bool",
+              "required": true,
+            },
           },
         },
       },
-    },
-    "something": Object {
-      "description": "",
-      "required": true,
-      "type": Object {
-        "name": "string",
+      "something": Object {
+        "description": "",
+        "required": true,
+        "type": Object {
+          "name": "string",
+        },
       },
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_5.js" without errors 1`] = `
-Object {
-  "childContext": Object {
-    "color": Object {
-      "required": false,
-      "type": Object {
-        "name": "string",
+Array [
+  Object {
+    "childContext": Object {
+      "color": Object {
+        "required": false,
+        "type": Object {
+          "name": "string",
+        },
+      },
+    },
+    "context": Object {
+      "config": Object {
+        "required": false,
+        "type": Object {
+          "name": "object",
+        },
+      },
+    },
+    "description": "",
+    "displayName": "Button",
+    "methods": Array [],
+    "props": Object {
+      "children": Object {
+        "description": "",
+        "required": true,
+        "type": Object {
+          "name": "string",
+        },
+      },
+      "onClick": Object {
+        "description": "",
+        "required": false,
+        "type": Object {
+          "name": "func",
+        },
+      },
+      "style": Object {
+        "defaultValue": Object {
+          "computed": false,
+          "value": "{}",
+        },
+        "description": "",
+        "required": false,
+        "type": Object {
+          "name": "object",
+        },
       },
     },
   },
-  "context": Object {
-    "config": Object {
-      "required": false,
-      "type": Object {
-        "name": "object",
-      },
-    },
-  },
-  "description": "",
-  "displayName": "Button",
-  "methods": Array [],
-  "props": Object {
-    "children": Object {
-      "description": "",
-      "required": true,
-      "type": Object {
-        "name": "string",
-      },
-    },
-    "onClick": Object {
-      "description": "",
-      "required": false,
-      "type": Object {
-        "name": "func",
-      },
-    },
-    "style": Object {
-      "defaultValue": Object {
-        "computed": false,
-        "value": "{}",
-      },
-      "description": "",
-      "required": false,
-      "type": Object {
-        "name": "object",
-      },
-    },
-  },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_6.js" without errors 1`] = `
-Object {
-  "childContext": Object {
-    "color": Object {
-      "required": false,
-      "type": Object {
-        "name": "string",
+Array [
+  Object {
+    "childContext": Object {
+      "color": Object {
+        "required": false,
+        "type": Object {
+          "name": "string",
+        },
+      },
+    },
+    "context": Object {
+      "config": Object {
+        "required": false,
+        "type": Object {
+          "name": "object",
+        },
+      },
+    },
+    "description": "",
+    "displayName": "Button",
+    "methods": Array [],
+    "props": Object {
+      "children": Object {
+        "description": "",
+        "required": true,
+        "type": Object {
+          "name": "string",
+        },
+      },
+      "onClick": Object {
+        "description": "",
+        "required": false,
+        "type": Object {
+          "name": "func",
+        },
+      },
+      "style": Object {
+        "defaultValue": Object {
+          "computed": false,
+          "value": "{}",
+        },
+        "description": "",
+        "required": false,
+        "type": Object {
+          "name": "object",
+        },
       },
     },
   },
-  "context": Object {
-    "config": Object {
-      "required": false,
-      "type": Object {
-        "name": "object",
-      },
-    },
-  },
-  "description": "",
-  "displayName": "Button",
-  "methods": Array [],
-  "props": Object {
-    "children": Object {
-      "description": "",
-      "required": true,
-      "type": Object {
-        "name": "string",
-      },
-    },
-    "onClick": Object {
-      "description": "",
-      "required": false,
-      "type": Object {
-        "name": "func",
-      },
-    },
-    "style": Object {
-      "defaultValue": Object {
-        "computed": false,
-        "value": "{}",
-      },
-      "description": "",
-      "required": false,
-      "type": Object {
-        "name": "object",
-      },
-    },
-  },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_7.js" without errors 1`] = `
-Object {
-  "description": "The is a component to test the document generation",
-  "displayName": "Component",
-  "methods": Array [],
-}
+Array [
+  Object {
+    "description": "The is a component to test the document generation",
+    "displayName": "Component",
+    "methods": Array [],
+  },
+]
 `;
 
 exports[`main fixtures processes component "component_8.js" without errors 1`] = `
-Object {
-  "description": "",
-  "displayName": "Parent",
-  "methods": Array [
-    Object {
-      "docblock": null,
-      "modifiers": Array [],
-      "name": "onChangeSlider",
-      "params": Array [
-        Object {
-          "name": "[min, max]",
-          "optional": undefined,
-          "type": null,
-        },
-      ],
-      "returns": null,
-    },
-  ],
-}
+Array [
+  Object {
+    "description": "",
+    "displayName": "Parent",
+    "methods": Array [
+      Object {
+        "docblock": null,
+        "modifiers": Array [],
+        "name": "onChangeSlider",
+        "params": Array [
+          Object {
+            "name": "[min, max]",
+            "optional": false,
+            "type": null,
+          },
+        ],
+        "returns": null,
+      },
+    ],
+  },
+]
 `;
 
 exports[`main fixtures processes component "component_9.js" without errors 1`] = `
-Object {
-  "description": "Should be recognized as component.",
-  "displayName": "ExampleComponent",
-  "methods": Array [],
-}
+Array [
+  Object {
+    "description": "Should be recognized as component.",
+    "displayName": "ExampleComponent",
+    "methods": Array [],
+  },
+]
 `;
 
 exports[`main fixtures processes component "component_10.js" without errors 1`] = `
-Object {
-  "description": "React component that display current time at current location.",
-  "displayName": "Clock",
-  "methods": Array [
-    Object {
-      "description": "Update clock state with new time",
-      "docblock": "Update clock state with new time",
-      "modifiers": Array [],
-      "name": "updateClock",
-      "params": Array [],
-      "returns": null,
-    },
-    Object {
-      "description": "Parse current Date object",
-      "docblock": "Parse current Date object
+Array [
+  Object {
+    "description": "React component that display current time at current location.",
+    "displayName": "Clock",
+    "methods": Array [
+      Object {
+        "description": "Update clock state with new time",
+        "docblock": "Update clock state with new time",
+        "modifiers": Array [],
+        "name": "updateClock",
+        "params": Array [],
+        "returns": null,
+      },
+      Object {
+        "description": "Parse current Date object",
+        "docblock": "Parse current Date object
 
 @returns {Object} currentTime
    @returns {int} currentTime.hour
@@ -288,1684 +470,1759 @@ Object {
    @returns {string} currentTime.dayOfWeek
    @returns {string} currentTime.month
    @returns {int} currentTime.date",
-      "modifiers": Array [],
-      "name": "getTime",
-      "params": Array [],
-      "returns": Object {
-        "description": "currentTime",
+        "modifiers": Array [],
+        "name": "getTime",
+        "params": Array [],
+        "returns": Object {
+          "description": "currentTime",
+          "type": Object {
+            "name": "Object",
+          },
+        },
+      },
+      Object {
+        "description": "Update current clock for every 1 second",
+        "docblock": "Update current clock for every 1 second",
+        "modifiers": Array [],
+        "name": "setTimer",
+        "params": Array [],
+        "returns": null,
+      },
+    ],
+    "props": Object {
+      "title": Object {
+        "description": "A text display current's user identity,
+ \\"Nobody\\" if no one is detected in the background,
+ \\"Hi, ..name\\" if an user is detected",
+        "required": false,
         "type": Object {
-          "name": "Object",
+          "name": "string",
         },
       },
     },
-    Object {
-      "description": "Update current clock for every 1 second",
-      "docblock": "Update current clock for every 1 second",
-      "modifiers": Array [],
-      "name": "setTimer",
-      "params": Array [],
-      "returns": null,
-    },
-  ],
-  "props": Object {
-    "title": Object {
-      "description": "A text display current's user identity,
- \\"Nobody\\" if no one is detected in the background,
- \\"Hi, ..name\\" if an user is detected",
-      "required": false,
-      "type": Object {
-        "name": "string",
-      },
-    },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_11.js" without errors 1`] = `
-Object {
-  "composes": Array [
-    "OtherProps",
-  ],
-  "description": "",
-  "displayName": "MyComponent",
-  "methods": Array [],
-  "props": Object {
-    "fooProp": Object {
-      "description": "fooProp is spread in from a locally resolved type",
-      "flowType": Object {
-        "name": "string",
+Array [
+  Object {
+    "composes": Array [
+      "OtherProps",
+    ],
+    "description": "",
+    "displayName": "MyComponent",
+    "methods": Array [],
+    "props": Object {
+      "fooProp": Object {
+        "description": "fooProp is spread in from a locally resolved type",
+        "flowType": Object {
+          "name": "string",
+        },
+        "required": false,
       },
-      "required": false,
-    },
-    "prop1": Object {
-      "description": "The first prop",
-      "flowType": Object {
-        "name": "string",
+      "prop1": Object {
+        "description": "The first prop",
+        "flowType": Object {
+          "name": "string",
+        },
+        "required": true,
       },
-      "required": true,
-    },
-    "prop2": Object {
-      "description": "The second, covariant prop",
-      "flowType": Object {
-        "name": "number",
+      "prop2": Object {
+        "description": "The second, covariant prop",
+        "flowType": Object {
+          "name": "number",
+        },
+        "required": true,
       },
-      "required": true,
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_12.js" without errors 1`] = `
-Object {
-  "description": "",
-  "displayName": "Paper",
-  "methods": Array [],
-  "props": Object {
-    "anchorOrigin": Object {
-      "defaultValue": Object {
-        "computed": false,
-        "value": "{
+Array [
+  Object {
+    "description": "",
+    "displayName": "Paper",
+    "methods": Array [],
+    "props": Object {
+      "anchorOrigin": Object {
+        "defaultValue": Object {
+          "computed": false,
+          "value": "{
   vertical: 'top',
   horizontal: 'left',
 }",
-      },
-      "description": "This is the point on the anchor where the popover's
+        },
+        "description": "This is the point on the anchor where the popover's
 \`anchorEl\` will attach to. This is not used when the
 anchorReference is 'anchorPosition'.
 
 Options:
 vertical: [top, center, bottom];
 horizontal: [left, center, right].",
-      "flowType": Object {
-        "name": "signature",
-        "raw": "{
+        "flowType": Object {
+          "name": "signature",
+          "raw": "{
   horizontal: 'left' | 'center' | 'right' | number,
   vertical: 'top' | 'center' | 'bottom' | number,
 }",
-        "signature": Object {
-          "properties": Array [
-            Object {
-              "key": "horizontal",
-              "value": Object {
-                "elements": Array [
-                  Object {
-                    "name": "literal",
-                    "value": "'left'",
-                  },
-                  Object {
-                    "name": "literal",
-                    "value": "'center'",
-                  },
-                  Object {
-                    "name": "literal",
-                    "value": "'right'",
-                  },
-                  Object {
-                    "name": "number",
-                  },
-                ],
-                "name": "union",
-                "raw": "'left' | 'center' | 'right' | number",
-                "required": true,
+          "signature": Object {
+            "properties": Array [
+              Object {
+                "key": "horizontal",
+                "value": Object {
+                  "elements": Array [
+                    Object {
+                      "name": "literal",
+                      "value": "'left'",
+                    },
+                    Object {
+                      "name": "literal",
+                      "value": "'center'",
+                    },
+                    Object {
+                      "name": "literal",
+                      "value": "'right'",
+                    },
+                    Object {
+                      "name": "number",
+                    },
+                  ],
+                  "name": "union",
+                  "raw": "'left' | 'center' | 'right' | number",
+                  "required": true,
+                },
               },
-            },
-            Object {
-              "key": "vertical",
-              "value": Object {
-                "elements": Array [
-                  Object {
-                    "name": "literal",
-                    "value": "'top'",
-                  },
-                  Object {
-                    "name": "literal",
-                    "value": "'center'",
-                  },
-                  Object {
-                    "name": "literal",
-                    "value": "'bottom'",
-                  },
-                  Object {
-                    "name": "number",
-                  },
-                ],
-                "name": "union",
-                "raw": "'top' | 'center' | 'bottom' | number",
-                "required": true,
+              Object {
+                "key": "vertical",
+                "value": Object {
+                  "elements": Array [
+                    Object {
+                      "name": "literal",
+                      "value": "'top'",
+                    },
+                    Object {
+                      "name": "literal",
+                      "value": "'center'",
+                    },
+                    Object {
+                      "name": "literal",
+                      "value": "'bottom'",
+                    },
+                    Object {
+                      "name": "number",
+                    },
+                  ],
+                  "name": "union",
+                  "raw": "'top' | 'center' | 'bottom' | number",
+                  "required": true,
+                },
               },
-            },
-          ],
+            ],
+          },
+          "type": "object",
         },
-        "type": "object",
+        "required": false,
       },
-      "required": false,
-    },
-    "children": Object {
-      "description": "@ignore",
-      "flowType": Object {
-        "name": "Node",
+      "children": Object {
+        "description": "@ignore",
+        "flowType": Object {
+          "name": "Node",
+        },
+        "required": false,
       },
-      "required": false,
-    },
-    "classes": Object {
-      "description": "Useful to extend the style applied to components.",
-      "flowType": Object {
-        "name": "Object",
+      "classes": Object {
+        "description": "Useful to extend the style applied to components.",
+        "flowType": Object {
+          "name": "Object",
+        },
+        "required": false,
       },
-      "required": false,
-    },
-    "component": Object {
-      "defaultValue": Object {
-        "computed": false,
-        "value": "'div'",
-      },
-      "description": "The component used for the root node.
+      "component": Object {
+        "defaultValue": Object {
+          "computed": false,
+          "value": "'div'",
+        },
+        "description": "The component used for the root node.
 This currently has to be flow cast in defaultProps as of flow 0.59.0",
-      "flowType": Object {
-        "name": "ElementType",
+        "flowType": Object {
+          "name": "ElementType",
+        },
+        "required": false,
       },
-      "required": false,
-    },
-    "elevation": Object {
-      "defaultValue": Object {
-        "computed": false,
-        "value": "2",
-      },
-      "description": "Shadow depth, corresponds to \`dp\` in the spec.
+      "elevation": Object {
+        "defaultValue": Object {
+          "computed": false,
+          "value": "2",
+        },
+        "description": "Shadow depth, corresponds to \`dp\` in the spec.
 It's accepting values between 0 and 24 inclusive.",
-      "flowType": Object {
-        "name": "number",
+        "flowType": Object {
+          "name": "number",
+        },
+        "required": false,
       },
-      "required": false,
-    },
-    "labelRowsPerPage": Object {
-      "defaultValue": Object {
-        "computed": false,
-        "value": "'Rows per page:'",
-      },
-      "description": "Useful to customize the rows per page label. Invoked with a \`{ from, to, count, page }\`
+      "labelRowsPerPage": Object {
+        "defaultValue": Object {
+          "computed": false,
+          "value": "'Rows per page:'",
+        },
+        "description": "Useful to customize the rows per page label. Invoked with a \`{ from, to, count, page }\`
 object.",
-      "flowType": Object {
-        "name": "Node",
+        "flowType": Object {
+          "name": "Node",
+        },
+        "required": false,
       },
-      "required": false,
-    },
-    "timeout": Object {
-      "defaultValue": Object {
-        "computed": false,
-        "value": "300",
-      },
-      "description": "The duration for the transition, in milliseconds.
+      "timeout": Object {
+        "defaultValue": Object {
+          "computed": false,
+          "value": "300",
+        },
+        "description": "The duration for the transition, in milliseconds.
 You may specify a single timeout for all transitions, or individually with an object.
 
 Set to 'auto' to automatically calculate transition time based on height.",
-      "flowType": Object {
-        "elements": Array [
-          Object {
-            "name": "number",
-          },
-          Object {
-            "name": "signature",
-            "raw": "{ enter?: number, exit?: number }",
-            "signature": Object {
-              "properties": Array [
-                Object {
-                  "key": "enter",
-                  "value": Object {
-                    "name": "number",
-                    "required": false,
-                  },
-                },
-                Object {
-                  "key": "exit",
-                  "value": Object {
-                    "name": "number",
-                    "required": false,
-                  },
-                },
-              ],
+        "flowType": Object {
+          "elements": Array [
+            Object {
+              "name": "number",
             },
-            "type": "object",
-          },
-          Object {
-            "name": "literal",
-            "value": "'auto'",
-          },
-        ],
-        "name": "union",
-        "raw": "number | { enter?: number, exit?: number } | 'auto'",
+            Object {
+              "name": "signature",
+              "raw": "{ enter?: number, exit?: number }",
+              "signature": Object {
+                "properties": Array [
+                  Object {
+                    "key": "enter",
+                    "value": Object {
+                      "name": "number",
+                      "required": false,
+                    },
+                  },
+                  Object {
+                    "key": "exit",
+                    "value": Object {
+                      "name": "number",
+                      "required": false,
+                    },
+                  },
+                ],
+              },
+              "type": "object",
+            },
+            Object {
+              "name": "literal",
+              "value": "'auto'",
+            },
+          ],
+          "name": "union",
+          "raw": "number | { enter?: number, exit?: number } | 'auto'",
+        },
+        "required": false,
       },
-      "required": false,
-    },
-    "transition": Object {
-      "description": "Transition component.",
-      "flowType": Object {
-        "elements": Array [
-          Object {
-            "name": "unknown",
-          },
-        ],
-        "name": "ComponentType",
-        "raw": "ComponentType<*>",
+      "transition": Object {
+        "description": "Transition component.",
+        "flowType": Object {
+          "elements": Array [
+            Object {
+              "name": "unknown",
+            },
+          ],
+          "name": "ComponentType",
+          "raw": "ComponentType<*>",
+        },
+        "required": true,
       },
-      "required": true,
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_13.js" without errors 1`] = `
-Object {
-  "description": "",
-  "displayName": "Foo",
-  "methods": Array [],
-  "props": Object {
-    "RootComponent": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "ReactElementType",
-        "raw": "React.ElementType",
+Array [
+  Object {
+    "description": "",
+    "displayName": "Foo",
+    "methods": Array [],
+    "props": Object {
+      "RootComponent": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "ReactElementType",
+          "raw": "React.ElementType",
+        },
+        "required": false,
       },
-      "required": false,
-    },
-    "align": Object {
-      "description": "",
-      "flowType": Object {
-        "elements": Array [
-          Object {
-            "name": "literal",
-            "value": "\\"left\\"",
-          },
-          Object {
-            "name": "literal",
-            "value": "\\"center\\"",
-          },
-          Object {
-            "name": "literal",
-            "value": "\\"right\\"",
-          },
-          Object {
-            "name": "literal",
-            "value": "\\"justify\\"",
-          },
-        ],
-        "name": "union",
-        "raw": "\\"left\\" | \\"center\\" | \\"right\\" | \\"justify\\"",
+      "align": Object {
+        "description": "",
+        "flowType": Object {
+          "elements": Array [
+            Object {
+              "name": "literal",
+              "value": "\\"left\\"",
+            },
+            Object {
+              "name": "literal",
+              "value": "\\"center\\"",
+            },
+            Object {
+              "name": "literal",
+              "value": "\\"right\\"",
+            },
+            Object {
+              "name": "literal",
+              "value": "\\"justify\\"",
+            },
+          ],
+          "name": "union",
+          "raw": "\\"left\\" | \\"center\\" | \\"right\\" | \\"justify\\"",
+        },
+        "required": false,
       },
-      "required": false,
-    },
-    "capitalize": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "boolean",
+      "capitalize": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "boolean",
+        },
+        "required": false,
       },
-      "required": false,
-    },
-    "center": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "boolean",
+      "center": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "boolean",
+        },
+        "required": false,
       },
-      "required": false,
-    },
-    "children": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "ReactNode",
-        "raw": "React.Node",
+      "children": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "ReactNode",
+          "raw": "React.Node",
+        },
+        "required": false,
       },
-      "required": false,
-    },
-    "className": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "string",
+      "className": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "string",
+        },
+        "required": false,
       },
-      "required": false,
-    },
-    "color": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "string",
+      "color": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "string",
+        },
+        "required": false,
       },
-      "required": false,
-    },
-    "justify": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "boolean",
+      "justify": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "boolean",
+        },
+        "required": false,
       },
-      "required": false,
-    },
-    "leading": Object {
-      "description": "",
-      "flowType": Object {
-        "elements": Array [
-          Object {
-            "name": "literal",
-            "value": "\\"none\\"",
-          },
-          Object {
-            "name": "literal",
-            "value": "\\"tight\\"",
-          },
-          Object {
-            "name": "literal",
-            "value": "\\"normal\\"",
-          },
-          Object {
-            "name": "literal",
-            "value": "\\"loose\\"",
-          },
-        ],
-        "name": "union",
-        "raw": "\\"none\\" | \\"tight\\" | \\"normal\\" | \\"loose\\"",
+      "leading": Object {
+        "description": "",
+        "flowType": Object {
+          "elements": Array [
+            Object {
+              "name": "literal",
+              "value": "\\"none\\"",
+            },
+            Object {
+              "name": "literal",
+              "value": "\\"tight\\"",
+            },
+            Object {
+              "name": "literal",
+              "value": "\\"normal\\"",
+            },
+            Object {
+              "name": "literal",
+              "value": "\\"loose\\"",
+            },
+          ],
+          "name": "union",
+          "raw": "\\"none\\" | \\"tight\\" | \\"normal\\" | \\"loose\\"",
+        },
+        "required": false,
       },
-      "required": false,
-    },
-    "leadingLoose": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "boolean",
+      "leadingLoose": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "boolean",
+        },
+        "required": false,
       },
-      "required": false,
-    },
-    "leadingNone": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "boolean",
+      "leadingNone": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "boolean",
+        },
+        "required": false,
       },
-      "required": false,
-    },
-    "leadingNormal": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "boolean",
+      "leadingNormal": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "boolean",
+        },
+        "required": false,
       },
-      "required": false,
-    },
-    "leadingTight": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "boolean",
+      "leadingTight": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "boolean",
+        },
+        "required": false,
       },
-      "required": false,
-    },
-    "left": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "boolean",
+      "left": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "boolean",
+        },
+        "required": false,
       },
-      "required": false,
-    },
-    "lowercase": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "boolean",
+      "lowercase": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "boolean",
+        },
+        "required": false,
       },
-      "required": false,
-    },
-    "muted": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "boolean",
+      "muted": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "boolean",
+        },
+        "required": false,
       },
-      "required": false,
-    },
-    "right": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "boolean",
+      "right": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "boolean",
+        },
+        "required": false,
       },
-      "required": false,
-    },
-    "size": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "string",
+      "size": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "string",
+        },
+        "required": false,
       },
-      "required": false,
-    },
-    "tracking": Object {
-      "description": "",
-      "flowType": Object {
-        "elements": Array [
-          Object {
-            "name": "literal",
-            "value": "\\"tight\\"",
-          },
-          Object {
-            "name": "literal",
-            "value": "\\"normal\\"",
-          },
-          Object {
-            "name": "literal",
-            "value": "\\"wide\\"",
-          },
-        ],
-        "name": "union",
-        "raw": "\\"tight\\" | \\"normal\\" | \\"wide\\"",
+      "tracking": Object {
+        "description": "",
+        "flowType": Object {
+          "elements": Array [
+            Object {
+              "name": "literal",
+              "value": "\\"tight\\"",
+            },
+            Object {
+              "name": "literal",
+              "value": "\\"normal\\"",
+            },
+            Object {
+              "name": "literal",
+              "value": "\\"wide\\"",
+            },
+          ],
+          "name": "union",
+          "raw": "\\"tight\\" | \\"normal\\" | \\"wide\\"",
+        },
+        "required": false,
       },
-      "required": false,
-    },
-    "trackingNormal": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "boolean",
+      "trackingNormal": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "boolean",
+        },
+        "required": false,
       },
-      "required": false,
-    },
-    "trackingTight": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "boolean",
+      "trackingTight": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "boolean",
+        },
+        "required": false,
       },
-      "required": false,
-    },
-    "trackingWide": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "boolean",
+      "trackingWide": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "boolean",
+        },
+        "required": false,
       },
-      "required": false,
-    },
-    "transform": Object {
-      "description": "",
-      "flowType": Object {
-        "elements": Array [
-          Object {
-            "name": "literal",
-            "value": "\\"lowercase\\"",
-          },
-          Object {
-            "name": "literal",
-            "value": "\\"uppercase\\"",
-          },
-          Object {
-            "name": "literal",
-            "value": "\\"capitalize\\"",
-          },
-        ],
-        "name": "union",
-        "raw": "\\"lowercase\\" | \\"uppercase\\" | \\"capitalize\\"",
+      "transform": Object {
+        "description": "",
+        "flowType": Object {
+          "elements": Array [
+            Object {
+              "name": "literal",
+              "value": "\\"lowercase\\"",
+            },
+            Object {
+              "name": "literal",
+              "value": "\\"uppercase\\"",
+            },
+            Object {
+              "name": "literal",
+              "value": "\\"capitalize\\"",
+            },
+          ],
+          "name": "union",
+          "raw": "\\"lowercase\\" | \\"uppercase\\" | \\"capitalize\\"",
+        },
+        "required": false,
       },
-      "required": false,
-    },
-    "uppercase": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "boolean",
+      "uppercase": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "boolean",
+        },
+        "required": false,
       },
-      "required": false,
-    },
-    "wrap": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "boolean",
+      "wrap": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "boolean",
+        },
+        "required": false,
       },
-      "required": false,
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_14.js" without errors 1`] = `
-Object {
-  "description": "",
-  "displayName": "UncoloredView",
-  "methods": Array [],
-  "props": Object {
-    "color": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "string",
-        "nullable": true,
+Array [
+  Object {
+    "description": "",
+    "displayName": "UncoloredView",
+    "methods": Array [],
+    "props": Object {
+      "color": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "string",
+          "nullable": true,
+        },
+        "required": false,
       },
-      "required": false,
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_15.js" without errors 1`] = `
-Object {
-  "composes": Array [
-    "BarProps",
-    "BarProps2",
-    "BarProps3",
-  ],
-  "description": "",
-  "displayName": "Foo",
-  "methods": Array [],
-  "props": Object {
-    "other": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "literal",
-        "value": "'a'",
+Array [
+  Object {
+    "composes": Array [
+      "BarProps",
+      "BarProps2",
+      "BarProps3",
+    ],
+    "description": "",
+    "displayName": "Foo",
+    "methods": Array [],
+    "props": Object {
+      "other": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "literal",
+          "value": "'a'",
+        },
+        "required": true,
       },
-      "required": true,
-    },
-    "other2": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "literal",
-        "value": "'b'",
+      "other2": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "literal",
+          "value": "'b'",
+        },
+        "required": true,
       },
-      "required": true,
-    },
-    "other3": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "literal",
-        "value": "'c'",
+      "other3": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "literal",
+          "value": "'c'",
+        },
+        "required": true,
       },
-      "required": true,
-    },
-    "other4": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "literal",
-        "value": "'g'",
+      "other4": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "literal",
+          "value": "'g'",
+        },
+        "required": true,
       },
-      "required": true,
-    },
-    "other5": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "literal",
-        "value": "'f'",
+      "other5": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "literal",
+          "value": "'f'",
+        },
+        "required": true,
       },
-      "required": true,
-    },
-    "somePropOverride": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "literal",
-        "value": "'baz'",
+      "somePropOverride": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "literal",
+          "value": "'baz'",
+        },
+        "required": true,
       },
-      "required": true,
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_16.js" without errors 1`] = `
-Object {
-  "description": "",
-  "displayName": "Foo",
-  "methods": Array [],
-  "props": Object {
-    "bar": Object {
-      "defaultValue": Object {
-        "computed": false,
-        "value": "null",
-      },
-      "description": "This does something.",
-      "required": false,
-      "type": Object {
-        "name": "custom",
-        "raw": "PropTypes.node",
+Array [
+  Object {
+    "description": "",
+    "displayName": "Foo",
+    "methods": Array [],
+    "props": Object {
+      "bar": Object {
+        "defaultValue": Object {
+          "computed": false,
+          "value": "null",
+        },
+        "description": "This does something.",
+        "required": false,
+        "type": Object {
+          "name": "custom",
+          "raw": "PropTypes.node",
+        },
       },
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_17.js" without errors 1`] = `
-Object {
-  "description": "",
-  "displayName": "Foo",
-  "methods": Array [],
-  "props": Object {
-    "exactProp": Object {
-      "description": "",
-      "required": false,
-      "type": Object {
-        "name": "exact",
-        "value": Object {
-          "c": Object {
-            "description": "Comment for property c",
-            "name": "string",
-            "required": false,
-          },
-          "d": Object {
-            "name": "number",
-            "required": false,
+Array [
+  Object {
+    "description": "",
+    "displayName": "Foo",
+    "methods": Array [],
+    "props": Object {
+      "exactProp": Object {
+        "description": "",
+        "required": false,
+        "type": Object {
+          "name": "exact",
+          "value": Object {
+            "c": Object {
+              "description": "Comment for property c",
+              "name": "string",
+              "required": false,
+            },
+            "d": Object {
+              "name": "number",
+              "required": false,
+            },
           },
         },
       },
-    },
-    "oneOfTypeProp": Object {
-      "description": "",
-      "required": false,
-      "type": Object {
-        "name": "union",
-        "value": Array [
-          Object {
-            "description": "Comment for type string",
-            "name": "string",
-          },
-          Object {
-            "name": "number",
-          },
-        ],
+      "oneOfTypeProp": Object {
+        "description": "",
+        "required": false,
+        "type": Object {
+          "name": "union",
+          "value": Array [
+            Object {
+              "description": "Comment for type string",
+              "name": "string",
+            },
+            Object {
+              "name": "number",
+            },
+          ],
+        },
       },
-    },
-    "shapeProp": Object {
-      "description": "",
-      "required": false,
-      "type": Object {
-        "name": "shape",
-        "value": Object {
-          "a": Object {
-            "description": "Comment for property a",
-            "name": "string",
-            "required": false,
-          },
-          "b": Object {
-            "name": "number",
-            "required": false,
+      "shapeProp": Object {
+        "description": "",
+        "required": false,
+        "type": Object {
+          "name": "shape",
+          "value": Object {
+            "a": Object {
+              "description": "Comment for property a",
+              "name": "string",
+              "required": false,
+            },
+            "b": Object {
+              "name": "number",
+              "required": false,
+            },
           },
         },
       },
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_18.js" without errors 1`] = `
-Object {
-  "description": "",
-  "displayName": "UncoloredView",
-  "methods": Array [],
-  "props": Object {
-    "color": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "string",
-        "nullable": true,
+Array [
+  Object {
+    "description": "",
+    "displayName": "UncoloredView",
+    "methods": Array [],
+    "props": Object {
+      "color": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "string",
+          "nullable": true,
+        },
+        "required": false,
+        "type": Object {
+          "name": "string",
+        },
       },
-      "required": false,
-      "type": Object {
-        "name": "string",
-      },
-    },
-    "id": Object {
-      "defaultValue": Object {
-        "computed": false,
-        "value": "'test-forward-ref-default'",
-      },
-      "description": "",
-      "required": false,
-      "type": Object {
-        "name": "string",
+      "id": Object {
+        "defaultValue": Object {
+          "computed": false,
+          "value": "'test-forward-ref-default'",
+        },
+        "description": "",
+        "required": false,
+        "type": Object {
+          "name": "string",
+        },
       },
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_19.js" without errors 1`] = `
-Object {
-  "description": "",
-  "displayName": "Component",
-  "methods": Array [],
-  "props": Object {
-    "data": Object {
-      "description": "",
-      "flowType": Object {
-        "elements": Array [
-          Object {
-            "name": "mixed",
-          },
-        ],
-        "name": "Array",
-        "raw": "Array<mixed>",
+Array [
+  Object {
+    "description": "",
+    "displayName": "Component",
+    "methods": Array [],
+    "props": Object {
+      "data": Object {
+        "description": "",
+        "flowType": Object {
+          "elements": Array [
+            Object {
+              "name": "mixed",
+            },
+          ],
+          "name": "Array",
+          "raw": "Array<mixed>",
+        },
+        "required": false,
       },
-      "required": false,
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_20.js" without errors 1`] = `
-Object {
-  "description": "",
-  "displayName": "Button",
-  "methods": Array [],
-  "props": Object {
-    "@computed#children": Object {
-      "defaultValue": Object {
-        "computed": false,
-        "value": "\\"default\\"",
-      },
-      "description": "This is a test",
-      "required": false,
-      "type": Object {
-        "name": "string",
+Array [
+  Object {
+    "description": "",
+    "displayName": "Button",
+    "methods": Array [],
+    "props": Object {
+      "@computed#children": Object {
+        "defaultValue": Object {
+          "computed": false,
+          "value": "\\"default\\"",
+        },
+        "description": "This is a test",
+        "required": false,
+        "type": Object {
+          "name": "string",
+        },
       },
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_21.tsx" without errors 1`] = `
-Object {
-  "description": "This is a typescript class component",
-  "displayName": "TSComponent",
-  "methods": Array [],
-  "props": Object {
-    "bar": Object {
-      "description": "Required prop",
-      "required": true,
-      "tsType": Object {
-        "name": "number",
+Array [
+  Object {
+    "description": "This is a typescript class component",
+    "displayName": "TSComponent",
+    "methods": Array [],
+    "props": Object {
+      "bar": Object {
+        "description": "Required prop",
+        "required": true,
+        "tsType": Object {
+          "name": "number",
+        },
       },
-    },
-    "baz": Object {
-      "description": "Complex union prop",
-      "required": true,
-      "tsType": Object {
-        "elements": Array [
-          Object {
-            "name": "number",
-          },
-          Object {
-            "name": "signature",
-            "raw": "{ enter?: number, exit?: number }",
-            "signature": Object {
-              "properties": Array [
-                Object {
-                  "key": "enter",
-                  "value": Object {
-                    "name": "number",
-                    "required": false,
-                  },
-                },
-                Object {
-                  "key": "exit",
-                  "value": Object {
-                    "name": "number",
-                    "required": false,
-                  },
-                },
-              ],
+      "baz": Object {
+        "description": "Complex union prop",
+        "required": true,
+        "tsType": Object {
+          "elements": Array [
+            Object {
+              "name": "number",
             },
-            "type": "object",
-          },
-          Object {
-            "name": "literal",
-            "value": "'auto'",
-          },
-        ],
-        "name": "union",
-        "raw": "number | { enter?: number, exit?: number } | 'auto'",
+            Object {
+              "name": "signature",
+              "raw": "{ enter?: number, exit?: number }",
+              "signature": Object {
+                "properties": Array [
+                  Object {
+                    "key": "enter",
+                    "value": Object {
+                      "name": "number",
+                      "required": false,
+                    },
+                  },
+                  Object {
+                    "key": "exit",
+                    "value": Object {
+                      "name": "number",
+                      "required": false,
+                    },
+                  },
+                ],
+              },
+              "type": "object",
+            },
+            Object {
+              "name": "literal",
+              "value": "'auto'",
+            },
+          ],
+          "name": "union",
+          "raw": "number | { enter?: number, exit?: number } | 'auto'",
+        },
       },
-    },
-    "foo": Object {
-      "description": "Optional prop",
-      "required": false,
-      "tsType": Object {
-        "name": "string",
+      "foo": Object {
+        "description": "Optional prop",
+        "required": false,
+        "tsType": Object {
+          "name": "string",
+        },
       },
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_22.tsx" without errors 1`] = `
-Object {
-  "description": "This is a TypeScript function component",
-  "displayName": "TSFunctionComponent",
-  "methods": Array [],
-  "props": Object {
-    "align": Object {
-      "description": "",
-      "required": false,
-      "tsType": Object {
-        "elements": Array [
-          Object {
-            "name": "literal",
-            "value": "\\"left\\"",
-          },
-          Object {
-            "name": "literal",
-            "value": "\\"center\\"",
-          },
-          Object {
-            "name": "literal",
-            "value": "\\"right\\"",
-          },
-          Object {
-            "name": "literal",
-            "value": "\\"justify\\"",
-          },
-        ],
-        "name": "union",
-        "raw": "\\"left\\" | \\"center\\" | \\"right\\" | \\"justify\\"",
+Array [
+  Object {
+    "description": "This is a TypeScript function component",
+    "displayName": "TSFunctionComponent",
+    "methods": Array [],
+    "props": Object {
+      "align": Object {
+        "description": "",
+        "required": false,
+        "tsType": Object {
+          "elements": Array [
+            Object {
+              "name": "literal",
+              "value": "\\"left\\"",
+            },
+            Object {
+              "name": "literal",
+              "value": "\\"center\\"",
+            },
+            Object {
+              "name": "literal",
+              "value": "\\"right\\"",
+            },
+            Object {
+              "name": "literal",
+              "value": "\\"justify\\"",
+            },
+          ],
+          "name": "union",
+          "raw": "\\"left\\" | \\"center\\" | \\"right\\" | \\"justify\\"",
+        },
       },
-    },
-    "center": Object {
-      "description": "",
-      "required": false,
-      "tsType": Object {
-        "name": "boolean",
+      "center": Object {
+        "description": "",
+        "required": false,
+        "tsType": Object {
+          "name": "boolean",
+        },
       },
-    },
-    "justify": Object {
-      "description": "",
-      "required": false,
-      "tsType": Object {
-        "name": "boolean",
+      "justify": Object {
+        "description": "",
+        "required": false,
+        "tsType": Object {
+          "name": "boolean",
+        },
       },
-    },
-    "left": Object {
-      "description": "",
-      "required": false,
-      "tsType": Object {
-        "name": "boolean",
+      "left": Object {
+        "description": "",
+        "required": false,
+        "tsType": Object {
+          "name": "boolean",
+        },
       },
-    },
-    "right": Object {
-      "description": "",
-      "required": false,
-      "tsType": Object {
-        "name": "boolean",
+      "right": Object {
+        "description": "",
+        "required": false,
+        "tsType": Object {
+          "name": "boolean",
+        },
       },
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_23.tsx" without errors 1`] = `
-Object {
-  "composes": Array [
-    "OtherProps",
-  ],
-  "description": "This is a typescript class component",
-  "displayName": "TSComponent",
-  "methods": Array [],
-  "props": Object {
-    "bar": Object {
-      "description": "Required prop",
-      "required": true,
-      "tsType": Object {
-        "name": "number",
+Array [
+  Object {
+    "composes": Array [
+      "OtherProps",
+    ],
+    "description": "This is a typescript class component",
+    "displayName": "TSComponent",
+    "methods": Array [],
+    "props": Object {
+      "bar": Object {
+        "description": "Required prop",
+        "required": true,
+        "tsType": Object {
+          "name": "number",
+        },
       },
-    },
-    "baz": Object {
-      "description": "Complex union prop",
-      "required": true,
-      "tsType": Object {
-        "elements": Array [
-          Object {
-            "name": "number",
-          },
-          Object {
-            "name": "signature",
-            "raw": "{ enter?: number, exit?: number }",
-            "signature": Object {
-              "properties": Array [
-                Object {
-                  "key": "enter",
-                  "value": Object {
-                    "name": "number",
-                    "required": false,
-                  },
-                },
-                Object {
-                  "key": "exit",
-                  "value": Object {
-                    "name": "number",
-                    "required": false,
-                  },
-                },
-              ],
+      "baz": Object {
+        "description": "Complex union prop",
+        "required": true,
+        "tsType": Object {
+          "elements": Array [
+            Object {
+              "name": "number",
             },
-            "type": "object",
-          },
-          Object {
-            "name": "literal",
-            "value": "'auto'",
-          },
-        ],
-        "name": "union",
-        "raw": "number | { enter?: number, exit?: number } | 'auto'",
+            Object {
+              "name": "signature",
+              "raw": "{ enter?: number, exit?: number }",
+              "signature": Object {
+                "properties": Array [
+                  Object {
+                    "key": "enter",
+                    "value": Object {
+                      "name": "number",
+                      "required": false,
+                    },
+                  },
+                  Object {
+                    "key": "exit",
+                    "value": Object {
+                      "name": "number",
+                      "required": false,
+                    },
+                  },
+                ],
+              },
+              "type": "object",
+            },
+            Object {
+              "name": "literal",
+              "value": "'auto'",
+            },
+          ],
+          "name": "union",
+          "raw": "number | { enter?: number, exit?: number } | 'auto'",
+        },
       },
-    },
-    "foo": Object {
-      "description": "Optional prop",
-      "required": false,
-      "tsType": Object {
-        "name": "string",
+      "foo": Object {
+        "description": "Optional prop",
+        "required": false,
+        "tsType": Object {
+          "name": "string",
+        },
       },
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_24.js" without errors 1`] = `
-Object {
-  "composes": Array [
-    "OtherProps",
-  ],
-  "description": "This is a flow class component with an interface as props",
-  "displayName": "FlowComponent",
-  "methods": Array [],
-  "props": Object {
-    "bar": Object {
-      "description": "Required prop",
-      "flowType": Object {
-        "name": "number",
+Array [
+  Object {
+    "composes": Array [
+      "OtherProps",
+    ],
+    "description": "This is a flow class component with an interface as props",
+    "displayName": "FlowComponent",
+    "methods": Array [],
+    "props": Object {
+      "bar": Object {
+        "description": "Required prop",
+        "flowType": Object {
+          "name": "number",
+        },
+        "required": true,
       },
-      "required": true,
-    },
-    "baz": Object {
-      "description": "Complex union prop",
-      "flowType": Object {
-        "elements": Array [
-          Object {
-            "name": "number",
-          },
-          Object {
-            "name": "signature",
-            "raw": "{ enter?: number, exit?: number }",
-            "signature": Object {
-              "properties": Array [
-                Object {
-                  "key": "enter",
-                  "value": Object {
-                    "name": "number",
-                    "required": false,
-                  },
-                },
-                Object {
-                  "key": "exit",
-                  "value": Object {
-                    "name": "number",
-                    "required": false,
-                  },
-                },
-              ],
+      "baz": Object {
+        "description": "Complex union prop",
+        "flowType": Object {
+          "elements": Array [
+            Object {
+              "name": "number",
             },
-            "type": "object",
-          },
-          Object {
-            "name": "literal",
-            "value": "'auto'",
-          },
-        ],
-        "name": "union",
-        "raw": "number | { enter?: number, exit?: number } | 'auto'",
+            Object {
+              "name": "signature",
+              "raw": "{ enter?: number, exit?: number }",
+              "signature": Object {
+                "properties": Array [
+                  Object {
+                    "key": "enter",
+                    "value": Object {
+                      "name": "number",
+                      "required": false,
+                    },
+                  },
+                  Object {
+                    "key": "exit",
+                    "value": Object {
+                      "name": "number",
+                      "required": false,
+                    },
+                  },
+                ],
+              },
+              "type": "object",
+            },
+            Object {
+              "name": "literal",
+              "value": "'auto'",
+            },
+          ],
+          "name": "union",
+          "raw": "number | { enter?: number, exit?: number } | 'auto'",
+        },
+        "required": true,
       },
-      "required": true,
-    },
-    "foo": Object {
-      "description": "Optional prop",
-      "flowType": Object {
-        "name": "string",
+      "foo": Object {
+        "description": "Optional prop",
+        "flowType": Object {
+          "name": "string",
+        },
+        "required": false,
       },
-      "required": false,
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_25.tsx" without errors 1`] = `
-Object {
-  "description": "This is a typescript class component",
-  "displayName": "TSComponent",
-  "methods": Array [],
-  "props": Object {
-    "bar": Object {
-      "description": "Required prop",
-      "required": true,
-      "tsType": Object {
-        "elements": Array [
-          Object {
-            "name": "Child",
-          },
-        ],
-        "name": "Array",
-        "raw": "Array<X>",
+Array [
+  Object {
+    "description": "This is a typescript class component",
+    "displayName": "TSComponent",
+    "methods": Array [],
+    "props": Object {
+      "bar": Object {
+        "description": "Required prop",
+        "required": true,
+        "tsType": Object {
+          "elements": Array [
+            Object {
+              "name": "Child",
+            },
+          ],
+          "name": "Array",
+          "raw": "Array<X>",
+        },
       },
-    },
-    "baz": Object {
-      "description": "Complex union prop",
-      "required": true,
-      "tsType": Object {
-        "name": "number",
+      "baz": Object {
+        "description": "Complex union prop",
+        "required": true,
+        "tsType": Object {
+          "name": "number",
+        },
       },
-    },
-    "foo": Object {
-      "description": "Optional prop",
-      "required": false,
-      "tsType": Object {
-        "name": "Child",
+      "foo": Object {
+        "description": "Optional prop",
+        "required": false,
+        "tsType": Object {
+          "name": "Child",
+        },
       },
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_26.js" without errors 1`] = `
-Object {
-  "description": "This is a typescript class component",
-  "displayName": "FlowComponent",
-  "methods": Array [],
-  "props": Object {
-    "bar": Object {
-      "description": "Required prop",
-      "flowType": Object {
-        "elements": Array [
-          Object {
-            "name": "Child",
-          },
-        ],
-        "name": "Array",
-        "raw": "Array<X>",
+Array [
+  Object {
+    "description": "This is a typescript class component",
+    "displayName": "FlowComponent",
+    "methods": Array [],
+    "props": Object {
+      "bar": Object {
+        "description": "Required prop",
+        "flowType": Object {
+          "elements": Array [
+            Object {
+              "name": "Child",
+            },
+          ],
+          "name": "Array",
+          "raw": "Array<X>",
+        },
+        "required": true,
       },
-      "required": true,
-    },
-    "baz": Object {
-      "description": "Complex union prop",
-      "flowType": Object {
-        "name": "number",
+      "baz": Object {
+        "description": "Complex union prop",
+        "flowType": Object {
+          "name": "number",
+        },
+        "required": true,
       },
-      "required": true,
-    },
-    "foo": Object {
-      "description": "Optional prop",
-      "flowType": Object {
-        "name": "Child",
+      "foo": Object {
+        "description": "Optional prop",
+        "flowType": Object {
+          "name": "Child",
+        },
+        "required": false,
       },
-      "required": false,
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_27.tsx" without errors 1`] = `
-Object {
-  "description": "This is a typescript class component",
-  "displayName": "TSComponent",
-  "methods": Array [
-    Object {
-      "description": "This is a method",
-      "docblock": "This is a method",
-      "modifiers": Array [],
-      "name": "foo",
-      "params": Array [
-        Object {
-          "name": "a",
+Array [
+  Object {
+    "description": "This is a typescript class component",
+    "displayName": "TSComponent",
+    "methods": Array [
+      Object {
+        "description": "This is a method",
+        "docblock": "This is a method",
+        "modifiers": Array [],
+        "name": "foo",
+        "params": Array [
+          Object {
+            "name": "a",
+            "optional": false,
+            "type": Object {
+              "name": "string",
+            },
+          },
+        ],
+        "returns": Object {
           "type": Object {
             "name": "string",
           },
         },
-      ],
-      "returns": Object {
-        "type": Object {
-          "name": "string",
-        },
       },
-    },
-    Object {
-      "description": "This is a public method",
-      "docblock": "This is a public method",
-      "modifiers": Array [],
-      "name": "bar",
-      "params": Array [
-        Object {
-          "name": "a",
+      Object {
+        "description": "This is a public method",
+        "docblock": "This is a public method",
+        "modifiers": Array [],
+        "name": "bar",
+        "params": Array [
+          Object {
+            "name": "a",
+            "optional": false,
+            "type": Object {
+              "name": "string",
+            },
+          },
+        ],
+        "returns": Object {
           "type": Object {
             "name": "string",
           },
         },
-      ],
-      "returns": Object {
-        "type": Object {
+      },
+    ],
+    "props": Object {
+      "foo": Object {
+        "description": "",
+        "required": true,
+        "tsType": Object {
           "name": "string",
         },
-      },
-    },
-  ],
-  "props": Object {
-    "foo": Object {
-      "description": "",
-      "required": true,
-      "tsType": Object {
-        "name": "string",
       },
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_28.tsx" without errors 1`] = `
-Object {
-  "description": "Example component description",
-  "displayName": "ABC",
-  "methods": Array [],
-  "props": Object {
-    "foo": Object {
-      "defaultValue": Object {
-        "computed": false,
-        "value": "true",
-      },
-      "description": "Example prop description",
-      "required": false,
-      "tsType": Object {
-        "name": "boolean",
+Array [
+  Object {
+    "description": "Example component description",
+    "displayName": "ABC",
+    "methods": Array [],
+    "props": Object {
+      "foo": Object {
+        "defaultValue": Object {
+          "computed": false,
+          "value": "true",
+        },
+        "description": "Example prop description",
+        "required": false,
+        "tsType": Object {
+          "name": "boolean",
+        },
       },
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_29.js" without errors 1`] = `
-Object {
-  "description": "",
-  "displayName": "MyComponent",
-  "methods": Array [],
-  "props": Object {
-    "prop": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "T",
+Array [
+  Object {
+    "description": "",
+    "displayName": "MyComponent",
+    "methods": Array [],
+    "props": Object {
+      "prop": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "T",
+        },
+        "required": true,
       },
-      "required": true,
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_30.js" without errors 1`] = `
-Object {
-  "description": "",
-  "displayName": "MyComponent",
-  "methods": Array [],
-  "props": Object {
-    "prop": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "string",
+Array [
+  Object {
+    "description": "",
+    "displayName": "MyComponent",
+    "methods": Array [],
+    "props": Object {
+      "prop": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "string",
+        },
+        "required": true,
       },
-      "required": true,
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_31.js" without errors 1`] = `
-Object {
-  "description": "",
-  "displayName": "MyComponent",
-  "methods": Array [],
-  "props": Object {
-    "prop": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "T",
+Array [
+  Object {
+    "description": "",
+    "displayName": "MyComponent",
+    "methods": Array [],
+    "props": Object {
+      "prop": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "T",
+        },
+        "required": true,
       },
-      "required": true,
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_32.js" without errors 1`] = `
-Object {
-  "description": "",
-  "displayName": "Segments",
-  "methods": Array [
-    Object {
-      "docblock": null,
-      "modifiers": Array [],
-      "name": "foo",
-      "params": Array [
-        Object {
-          "name": "props",
-          "optional": undefined,
-          "type": Object {
-            "alias": "Props",
-            "name": "signature",
-            "raw": "{
+Array [
+  Object {
+    "description": "",
+    "displayName": "Segments",
+    "methods": Array [
+      Object {
+        "docblock": null,
+        "modifiers": Array [],
+        "name": "foo",
+        "params": Array [
+          Object {
+            "name": "props",
+            "optional": false,
+            "type": Object {
+              "alias": "Props",
+              "name": "signature",
+              "raw": "{
   segments: Array<T>,
 }",
-            "signature": Object {
-              "properties": Array [
-                Object {
-                  "key": "segments",
-                  "value": Object {
-                    "elements": Array [
-                      Object {
-                        "name": "T",
-                      },
-                    ],
-                    "name": "Array",
-                    "raw": "Array<T>",
-                    "required": true,
+              "signature": Object {
+                "properties": Array [
+                  Object {
+                    "key": "segments",
+                    "value": Object {
+                      "elements": Array [
+                        Object {
+                          "name": "T",
+                        },
+                      ],
+                      "name": "Array",
+                      "raw": "Array<T>",
+                      "required": true,
+                    },
                   },
-                },
-              ],
+                ],
+              },
+              "type": "object",
             },
-            "type": "object",
-          },
-        },
-      ],
-      "returns": null,
-    },
-  ],
-  "props": Object {
-    "segments": Object {
-      "description": "",
-      "flowType": Object {
-        "elements": Array [
-          Object {
-            "name": "T",
           },
         ],
-        "name": "Array",
-        "raw": "Array<T>",
+        "returns": null,
       },
-      "required": true,
+    ],
+    "props": Object {
+      "segments": Object {
+        "description": "",
+        "flowType": Object {
+          "elements": Array [
+            Object {
+              "name": "T",
+            },
+          ],
+          "name": "Array",
+          "raw": "Array<T>",
+        },
+        "required": true,
+      },
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_33.tsx" without errors 1`] = `
-Object {
-  "description": "This is a typescript component with imported prop types",
-  "displayName": "ImportedExtendedComponent",
-  "methods": Array [],
-  "props": Object {
-    "bar": Object {
-      "description": "",
-      "required": true,
-      "tsType": Object {
-        "name": "number",
+Array [
+  Object {
+    "description": "This is a typescript component with imported prop types",
+    "displayName": "ImportedExtendedComponent",
+    "methods": Array [],
+    "props": Object {
+      "bar": Object {
+        "description": "",
+        "required": true,
+        "tsType": Object {
+          "name": "number",
+        },
       },
-    },
-    "foo": Object {
-      "description": "",
-      "required": true,
-      "tsType": Object {
-        "name": "string",
+      "foo": Object {
+        "description": "",
+        "required": true,
+        "tsType": Object {
+          "name": "string",
+        },
       },
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_34.js" without errors 1`] = `
-Object {
-  "description": "",
-  "displayName": "CustomButton",
-  "methods": Array [],
-  "props": Object {
-    "children": Object {
-      "description": "",
-      "required": true,
-      "type": Object {
-        "name": "string",
+Array [
+  Object {
+    "description": "",
+    "displayName": "CustomButton",
+    "methods": Array [],
+    "props": Object {
+      "children": Object {
+        "description": "",
+        "required": true,
+        "type": Object {
+          "name": "string",
+        },
       },
-    },
-    "color": Object {
-      "description": "",
-      "required": false,
-      "type": Object {
-        "name": "string",
+      "color": Object {
+        "description": "",
+        "required": false,
+        "type": Object {
+          "name": "string",
+        },
       },
-    },
-    "onClick": Object {
-      "description": "",
-      "required": false,
-      "type": Object {
-        "name": "func",
+      "onClick": Object {
+        "description": "",
+        "required": false,
+        "type": Object {
+          "name": "func",
+        },
       },
-    },
-    "style": Object {
-      "description": "",
-      "required": false,
-      "type": Object {
-        "name": "object",
+      "style": Object {
+        "description": "",
+        "required": false,
+        "type": Object {
+          "name": "object",
+        },
       },
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_35.js" without errors 1`] = `
-Object {
-  "description": "",
-  "displayName": "SuperCustomButton",
-  "methods": Array [],
-  "props": Object {
-    "children": Object {
-      "description": "",
-      "required": true,
-      "type": Object {
-        "name": "string",
+Array [
+  Object {
+    "description": "",
+    "displayName": "SuperCustomButton",
+    "methods": Array [],
+    "props": Object {
+      "children": Object {
+        "description": "",
+        "required": true,
+        "type": Object {
+          "name": "string",
+        },
       },
-    },
-    "onClick": Object {
-      "description": "",
-      "required": false,
-      "type": Object {
-        "name": "func",
+      "onClick": Object {
+        "description": "",
+        "required": false,
+        "type": Object {
+          "name": "func",
+        },
       },
-    },
-    "style": Object {
-      "description": "",
-      "required": false,
-      "type": Object {
-        "name": "object",
+      "style": Object {
+        "description": "",
+        "required": false,
+        "type": Object {
+          "name": "object",
+        },
       },
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_36.js" without errors 1`] = `
-Object {
-  "description": "",
-  "displayName": "SuperDuperCustomButton",
-  "methods": Array [],
-  "props": Object {
-    "children": Object {
-      "description": "",
-      "required": true,
-      "type": Object {
-        "name": "string",
+Array [
+  Object {
+    "description": "",
+    "displayName": "SuperDuperCustomButton",
+    "methods": Array [],
+    "props": Object {
+      "children": Object {
+        "description": "",
+        "required": true,
+        "type": Object {
+          "name": "string",
+        },
       },
-    },
-    "onClick": Object {
-      "description": "",
-      "required": false,
-      "type": Object {
-        "name": "func",
+      "onClick": Object {
+        "description": "",
+        "required": false,
+        "type": Object {
+          "name": "func",
+        },
       },
-    },
-    "style": Object {
-      "description": "",
-      "required": false,
-      "type": Object {
-        "name": "object",
+      "style": Object {
+        "description": "",
+        "required": false,
+        "type": Object {
+          "name": "object",
+        },
       },
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_37.js" without errors 1`] = `
-Object {
-  "description": "",
-  "displayName": "SuperDuperCustomButton",
-  "methods": Array [],
-  "props": Object {
-    "children": Object {
-      "description": "",
-      "required": true,
-      "type": Object {
-        "name": "string",
+Array [
+  Object {
+    "description": "",
+    "displayName": "SuperDuperCustomButton",
+    "methods": Array [],
+    "props": Object {
+      "children": Object {
+        "description": "",
+        "required": true,
+        "type": Object {
+          "name": "string",
+        },
       },
-    },
-    "onClick": Object {
-      "description": "",
-      "required": false,
-      "type": Object {
-        "name": "func",
+      "onClick": Object {
+        "description": "",
+        "required": false,
+        "type": Object {
+          "name": "func",
+        },
       },
-    },
-    "style": Object {
-      "description": "",
-      "required": false,
-      "type": Object {
-        "name": "object",
+      "style": Object {
+        "description": "",
+        "required": false,
+        "type": Object {
+          "name": "object",
+        },
       },
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_38.js" without errors 1`] = `
-Object {
-  "description": "",
-  "displayName": "SuperDuperCustomButton",
-  "methods": Array [],
-  "props": Object {
-    "children": Object {
-      "description": "",
-      "required": true,
-      "type": Object {
-        "name": "string",
+Array [
+  Object {
+    "description": "",
+    "displayName": "SuperDuperCustomButton",
+    "methods": Array [],
+    "props": Object {
+      "children": Object {
+        "description": "",
+        "required": true,
+        "type": Object {
+          "name": "string",
+        },
       },
-    },
-    "onClick": Object {
-      "description": "",
-      "required": false,
-      "type": Object {
-        "name": "func",
+      "onClick": Object {
+        "description": "",
+        "required": false,
+        "type": Object {
+          "name": "func",
+        },
       },
-    },
-    "style": Object {
-      "description": "",
-      "required": false,
-      "type": Object {
-        "name": "object",
+      "style": Object {
+        "description": "",
+        "required": false,
+        "type": Object {
+          "name": "object",
+        },
       },
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_39.tsx" without errors 1`] = `
-Object {
-  "description": "This is a typescript component with imported prop types",
-  "displayName": "ImportedComponent",
-  "methods": Array [],
-  "props": Object {
-    "foo": Object {
-      "description": "",
-      "required": true,
-      "tsType": Object {
-        "name": "string",
+Array [
+  Object {
+    "description": "This is a typescript component with imported prop types",
+    "displayName": "ImportedComponent",
+    "methods": Array [],
+    "props": Object {
+      "foo": Object {
+        "description": "",
+        "required": true,
+        "tsType": Object {
+          "name": "string",
+        },
       },
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_40.js" without errors 1`] = `
-Object {
-  "description": "",
-  "displayName": "SuperDuperCustomButton",
-  "methods": Array [],
-  "props": Object {
-    "size": Object {
-      "defaultValue": Object {
-        "computed": true,
-        "value": "Sizes.EXTRA_LARGE",
-      },
-      "description": "",
-      "required": false,
-      "type": Object {
-        "computed": true,
-        "name": "enum",
-        "value": "Object.values(Sizes)",
+Array [
+  Object {
+    "description": "",
+    "displayName": "SuperDuperCustomButton",
+    "methods": Array [],
+    "props": Object {
+      "size": Object {
+        "defaultValue": Object {
+          "computed": true,
+          "value": "Sizes.EXTRA_LARGE",
+        },
+        "description": "",
+        "required": false,
+        "type": Object {
+          "computed": true,
+          "name": "enum",
+          "value": "Object.values(Sizes)",
+        },
       },
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_41.tsx" without errors 1`] = `
-Object {
-  "description": "",
-  "displayName": "MyComponent",
-  "methods": Array [],
-  "props": Object {
-    "value": Object {
-      "description": "String value of a number",
-      "required": false,
-      "tsType": Object {
-        "name": "STRING_VALS[number]",
-        "raw": "typeof STRING_VALS[number]",
+Array [
+  Object {
+    "description": "",
+    "displayName": "MyComponent",
+    "methods": Array [],
+    "props": Object {
+      "value": Object {
+        "description": "String value of a number",
+        "required": false,
+        "tsType": Object {
+          "name": "STRING_VALS[number]",
+          "raw": "typeof STRING_VALS[number]",
+        },
       },
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_42.js" without errors 1`] = `
-Object {
-  "description": "",
-  "methods": Array [],
-  "props": Object {
-    "foo": Object {
-      "defaultValue": Object {
-        "computed": false,
-        "value": "'bar'",
+Array [
+  Object {
+    "description": "",
+    "methods": Array [],
+    "props": Object {
+      "foo": Object {
+        "defaultValue": Object {
+          "computed": false,
+          "value": "'bar'",
+        },
+        "required": false,
       },
-      "required": false,
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "component_43.tsx" without errors 1`] = `
-Object {
-  "description": "",
-  "displayName": "MenuItem",
-  "methods": Array [],
-  "props": Object {
-    "children": Object {
-      "description": "Menu item contents.",
-      "required": false,
-      "type": Object {
-        "name": "node",
+Array [
+  Object {
+    "description": "",
+    "displayName": "MenuItem",
+    "methods": Array [],
+    "props": Object {
+      "children": Object {
+        "description": "Menu item contents.",
+        "required": false,
+        "type": Object {
+          "name": "node",
+        },
       },
-    },
-    "classes": Object {
-      "description": "Override or extend the styles applied to the component. See CSS API below for more details.",
-      "required": false,
-      "type": Object {
-        "name": "object",
+      "classes": Object {
+        "description": "Override or extend the styles applied to the component. See CSS API below for more details.",
+        "required": false,
+        "type": Object {
+          "name": "object",
+        },
       },
-    },
-    "component": Object {
-      "defaultValue": Object {
-        "computed": false,
-        "value": "'li'",
+      "component": Object {
+        "defaultValue": Object {
+          "computed": false,
+          "value": "'li'",
+        },
+        "required": false,
       },
-      "required": false,
-    },
-    "disableGutters": Object {
-      "defaultValue": Object {
-        "computed": false,
-        "value": "false",
+      "disableGutters": Object {
+        "defaultValue": Object {
+          "computed": false,
+          "value": "false",
+        },
+        "required": false,
       },
-      "required": false,
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "flow-export-type.js" without errors 1`] = `
-Object {
-  "description": "This is a Flow class component",
-  "displayName": "FlowComponent",
-  "methods": Array [
-    Object {
-      "docblock": null,
-      "modifiers": Array [],
-      "name": "foo",
-      "params": Array [
-        Object {
-          "name": "a",
-          "optional": undefined,
+Array [
+  Object {
+    "description": "This is a Flow class component",
+    "displayName": "FlowComponent",
+    "methods": Array [
+      Object {
+        "docblock": null,
+        "modifiers": Array [],
+        "name": "foo",
+        "params": Array [
+          Object {
+            "name": "a",
+            "optional": false,
+            "type": Object {
+              "name": "string",
+            },
+          },
+        ],
+        "returns": Object {
           "type": Object {
             "name": "string",
           },
         },
-      ],
-      "returns": Object {
-        "type": Object {
-          "name": "string",
-        },
       },
-    },
-    Object {
-      "docblock": null,
-      "modifiers": Array [],
-      "name": "bar",
-      "params": Array [
-        Object {
-          "name": "a",
-          "optional": undefined,
+      Object {
+        "docblock": null,
+        "modifiers": Array [],
+        "name": "bar",
+        "params": Array [
+          Object {
+            "name": "a",
+            "optional": false,
+            "type": Object {
+              "name": "string",
+            },
+          },
+        ],
+        "returns": Object {
           "type": Object {
             "name": "string",
           },
         },
-      ],
-      "returns": Object {
-        "type": Object {
+      },
+    ],
+    "props": Object {
+      "foo": Object {
+        "description": "",
+        "flowType": Object {
           "name": "string",
         },
+        "required": true,
       },
-    },
-  ],
-  "props": Object {
-    "foo": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "string",
-      },
-      "required": true,
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "flow-import-type.js" without errors 1`] = `
-Object {
-  "description": "This is a Flow component with imported prop types",
-  "displayName": "ImportedComponent",
-  "methods": Array [],
-  "props": Object {
-    "foo": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "string",
+Array [
+  Object {
+    "description": "This is a Flow component with imported prop types",
+    "displayName": "ImportedComponent",
+    "methods": Array [],
+    "props": Object {
+      "foo": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "string",
+        },
+        "required": true,
       },
-      "required": true,
     },
   },
-}
+]
 `;
 
 exports[`main fixtures processes component "flow-spread-import-type.js" without errors 1`] = `
-Object {
-  "description": "This is a Flow component with imported prop types",
-  "displayName": "ImportedExtendedComponent",
-  "methods": Array [],
-  "props": Object {
-    "bar": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "number",
+Array [
+  Object {
+    "description": "This is a Flow component with imported prop types",
+    "displayName": "ImportedExtendedComponent",
+    "methods": Array [],
+    "props": Object {
+      "bar": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "number",
+        },
+        "required": true,
       },
-      "required": true,
-    },
-    "foo": Object {
-      "description": "",
-      "flowType": Object {
-        "name": "string",
+      "foo": Object {
+        "description": "",
+        "flowType": Object {
+          "name": "string",
+        },
+        "required": true,
       },
-      "required": true,
     },
   },
-}
+]
 `;

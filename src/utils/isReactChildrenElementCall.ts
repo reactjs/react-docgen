@@ -1,19 +1,17 @@
-import { namedTypes as t } from 'ast-types';
+import type { NodePath } from '@babel/traverse';
+import type { MemberExpression } from '@babel/types';
 import isReactModuleName from './isReactModuleName';
 import match from './match';
 import resolveToModule from './resolveToModule';
-import type { Importer } from '../parse';
-import type { NodePath } from 'ast-types/lib/node-path';
+
+// TODO unit tests
 
 /**
  * Returns true if the expression is a function call of the form
  * `React.Children.only(...)`.
  */
-export default function isReactChildrenElementCall(
-  path: NodePath,
-  importer: Importer,
-): boolean {
-  if (t.ExpressionStatement.check(path.node)) {
+export default function isReactChildrenElementCall(path: NodePath): boolean {
+  if (path.isExpressionStatement()) {
     path = path.get('expression');
   }
 
@@ -21,12 +19,15 @@ export default function isReactChildrenElementCall(
     return false;
   }
 
-  const calleeObj = path.get('callee', 'object');
-  const module = resolveToModule(calleeObj, importer);
+  const calleeObj = (path.get('callee') as NodePath<MemberExpression>).get(
+    'object',
+  );
 
-  if (!match(calleeObj, { value: { property: { name: 'Children' } } })) {
+  if (!match(calleeObj.node, { property: { name: 'Children' } })) {
     return false;
   }
+
+  const module = resolveToModule(calleeObj);
 
   return Boolean(module && isReactModuleName(module));
 }

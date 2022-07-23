@@ -1,18 +1,25 @@
-/**
- * Helper methods for tests.
- */
-
-import { ASTNode, NodePath as NodePathConstructor } from 'ast-types';
-import { NodePath } from 'ast-types/lib/node-path';
-import buildParser, { Options, Parser } from '../src/babelParser';
-import { Importer } from '../src/parse';
+import type { Node } from '@babel/core';
+import type { NodePath } from '@babel/traverse';
+import type { Options, Parser } from '../src/babelParser';
+import type { Importer, ImportPath } from '../src/importer';
+import FileState from '../src/FileState';
+import buildParser from '../src/babelParser';
+import type {
+  ExportDefaultDeclaration,
+  Expression,
+  ExpressionStatement,
+  Program,
+  Statement,
+} from '@babel/types';
+// @ts-ignore TODO fix types in TD
+//import { File } from '@babel/core';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace jest {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface Matchers<R> {
-      toEqualASTNode: (expected: NodePath | ASTNode) => CustomMatcherResult;
+      toEqualASTNode: (expected: Node | NodePath) => CustomMatcherResult;
     }
   }
 }
@@ -20,72 +27,238 @@ declare global {
 export function getParser(options: Options = {}): Parser {
   return buildParser(options);
 }
+
+interface ParseCall {
+  (code: string, importer: Importer): NodePath<Program>;
+  (code: string, options: Options): NodePath<Program>;
+  <B extends boolean = false>(
+    code: string,
+    options?: Options,
+    importer?: Importer,
+    returnFileState?: B,
+  ): B extends true ? FileState : NodePath<Program>;
+}
+
+interface Parse extends ParseCall {
+  expression<T = Expression>(src: string, options?: Options): NodePath<T>;
+  expression<T = Expression>(
+    src: string,
+    importer: Importer,
+    options?: Options,
+  ): NodePath<T>;
+  statement<T = Statement>(src: string, index?: number): NodePath<T>;
+  statement<T = Statement>(
+    src: string,
+    importer: Importer,
+    index?: number,
+  ): NodePath<T>;
+  statement<T = Statement>(
+    src: string,
+    options: Options,
+    index?: number,
+  ): NodePath<T>;
+  statement<T = Statement>(
+    src: string,
+    importer: Importer,
+    options: Options,
+    index?: number,
+  ): NodePath<T>;
+  expressionLast<T = Expression>(src: string, options?: Options): NodePath<T>;
+  expressionLast<T = Expression>(
+    src: string,
+    importer: Importer,
+    options?: Options,
+  ): NodePath<T>;
+  statementLast<T = Expression>(src: string, options?: Options): NodePath<T>;
+  statementLast<T = Expression>(
+    src: string,
+    importer: Importer,
+    options?: Options,
+  ): NodePath<T>;
+}
+
 /**
- * Returns a NodePath to the program node of the passed node
+ * Returns a NodePath to the program path of the passed node
+ * Parses JS and Flow
  */
-export function parse(src: string, options: Options = {}): NodePath {
-  const ast = getParser(options).parse(src);
-  ast.__src = src;
+const parseDefault: ParseCall = function (
+  code: string,
+  options: Importer | Options = {},
+  importer: Importer = noopImporter,
+  returnFileState = false,
+): typeof returnFileState extends true ? FileState : NodePath<Program> {
+  if (typeof options !== 'object') {
+    importer = options;
+    options = {};
+  }
+  const opts = {
+    babelrc: false,
+    ...options,
+  };
+  const parser = getParser(opts);
+  const ast = parser(code);
+  const fileState = new FileState(opts, {
+    ast,
+    code,
+    importer,
+    parser,
+  });
 
-  return new NodePathConstructor(ast).get('program');
+  if (returnFileState) {
+    return fileState as any;
+  }
+
+  return fileState.path as any;
+};
+
+const parseTS: ParseCall = function (
+  code: string,
+  options: Importer | Options = {},
+  importer: Importer = noopImporter,
+): NodePath<Program> {
+  if (typeof options !== 'object') {
+    importer = options;
+    options = {};
+  }
+
+  return parseDefault(
+    code,
+    {
+      filename: 'file.tsx',
+      parserOptions: { plugins: ['typescript'] },
+      ...options,
+    },
+    importer,
+    false,
+  );
+};
+
+export const parse = buildTestParser(parseDefault as Parse);
+export const parseTypescript = buildTestParser(parseTS as Parse);
+
+function buildTestParser(parseFunction: Parse): Parse {
+  parseFunction.statement = function <T = Statement>(
+    this: Parse,
+    src: string,
+    importer: Importer | Options | number = noopImporter,
+    options: Options | number = {},
+    index = 0,
+  ): NodePath<T> {
+    if (typeof options === 'number') {
+      index = options;
+      options = {};
+    }
+    if (typeof importer === 'number') {
+      index = importer;
+      importer = noopImporter;
+    } else if (typeof importer === 'object') {
+      options = importer;
+      importer = noopImporter;
+    }
+    const root = this(src, options, importer, false);
+
+    if (index < 0) {
+      index = root.node.body.length + index;
+    }
+
+    return root.get('body')[index] as unknown as NodePath<T>;
+  };
+
+  parseFunction.statementLast = function <T = Expression>(
+    this: Parse,
+    src: string,
+    importer: Importer | Options = noopImporter,
+    options: Options = {},
+  ): NodePath<T> {
+    if (typeof importer === 'object') {
+      options = importer;
+      importer = noopImporter;
+    }
+    return this.statement<T>(src, importer, options, -1);
+  };
+
+  parseFunction.expression = function <T = Expression>(
+    this: Parse,
+    src: string,
+    importer: Importer | Options = noopImporter,
+    options: Options = {},
+  ): NodePath<T> {
+    if (typeof importer === 'object') {
+      options = importer;
+      importer = noopImporter;
+    }
+    return this.statement<ExpressionStatement>(
+      `(${src})`,
+      importer,
+      options,
+    ).get('expression') as unknown as NodePath<T>;
+  };
+
+  parseFunction.expressionLast = function <T = Expression>(
+    this: Parse,
+    src: string,
+    importer: Importer | Options = noopImporter,
+    options: Options = {},
+  ): NodePath<T> {
+    if (typeof importer === 'object') {
+      options = importer;
+      importer = noopImporter;
+    }
+    return this.statement<ExpressionStatement>(src, importer, options, -1).get(
+      'expression',
+    ) as unknown as NodePath<T>;
+  };
+
+  return parseFunction;
 }
-
-export function statement(
-  src: string,
-  options: Options = {},
-  last = false,
-): NodePath {
-  const root = parse(src, options);
-  return root.get('body', last ? root.node.body.length - 1 : 0);
-}
-
-export function expression(src: string, options: Options = {}): NodePath {
-  return statement(`(${src})`, options).get('expression');
-}
-
-export function expressionLast(src: string, options: Options = {}): NodePath {
-  return statement(src, options, true).get('expression');
-}
-
-/**
- * Injects src into template by replacing the occurrence of %s.
- */
-export function parseWithTemplate(src: string, template: string): NodePath {
-  return parse(template.replace('%s', src));
-}
-
-/**
- * Default template that simply defines React and PropTypes.
- */
-export const REACT_TEMPLATE = [
-  'var React = require("React");',
-  'var PropTypes = React.PropTypes;',
-  'var {PropTypes: OtherPropTypes} = require("React");',
-  '%s;',
-].join('\n');
-
-export const MODULE_TEMPLATE = [
-  'var React = require("React");',
-  'var PropTypes = React.PropTypes;',
-  'var Component = React.createClass(%s);',
-  'module.exports = Component',
-].join('\n');
 
 /**
  * Importer that doesn't resolve any values
  */
-export function noopImporter(): null {
+export const noopImporter: Importer = (): null => {
   return null;
-}
-
+};
 /**
  * Builds an importer where the keys are import paths and the values are AST nodes
  */
 export function makeMockImporter(
-  mocks: Record<string, NodePath> = {},
+  mocks: Record<
+    string,
+    (
+      stmtLast: <T = ExportDefaultDeclaration>(
+        code: string,
+        isTs?: boolean,
+        index?: number,
+      ) => NodePath<T>,
+    ) => NodePath
+  > = {},
 ): Importer {
-  return (path: NodePath): NodePath => {
-    const source = path.node.source.value;
-    return mocks[source];
+  const stmtLast = <T = ExportDefaultDeclaration>(
+    code: string,
+    isTs = false,
+    index = -1,
+  ): NodePath<T> => {
+    const parser = isTs ? parseTypescript : parse;
+
+    return parser.statement(code, importer, index);
   };
+  let cache: Record<string, NodePath> = Object.create(null);
+  const importer: Importer = (path: ImportPath): NodePath | null => {
+    const source = path.node.source?.value;
+
+    if (!source) {
+      throw new Error(`Cannot find mock source on ImportPath for ${path.type}`);
+    }
+
+    if (cache[source] === undefined) {
+      cache[source] = mocks[source]?.(stmtLast);
+    }
+
+    return cache[source];
+  };
+  afterEach(() => {
+    cache = Object.create(null);
+  });
+
+  return importer;
 }

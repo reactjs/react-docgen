@@ -1,5 +1,5 @@
-import { namedTypes as t } from 'ast-types';
 import getMemberValuePath from '../utils/getMemberValuePath';
+import type { MethodNodePath } from '../utils/getMethodDocumentation';
 import getMethodDocumentation from '../utils/getMethodDocumentation';
 import isReactComponentClass from '../utils/isReactComponentClass';
 import isReactComponentMethod from '../utils/isReactComponentMethod';
@@ -7,15 +7,9 @@ import type Documentation from '../Documentation';
 import match from '../utils/match';
 import { traverseShallow } from '../utils/traverse';
 import resolveToValue from '../utils/resolveToValue';
-import type { Importer } from '../parse';
-import type { NodePath } from 'ast-types/lib/node-path';
-import { Scope } from 'ast-types/lib/scope';
+import type { NodePath, Scope } from '@babel/traverse';
+import type { AssignmentExpression, Identifier } from '@babel/types';
 
-function isPublicClassProperty(path: NodePath): boolean {
-  return (
-    t.ClassProperty.check(path.node) && !t.ClassPrivateProperty.check(path.node)
-  );
-}
 /**
  * The following values/constructs are considered methods:
  *
@@ -24,44 +18,49 @@ function isPublicClassProperty(path: NodePath): boolean {
  * - Public class fields in classes whose value are a functions
  * - Object properties whose values are functions
  */
-function isMethod(path: NodePath, importer: Importer): boolean {
-  const isProbablyMethod =
-    (t.MethodDefinition.check(path.node) && path.node.kind !== 'constructor') ||
-    ((isPublicClassProperty(path) || t.Property.check(path.node)) &&
-      t.Function.check(resolveToValue(path.get('value'), importer).node));
+function isMethod(path: NodePath): boolean {
+  let isProbablyMethod =
+    (path.isClassMethod() && path.node.kind !== 'constructor') ||
+    path.isObjectMethod();
 
-  return isProbablyMethod && !isReactComponentMethod(path, importer);
+  if (
+    !isProbablyMethod &&
+    (path.isClassProperty() || path.isObjectProperty())
+  ) {
+    const value = resolveToValue(path.get('value') as NodePath);
+    isProbablyMethod = value.isFunction();
+  }
+
+  return isProbablyMethod && !isReactComponentMethod(path);
 }
 
 function findAssignedMethods(
   scope: Scope,
-  idPath: NodePath,
-  importer: Importer,
-): NodePath[] {
-  const results: NodePath[] = [];
+  idPath: NodePath<Identifier | null | undefined>,
+): Array<NodePath<AssignmentExpression>> {
+  const results: Array<NodePath<AssignmentExpression>> = [];
 
-  if (!t.Identifier.check(idPath.node)) {
+  if (!idPath.hasNode() || !idPath.isIdentifier()) {
     return results;
   }
 
   const name = idPath.node.name;
-  const idScope = idPath.scope.lookup(idPath.node.name);
+  const idScope = idPath.scope.getBinding(idPath.node.name)?.scope;
 
-  traverseShallow(scope.path, {
-    visitAssignmentExpression: function (path) {
+  traverseShallow(scope.path.node, {
+    AssignmentExpression(path) {
       const node = path.node;
       if (
         match(node.left, {
           type: 'MemberExpression',
           object: { type: 'Identifier', name },
         }) &&
-        path.scope.lookup(name) === idScope &&
-        t.Function.check(resolveToValue(path.get('right'), importer).node)
+        path.scope.getBinding(name)?.scope === idScope &&
+        resolveToValue(path.get('right')).isFunction()
       ) {
         results.push(path);
-        return false;
+        path.skip();
       }
-      return this.traverse(path);
     },
   });
 
@@ -75,59 +74,66 @@ function findAssignedMethods(
 export default function componentMethodsHandler(
   documentation: Documentation,
   path: NodePath,
-  importer: Importer,
 ): void {
   // Extract all methods from the class or object.
-  let methodPaths: NodePath[] = [];
-  if (isReactComponentClass(path, importer)) {
-    methodPaths = path
-      .get('body', 'body')
-      .filter((body: NodePath) => isMethod(body, importer));
-  } else if (t.ObjectExpression.check(path.node)) {
-    methodPaths = path
-      .get('properties')
-      .filter((props: NodePath) => isMethod(props, importer));
+  let methodPaths: Array<{ path: MethodNodePath; isStatic?: boolean }> = [];
+  if (isReactComponentClass(path)) {
+    methodPaths = (
+      path
+        .get('body')
+        .get('body')
+        .filter(body => isMethod(body)) as MethodNodePath[]
+    ).map(p => ({ path: p }));
+  } else if (path.isObjectExpression()) {
+    methodPaths = (
+      path
+        .get('properties')
+        .filter(props => isMethod(props)) as MethodNodePath[]
+    ).map(p => ({ path: p }));
 
     // Add the statics object properties.
-    const statics = getMemberValuePath(path, 'statics', importer);
-    if (statics) {
-      statics.get('properties').each((p: NodePath) => {
-        if (isMethod(p, importer)) {
-          p.node.static = true;
-          methodPaths.push(p);
+    const statics = getMemberValuePath(path, 'statics');
+    if (statics && statics.isObjectExpression()) {
+      statics.get('properties').forEach(property => {
+        if (isMethod(property)) {
+          methodPaths.push({
+            path: property as MethodNodePath,
+            isStatic: true,
+          });
         }
       });
     }
   } else if (
-    t.VariableDeclarator.check(path.parent.node) &&
-    path.parent.node.init === path.node &&
-    t.Identifier.check(path.parent.node.id)
+    path.parentPath &&
+    path.parentPath.isVariableDeclarator() &&
+    path.parentPath.node.init === path.node &&
+    path.parentPath.get('id').isIdentifier()
   ) {
     methodPaths = findAssignedMethods(
-      path.parent.scope,
-      path.parent.get('id'),
-      importer,
-    );
+      path.parentPath.scope,
+      path.parentPath.get('id') as NodePath<Identifier>,
+    ).map(p => ({ path: p }));
   } else if (
-    t.AssignmentExpression.check(path.parent.node) &&
-    path.parent.node.right === path.node &&
-    t.Identifier.check(path.parent.node.left)
+    path.parentPath &&
+    path.parentPath.isAssignmentExpression() &&
+    path.parentPath.node.right === path.node &&
+    path.parentPath.get('left').isIdentifier()
   ) {
     methodPaths = findAssignedMethods(
-      path.parent.scope,
-      path.parent.get('left'),
-      importer,
-    );
-  } else if (t.FunctionDeclaration.check(path.node)) {
+      path.parentPath.scope,
+      path.parentPath.get('left') as NodePath<Identifier>,
+    ).map(p => ({ path: p }));
+  } else if (path.isFunctionDeclaration()) {
     methodPaths = findAssignedMethods(
-      path.parent.scope,
+      path.parentPath.scope,
       path.get('id'),
-      importer,
-    );
+    ).map(p => ({ path: p }));
   }
 
   documentation.set(
     'methods',
-    methodPaths.map(p => getMethodDocumentation(p, importer)).filter(Boolean),
+    methodPaths
+      .map(({ path: p, isStatic }) => getMethodDocumentation(p, { isStatic }))
+      .filter(Boolean),
   );
 }

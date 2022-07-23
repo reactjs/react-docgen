@@ -1,27 +1,24 @@
-import { ASTNode, namedTypes as t, visit } from 'ast-types';
 import isReactComponentClass from '../utils/isReactComponentClass';
 import isReactCreateClassCall from '../utils/isReactCreateClassCall';
 import isReactForwardRefCall from '../utils/isReactForwardRefCall';
 import isStatelessComponent from '../utils/isStatelessComponent';
 import normalizeClassDefinition from '../utils/normalizeClassDefinition';
 import resolveToValue from '../utils/resolveToValue';
-import type { Parser } from '../babelParser';
-import type { Importer } from '../parse';
-import { NodePath } from 'ast-types/lib/node-path';
+import type { NodePath } from '@babel/traverse';
+import type FileState from '../FileState';
+import type { Resolver } from '.';
 
 /**
  * Given an AST, this function tries to find all object expressions that are
  * passed to `React.createClass` calls, by resolving all references properly.
  */
-export default function findAllComponentDefinitions(
-  ast: ASTNode,
-  _parser: Parser,
-  importer: Importer,
+const findAllComponentDefinitions: Resolver = function (
+  file: FileState,
 ): NodePath[] {
   const definitions = new Set<NodePath>();
 
   function classVisitor(path) {
-    if (isReactComponentClass(path, importer)) {
+    if (isReactComponentClass(path)) {
       normalizeClassDefinition(path);
       definitions.add(path);
     }
@@ -29,45 +26,42 @@ export default function findAllComponentDefinitions(
   }
 
   function statelessVisitor(path) {
-    if (isStatelessComponent(path, importer)) {
+    if (isStatelessComponent(path)) {
       definitions.add(path);
     }
     return false;
   }
 
-  visit(ast, {
-    visitFunctionDeclaration: statelessVisitor,
-    visitFunctionExpression: statelessVisitor,
-    visitArrowFunctionExpression: statelessVisitor,
-    visitClassExpression: classVisitor,
-    visitClassDeclaration: classVisitor,
-    visitCallExpression: function (path): boolean | null | undefined {
-      if (isReactForwardRefCall(path, importer)) {
+  file.traverse({
+    FunctionDeclaration: statelessVisitor,
+    FunctionExpression: statelessVisitor,
+    ObjectMethod: statelessVisitor,
+    ArrowFunctionExpression: statelessVisitor,
+    ClassExpression: classVisitor,
+    ClassDeclaration: classVisitor,
+    CallExpression: function (path): void {
+      if (isReactForwardRefCall(path)) {
         // If the the inner function was previously identified as a component
         // replace it with the parent node
-        const inner = resolveToValue(path.get('arguments', 0), importer);
+        const inner = resolveToValue(path.get('arguments')[0]);
         definitions.delete(inner);
         definitions.add(path);
 
         // Do not traverse into arguments
-        return false;
-      } else if (isReactCreateClassCall(path, importer)) {
-        const resolvedPath = resolveToValue(path.get('arguments', 0), importer);
-        if (t.ObjectExpression.check(resolvedPath.node)) {
+        return path.skip();
+      } else if (isReactCreateClassCall(path)) {
+        const resolvedPath = resolveToValue(path.get('arguments')[0]);
+        if (resolvedPath.isObjectExpression()) {
           definitions.add(resolvedPath);
         }
 
         // Do not traverse into arguments
-        return false;
+        return path.skip();
       }
-
-      // If it is neither of the above cases we need to traverse further
-      // as this call expression could be a HOC
-      this.traverse(path);
-
-      return;
     },
   });
 
   return Array.from(definitions);
-}
+};
+
+export default findAllComponentDefinitions;

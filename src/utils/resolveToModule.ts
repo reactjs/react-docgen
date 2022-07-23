@@ -1,63 +1,41 @@
-import { namedTypes as t } from 'ast-types';
-import match from './match';
+import type { NodePath } from '@babel/traverse';
+import type { Expression, StringLiteral } from '@babel/types';
+import getMemberExpressionRoot from './getMemberExpressionRoot';
 import resolveToValue from './resolveToValue';
-import type { Importer } from '../parse';
-import type { NodePath } from 'ast-types/lib/node-path';
 
 /**
  * Given a path (e.g. call expression, member expression or identifier),
  * this function tries to find the name of module from which the "root value"
  * was imported.
  */
-export default function resolveToModule(
-  path: NodePath,
-  importer: Importer,
-): string | null {
-  const node = path.node;
-  switch (node.type) {
-    // @ts-ignore
-    case t.VariableDeclarator.name:
-      if (node.init) {
-        return resolveToModule(path.get('init'), importer);
-      }
-      break;
-
-    // @ts-ignore
-    case t.CallExpression.name:
-      // @ts-ignore
-      if (match(node.callee, { type: t.Identifier.name, name: 'require' })) {
-        return node.arguments[0].value;
-      }
-      return resolveToModule(path.get('callee'), importer);
-
-    // @ts-ignore
-    case t.Identifier.name: // @ts-ignore
-    case t.JSXIdentifier.name: {
-      const valuePath = resolveToValue(path, importer);
-      if (valuePath !== path) {
-        return resolveToModule(valuePath, importer);
-      }
-      if (!t.Property.check(path.parentPath.node)) {
-        break;
-      }
+export default function resolveToModule(path: NodePath): string | null {
+  if (path.isVariableDeclarator()) {
+    if (path.node.init) {
+      return resolveToModule(path.get('init') as NodePath<Expression>);
+    }
+  } else if (path.isCallExpression()) {
+    const callee = path.get('callee');
+    if (callee.isIdentifier() && callee.node.name === 'require') {
+      return (path.node.arguments[0] as StringLiteral).value;
     }
 
-    // @ts-ignore // fall through
-    case t.Property.name: // @ts-ignore
-    case t.ObjectPattern.name:
-      return resolveToModule(path.parentPath, importer);
-    // @ts-ignore
-    case t.ImportDeclaration.name:
-      return node.source.value;
+    return resolveToModule(callee);
+  } else if (path.isIdentifier() || path.isJSXIdentifier()) {
+    const valuePath = resolveToValue(path);
+    if (valuePath !== path) {
+      return resolveToModule(valuePath);
+    }
+    if (path.parentPath.isObjectProperty()) {
+      return resolveToModule(path.parentPath);
+    }
+  } else if (path.isObjectProperty() || path.isObjectPattern()) {
+    return resolveToModule(path.parentPath);
+  } else if (path.isImportDeclaration()) {
+    return path.node.source.value;
+  } else if (path.isMemberExpression()) {
+    path = getMemberExpressionRoot(path);
 
-    // @ts-ignore
-    case t.MemberExpression.name:
-      while (path && t.MemberExpression.check(path.node)) {
-        path = path.get('object');
-      }
-      if (path) {
-        return resolveToModule(path, importer);
-      }
+    return resolveToModule(path);
   }
 
   return null;

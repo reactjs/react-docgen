@@ -97,6 +97,17 @@ Object {
 }
 `;
 
+exports[`defaultPropsHandler ClassDeclaration with static defaultProps should find prop default values that are literals 2`] = `
+Object {
+  "foo": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "\\"bar\\"",
+    },
+  },
+}
+`;
+
 exports[`defaultPropsHandler ClassDeclaration with static defaultProps should resolve local spreads 1`] = `
 Object {
   "bar": Object {
@@ -368,6 +379,17 @@ Object {
 }
 `;
 
+exports[`defaultPropsHandler ObjectExpression can resolve object methods 1`] = `
+Object {
+  "foo": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "\\"bar\\"",
+    },
+  },
+}
+`;
+
 exports[`defaultPropsHandler ObjectExpression handles computed properties 1`] = `
 Object {
   "@computed#bar": Object {
@@ -478,10 +500,40 @@ Object {
       "value": "[\\"foo\\", \\"bar\\"]",
     },
   },
+  "bigint": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "1n",
+    },
+  },
+  "falseliteral": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "false",
+    },
+  },
   "foo": Object {
     "defaultValue": Object {
       "computed": false,
       "value": "\\"bar\\"",
+    },
+  },
+  "nullliteral": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "null",
+    },
+  },
+  "regex": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "/./",
+    },
+  },
+  "trueliteral": Object {
+    "defaultValue": Object {
+      "computed": false,
+      "value": "true",
     },
   },
 }

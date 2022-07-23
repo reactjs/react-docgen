@@ -1,0 +1,93 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getClassMemberValuePath ClassDeclaration Getters and Setters finds getters 1`] = `
+Node {
+  "async": false,
+  "body": Node {
+    "body": Array [],
+    "directives": Array [],
+    "type": "BlockStatement",
+  },
+  "computed": false,
+  "generator": false,
+  "id": null,
+  "key": Node {
+    "name": "foo",
+    "type": "Identifier",
+  },
+  "kind": "get",
+  "params": Array [],
+  "static": false,
+  "type": "ClassMethod",
+}
+`;
+
+exports[`getClassMemberValuePath ClassDeclaration MethodDefinitions finds "normal" method definitions 1`] = `
+Node {
+  "async": false,
+  "body": Node {
+    "body": Array [],
+    "directives": Array [],
+    "type": "BlockStatement",
+  },
+  "computed": false,
+  "generator": false,
+  "id": null,
+  "key": Node {
+    "name": "render",
+    "type": "Identifier",
+  },
+  "kind": "method",
+  "params": Array [],
+  "static": false,
+  "type": "ClassMethod",
+}
+`;
+
+exports[`getClassMemberValuePath ClassDeclaration MethodDefinitions finds computed method definitions with literal keys 1`] = `
+Node {
+  "async": false,
+  "body": Node {
+    "body": Array [],
+    "directives": Array [],
+    "type": "BlockStatement",
+  },
+  "computed": true,
+  "generator": false,
+  "id": null,
+  "key": Node {
+    "extra": Object {
+      "raw": "'render'",
+      "rawValue": "render",
+    },
+    "type": "StringLiteral",
+    "value": "render",
+  },
+  "kind": "method",
+  "params": Array [],
+  "static": false,
+  "type": "ClassMethod",
+}
+`;
+
+exports[`getClassMemberValuePath ClassExpression finds "normal" method definitions 1`] = `
+Node {
+  "async": false,
+  "body": Node {
+    "body": Array [],
+    "directives": Array [],
+    "type": "BlockStatement",
+  },
+  "computed": false,
+  "generator": false,
+  "id": null,
+  "key": Node {
+    "name": "render",
+    "type": "Identifier",
+  },
+  "kind": "method",
+  "params": Array [],
+  "static": false,
+  "type": "ClassMethod",
+}
+`;

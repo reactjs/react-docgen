@@ -1,7 +1,14 @@
-import { parse, noopImporter, makeMockImporter } from '../../../tests/utils';
+import { parse, makeMockImporter } from '../../../tests/utils';
 import componentMethodsHandler from '../componentMethodsHandler';
 import Documentation from '../../Documentation';
-import DocumentationMock from '../../__mocks__/Documentation';
+import type DocumentationMock from '../../__mocks__/Documentation';
+import type {
+  ArrowFunctionExpression,
+  ClassDeclaration,
+  ExportDefaultDeclaration,
+  FunctionDeclaration,
+} from '@babel/types';
+import type { NodePath } from '@babel/traverse';
 
 jest.mock('../../Documentation');
 
@@ -13,23 +20,26 @@ describe('componentMethodsHandler', () => {
   });
 
   const mockImporter = makeMockImporter({
-    baz: parse(`
+    baz: stmtLast =>
+      stmtLast<ExportDefaultDeclaration>(`
       export default (foo: string): string => {};
-    `).get('body', 0, 'declaration'),
+    `).get('declaration'),
 
-    foo: parse(`
+    foo: stmtLast =>
+      stmtLast<ExportDefaultDeclaration>(`
       export default function(bar: number): number {
         return bar;
       }
-    `).get('body', 0, 'declaration'),
+    `).get('declaration'),
 
-    doFoo: parse(`
+    doFoo: stmtLast =>
+      stmtLast<ExportDefaultDeclaration>(`
       export default () => {};
-    `).get('body', 0, 'declaration'),
+    `).get('declaration'),
   });
 
-  function test(definition, importer) {
-    componentMethodsHandler(documentation, definition, importer);
+  function test(definition) {
+    componentMethodsHandler(documentation, definition);
     expect(documentation.methods).toEqual([
       {
         name: 'foo',
@@ -41,6 +51,7 @@ describe('componentMethodsHandler', () => {
         params: [
           {
             name: 'bar',
+            optional: false,
             type: { name: 'number' },
           },
         ],
@@ -55,6 +66,7 @@ describe('componentMethodsHandler', () => {
         params: [
           {
             name: 'foo',
+            optional: false,
             type: { name: 'string' },
           },
         ],
@@ -71,7 +83,7 @@ describe('componentMethodsHandler', () => {
 
   it('extracts the documentation for an ObjectExpression', () => {
     const src = `
-      ({
+      {
         /**
          * The foo method
          */
@@ -95,10 +107,10 @@ describe('componentMethodsHandler', () => {
         render() {
           return null;
         },
-      })
+      }
     `;
 
-    test(parse(src).get('body', 0, 'expression'), noopImporter);
+    test(parse.expression(src));
   });
 
   it('can resolve an imported method on an ObjectExpression', () => {
@@ -131,7 +143,7 @@ describe('componentMethodsHandler', () => {
       })
     `;
 
-    test(parse(src).get('body', 1, 'expression'), mockImporter);
+    test(parse.expressionLast(src, mockImporter));
   });
 
   it('extracts the documentation for a ClassDeclaration', () => {
@@ -166,7 +178,7 @@ describe('componentMethodsHandler', () => {
       }
     `;
 
-    test(parse(src).get('body', 0), noopImporter);
+    test(parse.statement<ClassDeclaration>(src));
   });
 
   it('can resolve an imported method on a ClassDeclaration', () => {
@@ -202,7 +214,7 @@ describe('componentMethodsHandler', () => {
       }
     `;
 
-    test(parse(src).get('body', 1), mockImporter);
+    test(parse.statementLast(src, mockImporter));
   });
 
   it('should handle and ignore computed methods', () => {
@@ -232,8 +244,7 @@ describe('componentMethodsHandler', () => {
 
     componentMethodsHandler(
       documentation,
-      parse(src).get('body', 0),
-      noopImporter,
+      parse.statement<ClassDeclaration>(src),
     );
     expect(documentation.methods).toMatchSnapshot();
   });
@@ -264,8 +275,7 @@ describe('componentMethodsHandler', () => {
 
     componentMethodsHandler(
       documentation,
-      parse(src).get('body', 1),
-      mockImporter,
+      parse.statementLast<ClassDeclaration>(src, mockImporter),
     );
     expect(documentation.methods).toMatchSnapshot();
   });
@@ -287,8 +297,7 @@ describe('componentMethodsHandler', () => {
 
     componentMethodsHandler(
       documentation,
-      parse(src).get('body', 0),
-      noopImporter,
+      parse.statement<ClassDeclaration>(src),
     );
     expect((documentation.methods as unknown[]).length).toBe(0);
   });
@@ -299,8 +308,10 @@ describe('componentMethodsHandler', () => {
         (props) => {}
       `;
 
-      const definition = parse(src).get('body', 0, 'expression');
-      componentMethodsHandler(documentation, definition, noopImporter);
+      const definition = parse
+        .statement(src)
+        .get('expression') as NodePath<ArrowFunctionExpression>;
+      componentMethodsHandler(documentation, definition);
       expect(documentation.methods).toEqual([]);
     });
 
@@ -314,8 +325,9 @@ describe('componentMethodsHandler', () => {
 
       componentMethodsHandler(
         documentation,
-        parse(src).get('body', 0, 'declarations', 0, 'init'),
-        noopImporter,
+        parse
+          .statement(src)
+          .get('declarations.0.init') as NodePath<ArrowFunctionExpression>,
       );
       expect(documentation.methods).toMatchSnapshot();
     });
@@ -329,8 +341,9 @@ describe('componentMethodsHandler', () => {
 
       componentMethodsHandler(
         documentation,
-        parse(src).get('body', 0, 'declarations', 0, 'init'),
-        mockImporter,
+        parse
+          .statement(src, mockImporter)
+          .get('declarations.0.init') as NodePath<ArrowFunctionExpression>,
       );
       expect(documentation.methods).toMatchSnapshot();
     });
@@ -345,8 +358,9 @@ describe('componentMethodsHandler', () => {
 
       componentMethodsHandler(
         documentation,
-        parse(src).get('body', 0, 'expression', 'right'),
-        noopImporter,
+        parse
+          .statement(src)
+          .get('expression.right') as NodePath<ArrowFunctionExpression>,
       );
       expect(documentation.methods).toMatchSnapshot();
     });
@@ -360,8 +374,9 @@ describe('componentMethodsHandler', () => {
 
       componentMethodsHandler(
         documentation,
-        parse(src).get('body', 0, 'expression', 'right'),
-        mockImporter,
+        parse
+          .statement(src, mockImporter)
+          .get('expression.right') as NodePath<ArrowFunctionExpression>,
       );
       expect(documentation.methods).toMatchSnapshot();
     });
@@ -376,8 +391,7 @@ describe('componentMethodsHandler', () => {
 
       componentMethodsHandler(
         documentation,
-        parse(src).get('body', 0),
-        noopImporter,
+        parse.statement<FunctionDeclaration>(src),
       );
       expect(documentation.methods).toMatchSnapshot();
     });
@@ -391,8 +405,7 @@ describe('componentMethodsHandler', () => {
 
       componentMethodsHandler(
         documentation,
-        parse(src).get('body', 0),
-        mockImporter,
+        parse.statement<FunctionDeclaration>(src, mockImporter),
       );
       expect(documentation.methods).toMatchSnapshot();
     });

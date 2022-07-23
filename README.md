@@ -2,7 +2,7 @@
 
 `react-docgen` is a CLI and toolbox to help extracting information from [React][] components, and generate documentation from it.
 
-It uses [ast-types][] and [@babel/parser][] to parse the source into an AST and provides methods to process this AST to extract the desired information. The output / return value is a JSON blob / JavaScript object.
+It uses [@babel/parser][] to parse the source into an AST and provides methods to process this AST to extract the desired information. The output / return value is a JSON blob / JavaScript object.
 
 It provides a default implementation for React components defined via
 `React.createClass`, [ES2015 class definitions][classes] or functions
@@ -425,6 +425,5 @@ The structure of the JSON blob / JavaScript object is as follows:
 [react]: http://facebook.github.io/react/
 [flow]: http://flowtype.org/
 [typescript]: http://typescriptlang.org/
-[ast-types]: https://github.com/benjamn/ast-types
 [@babel/parser]: https://github.com/babel/babel/tree/master/packages/babel-parser
 [classes]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes

@@ -1,4 +1,4 @@
-import { statement } from '../../../tests/utils';
+import { parse } from '../../../tests/utils';
 import { getDoclets, getDocblock } from '../docblock';
 
 describe('docblock', () => {
@@ -37,7 +37,7 @@ describe('docblock', () => {
     ];
 
     it('gets the closest docblock of the given node', () => {
-      const node = statement(source.join('\n'));
+      const node = parse.statement(source.join('\n'));
       expect(getDocblock(node)).toEqual(comment.join('\n'));
     });
 
@@ -50,13 +50,13 @@ describe('docblock', () => {
     ];
     terminators.forEach(t => {
       it('can handle ' + escape(t) + ' as line terminator', () => {
-        const node = statement(source.join(t));
+        const node = parse.statement(source.join(t));
         expect(getDocblock(node)).toEqual(comment.join(t));
       });
     });
 
     it('supports "short" docblocks', () => {
-      const node = statement('/** bar */\nfoo;');
+      const node = parse.statement('/** bar */\nfoo;');
       expect(getDocblock(node)).toEqual('bar');
     });
   });

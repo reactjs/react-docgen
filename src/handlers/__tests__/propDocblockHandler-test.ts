@@ -1,11 +1,9 @@
-import {
-  expression,
-  statement,
-  noopImporter,
-  makeMockImporter,
-} from '../../../tests/utils';
+import type { NodePath } from '@babel/traverse';
+import type { ExpressionStatement } from '@babel/types';
+import { parse, makeMockImporter, noopImporter } from '../../../tests/utils';
 import Documentation from '../../Documentation';
-import DocumentationMock from '../../__mocks__/Documentation';
+import type { Importer } from '../../importer';
+import type DocumentationMock from '../../__mocks__/Documentation';
 import propDocBlockHandler from '../propDocBlockHandler';
 
 jest.mock('../../Documentation');
@@ -18,7 +16,8 @@ describe('propDocBlockHandler', () => {
   });
 
   const mockImporter = makeMockImporter({
-    props: statement(`
+    props: stmtLast =>
+      stmtLast(`
       export default {
         /**
           * A comment on imported props
@@ -28,9 +27,12 @@ describe('propDocBlockHandler', () => {
     `).get('declaration'),
   });
 
-  function test(getSrc, parse) {
+  function test(
+    getSrc: (src: string) => string,
+    parseSrc: (src: string, importer?: Importer) => NodePath,
+  ) {
     it('finds docblocks for prop types', () => {
-      const definition = parse(
+      const definition = parseSrc(
         getSrc(
           `{
           /**
@@ -45,7 +47,7 @@ describe('propDocBlockHandler', () => {
         ),
       );
 
-      propDocBlockHandler(documentation, definition, noopImporter);
+      propDocBlockHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
         foo: {
           description: 'Foo comment',
@@ -57,7 +59,7 @@ describe('propDocBlockHandler', () => {
     });
 
     it('can handle multline comments', () => {
-      const definition = parse(
+      const definition = parseSrc(
         getSrc(
           `{
           /**
@@ -71,7 +73,7 @@ describe('propDocBlockHandler', () => {
         ),
       );
 
-      propDocBlockHandler(documentation, definition, noopImporter);
+      propDocBlockHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
         foo: {
           description:
@@ -81,7 +83,7 @@ describe('propDocBlockHandler', () => {
     });
 
     it('ignores non-docblock comments', () => {
-      const definition = parse(
+      const definition = parseSrc(
         getSrc(
           `{
           /**
@@ -98,7 +100,7 @@ describe('propDocBlockHandler', () => {
         ),
       );
 
-      propDocBlockHandler(documentation, definition, noopImporter);
+      propDocBlockHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
         foo: {
           description: 'Foo comment',
@@ -110,7 +112,7 @@ describe('propDocBlockHandler', () => {
     });
 
     it('only considers the comment with the property below it', () => {
-      const definition = parse(
+      const definition = parseSrc(
         getSrc(
           `{
           /**
@@ -122,7 +124,7 @@ describe('propDocBlockHandler', () => {
         ),
       );
 
-      propDocBlockHandler(documentation, definition, noopImporter);
+      propDocBlockHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
         foo: {
           description: 'Foo comment',
@@ -134,7 +136,7 @@ describe('propDocBlockHandler', () => {
     });
 
     it('understands and ignores the spread operator', () => {
-      const definition = parse(
+      const definition = parseSrc(
         getSrc(
           `{
           ...Bar.propTypes,
@@ -146,7 +148,7 @@ describe('propDocBlockHandler', () => {
         ),
       );
 
-      propDocBlockHandler(documentation, definition, noopImporter);
+      propDocBlockHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
         foo: {
           description: 'Foo comment',
@@ -155,7 +157,7 @@ describe('propDocBlockHandler', () => {
     });
 
     it('resolves variables', () => {
-      const definition = parse(`
+      const definition = parseSrc(`
         ${getSrc('Props')}
         var Props = {
           /**
@@ -165,7 +167,7 @@ describe('propDocBlockHandler', () => {
         };
       `);
 
-      propDocBlockHandler(documentation, definition, noopImporter);
+      propDocBlockHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
         foo: {
           description: 'Foo comment',
@@ -174,12 +176,15 @@ describe('propDocBlockHandler', () => {
     });
 
     it('resolves imported variables', () => {
-      const definition = parse(`
+      const definition = parseSrc(
+        `
         ${getSrc('Props')}
         import Props from 'props';
-      `);
+      `,
+        mockImporter,
+      );
 
-      propDocBlockHandler(documentation, definition, mockImporter);
+      propDocBlockHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
         foo: {
           description: 'A comment on imported props',
@@ -188,7 +193,8 @@ describe('propDocBlockHandler', () => {
     });
 
     it('resolves imported variables that are spread', () => {
-      const definition = parse(`
+      const definition = parseSrc(
+        `
         ${getSrc('Props')}
         import ExtraProps from 'props';
         var Props = {
@@ -198,9 +204,11 @@ describe('propDocBlockHandler', () => {
            */
           bar: Prop.bool,
         }
-      `);
+      `,
+        mockImporter,
+      );
 
-      propDocBlockHandler(documentation, definition, mockImporter);
+      propDocBlockHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
         foo: {
           description: 'A comment on imported props',
@@ -215,7 +223,8 @@ describe('propDocBlockHandler', () => {
   describe('React.createClass', () => {
     test(
       propTypesSrc => `({propTypes: ${propTypesSrc}})`,
-      src => statement(src).get('expression'),
+      (src, importer = noopImporter) =>
+        parse.statement<ExpressionStatement>(src, importer).get('expression'),
     );
   });
 
@@ -227,7 +236,7 @@ describe('propDocBlockHandler', () => {
             static propTypes = ${propTypesSrc};
           }
         `,
-        src => statement(src),
+        (src, importer = noopImporter) => parse.statement(src, importer),
       );
     });
 
@@ -240,20 +249,16 @@ describe('propDocBlockHandler', () => {
             }
           }
         `,
-        src => statement(src),
+        (src, importer = noopImporter) => parse.statement(src, importer),
       );
     });
   });
 
   it('does not error if propTypes cannot be found', () => {
-    let definition = expression('{fooBar: 42}');
-    expect(() =>
-      propDocBlockHandler(documentation, definition, noopImporter),
-    ).not.toThrow();
+    let definition = parse.expression('{fooBar: 42}');
+    expect(() => propDocBlockHandler(documentation, definition)).not.toThrow();
 
-    definition = statement('class Foo {}');
-    expect(() =>
-      propDocBlockHandler(documentation, definition, noopImporter),
-    ).not.toThrow();
+    definition = parse.statement('class Foo {}');
+    expect(() => propDocBlockHandler(documentation, definition)).not.toThrow();
   });
 });

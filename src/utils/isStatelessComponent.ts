@@ -1,37 +1,33 @@
-import { namedTypes as t, visit } from 'ast-types';
 import getPropertyValuePath from './getPropertyValuePath';
-import isReactComponentClass from './isReactComponentClass';
 import isReactCreateClassCall from './isReactCreateClassCall';
 import isReactCreateElementCall from './isReactCreateElementCall';
 import isReactCloneElementCall from './isReactCloneElementCall';
 import isReactChildrenElementCall from './isReactChildrenElementCall';
 import resolveToValue from './resolveToValue';
-import type { Importer } from '../parse';
-import type { NodePath } from 'ast-types/lib/node-path';
+import type { NodePath } from '@babel/traverse';
+import type { Expression, ObjectExpression } from '@babel/types';
 
 const validPossibleStatelessComponentTypes = [
-  'Property',
+  'ObjectMethod',
+  'ObjectProperty',
   'FunctionDeclaration',
   'FunctionExpression',
   'ArrowFunctionExpression',
 ];
 
-function isJSXElementOrReactCall(path: NodePath, importer: Importer): boolean {
+function isJSXElementOrReactCall(path: NodePath): boolean {
   return (
-    path.node.type === 'JSXElement' ||
-    path.node.type === 'JSXFragment' ||
-    (path.node.type === 'CallExpression' &&
-      isReactCreateElementCall(path, importer)) ||
-    (path.node.type === 'CallExpression' &&
-      isReactCloneElementCall(path, importer)) ||
-    (path.node.type === 'CallExpression' &&
-      isReactChildrenElementCall(path, importer))
+    path.isJSXElement() ||
+    path.isJSXFragment() ||
+    (path.isCallExpression() &&
+      (isReactCreateElementCall(path) ||
+        isReactCloneElementCall(path) ||
+        isReactChildrenElementCall(path)))
   );
 }
 
 function resolvesToJSXElementOrReactCall(
   path: NodePath,
-  importer: Importer,
   seen: WeakSet<NodePath>,
 ): boolean {
   // avoid returns with recursive function calls
@@ -42,24 +38,24 @@ function resolvesToJSXElementOrReactCall(
   seen.add(path);
 
   // Is the path is already a JSX element or a call to one of the React.* functions
-  if (isJSXElementOrReactCall(path, importer)) {
+  if (isJSXElementOrReactCall(path)) {
     return true;
   }
 
-  const resolvedPath = resolveToValue(path, importer);
+  const resolvedPath = resolveToValue(path);
 
   // If the path points to a conditional expression, then we need to look only at
   // the two possible paths
-  if (resolvedPath.node.type === 'ConditionalExpression') {
+  if (resolvedPath.isConditionalExpression()) {
     return (
       resolvesToJSXElementOrReactCall(
         resolvedPath.get('consequent'),
-        importer,
+
         seen,
       ) ||
       resolvesToJSXElementOrReactCall(
         resolvedPath.get('alternate'),
-        importer,
+
         seen,
       )
     );
@@ -67,74 +63,78 @@ function resolvesToJSXElementOrReactCall(
 
   // If the path points to a logical expression (AND, OR, ...), then we need to look only at
   // the two possible paths
-  if (resolvedPath.node.type === 'LogicalExpression') {
+  if (resolvedPath.isLogicalExpression()) {
     return (
       resolvesToJSXElementOrReactCall(
         resolvedPath.get('left'),
-        importer,
+
         seen,
-      ) ||
-      resolvesToJSXElementOrReactCall(resolvedPath.get('right'), importer, seen)
+      ) || resolvesToJSXElementOrReactCall(resolvedPath.get('right'), seen)
     );
   }
 
   // Is the resolved path is already a JSX element or a call to one of the React.* functions
   // Only do this if the resolvedPath actually resolved something as otherwise we did this check already
-  if (
-    resolvedPath !== path &&
-    isJSXElementOrReactCall(resolvedPath, importer)
-  ) {
+  if (resolvedPath !== path && isJSXElementOrReactCall(resolvedPath)) {
     return true;
   }
 
   // If we have a call expression, lets try to follow it
-  if (resolvedPath.node.type === 'CallExpression') {
-    let calleeValue = resolveToValue(resolvedPath.get('callee'), importer);
+  if (resolvedPath.isCallExpression()) {
+    let calleeValue = resolveToValue(resolvedPath.get('callee'));
 
-    if (returnsJSXElementOrReactCall(calleeValue, importer, seen)) {
+    if (returnsJSXElementOrReactCall(calleeValue, seen)) {
       return true;
     }
 
-    let resolvedValue;
+    if (calleeValue.isMemberExpression()) {
+      let resolvedValue: NodePath | undefined;
+      const namesToResolve: NodePath[] = [];
 
-    const namesToResolve = [calleeValue.get('property')];
-
-    if (calleeValue.node.type === 'MemberExpression') {
-      if (calleeValue.get('object').node.type === 'Identifier') {
-        resolvedValue = resolveToValue(calleeValue.get('object'), importer);
-      } else if (t.MemberExpression.check(calleeValue.node)) {
+      const calleeObj = calleeValue.get('object');
+      if (calleeObj.isIdentifier()) {
+        namesToResolve.push(calleeValue.get('property'));
+        resolvedValue = resolveToValue(calleeObj);
+      } else {
         do {
-          calleeValue = calleeValue.get('object');
           namesToResolve.unshift(calleeValue.get('property'));
-        } while (t.MemberExpression.check(calleeValue.node));
+          calleeValue = calleeValue.get('object');
+        } while (calleeValue.isMemberExpression());
 
-        resolvedValue = resolveToValue(calleeValue.get('object'), importer);
+        resolvedValue = resolveToValue(calleeValue);
       }
-    }
 
-    if (resolvedValue && t.ObjectExpression.check(resolvedValue.node)) {
-      const resolvedMemberExpression = namesToResolve.reduce(
-        (result, nodePath) => {
-          if (!nodePath) {
-            return result;
-          }
-
-          if (result) {
-            result = getPropertyValuePath(result, nodePath.node.name, importer);
-            if (result && t.Identifier.check(result.node)) {
-              return resolveToValue(result, importer);
+      if (resolvedValue && resolvedValue.isObjectExpression()) {
+        const resolvedMemberExpression = namesToResolve.reduce(
+          (result: NodePath | null, nodePath) => {
+            if (result) {
+              if (
+                (!nodePath.isIdentifier() && !nodePath.isStringLiteral()) ||
+                !result.isObjectExpression()
+              ) {
+                return null;
+              }
+              result = getPropertyValuePath(
+                result,
+                nodePath.isIdentifier()
+                  ? nodePath.node.name
+                  : nodePath.node.value,
+              );
+              if (result && result.isIdentifier()) {
+                return resolveToValue(result);
+              }
             }
-          }
-          return result;
-        },
-        resolvedValue,
-      );
+            return result;
+          },
+          resolvedValue,
+        );
 
-      if (
-        !resolvedMemberExpression ||
-        returnsJSXElementOrReactCall(resolvedMemberExpression, importer, seen)
-      ) {
-        return true;
+        if (
+          !resolvedMemberExpression ||
+          returnsJSXElementOrReactCall(resolvedMemberExpression, seen)
+        ) {
+          return true;
+        }
       }
     }
   }
@@ -144,46 +144,48 @@ function resolvesToJSXElementOrReactCall(
 
 function returnsJSXElementOrReactCall(
   path: NodePath,
-  importer: Importer,
   seen: WeakSet<NodePath> = new WeakSet(),
 ): boolean {
   let visited = false;
 
+  if (path.isObjectProperty()) {
+    path = path.get('value');
+  }
+
+  if (!path.isFunction()) {
+    return false;
+  }
+
   // early exit for ArrowFunctionExpressions
   if (
-    path.node.type === 'ArrowFunctionExpression' &&
-    path.get('body').node.type !== 'BlockStatement' &&
-    resolvesToJSXElementOrReactCall(path.get('body'), importer, seen)
+    path.isArrowFunctionExpression() &&
+    !path.get('body').isBlockStatement() &&
+    resolvesToJSXElementOrReactCall(path.get('body'), seen)
   ) {
     return true;
   }
 
-  let scope = path.scope;
-  // If we get a property we want the function scope it holds and not its outer scope
-  if (path.node.type === 'Property') {
-    scope = path.get('value').scope;
-  }
+  const scope = path.scope;
 
-  // @ts-ignore
-  visit(path, {
-    visitReturnStatement(returnPath): boolean | null | undefined {
+  path.traverse({
+    ReturnStatement(returnPath) {
       // Only check return statements which are part of the checked function scope
-      if (returnPath.scope !== scope) return false;
+      if (returnPath.scope.getFunctionParent() !== scope) {
+        path.skip();
+        return;
+      }
 
       if (
+        returnPath.node.argument &&
         resolvesToJSXElementOrReactCall(
-          returnPath.get('argument'),
-          importer,
+          returnPath.get('argument') as NodePath<Expression>,
+
           seen,
         )
       ) {
         visited = true;
-        return false;
+        path.skip();
       }
-
-      this.traverse(returnPath);
-
-      return;
     },
   });
 
@@ -193,26 +195,23 @@ function returnsJSXElementOrReactCall(
 /**
  * Returns `true` if the path represents a function which returns a JSXElement
  */
-export default function isStatelessComponent(
-  path: NodePath,
-  importer: Importer,
-): boolean {
-  const node = path.node;
-
-  if (validPossibleStatelessComponentTypes.indexOf(node.type) === -1) {
+export default function isStatelessComponent(path: NodePath): boolean {
+  if (!path.inType(...validPossibleStatelessComponentTypes)) {
     return false;
   }
 
-  if (node.type === 'Property') {
+  if (path.isObjectMethod()) {
+    // TODO check this, I think this does not work as expected, need to go up 2 parents
+    // Also property/ObjectMethod is not part of classes?!?
     if (
-      isReactCreateClassCall(path.parent, importer) ||
-      isReactComponentClass(path.parent, importer)
+      isReactCreateClassCall(path.parentPath as NodePath<ObjectExpression>) //||
+      //isReactComponentClass(path.parent)
     ) {
       return false;
     }
   }
 
-  if (returnsJSXElementOrReactCall(path, importer)) {
+  if (returnsJSXElementOrReactCall(path)) {
     return true;
   }
 

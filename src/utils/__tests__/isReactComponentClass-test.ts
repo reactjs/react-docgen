@@ -1,190 +1,201 @@
-import {
-  expression,
-  statement,
-  parse,
-  noopImporter,
-  makeMockImporter,
-} from '../../../tests/utils';
+import { parse, makeMockImporter } from '../../../tests/utils';
 import isReactComponentClass from '../isReactComponentClass';
 
 describe('isReactComponentClass', () => {
   const mockImporter = makeMockImporter({
-    component: statement(`
-      export default React.Component;
+    component: stmtLast =>
+      stmtLast(`
       import React from 'react';
+      export default React.Component;
     `).get('declaration'),
 
-    pureComponent: statement(`
-      export default React.PureComponent;
+    pureComponent: stmtLast =>
+      stmtLast(`
       import React from 'react';
+      export default React.PureComponent;
     `).get('declaration'),
   });
 
   describe('render method', () => {
     it('ignores class declarations with a render method without superclass', () => {
-      const def = statement('class Foo { render() {}}');
-      expect(isReactComponentClass(def, noopImporter)).toBe(false);
+      const def = parse.statement('class Foo { render() {}}');
+      expect(isReactComponentClass(def)).toBe(false);
     });
 
     it('ignores class expression with a render method without superclass', () => {
-      const def = expression('class { render() {}}');
-      expect(isReactComponentClass(def, noopImporter)).toBe(false);
+      const def = parse.expression('class { render() {}}');
+      expect(isReactComponentClass(def)).toBe(false);
     });
 
     it('ignores static render methods', () => {
-      const def = statement('class Foo { static render() {}}');
-      expect(isReactComponentClass(def, noopImporter)).toBe(false);
+      const def = parse.statement('class Foo { static render() {}}');
+      expect(isReactComponentClass(def)).toBe(false);
     });
 
     it('ignores dynamic render methods', () => {
-      const def = statement('class Foo { static [render]() {}}');
-      expect(isReactComponentClass(def, noopImporter)).toBe(false);
+      const def = parse.statement('class Foo { static [render]() {}}');
+      expect(isReactComponentClass(def)).toBe(false);
     });
 
     it('ignores getter or setter render methods', () => {
-      let def = statement('class Foo { get render() {}}');
-      expect(isReactComponentClass(def, noopImporter)).toBe(false);
+      let def = parse.statement('class Foo { get render() {}}');
+      expect(isReactComponentClass(def)).toBe(false);
 
-      def = statement('class Foo { set render(value) {}}');
-      expect(isReactComponentClass(def, noopImporter)).toBe(false);
+      def = parse.statement('class Foo { set render(value) {}}');
+      expect(isReactComponentClass(def)).toBe(false);
     });
   });
 
   describe('JSDoc @extends React.Component', () => {
     it('accepts class declarations declaring `@extends React.Component` in JSDoc', () => {
-      const def = parse(`
+      const def = parse.statementLast(`
         var React = require('react');
         /**
          * @class Foo
          * @extends React.Component
          */
         class Foo extends Bar {}
-      `).get('body', 1);
+      `);
 
-      expect(isReactComponentClass(def, noopImporter)).toBe(true);
+      expect(isReactComponentClass(def)).toBe(true);
     });
   });
 
   describe('React.Component inheritance', () => {
     it('accepts class declarations extending React.Component', () => {
-      const def = parse(`
+      const def = parse.statementLast(`
         var React = require('react');
         class Foo extends React.Component {}
-      `).get('body', 1);
+      `);
 
-      expect(isReactComponentClass(def, noopImporter)).toBe(true);
+      expect(isReactComponentClass(def)).toBe(true);
     });
 
     it('accepts class expressions extending React.Component', () => {
-      const def = parse(`
+      const def = parse
+        .statementLast(
+          `
         var React = require('react');
         var Foo = class extends React.Component {}
-      `).get('body', 1, 'declarations', 0, 'init');
+      `,
+        )
+        .get('declarations')[0]
+        .get('init');
 
-      expect(isReactComponentClass(def, noopImporter)).toBe(true);
+      expect(isReactComponentClass(def)).toBe(true);
     });
 
     it('resolves the super class reference', () => {
-      const def = parse(`
+      const def = parse.statementLast(`
         var { Component } = require('react');
         var C = Component;
         class Foo extends C {}
-      `).get('body', 2);
+      `);
 
-      expect(isReactComponentClass(def, noopImporter)).toBe(true);
+      expect(isReactComponentClass(def)).toBe(true);
     });
 
     it('resolves the super class reference with alias', () => {
-      const def = parse(`
+      const def = parse.statementLast(`
         var { Component: C } = require('react');
         class Foo extends C {}
-      `).get('body', 1);
+      `);
 
-      expect(isReactComponentClass(def, noopImporter)).toBe(true);
+      expect(isReactComponentClass(def)).toBe(true);
     });
 
     it('does not accept references to other modules', () => {
-      const def = parse(`
+      const def = parse.statementLast(
+        `
         var { Component } = require('FakeReact');
         class Foo extends Component {}
-      `).get('body', 1);
+      `,
+      );
 
-      expect(isReactComponentClass(def, noopImporter)).toBe(false);
+      expect(isReactComponentClass(def)).toBe(false);
     });
 
     it('does not consider super class if render method is present', () => {
-      const def = parse(`
+      const def = parse.statementLast(
+        `
         var {Component} = require('FakeReact');
         class Foo extends Component { render() {} }
-      `).get('body', 1);
+      `,
+      );
 
-      expect(isReactComponentClass(def, noopImporter)).toBe(true);
+      expect(isReactComponentClass(def)).toBe(true);
     });
 
     it('can resolve Component from an intermediate module', () => {
-      const def = parse(`
-        import RC from 'component';
-        class Foo extends RC {}
-      `).get('body', 1);
+      const def = parse.statementLast(
+        `import RC from 'component';
+         class Foo extends RC {}`,
+        mockImporter,
+      );
 
-      expect(isReactComponentClass(def, mockImporter)).toBe(true);
+      expect(isReactComponentClass(def)).toBe(true);
     });
   });
 
   describe('React.PureComponent inheritance', () => {
     it('accepts class declarations extending React.PureComponent', () => {
-      const def = parse(`
-        var React = require('react');
-        class Foo extends React.PureComponent {}
-      `).get('body', 1);
+      const def = parse.statementLast(
+        `var React = require('react');
+           class Foo extends React.PureComponent {}`,
+      );
 
-      expect(isReactComponentClass(def, noopImporter)).toBe(true);
+      expect(isReactComponentClass(def)).toBe(true);
     });
 
     it('accepts class expressions extending React.PureComponent', () => {
-      const def = parse(`
-        var React = require('react');
-        var Foo = class extends React.PureComponent {}
-      `).get('body', 1, 'declarations', 0, 'init');
+      const def = parse
+        .statementLast(
+          `var React = require('react');
+           var Foo = class extends React.PureComponent {}`,
+        )
+        .get('declarations')[0]
+        .get('init');
 
-      expect(isReactComponentClass(def, noopImporter)).toBe(true);
+      expect(isReactComponentClass(def)).toBe(true);
     });
 
     it('resolves the super class reference', () => {
-      const def = parse(`
-        var {PureComponent} = require('react');
-        var C = PureComponent;
-        class Foo extends C {}
-      `).get('body', 2);
+      const def = parse.statementLast(
+        `var {PureComponent} = require('react');
+         var C = PureComponent;
+         class Foo extends C {}`,
+      );
 
-      expect(isReactComponentClass(def, noopImporter)).toBe(true);
+      expect(isReactComponentClass(def)).toBe(true);
     });
 
     it('does not accept references to other modules', () => {
-      const def = parse(`
-        var {PureComponent} = require('FakeReact');
-        class Foo extends PureComponent {}
-      `).get('body', 1);
-
-      expect(isReactComponentClass(def, noopImporter)).toBe(false);
+      const def = parse.statementLast(
+        `var {PureComponent} = require('FakeReact');
+        class Foo extends PureComponent {}`,
+      );
+      expect(isReactComponentClass(def)).toBe(false);
     });
 
     it('does not consider super class if render method is present', () => {
-      const def = parse(`
+      const def = parse.statementLast(`
         var {PureComponent} = require('FakeReact');
         class Foo extends PureComponent { render() {} }
-      `).get('body', 1);
+      `);
 
-      expect(isReactComponentClass(def, noopImporter)).toBe(true);
+      expect(isReactComponentClass(def)).toBe(true);
     });
 
     it('can resolve PureComponent from an intermediate module', () => {
-      const def = parse(`
+      const def = parse.statementLast(
+        `
         import PC from 'pureComponent';
         class Foo extends PC {}
-      `).get('body', 1);
+      `,
+        mockImporter,
+      );
 
-      expect(isReactComponentClass(def, mockImporter)).toBe(true);
+      expect(isReactComponentClass(def)).toBe(true);
     });
   });
 });

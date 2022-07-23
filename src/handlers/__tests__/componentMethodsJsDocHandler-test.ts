@@ -1,5 +1,5 @@
 import Documentation from '../../Documentation';
-import DocumentationMock from '../../__mocks__/Documentation';
+import type DocumentationMock from '../../__mocks__/Documentation';
 import componentMethodsJsDocHandler from '../componentMethodsJsDocHandler';
 
 describe('componentMethodsJsDocHandler', () => {

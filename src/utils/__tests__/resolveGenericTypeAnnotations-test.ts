@@ -1,4 +1,4 @@
-import { statement, noopImporter } from '../../../tests/utils';
+import { parse } from '../../../tests/utils';
 import resolveGenericTypeAnnotation from '../resolveGenericTypeAnnotation';
 
 describe('resolveGenericTypeAnnotation', () => {
@@ -9,14 +9,12 @@ describe('resolveGenericTypeAnnotation', () => {
     `;
     expect(
       resolveGenericTypeAnnotation(
-        statement(code).get(
-          'declarations',
-          0,
-          'id',
-          'typeAnnotation',
-          'typeAnnotation',
-        ),
-        noopImporter,
+        parse
+          .statement(code)
+          .get('declarations')[0]
+          .get('id')
+          .get('typeAnnotation')
+          .get('typeAnnotation'),
       ),
     ).toMatchSnapshot();
   });

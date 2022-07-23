@@ -1,18 +1,24 @@
-import { namedTypes as t } from 'ast-types';
-import type { NodePath } from 'ast-types/lib/node-path';
+import type { NodePath } from '@babel/traverse';
 
 /**
  * If node is an Identifier, it returns its name. If it is a literal, it returns
  * its value.
  */
-export default function getNameOrValue(path: NodePath, raw = false): string {
-  const node = path.node;
-
-  if (t.Identifier.check(node)) {
-    return node.name;
-  } else if (t.Literal.check(node)) {
-    //@ts-ignore
-    return raw ? node.raw : node.value;
+export default function getNameOrValue(
+  path: NodePath,
+): boolean | number | string | null {
+  if (path.isIdentifier()) {
+    return path.node.name;
+  } else if (
+    path.isStringLiteral() ||
+    path.isNumericLiteral() ||
+    path.isBooleanLiteral()
+  ) {
+    return path.node.value;
+  } else if (path.isRegExpLiteral()) {
+    return path.node.pattern;
+  } else if (path.isNullLiteral()) {
+    return null;
   }
 
   throw new TypeError('Argument must be an Identifier or a Literal');

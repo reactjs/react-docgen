@@ -1,8 +1,8 @@
-import { ASTNode } from 'ast-types';
+import type { Node } from '@babel/types';
 import match from '../match';
 
 describe('match', () => {
-  const toASTNode = (obj: Record<string, unknown>): ASTNode => {
+  const toASTNode = (obj: Record<string, unknown>): Node => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return obj as any;
   };

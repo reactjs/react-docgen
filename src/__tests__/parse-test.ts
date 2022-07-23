@@ -1,12 +1,12 @@
 import fs from 'fs';
 import { directory as tempDirectory } from 'tempy';
-import { expression, noopImporter } from '../../tests/utils';
+import { parse as testParse, noopImporter } from '../../tests/utils';
 import parse, { ERROR_MISSING_DEFINITION } from '../parse';
 
 describe('parse', () => {
   it('allows custom component definition resolvers', () => {
-    const path = expression('{foo: "bar"}');
-    const resolver = jest.fn(() => path);
+    const path = testParse.expression('{foo: "bar"}');
+    const resolver = jest.fn(() => [path]);
     const handler = jest.fn();
     parse('//empty', resolver, [handler], noopImporter);
 
@@ -15,7 +15,7 @@ describe('parse', () => {
   });
 
   it('errors if component definition is not found', () => {
-    const resolver = jest.fn();
+    const resolver = jest.fn(() => []);
     expect(() => parse('//empty', resolver, [], noopImporter)).toThrowError(
       ERROR_MISSING_DEFINITION,
     );
@@ -35,7 +35,7 @@ describe('parse', () => {
       fs.writeFileSync(`${dir}/.babelrc`, '{}');
 
       expect(() =>
-        parse('const chained  = () => a |> b', () => null, [], noopImporter, {
+        parse('const chained  = () => a |> b', () => [], [], noopImporter, {
           cwd: dir,
           filename: `${dir}/component.js`,
         }),
@@ -50,7 +50,7 @@ describe('parse', () => {
 
   it('supports custom parserOptions with plugins', () => {
     expect(() =>
-      parse('const chained: Type = 1;', () => null, [], noopImporter, {
+      parse('const chained: Type = 1;', () => [], [], noopImporter, {
         parserOptions: {
           plugins: [
             // no flow
@@ -63,7 +63,7 @@ describe('parse', () => {
 
   it('supports custom parserOptions without plugins', () => {
     expect(() =>
-      parse('const chained: Type = 1;', () => null, [], noopImporter, {
+      parse('const chained: Type = 1;', () => [], [], noopImporter, {
         parserOptions: {
           allowSuperOutsideMethod: true,
         },

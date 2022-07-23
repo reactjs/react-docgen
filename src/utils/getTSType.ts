@@ -1,11 +1,10 @@
-import { namedTypes as t } from 'ast-types';
 import getPropertyName from './getPropertyName';
 import printValue from './printValue';
 import getTypeAnnotation from '../utils/getTypeAnnotation';
 import resolveToValue from '../utils/resolveToValue';
 import { resolveObjectToNameArray } from '../utils/resolveObjectKeysToArray';
-import getTypeParameters, { TypeParameters } from '../utils/getTypeParameters';
-import type { Importer } from '../parse';
+import type { TypeParameters } from '../utils/getTypeParameters';
+import getTypeParameters from '../utils/getTypeParameters';
 
 import type {
   ElementsType,
@@ -16,7 +15,28 @@ import type {
   TypeDescriptor,
   TSFunctionSignatureType,
 } from '../Documentation';
-import { NodePath } from 'ast-types/lib/node-path';
+import type { NodePath } from '@babel/traverse';
+import type {
+  TSUnionType,
+  TSFunctionType,
+  TSIntersectionType,
+  TSMappedType,
+  TSTupleType,
+  TSInterfaceDeclaration,
+  TSTypeLiteral,
+  TSTypeReference,
+  TSArrayType,
+  TSCallSignatureDeclaration,
+  TSIndexedAccessType,
+  TSTypeQuery,
+  TSType,
+  TSTypeAnnotation,
+  TSTypeOperator,
+  Identifier,
+  TSTypeParameterDeclaration,
+  RestElement,
+  TypeScript,
+} from '@babel/types';
 
 const tsTypes = {
   TSAnyKeyword: 'any',
@@ -49,71 +69,77 @@ const namedTypes = {
 };
 
 function handleTSArrayType(
-  path: NodePath,
+  path: NodePath<TSArrayType>,
   typeParams: TypeParameters | null,
-  importer: Importer,
 ): ElementsType<TSFunctionSignatureType> {
   return {
     name: 'Array',
-    elements: [
-      getTSTypeWithResolvedTypes(path.get('elementType'), typeParams, importer),
-    ],
+    elements: [getTSTypeWithResolvedTypes(path.get('elementType'), typeParams)],
     raw: printValue(path),
   };
 }
 
 function handleTSTypeReference(
-  path: NodePath,
+  path: NodePath<TSTypeReference>,
   typeParams: TypeParameters,
-  importer: Importer,
 ): TypeDescriptor<TSFunctionSignatureType> | null {
   let type: TypeDescriptor<TSFunctionSignatureType>;
-  if (t.TSQualifiedName.check(path.node.typeName)) {
-    const typeName = path.get('typeName');
-
-    if (typeName.node.left.name === 'React') {
+  const typeName = path.get('typeName');
+  if (typeName.isTSQualifiedName()) {
+    const left = typeName.get('left');
+    const right = typeName.get('right');
+    if (
+      left.isIdentifier() &&
+      left.node.name === 'React' &&
+      right.isIdentifier()
+    ) {
       type = {
-        name: `${typeName.node.left.name}${typeName.node.right.name}`,
+        name: `${left.node.name}${right.node.name}`,
         raw: printValue(typeName),
       };
     } else {
       type = { name: printValue(typeName).replace(/<.*>$/, '') };
     }
   } else {
-    type = { name: path.node.typeName.name };
+    type = { name: (typeName as NodePath<Identifier>).node.name };
   }
 
   const resolvedPath =
     (typeParams && typeParams[type.name]) ||
-    resolveToValue(path.get('typeName'), importer);
+    resolveToValue(path.get('typeName'));
 
-  if (path.node.typeParameters && resolvedPath.node.typeParameters) {
+  const typeParameters = path.get('typeParameters');
+  const resolvedTypeParameters = resolvedPath.get('typeParameters') as NodePath<
+    TSTypeParameterDeclaration | null | undefined
+  >;
+  if (typeParameters.hasNode() && resolvedTypeParameters.hasNode()) {
     typeParams = getTypeParameters(
-      resolvedPath.get('typeParameters'),
-      path.get('typeParameters'),
+      resolvedTypeParameters,
+      typeParameters,
       typeParams,
-      importer,
     );
   }
 
   if (typeParams && typeParams[type.name]) {
     // Open question: Why is this `null` instead of `typeParams`
-    type = getTSTypeWithResolvedTypes(resolvedPath, null, importer);
+    type = getTSTypeWithResolvedTypes(
+      resolvedPath as NodePath<TSType | TSTypeAnnotation>,
+      null,
+    );
   }
 
-  if (resolvedPath && resolvedPath.node.typeAnnotation) {
-    type = getTSTypeWithResolvedTypes(
-      resolvedPath.get('typeAnnotation'),
-      typeParams,
-      importer,
-    );
-  } else if (path.node.typeParameters) {
-    const params = path.get('typeParameters').get('params');
+  const resolvedTypeAnnotation = resolvedPath.get('typeAnnotation') as NodePath<
+    TSType | TSTypeAnnotation | null | undefined
+  >;
+  if (resolvedTypeAnnotation.hasNode()) {
+    type = getTSTypeWithResolvedTypes(resolvedTypeAnnotation, typeParams);
+  } else if (typeParameters.hasNode()) {
+    const params = typeParameters.get('params');
 
     type = {
       ...(type as SimpleType),
-      elements: params.map((param: NodePath) =>
-        getTSTypeWithResolvedTypes(param, typeParams, importer),
+      elements: params.map(param =>
+        getTSTypeWithResolvedTypes(param, typeParams),
       ),
       raw: printValue(path),
     };
@@ -123,19 +149,18 @@ function handleTSTypeReference(
 }
 
 function getTSTypeWithRequirements(
-  path: NodePath,
+  path: NodePath<TSType | TSTypeAnnotation>,
   typeParams: TypeParameters | null,
-  importer: Importer,
 ): TypeDescriptor<TSFunctionSignatureType> {
-  const type = getTSTypeWithResolvedTypes(path, typeParams, importer);
-  type.required = !path.parentPath.node.optional;
+  const type = getTSTypeWithResolvedTypes(path, typeParams);
+  type.required =
+    !('optional' in path.parentPath.node) || !path.parentPath.node.optional;
   return type;
 }
 
 function handleTSTypeLiteral(
-  path: NodePath,
+  path: NodePath<TSTypeLiteral>,
   typeParams: TypeParameters | null,
-  importer: Importer,
 ): ObjectSignatureType<TSFunctionSignatureType> {
   const type: ObjectSignatureType<TSFunctionSignatureType> = {
     name: 'signature',
@@ -144,49 +169,44 @@ function handleTSTypeLiteral(
     signature: { properties: [] },
   };
 
-  path.get('members').each(param => {
+  path.get('members').forEach(param => {
+    const typeAnnotation = param.get('typeAnnotation') as NodePath<
+      TSTypeAnnotation | null | undefined
+    >;
     if (
-      t.TSPropertySignature.check(param.node) ||
-      t.TSMethodSignature.check(param.node)
+      (param.isTSPropertySignature() || param.isTSMethodSignature()) &&
+      typeAnnotation.hasNode()
     ) {
-      const propName = getPropertyName(param, importer);
+      const propName = getPropertyName(param);
       if (!propName) {
         return;
       }
       type.signature.properties.push({
         key: propName,
-        value: getTSTypeWithRequirements(
-          param.get('typeAnnotation'),
-          typeParams,
-          importer,
-        ),
+        value: getTSTypeWithRequirements(typeAnnotation, typeParams),
       });
-    } else if (t.TSCallSignatureDeclaration.check(param.node)) {
-      type.signature.constructor = handleTSFunctionType(
-        param,
-        typeParams,
-        importer,
-      );
-    } else if (t.TSIndexSignature.check(param.node)) {
-      type.signature.properties.push({
-        key: getTSTypeWithResolvedTypes(
-          param.get('parameters').get(0).get('typeAnnotation'),
-          typeParams,
-          importer,
-        ),
-        value: getTSTypeWithRequirements(
-          param.get('typeAnnotation'),
-          typeParams,
-          importer,
-        ),
-      });
+    } else if (param.isTSCallSignatureDeclaration()) {
+      type.signature.constructor = handleTSFunctionType(param, typeParams);
+    } else if (param.isTSIndexSignature() && typeAnnotation.hasNode()) {
+      const idTypeAnnotation = param
+        .get('parameters')[0]
+        .get('typeAnnotation') as NodePath<TSTypeAnnotation | null | undefined>;
+
+      if (idTypeAnnotation.hasNode()) {
+        type.signature.properties.push({
+          key: getTSTypeWithResolvedTypes(idTypeAnnotation, typeParams),
+          value: getTSTypeWithRequirements(typeAnnotation, typeParams),
+        });
+      }
     }
   });
 
   return type;
 }
 
-function handleTSInterfaceDeclaration(path: NodePath): SimpleType {
+function handleTSInterfaceDeclaration(
+  path: NodePath<TSInterfaceDeclaration>,
+): SimpleType {
   // Interfaces are handled like references which would be documented separately,
   // rather than inlined like type aliases.
   return {
@@ -195,48 +215,53 @@ function handleTSInterfaceDeclaration(path: NodePath): SimpleType {
 }
 
 function handleTSUnionType(
-  path: NodePath,
+  path: NodePath<TSUnionType>,
   typeParams: TypeParameters | null,
-  importer: Importer,
 ): ElementsType<TSFunctionSignatureType> {
   return {
     name: 'union',
     raw: printValue(path),
     elements: path
       .get('types')
-      .map(subType =>
-        getTSTypeWithResolvedTypes(subType, typeParams, importer),
-      ),
+      .map(subType => getTSTypeWithResolvedTypes(subType, typeParams)),
   };
 }
 
 function handleTSIntersectionType(
-  path: NodePath,
+  path: NodePath<TSIntersectionType>,
   typeParams: TypeParameters | null,
-  importer: Importer,
 ): ElementsType<TSFunctionSignatureType> {
   return {
     name: 'intersection',
     raw: printValue(path),
     elements: path
       .get('types')
-      .map(subType =>
-        getTSTypeWithResolvedTypes(subType, typeParams, importer),
-      ),
+      .map(subType => getTSTypeWithResolvedTypes(subType, typeParams)),
   };
 }
 
 function handleTSMappedType(
-  path: NodePath,
+  path: NodePath<TSMappedType>,
   typeParams: TypeParameters | null,
-  importer: Importer,
 ): ObjectSignatureType<TSFunctionSignatureType> {
   const key = getTSTypeWithResolvedTypes(
-    path.get('typeParameter').get('constraint'),
+    path.get('typeParameter').get('constraint') as NodePath<TSType>,
     typeParams,
-    importer,
   );
   key.required = !path.node.optional;
+
+  const typeAnnotation = path.get('typeAnnotation');
+  let value: TypeDescriptor<TSFunctionSignatureType>;
+  if (typeAnnotation.hasNode()) {
+    value = getTSTypeWithResolvedTypes(typeAnnotation, typeParams);
+  } else {
+    value = { name: 'any' }; //TODO test
+    /**
+     type OptionsFlags<Type> = {
+  [Property in keyof Type];
+};
+     */
+  }
 
   return {
     name: 'signature',
@@ -246,11 +271,7 @@ function handleTSMappedType(
       properties: [
         {
           key,
-          value: getTSTypeWithResolvedTypes(
-            path.get('typeAnnotation'),
-            typeParams,
-            importer,
-          ),
+          value,
         },
       ],
     },
@@ -258,40 +279,50 @@ function handleTSMappedType(
 }
 
 function handleTSFunctionType(
-  path: NodePath,
+  path: NodePath<TSCallSignatureDeclaration | TSFunctionType>,
   typeParams: TypeParameters | null,
-  importer: Importer,
 ): TSFunctionSignatureType {
+  let returnType: TypeDescriptor<TSFunctionSignatureType> | undefined;
+
+  const annotation = path.get('typeAnnotation');
+  if (annotation.hasNode()) {
+    returnType = getTSTypeWithResolvedTypes(annotation, typeParams);
+  }
+
   const type: TSFunctionSignatureType = {
     name: 'signature',
     type: 'function',
     raw: printValue(path),
     signature: {
       arguments: [],
-      return: getTSTypeWithResolvedTypes(
-        path.get('typeAnnotation'),
-        typeParams,
-        importer,
-      ),
+      return: returnType,
     },
   };
 
-  path.get('parameters').each(param => {
-    const typeAnnotation = getTypeAnnotation(param);
+  path.get('parameters').forEach(param => {
+    const typeAnnotation = getTypeAnnotation<TSType>(param);
+
     const arg: FunctionArgumentType<TSFunctionSignatureType> = {
-      name: param.node.name || '',
       type: typeAnnotation
-        ? getTSTypeWithResolvedTypes(typeAnnotation, typeParams, importer)
+        ? getTSTypeWithResolvedTypes(typeAnnotation, typeParams)
         : undefined,
+      name: '',
     };
 
-    if (param.node.name === 'this') {
-      type.signature.this = arg.type;
-      return;
-    }
+    if (param.isIdentifier()) {
+      arg.name = param.node.name;
 
-    if (param.node.type === 'RestElement') {
-      arg.name = param.node.argument.name;
+      if (param.node.name === 'this') {
+        type.signature.this = arg.type;
+        return;
+      }
+    } else {
+      const restArgument = (param as NodePath<RestElement>).get('argument');
+      if (restArgument.isIdentifier()) {
+        arg.name = restArgument.node.name;
+      } else {
+        arg.name = printValue(restArgument);
+      }
       arg.rest = true;
     }
 
@@ -302,9 +333,8 @@ function handleTSFunctionType(
 }
 
 function handleTSTupleType(
-  path: NodePath,
+  path: NodePath<TSTupleType>,
   typeParams: TypeParameters | null,
-  importer: Importer,
 ): ElementsType<TSFunctionSignatureType> {
   const type: ElementsType<TSFunctionSignatureType> = {
     name: 'tuple',
@@ -312,53 +342,48 @@ function handleTSTupleType(
     elements: [],
   };
 
-  path.get('elementTypes').each(param => {
-    type.elements.push(getTSTypeWithResolvedTypes(param, typeParams, importer));
+  path.get('elementTypes').forEach(param => {
+    type.elements.push(getTSTypeWithResolvedTypes(param, typeParams));
   });
 
   return type;
 }
 
 function handleTSTypeQuery(
-  path: NodePath,
+  path: NodePath<TSTypeQuery>,
   typeParams: TypeParameters | null,
-  importer: Importer,
 ): TypeDescriptor<TSFunctionSignatureType> {
-  const resolvedPath = resolveToValue(path.get('exprName'), importer);
-  if (resolvedPath && resolvedPath.node.typeAnnotation) {
+  const resolvedPath = resolveToValue(path.get('exprName'));
+  if ('typeAnnotation' in resolvedPath.node) {
     return getTSTypeWithResolvedTypes(
-      resolvedPath.get('typeAnnotation'),
+      resolvedPath.get('typeAnnotation') as NodePath<TypeScript>,
       typeParams,
-      importer,
     );
   }
-
+  // @ts-ignore Do we need to handle TsQualifiedName here TODO
   return { name: path.node.exprName.name };
 }
 
 function handleTSTypeOperator(
-  path: NodePath,
-  _typeParams: TypeParameters | null,
-  importer: Importer,
+  path: NodePath<TSTypeOperator>,
 ): TypeDescriptor<TSFunctionSignatureType> | null {
   if (path.node.operator !== 'keyof') {
     return null;
   }
 
-  let value = path.get('typeAnnotation');
-  if (t.TSTypeQuery.check(value.node)) {
+  let value: NodePath = path.get('typeAnnotation');
+  if (value.isTSTypeQuery()) {
     value = value.get('exprName');
-  } else if (value.node.id) {
-    value = value.get('id');
+  } else if ('id' in value.node) {
+    value = value.get('id') as NodePath;
   }
 
-  const resolvedPath = resolveToValue(value, importer);
+  const resolvedPath = resolveToValue(value);
   if (
     resolvedPath &&
-    (t.ObjectExpression.check(resolvedPath.node) ||
-      t.TSTypeLiteral.check(resolvedPath.node))
+    (resolvedPath.isObjectExpression() || resolvedPath.isTSTypeLiteral())
   ) {
-    const keys = resolveObjectToNameArray(resolvedPath, importer, true);
+    const keys = resolveObjectToNameArray(resolvedPath, true);
 
     if (keys) {
       return {
@@ -373,19 +398,16 @@ function handleTSTypeOperator(
 }
 
 function handleTSIndexedAccessType(
-  path: NodePath,
+  path: NodePath<TSIndexedAccessType>,
   typeParams: TypeParameters | null,
-  importer: Importer,
 ): SimpleType {
   const objectType = getTSTypeWithResolvedTypes(
     path.get('objectType'),
     typeParams,
-    importer,
   ) as ObjectSignatureType<TSFunctionSignatureType>;
   const indexType = getTSTypeWithResolvedTypes(
     path.get('indexType'),
     typeParams,
-    importer,
   ) as LiteralType;
 
   // We only get the signature if the objectType is a type (vs interface)
@@ -409,53 +431,61 @@ function handleTSIndexedAccessType(
   };
 }
 
-let visitedTypes = {};
+let visitedTypes: Record<
+  string,
+  TypeDescriptor<TSFunctionSignatureType> | true
+> = {};
 
 function getTSTypeWithResolvedTypes(
-  path: NodePath,
+  path: NodePath<TypeScript>,
   typeParams: TypeParameters | null,
-  importer: Importer,
 ): TypeDescriptor<TSFunctionSignatureType> {
-  if (t.TSTypeAnnotation.check(path.node)) {
+  if (path.isTSTypeAnnotation()) {
     path = path.get('typeAnnotation');
   }
 
   const node = path.node;
   let type: TypeDescriptor;
-  const isTypeAlias = t.TSTypeAliasDeclaration.check(path.parentPath.node);
+  let typeAliasName: string | null = null;
+  if (path.parentPath.isTSTypeAliasDeclaration()) {
+    typeAliasName = path.parentPath.node.id.name;
+  }
 
   // When we see a typealias mark it as visited so that the next
   // call of this function does not run into an endless loop
-  if (isTypeAlias) {
-    if (visitedTypes[path.parentPath.node.id.name] === true) {
+  if (typeAliasName) {
+    if (visitedTypes[typeAliasName] === true) {
       // if we are currently visiting this node then just return the name
       // as we are starting to endless loop
-      return { name: path.parentPath.node.id.name };
-    } else if (typeof visitedTypes[path.parentPath.node.id.name] === 'object') {
+      return { name: typeAliasName };
+    } else if (typeof visitedTypes[typeAliasName] === 'object') {
       // if we already resolved the type simple return it
-      return visitedTypes[path.parentPath.node.id.name];
+      return visitedTypes[
+        typeAliasName
+      ] as TypeDescriptor<TSFunctionSignatureType>;
     }
     // mark the type as visited
-    visitedTypes[path.parentPath.node.id.name] = true;
+    visitedTypes[typeAliasName] = true;
   }
 
   if (node.type in tsTypes) {
     type = { name: tsTypes[node.type] };
-  } else if (t.TSLiteralType.check(node)) {
+  } else if (path.isTSLiteralType()) {
+    const literal = path.get('literal');
     type = {
       name: 'literal',
-      // @ts-ignore
-      value: node.literal.raw || `${node.literal.value}`,
+      // @ts-ignore TODO create test for UnaryExpression (eg. -2 as literal)
+      value: (literal.node.extra?.raw as string) || `${literal.node.value}`,
     };
   } else if (node.type in namedTypes) {
-    type = namedTypes[node.type](path, typeParams, importer);
+    type = namedTypes[node.type](path, typeParams);
   } else {
     type = { name: 'unknown' };
   }
 
-  if (isTypeAlias) {
+  if (typeAliasName) {
     // mark the type as unvisited so that further calls can resolve the type again
-    visitedTypes[path.parentPath.node.id.name] = type;
+    visitedTypes[typeAliasName] = type;
   }
 
   return type;
@@ -469,15 +499,14 @@ function getTSTypeWithResolvedTypes(
  * If there is no match, "unknown" is returned.
  */
 export default function getTSType(
-  path: NodePath,
-  typeParamMap: TypeParameters | null,
-  importer: Importer,
+  path: NodePath<TypeScript>,
+  typeParamMap: TypeParameters | null = null,
 ): TypeDescriptor<TSFunctionSignatureType> {
   // Empty visited types before an after run
   // Before: in case the detection threw and we rerun again
   // After: cleanup memory after we are done here
   visitedTypes = {};
-  const type = getTSTypeWithResolvedTypes(path, typeParamMap, importer);
+  const type = getTSTypeWithResolvedTypes(path, typeParamMap);
   visitedTypes = {};
 
   return type;

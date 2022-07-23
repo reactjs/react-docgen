@@ -1,14 +1,13 @@
+import type { NodePath } from '@babel/traverse';
+import type { Expression, ExpressionStatement } from '@babel/types';
 import isReactBuiltinCall from './isReactBuiltinCall';
-import type { Importer } from '../parse';
-import type { NodePath } from 'ast-types/lib/node-path';
 
 /**
  * Returns true if the expression is a function call of the form
  * `React.cloneElement(...)`.
  */
 export default function isReactCloneElementCall(
-  path: NodePath,
-  importer: Importer,
+  path: NodePath<Expression | ExpressionStatement>,
 ): boolean {
-  return isReactBuiltinCall(path, 'cloneElement', importer);
+  return isReactBuiltinCall(path, 'cloneElement');
 }

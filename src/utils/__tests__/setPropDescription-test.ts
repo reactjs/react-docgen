@@ -1,12 +1,8 @@
-import {
-  expression,
-  statement,
-  noopImporter,
-  makeMockImporter,
-} from '../../../tests/utils';
+import { parse, makeMockImporter } from '../../../tests/utils';
 import setPropDescription from '../setPropDescription';
 import Documentation from '../../Documentation';
 import type { default as DocumentationMock } from '../../__mocks__/Documentation';
+import type { ExpressionStatement } from '@babel/types';
 
 jest.mock('../../Documentation');
 
@@ -19,13 +15,13 @@ describe('setPropDescription', () => {
   });
 
   const mockImporter = makeMockImporter({
-    foo: statement(`export default 'foo';`).get('declaration'),
+    foo: stmtLast => stmtLast(`export default 'foo';`).get('declaration'),
   });
 
   function getDescriptors(src: string, documentation = defaultDocumentation) {
-    const node = expression(src).get('properties', 0);
+    const node = parse.expression(src).get('properties')[0];
 
-    setPropDescription(documentation, node, noopImporter);
+    setPropDescription(documentation, node);
 
     return documentation.descriptors;
   }
@@ -87,9 +83,12 @@ describe('setPropDescription', () => {
       });
       import a from 'foo';
     `;
-    const node = statement(src).get('expression', 'properties', 0);
+    const node = parse
+      .statement<ExpressionStatement>(src, mockImporter)
+      .get('expression')
+      .get('properties')[0];
 
-    setPropDescription(defaultDocumentation, node, mockImporter);
+    setPropDescription(defaultDocumentation, node);
 
     expect(defaultDocumentation.descriptors).toEqual({
       foo: {

@@ -1,4 +1,11 @@
-import { namedTypes as t } from 'ast-types';
+import { Scope } from '@babel/traverse';
+import type { NodePath } from '@babel/traverse';
+import type {
+  Expression,
+  Identifier,
+  ImportDeclaration,
+  MemberExpression,
+} from '@babel/types';
 import getMemberExpressionRoot from './getMemberExpressionRoot';
 import getPropertyValuePath from './getPropertyValuePath';
 import { Array as toArray } from './expressionTo';
@@ -6,56 +13,46 @@ import { traverseShallow } from './traverse';
 import getMemberValuePath, {
   isSupportedDefinitionType,
 } from './getMemberValuePath';
-import type { Importer } from '../parse';
-import type { NodePath } from 'ast-types/lib/node-path';
-import { Scope } from 'ast-types/lib/scope';
-import { Context } from 'ast-types/lib/path-visitor';
+import initialize from './ts-types';
 
 function findScopePath(
-  paths: NodePath[],
-  path: NodePath,
-  importer: Importer,
+  bindingIdentifiers: Array<NodePath<Identifier>>,
 ): NodePath | null {
-  if (paths.length < 1) {
-    return null;
-  }
-  let resultPath = paths[0];
-  const parentPath = resultPath.parent;
+  if (bindingIdentifiers && bindingIdentifiers.length >= 1) {
+    const resolvedParentPath = bindingIdentifiers[0].parentPath;
+    if (
+      resolvedParentPath.isImportDefaultSpecifier() ||
+      resolvedParentPath.isImportSpecifier()
+    ) {
+      // TODO TESTME
+      let exportName: string | undefined;
+      if (resolvedParentPath.isImportDefaultSpecifier()) {
+        exportName = 'default';
+      } else {
+        const imported = resolvedParentPath.get('imported');
 
-  // Namespace imports are handled separately, at the site of a member expression access
-  if (
-    t.ImportDefaultSpecifier.check(parentPath.node) ||
-    t.ImportSpecifier.check(parentPath.node)
-  ) {
-    let exportName;
-    if (t.ImportDefaultSpecifier.check(parentPath.node)) {
-      exportName = 'default';
-    } else {
-      exportName = parentPath.node.imported.name;
+        if (imported.isStringLiteral()) {
+          exportName = imported.node.value;
+        } else if (imported.isIdentifier()) {
+          exportName = imported.node.name;
+        }
+      }
+
+      if (!exportName) {
+        throw new Error('Could not detect export name');
+      }
+
+      const importedPath = resolvedParentPath.hub.import(
+        resolvedParentPath.parentPath as NodePath<ImportDeclaration>,
+        exportName,
+      );
+
+      if (importedPath) {
+        return resolveToValue(importedPath);
+      }
     }
 
-    const resolvedPath = importer(parentPath.parentPath, exportName);
-
-    if (resolvedPath) {
-      return resolveToValue(resolvedPath, importer);
-    }
-  }
-
-  if (
-    t.ImportDefaultSpecifier.check(parentPath.node) ||
-    t.ImportSpecifier.check(parentPath.node) ||
-    t.ImportNamespaceSpecifier.check(parentPath.node) ||
-    t.VariableDeclarator.check(parentPath.node) ||
-    t.TypeAlias.check(parentPath.node) ||
-    t.InterfaceDeclaration.check(parentPath.node) ||
-    t.TSTypeAliasDeclaration.check(parentPath.node) ||
-    t.TSInterfaceDeclaration.check(parentPath.node)
-  ) {
-    resultPath = parentPath;
-  }
-
-  if (resultPath.node !== path.node) {
-    return resolveToValue(resultPath, importer);
+    return resolveToValue(resolvedParentPath);
   }
 
   return null;
@@ -67,47 +64,52 @@ function findScopePath(
  */
 function findLastAssignedValue(
   scope: Scope,
-  idPath: NodePath<t.Identifier>,
-  importer: Importer,
+  idPath: NodePath<Identifier>,
 ): NodePath | null {
   const results: NodePath[] = [];
   const name = idPath.node.name;
 
-  traverseShallow(scope.path, {
-    visitAssignmentExpression: function (
-      this: Context,
-      path: NodePath<t.AssignmentExpression>,
-    ): boolean | undefined {
-      const node = path.node;
-      // Skip anything that is not an assignment to a variable with the
-      // passed name.
-      // Ensure the LHS isn't the reference we're trying to resolve.
-      if (
-        !t.Identifier.check(node.left) ||
-        node.left === idPath.node ||
-        node.left.name !== name ||
-        node.operator !== '='
-      ) {
-        return this.traverse(path);
-      }
-      // Ensure the RHS doesn't contain the reference we're trying to resolve.
-      const candidatePath = path.get('right');
-      for (let p = idPath; p && p.node != null; p = p.parent) {
-        if (p.node === candidatePath.node) {
-          return this.traverse(path);
+  traverseShallow(
+    scope.path.node,
+    {
+      AssignmentExpression(path) {
+        const node = path.node;
+        const left = path.get('left');
+        // Skip anything that is not an assignment to a variable with the
+        // passed name.
+        // Ensure the LHS isn't the reference we're trying to resolve.
+        if (
+          !left.isIdentifier() ||
+          left.node === idPath.node ||
+          left.node.name !== name ||
+          node.operator !== '='
+        ) {
+          return;
         }
-      }
-      results.push(candidatePath);
-      return false;
+        // Ensure the RHS doesn't contain the reference we're trying to resolve.
+        const candidatePath = path.get('right');
+        for (
+          let p: NodePath | null = idPath;
+          p && p.node != null;
+          p = p.parentPath
+        ) {
+          if (p.node === candidatePath.node) {
+            return;
+          }
+        }
+        results.push(candidatePath);
+        return path.skip();
+      },
     },
-  });
+    scope,
+  );
 
   const resultPath = results.pop();
 
   if (resultPath == null) {
     return null;
   }
-  return resolveToValue(resultPath, importer);
+  return resolveToValue(resultPath);
 }
 
 /**
@@ -117,109 +119,105 @@ function findLastAssignedValue(
  *
  * Else the path itself is returned.
  */
-export default function resolveToValue(
-  path: NodePath,
-  importer: Importer,
-): NodePath {
-  const node = path.node;
-  if (t.VariableDeclarator.check(node)) {
-    if (node.init) {
-      return resolveToValue(path.get('init'), importer);
+export default function resolveToValue(path: NodePath): NodePath {
+  if (path.isVariableDeclarator()) {
+    if (path.node.init) {
+      return resolveToValue(path.get('init') as NodePath<Expression>);
     }
-  } else if (t.MemberExpression.check(node)) {
+  } else if (path.isMemberExpression()) {
     const root = getMemberExpressionRoot(path);
-    const resolved = resolveToValue(root, importer);
-    if (t.ObjectExpression.check(resolved.node)) {
+    const resolved = resolveToValue(root);
+    if (resolved.isObjectExpression()) {
       let propertyPath: NodePath | null = resolved;
-      for (const propertyName of toArray(path, importer).slice(1)) {
-        if (propertyPath && t.ObjectExpression.check(propertyPath.node)) {
-          propertyPath = getPropertyValuePath(
-            propertyPath,
-            propertyName,
-            importer,
-          );
+      for (const propertyName of toArray(path).slice(1)) {
+        if (propertyPath && propertyPath.isObjectExpression()) {
+          propertyPath = getPropertyValuePath(propertyPath, propertyName);
         }
         if (!propertyPath) {
           return path;
         }
-        propertyPath = resolveToValue(propertyPath, importer);
+        propertyPath = resolveToValue(propertyPath);
       }
       return propertyPath;
     } else if (isSupportedDefinitionType(resolved)) {
-      const memberPath = getMemberValuePath(
-        resolved,
-        path.node.property.name,
-        importer,
-      );
-      if (memberPath) {
-        return resolveToValue(memberPath, importer);
+      const property = path.get('property');
+      if (property.isIdentifier() || property.isStringLiteral()) {
+        const memberPath = getMemberValuePath(
+          resolved,
+          property.isIdentifier() ? property.node.name : property.node.value, // TODO TESTME
+        );
+        if (memberPath) {
+          return resolveToValue(memberPath);
+        }
       }
-    } else if (
-      t.ImportDeclaration.check(resolved.node) &&
-      resolved.node.specifiers
-    ) {
+    } else if (resolved.isImportDeclaration() && resolved.node.specifiers) {
       // Handle references to namespace imports, e.g. import * as foo from 'bar'.
       // Try to find a specifier that matches the root of the member expression, and
       // find the export that matches the property name.
-      for (const specifier of resolved.node.specifiers) {
+      for (const specifier of resolved.get('specifiers')) {
         if (
-          t.ImportNamespaceSpecifier.check(specifier) &&
-          specifier.local &&
-          specifier.local.name === root.node.name
+          specifier.isImportNamespaceSpecifier() &&
+          specifier.node.local &&
+          specifier.node.local.name === (root.node as Identifier).name // TODO TESTME could be not an identifier
         ) {
-          const resolvedPath = importer(
+          const resolvedPath = path.hub.import(
             resolved,
-            root.parentPath.node.property.name,
+            ((root.parentPath.node as MemberExpression).property as Identifier)
+              .name, // TODO TESTME Idk what that is
           );
           if (resolvedPath) {
-            return resolveToValue(resolvedPath, importer);
+            return resolveToValue(resolvedPath);
           }
         }
       }
     }
   } else if (
-    t.ImportDefaultSpecifier.check(node) ||
-    t.ImportNamespaceSpecifier.check(node) ||
-    t.ImportSpecifier.check(node)
+    path.isImportDefaultSpecifier() ||
+    path.isImportNamespaceSpecifier() ||
+    path.isImportSpecifier()
   ) {
-    // go up two levels as first level is only the array of specifiers
-    return path.parentPath.parentPath;
-  } else if (t.AssignmentExpression.check(node)) {
-    if (node.operator === '=') {
-      return resolveToValue(path.get('right'), importer);
+    // go up to the import declaration
+    return path.parentPath;
+  } else if (path.isAssignmentExpression()) {
+    if (path.node.operator === '=') {
+      return resolveToValue(path.get('right'));
     }
   } else if (
-    t.TypeCastExpression.check(node) ||
-    t.TSAsExpression.check(node) ||
-    t.TSTypeAssertion.check(node)
+    path.isTypeCastExpression() ||
+    path.isTSAsExpression() ||
+    path.isTSTypeAssertion()
   ) {
-    return resolveToValue(path.get('expression'), importer);
-  } else if (t.Identifier.check(node)) {
+    return resolveToValue(path.get('expression') as NodePath);
+  } else if (path.isIdentifier()) {
     if (
-      (t.ClassDeclaration.check(path.parentPath.node) ||
-        t.ClassExpression.check(path.parentPath.node) ||
-        t.Function.check(path.parentPath.node)) &&
+      (path.parentPath.isClassDeclaration() ||
+        path.parentPath.isClassExpression() ||
+        path.parentPath.isFunction()) &&
       path.parentPath.get('id') === path
     ) {
       return path.parentPath;
     }
 
-    let scope: Scope = path.scope.lookup(node.name);
+    const binding = path.scope.getBinding(path.node.name);
     let resolvedPath: NodePath | null = null;
-    if (scope) {
+    if (binding) {
       // The variable may be assigned a different value after initialization.
       // We are first trying to find all assignments to the variable in the
       // block where it is defined (i.e. we are not traversing into statements)
-      resolvedPath = findLastAssignedValue(scope, path, importer);
+      resolvedPath = findLastAssignedValue(binding.scope, path);
       if (!resolvedPath) {
-        const bindings = scope.getBindings()[node.name];
-        resolvedPath = findScopePath(bindings, path, importer);
+        // @ts-ignore
+        const bindingMap = binding.path.getOuterBindingIdentifierPaths(
+          true,
+        ) as Record<string, Array<NodePath<Identifier>>>;
+        resolvedPath = findScopePath(bindingMap[path.node.name]);
       }
     } else {
-      scope = path.scope.lookupType(node.name);
-      if (scope) {
-        const typesInScope = scope.getTypes()[node.name];
-        resolvedPath = findScopePath(typesInScope, path, importer);
+      // Initialize our monkey-patching of @babel/traverse 🙈
+      initialize(Scope);
+      const typeBinding = path.scope.getTypeBinding(path.node.name);
+      if (typeBinding) {
+        resolvedPath = findScopePath([typeBinding.identifierPath]);
       }
     }
     return resolvedPath || path;

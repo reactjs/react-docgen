@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getNameOrValue gets Identifier name 1`] = `"foo"`;
+
+exports[`getNameOrValue gets boolean literal value 1`] = `true`;
+
+exports[`getNameOrValue gets null RegExp pattern 1`] = `"abc?"`;
+
+exports[`getNameOrValue gets null literal value 1`] = `null`;
+
+exports[`getNameOrValue gets numeric literal value 1`] = `1`;
+
+exports[`getNameOrValue gets string literal value 1`] = `"foo"`;

@@ -1,9 +1,8 @@
-import { expression, statement, noopImporter } from '../../../tests/utils';
+import { parse } from '../../../tests/utils';
 import getPropertyValuePath from '../getPropertyValuePath';
 import getClassMemberValuePath from '../getClassMemberValuePath';
 import getMemberValuePath from '../getMemberValuePath';
 import getMemberExpressionValuePath from '../getMemberExpressionValuePath';
-import { NodePath } from 'ast-types';
 
 jest.mock('../getPropertyValuePath');
 jest.mock('../getClassMemberValuePath');
@@ -11,93 +10,69 @@ jest.mock('../getMemberExpressionValuePath');
 
 describe('getMemberValuePath', () => {
   it('handles ObjectExpressions', () => {
-    const path = expression('{}');
+    const path = parse.expression('{}');
 
-    getMemberValuePath(path, 'foo', noopImporter);
-    expect(getPropertyValuePath).toBeCalledWith(path, 'foo', noopImporter);
+    getMemberValuePath(path, 'foo');
+    expect(getPropertyValuePath).toBeCalledWith(path, 'foo');
   });
 
   it('handles ClassDeclarations', () => {
-    const path = statement('class Foo {}');
+    const path = parse.statement('class Foo {}');
 
-    getMemberValuePath(path, 'foo', noopImporter);
-    expect(getClassMemberValuePath).toBeCalledWith(path, 'foo', noopImporter);
+    getMemberValuePath(path, 'foo');
+    expect(getClassMemberValuePath).toBeCalledWith(path, 'foo');
   });
 
   it('handles TaggedTemplateLiterals', () => {
-    const path = expression('foo``');
+    const path = parse.expression('foo``');
 
-    getMemberValuePath(path, 'foo', noopImporter);
-    expect(getMemberExpressionValuePath).toBeCalledWith(
-      path,
-      'foo',
-      noopImporter,
-    );
+    getMemberValuePath(path, 'foo');
+    expect(getMemberExpressionValuePath).toBeCalledWith(path, 'foo');
   });
 
   it('handles ClassExpressions', () => {
-    const path = expression('class {}');
+    const path = parse.expression('class {}');
 
-    getMemberValuePath(path, 'foo', noopImporter);
-    expect(getClassMemberValuePath).toBeCalledWith(path, 'foo', noopImporter);
+    getMemberValuePath(path, 'foo');
+    expect(getClassMemberValuePath).toBeCalledWith(path, 'foo');
   });
 
   it('handles CallExpressions', () => {
-    const path = expression('system({is: "button"}, "space")');
+    const path = parse.expression('system({is: "button"}, "space")');
 
-    getMemberValuePath(path, 'foo', noopImporter);
-    expect(getMemberExpressionValuePath).toBeCalledWith(
-      path,
-      'foo',
-      noopImporter,
-    );
+    getMemberValuePath(path, 'foo');
+    expect(getMemberExpressionValuePath).toBeCalledWith(path, 'foo');
   });
 
-  it('tries synonyms', () => {
-    let path = expression('{}');
+  describe('tries defaultProps synonyms', () => {
+    it('with object', () => {
+      const path = parse.expression('{}');
 
-    getMemberValuePath(path, 'defaultProps', noopImporter);
-    expect(getPropertyValuePath).toBeCalledWith(
-      path,
-      'defaultProps',
-      noopImporter,
-    );
-    expect(getPropertyValuePath).toBeCalledWith(
-      path,
-      'getDefaultProps',
-      noopImporter,
-    );
+      getMemberValuePath(path, 'defaultProps');
+      expect(getPropertyValuePath).toBeCalledWith(path, 'defaultProps');
+      expect(getPropertyValuePath).toBeCalledWith(path, 'getDefaultProps');
+    });
 
-    path = statement('class Foo {}');
+    it('with class', () => {
+      const path = parse.statement('class Foo {}');
 
-    getMemberValuePath(path, 'defaultProps', noopImporter);
-    expect(getClassMemberValuePath).toBeCalledWith(
-      path,
-      'defaultProps',
-      noopImporter,
-    );
-    expect(getClassMemberValuePath).toBeCalledWith(
-      path,
-      'getDefaultProps',
-      noopImporter,
-    );
+      getMemberValuePath(path, 'defaultProps');
+      expect(getClassMemberValuePath).toBeCalledWith(path, 'defaultProps');
+      expect(getClassMemberValuePath).toBeCalledWith(path, 'getDefaultProps');
+    });
   });
 
   it('returns the result of getPropertyValuePath and getClassMemberValuePath', () => {
-    const mockPath = new NodePath(42);
-    const mockPath2 = new NodePath(21);
+    const mockPath = parse.expression('42');
+    const mockPath2 = parse.expression('21');
     jest.mocked(getPropertyValuePath).mockReturnValue(mockPath);
     jest.mocked(getClassMemberValuePath).mockReturnValue(mockPath2);
-    let path = expression('{}');
+    let path = parse.expression('{}');
 
-    expect(getMemberValuePath(path, 'defaultProps', noopImporter)).toBe(
-      mockPath,
-    );
+    expect(getMemberValuePath(path, 'defaultProps')).toBe(mockPath);
 
-    path = statement('class Foo {}');
+    path = parse.statement('class Foo {}');
 
-    expect(getMemberValuePath(path, 'defaultProps', noopImporter)).toBe(
-      mockPath2,
-    );
+    expect(getMemberValuePath(path, 'defaultProps')).toBe(mockPath2);
   });
 });

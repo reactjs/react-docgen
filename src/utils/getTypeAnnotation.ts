@@ -1,25 +1,24 @@
-import { namedTypes as t } from 'ast-types';
-import type { NodePath } from 'ast-types/lib/node-path';
-
-function hasTypeAnnotation(path: NodePath): boolean {
-  return !!path.node.typeAnnotation;
-}
+import type { NodePath } from '@babel/traverse';
+import type { FlowType } from '@babel/types';
 
 /**
  * Gets the most inner valuable TypeAnnotation from path. If no TypeAnnotation
  * can be found null is returned
  */
-export default function getTypeAnnotation(path: NodePath): NodePath | null {
-  if (!hasTypeAnnotation(path)) return null;
+export default function getTypeAnnotation<T = FlowType>(
+  path: NodePath,
+): NodePath<T> | null {
+  if (!path.has('typeAnnotation')) return null;
 
-  let resultPath: NodePath = path;
+  let resultPath = path;
   do {
-    resultPath = resultPath.get('typeAnnotation');
+    resultPath = resultPath.get('typeAnnotation') as NodePath;
   } while (
-    hasTypeAnnotation(resultPath) &&
-    !t.FlowType.check(resultPath.node) &&
-    !t.TSType.check(resultPath.node)
+    resultPath.has('typeAnnotation') &&
+    !resultPath.isFlowType() &&
+    !resultPath.isTSType()
   );
 
+  // @ts-ignore
   return resultPath;
 }

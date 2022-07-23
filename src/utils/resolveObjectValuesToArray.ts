@@ -1,100 +1,148 @@
-import { ASTNode, namedTypes as t } from 'ast-types';
 import resolveToValue from './resolveToValue';
-import type { Importer } from '../parse';
-import type { NodePath } from 'ast-types/lib/node-path';
+import type { NodePath } from '@babel/traverse';
+import type {
+  CallExpression,
+  Identifier,
+  NumericLiteral,
+  ObjectMethod,
+  ObjectProperty,
+  ObjectTypeProperty,
+  ObjectTypeSpreadProperty,
+  SpreadElement,
+  StringLiteral,
+  TSPropertySignature,
+} from '@babel/types';
 
 interface ObjectPropMap {
   properties: string[];
   values: Record<string, unknown>;
 }
 
-function isObjectValuesCall(node: ASTNode): boolean {
+function isObjectValuesCall(path: NodePath): path is NodePath<CallExpression> {
+  if (!path.isCallExpression() || path.node.arguments.length !== 1) {
+    return false;
+  }
+
+  const callee = path.get('callee');
+  if (!callee.isMemberExpression()) {
+    return false;
+  }
+  const object = callee.get('object');
+  const property = callee.get('property');
+
   return (
-    t.CallExpression.check(node) &&
-    node.arguments.length === 1 &&
-    t.MemberExpression.check(node.callee) &&
-    t.Identifier.check(node.callee.object) &&
-    node.callee.object.name === 'Object' &&
-    t.Identifier.check(node.callee.property) &&
-    node.callee.property.name === 'values'
+    object.isIdentifier() &&
+    object.node.name === 'Object' &&
+    property.isIdentifier() &&
+    property.node.name === 'values'
   );
 }
 
-function isWhitelistedObjectProperty(prop) {
+function isWhitelistedObjectProperty(prop: NodePath): boolean {
   return (
-    (t.Property.check(prop) &&
-      ((t.Identifier.check(prop.key) && !prop.computed) ||
-        t.Literal.check(prop.key))) ||
-    t.SpreadElement.check(prop)
+    (prop.isObjectProperty() &&
+      ((prop.get('key').isIdentifier() && !prop.node.computed) ||
+        prop.get('key').isStringLiteral() ||
+        prop.get('key').isNumericLiteral())) ||
+    (prop.isObjectMethod() &&
+      ((prop.get('key').isIdentifier() && !prop.node.computed) ||
+        prop.get('key').isStringLiteral() ||
+        prop.get('key').isNumericLiteral())) ||
+    prop.isSpreadElement()
   );
 }
 
-function isWhiteListedObjectTypeProperty(prop) {
+function isWhiteListedObjectTypeProperty(prop: NodePath): boolean {
   return (
-    t.ObjectTypeProperty.check(prop) ||
-    t.ObjectTypeSpreadProperty.check(prop) ||
-    t.TSPropertySignature.check(prop)
+    prop.isObjectTypeProperty() ||
+    prop.isObjectTypeSpreadProperty() ||
+    prop.isTSPropertySignature()
   );
 }
 
 // Resolves an ObjectExpression or an ObjectTypeAnnotation
 export function resolveObjectToPropMap(
   object: NodePath,
-  importer: Importer,
   raw = false,
 ): ObjectPropMap | null {
   if (
-    (t.ObjectExpression.check(object.value) &&
-      object.value.properties.every(isWhitelistedObjectProperty)) ||
-    (t.ObjectTypeAnnotation.check(object.value) &&
-      object.value.properties.every(isWhiteListedObjectTypeProperty)) ||
-    (t.TSTypeLiteral.check(object.value) &&
-      object.value.members.every(isWhiteListedObjectTypeProperty))
+    (object.isObjectExpression() &&
+      object.get('properties').every(isWhitelistedObjectProperty)) ||
+    (object.isObjectTypeAnnotation() &&
+      object.get('properties').every(isWhiteListedObjectTypeProperty)) ||
+    (object.isTSTypeLiteral() &&
+      object.get('members').every(isWhiteListedObjectTypeProperty))
   ) {
     const properties: string[] = [];
     let values = {};
     let error = false;
-    const members = t.TSTypeLiteral.check(object.value)
-      ? object.get('members')
-      : object.get('properties');
-    members.each(propPath => {
-      if (error) return;
-      const prop = propPath.value;
-
-      if (prop.kind === 'get' || prop.kind === 'set' || prop.method === true) {
-        return;
-      }
+    const members: Array<
+      NodePath<
+        | ObjectMethod
+        | ObjectProperty
+        | ObjectTypeProperty
+        | ObjectTypeSpreadProperty
+        | SpreadElement
+        | TSPropertySignature
+      >
+    > = object.isTSTypeLiteral()
+      ? (object.get('members') as Array<NodePath<TSPropertySignature>>)
+      : (object.get('properties') as Array<
+          NodePath<
+            | ObjectMethod
+            | ObjectProperty
+            | ObjectTypeProperty
+            | ObjectTypeSpreadProperty
+            | SpreadElement
+          >
+        >);
+    members.forEach(propPath => {
+      if (error || propPath.isObjectMethod()) return;
 
       if (
-        t.Property.check(prop) ||
-        t.ObjectTypeProperty.check(prop) ||
-        t.TSPropertySignature.check(prop)
+        propPath.isObjectProperty() ||
+        propPath.isObjectTypeProperty() ||
+        propPath.isTSPropertySignature()
       ) {
+        const key = propPath.get('key') as NodePath<
+          Identifier | NumericLiteral | StringLiteral
+        >;
         // Key is either Identifier or Literal
-        // @ts-ignore
-        const name = prop.key.name || (raw ? prop.key.raw : prop.key.value);
-        const propValue = propPath.get(name).parentPath.value;
+        // TODO check this also for TSPropertySignature and ObjectTypeProperty
+        // TODO reimplement, this has so many issues
+        // Identifiers as values are not followed at all
+        // TSPropertySignature is not handled correctly here
+        const name: string = key.isIdentifier()
+          ? key.node.name
+          : raw
+          ? (key.node.extra?.raw as string)
+          : `${(key as NodePath<NumericLiteral | StringLiteral>).node.value}`;
         const value =
-          propValue.value.value ||
-          (raw ? propValue.value.raw : propValue.value.value);
+          // @ts-ignore
+          propPath.node.value.value ||
+          // @ts-ignore
+          (raw ? propPath.node.value.raw : propPath.node.value.value);
 
         if (properties.indexOf(name) === -1) {
           properties.push(name);
         }
         values[name] = value;
       } else if (
-        t.SpreadElement.check(prop) ||
-        t.ObjectTypeSpreadProperty.check(prop)
+        propPath.isSpreadElement() ||
+        propPath.isObjectTypeSpreadProperty()
       ) {
-        let spreadObject = resolveToValue(propPath.get('argument'), importer);
-        if (t.GenericTypeAnnotation.check(spreadObject.value)) {
-          const typeAlias = resolveToValue(spreadObject.get('id'), importer);
-          if (t.ObjectTypeAnnotation.check(typeAlias.get('right').value)) {
-            spreadObject = resolveToValue(typeAlias.get('right'), importer);
+        let spreadObject = resolveToValue(propPath.get('argument') as NodePath);
+        if (spreadObject.isGenericTypeAnnotation()) {
+          const typeAlias = resolveToValue(spreadObject.get('id'));
+          if (
+            typeAlias.isTypeAlias() &&
+            typeAlias.get('right').isObjectTypeAnnotation()
+          ) {
+            spreadObject = resolveToValue(typeAlias.get('right'));
           }
         }
 
-        const spreadValues = resolveObjectToPropMap(spreadObject, importer);
+        const spreadValues = resolveObjectToPropMap(spreadObject);
         if (!spreadValues) {
           error = true;
           return;
@@ -127,16 +175,10 @@ export function resolveObjectToPropMap(
  */
 export default function resolveObjectValuesToArray(
   path: NodePath,
-  importer: Importer,
 ): string[] | null {
-  const node = path.node;
-
-  if (isObjectValuesCall(node)) {
-    const objectExpression = resolveToValue(
-      path.get('arguments').get(0),
-      importer,
-    );
-    const propMap = resolveObjectToPropMap(objectExpression, importer);
+  if (isObjectValuesCall(path)) {
+    const objectExpression = resolveToValue(path.get('arguments')[0]);
+    const propMap = resolveObjectToPropMap(objectExpression);
 
     if (propMap) {
       const nodes = propMap.properties.map(prop => {

@@ -1,29 +1,33 @@
-import { parse, noopImporter, makeMockImporter } from '../../../tests/utils';
+import { makeMockImporter, parse } from '../../../tests/utils';
 import componentDocblockHandler from '../componentDocblockHandler';
 import Documentation from '../../Documentation';
-import DocumentationMock from '../../__mocks__/Documentation';
-import { NodePath } from 'ast-types/lib/node-path';
+import type DocumentationMock from '../../__mocks__/Documentation';
+import type { NodePath } from '@babel/traverse';
+import type {
+  ArrowFunctionExpression,
+  ClassExpression,
+  ExportDefaultDeclaration,
+  ExportNamedDeclaration,
+  ExpressionStatement,
+  FunctionExpression,
+  Node,
+  ObjectExpression,
+  VariableDeclaration,
+} from '@babel/types';
 
 jest.mock('../../Documentation');
 
 describe('componentDocblockHandler', () => {
   let documentation: Documentation & DocumentationMock;
 
-  function lastStatement(src: string): NodePath {
-    const programPath = parse(src);
-    return programPath.get('body', programPath.node.body.length - 1);
-  }
-
-  function beforeLastStatement(src: string): NodePath {
-    const programPath = parse(src);
-    return programPath.get('body', programPath.node.body.length - 2);
-  }
-
   beforeEach(() => {
     documentation = new Documentation() as Documentation & DocumentationMock;
   });
 
-  function test(definitionSrc: string, parseFunc: (src: string) => NodePath) {
+  function test(
+    definitionSrc: string,
+    parseFunc: (src: string) => NodePath<Node | null | undefined>,
+  ) {
     it('finds docblocks for component definitions', () => {
       const definition = parseFunc(`
         import something from 'somewhere';
@@ -32,9 +36,9 @@ describe('componentDocblockHandler', () => {
          * Component description
          */
         ${definitionSrc}
-      `);
+      `) as NodePath;
 
-      componentDocblockHandler(documentation, definition, noopImporter);
+      componentDocblockHandler(documentation, definition);
       expect(documentation.description).toBe('Component description');
     });
 
@@ -46,17 +50,17 @@ describe('componentDocblockHandler', () => {
          * This is not a docblock',
          */
         ${definitionSrc}
-      `);
+      `) as NodePath;
 
-      componentDocblockHandler(documentation, definition, noopImporter);
+      componentDocblockHandler(documentation, definition);
       expect(documentation.description).toBe('');
 
       definition = parseFunc(`
         // Inline comment'
         ${definitionSrc}
-      `);
+      `) as NodePath;
 
-      componentDocblockHandler(documentation, definition, noopImporter);
+      componentDocblockHandler(documentation, definition);
       expect(documentation.description).toBe('');
     });
 
@@ -69,9 +73,9 @@ describe('componentDocblockHandler', () => {
          */
         var something_else = "foo";
         ${definitionSrc}
-      `);
+      `) as NodePath;
 
-      componentDocblockHandler(documentation, definition, noopImporter);
+      componentDocblockHandler(documentation, definition);
       expect(documentation.description).toBe('');
     });
   }
@@ -80,7 +84,11 @@ describe('componentDocblockHandler', () => {
    * Decorates can only be assigned to class and therefore only make sense for
    * class declarations and export declarations.
    */
-  function testDecorators(classSrc, parseFunc, exportSrc = '') {
+  function testDecorators(
+    classSrc: string,
+    parseFunc: (src: string) => NodePath<Node | null | undefined>,
+    exportSrc = '',
+  ) {
     describe('decorators', () => {
       it("uses the docblock above the decorator if it's the only one", () => {
         const definition = parseFunc(`
@@ -92,9 +100,9 @@ describe('componentDocblockHandler', () => {
           @Decorator1
           @Decorator2
           ${classSrc}
-        `);
+        `) as NodePath;
 
-        componentDocblockHandler(documentation, definition, noopImporter);
+        componentDocblockHandler(documentation, definition);
         expect(documentation.description).toBe('Component description');
       });
 
@@ -112,132 +120,133 @@ describe('componentDocblockHandler', () => {
            * Component description
            */
           ${classSrc}
-        `);
+        `) as NodePath;
 
-        componentDocblockHandler(documentation, definition, noopImporter);
+        componentDocblockHandler(documentation, definition);
         expect(documentation.description).toBe('Component description');
       });
     });
   }
 
-  function testImports(exportSrc, parseFunc, importName, useDefault = false) {
+  function testImports(
+    exportSrc: string,
+    importName: string,
+    useDefault = false,
+  ) {
     const importDef = useDefault ? `${importName}` : `{ ${importName} }`;
 
     const mockImporter = makeMockImporter({
-      test1: parseFunc(`
+      test1: stmtLast =>
+        stmtLast(
+          `
         /**
         * Component description
         */
         ${exportSrc}
-      `),
+      `,
+          false,
+          0,
+        ).get('declaration') as NodePath,
 
-      test2: lastStatement(`
+      test2: stmtLast =>
+        stmtLast<ExportDefaultDeclaration>(`
         import ${importDef} from 'test1';
-
         export default ${importName};
       `).get('declaration'),
     });
 
     describe('imports', () => {
       it('can use a custom importer to resolve docblocks on imported components', () => {
-        const program = lastStatement(`
-          import ${importDef} from 'test1';
+        const program = parse
+          .statementLast<ExportDefaultDeclaration>(
+            `import ${importDef} from 'test1';
+             export default ${importName};`,
+            mockImporter,
+          )
+          .get('declaration');
 
-          export default ${importName};
-        `).get('declaration');
-
-        componentDocblockHandler(documentation, program, mockImporter);
+        componentDocblockHandler(documentation, program);
         expect(documentation.description).toBe('Component description');
       });
     });
 
     it('traverses multiple imports', () => {
-      const program = lastStatement(`
-        import ${importDef} from 'test2';
+      const program = parse
+        .statementLast<ExportDefaultDeclaration>(
+          `import ${importDef} from 'test2';
+           export default ${importName};`,
+          mockImporter,
+        )
+        .get('declaration');
 
-        export default ${importName};
-      `).get('declaration');
-
-      componentDocblockHandler(documentation, program, mockImporter);
+      componentDocblockHandler(documentation, program);
       expect(documentation.description).toBe('Component description');
     });
   }
 
   describe('React.createClass', () => {
     test('var Component = React.createClass({})', src =>
-      lastStatement(src).get('declarations', 0, 'init', 'arguments', 0));
-    testImports(
-      'export var Component = React.createClass({})',
-      src => lastStatement(src).get('declaration'),
-      'Component',
-    );
+      parse
+        .statementLast(src)
+        .get('declarations.0.init.arguments.0') as NodePath<ObjectExpression>);
+    testImports('export var Component = React.createClass({})', 'Component');
   });
 
   describe('ClassDeclaration', () => {
-    test('class Component {}', src => lastStatement(src));
-    testDecorators('class Component {}', src => lastStatement(src));
-    testImports(
-      'export class Component {}',
-      src => lastStatement(src).get('declaration'),
-      'Component',
-    );
+    test('class Component {}', src => parse.statementLast(src));
+    testDecorators('class Component {}', src => parse.statementLast(src));
+    testImports('export class Component {}', 'Component');
   });
 
   describe('ClassExpression', () => {
     test('var Component = class {};', src =>
-      lastStatement(src).get('declarations', 0, 'init'));
-    testImports(
-      'export var Component = class {};',
-      src => lastStatement(src).get('declaration'),
-      'Component',
-    );
+      parse
+        .statementLast<VariableDeclaration>(src)
+        .get('declarations.0.init') as NodePath<ClassExpression>);
+    testImports('export var Component = class {};', 'Component');
   });
 
   describe('Stateless functions', () => {
-    test('function Component() {}', src => lastStatement(src));
-    testImports(
-      'export function Component() {}',
-      src => lastStatement(src).get('declaration'),
-      'Component',
-    );
+    test('function Component() {}', src => parse.statementLast(src));
+    testImports('export function Component() {}', 'Component');
     test('var Component = function () {};', src =>
-      lastStatement(src).get('declarations', 0, 'init'));
-    testImports(
-      'export var Component = function () {};',
-      src => lastStatement(src).get('declaration'),
-      'Component',
-    );
+      parse
+        .statementLast<VariableDeclaration>(src)
+        .get('declarations.0.init') as NodePath<FunctionExpression>);
+    testImports('export var Component = function () {};', 'Component');
     test('var Component = () => {}', src =>
-      lastStatement(src).get('declarations', 0, 'init'));
-    testImports(
-      'export var Component = () => {}',
-      src => lastStatement(src).get('declaration'),
-      'Component',
-    );
+      parse
+        .statementLast<VariableDeclaration>(src)
+        .get('declarations.0.init') as NodePath<ArrowFunctionExpression>);
+    testImports('export var Component = () => {}', 'Component');
   });
 
   describe('ES6 default exports', () => {
     describe('Default React.createClass export', () => {
       test('export default React.createClass({});', src =>
-        lastStatement(src).get('declaration', 'arguments', 0));
+        parse
+          .statementLast<ExportDefaultDeclaration>(src)
+          .get('declaration.arguments.0') as NodePath<ObjectExpression>);
     });
 
     describe('Default class declaration export', () => {
       test('export default class Component {}', src =>
-        lastStatement(src).get('declaration'));
+        parse.statementLast<ExportDefaultDeclaration>(src).get('declaration'));
       testDecorators(
         'class Component {}',
-        src => lastStatement(src).get('declaration'),
+        src =>
+          parse.statementLast<ExportDefaultDeclaration>(src).get('declaration'),
         'export default',
       );
     });
 
     describe('Default class expression export', () => {
       test('export default class {}', src =>
-        lastStatement(src).get('declaration'));
+        parse.statementLast<ExportDefaultDeclaration>(src).get('declaration'));
       testDecorators(
         'class {}',
-        src => lastStatement(src).get('declaration'),
+        src =>
+          parse.statementLast<ExportDefaultDeclaration>(src).get('declaration'),
         'export default',
       );
     });
@@ -245,17 +254,23 @@ describe('componentDocblockHandler', () => {
     describe('Default stateless function export', () => {
       describe('named function', () => {
         test('export default function Component() {}', src =>
-          lastStatement(src).get('declaration'));
+          parse
+            .statementLast<ExportDefaultDeclaration>(src)
+            .get('declaration'));
       });
 
       describe('anonymous function', () => {
         test('export default function() {}', src =>
-          lastStatement(src).get('declaration'));
+          parse
+            .statementLast<ExportDefaultDeclaration>(src)
+            .get('declaration'));
       });
 
       describe('arrow function', () => {
         test('export default () => {}', src =>
-          lastStatement(src).get('declaration'));
+          parse
+            .statementLast<ExportDefaultDeclaration>(src)
+            .get('declaration'));
       });
     });
   });
@@ -263,22 +278,20 @@ describe('componentDocblockHandler', () => {
   describe('ES6 named exports', () => {
     describe('Named React.createClass export', () => {
       test('export var Component = React.createClass({});', src =>
-        lastStatement(src).get(
-          'declaration',
-          'declarations',
-          '0',
-          'init',
-          'arguments',
-          0,
-        ));
+        parse
+          .statementLast<ExportNamedDeclaration>(src)
+          .get(
+            'declaration.declarations.0.init.arguments.0',
+          ) as NodePath<ObjectExpression>);
     });
 
     describe('Named class declaration export', () => {
       test('export class Component {}', src =>
-        lastStatement(src).get('declaration'));
+        parse.statementLast<ExportNamedDeclaration>(src).get('declaration'));
       testDecorators(
         'class Component {}',
-        src => lastStatement(src).get('declaration'),
+        src =>
+          parse.statementLast<ExportNamedDeclaration>(src).get('declaration'),
         'export',
       );
     });
@@ -286,17 +299,17 @@ describe('componentDocblockHandler', () => {
     describe('Named stateless function', () => {
       describe('named function', () => {
         test('export function Component() {}', src =>
-          lastStatement(src).get('declaration'));
+          parse.statementLast<ExportNamedDeclaration>(src).get('declaration'));
       });
 
       describe('anonymous function', () => {
         test('export var Component = function() {}', src =>
-          lastStatement(src).get('declaration'));
+          parse.statementLast<ExportNamedDeclaration>(src).get('declaration'));
       });
 
       describe('arrow function', () => {
         test('export var Component = () => {}', src =>
-          lastStatement(src).get('declaration'));
+          parse.statementLast<ExportNamedDeclaration>(src).get('declaration'));
       });
     });
   });
@@ -308,13 +321,11 @@ describe('componentDocblockHandler', () => {
       test(`
         React.forwardRef((props, ref) => {});
         import React from "react";`, src =>
-        beforeLastStatement(src).get('expression'));
+        parse.statement<ExpressionStatement>(src, -2).get('expression'));
 
       testImports(
-        `
-        export default React.forwardRef((props, ref) => {});
-        import React from 'react';`,
-        src => beforeLastStatement(src).get('declaration'),
+        `import React from 'react';
+         export default React.forwardRef((props, ref) => {});`,
         'RefComponent',
         useDefault,
       );
@@ -323,32 +334,34 @@ describe('componentDocblockHandler', () => {
     describe('inline implementation with memo', () => {
       test(`
         React.memo(React.forwardRef((props, ref) => {}));
-        import React from "react";`, src =>
-        beforeLastStatement(src).get('expression'));
+        import React from "react";
+        `, src =>
+        parse.statement<ExpressionStatement>(src, -2).get('expression'));
 
       testImports(
         `
-        export default React.memo(React.forwardRef((props, ref) => {}));
-        import React from 'react';`,
-        src => beforeLastStatement(src).get('declaration'),
+         export default React.memo(React.forwardRef((props, ref) => {}));
+         import React from 'react';
+        `,
         'RefComponent',
         useDefault,
       );
     });
 
     describe('out of line implementation', () => {
-      test(`let Component = (props, ref) => {};
+      test(`
+        let Component = (props, ref) => {};
         React.forwardRef(Component);
         import React from "react";
-        `, src => beforeLastStatement(src).get('expression'));
+        `, src =>
+        parse.statement<ExpressionStatement>(src, -2).get('expression'));
 
       testImports(
         `
-        let Component = (props, ref) => {};
-        export default React.forwardRef(Component);
-        import React from 'react';
+         let Component = (props, ref) => {};
+         export default React.forwardRef(Component);
+         import React from 'react';
         `,
-        src => beforeLastStatement(src).get('declaration'),
         `RefComponent`,
         useDefault,
       );

@@ -1,13 +1,9 @@
-import {
-  expression,
-  statement,
-  parse,
-  noopImporter,
-  makeMockImporter,
-} from '../../../tests/utils';
+import { parse, makeMockImporter } from '../../../tests/utils';
 import Documentation from '../../Documentation';
 import flowTypeHandler from '../flowTypeHandler';
-import DocumentationMock from '../../__mocks__/Documentation';
+import type DocumentationMock from '../../__mocks__/Documentation';
+import type { ExportNamedDeclaration, ExpressionStatement } from '@babel/types';
+import type { NodePath } from '@babel/traverse';
 
 jest.mock('../../Documentation');
 jest.mock('../../utils/getFlowType', () => ({
@@ -23,7 +19,8 @@ describe('flowTypeHandler', () => {
   });
 
   const mockImporter = makeMockImporter({
-    something: statement(`
+    something: stmtLast =>
+      stmtLast<ExportNamedDeclaration>(`
       export type Props = {
         foo: string,
         bar?: number,
@@ -33,10 +30,10 @@ describe('flowTypeHandler', () => {
         def: "test" | 1 | true,
         foobar: Foo & Bar,
       };
-    `).get('declaration'),
+    `).get('declaration') as NodePath,
   });
 
-  function template(src, typeObject) {
+  function template(src: string, typeObject: string): string {
     return `
       ${src}
       var React = require('React');
@@ -46,7 +43,7 @@ describe('flowTypeHandler', () => {
     `;
   }
 
-  function test(getSrc) {
+  function test(getSrc: (src: string) => NodePath) {
     it('detects types correctly', () => {
       const flowTypesSrc = `
       {
@@ -57,7 +54,7 @@ describe('flowTypeHandler', () => {
       `;
       const definition = getSrc(flowTypesSrc);
 
-      flowTypeHandler(documentation, definition, noopImporter);
+      flowTypeHandler(documentation, definition);
 
       expect(documentation.descriptors).toEqual({
         foo: {
@@ -87,7 +84,7 @@ describe('flowTypeHandler', () => {
       `;
       const definition = getSrc(flowTypesSrc);
 
-      flowTypeHandler(documentation, definition, noopImporter);
+      flowTypeHandler(documentation, definition);
 
       expect(documentation.descriptors).toEqual({
         foo: {
@@ -112,7 +109,7 @@ describe('flowTypeHandler', () => {
       `;
       const definition = getSrc(flowTypesSrc);
 
-      flowTypeHandler(documentation, definition, noopImporter);
+      flowTypeHandler(documentation, definition);
 
       expect(documentation.descriptors).toMatchSnapshot();
     });
@@ -126,7 +123,7 @@ describe('flowTypeHandler', () => {
       `;
       const definition = getSrc(flowTypesSrc);
 
-      flowTypeHandler(documentation, definition, noopImporter);
+      flowTypeHandler(documentation, definition);
 
       expect(documentation.descriptors).toEqual({
         foo: {
@@ -150,7 +147,7 @@ describe('flowTypeHandler', () => {
       `;
       const definition = getSrc(flowTypesSrc);
 
-      flowTypeHandler(documentation, definition, noopImporter);
+      flowTypeHandler(documentation, definition);
 
       expect(documentation.descriptors).toEqual({
         foo: {
@@ -172,7 +169,7 @@ describe('flowTypeHandler', () => {
 
           const definition = getSrc(flowTypesSrc);
 
-          flowTypeHandler(documentation, definition, noopImporter);
+          flowTypeHandler(documentation, definition);
 
           expect(documentation.descriptors).toEqual({
             foo: {
@@ -189,7 +186,7 @@ describe('flowTypeHandler', () => {
   describe('TypeAlias', () => {
     describe('class definition for flow <0.53', () => {
       test(propTypesSrc =>
-        statement(
+        parse.statement(
           template(
             'class Foo extends Component<void, Props, void> {}',
             propTypesSrc,
@@ -200,7 +197,7 @@ describe('flowTypeHandler', () => {
 
     describe('class definition for flow >=0.53 without State', () => {
       test(propTypesSrc =>
-        statement(
+        parse.statement(
           template('class Foo extends Component<Props> {}', propTypesSrc),
         ),
       );
@@ -208,7 +205,7 @@ describe('flowTypeHandler', () => {
 
     describe('class definition for flow >=0.53 with State', () => {
       test(propTypesSrc =>
-        statement(
+        parse.statement(
           template(
             'class Foo extends Component<Props, State> {}',
             propTypesSrc,
@@ -219,7 +216,7 @@ describe('flowTypeHandler', () => {
 
     describe('class definition with inline props', () => {
       test(propTypesSrc =>
-        statement(
+        parse.statement(
           template(
             'class Foo extends Component { props: Props; }',
             propTypesSrc,
@@ -230,41 +227,41 @@ describe('flowTypeHandler', () => {
 
     describe('stateless component', () => {
       test(propTypesSrc =>
-        statement(template('(props: Props) => <div />;', propTypesSrc)).get(
-          'expression',
-        ),
+        parse
+          .statement<ExpressionStatement>(
+            template('(props: Props) => <div />;', propTypesSrc),
+          )
+          .get('expression'),
       );
     });
   });
 
   it('does not error if flowTypes cannot be found', () => {
-    let definition = expression('{fooBar: 42}');
-    expect(() =>
-      flowTypeHandler(documentation, definition, noopImporter),
-    ).not.toThrow();
+    let definition = parse.expression('{fooBar: 42}');
+    expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
 
-    definition = statement('class Foo extends Component {}');
-    expect(() =>
-      flowTypeHandler(documentation, definition, noopImporter),
-    ).not.toThrow();
+    definition = parse.statement('class Foo extends Component {}');
+    expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
 
-    definition = statement('() => <div />');
-    expect(() =>
-      flowTypeHandler(documentation, definition, noopImporter),
-    ).not.toThrow();
+    definition = parse.statement('() => <div />');
+    expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
   });
 
   it('supports intersection proptypes', () => {
-    const definition = statement(`
+    const definition = parse
+      .statement<ExpressionStatement>(
+        `
       (props: Props) => <div />;
 
       var React = require('React');
       import type Imported from 'something';
 
       type Props = Imported & { foo: 'bar' };
-    `).get('expression');
+    `,
+      )
+      .get('expression');
 
-    flowTypeHandler(documentation, definition, noopImporter);
+    flowTypeHandler(documentation, definition);
 
     expect(documentation.descriptors).toEqual({
       foo: {
@@ -276,23 +273,27 @@ describe('flowTypeHandler', () => {
   });
 
   it('does support utility types inline', () => {
-    const definition = statement(`
+    const definition = parse
+      .statement<ExpressionStatement>(
+        `
       (props: $ReadOnly<Props>) => <div />;
 
       var React = require('React');
 
       type Props = { foo: 'fooValue' };
-    `).get('expression');
+    `,
+      )
+      .get('expression');
 
-    expect(() =>
-      flowTypeHandler(documentation, definition, noopImporter),
-    ).not.toThrow();
+    expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
 
     expect(documentation.descriptors).toMatchSnapshot();
   });
 
   it('does not support union proptypes', () => {
-    const definition = statement(`
+    const definition = parse
+      .statement<ExpressionStatement>(
+        `
       (props: Props) => <div />;
 
       var React = require('React');
@@ -300,91 +301,125 @@ describe('flowTypeHandler', () => {
 
       type Other = { bar: 'barValue' };
       type Props = Imported | Other | { foo: 'fooValue' };
-    `).get('expression');
+    `,
+      )
+      .get('expression');
 
-    expect(() =>
-      flowTypeHandler(documentation, definition, noopImporter),
-    ).not.toThrow();
+    expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
 
     expect(documentation.descriptors).toEqual({});
   });
 
   describe('imported prop types', () => {
     it('does not resolve type included by require', () => {
-      const definition = statement(`
+      const definition = parse
+        .statement<ExpressionStatement>(
+          `
         (props: Props) => <div />;
         var React = require('React');
         var Component = React.Component;
 
         var Props = require('something');
-      `).get('expression');
+      `,
+          mockImporter,
+        )
+        .get('expression');
 
-      expect(() =>
-        flowTypeHandler(documentation, definition, noopImporter),
-      ).not.toThrow();
+      expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
       expect(documentation.descriptors).toEqual({});
 
-      expect(() =>
-        flowTypeHandler(documentation, definition, mockImporter),
-      ).not.toThrow();
+      expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
       expect(documentation.descriptors).toEqual({});
     });
 
     it('imported', () => {
-      const definition = statement(`
+      const definition = parse
+        .statement<ExpressionStatement>(
+          `
         (props: Props) => <div />;
         var React = require('React');
         var Component = React.Component;
 
         import { Props } from 'something';
-      `).get('expression');
+      `,
+          mockImporter,
+        )
+        .get('expression');
 
-      expect(() =>
-        flowTypeHandler(documentation, definition, noopImporter),
-      ).not.toThrow();
-      expect(documentation.descriptors).toEqual({});
-
-      expect(() =>
-        flowTypeHandler(documentation, definition, mockImporter),
-      ).not.toThrow();
+      expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('type imported', () => {
-      const definition = statement(`
+    it('type not imported', () => {
+      const definition = parse
+        .statement<ExpressionStatement>(
+          `
         (props: Props) => <div />;
         var React = require('React');
         var Component = React.Component;
 
         import type { Props } from 'something';
-      `).get('expression');
+      `,
+        )
+        .get('expression');
 
-      expect(() =>
-        flowTypeHandler(documentation, definition, noopImporter),
-      ).not.toThrow();
+      expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
       expect(documentation.descriptors).toEqual({});
+    });
 
-      expect(() =>
-        flowTypeHandler(documentation, definition, mockImporter),
-      ).not.toThrow();
+    it('type imported', () => {
+      const definition = parse
+        .statement<ExpressionStatement>(
+          `
+        (props: Props) => <div />;
+        var React = require('React');
+        var Component = React.Component;
+
+        import type { Props } from 'something';
+      `,
+          mockImporter,
+        )
+        .get('expression');
+
+      expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
     it('does not resolve types not in scope', () => {
-      const definition = statement(`
+      const definition = parse
+        .statement<ExpressionStatement>(
+          `
         (props: Props) => <div />;
         var React = require('React');
         var Component = React.Component;
-      `).get('expression');
+      `,
+          mockImporter,
+        )
+        .get('expression');
 
-      expect(() =>
-        flowTypeHandler(documentation, definition, noopImporter),
-      ).not.toThrow();
+      expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
       expect(documentation.descriptors).toEqual({});
 
-      expect(() =>
-        flowTypeHandler(documentation, definition, mockImporter),
-      ).not.toThrow();
+      expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
+      expect(documentation.descriptors).toEqual({});
+    });
+
+    it('does not resolve types not in scope', () => {
+      const definition = parse
+        .statement<ExpressionStatement>(
+          `
+        (props: Props) => <div />;
+        var React = require('React');
+        var Component = React.Component;
+      `,
+          mockImporter,
+        )
+        .get('expression');
+
+      expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
+      expect(documentation.descriptors).toEqual({});
+
+      expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
       expect(documentation.descriptors).toEqual({});
     });
   });
@@ -398,8 +433,7 @@ describe('flowTypeHandler', () => {
       `;
       flowTypeHandler(
         documentation,
-        parse(src).get('body', 2, 'expression'),
-        noopImporter,
+        parse(src).get('body.2.expression') as NodePath,
       );
       expect(documentation.descriptors).toEqual({
         foo: {
@@ -419,8 +453,7 @@ describe('flowTypeHandler', () => {
       `;
       flowTypeHandler(
         documentation,
-        parse(src).get('body', 3, 'expression'),
-        noopImporter,
+        parse(src).get('body.3.expression') as NodePath,
       );
       expect(documentation.descriptors).toEqual({
         foo: {
@@ -440,8 +473,7 @@ describe('flowTypeHandler', () => {
       `;
       flowTypeHandler(
         documentation,
-        parse(src).get('body', 3, 'expression', 'right'),
-        noopImporter,
+        parse(src).get('body.3.expression.right') as NodePath,
       );
       expect(documentation.descriptors).toEqual({
         foo: {

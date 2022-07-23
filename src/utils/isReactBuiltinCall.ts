@@ -1,11 +1,44 @@
-import { namedTypes as t } from 'ast-types';
 import isReactModuleName from './isReactModuleName';
 import match from './match';
 import resolveToModule from './resolveToModule';
 import resolveToValue from './resolveToValue';
-import type { Importer } from '../parse';
-import type { NodePath } from 'ast-types/lib/node-path';
 import isDestructuringAssignment from './isDestructuringAssignment';
+import type { NodePath } from '@babel/traverse';
+import type { CallExpression, MemberExpression } from '@babel/types';
+
+function isNamedMemberExpression(value: NodePath, name: string): boolean {
+  if (!value.isMemberExpression()) {
+    return false;
+  }
+
+  const property = value.get('property');
+
+  return property.isIdentifier() && property.node.name === name;
+}
+
+function isNamedImportDeclaration(
+  value: NodePath,
+  callee: NodePath<CallExpression['callee']>,
+  name: string,
+): boolean {
+  if (!value.isImportDeclaration() || !callee.isIdentifier()) {
+    return false;
+  }
+
+  return value.get('specifiers').some(specifier => {
+    if (!specifier.isImportSpecifier()) {
+      return false;
+    }
+    const imported = specifier.get('imported');
+    const local = specifier.get('local');
+
+    return (
+      ((imported.isIdentifier() && imported.node.name === name) ||
+        (imported.isStringLiteral() && imported.node.value === name)) &&
+      local.node.name === callee.node.name
+    );
+  });
+}
 
 /**
  * Returns true if the expression is a function call of the form
@@ -14,40 +47,34 @@ import isDestructuringAssignment from './isDestructuringAssignment';
 export default function isReactBuiltinCall(
   path: NodePath,
   name: string,
-  importer: Importer,
 ): boolean {
-  if (t.ExpressionStatement.check(path.node)) {
+  if (path.isExpressionStatement()) {
     path = path.get('expression');
   }
 
-  if (match(path.node, { callee: { property: { name } } })) {
-    const module = resolveToModule(path.get('callee', 'object'), importer);
-    return Boolean(module && isReactModuleName(module));
-  }
+  if (path.isCallExpression()) {
+    if (match(path.node, { callee: { property: { name } } })) {
+      const module = resolveToModule(
+        (path.get('callee') as NodePath<MemberExpression>).get('object'),
+      );
 
-  if (t.CallExpression.check(path.node)) {
-    const value = resolveToValue(path.get('callee'), importer);
-    if (value === path.get('callee')) return false;
+      return Boolean(module && isReactModuleName(module));
+    }
 
-    // Check if this is a destructuring assignment
-    // const { x } = require('react')
+    const value = resolveToValue(path.get('callee'));
+    if (value === path.get('callee')) {
+      return false;
+    }
+
     if (
+      // const { x } = require('react')
       isDestructuringAssignment(value, name) ||
       // `require('react').createElement`
-      (t.MemberExpression.check(value.node) &&
-        t.Identifier.check(value.get('property').node) &&
-        value.get('property').node.name === name) ||
+      isNamedMemberExpression(value, name) ||
       // `import { createElement } from 'react'`
-      (t.ImportDeclaration.check(value.node) &&
-        value.node.specifiers &&
-        value.node.specifiers.some(
-          specifier =>
-            // @ts-ignore
-            specifier.imported?.name === name &&
-            specifier.local?.name === path.node.callee.name,
-        ))
+      isNamedImportDeclaration(value, path.get('callee'), name)
     ) {
-      const module = resolveToModule(value, importer);
+      const module = resolveToModule(value);
 
       return Boolean(module && isReactModuleName(module));
     }

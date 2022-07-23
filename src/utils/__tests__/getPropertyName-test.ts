@@ -1,113 +1,119 @@
-import {
-  statement,
-  expression,
-  noopImporter,
-  makeMockImporter,
-  expressionLast,
-} from '../../../tests/utils';
+import type { ObjectExpression, TypeCastExpression } from '@babel/types';
+import { parse, makeMockImporter } from '../../../tests/utils';
 import getPropertyName from '../getPropertyName';
 
 describe('getPropertyName', () => {
   const mockImporter = makeMockImporter({
-    foo: statement(`
+    foo: stmtLast =>
+      stmtLast(`
       export default "name";
     `).get('declaration'),
 
-    bar: statement(`
+    bar: stmtLast =>
+      stmtLast(`
       export default { baz: "name" };
     `).get('declaration'),
   });
 
   it('returns the name for a normal property', () => {
-    const def = expression('{ foo: 1 }');
-    const param = def.get('properties', 0);
+    const def = parse.expression<ObjectExpression>('{ foo: 1 }');
+    const param = def.get('properties')[0];
 
-    expect(getPropertyName(param, noopImporter)).toBe('foo');
+    expect(getPropertyName(param)).toBe('foo');
   });
 
   it('returns the name of a object type spread property', () => {
-    const def = expression('(a: { ...foo })');
-    const param = def.get('typeAnnotation', 'typeAnnotation', 'properties', 0);
+    const def = parse.expression<TypeCastExpression>('(a: { ...foo })');
+    const param = def
+      .get('typeAnnotation')
+      .get('typeAnnotation')
+      .get('properties')[0];
 
-    expect(getPropertyName(param, noopImporter)).toBe('foo');
+    expect(getPropertyName(param)).toBe('foo');
   });
 
   it('creates name for computed properties', () => {
-    const def = expression('{ [foo]: 21 }');
-    const param = def.get('properties', 0);
+    const def = parse.expression<ObjectExpression>('{ [foo]: 21 }');
+    const param = def.get('properties')[0];
 
-    expect(getPropertyName(param, noopImporter)).toBe('@computed#foo');
+    expect(getPropertyName(param)).toBe('@computed#foo');
   });
 
   it('creates name for computed properties from string', () => {
-    const def = expression('{ ["foo"]: 21 }');
-    const param = def.get('properties', 0);
+    const def = parse.expression<ObjectExpression>('{ ["foo"]: 21 }');
+    const param = def.get('properties')[0];
 
-    expect(getPropertyName(param, noopImporter)).toBe('foo');
+    expect(getPropertyName(param)).toBe('foo');
   });
 
   it('creates name for computed properties from int', () => {
-    const def = expression('{ [31]: 21 }');
-    const param = def.get('properties', 0);
+    const def = parse.expression<ObjectExpression>('{ [31]: 21 }');
+    const param = def.get('properties')[0];
 
-    expect(getPropertyName(param, noopImporter)).toBe('31');
+    expect(getPropertyName(param)).toBe('31');
   });
 
   it('returns null for computed properties from regex', () => {
-    const def = expression('{ [/31/]: 21 }');
-    const param = def.get('properties', 0);
+    const def = parse.expression<ObjectExpression>('{ [/31/]: 21 }');
+    const param = def.get('properties')[0];
 
-    expect(getPropertyName(param, noopImporter)).toBe(null);
+    expect(getPropertyName(param)).toBe(null);
   });
 
   it('returns null for to complex computed properties', () => {
-    const def = expression('{ [() => {}]: 21 }');
-    const param = def.get('properties', 0);
+    const def = parse.expression<ObjectExpression>('{ [() => {}]: 21 }');
+    const param = def.get('properties')[0];
 
-    expect(getPropertyName(param, noopImporter)).toBe(null);
+    expect(getPropertyName(param)).toBe(null);
   });
 
   it('resolves simple variables', () => {
-    const def = expressionLast(`
+    const def = parse.expressionLast<ObjectExpression>(`
     const foo = "name";
 
     ({ [foo]: 21 });
     `);
-    const param = def.get('properties', 0);
+    const param = def.get('properties')[0];
 
-    expect(getPropertyName(param, noopImporter)).toBe('name');
+    expect(getPropertyName(param)).toBe('name');
   });
 
   it('resolves imported variables', () => {
-    const def = expressionLast(`
+    const def = parse.expressionLast<ObjectExpression>(
+      `
     import foo from 'foo';
 
     ({ [foo]: 21 });
-    `);
-    const param = def.get('properties', 0);
+    `,
+      mockImporter,
+    );
+    const param = def.get('properties')[0];
 
-    expect(getPropertyName(param, mockImporter)).toBe('name');
+    expect(getPropertyName(param)).toBe('name');
   });
 
   it('resolves simple member expressions', () => {
-    const def = expressionLast(`
+    const def = parse.expressionLast<ObjectExpression>(`
     const a = { foo: "name" };
 
     ({ [a.foo]: 21 });
     `);
-    const param = def.get('properties', 0);
+    const param = def.get('properties')[0];
 
-    expect(getPropertyName(param, noopImporter)).toBe('name');
+    expect(getPropertyName(param)).toBe('name');
   });
 
   it('resolves imported member expressions', () => {
-    const def = expressionLast(`
+    const def = parse.expressionLast<ObjectExpression>(
+      `
     import bar from 'bar';
 
     ({ [bar.baz]: 21 });
-    `);
-    const param = def.get('properties', 0);
+    `,
+      mockImporter,
+    );
+    const param = def.get('properties')[0];
 
-    expect(getPropertyName(param, mockImporter)).toBe('name');
+    expect(getPropertyName(param)).toBe('name');
   });
 });

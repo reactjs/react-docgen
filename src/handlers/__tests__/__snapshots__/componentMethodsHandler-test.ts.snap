@@ -120,7 +120,7 @@ Array [
     "params": Array [
       Object {
         "name": "bar",
-        "optional": undefined,
+        "optional": false,
         "type": Object {
           "name": "number",
         },
@@ -144,7 +144,7 @@ Array [
     "params": Array [
       Object {
         "name": "bar",
-        "optional": undefined,
+        "optional": false,
         "type": Object {
           "name": "number",
         },

@@ -1,10 +1,6 @@
-import {
-  loadPartialConfig,
-  parseSync,
-  ParserOptions,
-  TransformOptions,
-  ParseResult,
-} from '@babel/core';
+import type { ParserOptions, TransformOptions } from '@babel/core';
+import { loadPartialConfig, parseSync } from '@babel/core';
+import type { File } from '@babel/types';
 import path from 'path';
 
 const TYPESCRIPT_EXTS = {
@@ -46,14 +42,7 @@ function getDefaultPlugins(
 }
 
 export type Options = TransformOptions & { parserOptions?: ParserOptions };
-export type FileNodeWithOptions = ParseResult & {
-  program: { options: Options };
-  __src: string;
-};
-
-export interface Parser {
-  parse: (src: string) => FileNodeWithOptions;
-}
+export type Parser = (src: string) => File;
 
 function buildPluginList(
   parserOptions: ParserOptions | undefined,
@@ -75,9 +64,13 @@ function buildPluginList(
     plugins = getDefaultPlugins(babelOptions);
   }
 
-  // Ensure we always have estree plugin enabled, if we add it a second time
-  // here it does not matter
-  plugins.push('estree');
+  // Ensure that the estree plugin is never active
+  if (plugins.includes('estree')) {
+    throw new Error(
+      //TODO not throw, just remove
+      'The estree plugin is active for @babel/parser. As of version 6 react-docgen must have this plugin disabled.',
+    );
+  }
 
   return plugins;
 }
@@ -102,16 +95,13 @@ export default function buildParse(options: Options = {}): Parser {
     ...babelOptions,
   };
 
-  return {
-    parse(src: string): FileNodeWithOptions {
-      const ast = parseSync(src, opts) as FileNodeWithOptions | null;
+  return (src: string): File => {
+    const ast = parseSync(src, opts);
 
-      if (!ast) {
-        throw new Error('Unable to parse source code.');
-      }
-      // Attach options to the Program node, for use when processing imports.
-      ast.program.options = options;
-      return ast;
-    },
+    if (!ast) {
+      throw new Error('Unable to parse source code.');
+    }
+
+    return ast;
   };
 }

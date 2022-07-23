@@ -1,14 +1,13 @@
-import { namedTypes as t } from 'ast-types';
-import type { NodePath } from 'ast-types/lib/node-path';
+import type { NodePath } from '@babel/traverse';
 
 /**
  * Returns true of the path is an unreachable TypePath
  */
 export default (path: NodePath): boolean => {
   return (
-    !path ||
-    t.Identifier.check(path.node) ||
-    t.ImportDeclaration.check(path.node) ||
-    t.CallExpression.check(path.node)
+    !path || // TODO Remove if we are fully typed
+    path.isIdentifier() ||
+    path.isImportDeclaration() ||
+    path.isCallExpression()
   );
 };

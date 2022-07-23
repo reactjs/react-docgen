@@ -1,54 +1,50 @@
-import { NodePath } from 'ast-types/lib/node-path';
-import {
-  getParser,
-  parse as parseSource,
-  statement,
-  noopImporter,
-  makeMockImporter,
-} from '../../../tests/utils';
-import { Importer } from '../../parse';
+import type { NodePath } from '@babel/traverse';
+import { noopImporter, makeMockImporter, parse } from '../../../tests/utils';
 import findExportedComponentDefinition from '../findExportedComponentDefinition';
 
 describe('findExportedComponentDefinition', () => {
-  function parse(source: string, importer: Importer = noopImporter): NodePath {
-    return findExportedComponentDefinition(
-      parseSource(source).node,
-      getParser(),
-      importer,
-    ) as NodePath;
+  function findComponentsInSource(
+    source: string,
+    importer = noopImporter,
+  ): NodePath[] {
+    return findExportedComponentDefinition(parse(source, {}, importer, true));
   }
 
   const mockImporter = makeMockImporter({
-    createClass: statement(`
-      export default React.createClass({});
-      import React from 'react';
+    createClass: stmtLast =>
+      stmtLast(`
+      import React from 'react'
+      export default React.createClass({})
     `).get('declaration'),
 
-    classDec: statement(`
-      export default class Component extends React.Component {};
-      import React from 'react';
+    classDec: stmtLast =>
+      stmtLast(`
+      import React from 'react'
+      export default class Component extends React.Component {}
     `).get('declaration'),
 
-    classExpr: statement(`
-      export default Component;
-      var Component = class extends React.Component {};
-      import React from 'react';
+    classExpr: stmtLast =>
+      stmtLast(`
+      import React from 'react'
+      var Component = class extends React.Component {}
+      export default Component
     `).get('declaration'),
 
-    statelessJsx: statement(`
-      export default () => <div />;
+    statelessJsx: stmtLast =>
+      stmtLast(`export default () => <div />`).get('declaration'),
+
+    statelessCreateElement: stmtLast =>
+      stmtLast(`
+      import React from 'react'
+      export default () => React.createElement('div', {})
     `).get('declaration'),
 
-    statelessCreateElement: statement(`
-      export default () => React.createElement('div', {});
-      import React from 'react';
-    `).get('declaration'),
-
-    forwardRef: statement(`
+    forwardRef: stmtLast =>
+      stmtLast(`
+      import React from 'react'
       export default React.forwardRef((props, ref) => (
         <div ref={ref} style={{backgroundColor: props.color}} />
-      ));
-      import React from 'react';
+      ))
     `).get('declaration'),
   });
 
@@ -61,7 +57,9 @@ describe('findExportedComponentDefinition', () => {
           module.exports = Component;
         `;
 
-        expect(parse(source)).toBeDefined();
+        const result = findComponentsInSource(source);
+        expect(Array.isArray(result)).toBe(true);
+        expect(result).toHaveLength(1);
       });
 
       it('finds React.createClass with hoc', () => {
@@ -71,7 +69,9 @@ describe('findExportedComponentDefinition', () => {
           module.exports = hoc(Component);
         `;
 
-        expect(parse(source)).toBeDefined();
+        const result = findComponentsInSource(source);
+        expect(Array.isArray(result)).toBe(true);
+        expect(result).toHaveLength(1);
       });
 
       it('finds React.createClass with hoc and args', () => {
@@ -81,7 +81,9 @@ describe('findExportedComponentDefinition', () => {
           module.exports = hoc(arg1, arg2)(Component);
         `;
 
-        expect(parse(source)).toBeDefined();
+        const result = findComponentsInSource(source);
+        expect(Array.isArray(result)).toBe(true);
+        expect(result).toHaveLength(1);
       });
 
       it('finds React.createClass with two hocs', () => {
@@ -93,7 +95,9 @@ describe('findExportedComponentDefinition', () => {
           );
         `;
 
-        expect(parse(source)).toBeDefined();
+        const result = findComponentsInSource(source);
+        expect(Array.isArray(result)).toBe(true);
+        expect(result).toHaveLength(1);
       });
 
       it('finds React.createClass with three hocs', () => {
@@ -107,7 +111,9 @@ describe('findExportedComponentDefinition', () => {
           );
         `;
 
-        expect(parse(source)).toBeDefined();
+        const result = findComponentsInSource(source);
+        expect(Array.isArray(result)).toBe(true);
+        expect(result).toHaveLength(1);
       });
 
       it('finds React.createClass, independent of the var name', () => {
@@ -117,7 +123,9 @@ describe('findExportedComponentDefinition', () => {
           module.exports = Component;
         `;
 
-        expect(parse(source)).toBeDefined();
+        const result = findComponentsInSource(source);
+        expect(Array.isArray(result)).toBe(true);
+        expect(result).toHaveLength(1);
       });
 
       it('does not process X.createClass of other modules', () => {
@@ -127,7 +135,9 @@ describe('findExportedComponentDefinition', () => {
           module.exports = Component;
         `;
 
-        expect(parse(source)).toBeNull();
+        const result = findComponentsInSource(source);
+        expect(Array.isArray(result)).toBe(true);
+        expect(result).toHaveLength(0);
       });
 
       it('resolves an imported variable to React.createClass', () => {
@@ -136,7 +146,9 @@ describe('findExportedComponentDefinition', () => {
           module.exports = Component;
         `;
 
-        expect(parse(source, mockImporter)).toBeDefined();
+        const result = findComponentsInSource(source);
+        expect(Array.isArray(result)).toBe(true);
+        expect(result).toHaveLength(0);
       });
     });
 
@@ -148,9 +160,10 @@ describe('findExportedComponentDefinition', () => {
           module.exports = Component;
         `;
 
-        const result = parse(source);
-        expect(result).toBeDefined();
-        expect(result.node.type).toBe('ClassDeclaration');
+        const result = findComponentsInSource(source);
+        expect(Array.isArray(result)).toBe(true);
+        expect(result).toHaveLength(1);
+        expect(result[0].node.type).toBe('ClassDeclaration');
       });
 
       it('finds class expression', () => {
@@ -160,9 +173,10 @@ describe('findExportedComponentDefinition', () => {
           module.exports = Component;
         `;
 
-        const result = parse(source);
-        expect(result).toBeDefined();
-        expect(result.node.type).toBe('ClassExpression');
+        const result = findComponentsInSource(source);
+        expect(Array.isArray(result)).toBe(true);
+        expect(result).toHaveLength(1);
+        expect(result[0].node.type).toBe('ClassExpression');
       });
 
       it('finds class definition, independent of the var name', () => {
@@ -172,9 +186,10 @@ describe('findExportedComponentDefinition', () => {
           module.exports = Component;
         `;
 
-        const result = parse(source);
-        expect(result).toBeDefined();
-        expect(result.node.type).toBe('ClassDeclaration');
+        const result = findComponentsInSource(source);
+        expect(Array.isArray(result)).toBe(true);
+        expect(result).toHaveLength(1);
+        expect(result[0].node.type).toBe('ClassDeclaration');
       });
 
       it('resolves an imported variable to class declaration', () => {
@@ -183,9 +198,10 @@ describe('findExportedComponentDefinition', () => {
           module.exports = Component;
         `;
 
-        const result = parse(source, mockImporter);
-        expect(result).toBeDefined();
-        expect(result.node.type).toBe('ClassDeclaration');
+        const result = findComponentsInSource(source, mockImporter);
+        expect(Array.isArray(result)).toBe(true);
+        expect(result).toHaveLength(1);
+        expect(result[0].node.type).toBe('ClassDeclaration');
       });
 
       it('resolves an imported variable to class expression', () => {
@@ -194,9 +210,10 @@ describe('findExportedComponentDefinition', () => {
           module.exports = Component;
         `;
 
-        const result = parse(source, mockImporter);
-        expect(result).toBeDefined();
-        expect(result.node.type).toBe('ClassExpression');
+        const result = findComponentsInSource(source, mockImporter);
+        expect(Array.isArray(result)).toBe(true);
+        expect(result).toHaveLength(1);
+        expect(result[0].node.type).toBe('ClassExpression');
       });
     });
 
@@ -208,7 +225,9 @@ describe('findExportedComponentDefinition', () => {
           module.exports = Component;
         `;
 
-        expect(parse(source)).toBeDefined();
+        const result = findComponentsInSource(source);
+        expect(Array.isArray(result)).toBe(true);
+        expect(result).toHaveLength(1);
       });
 
       it('finds stateless components with React.createElement, independent of the var name', () => {
@@ -218,7 +237,9 @@ describe('findExportedComponentDefinition', () => {
           module.exports = Component;
         `;
 
-        expect(parse(source)).toBeDefined();
+        const result = findComponentsInSource(source);
+        expect(Array.isArray(result)).toBe(true);
+        expect(result).toHaveLength(1);
       });
 
       it('does not process X.createElement of other modules', () => {
@@ -228,7 +249,9 @@ describe('findExportedComponentDefinition', () => {
           module.exports = Component;
         `;
 
-        expect(parse(source)).toBeNull();
+        const result = findComponentsInSource(source);
+        expect(Array.isArray(result)).toBe(true);
+        expect(result).toHaveLength(0);
       });
 
       it('resolves an imported stateless component with JSX', () => {
@@ -237,7 +260,9 @@ describe('findExportedComponentDefinition', () => {
           module.exports = Component;
         `;
 
-        expect(parse(source, mockImporter)).toBeDefined();
+        const result = findComponentsInSource(source, mockImporter);
+        expect(Array.isArray(result)).toBe(true);
+        expect(result).toHaveLength(1);
       });
 
       it('resolves an imported stateless component with React.createElement', () => {
@@ -246,7 +271,9 @@ describe('findExportedComponentDefinition', () => {
           module.exports = Component;
         `;
 
-        expect(parse(source, mockImporter)).toBeDefined();
+        const result = findComponentsInSource(source, mockImporter);
+        expect(Array.isArray(result)).toBe(true);
+        expect(result).toHaveLength(1);
       });
     });
 
@@ -260,7 +287,9 @@ describe('findExportedComponentDefinition', () => {
             exports.Component = Component;
           `;
 
-          expect(parse(source)).toBeDefined();
+          const result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
         });
 
         it('errors if multiple components are exported', () => {
@@ -272,27 +301,33 @@ describe('findExportedComponentDefinition', () => {
             exports.ComponentB = ComponentB;
           `;
 
-          expect(() => parse(source)).toThrow();
+          expect(() => findComponentsInSource(source)).toThrow();
         });
 
-        it('accepts multiple definitions if only one is exported', () => {
-          let source = `
+        it('accepts multiple definitions if only one is exported on exports', () => {
+          const source = `
             var R = require("React");
             var ComponentA = R.createClass({});
             var ComponentB = R.createClass({});
             exports.ComponentB = ComponentB;
           `;
 
-          expect(parse(source)).toBeDefined();
+          const result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+        });
 
-          source = `
+        it('accepts multiple definitions if only one is exported', () => {
+          const source = `
             var R = require("React");
             var ComponentA = R.createClass({});
             var ComponentB = R.createClass({});
             module.exports = ComponentB;
           `;
 
-          expect(parse(source)).toBeDefined();
+          const result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
         });
 
         it('supports imported components', () => {
@@ -301,7 +336,9 @@ describe('findExportedComponentDefinition', () => {
             exports.ComponentB = Component;
           `;
 
-          expect(parse(source, mockImporter)).toBeDefined();
+          const result = findComponentsInSource(source, mockImporter);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
         });
       });
 
@@ -314,9 +351,10 @@ describe('findExportedComponentDefinition', () => {
             exports.Component = Component;
           `;
 
-          const result = parse(source);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('ClassDeclaration');
+          const result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('ClassDeclaration');
         });
 
         it('errors if multiple components are exported', () => {
@@ -328,7 +366,7 @@ describe('findExportedComponentDefinition', () => {
             exports.ComponentB = ComponentB;
           `;
 
-          expect(() => parse(source)).toThrow();
+          expect(() => findComponentsInSource(source)).toThrow();
         });
 
         it('accepts multiple definitions if only one is exported', () => {
@@ -339,9 +377,10 @@ describe('findExportedComponentDefinition', () => {
             exports.ComponentB = ComponentB;
           `;
 
-          let result = parse(source);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('ClassDeclaration');
+          let result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('ClassDeclaration');
 
           source = `
             var R = require("React");
@@ -350,9 +389,10 @@ describe('findExportedComponentDefinition', () => {
             module.exports = ComponentB;
           `;
 
-          result = parse(source);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('ClassDeclaration');
+          result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('ClassDeclaration');
         });
 
         it('supports imported components', () => {
@@ -361,9 +401,10 @@ describe('findExportedComponentDefinition', () => {
             exports.ComponentB = Component;
           `;
 
-          const result = parse(source, mockImporter);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('ClassDeclaration');
+          const result = findComponentsInSource(source, mockImporter);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('ClassDeclaration');
         });
       });
     });
@@ -373,37 +414,45 @@ describe('findExportedComponentDefinition', () => {
     describe('export default <component>;', () => {
       describe('React.createClass', () => {
         it('finds default export', () => {
-          let source = `
+          const source = `
             var React = require("React");
             var Component = React.createClass({});
             export default Component
           `;
 
-          expect(parse(source)).toBeDefined();
+          const result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+        });
 
-          source = `
+        it('finds default export inline', () => {
+          const source = `
             var React = require("React");
             export default React.createClass({});
           `;
 
-          expect(parse(source)).toBeDefined();
+          const result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
         });
 
         it('errors if multiple components are exported', () => {
-          let source = `
+          const source = `
             import React, { createElement } from "React"
             export var Component = React.createClass({})
             export default React.createClass({});
           `;
-          expect(() => parse(source)).toThrow();
+          expect(() => findComponentsInSource(source)).toThrow();
+        });
 
-          source = `
+        it('errors if multiple components are exported with named export', () => {
+          const source = `
             import React, { createElement } from "React"
             var Component = React.createClass({})
             export {Component};
             export default React.createClass({});
           `;
-          expect(() => parse(source)).toThrow();
+          expect(() => findComponentsInSource(source)).toThrow();
         });
 
         it('accepts multiple definitions if only one is exported', () => {
@@ -413,7 +462,9 @@ describe('findExportedComponentDefinition', () => {
             export default React.createClass({});
           `;
 
-          expect(parse(source)).toBeDefined();
+          const result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
         });
 
         it('supports imported components', () => {
@@ -422,7 +473,9 @@ describe('findExportedComponentDefinition', () => {
             export default Component;
           `;
 
-          expect(parse(source, mockImporter)).toBeDefined();
+          const result = findComponentsInSource(source, mockImporter);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
         });
       });
 
@@ -434,18 +487,20 @@ describe('findExportedComponentDefinition', () => {
             export default Component;
           `;
 
-          let result = parse(source);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('ClassDeclaration');
+          let result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('ClassDeclaration');
 
           source = `
             import React from 'React';
             export default class Component extends React.Component {};
           `;
 
-          result = parse(source);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('ClassDeclaration');
+          result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('ClassDeclaration');
         });
 
         it('finds default export with hoc', () => {
@@ -455,9 +510,10 @@ describe('findExportedComponentDefinition', () => {
             export default hoc(Component);
           `;
 
-          const result = parse(source);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('ClassDeclaration');
+          const result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('ClassDeclaration');
         });
 
         it('finds default export with hoc and args', () => {
@@ -467,9 +523,10 @@ describe('findExportedComponentDefinition', () => {
             export default hoc(arg1, arg2)(Component);
           `;
 
-          const result = parse(source);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('ClassDeclaration');
+          const result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('ClassDeclaration');
         });
 
         it('finds default export with two hocs', () => {
@@ -481,9 +538,10 @@ describe('findExportedComponentDefinition', () => {
             );
           `;
 
-          const result = parse(source);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('ClassDeclaration');
+          const result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('ClassDeclaration');
         });
 
         it('errors if multiple components are exported', () => {
@@ -492,7 +550,7 @@ describe('findExportedComponentDefinition', () => {
             export var Component = class extends React.Component {};
             export default class ComponentB extends React.Component{};
           `;
-          expect(() => parse(source)).toThrow();
+          expect(() => findComponentsInSource(source)).toThrow();
 
           source = `
             import React from 'React';
@@ -500,7 +558,7 @@ describe('findExportedComponentDefinition', () => {
             export {Component};
             export default class ComponentB extends React.Component{};
           `;
-          expect(() => parse(source)).toThrow();
+          expect(() => findComponentsInSource(source)).toThrow();
         });
 
         it('accepts multiple definitions if only one is exported', () => {
@@ -510,9 +568,10 @@ describe('findExportedComponentDefinition', () => {
             export default class ComponentB extends React.Component{};
           `;
 
-          const result = parse(source);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('ClassDeclaration');
+          const result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('ClassDeclaration');
         });
 
         it('supports imported components', () => {
@@ -521,42 +580,61 @@ describe('findExportedComponentDefinition', () => {
             export default Component;
           `;
 
-          const result = parse(source, mockImporter);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('ClassDeclaration');
+          const result = findComponentsInSource(source, mockImporter);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('ClassDeclaration');
         });
       });
     });
 
     describe('export var foo = <C>, ...;', () => {
       describe('React.createClass', () => {
-        it('finds named exports', () => {
-          let source = `
+        it('finds named exports with export var', () => {
+          const source = `
             var React = require("React");
             export var somethingElse = 42, Component = React.createClass({});
           `;
-          expect(parse(source)).toBeDefined();
 
-          source = `
+          const result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+        });
+
+        it('finds named exports with export let', () => {
+          const source = `
             var React = require("React");
             export let Component = React.createClass({}), somethingElse = 42;
           `;
-          expect(parse(source)).toBeDefined();
 
-          source = `
+          const result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+        });
+
+        it('finds named exports with export const', () => {
+          const source = `
             var React = require("React");
             export const something = 21,
              Component = React.createClass({}),
              somethingElse = 42;
           `;
-          expect(parse(source)).toBeDefined();
 
-          source = `
+          const result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+        });
+
+        it('finds named exports with export let and additional export', () => {
+          const source = `
             var React = require("React");
             export var somethingElse = function() {};
             export let Component = React.createClass({});
           `;
-          expect(parse(source)).toBeDefined();
+
+          const result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
         });
 
         it('errors if multiple components are exported', () => {
@@ -566,7 +644,7 @@ describe('findExportedComponentDefinition', () => {
               ComponentB = R.createClass({});
           `;
 
-          expect(() => parse(source)).toThrow();
+          expect(() => findComponentsInSource(source)).toThrow();
 
           source = `
             var R = require("React");
@@ -575,7 +653,7 @@ describe('findExportedComponentDefinition', () => {
             export {ComponentB};
           `;
 
-          expect(() => parse(source)).toThrow();
+          expect(() => findComponentsInSource(source)).toThrow();
         });
 
         it('accepts multiple definitions if only one is exported', () => {
@@ -585,7 +663,9 @@ describe('findExportedComponentDefinition', () => {
             export let ComponentB = R.createClass({});
           `;
 
-          expect(parse(source)).toBeDefined();
+          const result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
         });
 
         it('supports imported components', () => {
@@ -594,7 +674,9 @@ describe('findExportedComponentDefinition', () => {
             export let ComponentB = Component;
           `;
 
-          expect(parse(source, mockImporter)).toBeDefined();
+          const result = findComponentsInSource(source, mockImporter);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
         });
       });
 
@@ -605,18 +687,20 @@ describe('findExportedComponentDefinition', () => {
             export var somethingElse = 42,
               Component = class extends React.Component {};
           `;
-          let result = parse(source);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('ClassExpression');
+          let result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('ClassExpression');
 
           source = `
             import React from 'React';
             export let Component = class extends React.Component {},
               somethingElse = 42;
           `;
-          result = parse(source);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('ClassExpression');
+          result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('ClassExpression');
 
           source = `
             import React from 'React';
@@ -624,18 +708,20 @@ describe('findExportedComponentDefinition', () => {
               Component = class extends React.Component {},
               somethingElse = 42;
           `;
-          result = parse(source);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('ClassExpression');
+          result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('ClassExpression');
 
           source = `
             import React from 'React';
             export var somethingElse = function() {};
             export let Component  = class extends React.Component {};
           `;
-          result = parse(source);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('ClassExpression');
+          result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('ClassExpression');
         });
 
         it('errors if multiple components are exported', () => {
@@ -644,7 +730,7 @@ describe('findExportedComponentDefinition', () => {
             export var ComponentA  = class extends React.Component {};
             export var ComponentB  = class extends React.Component {};
           `;
-          expect(() => parse(source)).toThrow();
+          expect(() => findComponentsInSource(source)).toThrow();
 
           source = `
             import React from 'React';
@@ -652,7 +738,7 @@ describe('findExportedComponentDefinition', () => {
             var ComponentB  = class extends React.Component {};
             export {ComponentB};
           `;
-          expect(() => parse(source)).toThrow();
+          expect(() => findComponentsInSource(source)).toThrow();
         });
 
         it('accepts multiple definitions if only one is exported', () => {
@@ -661,9 +747,10 @@ describe('findExportedComponentDefinition', () => {
             var ComponentA  = class extends React.Component {}
             export var ComponentB = class extends React.Component {};
           `;
-          const result = parse(source);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('ClassExpression');
+          const result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('ClassExpression');
         });
 
         it('supports imported components', () => {
@@ -672,9 +759,10 @@ describe('findExportedComponentDefinition', () => {
             export let ComponentB = Component;
           `;
 
-          const result = parse(source, mockImporter);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('ClassDeclaration');
+          const result = findComponentsInSource(source, mockImporter);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('ClassDeclaration');
         });
       });
 
@@ -685,18 +773,20 @@ describe('findExportedComponentDefinition', () => {
             export var somethingElse = 42,
               Component = () => <div />;
           `;
-          let result = parse(source);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('ArrowFunctionExpression');
+          let result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('ArrowFunctionExpression');
 
           source = `
             import React from 'React';
             export let Component = () => <div />,
               somethingElse = 42;
           `;
-          result = parse(source);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('ArrowFunctionExpression');
+          result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('ArrowFunctionExpression');
 
           source = `
             import React from 'React';
@@ -704,18 +794,20 @@ describe('findExportedComponentDefinition', () => {
               Component = () => <div />,
               somethingElse = 42;
           `;
-          result = parse(source);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('ArrowFunctionExpression');
+          result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('ArrowFunctionExpression');
 
           source = `
             import React from 'React';
             export var somethingElse = function() {};
             export let Component = () => <div />
           `;
-          result = parse(source);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('ArrowFunctionExpression');
+          result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('ArrowFunctionExpression');
         });
 
         it('errors if multiple components are exported', () => {
@@ -724,7 +816,7 @@ describe('findExportedComponentDefinition', () => {
             export var ComponentA = () => <div />
             export var ComponentB = () => <div />
           `;
-          expect(() => parse(source)).toThrow();
+          expect(() => findComponentsInSource(source)).toThrow();
 
           source = `
             import React from 'React';
@@ -732,7 +824,7 @@ describe('findExportedComponentDefinition', () => {
             var ComponentB  = () => <div />
             export {ComponentB};
           `;
-          expect(() => parse(source)).toThrow();
+          expect(() => findComponentsInSource(source)).toThrow();
         });
 
         it('accepts multiple definitions if only one is exported', () => {
@@ -741,9 +833,10 @@ describe('findExportedComponentDefinition', () => {
             var ComponentA  = class extends React.Component {}
             export var ComponentB = function() { return <div />; };
           `;
-          const result = parse(source);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('FunctionExpression');
+          const result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('FunctionExpression');
         });
 
         it('supports imported components', () => {
@@ -752,49 +845,63 @@ describe('findExportedComponentDefinition', () => {
             export var ComponentA = Component;
           `;
 
-          let result = parse(source, mockImporter);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('ArrowFunctionExpression');
+          let result = findComponentsInSource(source, mockImporter);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('ArrowFunctionExpression');
 
           source = `
             import Component from 'statelessCreateElement';
             export var ComponentB = Component;
           `;
 
-          result = parse(source, mockImporter);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('ArrowFunctionExpression');
+          result = findComponentsInSource(source, mockImporter);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('ArrowFunctionExpression');
         });
       });
     });
 
     describe('export {<C>};', () => {
       describe('React.createClass', () => {
-        it('finds exported specifiers', () => {
-          let source = `
+        it('finds exported specifiers 1', () => {
+          const source = `
             var React = require("React");
             var foo = 42;
             var Component = React.createClass({});
             export {foo, Component}
           `;
-          expect(parse(source)).toBeDefined();
+          const result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+        });
 
-          source = `
+        it('finds exported specifiers 2', () => {
+          const source = `
             import React from "React"
             var foo = 42;
             var Component = React.createClass({});
             export {Component, foo}
           `;
-          expect(parse(source)).toBeDefined();
 
-          source = `
+          const result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+        });
+
+        it('finds exported specifiers 3', () => {
+          const source = `
             import React, { createElement } from "React"
             var foo = 42;
             var baz = 21;
             var Component = React.createClass({});
             export {foo, Component as bar, baz}
           `;
-          expect(parse(source)).toBeDefined();
+
+          const result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
         });
 
         it('errors if multiple components are exported', () => {
@@ -805,7 +912,7 @@ describe('findExportedComponentDefinition', () => {
             export {ComponentA as foo, ComponentB};
           `;
 
-          expect(() => parse(source)).toThrow();
+          expect(() => findComponentsInSource(source)).toThrow();
         });
 
         it('accepts multiple definitions if only one is exported', () => {
@@ -816,7 +923,9 @@ describe('findExportedComponentDefinition', () => {
             export {ComponentA}
           `;
 
-          expect(parse(source)).toBeDefined();
+          const result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
         });
 
         it('supports imported components', () => {
@@ -825,7 +934,9 @@ describe('findExportedComponentDefinition', () => {
             export { Component };
           `;
 
-          expect(parse(source, mockImporter)).toBeDefined();
+          const result = findComponentsInSource(source, mockImporter);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
         });
       });
 
@@ -837,9 +948,10 @@ describe('findExportedComponentDefinition', () => {
             var Component = class extends React.Component {};
             export {foo, Component};
           `;
-          let result = parse(source);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('ClassExpression');
+          let result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('ClassExpression');
 
           source = `
             import React from 'React';
@@ -847,9 +959,10 @@ describe('findExportedComponentDefinition', () => {
             var Component = class extends React.Component {};
             export {Component, foo};
           `;
-          result = parse(source);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('ClassExpression');
+          result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('ClassExpression');
 
           source = `
             import React from 'React';
@@ -858,9 +971,10 @@ describe('findExportedComponentDefinition', () => {
             var Component = class extends React.Component {};
             export {foo, Component as bar, baz};
           `;
-          result = parse(source);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('ClassExpression');
+          result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('ClassExpression');
         });
 
         it('errors if multiple components are exported', () => {
@@ -871,7 +985,7 @@ describe('findExportedComponentDefinition', () => {
             export {ComponentA as foo, ComponentB};
           `;
 
-          expect(() => parse(source)).toThrow();
+          expect(() => findComponentsInSource(source)).toThrow();
         });
 
         it('accepts multiple definitions if only one is exported', () => {
@@ -881,9 +995,10 @@ describe('findExportedComponentDefinition', () => {
             var ComponentB = class extends React.Component {};
             export {ComponentA};
           `;
-          const result = parse(source);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('ClassExpression');
+          const result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('ClassExpression');
         });
 
         it('supports imported components', () => {
@@ -892,9 +1007,10 @@ describe('findExportedComponentDefinition', () => {
             export { Component };
           `;
 
-          const result = parse(source, mockImporter);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('ClassDeclaration');
+          const result = findComponentsInSource(source, mockImporter);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('ClassDeclaration');
         });
       });
 
@@ -906,9 +1022,10 @@ describe('findExportedComponentDefinition', () => {
             function Component() { return <div />; }
             export {foo, Component};
           `;
-          let result = parse(source);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('FunctionDeclaration');
+          let result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('FunctionDeclaration');
 
           source = `
             import React from 'React';
@@ -916,9 +1033,10 @@ describe('findExportedComponentDefinition', () => {
             var Component = () => <div />;
             export {Component, foo};
           `;
-          result = parse(source);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('ArrowFunctionExpression');
+          result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('ArrowFunctionExpression');
 
           source = `
             import React from 'React';
@@ -927,9 +1045,10 @@ describe('findExportedComponentDefinition', () => {
             var Component = function () { return <div />; }
             export {foo, Component as bar, baz};
           `;
-          result = parse(source);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('FunctionExpression');
+          result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('FunctionExpression');
         });
 
         it('errors if multiple components are exported', () => {
@@ -940,7 +1059,7 @@ describe('findExportedComponentDefinition', () => {
             export {ComponentA as foo, ComponentB};
           `;
 
-          expect(() => parse(source)).toThrow();
+          expect(() => findComponentsInSource(source)).toThrow();
         });
 
         it('accepts multiple definitions if only one is exported', () => {
@@ -950,9 +1069,10 @@ describe('findExportedComponentDefinition', () => {
             var ComponentB = () => <div />;
             export {ComponentA};
           `;
-          const result = parse(source);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('ArrowFunctionExpression');
+          const result = findComponentsInSource(source);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('ArrowFunctionExpression');
         });
 
         it('supports imported components', () => {
@@ -961,18 +1081,20 @@ describe('findExportedComponentDefinition', () => {
             export { Component as ComponentA };
           `;
 
-          let result = parse(source, mockImporter);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('ArrowFunctionExpression');
+          let result = findComponentsInSource(source, mockImporter);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('ArrowFunctionExpression');
 
           source = `
             import Component from 'statelessCreateElement';
             export { Component as ComponentB };
           `;
 
-          result = parse(source, mockImporter);
-          expect(result).toBeDefined();
-          expect(result.node.type).toBe('ArrowFunctionExpression');
+          result = findComponentsInSource(source, mockImporter);
+          expect(Array.isArray(result)).toBe(true);
+          expect(result).toHaveLength(1);
+          expect(result[0].node.type).toBe('ArrowFunctionExpression');
         });
       });
     });
@@ -985,9 +1107,10 @@ describe('findExportedComponentDefinition', () => {
           export var foo = 42;
           export class Component extends React.Component {};
         `;
-        const result = parse(source);
-        expect(result).toBeDefined();
-        expect(result.node.type).toBe('ClassDeclaration');
+        const result = findComponentsInSource(source);
+        expect(Array.isArray(result)).toBe(true);
+        expect(result).toHaveLength(1);
+        expect(result[0].node.type).toBe('ClassDeclaration');
       });
 
       it('errors if multiple components are exported', () => {
@@ -997,7 +1120,7 @@ describe('findExportedComponentDefinition', () => {
           export class ComponentB extends React.Component {};
         `;
 
-        expect(() => parse(source)).toThrow();
+        expect(() => findComponentsInSource(source)).toThrow();
       });
 
       it('accepts multiple definitions if only one is exported', () => {
@@ -1006,9 +1129,10 @@ describe('findExportedComponentDefinition', () => {
           class ComponentA extends React.Component {};
           export class ComponentB extends React.Component {};
         `;
-        const result = parse(source);
-        expect(result).toBeDefined();
-        expect(result.node.type).toBe('ClassDeclaration');
+        const result = findComponentsInSource(source);
+        expect(Array.isArray(result)).toBe(true);
+        expect(result).toHaveLength(1);
+        expect(result[0].node.type).toBe('ClassDeclaration');
       });
     });
   });

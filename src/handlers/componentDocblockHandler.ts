@@ -1,20 +1,17 @@
-import { namedTypes as t } from 'ast-types';
 import type Documentation from '../Documentation';
 import { getDocblock } from '../utils/docblock';
 import isReactForwardRefCall from '../utils/isReactForwardRefCall';
 import resolveToValue from '../utils/resolveToValue';
-import type { Importer } from '../parse';
-import type { NodePath } from 'ast-types/lib/node-path';
+import type { NodePath, Node } from '@babel/traverse';
+import type { ClassDeclaration, ClassExpression } from '@babel/types';
 
-function isClassDefinition(nodePath: NodePath): boolean {
-  const node = nodePath.node;
-  return t.ClassDeclaration.check(node) || t.ClassExpression.check(node);
+function isClassDefinition(
+  path: NodePath,
+): path is NodePath<ClassDeclaration | ClassExpression> {
+  return path.isClassDeclaration() || path.isClassExpression();
 }
 
-function getDocblockFromComponent(
-  path: NodePath,
-  importer: Importer,
-): string | null {
+function getDocblockFromComponent(path: NodePath): string | null {
   let description: string | null = null;
 
   if (isClassDefinition(path)) {
@@ -22,22 +19,22 @@ function getDocblockFromComponent(
     // attached to the last decorator instead as trailing comment.
     if (path.node.decorators && path.node.decorators.length > 0) {
       description = getDocblock(
-        path.get('decorators', path.node.decorators.length - 1),
+        path.get('decorators')[path.node.decorators.length - 1],
         true,
       );
     }
   }
   if (description == null) {
     // Find parent statement (e.g. var Component = React.createClass(<path>);)
-    let searchPath = path;
-    while (searchPath && !t.Statement.check(searchPath.node)) {
-      searchPath = searchPath.parent;
+    let searchPath: NodePath<Node> | null = path;
+    while (searchPath && !searchPath.isStatement()) {
+      searchPath = searchPath.parentPath;
     }
     if (searchPath) {
       // If the parent is an export statement, we have to traverse one more up
       if (
-        t.ExportNamedDeclaration.check(searchPath.parentPath.node) ||
-        t.ExportDefaultDeclaration.check(searchPath.parentPath.node)
+        searchPath.parentPath.isExportNamedDeclaration() ||
+        searchPath.parentPath.isExportDefaultDeclaration()
       ) {
         searchPath = searchPath.parentPath;
       }
@@ -45,12 +42,12 @@ function getDocblockFromComponent(
     }
   }
   if (!description) {
-    const searchPath = isReactForwardRefCall(path, importer)
-      ? path.get('arguments', 0)
+    const searchPath = isReactForwardRefCall(path)
+      ? path.get('arguments')[0]
       : path;
-    const inner = resolveToValue(searchPath, importer);
+    const inner = resolveToValue(searchPath);
     if (inner.node !== path.node) {
-      return getDocblockFromComponent(inner, importer);
+      return getDocblockFromComponent(inner);
     }
   }
   return description;
@@ -62,10 +59,6 @@ function getDocblockFromComponent(
 export default function componentDocblockHandler(
   documentation: Documentation,
   path: NodePath,
-  importer: Importer,
 ): void {
-  documentation.set(
-    'description',
-    getDocblockFromComponent(path, importer) || '',
-  );
+  documentation.set('description', getDocblockFromComponent(path) || '');
 }

@@ -1,4 +1,3 @@
-import { namedTypes as t } from 'ast-types';
 import getPropType from '../utils/getPropType';
 import getPropertyName from '../utils/getPropertyName';
 import getMemberValuePath from '../utils/getMemberValuePath';
@@ -9,11 +8,11 @@ import resolveToModule from '../utils/resolveToModule';
 import resolveToValue from '../utils/resolveToValue';
 import type Documentation from '../Documentation';
 import type { PropDescriptor, PropTypeDescriptor } from '../Documentation';
-import type { Importer } from '../parse';
-import type { NodePath } from 'ast-types/lib/node-path';
+import type { NodePath } from '@babel/traverse';
+import type { Node } from '@babel/types';
 
-function isPropTypesExpression(path: NodePath, importer: Importer): boolean {
-  const moduleName = resolveToModule(path, importer);
+function isPropTypesExpression(path: NodePath): boolean {
+  const moduleName = resolveToModule(path);
   if (moduleName) {
     return isReactModuleName(moduleName) || moduleName === 'ReactPropTypes';
   }
@@ -23,48 +22,33 @@ function isPropTypesExpression(path: NodePath, importer: Importer): boolean {
 function amendPropTypes(
   getDescriptor: (propName: string) => PropDescriptor,
   path: NodePath,
-  importer: Importer,
 ): void {
-  if (!t.ObjectExpression.check(path.node)) {
+  if (!path.isObjectExpression()) {
     return;
   }
 
-  path.get('properties').each((propertyPath: NodePath): void => {
-    switch (propertyPath.node.type) {
-      // @ts-ignore
-      case t.Property.name: {
-        const propName = getPropertyName(propertyPath, importer);
-        if (!propName) return;
+  path.get('properties').forEach(propertyPath => {
+    if (propertyPath.isObjectProperty()) {
+      const propName = getPropertyName(propertyPath);
+      if (!propName) return;
 
-        const propDescriptor = getDescriptor(propName);
-        const valuePath = resolveToValue(propertyPath.get('value'), importer);
-        const type: PropTypeDescriptor = isPropTypesExpression(
-          valuePath,
-          importer,
-        )
-          ? getPropType(valuePath, importer)
-          : { name: 'custom', raw: printValue(valuePath) };
+      const propDescriptor = getDescriptor(propName);
+      const valuePath = resolveToValue(propertyPath.get('value'));
+      const type: PropTypeDescriptor = isPropTypesExpression(valuePath)
+        ? getPropType(valuePath)
+        : { name: 'custom', raw: printValue(valuePath) };
 
-        if (type) {
-          propDescriptor.type = type;
-          propDescriptor.required =
-            type.name !== 'custom' && isRequiredPropType(valuePath);
-        }
-        break;
+      if (type) {
+        propDescriptor.type = type;
+        propDescriptor.required =
+          type.name !== 'custom' && isRequiredPropType(valuePath);
       }
-      // @ts-ignore
-      case t.SpreadElement.name: {
-        const resolvedValuePath = resolveToValue(
-          propertyPath.get('argument'),
-          importer,
-        );
-        switch (resolvedValuePath.node.type) {
-          // @ts-ignore
-          case t.ObjectExpression.name: // normal object literal
-            amendPropTypes(getDescriptor, resolvedValuePath, importer);
-            break;
-        }
-        break;
+    }
+    if (propertyPath.isSpreadElement()) {
+      const resolvedValuePath = resolveToValue(propertyPath.get('argument'));
+      if (resolvedValuePath.isObjectExpression()) {
+        // normal object literal
+        amendPropTypes(getDescriptor, resolvedValuePath);
       }
     }
   });
@@ -72,17 +56,16 @@ function amendPropTypes(
 
 function getPropTypeHandler(
   propName: string,
-): (documentation: Documentation, path: NodePath, importer: Importer) => void {
-  return function (
-    documentation: Documentation,
-    path: NodePath,
-    importer: Importer,
-  ) {
-    let propTypesPath = getMemberValuePath(path, propName, importer);
+): (documentation: Documentation, path: NodePath) => void {
+  return function (documentation: Documentation, path: NodePath) {
+    let propTypesPath: NodePath<Node> | null = getMemberValuePath(
+      path,
+      propName,
+    );
     if (!propTypesPath) {
       return;
     }
-    propTypesPath = resolveToValue(propTypesPath, importer);
+    propTypesPath = resolveToValue(propTypesPath);
     if (!propTypesPath) {
       return;
     }
@@ -97,7 +80,7 @@ function getPropTypeHandler(
       default:
         getDescriptor = documentation.getPropDescriptor;
     }
-    amendPropTypes(getDescriptor.bind(documentation), propTypesPath, importer);
+    amendPropTypes(getDescriptor.bind(documentation), propTypesPath);
   };
 }
 

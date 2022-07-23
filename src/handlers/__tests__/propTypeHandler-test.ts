@@ -1,13 +1,11 @@
-import {
-  statement,
-  expression,
-  noopImporter,
-  makeMockImporter,
-} from '../../../tests/utils';
+import { parse, makeMockImporter, noopImporter } from '../../../tests/utils';
 import Documentation from '../../Documentation';
-import DocumentationMock from '../../__mocks__/Documentation';
+import type DocumentationMock from '../../__mocks__/Documentation';
 import { propTypeHandler } from '../propTypeHandler';
 import getPropType from '../../utils/getPropType';
+import type { NodePath } from '@babel/traverse';
+import type { Importer } from '../../importer';
+import type { ExpressionStatement } from '@babel/types';
 
 const getPropTypeMock = getPropType as jest.Mock;
 
@@ -22,39 +20,45 @@ describe('propTypeHandler', () => {
   });
 
   const mockImporter = makeMockImporter({
-    props: statement(`
+    props: stmtLast =>
+      stmtLast(`
+      import { PropTypes } from 'react';
       export default {bar: PropTypes.bool};
-      import { PropTypes } from 'react';
     `).get('declaration'),
 
-    simpleProp: statement(`
+    simpleProp: stmtLast =>
+      stmtLast(`
+      import { PropTypes } from 'react';
       export default PropTypes.array.isRequired;
-      import { PropTypes } from 'react';
     `).get('declaration'),
 
-    complexProp: statement(`
-      export default prop;
+    complexProp: stmtLast =>
+      stmtLast(`
       var prop = PropTypes.oneOfType([PropTypes.number, PropTypes.bool]).isRequired;
       import { PropTypes } from 'react';
+      export default prop;
     `).get('declaration'),
 
-    foo: statement(`
-      export default PropTypes.bool;
-      import { PropTypes } from 'react';
+    foo: stmtLast =>
+      stmtLast(`
+        import { PropTypes } from 'react';
+        export default PropTypes.bool;
     `).get('declaration'),
 
-    bar: statement(`
-      export default PropTypes.bool;
-      import { PropTypes } from 'react';
+    bar: stmtLast =>
+      stmtLast(`
+        import { PropTypes } from 'react';
+        export default PropTypes.bool;
     `).get('declaration'),
 
-    baz: statement(`
-      export default OtherPropTypes.bool;
-      import { PropTypes as OtherPropTypes } from 'react';
+    baz: stmtLast =>
+      stmtLast(`
+        import { PropTypes as OtherPropTypes } from 'react';
+        export default OtherPropTypes.bool;
     `).get('declaration'),
   });
 
-  function template(src) {
+  function template(src: string) {
     return `
       ${src}
       var React = require('React');
@@ -63,26 +67,29 @@ describe('propTypeHandler', () => {
     `;
   }
 
-  function test(getSrc, parse) {
+  function test(
+    getSrc: (src: string) => string,
+    parseSrc: (src: string, importer?: Importer) => NodePath,
+  ) {
     it('passes the correct argument to getPropType', () => {
       const propTypesSrc = `{
           foo: PropTypes.bool,
           abc: PropTypes.xyz,
         }`;
-      const definition = parse(getSrc(propTypesSrc));
-      const propTypesAST = expression(propTypesSrc);
+      const definition = parseSrc(getSrc(propTypesSrc));
+      const propTypesAST = parse.expression(propTypesSrc);
 
-      const fooPath = propTypesAST.get('properties', 0, 'value');
-      const xyzPath = propTypesAST.get('properties', 1, 'value');
+      const fooPath = propTypesAST.get('properties.0.value') as NodePath;
+      const xyzPath = propTypesAST.get('properties.1.value') as NodePath;
 
-      propTypeHandler(documentation, definition, noopImporter);
+      propTypeHandler(documentation, definition);
 
       expect(getPropTypeMock.mock.calls[0][0]).toEqualASTNode(fooPath);
       expect(getPropTypeMock.mock.calls[1][0]).toEqualASTNode(xyzPath);
     });
 
     it('finds definitions via React.PropTypes', () => {
-      const definition = parse(
+      const definition = parseSrc(
         getSrc(
           `{
           foo: PropTypes.bool,
@@ -92,7 +99,7 @@ describe('propTypeHandler', () => {
         ),
       );
 
-      propTypeHandler(documentation, definition, noopImporter);
+      propTypeHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
         foo: {
           type: {},
@@ -110,7 +117,7 @@ describe('propTypeHandler', () => {
     });
 
     it('finds definitions via the ReactPropTypes module', () => {
-      const definition = parse(
+      const definition = parseSrc(
         getSrc(
           `{
           foo: require("ReactPropTypes").bool,
@@ -118,7 +125,7 @@ describe('propTypeHandler', () => {
         ),
       );
 
-      propTypeHandler(documentation, definition, noopImporter);
+      propTypeHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
         foo: {
           type: {},
@@ -128,7 +135,7 @@ describe('propTypeHandler', () => {
     });
 
     it('detects whether a prop is required', () => {
-      const definition = parse(
+      const definition = parseSrc(
         getSrc(
           `{
           simple_prop: PropTypes.array.isRequired,
@@ -138,7 +145,7 @@ describe('propTypeHandler', () => {
         ),
       );
 
-      propTypeHandler(documentation, definition, noopImporter);
+      propTypeHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
         simple_prop: {
           type: {},
@@ -152,7 +159,7 @@ describe('propTypeHandler', () => {
     });
 
     it('handles computed properties', () => {
-      const definition = parse(
+      const definition = parseSrc(
         getSrc(
           `{
           [foo]: PropTypes.array.isRequired,
@@ -162,12 +169,12 @@ describe('propTypeHandler', () => {
         ),
       );
 
-      propTypeHandler(documentation, definition, noopImporter);
+      propTypeHandler(documentation, definition);
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
     it('ignores complex computed properties', () => {
-      const definition = parse(
+      const definition = parseSrc(
         getSrc(
           `{
           [() => {}]: PropTypes.array.isRequired,
@@ -177,12 +184,12 @@ describe('propTypeHandler', () => {
         ),
       );
 
-      propTypeHandler(documentation, definition, noopImporter);
+      propTypeHandler(documentation, definition);
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
     it('only considers definitions from React or ReactPropTypes', () => {
-      const definition = parse(
+      const definition = parseSrc(
         getSrc(
           `{
           custom_propA: PropTypes.bool,
@@ -191,7 +198,7 @@ describe('propTypeHandler', () => {
         ),
       );
 
-      propTypeHandler(documentation, definition, noopImporter);
+      propTypeHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
         custom_propA: {
           type: {},
@@ -209,12 +216,12 @@ describe('propTypeHandler', () => {
 
     it('resolves variables', () => {
       const definitionSrc = getSrc('props');
-      const definition = parse(`
+      const definition = parseSrc(`
         ${definitionSrc}
         var props = {bar: PropTypes.bool};
       `);
 
-      propTypeHandler(documentation, definition, noopImporter);
+      propTypeHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
         bar: {
           type: {},
@@ -225,12 +232,15 @@ describe('propTypeHandler', () => {
 
     it('resolves imported variables', () => {
       const definitionSrc = getSrc('props');
-      const definition = parse(`
+      const definition = parseSrc(
+        `
         ${definitionSrc}
         import props from 'props';
-      `);
+      `,
+        mockImporter,
+      );
 
-      propTypeHandler(documentation, definition, mockImporter);
+      propTypeHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
         bar: {
           type: {},
@@ -247,16 +257,19 @@ describe('propTypeHandler', () => {
         simple_prop: simpleProp,
         complex_prop: complexProp,
       }`);
-      const definition = parse(`
+      const definition = parseSrc(
+        `
         ${definitionSrc}
         import foo from 'foo';
         import bar from 'bar';
         import baz from 'baz';
         import simpleProp from 'simpleProp';
         import complexProp from 'complexProp';
-      `);
+      `,
+        mockImporter,
+      );
 
-      propTypeHandler(documentation, definition, mockImporter);
+      propTypeHandler(documentation, definition);
       expect(documentation.descriptors).toMatchSnapshot();
     });
   }
@@ -264,7 +277,8 @@ describe('propTypeHandler', () => {
   describe('React.createClass', () => {
     test(
       propTypesSrc => template(`({propTypes: ${propTypesSrc}})`),
-      src => statement(src).get('expression'),
+      (src, importer = noopImporter) =>
+        parse.statement<ExpressionStatement>(src, importer).get('expression'),
     );
   });
 
@@ -277,7 +291,7 @@ describe('propTypeHandler', () => {
             static propTypes = ${propTypesSrc};
           }
         `),
-        src => statement(src),
+        (src, importer = noopImporter) => parse.statement(src, importer),
       );
     });
 
@@ -291,7 +305,7 @@ describe('propTypeHandler', () => {
             }
           }
         `),
-        src => statement(src),
+        (src, importer = noopImporter) => parse.statement(src, importer),
       );
     });
   });
@@ -303,37 +317,27 @@ describe('propTypeHandler', () => {
         var Component = (props) => <div />;
         Component.propTypes = ${propTypesSrc};
       `),
-      src => statement(src),
+      (src, importer = noopImporter) => parse.statement(src, importer),
     );
   });
 
   it('does not error if propTypes cannot be found', () => {
-    let definition = expression('{fooBar: 42}');
-    expect(() =>
-      propTypeHandler(documentation, definition, noopImporter),
-    ).not.toThrow();
+    let definition = parse.expression('{fooBar: 42}');
+    expect(() => propTypeHandler(documentation, definition)).not.toThrow();
 
-    definition = statement('class Foo {}');
-    expect(() =>
-      propTypeHandler(documentation, definition, noopImporter),
-    ).not.toThrow();
+    definition = parse.statement('class Foo {}');
+    expect(() => propTypeHandler(documentation, definition)).not.toThrow();
 
-    definition = statement('function Foo() {}');
-    expect(() =>
-      propTypeHandler(documentation, definition, noopImporter),
-    ).not.toThrow();
+    definition = parse.statement('function Foo() {}');
+    expect(() => propTypeHandler(documentation, definition)).not.toThrow();
 
-    definition = expression('() => {}');
-    expect(() =>
-      propTypeHandler(documentation, definition, noopImporter),
-    ).not.toThrow();
+    definition = parse.expression('() => {}');
+    expect(() => propTypeHandler(documentation, definition)).not.toThrow();
   });
 
   // This case is handled by propTypeCompositionHandler
   it('does not error if propTypes is a member expression', () => {
-    const definition = expression('{propTypes: Foo.propTypes}');
-    expect(() =>
-      propTypeHandler(documentation, definition, noopImporter),
-    ).not.toThrow();
+    const definition = parse.expression('{propTypes: Foo.propTypes}');
+    expect(() => propTypeHandler(documentation, definition)).not.toThrow();
   });
 });

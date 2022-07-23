@@ -4,8 +4,11 @@ import * as AllResolver from './resolver';
 import * as AllImporter from './importer';
 import * as utils from './utils';
 import type { Options } from './babelParser';
-import type { DocumentationObject } from './Documentation';
-import type { Handler, Resolver, Importer } from './parse';
+import type { DocumentationObject as Documentation } from './Documentation';
+import type { Resolver } from './resolver';
+import type { Importer } from './importer';
+import type { Handler } from './handlers';
+import type FileState from './FileState';
 
 const defaultResolver: Resolver = AllResolver.findExportedComponentDefinition;
 const defaultHandlers: Handler[] = [
@@ -21,7 +24,21 @@ const defaultHandlers: Handler[] = [
   allHandlers.componentMethodsHandler,
   allHandlers.componentMethodsJsDocHandler,
 ];
-const defaultImporter: Importer = AllImporter.ignoreImports;
+const defaultImporter: Importer = AllImporter.makeFsImporter();
+
+declare module '@babel/traverse' {
+  export interface HubInterface {
+    file: FileState;
+    parse: typeof FileState.prototype.parse;
+    import: typeof FileState.prototype.import;
+  }
+
+  export interface Hub {
+    file: FileState;
+    parse: typeof FileState.prototype.parse;
+    import: typeof FileState.prototype.import;
+  }
+}
 
 /**
  * See `parse.js` for more information about the arguments. This function
@@ -36,22 +53,14 @@ const defaultImporter: Importer = AllImporter.ignoreImports;
  * documentation (from a docblock).
  */
 function defaultParse(
-  src: string | Buffer,
-  resolver?: Resolver | undefined | null,
-  handlers?: Handler[] | undefined | null,
+  src: Buffer | string,
+  resolver: Resolver = defaultResolver,
+  handlers: Handler[] = defaultHandlers,
+  importer: Importer = defaultImporter,
   // Used for backwards compatibility of this method
-  options: Options & { importer?: Importer } = {},
-): DocumentationObject[] | DocumentationObject {
-  if (!resolver) {
-    resolver = defaultResolver;
-  }
-  if (!handlers) {
-    handlers = defaultHandlers;
-  }
-
-  const { importer = defaultImporter, ...opts } = options;
-
-  return parse(String(src), resolver, handlers, importer, opts);
+  options: Options = {},
+): Documentation | Documentation[] {
+  return parse(String(src), resolver, handlers, importer, options);
 }
 
 export {
@@ -62,3 +71,5 @@ export {
   AllImporter as importers,
   utils,
 };
+
+export type { Importer, Handler, Resolver, FileState, Options, Documentation };

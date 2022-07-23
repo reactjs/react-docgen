@@ -1,74 +1,62 @@
-import { namedTypes as t } from 'ast-types';
 import type Documentation from '../Documentation';
 import { unwrapUtilityType } from '../utils/flowUtilityTypes';
 import getFlowType from '../utils/getFlowType';
-import getFlowTypeFromReactComponent, {
-  applyToFlowTypeProperties,
-} from '../utils/getFlowTypeFromReactComponent';
+import getTypeFromReactComponent, {
+  applyToTypeProperties,
+} from '../utils/getTypeFromReactComponent';
 import getPropertyName from '../utils/getPropertyName';
 import getTSType from '../utils/getTSType';
 import type { TypeParameters } from '../utils/getTypeParameters';
 import resolveToValue from '../utils/resolveToValue';
 import setPropDescription from '../utils/setPropDescription';
-import type { Importer } from '../parse';
-import type { NodePath } from 'ast-types/lib/node-path';
+import type { NodePath } from '@babel/traverse';
+import type { FlowType } from '@babel/types';
 
 function setPropDescriptor(
   documentation: Documentation,
   path: NodePath,
   typeParams: TypeParameters | null,
-  importer: Importer,
 ): void {
-  if (t.ObjectTypeSpreadProperty.check(path.node)) {
-    const argument = unwrapUtilityType(path.get('argument'));
+  if (path.isObjectTypeSpreadProperty()) {
+    const argument = unwrapUtilityType(
+      path.get('argument'),
+    ) as NodePath<FlowType>;
 
-    if (t.ObjectTypeAnnotation.check(argument.node)) {
-      applyToFlowTypeProperties(
+    if (argument.isObjectTypeAnnotation()) {
+      applyToTypeProperties(
         documentation,
         argument,
         (propertyPath, innerTypeParams) => {
-          setPropDescriptor(
-            documentation,
-            propertyPath,
-            innerTypeParams,
-            importer,
-          );
+          setPropDescriptor(documentation, propertyPath, innerTypeParams);
         },
         typeParams,
-        importer,
       );
       return;
     }
 
-    const name = argument.get('id').get('name');
-    const resolvedPath = resolveToValue(
-      name,
-      // TODO: Make this configurable with a pragma comment?
-      importer,
-    );
+    // TODO what about other types here
+    const id = argument.get('id') as NodePath;
+    if (!id.hasNode() || !id.isIdentifier()) {
+      return;
+    }
+    const resolvedPath = resolveToValue(id);
 
-    if (resolvedPath && t.TypeAlias.check(resolvedPath.node)) {
+    if (resolvedPath && resolvedPath.isTypeAlias()) {
       const right = resolvedPath.get('right');
-      applyToFlowTypeProperties(
+      applyToTypeProperties(
         documentation,
         right,
         (propertyPath, innerTypeParams) => {
-          setPropDescriptor(
-            documentation,
-            propertyPath,
-            innerTypeParams,
-            importer,
-          );
+          setPropDescriptor(documentation, propertyPath, innerTypeParams);
         },
         typeParams,
-        importer,
       );
-    } else if (!argument.node.typeParameters) {
-      documentation.addComposes(name.node.name);
+    } else if (!argument.has('typeParameters')) {
+      documentation.addComposes(id.node.name);
     }
-  } else if (t.ObjectTypeProperty.check(path.node)) {
-    const type = getFlowType(path.get('value'), typeParams, importer);
-    const propName = getPropertyName(path, importer);
+  } else if (path.isObjectTypeProperty()) {
+    const type = getFlowType(path.get('value'), typeParams);
+    const propName = getPropertyName(path);
     if (!propName) return;
 
     const propDescriptor = documentation.getPropDescriptor(propName);
@@ -78,11 +66,15 @@ function setPropDescriptor(
     // We are doing this here instead of in a different handler
     // to not need to duplicate the logic for checking for
     // imported types that are spread in to props.
-    setPropDescription(documentation, path, importer);
-  } else if (t.TSPropertySignature.check(path.node)) {
-    const type = getTSType(path.get('typeAnnotation'), typeParams, importer);
+    setPropDescription(documentation, path);
+  } else if (path.isTSPropertySignature()) {
+    const typeAnnotation = path.get('typeAnnotation');
+    if (!typeAnnotation.hasNode()) {
+      return;
+    }
+    const type = getTSType(typeAnnotation, typeParams);
 
-    const propName = getPropertyName(path, importer);
+    const propName = getPropertyName(path);
     if (!propName) return;
 
     const propDescriptor = documentation.getPropDescriptor(propName);
@@ -92,7 +84,7 @@ function setPropDescriptor(
     // We are doing this here instead of in a different handler
     // to not need to duplicate the logic for checking for
     // imported types that are spread in to props.
-    setPropDescription(documentation, path, importer);
+    setPropDescription(documentation, path);
   }
 }
 
@@ -100,25 +92,25 @@ function setPropDescriptor(
  * This handler tries to find flow Type annotated react components and extract
  * its types to the documentation. It also extracts docblock comments which are
  * inlined in the type definition.
+ *
+ * TODO either rename this handler or split in flow vs ts
  */
 export default function flowTypeHandler(
   documentation: Documentation,
   path: NodePath,
-  importer: Importer,
 ): void {
-  const flowTypesPath = getFlowTypeFromReactComponent(path, importer);
+  const typesPath = getTypeFromReactComponent(path);
 
-  if (!flowTypesPath) {
+  if (!typesPath) {
     return;
   }
 
-  applyToFlowTypeProperties(
+  applyToTypeProperties(
     documentation,
-    flowTypesPath,
+    typesPath,
     (propertyPath, typeParams) => {
-      setPropDescriptor(documentation, propertyPath, typeParams, importer);
+      setPropDescriptor(documentation, propertyPath, typeParams);
     },
     null,
-    importer,
   );
 }

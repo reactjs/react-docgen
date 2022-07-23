@@ -1,8 +1,6 @@
-import { namedTypes as t } from 'ast-types';
+import type { NodePath } from '@babel/traverse';
 import resolveToModule from './resolveToModule';
 import isReactBuiltinCall from './isReactBuiltinCall';
-import type { Importer } from '../parse';
-import type { NodePath } from 'ast-types/lib/node-path';
 
 /**
  * Returns true if the expression is a function call of the form
@@ -11,18 +9,15 @@ import type { NodePath } from 'ast-types/lib/node-path';
  * createReactClass(...);
  * ```
  */
-function isReactCreateClassCallModular(
-  path: NodePath,
-  importer: Importer,
-): boolean {
-  if (t.ExpressionStatement.check(path.node)) {
+function isReactCreateClassCallModular(path: NodePath): boolean {
+  if (path.isExpressionStatement()) {
     path = path.get('expression');
   }
 
-  if (!t.CallExpression.check(path.node)) {
+  if (!path.isCallExpression()) {
     return false;
   }
-  const module = resolveToModule(path, importer);
+  const module = resolveToModule(path);
   return Boolean(module && module === 'create-react-class');
 }
 
@@ -34,12 +29,9 @@ function isReactCreateClassCallModular(
  * createReactClass(...);
  * ```
  */
-export default function isReactCreateClassCall(
-  path: NodePath,
-  importer: Importer,
-): boolean {
+export default function isReactCreateClassCall(path: NodePath): boolean {
   return (
-    isReactBuiltinCall(path, 'createClass', importer) ||
-    isReactCreateClassCallModular(path, importer)
+    isReactBuiltinCall(path, 'createClass') ||
+    isReactCreateClassCallModular(path)
   );
 }

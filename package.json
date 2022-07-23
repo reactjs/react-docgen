@@ -21,7 +21,7 @@
     "dist"
   ],
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=14.0.0"
   },
   "main": "dist/main.js",
   "typings": "dist/main.d.ts",
@@ -31,10 +31,8 @@
     "lint": "eslint . --ext .js,.ts --report-unused-disable-directives",
     "fix": "eslint . --ext .js,.ts --fix --report-unused-disable-directives",
     "prepare": "yarn build",
-    "preversion": "yarn lint",
     "start": "cd website && yarn && yarn start",
-    "test": "yarn build && jest",
-    "watch": "yarn build --watch"
+    "test": "yarn build && jest"
   },
   "keywords": [
     "react",
@@ -45,21 +43,23 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@babel/core": "^7.7.5",
-    "@babel/generator": "^7.12.11",
-    "ast-types": "^0.14.2",
+    "@babel/core": "^7.18.9",
+    "@babel/generator": "^7.18.9",
+    "@babel/traverse": "^7.18.9",
+    "@babel/types": "^7.18.9",
     "commander": "^2.19.0",
     "doctrine": "^3.0.0",
-    "estree-to-babel": "^3.1.0",
-    "neo-async": "^2.6.1",
-    "node-dir": "^0.1.10",
-    "resolve": "^1.17.0",
+    "neo-async": "^2.6.2",
+    "node-dir": "^0.1.17",
+    "resolve": "^1.22.1",
     "strip-indent": "^3.0.0"
   },
   "devDependencies": {
+    "@types/babel__traverse": "7.17.1",
     "@types/cross-spawn": "6.0.2",
     "@types/doctrine": "0.0.5",
     "@types/jest": "28.1.6",
+    "@types/resolve": "1.20.2",
     "@types/rimraf": "3.0.2",
     "@typescript-eslint/eslint-plugin": "5.32.0",
     "@typescript-eslint/parser": "5.32.0",

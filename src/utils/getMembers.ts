@@ -1,10 +1,10 @@
-import { namedTypes as t } from 'ast-types';
-import type { NodePath } from 'ast-types/lib/node-path';
+import type { NodePath } from '@babel/traverse';
+import type { Expression, PrivateName } from '@babel/types';
 
 interface MemberDescriptor {
-  path: NodePath;
+  path: NodePath<Expression | PrivateName>;
   computed: boolean;
-  argumentsPath: NodePath | null;
+  argumentPaths: NodePath[];
 }
 
 /**
@@ -24,32 +24,37 @@ export default function getMembers(
   includeRoot = false,
 ): MemberDescriptor[] {
   const result: MemberDescriptor[] = [];
-  let argumentsPath = null;
+  let argumentPaths: NodePath[] = [];
+  let resultPath: MemberDescriptor['path'] = path as NodePath<Expression>;
+
   // eslint-disable-next-line no-constant-condition
-  loop: while (true) {
-    switch (true) {
-      case t.MemberExpression.check(path.node):
-        result.push({
-          path: path.get('property'),
-          computed: path.node.computed,
-          argumentsPath: argumentsPath,
-        });
-        argumentsPath = null;
-        path = path.get('object');
+  while (true) {
+    if (resultPath.isMemberExpression()) {
+      const property = resultPath.get('property');
+      result.push({
+        path: property,
+        computed: resultPath.node.computed,
+        argumentPaths,
+      });
+      argumentPaths = [];
+      resultPath = resultPath.get('object');
+    } else if (resultPath.isCallExpression()) {
+      const callee = resultPath.get('callee');
+      if (callee.isExpression()) {
+        argumentPaths = resultPath.get('arguments');
+        resultPath = callee;
+      } else {
         break;
-      case t.CallExpression.check(path.node):
-        argumentsPath = path.get('arguments');
-        path = path.get('callee');
-        break;
-      default:
-        break loop;
+      }
+    } else {
+      break;
     }
   }
   if (includeRoot && result.length > 0) {
     result.push({
-      path,
+      path: resultPath,
       computed: false,
-      argumentsPath,
+      argumentPaths,
     });
   }
   return result.reverse();

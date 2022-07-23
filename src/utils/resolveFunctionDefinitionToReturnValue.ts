@@ -1,22 +1,30 @@
+import type { NodePath } from '@babel/traverse';
+import type { Expression, Function as BabelFunction } from '@babel/types';
 import resolveToValue from './resolveToValue';
-import { traverseShallow } from './traverse';
-import type { Importer } from '../parse';
-import type { NodePath } from 'ast-types/lib/node-path';
-import { ReturnStatement } from 'typescript';
+import { ignore, traverseShallow } from './traverse';
+
+// TODO needs unit test
 
 export default function resolveFunctionDefinitionToReturnValue(
-  path: NodePath,
-  importer: Importer,
-): NodePath | null {
+  path: NodePath<BabelFunction>,
+): NodePath<Expression> | null {
   let returnPath: NodePath | null = null;
 
-  traverseShallow(path.get('body'), {
-    visitFunction: () => false,
-    visitReturnStatement: (nodePath: NodePath<ReturnStatement>): false => {
-      returnPath = resolveToValue(nodePath.get('argument'), importer);
-      return false;
+  const body = path.get('body');
+  traverseShallow(
+    body.node,
+    {
+      Function: ignore,
+      ReturnStatement: nodePath => {
+        const argument = nodePath.get('argument');
+        if (argument.hasNode()) {
+          returnPath = resolveToValue(argument);
+        }
+        nodePath.skip();
+      },
     },
-  });
+    body.scope,
+  );
 
   return returnPath;
 }
