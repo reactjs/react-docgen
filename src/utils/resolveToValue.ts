@@ -63,46 +63,41 @@ function findScopePath(
  * `scope`. We are not descending into any statements (blocks).
  */
 function findLastAssignedValue(
-  scope: Scope,
+  path: NodePath,
   idPath: NodePath<Identifier>,
 ): NodePath | null {
   const results: NodePath[] = [];
   const name = idPath.node.name;
 
-  traverseShallow(
-    scope.path.node,
-    {
-      AssignmentExpression(path) {
-        const node = path.node;
-        const left = path.get('left');
-        // Skip anything that is not an assignment to a variable with the
-        // passed name.
-        // Ensure the LHS isn't the reference we're trying to resolve.
-        if (
-          !left.isIdentifier() ||
-          left.node === idPath.node ||
-          left.node.name !== name ||
-          node.operator !== '='
-        ) {
+  traverseShallow(path, {
+    AssignmentExpression(assignmentPath) {
+      const left = assignmentPath.get('left');
+      // Skip anything that is not an assignment to a variable with the
+      // passed name.
+      // Ensure the LHS isn't the reference we're trying to resolve.
+      if (
+        !left.isIdentifier() ||
+        left.node === idPath.node ||
+        left.node.name !== name ||
+        assignmentPath.node.operator !== '='
+      ) {
+        return;
+      }
+      // Ensure the RHS doesn't contain the reference we're trying to resolve.
+      const candidatePath = assignmentPath.get('right');
+      for (
+        let p: NodePath | null = idPath;
+        p && p.node != null;
+        p = p.parentPath
+      ) {
+        if (p.node === candidatePath.node) {
           return;
         }
-        // Ensure the RHS doesn't contain the reference we're trying to resolve.
-        const candidatePath = path.get('right');
-        for (
-          let p: NodePath | null = idPath;
-          p && p.node != null;
-          p = p.parentPath
-        ) {
-          if (p.node === candidatePath.node) {
-            return;
-          }
-        }
-        results.push(candidatePath);
-        return path.skip();
-      },
+      }
+      results.push(candidatePath);
+      return assignmentPath.skip();
     },
-    scope,
-  );
+  });
 
   const resultPath = results.pop();
 
@@ -204,9 +199,9 @@ export default function resolveToValue(path: NodePath): NodePath {
       // The variable may be assigned a different value after initialization.
       // We are first trying to find all assignments to the variable in the
       // block where it is defined (i.e. we are not traversing into statements)
-      resolvedPath = findLastAssignedValue(binding.scope, path);
+      resolvedPath = findLastAssignedValue(binding.scope.path, path);
       if (!resolvedPath) {
-        // @ts-ignore
+        // @ts-ignore TODO fix in DT
         const bindingMap = binding.path.getOuterBindingIdentifierPaths(
           true,
         ) as Record<string, Array<NodePath<Identifier>>>;

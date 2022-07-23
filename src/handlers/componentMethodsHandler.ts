@@ -7,7 +7,7 @@ import type Documentation from '../Documentation';
 import match from '../utils/match';
 import { traverseShallow } from '../utils/traverse';
 import resolveToValue from '../utils/resolveToValue';
-import type { NodePath, Scope } from '@babel/traverse';
+import type { NodePath } from '@babel/traverse';
 import type { AssignmentExpression, Identifier } from '@babel/types';
 
 /**
@@ -35,7 +35,7 @@ function isMethod(path: NodePath): boolean {
 }
 
 function findAssignedMethods(
-  scope: Scope,
+  path: NodePath,
   idPath: NodePath<Identifier | null | undefined>,
 ): Array<NodePath<AssignmentExpression>> {
   const results: Array<NodePath<AssignmentExpression>> = [];
@@ -47,19 +47,19 @@ function findAssignedMethods(
   const name = idPath.node.name;
   const idScope = idPath.scope.getBinding(idPath.node.name)?.scope;
 
-  traverseShallow(scope.path.node, {
-    AssignmentExpression(path) {
-      const node = path.node;
+  traverseShallow(path, {
+    AssignmentExpression(assignmentPath) {
+      const node = assignmentPath.node;
       if (
         match(node.left, {
           type: 'MemberExpression',
           object: { type: 'Identifier', name },
         }) &&
-        path.scope.getBinding(name)?.scope === idScope &&
-        resolveToValue(path.get('right')).isFunction()
+        assignmentPath.scope.getBinding(name)?.scope === idScope &&
+        resolveToValue(assignmentPath.get('right')).isFunction()
       ) {
-        results.push(path);
-        path.skip();
+        results.push(assignmentPath);
+        assignmentPath.skip();
       }
     },
   });
@@ -110,7 +110,7 @@ export default function componentMethodsHandler(
     path.parentPath.get('id').isIdentifier()
   ) {
     methodPaths = findAssignedMethods(
-      path.parentPath.scope,
+      path.parentPath.scope.path,
       path.parentPath.get('id') as NodePath<Identifier>,
     ).map(p => ({ path: p }));
   } else if (
@@ -120,12 +120,12 @@ export default function componentMethodsHandler(
     path.parentPath.get('left').isIdentifier()
   ) {
     methodPaths = findAssignedMethods(
-      path.parentPath.scope,
+      path.parentPath.scope.path,
       path.parentPath.get('left') as NodePath<Identifier>,
     ).map(p => ({ path: p }));
   } else if (path.isFunctionDeclaration()) {
     methodPaths = findAssignedMethods(
-      path.parentPath.scope,
+      path.parentPath.scope.path,
       path.get('id'),
     ).map(p => ({ path: p }));
   }

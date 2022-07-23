@@ -1,6 +1,4 @@
-import type { NodePath, Scope, Visitor } from '@babel/traverse';
-import { default as babelTraverse } from '@babel/traverse';
-import type { Node } from '@babel/types';
+import type { NodePath, Visitor } from '@babel/traverse';
 
 export function ignore<T>(path: NodePath<T>): void {
   path.skip();
@@ -10,15 +8,11 @@ export function ignore<T>(path: NodePath<T>): void {
  * A helper function that doesn't traverse into nested blocks / statements by
  * default.
  */
-export function traverseShallow(
-  node: Node,
-  visitors: Visitor,
-  scope?: Scope | undefined,
-): void {
-  babelTraverse(node, { ...defaultVisitors, ...visitors }, scope);
+export function traverseShallow(path: NodePath, visitors: Visitor): void {
+  path.traverse({ ...shallowIgnoreVisitors, ...visitors });
 }
 
-const defaultVisitors = {
+const shallowIgnoreVisitors = {
   FunctionDeclaration: ignore,
   FunctionExpression: ignore,
   ClassDeclaration: ignore,

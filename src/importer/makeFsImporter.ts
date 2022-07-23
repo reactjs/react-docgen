@@ -75,78 +75,74 @@ export default function makeFsImporter(
   ): NodePath | null {
     let resultPath: NodePath | null = null;
 
-    traverseShallow(
-      state.ast,
-      {
-        ExportNamedDeclaration(path) {
-          const { declaration, specifiers, source } = path.node;
-          if (
-            declaration &&
-            'id' in declaration &&
-            declaration.id &&
-            'name' in declaration.id &&
-            declaration.id.name === name
-          ) {
-            resultPath = path.get('declaration') as NodePath;
-          } else if (
-            declaration &&
-            'declarations' in declaration &&
-            declaration.declarations
-          ) {
-            (path.get('declaration') as NodePath<VariableDeclaration>)
-              .get('declarations')
-              .forEach(declPath => {
-                const id = declPath.get('id');
-                // TODO: ArrayPattern and ObjectPattern
-                if (
-                  id.isIdentifier() &&
-                  id.node.name === name &&
-                  'init' in declPath.node &&
-                  declPath.node.init
-                ) {
-                  resultPath = declPath.get('init') as NodePath;
-                }
-              });
-          } else if (specifiers) {
-            path.get('specifiers').forEach(specifierPath => {
+    traverseShallow(state.path, {
+      ExportNamedDeclaration(path) {
+        const { declaration, specifiers, source } = path.node;
+        if (
+          declaration &&
+          'id' in declaration &&
+          declaration.id &&
+          'name' in declaration.id &&
+          declaration.id.name === name
+        ) {
+          resultPath = path.get('declaration') as NodePath;
+        } else if (
+          declaration &&
+          'declarations' in declaration &&
+          declaration.declarations
+        ) {
+          (path.get('declaration') as NodePath<VariableDeclaration>)
+            .get('declarations')
+            .forEach(declPath => {
+              const id = declPath.get('id');
+              // TODO: ArrayPattern and ObjectPattern
               if (
-                'name' in specifierPath.node.exported &&
-                specifierPath.node.exported.name === name
+                id.isIdentifier() &&
+                id.node.name === name &&
+                'init' in declPath.node &&
+                declPath.node.init
               ) {
-                // TODO TESTME with ExportDefaultSpecifier
-                if (source) {
-                  const local =
-                    'local' in specifierPath.node
-                      ? specifierPath.node.local.name
-                      : 'default';
-                  resultPath = resolveImportedValue(path, local, state, seen);
-                } else if ('local' in specifierPath.node) {
-                  resultPath = specifierPath.get('local') as NodePath;
-                }
+                resultPath = declPath.get('init') as NodePath;
               }
             });
-          }
+        } else if (specifiers) {
+          path.get('specifiers').forEach(specifierPath => {
+            if (
+              'name' in specifierPath.node.exported &&
+              specifierPath.node.exported.name === name
+            ) {
+              // TODO TESTME with ExportDefaultSpecifier
+              if (source) {
+                const local =
+                  'local' in specifierPath.node
+                    ? specifierPath.node.local.name
+                    : 'default';
+                resultPath = resolveImportedValue(path, local, state, seen);
+              } else if ('local' in specifierPath.node) {
+                resultPath = specifierPath.get('local') as NodePath;
+              }
+            }
+          });
+        }
 
-          return false;
-        },
-        ExportDefaultDeclaration(path) {
-          if (name === 'default') {
-            resultPath = path.get('declaration');
-          }
-
-          return false;
-        },
-        ExportAllDeclaration(path) {
-          const resolvedPath = resolveImportedValue(path, name, state, seen);
-          if (resolvedPath) {
-            resultPath = resolvedPath;
-          }
-
-          return false;
-        },
+        return false;
       },
-      state.scope,
-    );
+      ExportDefaultDeclaration(path) {
+        if (name === 'default') {
+          resultPath = path.get('declaration');
+        }
+
+        return false;
+      },
+      ExportAllDeclaration(path) {
+        const resolvedPath = resolveImportedValue(path, name, state, seen);
+        if (resolvedPath) {
+          resultPath = resolvedPath;
+        }
+
+        return false;
+      },
+    });
 
     return resultPath;
   }

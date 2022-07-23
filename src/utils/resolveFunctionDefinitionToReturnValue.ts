@@ -11,20 +11,16 @@ export default function resolveFunctionDefinitionToReturnValue(
   let returnPath: NodePath | null = null;
 
   const body = path.get('body');
-  traverseShallow(
-    body.node,
-    {
-      Function: ignore,
-      ReturnStatement: nodePath => {
-        const argument = nodePath.get('argument');
-        if (argument.hasNode()) {
-          returnPath = resolveToValue(argument);
-        }
-        nodePath.skip();
-      },
+  traverseShallow(body, {
+    Function: ignore,
+    ReturnStatement: nodePath => {
+      const argument = nodePath.get('argument');
+      if (argument.hasNode()) {
+        returnPath = resolveToValue(argument);
+      }
+      nodePath.skip();
     },
-    body.scope,
-  );
+  });
 
   return returnPath;
 }
