@@ -5,9 +5,6 @@ import type { NodePath } from '@babel/traverse';
  */
 export default (path: NodePath): boolean => {
   return (
-    !path || // TODO Remove if we are fully typed
-    path.isIdentifier() ||
-    path.isImportDeclaration() ||
-    path.isCallExpression()
+    path.isIdentifier() || path.isImportDeclaration() || path.isCallExpression()
   );
 };
