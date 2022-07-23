@@ -3,10 +3,12 @@ const path = require('path');
 const Table = require('cli-table');
 const Benchmark = require('benchmark');
 const { parse } = require('..');
+const { parse: parse5 } = require('react-docgen5');
+const { parse: parse6old } = require('react-docgen6pre');
 
 console.log(`Node: ${process.version}`);
 
-const head = ['fixture', 'timing'];
+const head = ['fixture', 'current', 'v6.0.0-alpha.3', 'v5.4.3'];
 
 const files = ['./fixtures/CircularProgress.js'];
 
@@ -31,10 +33,17 @@ files.forEach(file => {
   const options = { filename: file, babelrc: false, configFile: false };
 
   // warmup
-  parse(code, null, null, options);
+  parse(code, undefined, undefined, undefined, options);
+  parse5(code, undefined, undefined, options);
   global.gc();
-  suite.add(0, () => {
-    parse(code, null, null, options);
+  suite.add('current', () => {
+    parse(code, undefined, undefined, undefined, options);
+  });
+  suite.add('v6.0.0-alpha.3', () => {
+    parse6old(code, undefined, undefined, options);
+  });
+  suite.add('v5.4.3', () => {
+    parse5(code, undefined, undefined, options);
   });
   const result = [suite.name];
   suite.on('cycle', function (event) {
@@ -49,8 +58,13 @@ files.forEach(file => {
     }
     global.gc();
   });
+  suite.on('complete', function () {
+    process.stdout.write(
+      '-> Winner: ' + this.filter('fastest').map('name') + '\n',
+    );
+  });
 
-  console.log(`Running benchmark for ${suite.name} ...`);
+  process.stdout.write(`Running benchmark for ${suite.name} ... `);
   global.gc();
   suite.run({ async: false });
   global.gc(); // gc is disabled so ensure we run it
