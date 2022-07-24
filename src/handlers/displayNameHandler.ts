@@ -53,14 +53,9 @@ export default function displayNameHandler(
   }
   displayNamePath = resolveToValue(displayNamePath);
 
-  // If display name is defined as a getter we get a function expression as
-  // value. In that case we try to determine the value from the return
-  // statement.
-  if (
-    displayNamePath.isFunctionExpression() ||
-    displayNamePath.isClassMethod() ||
-    displayNamePath.isObjectMethod() // TODO test objectmethod? Do we need it?
-  ) {
+  // If display name is defined as function somehow (getter, property with function)
+  // we resolve the return value of the function
+  if (displayNamePath.isFunction()) {
     displayNamePath = resolveFunctionDefinitionToReturnValue(displayNamePath);
   }
   if (
