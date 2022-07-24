@@ -7,6 +7,7 @@ import type {
   ExportDefaultDeclaration,
   ExpressionStatement,
   FunctionExpression,
+  ObjectExpression,
 } from '@babel/types';
 import type { NodePath } from '@babel/traverse';
 
@@ -37,37 +38,15 @@ describe('defaultPropsHandler', () => {
   });
 
   it('extracts the displayName', () => {
-    let definition: NodePath = parse.expression('{displayName: "FooBar"}');
+    const definition: NodePath = parse.expression('{displayName: "FooBar"}');
     displayNameHandler(documentation, definition);
     expect(documentation.displayName).toBe('FooBar');
+  });
 
-    definition = parse
-      .statement<ExpressionStatement>(
-        `
-      ({displayName: foobarbaz});
-      import foobarbaz from 'foobarbaz';
-    `,
-        mockImporter,
-      )
-      .get('expression');
-    displayNameHandler(documentation, definition);
-    expect(documentation.displayName).toBe('FooBarBaz');
-
-    definition = parse.statement(`
-      class Foo {
-        static displayName = "BarFoo";
-      }
-    `);
-    displayNameHandler(documentation, definition);
-    expect(documentation.displayName).toBe('BarFoo');
-
-    definition = parse.statement(
-      `
-      class Foo {
-        static displayName = foobarbaz;
-      }
-      import foobarbaz from 'foobarbaz';
-    `,
+  it('extracts the imported displayName', () => {
+    const definition = parse.expressionLast<ObjectExpression>(
+      `import foobarbaz from 'foobarbaz';
+       ({displayName: foobarbaz});`,
       mockImporter,
     );
     displayNameHandler(documentation, definition);
@@ -75,7 +54,7 @@ describe('defaultPropsHandler', () => {
   });
 
   it('resolves identifiers', () => {
-    let definition: NodePath = parse
+    const definition = parse
       .statement<ExpressionStatement>(
         `
       ({displayName: name})
@@ -85,8 +64,10 @@ describe('defaultPropsHandler', () => {
       .get('expression');
     displayNameHandler(documentation, definition);
     expect(documentation.displayName).toBe('abc');
+  });
 
-    definition = parse
+  it('resolves imported identifiers', () => {
+    const definition = parse
       .statement<ExpressionStatement>(
         `
       ({displayName: name})
@@ -98,46 +79,10 @@ describe('defaultPropsHandler', () => {
       .get('expression');
     displayNameHandler(documentation, definition);
     expect(documentation.displayName).toBe('FooBarBaz');
-
-    definition = parse.statement(`
-      class Foo {
-        static displayName = name;
-      }
-      var name = 'xyz';
-    `);
-    displayNameHandler(documentation, definition);
-    expect(documentation.displayName).toBe('xyz');
-
-    definition = parse.statement(
-      `
-      class Foo {
-        static displayName = name;
-      }
-      import foobarbaz from 'foobarbaz';
-      var name = foobarbaz;
-    `,
-      mockImporter,
-    );
-    displayNameHandler(documentation, definition);
-    expect(documentation.displayName).toBe('FooBarBaz');
-  });
-
-  it('ignores non-literal names', () => {
-    let definition = parse.expression('{displayName: foo.bar}');
-    expect(() => displayNameHandler(documentation, definition)).not.toThrow();
-    expect(documentation.displayName).not.toBeDefined();
-
-    definition = parse.statement(`
-      class Foo {
-        static displayName = foo.bar;
-      }
-    `);
-    expect(() => displayNameHandler(documentation, definition)).not.toThrow();
-    expect(documentation.displayName).not.toBeDefined();
   });
 
   it('can resolve non-literal names with appropriate importer', () => {
-    let definition = parse
+    const definition = parse
       .statement<ExpressionStatement>(
         `
       ({displayName: foo.bar});
@@ -148,18 +93,6 @@ describe('defaultPropsHandler', () => {
       .get('expression');
     displayNameHandler(documentation, definition);
     expect(documentation.displayName).toBe('baz');
-
-    definition = parse.statement(
-      `
-      class Foo {
-        static displayName = bar.baz;
-      }
-      import bar from 'bar';
-    `,
-      mockImporter,
-    );
-    displayNameHandler(documentation, definition);
-    expect(documentation.displayName).toBe('foo');
   });
 
   describe('ClassDeclaration', () => {
@@ -175,6 +108,74 @@ describe('defaultPropsHandler', () => {
         .get('declaration');
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBeUndefined();
+    });
+
+    it('resolves identifiers', () => {
+      const definition = parse.statement(`
+      class Foo {
+        static displayName = name;
+      }
+      var name = 'xyz';
+    `);
+      displayNameHandler(documentation, definition);
+      expect(documentation.displayName).toBe('xyz');
+    });
+
+    it('resolves imported identifiers', () => {
+      const definition = parse.statement(
+        `
+      class Foo {
+        static displayName = name;
+      }
+      import foobarbaz from 'foobarbaz';
+      var name = foobarbaz;
+    `,
+        mockImporter,
+      );
+      displayNameHandler(documentation, definition);
+      expect(documentation.displayName).toBe('FooBarBaz');
+    });
+
+    it('resolves imported displayName', () => {
+      const definition = parse.statement(
+        `
+      class Foo {
+        static displayName = foobarbaz;
+      }
+      import foobarbaz from 'foobarbaz';
+    `,
+        mockImporter,
+      );
+      displayNameHandler(documentation, definition);
+      expect(documentation.displayName).toBe('FooBarBaz');
+    });
+
+    it('ignores non-literal names', () => {
+      let definition = parse.expression('{displayName: foo.bar}');
+      expect(() => displayNameHandler(documentation, definition)).not.toThrow();
+      expect(documentation.displayName).not.toBeDefined();
+
+      definition = parse.statement(`
+      class Foo {
+        static displayName = foo.bar;
+      }
+    `);
+      expect(() => displayNameHandler(documentation, definition)).not.toThrow();
+      expect(documentation.displayName).toBeUndefined();
+    });
+
+    it('can resolve non-literal names with appropriate importer', () => {
+      const definition = parse.statement(
+        `
+      class Foo {
+        static displayName = bar.baz;
+      }
+      import bar from 'bar';
+    `,
+        mockImporter,
+      );
+      displayNameHandler(documentation, definition);
+      expect(documentation.displayName).toBe('foo');
     });
 
     it('considers a static displayName class property', () => {
@@ -193,6 +194,31 @@ describe('defaultPropsHandler', () => {
           static get displayName() {
             return 'foo';
           }
+        }
+      `);
+      expect(() => displayNameHandler(documentation, definition)).not.toThrow();
+      expect(documentation.displayName).toBe('foo');
+    });
+
+    it('considers static displayName property with function expression', () => {
+      const definition = parse.statement(`
+        class Foo {
+          static displayName = function() {
+            return 'foo';
+          }
+        }
+      `);
+      expect(() => displayNameHandler(documentation, definition)).not.toThrow();
+      expect(documentation.displayName).toBe('foo');
+    });
+
+    it('considers static displayName property with function declaration', () => {
+      const definition = parse.statement(`
+        class Foo {
+          static displayName = displayName;
+        }
+        function displayName() {
+          return 'foo';
         }
       `);
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
