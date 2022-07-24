@@ -40,7 +40,10 @@ jobs:
         run: yarn install --frozen-lockfile --non-interactive
 
       - name: Unit tests
-        run: yarn test --ci
+        run: yarn test --ci --coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
 
   lint:
     name: Lint
