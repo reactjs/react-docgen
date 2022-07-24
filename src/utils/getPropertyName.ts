@@ -37,7 +37,6 @@ export default function getPropertyName(
   if (propertyPath.isObjectTypeSpreadProperty()) {
     const argument = propertyPath.get('argument');
     if (argument.isGenericTypeAnnotation()) {
-      // TODO test qualified type identifier
       return getNameOrValue(argument.get('id')) as string;
     }
     return null;
