@@ -8,7 +8,7 @@ import resolveExportDeclaration from '../utils/resolveExportDeclaration';
 import resolveToValue from '../utils/resolveToValue';
 import resolveHOC from '../utils/resolveHOC';
 import type { NodePath } from '@babel/traverse';
-import { ignore } from '../utils/traverse';
+import { shallowIgnoreVisitors } from '../utils/traverse';
 import type {
   ExportDefaultDeclaration,
   ExportNamedDeclaration,
@@ -101,19 +101,7 @@ const findExportedComponentDefinition: Resolver = function (
   }
 
   file.traverse({
-    FunctionDeclaration: ignore,
-    FunctionExpression: ignore,
-    ClassDeclaration: ignore,
-    ClassExpression: ignore,
-    IfStatement: ignore,
-    WithStatement: ignore,
-    SwitchStatement: ignore,
-    WhileStatement: ignore,
-    DoWhileStatement: ignore,
-    ForStatement: ignore,
-    ForInStatement: ignore,
-    ForOfStatement: ignore,
-    ImportDeclaration: ignore,
+    ...shallowIgnoreVisitors,
 
     ExportNamedDeclaration: exportDeclaration,
     ExportDefaultDeclaration: exportDeclaration,

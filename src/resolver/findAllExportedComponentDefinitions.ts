@@ -8,7 +8,7 @@ import resolveExportDeclaration from '../utils/resolveExportDeclaration';
 import resolveToValue from '../utils/resolveToValue';
 import resolveHOC from '../utils/resolveHOC';
 import type { NodePath } from '@babel/traverse';
-import { ignore } from '../utils/traverse';
+import { shallowIgnoreVisitors } from '../utils/traverse';
 import type {
   ExportDefaultDeclaration,
   ExportNamedDeclaration,
@@ -94,22 +94,8 @@ const findExportedComponentDefinitions: Resolver = function (
   }
 
   file.traverse({
-    FunctionDeclaration: ignore,
-    FunctionExpression: ignore,
-    ClassDeclaration: ignore,
-    ClassExpression: ignore,
-    IfStatement: ignore,
-    WithStatement: ignore,
-    SwitchStatement: ignore,
-    // @ts-ignore TODO  TYPO test implications, write test and then fix
-    //CatchCause: ignore,
-    WhileStatement: ignore,
-    DoWhileStatement: ignore,
-    ForStatement: ignore,
-    ForInStatement: ignore,
+    ...shallowIgnoreVisitors,
 
-    // TODO Check if this was necessary
-    //ExportDeclaration: exportDeclaration,
     ExportNamedDeclaration: exportDeclaration,
     ExportDefaultDeclaration: exportDeclaration,
 

@@ -12,7 +12,7 @@ export function traverseShallow(path: NodePath, visitors: Visitor): void {
   path.traverse({ ...shallowIgnoreVisitors, ...visitors });
 }
 
-const shallowIgnoreVisitors = {
+export const shallowIgnoreVisitors = {
   FunctionDeclaration: ignore,
   FunctionExpression: ignore,
   ClassDeclaration: ignore,
@@ -20,6 +20,7 @@ const shallowIgnoreVisitors = {
   IfStatement: ignore,
   WithStatement: ignore,
   SwitchStatement: ignore,
+  CatchClause: ignore,
   WhileStatement: ignore,
   DoWhileStatement: ignore,
   ForStatement: ignore,
