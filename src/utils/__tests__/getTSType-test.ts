@@ -112,14 +112,16 @@ describe('getTSType', () => {
     });
   });
 
-  it('detects literal types', () => {
-    const literalTypes = ['"foo"', 1234, true];
+  describe('literal types', () => {
+    const literalTypes = ['"foo"', 1234, true, -1, '`foo`'];
 
     literalTypes.forEach(value => {
-      const typePath = typeAlias(`let x: ${value};`);
-      expect(getTSType(typePath)).toEqual({
-        name: 'literal',
-        value: `${value}`,
+      it(`detects ${value}`, () => {
+        const typePath = typeAlias(`let x: ${value};`);
+        expect(getTSType(typePath)).toEqual({
+          name: 'literal',
+          value: `${value}`,
+        });
       });
     });
   });

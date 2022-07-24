@@ -474,8 +474,7 @@ function getTSTypeWithResolvedTypes(
     const literal = path.get('literal');
     type = {
       name: 'literal',
-      // @ts-ignore TODO create test for UnaryExpression (eg. -2 as literal)
-      value: (literal.node.extra?.raw as string) || `${literal.node.value}`,
+      value: printValue(literal),
     };
   } else if (node.type in namedTypes) {
     type = namedTypes[node.type](path, typeParams);
