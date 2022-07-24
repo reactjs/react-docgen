@@ -1,6 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`getNameOrValue errors on invalid path 1`] = `"Argument must be Identifier, Literal, QualifiedTypeIdentifier or TSQualifiedName. Received 'FunctionDeclaration'"`;
+
 exports[`getNameOrValue gets Identifier name 1`] = `"foo"`;
+
+exports[`getNameOrValue gets QualifiedTypeIdentifier 1`] = `"x.h"`;
+
+exports[`getNameOrValue gets TSQualifiedName 1`] = `"x.h"`;
 
 exports[`getNameOrValue gets boolean literal value 1`] = `true`;
 

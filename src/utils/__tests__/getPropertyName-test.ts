@@ -32,6 +32,16 @@ describe('getPropertyName', () => {
     expect(getPropertyName(param)).toBe('foo');
   });
 
+  it('returns the qualified name of a object type spread property', () => {
+    const def = parse.expression<TypeCastExpression>('(a: { ...foo.bub })');
+    const param = def
+      .get('typeAnnotation')
+      .get('typeAnnotation')
+      .get('properties')[0];
+
+    expect(getPropertyName(param)).toBe('foo.bub');
+  });
+
   it('creates name for computed properties', () => {
     const def = parse.expression<ObjectExpression>('{ [foo]: 21 }');
     const param = def.get('properties')[0];
