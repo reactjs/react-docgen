@@ -163,6 +163,24 @@ Array [
 ]
 `;
 
+exports[`main fixtures processes component "class-without-id.tsx" without errors 1`] = `
+Array [
+  Object {
+    "description": "",
+    "methods": Array [],
+    "props": Object {
+      "value": Object {
+        "description": "",
+        "required": true,
+        "tsType": Object {
+          "name": "string",
+        },
+      },
+    },
+  },
+]
+`;
+
 exports[`main fixtures processes component "component_1.js" without errors 1`] = `
 Array [
   Object {
