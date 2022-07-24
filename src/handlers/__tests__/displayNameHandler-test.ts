@@ -4,6 +4,7 @@ import displayNameHandler from '../displayNameHandler';
 import type DocumentationMock from '../../__mocks__/Documentation';
 import type {
   ArrowFunctionExpression,
+  ExportDefaultDeclaration,
   ExpressionStatement,
   FunctionExpression,
 } from '@babel/types';
@@ -163,12 +164,17 @@ describe('defaultPropsHandler', () => {
 
   describe('ClassDeclaration', () => {
     it('considers the class name', () => {
-      const definition = parse.statement(`
-        class Foo {
-        }
-      `);
+      const definition = parse.statement(`class Foo {}`);
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('Foo');
+    });
+
+    it('does not crash if no name', () => {
+      const definition = parse
+        .statement<ExportDefaultDeclaration>(`export default class {}`)
+        .get('declaration');
+      expect(() => displayNameHandler(documentation, definition)).not.toThrow();
+      expect(documentation.displayName).toBeUndefined();
     });
 
     it('considers a static displayName class property', () => {
@@ -242,6 +248,14 @@ describe('defaultPropsHandler', () => {
       const definition = parse.statement('function Foo () {}');
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('Foo');
+    });
+
+    it('does not crash if no name', () => {
+      const definition = parse
+        .statement<ExportDefaultDeclaration>(`export default function () {}`)
+        .get('declaration');
+      expect(() => displayNameHandler(documentation, definition)).not.toThrow();
+      expect(documentation.displayName).toBeUndefined();
     });
 
     it('considers a static displayName object property', () => {
