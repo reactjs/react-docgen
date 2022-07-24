@@ -15,4 +15,14 @@ describe('printValue', () => {
   it('does not print trailing comments', () => {
     expect(printValue(pathFromSource('bar//foo'))).toEqual('bar');
   });
+
+  it('deindents code', () => {
+    expect(
+      printValue(
+        pathFromSource(`    (    function () {
+      return x;
+    })`),
+      ),
+    ).toMatchSnapshot();
+  });
 });
