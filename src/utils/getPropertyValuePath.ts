@@ -10,18 +10,18 @@ export default function getPropertyValuePath(
   path: NodePath<ObjectExpression>,
   propertyName: string,
 ): NodePath<Expression | ObjectMethod> | null {
-  path.assertObjectExpression();
+  const property = path
+    .get('properties')
+    .find(
+      propertyPath =>
+        !propertyPath.isSpreadElement() &&
+        getPropertyName(propertyPath) === propertyName,
+    );
 
-  return (
-    path
-      .get('properties')
-      .filter(propertyPath => getPropertyName(propertyPath) === propertyName)
-      .map(propertyPath =>
-        propertyPath.isObjectMethod()
-          ? propertyPath
-          : propertyPath.isObjectProperty()
-          ? (propertyPath.get('value') as NodePath<Expression>)
-          : null,
-      )[0] || null
-  );
+  if (property) {
+    return property.isObjectMethod()
+      ? property
+      : (property.get('value') as NodePath<Expression>);
+  }
+  return null;
 }
