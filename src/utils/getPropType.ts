@@ -51,14 +51,12 @@ function getEnumValuesFromArrayExpression(
   return values;
 }
 
-// TODO
 function getPropTypeOneOf(argumentPath: NodePath): PropTypeDescriptor {
   const type: PropTypeDescriptor = { name: 'enum' };
   const value: NodePath = resolveToValue(argumentPath);
   if (!value.isArrayExpression()) {
     const objectValues =
-      resolveObjectKeysToArray(value) || //TODO return array of names and not ArrayExpression anymore
-      resolveObjectValuesToArray(value);
+      resolveObjectKeysToArray(value) || resolveObjectValuesToArray(value);
     if (objectValues) {
       type.value = objectValues.map(objectValue => ({
         value: objectValue,
