@@ -1,9 +1,4 @@
 import isExportsOrModuleAssignment from '../utils/isExportsOrModuleAssignment';
-import isReactComponentClass from '../utils/isReactComponentClass';
-import isReactCreateClassCall from '../utils/isReactCreateClassCall';
-import isReactForwardRefCall from '../utils/isReactForwardRefCall';
-import isStatelessComponent from '../utils/isStatelessComponent';
-import normalizeClassDefinition from '../utils/normalizeClassDefinition';
 import resolveExportDeclaration from '../utils/resolveExportDeclaration';
 import resolveToValue from '../utils/resolveToValue';
 import resolveHOC from '../utils/resolveHOC';
@@ -15,38 +10,13 @@ import type {
 } from '@babel/types';
 import type { Resolver } from '.';
 import type FileState from '../FileState';
+import {
+  isComponentDefinition,
+  resolveDefinition,
+} from './findAllExportedComponentDefinitions';
 
 const ERROR_MULTIPLE_DEFINITIONS =
   'Multiple exported component definitions found.';
-
-function isComponentDefinition(path: NodePath): boolean {
-  return (
-    isReactCreateClassCall(path) ||
-    isReactComponentClass(path) ||
-    isStatelessComponent(path) ||
-    isReactForwardRefCall(path)
-  );
-}
-
-// TODO duplicate code
-function resolveDefinition(definition: NodePath): NodePath | null {
-  if (isReactCreateClassCall(definition)) {
-    // return argument
-    const resolvedPath = resolveToValue(definition.get('arguments')[0]);
-    if (resolvedPath.isObjectExpression()) {
-      return resolvedPath;
-    }
-  } else if (isReactComponentClass(definition)) {
-    normalizeClassDefinition(definition);
-    return definition;
-  } else if (
-    isStatelessComponent(definition) ||
-    isReactForwardRefCall(definition)
-  ) {
-    return definition;
-  }
-  return null;
-}
 
 /**
  * Given an AST, this function tries to find the exported component definition.
