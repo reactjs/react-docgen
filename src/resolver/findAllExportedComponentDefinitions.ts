@@ -16,7 +16,7 @@ import type {
 import type FileState from '../FileState';
 import type { Resolver } from '.';
 
-function isComponentDefinition(path: NodePath): boolean {
+export function isComponentDefinition(path: NodePath): boolean {
   return (
     isReactCreateClassCall(path) ||
     isReactComponentClass(path) ||
@@ -25,8 +25,7 @@ function isComponentDefinition(path: NodePath): boolean {
   );
 }
 
-// TODO duplicate code
-function resolveDefinition(definition: NodePath): NodePath | null {
+export function resolveDefinition(definition: NodePath): NodePath | null {
   if (isReactCreateClassCall(definition)) {
     // return argument
     const resolvedPath = resolveToValue(definition.get('arguments')[0]);
