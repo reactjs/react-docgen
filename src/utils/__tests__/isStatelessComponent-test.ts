@@ -86,10 +86,12 @@ describe('isStatelessComponent', () => {
     describe(name, () => {
       Object.keys(componentIdentifiers).forEach(componentIdentifierName => {
         const returnExpr = componentIdentifiers[componentIdentifierName];
+
         describe(componentIdentifierName, () => {
           Object.keys(componentStyle).forEach(componentName => {
             const [componentFactory, componentSelector] =
               componentStyle[componentName];
+
             describe(componentName, () => {
               Object.keys(modifiers).forEach(modifierName => {
                 const modifierFactory = modifiers[modifierName];
@@ -184,6 +186,7 @@ describe('isStatelessComponent', () => {
           }
         }
       `);
+
       expect(isStatelessComponent(def)).toBe(false);
     });
 

@@ -332,22 +332,26 @@ describe('propTypeHandler', () => {
   describe('does not error if propTypes cannot be found', () => {
     it('ObjectExpression', () => {
       const definition = parse.expression<ObjectExpression>('{fooBar: 42}');
+
       expect(() => propTypeHandler(documentation, definition)).not.toThrow();
     });
 
     it('ClassDeclaration', () => {
       const definition = parse.statement<ClassDeclaration>('class Foo {}');
+
       expect(() => propTypeHandler(documentation, definition)).not.toThrow();
     });
 
     it('FunctionDeclaration', () => {
       const definition =
         parse.statement<FunctionDeclaration>('function Foo() {}');
+
       expect(() => propTypeHandler(documentation, definition)).not.toThrow();
     });
 
     it('ArrowFunctionExpression', () => {
       const definition = parse.expression<ArrowFunctionExpression>('() => {}');
+
       expect(() => propTypeHandler(documentation, definition)).not.toThrow();
     });
   });
@@ -357,6 +361,7 @@ describe('propTypeHandler', () => {
     const definition = parse.expression<ObjectExpression>(
       '{propTypes: Foo.propTypes}',
     );
+
     expect(() => propTypeHandler(documentation, definition)).not.toThrow();
   });
 });

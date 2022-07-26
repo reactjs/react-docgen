@@ -22,6 +22,7 @@ function getDocblockFromComponent(path: NodePath): string | null {
   if (description == null) {
     // Find parent statement (e.g. var Component = React.createClass(<path>);)
     let searchPath: NodePath<Node> | null = path;
+
     while (searchPath && !searchPath.isStatement()) {
       searchPath = searchPath.parentPath;
     }
@@ -41,10 +42,12 @@ function getDocblockFromComponent(path: NodePath): string | null {
       ? path.get('arguments')[0]
       : path;
     const inner = resolveToValue(searchPath);
+
     if (inner.node !== path.node) {
       return getDocblockFromComponent(inner);
     }
   }
+
   return description;
 }
 

@@ -33,11 +33,13 @@ function setPropDescriptor(
         },
         typeParams,
       );
+
       return;
     }
 
     // TODO what about other types here
     const id = argument.get('id') as NodePath;
+
     if (!id.hasNode() || !id.isIdentifier()) {
       return;
     }
@@ -45,6 +47,7 @@ function setPropDescriptor(
 
     if (resolvedPath && resolvedPath.isTypeAlias()) {
       const right = resolvedPath.get('right');
+
       applyToTypeProperties(
         documentation,
         right,
@@ -59,9 +62,11 @@ function setPropDescriptor(
   } else if (path.isObjectTypeProperty()) {
     const type = getFlowType(path.get('value'), typeParams);
     const propName = getPropertyName(path);
+
     if (!propName) return;
 
     const propDescriptor = documentation.getPropDescriptor(propName);
+
     propDescriptor.required = !path.node.optional;
     propDescriptor.flowType = type;
 
@@ -71,15 +76,18 @@ function setPropDescriptor(
     setPropDescription(documentation, path);
   } else if (path.isTSPropertySignature()) {
     const typeAnnotation = path.get('typeAnnotation');
+
     if (!typeAnnotation.hasNode()) {
       return;
     }
     const type = getTSType(typeAnnotation, typeParams);
 
     const propName = getPropertyName(path);
+
     if (!propName) return;
 
     const propDescriptor = documentation.getPropDescriptor(propName);
+
     propDescriptor.required = !path.node.optional;
     propDescriptor.tsType = type;
 

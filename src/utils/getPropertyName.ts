@@ -36,9 +36,11 @@ export default function getPropertyName(
 ): string | null {
   if (propertyPath.isObjectTypeSpreadProperty()) {
     const argument = propertyPath.get('argument');
+
     if (argument.isGenericTypeAnnotation()) {
       return getNameOrValue(argument.get('id')) as string;
     }
+
     return null;
   } else if (propertyPath.has('computed')) {
     const key = propertyPath.get('key') as NodePath<Expression>;

@@ -19,8 +19,10 @@ function toArray(path: NodePath<Node | null>): string[] {
     } else if (path.isMemberExpression()) {
       parts.push(path.get('object'));
       const property = path.get('property');
+
       if (path.node.computed) {
         const resolvedPath = resolveToValue(property);
+
         if (resolvedPath !== undefined) {
           result = result.concat(toArray(resolvedPath));
         } else {
@@ -38,6 +40,7 @@ function toArray(path: NodePath<Node | null>): string[] {
       continue;
     } else if (path.isTSAsExpression()) {
       const expression = path.get('expression');
+
       if (expression.isIdentifier()) {
         result.push(expression.node.name);
       }
@@ -64,6 +67,7 @@ function toArray(path: NodePath<Node | null>): string[] {
           throw new Error('Unrecognized object property type');
         }
       });
+
       result.push('{' + properties.join(', ') + '}');
       continue;
     } else if (path.isArrayExpression()) {

@@ -33,6 +33,7 @@ export default function normalizeClassDefinition(
   classDefinition: NodePath<ClassDeclaration | ClassExpression>,
 ): void {
   let variableName;
+
   if (classDefinition.isClassDeclaration()) {
     // Class declarations may not have an id, e.g.: `export default class extends React.Component {}`
     if (classDefinition.node.id) {
@@ -40,6 +41,7 @@ export default function normalizeClassDefinition(
     }
   } else if (classDefinition.isClassExpression()) {
     let parentPath: NodePath | null = classDefinition.parentPath;
+
     while (
       parentPath &&
       parentPath.node !== classDefinition.scope.block &&
@@ -47,12 +49,14 @@ export default function normalizeClassDefinition(
     ) {
       if (parentPath.isVariableDeclarator()) {
         const idPath = parentPath.get('id');
+
         if (idPath.isIdentifier()) {
           variableName = idPath.node.name;
           break;
         }
       } else if (parentPath.isAssignmentExpression()) {
         const leftPath = parentPath.get('left');
+
         if (leftPath.isIdentifier()) {
           variableName = leftPath.node.name;
           break;
@@ -67,6 +71,7 @@ export default function normalizeClassDefinition(
   }
 
   const scopeBlock = classDefinition.parentPath.scope.block;
+
   classDefinition.parentPath.scope.traverse(scopeBlock, {
     Function: ignore,
     ClassDeclaration: ignore,
@@ -75,10 +80,13 @@ export default function normalizeClassDefinition(
     ForStatement: ignore,
     AssignmentExpression(path) {
       const left = path.get('left');
+
       if (left.isMemberExpression()) {
         const first = getMemberExpressionRoot(left);
+
         if (first.isIdentifier() && first.node.name === variableName) {
           const [member] = getMembers(left);
+
           if (
             member &&
             !member.path.has('computed') &&
@@ -92,6 +100,7 @@ export default function normalizeClassDefinition(
               false,
               true,
             );
+
             classDefinition.get('body').unshiftContainer('body', property);
             path.skip();
             path.remove();

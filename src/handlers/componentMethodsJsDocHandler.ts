@@ -13,11 +13,13 @@ function merge<T, U>(obj1: T, obj2: U): (T & U) | null {
   const merged: Record<string, unknown> = {
     ...(obj1 as Record<string, unknown>),
   };
+
   for (const prop in obj2 as Record<string, unknown>) {
     if (obj2[prop] != null) {
       merged[prop] = obj2[prop];
     }
   }
+
   return merged as T & U;
 }
 /**
@@ -28,6 +30,7 @@ const componentMethodsJsDocHandler: Handler = function (
   documentation: Documentation,
 ): void {
   let methods = documentation.get('methods') as MethodDescriptor[] | null;
+
   if (!methods) {
     return;
   }
@@ -43,6 +46,7 @@ const componentMethodsJsDocHandler: Handler = function (
     const returns = merge(jsDoc.returns, method.returns);
     const params = method.params.map(param => {
       const jsDocParam = jsDoc.params.find(p => p.name === param.name);
+
       return merge(jsDocParam, param);
     });
 

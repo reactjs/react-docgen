@@ -62,6 +62,7 @@ export default function isReactBuiltinCall(
     }
 
     const value = resolveToValue(path.get('callee'));
+
     if (value === path.get('callee')) {
       return false;
     }

@@ -15,6 +15,7 @@ export default function resolveToModule(path: NodePath): string | null {
     }
   } else if (path.isCallExpression()) {
     const callee = path.get('callee');
+
     if (callee.isIdentifier() && callee.node.name === 'require') {
       return (path.node.arguments[0] as StringLiteral).value;
     }
@@ -22,6 +23,7 @@ export default function resolveToModule(path: NodePath): string | null {
     return resolveToModule(callee);
   } else if (path.isIdentifier() || path.isJSXIdentifier()) {
     const valuePath = resolveToValue(path);
+
     if (valuePath !== path) {
       return resolveToModule(valuePath);
     }

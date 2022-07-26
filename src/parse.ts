@@ -18,7 +18,9 @@ function executeHandlers(
   return componentDefinitions.map(
     (componentDefinition): DocumentationObject => {
       const documentation = new Documentation();
+
       handlers.forEach(handler => handler(documentation, componentDefinition));
+
       return postProcessDocumentation(documentation.toObject());
     },
   );
@@ -63,6 +65,7 @@ export default function parse(
   if (componentDefinitions.length === 0) {
     throw new Error(ERROR_MISSING_DEFINITION);
   }
+
   return executeHandlers(handlers, componentDefinitions);
 }
 

@@ -155,6 +155,7 @@ describe('propTypeCompositionHandler', () => {
   describe('does not error if propTypes cannot be found', () => {
     it('ObjectExpression', () => {
       const definition = parse.expression<ObjectExpression>('{fooBar: 42}');
+
       expect(() =>
         propTypeCompositionHandler(documentation, definition),
       ).not.toThrow();
@@ -162,6 +163,7 @@ describe('propTypeCompositionHandler', () => {
 
     it('ClassDeclaration', () => {
       const definition = parse.statement<ClassDeclaration>('class Foo {}');
+
       expect(() =>
         propTypeCompositionHandler(documentation, definition),
       ).not.toThrow();

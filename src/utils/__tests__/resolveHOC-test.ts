@@ -18,6 +18,7 @@ describe('resolveHOC', () => {
 
   it('resolves simple hoc', () => {
     const path = parse.expressionLast(['hoc(Component);'].join('\n'));
+
     expect(resolveHOC(path)).toEqualASTNode(identifier('Component'));
   });
 
@@ -25,6 +26,7 @@ describe('resolveHOC', () => {
     const path = parse.expressionLast(
       ['hoc1(arg1a, arg1b)(Component);'].join('\n'),
     );
+
     expect(resolveHOC(path)).toEqualASTNode(identifier('Component'));
   });
 
@@ -34,6 +36,7 @@ describe('resolveHOC', () => {
         hoc1(arg1a, arg2a)(Component)
       );`,
     );
+
     expect(resolveHOC(path)).toEqualASTNode(identifier('Component'));
   });
 
@@ -45,31 +48,37 @@ describe('resolveHOC', () => {
         )
       );`,
     );
+
     expect(resolveHOC(path)).toEqualASTNode(identifier('Component'));
   });
 
   it('resolves HOC with additional params', () => {
     const path = parse.expressionLast(`hoc3(Component, {})`);
+
     expect(resolveHOC(path)).toEqualASTNode(identifier('Component'));
   });
 
   it('resolves HOC as last element if first is literal', () => {
     const path = parse.expressionLast(`hoc3(41, Component)`);
+
     expect(resolveHOC(path)).toEqualASTNode(identifier('Component'));
   });
 
   it('resolves HOC as last element if first is array', () => {
     const path = parse.expressionLast(`hoc3([], Component)`);
+
     expect(resolveHOC(path)).toEqualASTNode(identifier('Component'));
   });
 
   it('resolves HOC as last element if first is object', () => {
     const path = parse.expressionLast(`hoc3({}, Component)`);
+
     expect(resolveHOC(path)).toEqualASTNode(identifier('Component'));
   });
 
   it('resolves HOC as last element if first is spread', () => {
     const path = parse.expressionLast(`hoc3(...params, Component)`);
+
     expect(resolveHOC(path)).toEqualASTNode(identifier('Component'));
   });
 
@@ -77,6 +86,7 @@ describe('resolveHOC', () => {
     const path = parse.expressionLast(
       ['const Component = React.memo(42);', 'hoc()(Component);'].join('\n'),
     );
+
     expect(resolveHOC(path)).toEqualASTNode(numericLiteral(42));
   });
 
@@ -88,6 +98,7 @@ describe('resolveHOC', () => {
     `,
       mockImporter,
     );
+
     expect(resolveHOC(path)).toEqualASTNode(identifier('Component'));
   });
 
@@ -101,6 +112,7 @@ describe('resolveHOC', () => {
     `,
       mockImporter,
     );
+
     expect(resolveHOC(path)).toEqualASTNode(identifier('Component'));
   });
 
@@ -110,6 +122,7 @@ describe('resolveHOC', () => {
        hoc(bar);`,
       mockImporter,
     );
+
     expect(resolveHOC(path)).toEqualASTNode(identifier('Component'));
   });
 });

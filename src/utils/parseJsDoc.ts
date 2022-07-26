@@ -72,6 +72,7 @@ function getType(tagType: Type | null | undefined): JsDocType | null {
             'name' in tagType.expression
           ? tagType.expression.name
           : null;
+
       if (typeName) {
         return { name: typeName };
       } else {
@@ -90,12 +91,14 @@ function getReturnsJsDoc(jsDoc: Annotation): JsDocProperty | null {
   const returnTag = jsDoc.tags.find(
     tag => tag.title === 'return' || tag.title === 'returns',
   );
+
   if (returnTag) {
     return {
       description: returnTag.description,
       type: getType(returnTag.type),
     };
   }
+
   return null;
 }
 
@@ -104,6 +107,7 @@ function getParamsJsDoc(jsDoc: Annotation): JsDocParam[] {
   if (!jsDoc.tags) {
     return [];
   }
+
   return jsDoc.tags
     .filter(tag => tag.title === 'param')
     .map(tag => {

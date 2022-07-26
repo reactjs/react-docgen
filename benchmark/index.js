@@ -46,6 +46,7 @@ files.forEach(file => {
     parse5(code, undefined, undefined, options);
   });
   const result = [suite.name];
+
   suite.on('cycle', function (event) {
     {
       // separate scope so we can cleanup all this afterwards
@@ -54,6 +55,7 @@ files.forEach(file => {
       const msg = `${Math.round(bench.hz * factor) / factor} ops/sec ±${
         Math.round(bench.stats.rme * 100) / 100
       }% (${Math.round(bench.stats.mean * 1000)}ms)`;
+
       result.push(msg);
     }
     global.gc();

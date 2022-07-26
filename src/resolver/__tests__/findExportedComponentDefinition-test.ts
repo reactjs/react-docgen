@@ -58,6 +58,7 @@ describe('findExportedComponentDefinition', () => {
         `;
 
         const result = findComponentsInSource(source);
+
         expect(Array.isArray(result)).toBe(true);
         expect(result).toHaveLength(1);
       });
@@ -70,6 +71,7 @@ describe('findExportedComponentDefinition', () => {
         `;
 
         const result = findComponentsInSource(source);
+
         expect(Array.isArray(result)).toBe(true);
         expect(result).toHaveLength(1);
       });
@@ -82,6 +84,7 @@ describe('findExportedComponentDefinition', () => {
         `;
 
         const result = findComponentsInSource(source);
+
         expect(Array.isArray(result)).toBe(true);
         expect(result).toHaveLength(1);
       });
@@ -96,6 +99,7 @@ describe('findExportedComponentDefinition', () => {
         `;
 
         const result = findComponentsInSource(source);
+
         expect(Array.isArray(result)).toBe(true);
         expect(result).toHaveLength(1);
       });
@@ -112,6 +116,7 @@ describe('findExportedComponentDefinition', () => {
         `;
 
         const result = findComponentsInSource(source);
+
         expect(Array.isArray(result)).toBe(true);
         expect(result).toHaveLength(1);
       });
@@ -124,6 +129,7 @@ describe('findExportedComponentDefinition', () => {
         `;
 
         const result = findComponentsInSource(source);
+
         expect(Array.isArray(result)).toBe(true);
         expect(result).toHaveLength(1);
       });
@@ -136,6 +142,7 @@ describe('findExportedComponentDefinition', () => {
         `;
 
         const result = findComponentsInSource(source);
+
         expect(Array.isArray(result)).toBe(true);
         expect(result).toHaveLength(0);
       });
@@ -147,6 +154,7 @@ describe('findExportedComponentDefinition', () => {
         `;
 
         const result = findComponentsInSource(source);
+
         expect(Array.isArray(result)).toBe(true);
         expect(result).toHaveLength(0);
       });
@@ -161,6 +169,7 @@ describe('findExportedComponentDefinition', () => {
         `;
 
         const result = findComponentsInSource(source);
+
         expect(Array.isArray(result)).toBe(true);
         expect(result).toHaveLength(1);
         expect(result[0].node.type).toBe('ClassDeclaration');
@@ -174,6 +183,7 @@ describe('findExportedComponentDefinition', () => {
         `;
 
         const result = findComponentsInSource(source);
+
         expect(Array.isArray(result)).toBe(true);
         expect(result).toHaveLength(1);
         expect(result[0].node.type).toBe('ClassExpression');
@@ -187,6 +197,7 @@ describe('findExportedComponentDefinition', () => {
         `;
 
         const result = findComponentsInSource(source);
+
         expect(Array.isArray(result)).toBe(true);
         expect(result).toHaveLength(1);
         expect(result[0].node.type).toBe('ClassDeclaration');
@@ -199,6 +210,7 @@ describe('findExportedComponentDefinition', () => {
         `;
 
         const result = findComponentsInSource(source, mockImporter);
+
         expect(Array.isArray(result)).toBe(true);
         expect(result).toHaveLength(1);
         expect(result[0].node.type).toBe('ClassDeclaration');
@@ -211,6 +223,7 @@ describe('findExportedComponentDefinition', () => {
         `;
 
         const result = findComponentsInSource(source, mockImporter);
+
         expect(Array.isArray(result)).toBe(true);
         expect(result).toHaveLength(1);
         expect(result[0].node.type).toBe('ClassExpression');
@@ -226,6 +239,7 @@ describe('findExportedComponentDefinition', () => {
         `;
 
         const result = findComponentsInSource(source);
+
         expect(Array.isArray(result)).toBe(true);
         expect(result).toHaveLength(1);
       });
@@ -238,6 +252,7 @@ describe('findExportedComponentDefinition', () => {
         `;
 
         const result = findComponentsInSource(source);
+
         expect(Array.isArray(result)).toBe(true);
         expect(result).toHaveLength(1);
       });
@@ -250,6 +265,7 @@ describe('findExportedComponentDefinition', () => {
         `;
 
         const result = findComponentsInSource(source);
+
         expect(Array.isArray(result)).toBe(true);
         expect(result).toHaveLength(0);
       });
@@ -261,6 +277,7 @@ describe('findExportedComponentDefinition', () => {
         `;
 
         const result = findComponentsInSource(source, mockImporter);
+
         expect(Array.isArray(result)).toBe(true);
         expect(result).toHaveLength(1);
       });
@@ -272,6 +289,7 @@ describe('findExportedComponentDefinition', () => {
         `;
 
         const result = findComponentsInSource(source, mockImporter);
+
         expect(Array.isArray(result)).toBe(true);
         expect(result).toHaveLength(1);
       });
@@ -288,6 +306,7 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           const result = findComponentsInSource(source);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
         });
@@ -313,6 +332,7 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           const result = findComponentsInSource(source);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
         });
@@ -326,6 +346,7 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           const result = findComponentsInSource(source);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
         });
@@ -337,6 +358,7 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           const result = findComponentsInSource(source, mockImporter);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
         });
@@ -352,6 +374,7 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           const result = findComponentsInSource(source);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
           expect(result[0].node.type).toBe('ClassDeclaration');
@@ -378,6 +401,7 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           let result = findComponentsInSource(source);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
           expect(result[0].node.type).toBe('ClassDeclaration');
@@ -402,6 +426,7 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           const result = findComponentsInSource(source, mockImporter);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
           expect(result[0].node.type).toBe('ClassDeclaration');
@@ -421,6 +446,7 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           const result = findComponentsInSource(source);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
         });
@@ -432,6 +458,7 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           const result = findComponentsInSource(source);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
         });
@@ -442,6 +469,7 @@ describe('findExportedComponentDefinition', () => {
             export var Component = React.createClass({})
             export default React.createClass({});
           `;
+
           expect(() => findComponentsInSource(source)).toThrow();
         });
 
@@ -452,6 +480,7 @@ describe('findExportedComponentDefinition', () => {
             export {Component};
             export default React.createClass({});
           `;
+
           expect(() => findComponentsInSource(source)).toThrow();
         });
 
@@ -463,6 +492,7 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           const result = findComponentsInSource(source);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
         });
@@ -474,6 +504,7 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           const result = findComponentsInSource(source, mockImporter);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
         });
@@ -488,6 +519,7 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           let result = findComponentsInSource(source);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
           expect(result[0].node.type).toBe('ClassDeclaration');
@@ -511,6 +543,7 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           const result = findComponentsInSource(source);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
           expect(result[0].node.type).toBe('ClassDeclaration');
@@ -524,6 +557,7 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           const result = findComponentsInSource(source);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
           expect(result[0].node.type).toBe('ClassDeclaration');
@@ -539,6 +573,7 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           const result = findComponentsInSource(source);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
           expect(result[0].node.type).toBe('ClassDeclaration');
@@ -550,6 +585,7 @@ describe('findExportedComponentDefinition', () => {
             export var Component = class extends React.Component {};
             export default class ComponentB extends React.Component{};
           `;
+
           expect(() => findComponentsInSource(source)).toThrow();
 
           source = `
@@ -569,6 +605,7 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           const result = findComponentsInSource(source);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
           expect(result[0].node.type).toBe('ClassDeclaration');
@@ -581,6 +618,7 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           const result = findComponentsInSource(source, mockImporter);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
           expect(result[0].node.type).toBe('ClassDeclaration');
@@ -597,6 +635,7 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           const result = findComponentsInSource(source);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
         });
@@ -608,6 +647,7 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           const result = findComponentsInSource(source);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
         });
@@ -621,6 +661,7 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           const result = findComponentsInSource(source);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
         });
@@ -633,6 +674,7 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           const result = findComponentsInSource(source);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
         });
@@ -664,6 +706,7 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           const result = findComponentsInSource(source);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
         });
@@ -675,6 +718,7 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           const result = findComponentsInSource(source, mockImporter);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
         });
@@ -688,6 +732,7 @@ describe('findExportedComponentDefinition', () => {
               Component = class extends React.Component {};
           `;
           let result = findComponentsInSource(source);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
           expect(result[0].node.type).toBe('ClassExpression');
@@ -730,6 +775,7 @@ describe('findExportedComponentDefinition', () => {
             export var ComponentA  = class extends React.Component {};
             export var ComponentB  = class extends React.Component {};
           `;
+
           expect(() => findComponentsInSource(source)).toThrow();
 
           source = `
@@ -748,6 +794,7 @@ describe('findExportedComponentDefinition', () => {
             export var ComponentB = class extends React.Component {};
           `;
           const result = findComponentsInSource(source);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
           expect(result[0].node.type).toBe('ClassExpression');
@@ -760,6 +807,7 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           const result = findComponentsInSource(source, mockImporter);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
           expect(result[0].node.type).toBe('ClassDeclaration');
@@ -774,6 +822,7 @@ describe('findExportedComponentDefinition', () => {
               Component = () => <div />;
           `;
           let result = findComponentsInSource(source);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
           expect(result[0].node.type).toBe('ArrowFunctionExpression');
@@ -816,6 +865,7 @@ describe('findExportedComponentDefinition', () => {
             export var ComponentA = () => <div />
             export var ComponentB = () => <div />
           `;
+
           expect(() => findComponentsInSource(source)).toThrow();
 
           source = `
@@ -834,6 +884,7 @@ describe('findExportedComponentDefinition', () => {
             export var ComponentB = function() { return <div />; };
           `;
           const result = findComponentsInSource(source);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
           expect(result[0].node.type).toBe('FunctionExpression');
@@ -846,6 +897,7 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           let result = findComponentsInSource(source, mockImporter);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
           expect(result[0].node.type).toBe('ArrowFunctionExpression');
@@ -873,6 +925,7 @@ describe('findExportedComponentDefinition', () => {
             export {foo, Component}
           `;
           const result = findComponentsInSource(source);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
         });
@@ -886,6 +939,7 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           const result = findComponentsInSource(source);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
         });
@@ -900,6 +954,7 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           const result = findComponentsInSource(source);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
         });
@@ -924,6 +979,7 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           const result = findComponentsInSource(source);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
         });
@@ -935,6 +991,7 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           const result = findComponentsInSource(source, mockImporter);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
         });
@@ -949,6 +1006,7 @@ describe('findExportedComponentDefinition', () => {
             export {foo, Component};
           `;
           let result = findComponentsInSource(source);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
           expect(result[0].node.type).toBe('ClassExpression');
@@ -996,6 +1054,7 @@ describe('findExportedComponentDefinition', () => {
             export {ComponentA};
           `;
           const result = findComponentsInSource(source);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
           expect(result[0].node.type).toBe('ClassExpression');
@@ -1008,6 +1067,7 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           const result = findComponentsInSource(source, mockImporter);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
           expect(result[0].node.type).toBe('ClassDeclaration');
@@ -1023,6 +1083,7 @@ describe('findExportedComponentDefinition', () => {
             export {foo, Component};
           `;
           let result = findComponentsInSource(source);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
           expect(result[0].node.type).toBe('FunctionDeclaration');
@@ -1070,6 +1131,7 @@ describe('findExportedComponentDefinition', () => {
             export {ComponentA};
           `;
           const result = findComponentsInSource(source);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
           expect(result[0].node.type).toBe('ArrowFunctionExpression');
@@ -1082,6 +1144,7 @@ describe('findExportedComponentDefinition', () => {
           `;
 
           let result = findComponentsInSource(source, mockImporter);
+
           expect(Array.isArray(result)).toBe(true);
           expect(result).toHaveLength(1);
           expect(result[0].node.type).toBe('ArrowFunctionExpression');
@@ -1108,6 +1171,7 @@ describe('findExportedComponentDefinition', () => {
           export class Component extends React.Component {};
         `;
         const result = findComponentsInSource(source);
+
         expect(Array.isArray(result)).toBe(true);
         expect(result).toHaveLength(1);
         expect(result[0].node.type).toBe('ClassDeclaration');
@@ -1130,6 +1194,7 @@ describe('findExportedComponentDefinition', () => {
           export class ComponentB extends React.Component {};
         `;
         const result = findComponentsInSource(source);
+
         expect(Array.isArray(result)).toBe(true);
         expect(result).toHaveLength(1);
         expect(result[0].node.type).toBe('ClassDeclaration');

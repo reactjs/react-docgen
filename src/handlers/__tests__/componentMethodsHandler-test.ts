@@ -311,6 +311,7 @@ describe('componentMethodsHandler', () => {
       const definition = parse
         .statement(src)
         .get('expression') as NodePath<ArrowFunctionExpression>;
+
       componentMethodsHandler(documentation, definition);
       expect(documentation.methods).toEqual([]);
     });

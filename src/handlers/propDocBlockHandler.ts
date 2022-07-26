@@ -18,6 +18,7 @@ function resolveDocumentation(
   path.get('properties').forEach(propertyPath => {
     if (propertyPath.isSpreadElement()) {
       const resolvedValuePath = resolveToValue(propertyPath.get('argument'));
+
       resolveDocumentation(documentation, resolvedValuePath);
     } else if (
       propertyPath.isObjectProperty() ||
@@ -36,6 +37,7 @@ const propDocBlockHandler: Handler = function (
     componentDefinition,
     'propTypes',
   );
+
   if (!propTypesPath) {
     return;
   }

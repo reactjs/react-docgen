@@ -24,6 +24,7 @@ function isRenderMethod(path: NodePath): boolean {
   }
 
   const key = path.get('key') as NodePath<ClassMethod['key']>;
+
   if (!key.isIdentifier() || key.node.name !== 'render') {
     return false;
   }
@@ -57,6 +58,7 @@ export default function isReactComponentClass(
     isDestructuringAssignment(superClass, 'PureComponent')
   ) {
     const module = resolveToModule(superClass);
+
     if (module && isReactModuleName(module)) {
       return true;
     }

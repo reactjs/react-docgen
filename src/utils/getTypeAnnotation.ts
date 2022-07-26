@@ -11,6 +11,7 @@ export default function getTypeAnnotation<T = FlowType>(
   if (!path.has('typeAnnotation')) return null;
 
   let resultPath = path;
+
   do {
     resultPath = resultPath.get('typeAnnotation') as NodePath;
   } while (

@@ -3,6 +3,7 @@ const argv = require('commander');
 
 function collect(val, memo) {
   memo.push(val);
+
   return memo;
 }
 
@@ -61,12 +62,14 @@ let excludePatterns = argv.exclude;
 let resolver;
 let errorMessage;
 const regexRegex = /^\/(.*)\/([igymu]{0,5})$/;
+
 if (
   excludePatterns &&
   excludePatterns.length === 1 &&
   regexRegex.test(excludePatterns[0])
 ) {
   const match = excludePatterns[0].match(regexRegex);
+
   excludePatterns = new RegExp(match[1], match[2]);
 }
 
@@ -79,6 +82,7 @@ if (argv.resolver) {
       throw error;
     }
     const resolverPath = path.resolve(process.cwd(), argv.resolver);
+
     try {
       // Look for local resolver
       resolver = require(resolverPath);
@@ -160,11 +164,13 @@ if (errorMessage) {
    * 2. No files passed, consume input stream
    */
   let source = '';
+
   process.stdin.setEncoding('utf8');
   process.stdin.resume();
   const timer = setTimeout(function () {
     process.stderr.write('Still waiting for std input...');
   }, 5000);
+
   process.stdin.on('data', function (chunk) {
     clearTimeout(timer);
     source += chunk;
@@ -181,6 +187,7 @@ if (errorMessage) {
    * 3. Paths are passed
    */
   const result = Object.create(null);
+
   async.eachSeries(
     paths,
     function (filePath, done) {
@@ -188,6 +195,7 @@ if (errorMessage) {
         if (error) {
           writeError(error, filePath);
           done();
+
           return;
         }
         if (stats.isDirectory()) {
@@ -210,6 +218,7 @@ if (errorMessage) {
     },
     function () {
       const resultsPaths = Object.keys(result);
+
       if (resultsPaths.length === 0) {
         // we must have gotten an error
         process.exitCode = 1;

@@ -38,6 +38,7 @@ describe('docblock', () => {
 
     it('gets the closest docblock of the given node', () => {
       const node = parse.statement(source.join('\n'));
+
       expect(getDocblock(node)).toEqual(comment.join('\n'));
     });
 
@@ -48,15 +49,18 @@ describe('docblock', () => {
       '\u2029',
       '\u000D\u000A', // \r\n
     ];
+
     terminators.forEach(t => {
       it('can handle ' + escape(t) + ' as line terminator', () => {
         const node = parse.statement(source.join(t));
+
         expect(getDocblock(node)).toEqual(comment.join(t));
       });
     });
 
     it('supports "short" docblocks', () => {
       const node = parse.statement('/** bar */\nfoo;');
+
       expect(getDocblock(node)).toEqual('bar');
     });
   });

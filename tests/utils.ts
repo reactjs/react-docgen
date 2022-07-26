@@ -174,6 +174,7 @@ function buildTestParser(parseFunction: Parse): Parse {
       options = importer;
       importer = noopImporter;
     }
+
     return this.statement<T>(src, importer, options, -1);
   };
 
@@ -187,6 +188,7 @@ function buildTestParser(parseFunction: Parse): Parse {
       options = importer;
       importer = noopImporter;
     }
+
     return this.statement<ExpressionStatement>(
       `(${src})`,
       importer,
@@ -204,6 +206,7 @@ function buildTestParser(parseFunction: Parse): Parse {
       options = importer;
       importer = noopImporter;
     }
+
     return this.statement<ExpressionStatement>(src, importer, options, -1).get(
       'expression',
     ) as unknown as NodePath<T>;
@@ -256,6 +259,7 @@ export function makeMockImporter(
 
     return cache[source];
   };
+
   afterEach(() => {
     cache = Object.create(null);
   });

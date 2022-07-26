@@ -74,6 +74,7 @@ function registerTypeBinding(
   bindingPath: NodePath<BindingNode>,
 ): void {
   const ids = { [path.node.name]: [path.node] };
+
   // TODO remove loop as always one identifier?
   for (const name of Object.keys(ids)) {
     for (const id of ids[name]) {

@@ -5,7 +5,6 @@ import resolveToValue from '../utils/resolveToValue';
 import { resolveObjectToNameArray } from '../utils/resolveObjectKeysToArray';
 import type { TypeParameters } from '../utils/getTypeParameters';
 import getTypeParameters from '../utils/getTypeParameters';
-
 import type {
   ElementsType,
   FunctionArgumentType,
@@ -85,9 +84,11 @@ function handleTSTypeReference(
 ): TypeDescriptor<TSFunctionSignatureType> | null {
   let type: TypeDescriptor<TSFunctionSignatureType>;
   const typeName = path.get('typeName');
+
   if (typeName.isTSQualifiedName()) {
     const left = typeName.get('left');
     const right = typeName.get('right');
+
     if (
       left.isIdentifier() &&
       left.node.name === 'React' &&
@@ -112,6 +113,7 @@ function handleTSTypeReference(
   const resolvedTypeParameters = resolvedPath.get('typeParameters') as NodePath<
     TSTypeParameterDeclaration | null | undefined
   >;
+
   if (typeParameters.hasNode() && resolvedTypeParameters.hasNode()) {
     typeParams = getTypeParameters(
       resolvedTypeParameters,
@@ -131,6 +133,7 @@ function handleTSTypeReference(
   const resolvedTypeAnnotation = resolvedPath.get('typeAnnotation') as NodePath<
     TSType | TSTypeAnnotation | null | undefined
   >;
+
   if (resolvedTypeAnnotation.hasNode()) {
     type = getTSTypeWithResolvedTypes(resolvedTypeAnnotation, typeParams);
   } else if (typeParameters.hasNode()) {
@@ -153,8 +156,10 @@ function getTSTypeWithRequirements(
   typeParams: TypeParameters | null,
 ): TypeDescriptor<TSFunctionSignatureType> {
   const type = getTSTypeWithResolvedTypes(path, typeParams);
+
   type.required =
     !('optional' in path.parentPath.node) || !path.parentPath.node.optional;
+
   return type;
 }
 
@@ -173,11 +178,13 @@ function handleTSTypeLiteral(
     const typeAnnotation = param.get('typeAnnotation') as NodePath<
       TSTypeAnnotation | null | undefined
     >;
+
     if (
       (param.isTSPropertySignature() || param.isTSMethodSignature()) &&
       typeAnnotation.hasNode()
     ) {
       const propName = getPropertyName(param);
+
       if (!propName) {
         return;
       }
@@ -248,10 +255,12 @@ function handleTSMappedType(
     path.get('typeParameter').get('constraint') as NodePath<TSType>,
     typeParams,
   );
+
   key.required = !path.node.optional;
 
   const typeAnnotation = path.get('typeAnnotation');
   let value: TypeDescriptor<TSFunctionSignatureType>;
+
   if (typeAnnotation.hasNode()) {
     value = getTSTypeWithResolvedTypes(typeAnnotation, typeParams);
   } else {
@@ -285,6 +294,7 @@ function handleTSFunctionType(
   let returnType: TypeDescriptor<TSFunctionSignatureType> | undefined;
 
   const annotation = path.get('typeAnnotation');
+
   if (annotation.hasNode()) {
     returnType = getTSTypeWithResolvedTypes(annotation, typeParams);
   }
@@ -314,10 +324,12 @@ function handleTSFunctionType(
 
       if (param.node.name === 'this') {
         type.signature.this = arg.type;
+
         return;
       }
     } else {
       const restArgument = (param as NodePath<RestElement>).get('argument');
+
       if (restArgument.isIdentifier()) {
         arg.name = restArgument.node.name;
       } else {
@@ -354,12 +366,14 @@ function handleTSTypeQuery(
   typeParams: TypeParameters | null,
 ): TypeDescriptor<TSFunctionSignatureType> {
   const resolvedPath = resolveToValue(path.get('exprName'));
+
   if ('typeAnnotation' in resolvedPath.node) {
     return getTSTypeWithResolvedTypes(
       resolvedPath.get('typeAnnotation') as NodePath<TypeScript>,
       typeParams,
     );
   }
+
   // @ts-ignore Do we need to handle TsQualifiedName here TODO
   return { name: path.node.exprName.name };
 }
@@ -372,6 +386,7 @@ function handleTSTypeOperator(
   }
 
   let value: NodePath = path.get('typeAnnotation');
+
   if (value.isTSTypeQuery()) {
     value = value.get('exprName');
   } else if ('id' in value.node) {
@@ -379,6 +394,7 @@ function handleTSTypeOperator(
   }
 
   const resolvedPath = resolveToValue(value);
+
   if (
     resolvedPath &&
     (resolvedPath.isObjectExpression() || resolvedPath.isTSTypeLiteral())
@@ -422,9 +438,11 @@ function handleTSIndexedAccessType(
     // indexType.value = "'foo'"
     return indexType.value && p.key === indexType.value.replace(/['"]+/g, '');
   });
+
   if (!resolvedType) {
     return { name: 'unknown' };
   }
+
   return {
     name: resolvedType.value.name,
     raw: printValue(path),
@@ -447,6 +465,7 @@ function getTSTypeWithResolvedTypes(
   const node = path.node;
   let type: TypeDescriptor;
   let typeAliasName: string | null = null;
+
   if (path.parentPath.isTSTypeAliasDeclaration()) {
     typeAliasName = path.parentPath.node.id.name;
   }
@@ -472,6 +491,7 @@ function getTSTypeWithResolvedTypes(
     type = { name: tsTypes[node.type] };
   } else if (path.isTSLiteralType()) {
     const literal = path.get('literal');
+
     type = {
       name: 'literal',
       value: printValue(literal),
@@ -506,6 +526,7 @@ export default function getTSType(
   // After: cleanup memory after we are done here
   visitedTypes = {};
   const type = getTSTypeWithResolvedTypes(path, typeParamMap);
+
   visitedTypes = {};
 
   return type;

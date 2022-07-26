@@ -31,6 +31,7 @@ export default function getMembers(
   while (true) {
     if (resultPath.isMemberExpression()) {
       const property = resultPath.get('property');
+
       result.push({
         path: property,
         computed: resultPath.node.computed,
@@ -40,6 +41,7 @@ export default function getMembers(
       resultPath = resultPath.get('object');
     } else if (resultPath.isCallExpression()) {
       const callee = resultPath.get('callee');
+
       if (callee.isExpression()) {
         argumentPaths = resultPath.get('arguments');
         resultPath = callee;
@@ -57,5 +59,6 @@ export default function getMembers(
       argumentPaths,
     });
   }
+
   return result.reverse();
 }

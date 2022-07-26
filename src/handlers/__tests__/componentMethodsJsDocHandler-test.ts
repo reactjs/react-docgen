@@ -26,6 +26,7 @@ describe('componentMethodsJsDocHandler', () => {
         ],
       },
     ];
+
     documentation.set('methods', methods);
     componentMethodsJsDocHandler(documentation, {} as NodePath<ComponentNode>);
     expect(documentation.get('methods')).toEqual(methods);

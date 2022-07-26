@@ -24,6 +24,7 @@ export default function resolveComponentDefinition(
   if (isReactCreateClassCall(definition)) {
     // return argument
     const resolvedPath = resolveToValue(definition.get('arguments')[0]);
+
     if (resolvedPath.isObjectExpression()) {
       return resolvedPath;
     }

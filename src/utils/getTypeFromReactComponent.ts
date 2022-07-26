@@ -26,10 +26,13 @@ import getTypeIdentifier from './getTypeIdentifier';
 
 function getStatelessPropsPath(componentDefinition: NodePath): NodePath {
   const value = resolveToValue(componentDefinition);
+
   if (isReactForwardRefCall(value)) {
     const inner = resolveToValue(value.get('arguments')[0]);
+
     return inner.get('params')[0];
   }
+
   return value.get('params')[0];
 }
 
@@ -46,9 +49,11 @@ export default (path: NodePath): NodePath | null => {
 
     if (superTypes.hasNode()) {
       const params = superTypes.get('params');
+
       typePath = params[params.length === 3 ? 1 : 0];
     } else {
       const propsMemberPath = getMemberValuePath(path, 'props');
+
       if (!propsMemberPath) {
         return null;
       }
@@ -112,6 +117,7 @@ export function applyToTypeProperties(
     // The react-docgen output format does not currently allow
     // for the expression of union types
     const typePath = resolveGenericTypeAnnotation(path);
+
     if (typePath) {
       applyToTypeProperties(documentation, typePath, callback, typeParams);
     }
@@ -130,6 +136,7 @@ function applyExtends(
     >
   ).forEach(extendsPath => {
     const resolvedPath = resolveGenericTypeAnnotation(extendsPath);
+
     if (resolvedPath) {
       if (
         resolvedPath.has('typeParameters') &&
@@ -148,6 +155,7 @@ function applyExtends(
       applyToTypeProperties(documentation, resolvedPath, callback, typeParams);
     } else {
       const idPath = getTypeIdentifier(extendsPath);
+
       if (idPath && idPath.isIdentifier()) {
         documentation.addComposes(idPath.node.name);
       }

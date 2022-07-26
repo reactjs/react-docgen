@@ -24,6 +24,7 @@ describe('isReactCreateClassCall', () => {
           render() {}
         });
       `);
+
       expect(isReactCreateClassCall(def)).toBe(true);
     });
 
@@ -34,6 +35,7 @@ describe('isReactCreateClassCall', () => {
           render() {}
         });
       `);
+
       expect(isReactCreateClassCall(def)).toBe(true);
     });
 
@@ -42,6 +44,7 @@ describe('isReactCreateClassCall', () => {
         var React = require("React");
         React.isValidElement({});
       `);
+
       expect(isReactCreateClassCall(def)).toBe(false);
     });
 
@@ -52,6 +55,7 @@ describe('isReactCreateClassCall', () => {
           render() {}
         });
       `);
+
       expect(isReactCreateClassCall(def)).toBe(false);
     });
 
@@ -60,6 +64,7 @@ describe('isReactCreateClassCall', () => {
         var { createClass } = require("react");
         createClass({});
       `);
+
       expect(isReactCreateClassCall(def)).toBe(true);
     });
 
@@ -68,6 +73,7 @@ describe('isReactCreateClassCall', () => {
         var { createClass: foo } = require("react");
         foo({});
       `);
+
       expect(isReactCreateClassCall(def)).toBe(true);
     });
 
@@ -76,6 +82,7 @@ describe('isReactCreateClassCall', () => {
         import { createClass } from "react";
         createClass({});
       `);
+
       expect(isReactCreateClassCall(def)).toBe(true);
     });
 
@@ -84,6 +91,7 @@ describe('isReactCreateClassCall', () => {
         import { createClass as foo } from "react";
         foo({});
       `);
+
       expect(isReactCreateClassCall(def)).toBe(true);
     });
 
@@ -95,6 +103,7 @@ describe('isReactCreateClassCall', () => {
       `,
         mockImporter,
       );
+
       expect(isReactCreateClassCall(def)).toBe(true);
     });
   });
@@ -107,6 +116,7 @@ describe('isReactCreateClassCall', () => {
           render() {}
         });
       `);
+
       expect(isReactCreateClassCall(def)).toBe(true);
     });
 
@@ -117,6 +127,7 @@ describe('isReactCreateClassCall', () => {
           render() {}
         });
       `);
+
       expect(isReactCreateClassCall(def)).toBe(true);
     });
 
@@ -127,6 +138,7 @@ describe('isReactCreateClassCall', () => {
           render() {}
         });
       `);
+
       expect(isReactCreateClassCall(def)).toBe(false);
     });
 
@@ -138,6 +150,7 @@ describe('isReactCreateClassCall', () => {
       `,
         mockImporter,
       );
+
       expect(isReactCreateClassCall(def)).toBe(true);
     });
   });

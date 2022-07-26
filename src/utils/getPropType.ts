@@ -42,6 +42,7 @@ function getEnumValuesFromArrayExpression(
 
     // try to resolve the array element to it's value
     const value = resolveToValue(elementPath as NodePath<Expression>);
+
     return values.push({
       value: printValue(value),
       computed: !value.isLiteral(),
@@ -54,9 +55,11 @@ function getEnumValuesFromArrayExpression(
 function getPropTypeOneOf(argumentPath: NodePath): PropTypeDescriptor {
   const type: PropTypeDescriptor = { name: 'enum' };
   const value: NodePath = resolveToValue(argumentPath);
+
   if (!value.isArrayExpression()) {
     const objectValues =
       resolveObjectKeysToArray(value) || resolveObjectValuesToArray(value);
+
     if (objectValues) {
       type.value = objectValues.map(objectValue => ({
         value: objectValue,
@@ -70,11 +73,13 @@ function getPropTypeOneOf(argumentPath: NodePath): PropTypeDescriptor {
   } else {
     type.value = getEnumValuesFromArrayExpression(value);
   }
+
   return type;
 }
 
 function getPropTypeOneOfType(argumentPath: NodePath): PropTypeDescriptor {
   const type: PropTypeDescriptor = { name: 'union' };
+
   if (!argumentPath.isArrayExpression()) {
     type.computed = true;
     type.value = printValue(argumentPath);
@@ -86,12 +91,15 @@ function getPropTypeOneOfType(argumentPath: NodePath): PropTypeDescriptor {
       const docs = getDocblock(
         elementPath as NodePath<Expression | SpreadElement>,
       );
+
       if (docs) {
         descriptor.description = docs;
       }
+
       return descriptor;
     });
   }
+
   return type;
 }
 
@@ -99,6 +107,7 @@ function getPropTypeArrayOf(argumentPath: NodePath) {
   const type: PropTypeDescriptor = { name: 'arrayOf' };
 
   const docs = getDocblock(argumentPath);
+
   if (docs) {
     type.description = docs;
   }
@@ -112,6 +121,7 @@ function getPropTypeArrayOf(argumentPath: NodePath) {
   } else {
     type.value = subType;
   }
+
   return type;
 }
 
@@ -119,6 +129,7 @@ function getPropTypeObjectOf(argumentPath: NodePath) {
   const type: PropTypeDescriptor = { name: 'objectOf' };
 
   const docs = getDocblock(argumentPath);
+
   if (docs) {
     type.description = docs;
   }
@@ -132,6 +143,7 @@ function getPropTypeObjectOf(argumentPath: NodePath) {
   } else {
     type.value = subType;
   }
+
   return type;
 }
 
@@ -140,12 +152,14 @@ function getPropTypeObjectOf(argumentPath: NodePath) {
  */
 function getPropTypeShapish(name: 'exact' | 'shape', argumentPath: NodePath) {
   const type: PropTypeDescriptor = { name };
+
   if (!argumentPath.isObjectExpression()) {
     argumentPath = resolveToValue(argumentPath);
   }
 
   if (argumentPath.isObjectExpression()) {
     const value = {};
+
     argumentPath.get('properties').forEach(propertyPath => {
       if (propertyPath.isSpreadElement() || propertyPath.isObjectMethod()) {
         // It is impossible to resolve a name for a spread element
@@ -153,6 +167,7 @@ function getPropTypeShapish(name: 'exact' | 'shape', argumentPath: NodePath) {
       }
 
       const propertyName = getPropertyName(propertyPath);
+
       if (!propertyName) return;
 
       const valuePath = (propertyPath as NodePath<ObjectProperty>).get('value');
@@ -160,6 +175,7 @@ function getPropTypeShapish(name: 'exact' | 'shape', argumentPath: NodePath) {
       const descriptor: PropDescriptor | PropTypeDescriptor =
         getPropType(valuePath);
       const docs = getDocblock(propertyPath);
+
       if (docs) {
         descriptor.description = docs;
       }
@@ -224,9 +240,11 @@ const propTypes = new Map<string, (path: NodePath) => PropTypeDescriptor>([
  */
 export default function getPropType(path: NodePath): PropTypeDescriptor {
   let descriptor: PropTypeDescriptor | null = null;
+
   getMembers(path, true).some(member => {
     const memberPath = member.path;
     let name: string | null = null;
+
     if (memberPath.isStringLiteral()) {
       name = memberPath.node.value;
     } else if (memberPath.isIdentifier() && !member.computed) {
@@ -235,9 +253,11 @@ export default function getPropType(path: NodePath): PropTypeDescriptor {
     if (name) {
       if (isSimplePropType(name)) {
         descriptor = { name };
+
         return true;
       } else if (propTypes.has(name) && member.argumentPaths.length) {
         descriptor = propTypes.get(name)!(member.argumentPaths[0]);
+
         return true;
       }
     }

@@ -17,6 +17,7 @@ const displayNameHandler: Handler = function (
     componentDefinition,
     'displayName',
   );
+
   if (!displayNamePath) {
     // Function and class declarations need special treatment. The name of the
     // function / class is the displayName
@@ -35,23 +36,28 @@ const displayNameHandler: Handler = function (
       isReactForwardRefCall(componentDefinition)
     ) {
       let currentPath: NodePath = componentDefinition;
+
       while (currentPath.parentPath) {
         if (currentPath.parentPath.isVariableDeclarator()) {
           documentation.set(
             'displayName',
             getNameOrValue(currentPath.parentPath.get('id')),
           );
+
           return;
         } else if (currentPath.parentPath.isAssignmentExpression()) {
           const leftPath = currentPath.parentPath.get('left');
+
           if (leftPath.isIdentifier() || leftPath.isLiteral()) {
             documentation.set('displayName', getNameOrValue(leftPath));
+
             return;
           }
         }
         currentPath = currentPath.parentPath;
       }
     }
+
     return;
   }
   displayNamePath = resolveToValue(displayNamePath);

@@ -91,6 +91,7 @@ describe('getFlowType', () => {
         .expression<TypeCastExpression>('x: ' + type)
         .get('typeAnnotation')
         .get('typeAnnotation');
+
       expect(getFlowType(typePath)).toEqual({ name: type });
     });
   });
@@ -103,6 +104,7 @@ describe('getFlowType', () => {
         .expression<TypeCastExpression>(`x: ${value}`)
         .get('typeAnnotation')
         .get('typeAnnotation');
+
       expect(getFlowType(typePath)).toEqual({
         name: 'literal',
         value: `${value}`,
@@ -115,6 +117,7 @@ describe('getFlowType', () => {
       .expression<TypeCastExpression>('x: xyz')
       .get('typeAnnotation')
       .get('typeAnnotation');
+
     expect(getFlowType(typePath)).toEqual({ name: 'xyz' });
   });
 
@@ -132,6 +135,7 @@ describe('getFlowType', () => {
     )
       .get('typeAnnotation')
       .get('typeAnnotation');
+
     expect(getFlowType(typePath)).toEqual({
       name: 'string',
     });
@@ -142,6 +146,7 @@ describe('getFlowType', () => {
       .expression<TypeCastExpression>('x: ?xyz')
       .get('typeAnnotation')
       .get('typeAnnotation');
+
     expect(getFlowType(typePath)).toEqual({
       name: 'xyz',
       nullable: true,
@@ -162,6 +167,7 @@ describe('getFlowType', () => {
     )
       .get('typeAnnotation')
       .get('typeAnnotation');
+
     expect(getFlowType(typePath)).toEqual({
       name: 'string',
       nullable: true,
@@ -173,6 +179,7 @@ describe('getFlowType', () => {
       .expression<TypeCastExpression>('x: ?number[]')
       .get('typeAnnotation')
       .get('typeAnnotation');
+
     expect(getFlowType(typePath)).toEqual({
       name: 'Array',
       elements: [{ name: 'number' }],
@@ -186,6 +193,7 @@ describe('getFlowType', () => {
       .expression<TypeCastExpression>('x: (?number)[]')
       .get('typeAnnotation')
       .get('typeAnnotation');
+
     expect(getFlowType(typePath)).toEqual({
       name: 'Array',
       elements: [{ name: 'number', nullable: true }],
@@ -198,6 +206,7 @@ describe('getFlowType', () => {
       .expression<TypeCastExpression>('x: number[]')
       .get('typeAnnotation')
       .get('typeAnnotation');
+
     expect(getFlowType(typePath)).toEqual({
       name: 'Array',
       elements: [{ name: 'number' }],
@@ -210,6 +219,7 @@ describe('getFlowType', () => {
       .expression<TypeCastExpression>('x: Array<number>')
       .get('typeAnnotation')
       .get('typeAnnotation');
+
     expect(getFlowType(typePath)).toEqual({
       name: 'Array',
       elements: [{ name: 'number' }],
@@ -231,6 +241,7 @@ describe('getFlowType', () => {
     )
       .get('typeAnnotation')
       .get('typeAnnotation');
+
     expect(getFlowType(typePath)).toEqual({
       name: 'Array',
       elements: [{ name: 'string' }],
@@ -301,6 +312,7 @@ describe('getFlowType', () => {
       .expression<TypeCastExpression>('x: Array<number, xyz>')
       .get('typeAnnotation')
       .get('typeAnnotation');
+
     expect(getFlowType(typePath)).toEqual({
       name: 'Array',
       elements: [{ name: 'number' }, { name: 'xyz' }],
@@ -323,6 +335,7 @@ describe('getFlowType', () => {
     )
       .get('typeAnnotation')
       .get('typeAnnotation');
+
     expect(getFlowType(typePath)).toEqual({
       name: 'Array',
       elements: [{ name: 'number' }, { name: 'string' }],
@@ -335,6 +348,7 @@ describe('getFlowType', () => {
       .expression<TypeCastExpression>('x: Class<Boolean>')
       .get('typeAnnotation')
       .get('typeAnnotation');
+
     expect(getFlowType(typePath)).toEqual({
       name: 'Class',
       elements: [{ name: 'Boolean' }],
@@ -356,6 +370,7 @@ describe('getFlowType', () => {
     )
       .get('typeAnnotation')
       .get('typeAnnotation');
+
     expect(getFlowType(typePath)).toEqual({
       name: 'Class',
       elements: [{ name: 'string' }],
@@ -368,6 +383,7 @@ describe('getFlowType', () => {
       .expression<TypeCastExpression>('x: Function<xyz>')
       .get('typeAnnotation')
       .get('typeAnnotation');
+
     expect(getFlowType(typePath)).toEqual({
       name: 'Function',
       elements: [{ name: 'xyz' }],
@@ -389,6 +405,7 @@ describe('getFlowType', () => {
     )
       .get('typeAnnotation')
       .get('typeAnnotation');
+
     expect(getFlowType(typePath)).toEqual({
       name: 'Function',
       elements: [{ name: 'string' }],
@@ -401,6 +418,7 @@ describe('getFlowType', () => {
       .expression<TypeCastExpression>('x: { a: string, b?: xyz }')
       .get('typeAnnotation')
       .get('typeAnnotation');
+
     expect(getFlowType(typePath)).toEqual({
       name: 'signature',
       type: 'object',
@@ -419,6 +437,7 @@ describe('getFlowType', () => {
       .expression<TypeCastExpression>('x: { a: string, b: ?xyz }')
       .get('typeAnnotation')
       .get('typeAnnotation');
+
     expect(getFlowType(typePath)).toEqual({
       name: 'signature',
       type: 'object',
@@ -448,6 +467,7 @@ describe('getFlowType', () => {
     )
       .get('typeAnnotation')
       .get('typeAnnotation');
+
     expect(getFlowType(typePath)).toEqual({
       name: 'signature',
       type: 'object',
@@ -481,6 +501,7 @@ describe('getFlowType', () => {
       .expression<TypeCastExpression>('x: string | xyz | "foo" | void')
       .get('typeAnnotation')
       .get('typeAnnotation');
+
     expect(getFlowType(typePath)).toEqual({
       name: 'union',
       elements: [
@@ -507,6 +528,7 @@ describe('getFlowType', () => {
     )
       .get('typeAnnotation')
       .get('typeAnnotation');
+
     expect(getFlowType(typePath)).toEqual({
       name: 'union',
       elements: [
@@ -531,6 +553,7 @@ describe('getFlowType', () => {
       .expression<TypeCastExpression>('x: string & xyz & "foo" & void')
       .get('typeAnnotation')
       .get('typeAnnotation');
+
     expect(getFlowType(typePath)).toEqual({
       name: 'intersection',
       elements: [
@@ -557,6 +580,7 @@ describe('getFlowType', () => {
     )
       .get('typeAnnotation')
       .get('typeAnnotation');
+
     expect(getFlowType(typePath)).toEqual({
       name: 'intersection',
       elements: [
@@ -583,6 +607,7 @@ describe('getFlowType', () => {
       )
       .get('typeAnnotation')
       .get('typeAnnotation');
+
     expect(getFlowType(typePath)).toEqual({
       name: 'signature',
       type: 'function',
@@ -611,6 +636,7 @@ describe('getFlowType', () => {
       .expression<TypeCastExpression>('x: (number, ?string) => boolean')
       .get('typeAnnotation')
       .get('typeAnnotation');
+
     expect(getFlowType(typePath)).toEqual({
       name: 'signature',
       type: 'function',
@@ -630,6 +656,7 @@ describe('getFlowType', () => {
       .expression<TypeCastExpression>('x: string => boolean')
       .get('typeAnnotation')
       .get('typeAnnotation');
+
     expect(getFlowType(typePath)).toEqual({
       name: 'signature',
       type: 'function',
@@ -648,6 +675,7 @@ describe('getFlowType', () => {
       )
       .get('typeAnnotation')
       .get('typeAnnotation');
+
     expect(getFlowType(typePath)).toEqual({
       name: 'signature',
       type: 'object',
@@ -806,6 +834,7 @@ describe('getFlowType', () => {
       )
       .get('typeAnnotation')
       .get('typeAnnotation');
+
     expect(getFlowType(typePath)).toEqual({
       name: 'signature',
       type: 'object',
@@ -854,6 +883,7 @@ describe('getFlowType', () => {
     )
       .get('typeAnnotation')
       .get('typeAnnotation');
+
     expect(getFlowType(typePath)).toEqual({
       name: 'signature',
       type: 'object',
@@ -890,6 +920,7 @@ describe('getFlowType', () => {
       .expression<TypeCastExpression>('x: [string, number]')
       .get('typeAnnotation')
       .get('typeAnnotation');
+
     expect(getFlowType(typePath)).toEqual({
       name: 'tuple',
       elements: [{ name: 'string' }, { name: 'number' }],
@@ -902,6 +933,7 @@ describe('getFlowType', () => {
       .expression<TypeCastExpression>('x: [string, number] | [number, string]')
       .get('typeAnnotation')
       .get('typeAnnotation');
+
     expect(getFlowType(typePath)).toEqual({
       name: 'union',
       elements: [

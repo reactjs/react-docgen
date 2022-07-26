@@ -20,12 +20,14 @@ function findScopePath(
 ): NodePath | null {
   if (bindingIdentifiers && bindingIdentifiers.length >= 1) {
     const resolvedParentPath = bindingIdentifiers[0].parentPath;
+
     if (
       resolvedParentPath.isImportDefaultSpecifier() ||
       resolvedParentPath.isImportSpecifier()
     ) {
       // TODO TESTME
       let exportName: string | undefined;
+
       if (resolvedParentPath.isImportDefaultSpecifier()) {
         exportName = 'default';
       } else {
@@ -72,6 +74,7 @@ function findLastAssignedValue(
   traverseShallow(path, {
     AssignmentExpression(assignmentPath) {
       const left = assignmentPath.get('left');
+
       // Skip anything that is not an assignment to a variable with the
       // passed name.
       // Ensure the LHS isn't the reference we're trying to resolve.
@@ -85,6 +88,7 @@ function findLastAssignedValue(
       }
       // Ensure the RHS doesn't contain the reference we're trying to resolve.
       const candidatePath = assignmentPath.get('right');
+
       for (
         let p: NodePath | null = idPath;
         p && p.node != null;
@@ -95,6 +99,7 @@ function findLastAssignedValue(
         }
       }
       results.push(candidatePath);
+
       return assignmentPath.skip();
     },
   });
@@ -104,6 +109,7 @@ function findLastAssignedValue(
   if (resultPath == null) {
     return null;
   }
+
   return resolveToValue(resultPath);
 }
 
@@ -122,8 +128,10 @@ export default function resolveToValue(path: NodePath): NodePath {
   } else if (path.isMemberExpression()) {
     const root = getMemberExpressionRoot(path);
     const resolved = resolveToValue(root);
+
     if (resolved.isObjectExpression()) {
       let propertyPath: NodePath | null = resolved;
+
       for (const propertyName of toArray(path).slice(1)) {
         if (propertyPath && propertyPath.isObjectExpression()) {
           propertyPath = getPropertyValuePath(propertyPath, propertyName);
@@ -133,14 +141,17 @@ export default function resolveToValue(path: NodePath): NodePath {
         }
         propertyPath = resolveToValue(propertyPath);
       }
+
       return propertyPath;
     } else if (isSupportedDefinitionType(resolved)) {
       const property = path.get('property');
+
       if (property.isIdentifier() || property.isStringLiteral()) {
         const memberPath = getMemberValuePath(
           resolved,
           property.isIdentifier() ? property.node.name : property.node.value, // TODO TESTME
         );
+
         if (memberPath) {
           return resolveToValue(memberPath);
         }
@@ -160,6 +171,7 @@ export default function resolveToValue(path: NodePath): NodePath {
             ((root.parentPath.node as MemberExpression).property as Identifier)
               .name, // TODO TESTME Idk what that is
           );
+
           if (resolvedPath) {
             return resolveToValue(resolvedPath);
           }
@@ -195,6 +207,7 @@ export default function resolveToValue(path: NodePath): NodePath {
 
     const binding = path.scope.getBinding(path.node.name);
     let resolvedPath: NodePath | null = null;
+
     if (binding) {
       // The variable may be assigned a different value after initialization.
       // We are first trying to find all assignments to the variable in the
@@ -205,16 +218,19 @@ export default function resolveToValue(path: NodePath): NodePath {
         const bindingMap = binding.path.getOuterBindingIdentifierPaths(
           true,
         ) as Record<string, Array<NodePath<Identifier>>>;
+
         resolvedPath = findScopePath(bindingMap[path.node.name]);
       }
     } else {
       // Initialize our monkey-patching of @babel/traverse 🙈
       initialize(Scope);
       const typeBinding = path.scope.getTypeBinding(path.node.name);
+
       if (typeBinding) {
         resolvedPath = findScopePath([typeBinding.identifierPath]);
       }
     }
+
     return resolvedPath || path;
   }
 

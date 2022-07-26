@@ -13,6 +13,7 @@ export default function getMemberExpressionRoot(
   memberExpressionPath: NodePath<MemberExpression>,
 ): NodePath<Expression> {
   let path: NodePath<Expression> = memberExpressionPath;
+
   while (path.isMemberExpression()) {
     path = path.get('object');
   }

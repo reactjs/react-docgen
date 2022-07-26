@@ -74,6 +74,7 @@ describe('getMemberValuePath', () => {
   it('returns the result of getPropertyValuePath and getClassMemberValuePath', () => {
     const mockPath = parse.expression('42');
     const mockPath2 = parse.expression('21');
+
     jest.mocked(getPropertyValuePath).mockReturnValue(mockPath);
     jest.mocked(getClassMemberValuePath).mockReturnValue(mockPath2);
     let path = parse.expression<ObjectExpression>('{}');

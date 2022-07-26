@@ -17,6 +17,7 @@ import resolveToValue from '../resolveToValue';
 describe('resolveToValue', () => {
   it('resolves simple variable declarations', () => {
     const path = parse.expressionLast(['var foo  = 42;', 'foo;'].join('\n'));
+
     expect(resolveToValue(path)).toEqualASTNode(numericLiteral(42));
   });
 
@@ -32,6 +33,7 @@ describe('resolveToValue', () => {
       undefined,
       undefined,
     );
+
     expected.decorators = undefined;
     // @ts-ignore BABEL types bug
     expected.method = false;
@@ -66,6 +68,7 @@ describe('resolveToValue', () => {
       class Foo {}
       Foo;
     `);
+
     expect(resolveToValue(path).node.type).toBe('ClassDeclaration');
   });
 
@@ -74,6 +77,7 @@ describe('resolveToValue', () => {
       function foo() {}
       foo;
     `);
+
     expect(resolveToValue(path).node.type).toBe('FunctionDeclaration');
   });
 
@@ -83,6 +87,7 @@ describe('resolveToValue', () => {
       function foo() {}
       (foo: any);
     `);
+
       expect(resolveToValue(path).node.type).toBe('FunctionDeclaration');
     });
   });
@@ -93,6 +98,7 @@ describe('resolveToValue', () => {
       function foo() {}
       (foo as any);
     `);
+
       expect(resolveToValue(path).node.type).toBe('FunctionDeclaration');
     });
 
@@ -101,6 +107,7 @@ describe('resolveToValue', () => {
       function foo() {}
       (<any> foo);
     `);
+
       expect(resolveToValue(path).node.type).toBe('FunctionDeclaration');
     });
 
@@ -109,6 +116,7 @@ describe('resolveToValue', () => {
         `let action: Action;
          type Action = {};`,
       );
+
       expect(
         resolveToValue(
           path.get(

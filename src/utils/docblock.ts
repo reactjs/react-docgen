@@ -21,6 +21,7 @@ const DOCBLOCK_HEADER = /^\*\s/;
  */
 export function getDocblock(path: NodePath, trailing = false): string | null {
   let comments: Array<CommentBlock | CommentLine> = [];
+
   if (trailing && path.node.trailingComments) {
     comments = path.node.trailingComments.filter(
       comment =>
@@ -36,6 +37,7 @@ export function getDocblock(path: NodePath, trailing = false): string | null {
   if (comments.length > 0) {
     return parseDocblock(comments[comments.length - 1].value);
   }
+
   return null;
 }
 

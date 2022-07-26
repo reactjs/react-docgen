@@ -10,6 +10,7 @@ export function isSupportedUtilityType(
 ): path is NodePath<GenericTypeAnnotation> {
   if (path.isGenericTypeAnnotation()) {
     const idPath = path.get('id');
+
     if (idPath.isIdentifier()) {
       const name = idPath.node.name;
 

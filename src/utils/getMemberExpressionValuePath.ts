@@ -7,6 +7,7 @@ import isReactForwardRefCall from './isReactForwardRefCall';
 function resolveName(path: NodePath): string | undefined {
   if (path.isVariableDeclaration()) {
     const declarations = path.get('declarations');
+
     if (declarations.length > 1) {
       throw new TypeError(
         'Got unsupported VariableDeclaration. VariableDeclaration must only ' +
@@ -16,6 +17,7 @@ function resolveName(path: NodePath): string | undefined {
       );
     }
     const id = declarations[0].get('id');
+
     if (id.isIdentifier()) {
       return id.node.name;
     }
@@ -25,6 +27,7 @@ function resolveName(path: NodePath): string | undefined {
 
   if (path.isFunctionDeclaration()) {
     const id = path.get('id');
+
     if (id.isIdentifier()) {
       return id.node.name;
     }
@@ -40,12 +43,15 @@ function resolveName(path: NodePath): string | undefined {
     isReactForwardRefCall(path)
   ) {
     let currentPath: NodePath = path;
+
     while (currentPath.parentPath) {
       if (currentPath.parentPath.isVariableDeclarator()) {
         const id = currentPath.parentPath.get('id');
+
         if (id.isIdentifier()) {
           return id.node.name;
         }
+
         return;
       }
 
@@ -76,9 +82,11 @@ export default function getMemberExpressionValuePath(
   }
 
   let result: NodePath<Expression> | null = null;
+
   program.traverse({
     AssignmentExpression(path) {
       const memberPath = path.get('left');
+
       if (!memberPath.isMemberExpression()) {
         return;
       }
@@ -91,6 +99,7 @@ export default function getMemberExpressionValuePath(
       ) {
         result = path.get('right');
         path.skip();
+
         return;
       }
     },
