@@ -1,8 +1,9 @@
 import type { NodePath } from '@babel/traverse';
-import type { ExpressionStatement } from '@babel/types';
+import type { ClassDeclaration, ObjectExpression } from '@babel/types';
 import { parse, makeMockImporter, noopImporter } from '../../../tests/utils';
 import Documentation from '../../Documentation';
 import type { Importer } from '../../importer';
+import type { ComponentNode } from '../../resolver';
 import type DocumentationMock from '../../__mocks__/Documentation';
 import propDocBlockHandler from '../propDocBlockHandler';
 
@@ -29,7 +30,7 @@ describe('propDocBlockHandler', () => {
 
   function test(
     getSrc: (src: string) => string,
-    parseSrc: (src: string, importer?: Importer) => NodePath,
+    parseSrc: (src: string, importer?: Importer) => NodePath<ComponentNode>,
   ) {
     it('finds docblocks for prop types', () => {
       const definition = parseSrc(
@@ -224,7 +225,9 @@ describe('propDocBlockHandler', () => {
     test(
       propTypesSrc => `({propTypes: ${propTypesSrc}})`,
       (src, importer = noopImporter) =>
-        parse.statement<ExpressionStatement>(src, importer).get('expression'),
+        parse
+          .statement(src, importer)
+          .get('expression') as NodePath<ObjectExpression>,
     );
   });
 
@@ -254,11 +257,19 @@ describe('propDocBlockHandler', () => {
     });
   });
 
-  it('does not error if propTypes cannot be found', () => {
-    let definition = parse.expression('{fooBar: 42}');
-    expect(() => propDocBlockHandler(documentation, definition)).not.toThrow();
+  describe('does not error if propTypes cannot be found', () => {
+    it('ObjectExpression', () => {
+      const definition = parse.expression<ObjectExpression>('{fooBar: 42}');
+      expect(() =>
+        propDocBlockHandler(documentation, definition),
+      ).not.toThrow();
+    });
 
-    definition = parse.statement('class Foo {}');
-    expect(() => propDocBlockHandler(documentation, definition)).not.toThrow();
+    it('ClassDeclaration', () => {
+      const definition = parse.statement<ClassDeclaration>('class Foo {}');
+      expect(() =>
+        propDocBlockHandler(documentation, definition),
+      ).not.toThrow();
+    });
   });
 });

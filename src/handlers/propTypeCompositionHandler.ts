@@ -4,6 +4,8 @@ import resolveToValue from '../utils/resolveToValue';
 import type Documentation from '../Documentation';
 import type { NodePath } from '@babel/traverse';
 import type { ObjectExpression, Node } from '@babel/types';
+import type { Handler } from '.';
+import type { ComponentNode } from '../resolver';
 
 /**
  * It resolves the path to its module name and adds it to the "composes" entry
@@ -30,12 +32,12 @@ function processObjectExpression(
   });
 }
 
-export default function propTypeCompositionHandler(
+const propTypeCompositionHandler: Handler = function (
   documentation: Documentation,
-  path: NodePath,
+  componentDefinition: NodePath<ComponentNode>,
 ): void {
   let propTypesPath: NodePath<Node> | null = getMemberValuePath(
-    path,
+    componentDefinition,
     'propTypes',
   );
   if (!propTypesPath) {
@@ -52,4 +54,6 @@ export default function propTypeCompositionHandler(
   }
 
   amendComposes(documentation, propTypesPath);
-}
+};
+
+export default propTypeCompositionHandler;

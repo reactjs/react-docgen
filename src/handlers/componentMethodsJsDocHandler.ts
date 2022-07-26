@@ -3,6 +3,7 @@ import type {
   default as Documentation,
   MethodDescriptor,
 } from '../Documentation';
+import type { Handler } from '.';
 
 // Merges two objects ignoring null/undefined.
 function merge<T, U>(obj1: T, obj2: U): (T & U) | null {
@@ -23,7 +24,7 @@ function merge<T, U>(obj1: T, obj2: U): (T & U) | null {
  * Extract info from the methods jsdoc blocks. Must be run after
  * flowComponentMethodsHandler.
  */
-export default function componentMethodsJsDocHandler(
+const componentMethodsJsDocHandler: Handler = function (
   documentation: Documentation,
 ): void {
   let methods = documentation.get('methods') as MethodDescriptor[] | null;
@@ -54,4 +55,6 @@ export default function componentMethodsJsDocHandler(
   });
 
   documentation.set('methods', methods);
-}
+};
+
+export default componentMethodsJsDocHandler;

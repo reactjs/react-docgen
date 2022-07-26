@@ -10,6 +10,8 @@ import type Documentation from '../Documentation';
 import type { PropDescriptor, PropTypeDescriptor } from '../Documentation';
 import type { NodePath } from '@babel/traverse';
 import type { Node } from '@babel/types';
+import type { Handler } from '.';
+import type { ComponentNode } from '../resolver';
 
 function isPropTypesExpression(path: NodePath): boolean {
   const moduleName = resolveToModule(path);
@@ -54,12 +56,13 @@ function amendPropTypes(
   });
 }
 
-function getPropTypeHandler(
-  propName: string,
-): (documentation: Documentation, path: NodePath) => void {
-  return function (documentation: Documentation, path: NodePath) {
+function getPropTypeHandler(propName: string): Handler {
+  return function (
+    documentation: Documentation,
+    componentDefinition: NodePath<ComponentNode>,
+  ): void {
     let propTypesPath: NodePath<Node> | null = getMemberValuePath(
-      path,
+      componentDefinition,
       propName,
     );
     if (!propTypesPath) {

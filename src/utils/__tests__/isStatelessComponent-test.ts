@@ -162,10 +162,10 @@ describe('isStatelessComponent', () => {
         .get('init');
 
       const bar = def.get('properties')[0];
-      const baz = def.get('properties')[1];
-      const hello = def.get('properties')[2];
+      const baz = def.get('properties')[1].get('value');
+      const hello = def.get('properties')[2].get('value');
       const render = def.get('properties')[3];
-      const world = def.get('properties')[4];
+      const world = def.get('properties')[4].get('value');
 
       expect(isStatelessComponent(bar)).toBe(true);
       expect(isStatelessComponent(baz)).toBe(true);

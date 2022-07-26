@@ -9,6 +9,8 @@ import { traverseShallow } from '../utils/traverse';
 import resolveToValue from '../utils/resolveToValue';
 import type { NodePath } from '@babel/traverse';
 import type { AssignmentExpression, Identifier } from '@babel/types';
+import type { ComponentNode } from '../resolver';
+import type { Handler } from '.';
 
 /**
  * The following values/constructs are considered methods:
@@ -71,28 +73,28 @@ function findAssignedMethods(
  * Extract all flow types for the methods of a react component. Doesn't
  * return any react specific lifecycle methods.
  */
-export default function componentMethodsHandler(
+const componentMethodsHandler: Handler = function (
   documentation: Documentation,
-  path: NodePath,
+  componentDefinition: NodePath<ComponentNode>,
 ): void {
   // Extract all methods from the class or object.
   let methodPaths: Array<{ path: MethodNodePath; isStatic?: boolean }> = [];
-  if (isReactComponentClass(path)) {
+  if (isReactComponentClass(componentDefinition)) {
     methodPaths = (
-      path
+      componentDefinition
         .get('body')
         .get('body')
         .filter(body => isMethod(body)) as MethodNodePath[]
     ).map(p => ({ path: p }));
-  } else if (path.isObjectExpression()) {
+  } else if (componentDefinition.isObjectExpression()) {
     methodPaths = (
-      path
+      componentDefinition
         .get('properties')
         .filter(props => isMethod(props)) as MethodNodePath[]
     ).map(p => ({ path: p }));
 
     // Add the statics object properties.
-    const statics = getMemberValuePath(path, 'statics');
+    const statics = getMemberValuePath(componentDefinition, 'statics');
     if (statics && statics.isObjectExpression()) {
       statics.get('properties').forEach(property => {
         if (isMethod(property)) {
@@ -104,29 +106,29 @@ export default function componentMethodsHandler(
       });
     }
   } else if (
-    path.parentPath &&
-    path.parentPath.isVariableDeclarator() &&
-    path.parentPath.node.init === path.node &&
-    path.parentPath.get('id').isIdentifier()
+    componentDefinition.parentPath &&
+    componentDefinition.parentPath.isVariableDeclarator() &&
+    componentDefinition.parentPath.node.init === componentDefinition.node &&
+    componentDefinition.parentPath.get('id').isIdentifier()
   ) {
     methodPaths = findAssignedMethods(
-      path.parentPath.scope.path,
-      path.parentPath.get('id') as NodePath<Identifier>,
+      componentDefinition.parentPath.scope.path,
+      componentDefinition.parentPath.get('id') as NodePath<Identifier>,
     ).map(p => ({ path: p }));
   } else if (
-    path.parentPath &&
-    path.parentPath.isAssignmentExpression() &&
-    path.parentPath.node.right === path.node &&
-    path.parentPath.get('left').isIdentifier()
+    componentDefinition.parentPath &&
+    componentDefinition.parentPath.isAssignmentExpression() &&
+    componentDefinition.parentPath.node.right === componentDefinition.node &&
+    componentDefinition.parentPath.get('left').isIdentifier()
   ) {
     methodPaths = findAssignedMethods(
-      path.parentPath.scope.path,
-      path.parentPath.get('left') as NodePath<Identifier>,
+      componentDefinition.parentPath.scope.path,
+      componentDefinition.parentPath.get('left') as NodePath<Identifier>,
     ).map(p => ({ path: p }));
-  } else if (path.isFunctionDeclaration()) {
+  } else if (componentDefinition.isFunctionDeclaration()) {
     methodPaths = findAssignedMethods(
-      path.parentPath.scope.path,
-      path.get('id'),
+      componentDefinition.parentPath.scope.path,
+      componentDefinition.get('id'),
     ).map(p => ({ path: p }));
   }
 
@@ -136,4 +138,6 @@ export default function componentMethodsHandler(
       .map(({ path: p, isStatic }) => getMethodDocumentation(p, { isStatic }))
       .filter(Boolean),
   );
-}
+};
+
+export default componentMethodsHandler;

@@ -1,5 +1,6 @@
 import type { NodePath } from '@babel/traverse';
 import type Documentation from '../Documentation';
+import type { ComponentNode } from '../resolver';
 
 export { default as componentDocblockHandler } from './componentDocblockHandler';
 export { default as componentMethodsHandler } from './componentMethodsHandler';
@@ -15,4 +16,7 @@ export {
   childContextTypeHandler,
 } from './propTypeHandler';
 
-export type Handler = (documentation: Documentation, path: NodePath) => void;
+export type Handler = (
+  documentation: Documentation,
+  componentDefinition: NodePath<ComponentNode>,
+) => void;

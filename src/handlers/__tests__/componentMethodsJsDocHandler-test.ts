@@ -1,4 +1,6 @@
+import type { NodePath } from '@babel/traverse';
 import Documentation from '../../Documentation';
+import type { ComponentNode } from '../../resolver';
 import type DocumentationMock from '../../__mocks__/Documentation';
 import componentMethodsJsDocHandler from '../componentMethodsJsDocHandler';
 
@@ -25,7 +27,7 @@ describe('componentMethodsJsDocHandler', () => {
       },
     ];
     documentation.set('methods', methods);
-    componentMethodsJsDocHandler(documentation);
+    componentMethodsJsDocHandler(documentation, {} as NodePath<ComponentNode>);
     expect(documentation.get('methods')).toEqual(methods);
   });
 
@@ -47,7 +49,7 @@ describe('componentMethodsJsDocHandler', () => {
         ],
       },
     ]);
-    componentMethodsJsDocHandler(documentation);
+    componentMethodsJsDocHandler(documentation, {} as NodePath<ComponentNode>);
     expect(documentation.get('methods')).toMatchSnapshot();
   });
 
@@ -71,7 +73,7 @@ describe('componentMethodsJsDocHandler', () => {
         ],
       },
     ]);
-    componentMethodsJsDocHandler(documentation);
+    componentMethodsJsDocHandler(documentation, {} as NodePath<ComponentNode>);
     expect(documentation.get('methods')).toMatchSnapshot();
   });
 
@@ -94,7 +96,7 @@ describe('componentMethodsJsDocHandler', () => {
         ],
       },
     ]);
-    componentMethodsJsDocHandler(documentation);
+    componentMethodsJsDocHandler(documentation, {} as NodePath<ComponentNode>);
     expect(documentation.get('methods')).toMatchSnapshot();
   });
 });

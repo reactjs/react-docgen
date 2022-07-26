@@ -7,11 +7,10 @@ import type { NodePath } from '@babel/traverse';
 import type { Expression } from '@babel/types';
 
 const validPossibleStatelessComponentTypes = [
-  'ObjectMethod',
-  'ObjectProperty',
+  'ArrowFunctionExpression',
   'FunctionDeclaration',
   'FunctionExpression',
-  'ArrowFunctionExpression',
+  'ObjectMethod',
 ];
 
 function isJSXElementOrReactCall(path: NodePath): boolean {

@@ -1,5 +1,12 @@
 import type { NodePath } from '@babel/traverse';
-import type { ObjectExpression } from '@babel/types';
+import type {
+  ArrowFunctionExpression,
+  CallExpression,
+  ClassDeclaration,
+  ClassExpression,
+  ObjectExpression,
+  VariableDeclaration,
+} from '@babel/types';
 import { parse, makeMockImporter } from '../../../tests/utils';
 import Documentation from '../../Documentation';
 import type DocumentationMock from '../../__mocks__/Documentation';
@@ -126,18 +133,18 @@ describe('defaultPropsHandler', () => {
 
     it('handles computed properties', () => {
       const src = `
-        ({
+        {
           getDefaultProps: function() {
             return {
               foo: "bar",
               [bar]: 42,
             };
           }
-        })
+        }
       `;
       defaultPropsHandler(
         documentation,
-        parse(src).get('body.0.expression') as NodePath,
+        parse.expression<ObjectExpression>(src),
       );
       expect(documentation.descriptors).toMatchSnapshot();
     });
@@ -244,7 +251,10 @@ describe('defaultPropsHandler', () => {
           };
         }
       `;
-      defaultPropsHandler(documentation, parse(src).get('body')[0]);
+      defaultPropsHandler(
+        documentation,
+        parse.statement<ClassDeclaration>(src),
+      );
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
@@ -258,7 +268,10 @@ describe('defaultPropsHandler', () => {
           }
         }
       `;
-      defaultPropsHandler(documentation, parse(src).get('body')[0]);
+      defaultPropsHandler(
+        documentation,
+        parse.statement<ClassDeclaration>(src),
+      );
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
@@ -353,7 +366,9 @@ describe('defaultPropsHandler', () => {
       }`;
       defaultPropsHandler(
         documentation,
-        parse.statement(src).get('declarations.0.init') as NodePath,
+        parse
+          .statement(src)
+          .get('declarations.0.init') as NodePath<ClassExpression>,
       );
       expect(documentation.descriptors).toMatchSnapshot();
     });
@@ -369,7 +384,7 @@ describe('defaultPropsHandler', () => {
         documentation,
         parse
           .statementLast(src, mockImporter)
-          .get('declarations.0.init') as NodePath,
+          .get('declarations.0.init') as NodePath<ClassExpression>,
       );
       expect(documentation.descriptors).toMatchSnapshot();
     });
@@ -386,7 +401,7 @@ describe('defaultPropsHandler', () => {
         }
       }
     `;
-    const definition = parse.expression(src);
+    const definition = parse.expression<ObjectExpression>(src);
     expect(() => defaultPropsHandler(documentation, definition)).not.toThrow();
     expect(documentation.descriptors).toMatchSnapshot();
   });
@@ -403,7 +418,10 @@ describe('defaultPropsHandler', () => {
         }
       })
     `;
-    const definition = parse.expressionLast(src, mockImporter);
+    const definition = parse.expressionLast<ObjectExpression>(
+      src,
+      mockImporter,
+    );
     expect(() => defaultPropsHandler(documentation, definition)).not.toThrow();
     expect(documentation.descriptors).toMatchSnapshot();
   });
@@ -448,7 +466,9 @@ describe('defaultPropsHandler', () => {
       `;
       defaultPropsHandler(
         documentation,
-        parse.statement(src).get('declarations.0.init') as NodePath,
+        parse
+          .statement(src)
+          .get('declarations.0.init') as NodePath<ArrowFunctionExpression>,
       );
       expect(documentation.descriptors).toMatchSnapshot();
     });
@@ -465,7 +485,7 @@ describe('defaultPropsHandler', () => {
         documentation,
         parse
           .statement(src, mockImporter, 1)
-          .get('declarations.0.init') as NodePath,
+          .get('declarations.0.init') as NodePath<ArrowFunctionExpression>,
       );
       expect(documentation.descriptors).toMatchSnapshot();
     });
@@ -478,7 +498,9 @@ describe('defaultPropsHandler', () => {
       `;
       defaultPropsHandler(
         documentation,
-        parse.statement(src, 1).get('declarations.0.init') as NodePath,
+        parse
+          .statement(src, 1)
+          .get('declarations.0.init') as NodePath<ArrowFunctionExpression>,
       );
       expect(documentation.descriptors).toMatchSnapshot();
     });
@@ -493,7 +515,7 @@ describe('defaultPropsHandler', () => {
         documentation,
         parse
           .statement(src, mockImporter, 1)
-          .get('declarations.0.init') as NodePath,
+          .get('declarations.0.init') as NodePath<ArrowFunctionExpression>,
       );
       expect(documentation.descriptors).toMatchSnapshot();
     });
@@ -507,7 +529,10 @@ describe('defaultPropsHandler', () => {
           abc: defg = {xyz: abc.def, 123: 42}
         }) => <div />
       `;
-      defaultPropsHandler(documentation, parse.expressionLast(src));
+      defaultPropsHandler(
+        documentation,
+        parse.expressionLast<ArrowFunctionExpression>(src),
+      );
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
@@ -520,7 +545,7 @@ describe('defaultPropsHandler', () => {
       `;
       defaultPropsHandler(
         documentation,
-        parse.expressionLast(src, mockImporter),
+        parse.expressionLast<ArrowFunctionExpression>(src, mockImporter),
       );
       expect(documentation.descriptors).toMatchSnapshot();
     });
@@ -533,14 +558,20 @@ describe('defaultPropsHandler', () => {
           foo = ImportedComponent,
         }) => <div />
       `;
-      defaultPropsHandler(documentation, parse.expressionLast(src));
+      defaultPropsHandler(
+        documentation,
+        parse.expressionLast<ArrowFunctionExpression>(src),
+      );
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
     it('should work with no defaults', () => {
       const src = `({ foo }) => <div />`;
 
-      defaultPropsHandler(documentation, parse.expressionLast(src));
+      defaultPropsHandler(
+        documentation,
+        parse.expressionLast<ArrowFunctionExpression>(src),
+      );
       expect(documentation.descriptors).toMatchSnapshot();
     });
   });
@@ -551,7 +582,10 @@ describe('defaultPropsHandler', () => {
         import React from 'react';
         React.forwardRef(({ foo = 'bar' }, ref) => <div ref={ref}>{foo}</div>);
       `;
-      defaultPropsHandler(documentation, parse.expressionLast(src));
+      defaultPropsHandler(
+        documentation,
+        parse.expressionLast<CallExpression>(src),
+      );
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
@@ -563,7 +597,7 @@ describe('defaultPropsHandler', () => {
       `;
       defaultPropsHandler(
         documentation,
-        parse.expressionLast(src, mockImporter),
+        parse.expressionLast<CallExpression>(src, mockImporter),
       );
       expect(documentation.descriptors).toMatchSnapshot();
     });
@@ -574,7 +608,12 @@ describe('defaultPropsHandler', () => {
         const Component = React.forwardRef(({ foo }, ref) => <div ref={ref}>{foo}</div>);
         Component.defaultProps = { foo: 'baz' };
       `;
-      defaultPropsHandler(documentation, parse.statement(src, 1));
+      defaultPropsHandler(
+        documentation,
+        parse
+          .statement<VariableDeclaration>(src, 1)
+          .get('declarations.0.init') as NodePath<CallExpression>,
+      );
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
@@ -585,7 +624,12 @@ describe('defaultPropsHandler', () => {
         const Component = React.forwardRef(({ bar }, ref) => <div ref={ref}>{bar}</div>);
         Component.defaultProps = other;
       `;
-      defaultPropsHandler(documentation, parse.statement(src, mockImporter, 2));
+      defaultPropsHandler(
+        documentation,
+        parse
+          .statement(src, mockImporter, 2)
+          .get('declarations.0.init') as NodePath<CallExpression>,
+      );
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
@@ -595,7 +639,10 @@ describe('defaultPropsHandler', () => {
         const ComponentImpl = ({ foo = 'bar' }, ref) => <div ref={ref}>{foo}</div>;
         React.forwardRef(ComponentImpl);
       `;
-      defaultPropsHandler(documentation, parse.expressionLast(src));
+      defaultPropsHandler(
+        documentation,
+        parse.expressionLast<CallExpression>(src),
+      );
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
@@ -608,7 +655,7 @@ describe('defaultPropsHandler', () => {
       `;
       defaultPropsHandler(
         documentation,
-        parse.expressionLast(src, mockImporter),
+        parse.expressionLast<CallExpression>(src, mockImporter),
       );
       expect(documentation.descriptors).toMatchSnapshot();
     });

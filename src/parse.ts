@@ -6,17 +6,17 @@ import type { Options } from './babelParser';
 import type { NodePath } from '@babel/traverse';
 import type { Handler } from './handlers';
 import type { Importer } from './importer';
-import type { Resolver } from './resolver';
+import type { ComponentNode, Resolver } from './resolver';
 import FileState from './FileState';
 
 const ERROR_MISSING_DEFINITION = 'No suitable component definition found.';
 
 function executeHandlers(
   handlers: Handler[],
-  componentDefinitions: NodePath[],
+  componentDefinitions: Array<NodePath<ComponentNode>>,
 ): DocumentationObject[] {
   return componentDefinitions.map(
-    (componentDefinition: NodePath): DocumentationObject => {
+    (componentDefinition): DocumentationObject => {
       const documentation = new Documentation();
       handlers.forEach(handler => handler(documentation, componentDefinition));
       return postProcessDocumentation(documentation.toObject());

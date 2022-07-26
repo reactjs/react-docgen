@@ -1,3 +1,4 @@
+import type { ObjectExpression } from '@babel/types';
 import fs from 'fs';
 import { directory as tempDirectory } from 'tempy';
 import { parse as testParse, noopImporter } from '../../tests/utils';
@@ -5,7 +6,7 @@ import parse, { ERROR_MISSING_DEFINITION } from '../parse';
 
 describe('parse', () => {
   it('allows custom component definition resolvers', () => {
-    const path = testParse.expression('{foo: "bar"}');
+    const path = testParse.expression<ObjectExpression>('{foo: "bar"}');
     const resolver = jest.fn(() => [path]);
     const handler = jest.fn();
     parse('//empty', resolver, [handler], noopImporter);

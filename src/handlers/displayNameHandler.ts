@@ -6,32 +6,35 @@ import resolveFunctionDefinitionToReturnValue from '../utils/resolveFunctionDefi
 import type Documentation from '../Documentation';
 import type { NodePath } from '@babel/traverse';
 import type { Identifier } from '@babel/types';
+import type { Handler } from '.';
+import type { ComponentNode } from '../resolver';
 
-export default function displayNameHandler(
+const displayNameHandler: Handler = function (
   documentation: Documentation,
-  path: NodePath,
+  componentDefinition: NodePath<ComponentNode>,
 ): void {
   let displayNamePath: NodePath | null = getMemberValuePath(
-    path,
+    componentDefinition,
     'displayName',
   );
   if (!displayNamePath) {
     // Function and class declarations need special treatment. The name of the
     // function / class is the displayName
     if (
-      (path.isClassDeclaration() || path.isFunctionDeclaration()) &&
-      path.has('id')
+      (componentDefinition.isClassDeclaration() ||
+        componentDefinition.isFunctionDeclaration()) &&
+      componentDefinition.has('id')
     ) {
       documentation.set(
         'displayName',
-        getNameOrValue(path.get('id') as NodePath<Identifier>),
+        getNameOrValue(componentDefinition.get('id') as NodePath<Identifier>),
       );
     } else if (
-      path.isArrowFunctionExpression() ||
-      path.isFunctionExpression() ||
-      isReactForwardRefCall(path)
+      componentDefinition.isArrowFunctionExpression() ||
+      componentDefinition.isFunctionExpression() ||
+      isReactForwardRefCall(componentDefinition)
     ) {
-      let currentPath = path;
+      let currentPath: NodePath = componentDefinition;
       while (currentPath.parentPath) {
         if (currentPath.parentPath.isVariableDeclarator()) {
           documentation.set(
@@ -65,4 +68,6 @@ export default function displayNameHandler(
     return;
   }
   documentation.set('displayName', displayNamePath.node.value);
-}
+};
+
+export default displayNameHandler;

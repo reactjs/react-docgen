@@ -4,6 +4,8 @@ import getMemberValuePath from '../utils/getMemberValuePath';
 import resolveToValue from '../utils/resolveToValue';
 import setPropDescription from '../utils/setPropDescription';
 import type Documentation from '../Documentation';
+import type { ComponentNode } from '../resolver';
+import type { Handler } from '.';
 
 function resolveDocumentation(
   documentation: Documentation,
@@ -26,12 +28,12 @@ function resolveDocumentation(
   });
 }
 
-export default function propDocBlockHandler(
+const propDocBlockHandler: Handler = function (
   documentation: Documentation,
-  path: NodePath,
+  componentDefinition: NodePath<ComponentNode>,
 ): void {
   let propTypesPath: NodePath<Node> | null = getMemberValuePath(
-    path,
+    componentDefinition,
     'propTypes',
   );
   if (!propTypesPath) {
@@ -43,4 +45,6 @@ export default function propDocBlockHandler(
   }
 
   resolveDocumentation(documentation, propTypesPath);
-}
+};
+
+export default propDocBlockHandler;

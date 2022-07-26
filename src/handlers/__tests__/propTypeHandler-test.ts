@@ -5,7 +5,13 @@ import { propTypeHandler } from '../propTypeHandler';
 import getPropType from '../../utils/getPropType';
 import type { NodePath } from '@babel/traverse';
 import type { Importer } from '../../importer';
-import type { ExpressionStatement } from '@babel/types';
+import type {
+  ArrowFunctionExpression,
+  ClassDeclaration,
+  FunctionDeclaration,
+  ObjectExpression,
+} from '@babel/types';
+import type { ComponentNode } from '../../resolver';
 
 const getPropTypeMock = getPropType as jest.Mock;
 
@@ -69,7 +75,7 @@ describe('propTypeHandler', () => {
 
   function test(
     getSrc: (src: string) => string,
-    parseSrc: (src: string, importer?: Importer) => NodePath,
+    parseSrc: (src: string, importer?: Importer) => NodePath<ComponentNode>,
   ) {
     it('passes the correct argument to getPropType', () => {
       const propTypesSrc = `{
@@ -278,7 +284,9 @@ describe('propTypeHandler', () => {
     test(
       propTypesSrc => template(`({propTypes: ${propTypesSrc}})`),
       (src, importer = noopImporter) =>
-        parse.statement<ExpressionStatement>(src, importer).get('expression'),
+        parse
+          .statement(src, importer)
+          .get('expression') as NodePath<ObjectExpression>,
     );
   });
 
@@ -321,23 +329,34 @@ describe('propTypeHandler', () => {
     );
   });
 
-  it('does not error if propTypes cannot be found', () => {
-    let definition = parse.expression('{fooBar: 42}');
-    expect(() => propTypeHandler(documentation, definition)).not.toThrow();
+  describe('does not error if propTypes cannot be found', () => {
+    it('ObjectExpression', () => {
+      const definition = parse.expression<ObjectExpression>('{fooBar: 42}');
+      expect(() => propTypeHandler(documentation, definition)).not.toThrow();
+    });
 
-    definition = parse.statement('class Foo {}');
-    expect(() => propTypeHandler(documentation, definition)).not.toThrow();
+    it('ClassDeclaration', () => {
+      const definition = parse.statement<ClassDeclaration>('class Foo {}');
+      expect(() => propTypeHandler(documentation, definition)).not.toThrow();
+    });
 
-    definition = parse.statement('function Foo() {}');
-    expect(() => propTypeHandler(documentation, definition)).not.toThrow();
+    it('FunctionDeclaration', () => {
+      const definition =
+        parse.statement<FunctionDeclaration>('function Foo() {}');
+      expect(() => propTypeHandler(documentation, definition)).not.toThrow();
+    });
 
-    definition = parse.expression('() => {}');
-    expect(() => propTypeHandler(documentation, definition)).not.toThrow();
+    it('ArrowFunctionExpression', () => {
+      const definition = parse.expression<ArrowFunctionExpression>('() => {}');
+      expect(() => propTypeHandler(documentation, definition)).not.toThrow();
+    });
   });
 
   // This case is handled by propTypeCompositionHandler
   it('does not error if propTypes is a member expression', () => {
-    const definition = parse.expression('{propTypes: Foo.propTypes}');
+    const definition = parse.expression<ObjectExpression>(
+      '{propTypes: Foo.propTypes}',
+    );
     expect(() => propTypeHandler(documentation, definition)).not.toThrow();
   });
 });
