@@ -94,10 +94,8 @@ function setPropDescriptor(
  * This handler tries to find flow Type annotated react components and extract
  * its types to the documentation. It also extracts docblock comments which are
  * inlined in the type definition.
- *
- * TODO either rename this handler or split in flow vs ts
  */
-const flowTypeHandler: Handler = function (
+const codeTypeHandler: Handler = function (
   documentation: Documentation,
   componentDefinition: NodePath<ComponentNode>,
 ): void {
@@ -117,4 +115,4 @@ const flowTypeHandler: Handler = function (
   );
 };
 
-export default flowTypeHandler;
+export default codeTypeHandler;

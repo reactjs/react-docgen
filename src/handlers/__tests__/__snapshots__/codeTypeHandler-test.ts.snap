@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`flowTypeHandler TypeAlias class definition for flow <0.53 ignores hash map entry 1`] = `
+exports[`codeTypeHandler TypeAlias class definition for flow <0.53 ignores hash map entry 1`] = `
 Object {
   "bar": Object {
     "description": "",
@@ -10,7 +10,7 @@ Object {
 }
 `;
 
-exports[`flowTypeHandler TypeAlias class definition for flow >=0.53 with State ignores hash map entry 1`] = `
+exports[`codeTypeHandler TypeAlias class definition for flow >=0.53 with State ignores hash map entry 1`] = `
 Object {
   "bar": Object {
     "description": "",
@@ -20,7 +20,7 @@ Object {
 }
 `;
 
-exports[`flowTypeHandler TypeAlias class definition for flow >=0.53 without State ignores hash map entry 1`] = `
+exports[`codeTypeHandler TypeAlias class definition for flow >=0.53 without State ignores hash map entry 1`] = `
 Object {
   "bar": Object {
     "description": "",
@@ -30,7 +30,7 @@ Object {
 }
 `;
 
-exports[`flowTypeHandler TypeAlias class definition with inline props ignores hash map entry 1`] = `
+exports[`codeTypeHandler TypeAlias class definition with inline props ignores hash map entry 1`] = `
 Object {
   "bar": Object {
     "description": "",
@@ -40,7 +40,7 @@ Object {
 }
 `;
 
-exports[`flowTypeHandler TypeAlias stateless component ignores hash map entry 1`] = `
+exports[`codeTypeHandler TypeAlias stateless component ignores hash map entry 1`] = `
 Object {
   "bar": Object {
     "description": "",
@@ -50,7 +50,7 @@ Object {
 }
 `;
 
-exports[`flowTypeHandler does support utility types inline 1`] = `
+exports[`codeTypeHandler does support utility types inline 1`] = `
 Object {
   "foo": Object {
     "description": "",
@@ -60,7 +60,7 @@ Object {
 }
 `;
 
-exports[`flowTypeHandler imported prop types imported 1`] = `
+exports[`codeTypeHandler imported prop types imported 1`] = `
 Object {
   "abc": Object {
     "description": "",
@@ -95,7 +95,7 @@ Object {
 }
 `;
 
-exports[`flowTypeHandler imported prop types type imported 1`] = `
+exports[`codeTypeHandler imported prop types type imported 1`] = `
 Object {
   "abc": Object {
     "description": "",

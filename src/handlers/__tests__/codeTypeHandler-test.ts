@@ -1,6 +1,6 @@
 import { parse, makeMockImporter } from '../../../tests/utils';
 import Documentation from '../../Documentation';
-import flowTypeHandler from '../flowTypeHandler';
+import codeTypeHandler from '../codeTypeHandler';
 import type DocumentationMock from '../../__mocks__/Documentation';
 import type {
   ArrowFunctionExpression,
@@ -18,7 +18,7 @@ jest.mock('../../utils/getFlowType', () => ({
   __esModule: true,
 }));
 
-describe('flowTypeHandler', () => {
+describe('codeTypeHandler', () => {
   let documentation: Documentation & DocumentationMock;
 
   beforeEach(() => {
@@ -61,7 +61,7 @@ describe('flowTypeHandler', () => {
       `;
       const definition = getSrc(flowTypesSrc);
 
-      flowTypeHandler(documentation, definition);
+      codeTypeHandler(documentation, definition);
 
       expect(documentation.descriptors).toEqual({
         foo: {
@@ -91,7 +91,7 @@ describe('flowTypeHandler', () => {
       `;
       const definition = getSrc(flowTypesSrc);
 
-      flowTypeHandler(documentation, definition);
+      codeTypeHandler(documentation, definition);
 
       expect(documentation.descriptors).toEqual({
         foo: {
@@ -116,7 +116,7 @@ describe('flowTypeHandler', () => {
       `;
       const definition = getSrc(flowTypesSrc);
 
-      flowTypeHandler(documentation, definition);
+      codeTypeHandler(documentation, definition);
 
       expect(documentation.descriptors).toMatchSnapshot();
     });
@@ -130,7 +130,7 @@ describe('flowTypeHandler', () => {
       `;
       const definition = getSrc(flowTypesSrc);
 
-      flowTypeHandler(documentation, definition);
+      codeTypeHandler(documentation, definition);
 
       expect(documentation.descriptors).toEqual({
         foo: {
@@ -154,7 +154,7 @@ describe('flowTypeHandler', () => {
       `;
       const definition = getSrc(flowTypesSrc);
 
-      flowTypeHandler(documentation, definition);
+      codeTypeHandler(documentation, definition);
 
       expect(documentation.descriptors).toEqual({
         foo: {
@@ -176,7 +176,7 @@ describe('flowTypeHandler', () => {
 
           const definition = getSrc(flowTypesSrc);
 
-          flowTypeHandler(documentation, definition);
+          codeTypeHandler(documentation, definition);
 
           expect(documentation.descriptors).toEqual({
             foo: {
@@ -246,7 +246,7 @@ describe('flowTypeHandler', () => {
     it('ObjectExpression', () => {
       const definition = parse.expression<ObjectExpression>('{fooBar: 42}');
 
-      expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
+      expect(() => codeTypeHandler(documentation, definition)).not.toThrow();
     });
 
     it('ClassDeclaration', () => {
@@ -254,14 +254,14 @@ describe('flowTypeHandler', () => {
         'class Foo extends Component {}',
       );
 
-      expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
+      expect(() => codeTypeHandler(documentation, definition)).not.toThrow();
     });
 
     it('ArrowFunctionExpression', () => {
       const definition =
         parse.statement<ArrowFunctionExpression>('() => <div />');
 
-      expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
+      expect(() => codeTypeHandler(documentation, definition)).not.toThrow();
     });
   });
 
@@ -275,7 +275,7 @@ describe('flowTypeHandler', () => {
       )
       .get('expression') as NodePath<ArrowFunctionExpression>;
 
-    flowTypeHandler(documentation, definition);
+    codeTypeHandler(documentation, definition);
 
     expect(documentation.descriptors).toEqual({
       foo: {
@@ -295,7 +295,7 @@ describe('flowTypeHandler', () => {
       )
       .get('expression') as NodePath<ArrowFunctionExpression>;
 
-    expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
+    expect(() => codeTypeHandler(documentation, definition)).not.toThrow();
     expect(documentation.descriptors).toMatchSnapshot();
   });
 
@@ -310,7 +310,7 @@ describe('flowTypeHandler', () => {
       )
       .get('expression') as NodePath<ArrowFunctionExpression>;
 
-    expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
+    expect(() => codeTypeHandler(documentation, definition)).not.toThrow();
     expect(documentation.descriptors).toEqual({});
   });
 
@@ -326,7 +326,7 @@ describe('flowTypeHandler', () => {
         )
         .get('expression') as NodePath<ArrowFunctionExpression>;
 
-      expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
+      expect(() => codeTypeHandler(documentation, definition)).not.toThrow();
       expect(documentation.descriptors).toEqual({});
     });
 
@@ -341,7 +341,7 @@ describe('flowTypeHandler', () => {
         )
         .get('expression') as NodePath<ArrowFunctionExpression>;
 
-      expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
+      expect(() => codeTypeHandler(documentation, definition)).not.toThrow();
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
@@ -355,7 +355,7 @@ describe('flowTypeHandler', () => {
         )
         .get('expression') as NodePath<ArrowFunctionExpression>;
 
-      expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
+      expect(() => codeTypeHandler(documentation, definition)).not.toThrow();
       expect(documentation.descriptors).toEqual({});
     });
 
@@ -370,7 +370,7 @@ describe('flowTypeHandler', () => {
         )
         .get('expression') as NodePath<ArrowFunctionExpression>;
 
-      expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
+      expect(() => codeTypeHandler(documentation, definition)).not.toThrow();
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
@@ -384,7 +384,7 @@ describe('flowTypeHandler', () => {
         )
         .get('expression') as NodePath<ArrowFunctionExpression>;
 
-      expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
+      expect(() => codeTypeHandler(documentation, definition)).not.toThrow();
       expect(documentation.descriptors).toEqual({});
     });
 
@@ -398,7 +398,7 @@ describe('flowTypeHandler', () => {
         )
         .get('expression') as NodePath<ArrowFunctionExpression>;
 
-      expect(() => flowTypeHandler(documentation, definition)).not.toThrow();
+      expect(() => codeTypeHandler(documentation, definition)).not.toThrow();
       expect(documentation.descriptors).toEqual({});
     });
   });
@@ -410,7 +410,7 @@ describe('flowTypeHandler', () => {
         type Props = { foo: string };
         React.forwardRef((props: Props, ref) => <div ref={ref}>{props.foo}</div>);
       `;
-      flowTypeHandler(documentation, parse.expressionLast<CallExpression>(src));
+      codeTypeHandler(documentation, parse.expressionLast<CallExpression>(src));
       expect(documentation.descriptors).toEqual({
         foo: {
           flowType: {},
@@ -427,7 +427,7 @@ describe('flowTypeHandler', () => {
         const ComponentImpl = (props: Props, ref) => <div ref={ref}>{props.foo}</div>;
         React.forwardRef(ComponentImpl);
       `;
-      flowTypeHandler(documentation, parse.expressionLast<CallExpression>(src));
+      codeTypeHandler(documentation, parse.expressionLast<CallExpression>(src));
       expect(documentation.descriptors).toEqual({
         foo: {
           flowType: {},
@@ -444,7 +444,7 @@ describe('flowTypeHandler', () => {
         let Component = (props: Props, ref) => <div ref={ref}>{props.foo}</div>;
         Component = React.forwardRef(Component);
       `;
-      flowTypeHandler(
+      codeTypeHandler(
         documentation,
         parse.expressionLast(src).get('right') as NodePath<CallExpression>,
       );
