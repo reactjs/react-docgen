@@ -17,7 +17,7 @@ const defaultHandlers: Handler[] = [
   allHandlers.childContextTypeHandler,
   allHandlers.propTypeCompositionHandler,
   allHandlers.propDocBlockHandler,
-  allHandlers.flowTypeHandler,
+  allHandlers.codeTypeHandler,
   allHandlers.defaultPropsHandler,
   allHandlers.componentDocblockHandler,
   allHandlers.displayNameHandler,
