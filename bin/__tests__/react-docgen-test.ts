@@ -19,6 +19,7 @@ function run(
     const docgen = spawn(path.join(__dirname, '../react-docgen.js'), args);
     let stdout = '';
     let stderr = '';
+
     docgen.stdout?.on('data', data => (stdout += data));
     docgen.stderr?.on('data', data => (stderr += data));
     docgen.on('close', () => resolve([stdout, stderr]));
@@ -63,10 +64,12 @@ describe.skip('react-docgen CLI', () => {
     }
 
     const componentPath = path.join(dir, `Component.${extension}`);
+
     await writeFile(componentPath, component, 'utf-8');
     tempComponents.push(componentPath);
 
     const noComponentPath = path.join(dir, `NoComponent.${extension}`);
+
     await writeFile(noComponentPath, '{}', 'utf-8');
     tempNoComponents.push(noComponentPath);
 
@@ -112,6 +115,7 @@ describe.skip('react-docgen CLI', () => {
     async () => {
       await createTempfiles();
       const [stdout, stderr] = await run([tempDir]);
+
       expect(stderr).toContain('NoComponent');
       expect(stdout).toContain('Component');
     },
@@ -148,6 +152,7 @@ describe.skip('react-docgen CLI', () => {
         '--extension=bar',
         tempDir,
       ]);
+
       expect(stdout).toContain('Component.foo');
       expect(stdout).toContain('Component.bar');
 
@@ -195,6 +200,7 @@ describe.skip('react-docgen CLI', () => {
       await createTempfiles(undefined, 'foo');
 
       const [stdout, stderr] = await run(['--ignore=foo', tempDir]);
+
       expect(stdout).toBe('');
       expect(stderr).toBe('');
     },
@@ -207,6 +213,7 @@ describe.skip('react-docgen CLI', () => {
       await createTempfiles(undefined, 'foo');
 
       const [stdout, stderr] = await run(['-i', 'foo', tempDir]);
+
       expect(stdout).toBe('');
       expect(stderr).toBe('');
     },
@@ -217,6 +224,7 @@ describe.skip('react-docgen CLI', () => {
     'writes to stdout',
     async () => {
       const [stdout, stderr] = await run([], component);
+
       expect(stdout.length > 0).toBe(true);
       expect(stderr.length).toBe(0);
     },
@@ -227,6 +235,7 @@ describe.skip('react-docgen CLI', () => {
     'writes to stderr',
     async () => {
       const [stdout, stderr] = await run([], '{}');
+
       expect(stderr.length > 0).toBe(true);
       expect(stdout.length).toBe(0);
     },
@@ -237,6 +246,7 @@ describe.skip('react-docgen CLI', () => {
     'writes to a file if provided',
     async () => {
       const outFile = tempFile();
+
       await createTempfiles();
 
       const [stdout] = await run([`--out=${outFile}`, tempDir]);
@@ -251,6 +261,7 @@ describe.skip('react-docgen CLI', () => {
     'writes to a file if provided shortcut',
     async () => {
       const outFile = tempFile();
+
       await createTempfiles();
 
       const [stdout] = await run(['-o', outFile, tempDir]);

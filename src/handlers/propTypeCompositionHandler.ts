@@ -13,6 +13,7 @@ import type { ComponentNode } from '../resolver';
  */
 function amendComposes(documentation: Documentation, path: NodePath): void {
   const moduleName = resolveToModule(path);
+
   if (moduleName) {
     documentation.addComposes(moduleName);
   }
@@ -40,6 +41,7 @@ const propTypeCompositionHandler: Handler = function (
     componentDefinition,
     'propTypes',
   );
+
   if (!propTypesPath) {
     return;
   }
@@ -50,6 +52,7 @@ const propTypeCompositionHandler: Handler = function (
 
   if (propTypesPath.isObjectExpression()) {
     processObjectExpression(documentation, propTypesPath);
+
     return;
   }
 

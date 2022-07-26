@@ -22,6 +22,7 @@ const findAllComponentDefinitions: Resolver = function (
       normalizeClassDefinition(path);
       definitions.add(path);
     }
+
     return false;
   }
 
@@ -29,6 +30,7 @@ const findAllComponentDefinitions: Resolver = function (
     if (isStatelessComponent(path)) {
       definitions.add(path);
     }
+
     return false;
   }
 
@@ -46,6 +48,7 @@ const findAllComponentDefinitions: Resolver = function (
         const inner = resolveToValue(
           path.get('arguments')[0],
         ) as NodePath<ComponentNode>;
+
         definitions.delete(inner);
         definitions.add(path);
 
@@ -53,6 +56,7 @@ const findAllComponentDefinitions: Resolver = function (
         return path.skip();
       } else if (isReactCreateClassCall(path)) {
         const resolvedPath = resolveToValue(path.get('arguments')[0]);
+
         if (resolvedPath.isObjectExpression()) {
           definitions.add(resolvedPath);
         }

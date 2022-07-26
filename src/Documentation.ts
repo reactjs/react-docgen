@@ -167,25 +167,31 @@ export default class Documentation {
 
   getPropDescriptor(propName: string): PropDescriptor {
     let propDescriptor = this.#props.get(propName);
+
     if (!propDescriptor) {
       this.#props.set(propName, (propDescriptor = {}));
     }
+
     return propDescriptor;
   }
 
   getContextDescriptor(propName: string): PropDescriptor {
     let propDescriptor = this.#context.get(propName);
+
     if (!propDescriptor) {
       this.#context.set(propName, (propDescriptor = {}));
     }
+
     return propDescriptor;
   }
 
   getChildContextDescriptor(propName: string): PropDescriptor {
     let propDescriptor = this.#childContext.get(propName);
+
     if (!propDescriptor) {
       this.#childContext.set(propName, (propDescriptor = {}));
     }
+
     return propDescriptor;
   }
 
@@ -225,6 +231,7 @@ export default class Documentation {
     if (this.#composes.size > 0) {
       obj.composes = Array.from(this.#composes);
     }
+
     return obj;
   }
 }

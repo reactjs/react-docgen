@@ -22,6 +22,7 @@ function getDefaultValue(path: NodePath): DefaultValueDescriptor | null {
   let defaultValue: string | undefined;
   let resolvedPath = path;
   let valuePath = path;
+
   if (path.isBooleanLiteral()) {
     defaultValue = `${path.node.value}`;
   } else if (path.isNullLiteral()) {
@@ -73,6 +74,7 @@ function getDefaultPropsPath(
     componentDefinition,
     'defaultProps',
   );
+
   if (!defaultPropsPath) {
     return null;
   }
@@ -92,10 +94,12 @@ function getDefaultPropsPath(
     // an object literal.
     const returnValue =
       resolveFunctionDefinitionToReturnValue(defaultPropsPath);
+
     if (returnValue && returnValue.isObjectExpression()) {
       defaultPropsPath = returnValue;
     }
   }
+
   return defaultPropsPath;
 }
 
@@ -150,6 +154,7 @@ const defaultPropsHandler: Handler = function (
 ): void {
   let statelessProps: NodePath | null = null;
   const defaultPropsPath = getDefaultPropsPath(componentDefinition);
+
   /**
    * function, lazy, memo, forwardRef etc components can resolve default props as well
    */

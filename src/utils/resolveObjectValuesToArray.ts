@@ -24,6 +24,7 @@ function isObjectValuesCall(path: NodePath): path is NodePath<CallExpression> {
   }
 
   const callee = path.get('callee');
+
   if (!callee.isMemberExpression()) {
     return false;
   }
@@ -96,6 +97,7 @@ export function resolveObjectToPropMap(
             | SpreadElement
           >
         >);
+
     members.forEach(propPath => {
       if (error || propPath.isObjectMethod()) return;
 
@@ -132,8 +134,10 @@ export function resolveObjectToPropMap(
         propPath.isObjectTypeSpreadProperty()
       ) {
         let spreadObject = resolveToValue(propPath.get('argument') as NodePath);
+
         if (spreadObject.isGenericTypeAnnotation()) {
           const typeAlias = resolveToValue(spreadObject.get('id'));
+
           if (
             typeAlias.isTypeAlias() &&
             typeAlias.get('right').isObjectTypeAnnotation()
@@ -143,8 +147,10 @@ export function resolveObjectToPropMap(
         }
 
         const spreadValues = resolveObjectToPropMap(spreadObject);
+
         if (!spreadValues) {
           error = true;
+
           return;
         }
         spreadValues.properties.forEach(spreadProp => {

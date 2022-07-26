@@ -58,6 +58,7 @@ function getMethodParamOptional(
   path: NodePath<FunctionType['params'][number]>,
 ): boolean {
   let identifier: NodePath = path;
+
   if (identifier.isTSParameterProperty()) {
     identifier = identifier.get('parameter');
   }
@@ -78,6 +79,7 @@ function getMethodParamsDoc(methodPath: MethodNodePath): MethodParameter[] {
     functionExpression.get('params').forEach(paramPath => {
       let type: TypeDescriptor | null = null;
       const typePath = getTypeAnnotation<FlowType | TSType>(paramPath);
+
       if (typePath) {
         if (typePath.isFlowType()) {
           type = getFlowType(typePath, null);
@@ -113,6 +115,7 @@ function getMethodReturnDoc(methodPath: MethodNodePath): MethodReturn | null {
     const returnType = getTypeAnnotation(
       functionExpression.get('returnType') as NodePath,
     );
+
     if (returnType && returnType.isFlowType()) {
       return { type: getFlowType(returnType, null) };
     } else if (returnType) {
@@ -145,6 +148,7 @@ function getMethodModifiers(
   }
 
   const functionExpression = getMethodFunctionExpression(methodPath);
+
   if (functionExpression) {
     if (
       functionExpression.isClassMethod() ||
@@ -174,8 +178,10 @@ function getMethodName(
 ): string | null {
   if (methodPath.isAssignmentExpression()) {
     const left = methodPath.get('left');
+
     if (left.isMemberExpression()) {
       const property = left.get('property');
+
       if (!left.node.computed && property.isIdentifier()) {
         return property.node.name;
       }
@@ -204,6 +210,7 @@ function getMethodAccessibility(
 function getMethodDocblock(methodPath: MethodNodePath): string | null {
   if (methodPath.isAssignmentExpression()) {
     let path: NodePath | null = methodPath;
+
     do {
       path = path.parentPath;
     } while (path && !path.isExpressionStatement());
@@ -211,6 +218,7 @@ function getMethodDocblock(methodPath: MethodNodePath): string | null {
     if (path) {
       return getDocblock(path);
     }
+
     return null;
   }
 
@@ -233,6 +241,7 @@ export default function getMethodDocumentation(
   }
 
   const name = getMethodName(methodPath);
+
   if (!name) return null;
 
   return {

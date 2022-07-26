@@ -410,6 +410,7 @@ describe('codeTypeHandler', () => {
         type Props = { foo: string };
         React.forwardRef((props: Props, ref) => <div ref={ref}>{props.foo}</div>);
       `;
+
       codeTypeHandler(documentation, parse.expressionLast<CallExpression>(src));
       expect(documentation.descriptors).toEqual({
         foo: {
@@ -427,6 +428,7 @@ describe('codeTypeHandler', () => {
         const ComponentImpl = (props: Props, ref) => <div ref={ref}>{props.foo}</div>;
         React.forwardRef(ComponentImpl);
       `;
+
       codeTypeHandler(documentation, parse.expressionLast<CallExpression>(src));
       expect(documentation.descriptors).toEqual({
         foo: {
@@ -444,6 +446,7 @@ describe('codeTypeHandler', () => {
         let Component = (props: Props, ref) => <div ref={ref}>{props.foo}</div>;
         Component = React.forwardRef(Component);
       `;
+
       codeTypeHandler(
         documentation,
         parse.expressionLast(src).get('right') as NodePath<CallExpression>,

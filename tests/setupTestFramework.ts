@@ -22,6 +22,7 @@ const matchers = {
     // the next Node it finds even if value is an array
     const receivedNode = received.node;
     let expectedNode: Node;
+
     if (expected instanceof NodePath) {
       expectedNode = expected.node;
     } else {

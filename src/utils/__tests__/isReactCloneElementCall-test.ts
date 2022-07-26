@@ -16,6 +16,7 @@ describe('isReactCloneElementCall', () => {
         var React = require("React");
         React.cloneElement({});
       `);
+
       expect(isReactCloneElementCall(def)).toBe(true);
     });
 
@@ -24,6 +25,7 @@ describe('isReactCloneElementCall', () => {
         var other = require("React");
         other.cloneElement({});
       `);
+
       expect(isReactCloneElementCall(def)).toBe(true);
     });
 
@@ -32,6 +34,7 @@ describe('isReactCloneElementCall', () => {
         var React = require("React");
         React.isValidElement({});
       `);
+
       expect(isReactCloneElementCall(def)).toBe(false);
     });
 
@@ -40,6 +43,7 @@ describe('isReactCloneElementCall', () => {
         var React = require("bob");
         React.cloneElement({});
       `);
+
       expect(isReactCloneElementCall(def)).toBe(false);
     });
 
@@ -48,6 +52,7 @@ describe('isReactCloneElementCall', () => {
         var { cloneElement } = require("react");
         cloneElement({});
       `);
+
       expect(isReactCloneElementCall(def)).toBe(true);
     });
 
@@ -56,6 +61,7 @@ describe('isReactCloneElementCall', () => {
         var { cloneElement: foo } = require("react");
         foo({});
       `);
+
       expect(isReactCloneElementCall(def)).toBe(true);
     });
 
@@ -64,6 +70,7 @@ describe('isReactCloneElementCall', () => {
         import { cloneElement } from "react";
         cloneElement({});
       `);
+
       expect(isReactCloneElementCall(def)).toBe(true);
     });
 
@@ -72,6 +79,7 @@ describe('isReactCloneElementCall', () => {
         import { cloneElement as foo } from "react";
         foo({});
       `);
+
       expect(isReactCloneElementCall(def)).toBe(true);
     });
 
@@ -83,6 +91,7 @@ describe('isReactCloneElementCall', () => {
       `,
         mockImporter,
       );
+
       expect(isReactCloneElementCall(def)).toBe(true);
     });
   });

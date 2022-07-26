@@ -12,6 +12,7 @@ describe('getPropertyValuePath', () => {
     const objectExpressionPath = parse
       .statement<ExpressionStatement>('({foo: 21, bar: 42})')
       .get('expression') as NodePath<ObjectExpression>;
+
     expect(getPropertyValuePath(objectExpressionPath, 'bar')).toBe(
       objectExpressionPath.get('properties')[1].get('value'),
     );
@@ -26,6 +27,7 @@ describe('getPropertyValuePath', () => {
     `,
       )
       .get('expression') as NodePath<ObjectExpression>;
+
     expect(getPropertyValuePath(objectExpressionPath, 'bar')).toBe(
       objectExpressionPath.get('properties')[1].get('value'),
     );
@@ -35,6 +37,7 @@ describe('getPropertyValuePath', () => {
     const objectExpressionPath = parse
       .statement<ExpressionStatement>('({foo: 21, bar: 42})')
       .get('expression') as NodePath<ObjectExpression>;
+
     expect(getPropertyValuePath(objectExpressionPath, 'baz')).toBeNull();
   });
 
@@ -48,6 +51,7 @@ describe('getPropertyValuePath', () => {
         mockImporter,
       )
       .get('expression') as NodePath<ObjectExpression>;
+
     expect(getPropertyValuePath(objectExpressionPath, 'bar')).toBe(
       objectExpressionPath.get('properties')[1].get('value'),
     );
@@ -57,6 +61,7 @@ describe('getPropertyValuePath', () => {
     const objectExpressionPath = parse
       .statement<ExpressionStatement>('({ foo(){} })')
       .get('expression') as NodePath<ObjectExpression>;
+
     expect(getPropertyValuePath(objectExpressionPath, 'foo')).toBe(
       objectExpressionPath.get('properties')[0],
     );

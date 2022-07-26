@@ -1,6 +1,5 @@
 import type { NodePath } from '@babel/traverse';
 import { parse, noopImporter, makeMockImporter } from '../../../tests/utils';
-
 import findAllExportedComponentDefinitions from '../findAllExportedComponentDefinitions';
 
 describe('findAllExportedComponentDefinitions', () => {

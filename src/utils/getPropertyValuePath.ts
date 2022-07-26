@@ -24,5 +24,6 @@ export default function getPropertyValuePath(
       ? property
       : (property.get('value') as NodePath<Expression>);
   }
+
   return null;
 }

@@ -19,26 +19,31 @@ describe('isReactComponentClass', () => {
   describe('render method', () => {
     it('ignores class declarations with a render method without superclass', () => {
       const def = parse.statement('class Foo { render() {}}');
+
       expect(isReactComponentClass(def)).toBe(false);
     });
 
     it('ignores class expression with a render method without superclass', () => {
       const def = parse.expression('class { render() {}}');
+
       expect(isReactComponentClass(def)).toBe(false);
     });
 
     it('ignores static render methods', () => {
       const def = parse.statement('class Foo { static render() {}}');
+
       expect(isReactComponentClass(def)).toBe(false);
     });
 
     it('ignores dynamic render methods', () => {
       const def = parse.statement('class Foo { static [render]() {}}');
+
       expect(isReactComponentClass(def)).toBe(false);
     });
 
     it('ignores getter or setter render methods', () => {
       let def = parse.statement('class Foo { get render() {}}');
+
       expect(isReactComponentClass(def)).toBe(false);
 
       def = parse.statement('class Foo { set render(value) {}}');
@@ -174,6 +179,7 @@ describe('isReactComponentClass', () => {
         `var {PureComponent} = require('FakeReact');
         class Foo extends PureComponent {}`,
       );
+
       expect(isReactComponentClass(def)).toBe(false);
     });
 

@@ -9,6 +9,7 @@ describe('parse', () => {
     const path = testParse.expression<ObjectExpression>('{foo: "bar"}');
     const resolver = jest.fn(() => [path]);
     const handler = jest.fn();
+
     parse('//empty', resolver, [handler], noopImporter);
 
     expect(resolver).toBeCalled();
@@ -17,6 +18,7 @@ describe('parse', () => {
 
   it('errors if component definition is not found', () => {
     const resolver = jest.fn(() => []);
+
     expect(() => parse('//empty', resolver, [], noopImporter)).toThrowError(
       ERROR_MISSING_DEFINITION,
     );

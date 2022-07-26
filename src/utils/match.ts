@@ -23,5 +23,6 @@ export default function match(node: Node, pattern: Pattern): boolean {
       return false;
     }
   }
+
   return true;
 }

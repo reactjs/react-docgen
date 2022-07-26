@@ -18,6 +18,7 @@ describe('isReactForwardRefCall', () => {
           render() {}
         });
       `);
+
       expect(isReactForwardRefCall(def)).toBe(true);
     });
 
@@ -28,6 +29,7 @@ describe('isReactForwardRefCall', () => {
           render() {}
         });
       `);
+
       expect(isReactForwardRefCall(def)).toBe(true);
     });
 
@@ -36,6 +38,7 @@ describe('isReactForwardRefCall', () => {
         var React = require("React");
         React.isValidElement({});
       `);
+
       expect(isReactForwardRefCall(def)).toBe(false);
     });
 
@@ -46,6 +49,7 @@ describe('isReactForwardRefCall', () => {
           render() {}
         });
       `);
+
       expect(isReactForwardRefCall(def)).toBe(false);
     });
 
@@ -54,6 +58,7 @@ describe('isReactForwardRefCall', () => {
         var { forwardRef } = require("react");
         forwardRef({});
       `);
+
       expect(isReactForwardRefCall(def)).toBe(true);
     });
 
@@ -62,6 +67,7 @@ describe('isReactForwardRefCall', () => {
         var { forwardRef: foo } = require("react");
         foo({});
       `);
+
       expect(isReactForwardRefCall(def)).toBe(true);
     });
 
@@ -70,6 +76,7 @@ describe('isReactForwardRefCall', () => {
         import { forwardRef } from "react";
         forwardRef({});
       `);
+
       expect(isReactForwardRefCall(def)).toBe(true);
     });
 
@@ -78,6 +85,7 @@ describe('isReactForwardRefCall', () => {
         import { forwardRef, memo } from "react";
         memo(forwardRef({}));
       `);
+
       expect(isReactForwardRefCall(def)).toBe(false);
     });
 
@@ -86,6 +94,7 @@ describe('isReactForwardRefCall', () => {
         import { forwardRef as foo } from "react";
         foo({});
       `);
+
       expect(isReactForwardRefCall(def)).toBe(true);
     });
 
@@ -97,6 +106,7 @@ describe('isReactForwardRefCall', () => {
       `,
         mockImporter,
       );
+
       expect(isReactForwardRefCall(def)).toBe(true);
     });
   });

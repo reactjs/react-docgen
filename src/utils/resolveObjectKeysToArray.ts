@@ -37,6 +37,7 @@ function isWhitelistedObjectProperty(path: NodePath): boolean {
       (path.node.kind === 'get' || path.node.kind === 'set'))
   ) {
     const key = path.get('key') as NodePath;
+
     return (
       (key.isIdentifier() && !path.node.computed) ||
       key.isStringLiteral() ||
@@ -73,6 +74,7 @@ export function resolveObjectToNameArray(
     const properties = objectPath.isTSTypeLiteral()
       ? objectPath.get('members')
       : (objectPath.get('properties') as NodePath[]);
+
     properties.forEach(propPath => {
       if (error) return;
 
@@ -99,18 +101,22 @@ export function resolveObjectToNameArray(
         propPath.isObjectTypeSpreadProperty()
       ) {
         let spreadObject = resolveToValue(propPath.get('argument') as NodePath);
+
         if (spreadObject.isGenericTypeAnnotation()) {
           const typeAliasRight = resolveToValue(spreadObject.get('id')).get(
             'right',
           ) as NodePath;
+
           if (typeAliasRight.isObjectTypeAnnotation()) {
             spreadObject = resolveToValue(typeAliasRight);
           }
         }
 
         const spreadValues = resolveObjectToNameArray(spreadObject);
+
         if (!spreadValues) {
           error = true;
+
           return;
         }
         values = [...values, ...spreadValues];

@@ -92,6 +92,7 @@ export default function getMemberValuePath(
   memberName: string,
 ): NodePath<ClassMethod | Expression | ObjectMethod> | null {
   let result: NodePath<ClassMethod | Expression | ObjectMethod> | null;
+
   if (componentDefinition.isObjectExpression()) {
     result = getPropertyValuePath(componentDefinition, memberName);
     if (!result && memberName === 'defaultProps') {
@@ -116,6 +117,7 @@ export default function getMemberValuePath(
   }
 
   const postprocessMethod = POSTPROCESS_MEMBERS.get(memberName);
+
   if (result && postprocessMethod) {
     result = postprocessMethod(result);
   }

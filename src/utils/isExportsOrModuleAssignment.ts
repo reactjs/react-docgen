@@ -17,6 +17,7 @@ export default function isExportsOrModuleAssignment(path: NodePath): boolean {
   }
 
   const exprArr = expressionTo.Array(path.get('left'));
+
   return (
     (exprArr[0] === 'module' && exprArr[1] === 'exports') ||
     exprArr[0] === 'exports'

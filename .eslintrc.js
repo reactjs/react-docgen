@@ -10,6 +10,23 @@ module.exports = {
   rules: {
     'no-shadow': 'error',
     'no-var': 'error',
+    'padding-line-between-statements': [
+      'error',
+      // Require newline before return
+      { blankLine: 'always', prev: '*', next: 'return' },
+      // Require newline after a batch of variable declarations
+      { blankLine: 'always', prev: ['const', 'let', 'var'], next: '*' },
+      {
+        blankLine: 'any',
+        prev: ['const', 'let', 'var'],
+        next: ['const', 'let', 'var'],
+      },
+      {
+        blankLine: 'never',
+        prev: ['import'],
+        next: ['import'],
+      },
+    ],
     'prefer-const': 'error',
     strict: ['error', 'never'],
   },

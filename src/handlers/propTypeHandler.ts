@@ -15,9 +15,11 @@ import type { ComponentNode } from '../resolver';
 
 function isPropTypesExpression(path: NodePath): boolean {
   const moduleName = resolveToModule(path);
+
   if (moduleName) {
     return isReactModuleName(moduleName) || moduleName === 'ReactPropTypes';
   }
+
   return false;
 }
 
@@ -32,6 +34,7 @@ function amendPropTypes(
   path.get('properties').forEach(propertyPath => {
     if (propertyPath.isObjectProperty()) {
       const propName = getPropertyName(propertyPath);
+
       if (!propName) return;
 
       const propDescriptor = getDescriptor(propName);
@@ -48,6 +51,7 @@ function amendPropTypes(
     }
     if (propertyPath.isSpreadElement()) {
       const resolvedValuePath = resolveToValue(propertyPath.get('argument'));
+
       if (resolvedValuePath.isObjectExpression()) {
         // normal object literal
         amendPropTypes(getDescriptor, resolvedValuePath);
@@ -65,6 +69,7 @@ function getPropTypeHandler(propName: string): Handler {
       componentDefinition,
       propName,
     );
+
     if (!propTypesPath) {
       return;
     }
@@ -73,6 +78,7 @@ function getPropTypeHandler(propName: string): Handler {
       return;
     }
     let getDescriptor;
+
     switch (propName) {
       case 'childContextTypes':
         getDescriptor = documentation.getChildContextDescriptor;

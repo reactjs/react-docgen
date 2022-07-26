@@ -30,6 +30,7 @@ function isMethod(path: NodePath): boolean {
     (path.isClassProperty() || path.isObjectProperty())
   ) {
     const value = resolveToValue(path.get('value') as NodePath);
+
     isProbablyMethod = value.isFunction();
   }
 
@@ -52,6 +53,7 @@ function findAssignedMethods(
   traverseShallow(path, {
     AssignmentExpression(assignmentPath) {
       const node = assignmentPath.node;
+
       if (
         match(node.left, {
           type: 'MemberExpression',
@@ -79,6 +81,7 @@ const componentMethodsHandler: Handler = function (
 ): void {
   // Extract all methods from the class or object.
   let methodPaths: Array<{ path: MethodNodePath; isStatic?: boolean }> = [];
+
   if (isReactComponentClass(componentDefinition)) {
     methodPaths = (
       componentDefinition
@@ -95,6 +98,7 @@ const componentMethodsHandler: Handler = function (
 
     // Add the statics object properties.
     const statics = getMemberValuePath(componentDefinition, 'statics');
+
     if (statics && statics.isObjectExpression()) {
       statics.get('properties').forEach(property => {
         if (isMethod(property)) {

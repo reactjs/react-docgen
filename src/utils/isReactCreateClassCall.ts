@@ -18,6 +18,7 @@ function isReactCreateClassCallModular(path: NodePath): boolean {
     return false;
   }
   const module = resolveToModule(path);
+
   return Boolean(module && module === 'create-react-class');
 }
 

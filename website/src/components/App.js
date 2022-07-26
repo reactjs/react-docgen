@@ -72,6 +72,7 @@ export default class App extends React.Component {
     this._jsonRef = React.createRef();
 
     const options = this.buildOptions('js');
+
     this.state = {
       value: this.compile(codeSample, options),
       mode: 'application/json',
@@ -107,6 +108,7 @@ export default class App extends React.Component {
         plugins: [...defaultPlugins],
       },
     };
+
     switch (language) {
       case 'ts':
         options.parserOptions.plugins.push('typescript');

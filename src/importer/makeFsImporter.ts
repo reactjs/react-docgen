@@ -34,6 +34,7 @@ export default function makeFsImporter(
     // Also never traverse into react itself.
     const source = path.node.source?.value;
     const options = state.opts;
+
     if (!source || !options || !options.filename || source === 'react') {
       return null;
     }
@@ -56,9 +57,11 @@ export default function makeFsImporter(
     seen.add(resolvedSource);
 
     let nextState = cache.get(resolvedSource);
+
     if (!nextState) {
       // Read and parse the code
       const src = fs.readFileSync(resolvedSource, 'utf8');
+
       nextState = state.parse(src);
 
       cache.set(resolvedSource, nextState);
@@ -78,6 +81,7 @@ export default function makeFsImporter(
     traverseShallow(state.path, {
       ExportNamedDeclaration(path) {
         const { declaration, specifiers, source } = path.node;
+
         if (
           declaration &&
           'id' in declaration &&
@@ -95,6 +99,7 @@ export default function makeFsImporter(
             .get('declarations')
             .forEach(declPath => {
               const id = declPath.get('id');
+
               // TODO: ArrayPattern and ObjectPattern
               if (
                 id.isIdentifier() &&
@@ -117,6 +122,7 @@ export default function makeFsImporter(
                   'local' in specifierPath.node
                     ? specifierPath.node.local.name
                     : 'default';
+
                 resultPath = resolveImportedValue(path, local, state, seen);
               } else if ('local' in specifierPath.node) {
                 resultPath = specifierPath.get('local') as NodePath;
@@ -136,6 +142,7 @@ export default function makeFsImporter(
       },
       ExportAllDeclaration(path) {
         const resolvedPath = resolveImportedValue(path, name, state, seen);
+
         if (resolvedPath) {
           resultPath = resolvedPath;
         }

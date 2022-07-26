@@ -11,10 +11,12 @@ export default function resolveFunctionDefinitionToReturnValue(
   let returnPath: NodePath | null = null;
 
   const body = path.get('body');
+
   traverseShallow(body, {
     Function: ignore,
     ReturnStatement: nodePath => {
       const argument = nodePath.get('argument');
+
       if (argument.hasNode()) {
         returnPath = resolveToValue(argument);
       }

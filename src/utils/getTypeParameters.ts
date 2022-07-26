@@ -26,6 +26,7 @@ export default function getTypeParameters(
   const numInstantiationParams = instantiation.node.params.length;
 
   let i = 0;
+
   declaration.get('params').forEach(paramPath => {
     const key = paramPath.node.name;
     const defaultTypePath = paramPath.node.default

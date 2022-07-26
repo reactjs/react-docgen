@@ -16,9 +16,11 @@ export default function setPropDescription(
   >,
 ): void {
   const propName = getPropertyName(propertyPath);
+
   if (!propName) return;
 
   const propDescriptor = documentation.getPropDescriptor(propName);
+
   if (propDescriptor.description) return;
 
   propDescriptor.description = getDocblock(propertyPath) || '';

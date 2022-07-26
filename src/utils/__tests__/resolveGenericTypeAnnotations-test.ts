@@ -7,6 +7,7 @@ describe('resolveGenericTypeAnnotation', () => {
         var x: Props;
         type Props = { x: string };
     `;
+
     expect(
       resolveGenericTypeAnnotation(
         parse

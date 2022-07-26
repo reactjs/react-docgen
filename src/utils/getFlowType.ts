@@ -78,12 +78,14 @@ function handleKeysHelper(
   path: NodePath<GenericTypeAnnotation>,
 ): ElementsType | null {
   let value = path.get('typeParameters').get('params')[0];
+
   if (value.isTypeofTypeAnnotation()) {
     value = value.get('argument').get('id');
   } else if (!value.isObjectTypeAnnotation()) {
     value = value.get('id');
   }
   const resolvedPath = resolveToValue(value);
+
   if (
     resolvedPath &&
     (resolvedPath.isObjectExpression() || resolvedPath.isObjectTypeAnnotation())
@@ -121,6 +123,7 @@ function handleGenericTypeAnnotation(
 ): TypeDescriptor | null {
   const id = path.get('id');
   const typeParameters = path.get('typeParameters');
+
   if (
     id.isIdentifier() &&
     id.node.name === '$Keys' &&
@@ -130,8 +133,10 @@ function handleGenericTypeAnnotation(
   }
 
   let type: TypeDescriptor;
+
   if (id.isQualifiedTypeIdentifier()) {
     const qualification = id.get('qualification');
+
     if (qualification.isIdentifier() && qualification.node.name === 'React') {
       type = {
         name: `${qualification.node.name}${id.node.id.name}`,
@@ -202,6 +207,7 @@ function handleObjectTypeAnnotation(
   };
 
   const callProperties = path.get('callProperties');
+
   if (Array.isArray(callProperties)) {
     callProperties.forEach(param => {
       type.signature.constructor = getFlowTypeWithResolvedTypes(
@@ -212,6 +218,7 @@ function handleObjectTypeAnnotation(
   }
 
   const indexers = path.get('indexers');
+
   if (Array.isArray(indexers)) {
     indexers.forEach(param => {
       type.signature.properties.push({
@@ -230,8 +237,10 @@ function handleObjectTypeAnnotation(
       });
     } else if (param.isObjectTypeSpreadProperty()) {
       let spreadObject = resolveToValue(param.get('argument'));
+
       if (spreadObject.isGenericTypeAnnotation()) {
         const typeAlias = resolveToValue(spreadObject.get('id'));
+
         if (
           typeAlias.isTypeAlias() &&
           typeAlias.get('right').isObjectTypeAnnotation()
@@ -245,6 +254,7 @@ function handleObjectTypeAnnotation(
           spreadObject,
           typeParams,
         ) as ObjectSignatureType;
+
         type.signature.properties.push(...props.signature.properties);
       }
     }
@@ -298,6 +308,7 @@ function handleNullableTypeAnnotation(
   if (!typeAnnotation) return null;
 
   const type = getFlowTypeWithResolvedTypes(typeAnnotation, typeParams);
+
   type.nullable = true;
 
   return type;
@@ -329,6 +340,7 @@ function handleFunctionTypeAnnotation(
   });
 
   const rest = path.get('rest');
+
   if (rest.hasNode()) {
     const typeAnnotation = getTypeAnnotation(rest);
 
@@ -378,6 +390,7 @@ function getFlowTypeWithResolvedTypes(
   const parent = path.parentPath;
 
   const isTypeAlias = parent.isTypeAlias();
+
   // When we see a typealias mark it as visited so that the next
   // call of this function does not run into an endless loop
   if (isTypeAlias) {
@@ -442,6 +455,7 @@ export default function getFlowType(
   // After: cleanup memory after we are done here
   visitedTypes = {};
   const type = getFlowTypeWithResolvedTypes(path, typeParams);
+
   visitedTypes = {};
 
   return type;

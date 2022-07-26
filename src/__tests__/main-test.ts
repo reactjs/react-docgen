@@ -7,6 +7,7 @@ describe('main', () => {
   function test(source: string) {
     it('parses with default resolver/handlers', () => {
       const docs = parse(source);
+
       expect(docs).toMatchSnapshot();
     });
 
@@ -14,6 +15,7 @@ describe('main', () => {
       const docs = parse(source, undefined, [
         handlers.componentDocblockHandler,
       ]);
+
       expect(docs).toMatchSnapshot();
     });
   }
@@ -196,12 +198,14 @@ describe('main', () => {
   describe('fixtures', () => {
     const fixturePath = path.join(__dirname, 'fixtures');
     const fileNames = fs.readdirSync(fixturePath);
+
     for (let i = 0; i < fileNames.length; i++) {
       const filePath = path.join(fixturePath, fileNames[i]);
       const fileContent = fs.readFileSync(filePath, 'utf8');
 
       it(`processes component "${fileNames[i]}" without errors`, () => {
         let result;
+
         expect(() => {
           result = parse(
             fileContent,

@@ -2,7 +2,6 @@ import React from 'react';
 import CodeMirror from 'codemirror';
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/jsx/jsx';
-
 import 'codemirror/addon/fold/foldgutter';
 import 'codemirror/addon/fold/brace-fold';
 import 'codemirror/addon/fold/comment-fold';
@@ -35,6 +34,7 @@ export default class CodeMirrorPanel extends React.Component {
       },
       this.props,
     );
+
     delete options.value;
     delete options.onChange;
     delete options.codeSample;

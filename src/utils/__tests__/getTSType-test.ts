@@ -108,6 +108,7 @@ describe('getTSType', () => {
 
     simplePropTypes.forEach(type => {
       const typePath = typeAlias(`let x: ${type};`);
+
       expect(getTSType(typePath)).toEqual({ name: type });
     });
   });
@@ -118,6 +119,7 @@ describe('getTSType', () => {
     literalTypes.forEach(value => {
       it(`detects ${value}`, () => {
         const typePath = typeAlias(`let x: ${value};`);
+
         expect(getTSType(typePath)).toEqual({
           name: 'literal',
           value: `${value}`,
@@ -128,6 +130,7 @@ describe('getTSType', () => {
 
   it('detects external type', () => {
     const typePath = typeAlias('let x: xyz;');
+
     expect(getTSType(typePath)).toEqual({ name: 'xyz' });
   });
 
@@ -139,11 +142,13 @@ describe('getTSType', () => {
     `,
       mockImporter,
     );
+
     expect(getTSType(typePath)).toEqual({ name: 'string' });
   });
 
   it('detects array type shorthand', () => {
     const typePath = typeAlias('let x: number[];');
+
     expect(getTSType(typePath)).toEqual({
       name: 'Array',
       elements: [{ name: 'number' }],
@@ -153,6 +158,7 @@ describe('getTSType', () => {
 
   it('detects array type', () => {
     const typePath = typeAlias('let x: Array<number>;');
+
     expect(getTSType(typePath)).toEqual({
       name: 'Array',
       elements: [{ name: 'number' }],
@@ -162,6 +168,7 @@ describe('getTSType', () => {
 
   it('detects array type with multiple types', () => {
     const typePath = typeAlias('let x: Array<number, xyz>;');
+
     expect(getTSType(typePath)).toEqual({
       name: 'Array',
       elements: [{ name: 'number' }, { name: 'xyz' }],
@@ -177,6 +184,7 @@ describe('getTSType', () => {
     `,
       mockImporter,
     );
+
     expect(getTSType(typePath)).toEqual({
       name: 'Array',
       elements: [{ name: 'string' }],
@@ -212,6 +220,7 @@ describe('getTSType', () => {
 
   it('detects class type', () => {
     const typePath = typeAlias('let x: Class<Boolean>;');
+
     expect(getTSType(typePath)).toEqual({
       name: 'Class',
       elements: [{ name: 'Boolean' }],
@@ -227,6 +236,7 @@ describe('getTSType', () => {
     `,
       mockImporter,
     );
+
     expect(getTSType(typePath)).toEqual({
       name: 'Class',
       elements: [{ name: 'string' }],
@@ -236,6 +246,7 @@ describe('getTSType', () => {
 
   it('detects function type with subtype', () => {
     const typePath = typeAlias('let x: Function<xyz>;');
+
     expect(getTSType(typePath)).toEqual({
       name: 'Function',
       elements: [{ name: 'xyz' }],
@@ -251,6 +262,7 @@ describe('getTSType', () => {
     `,
       mockImporter,
     );
+
     expect(getTSType(typePath)).toEqual({
       name: 'Function',
       elements: [{ name: 'string' }],
@@ -260,6 +272,7 @@ describe('getTSType', () => {
 
   it('detects object types', () => {
     const typePath = typeAlias('let x: { a: string, b?: xyz };');
+
     expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'object',
@@ -281,6 +294,7 @@ describe('getTSType', () => {
     `,
       mockImporter,
     );
+
     expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'object',
@@ -296,6 +310,7 @@ describe('getTSType', () => {
 
   it('detects union type', () => {
     const typePath = typeAlias('let x: string | xyz | "foo" | void;');
+
     expect(getTSType(typePath)).toEqual({
       name: 'union',
       elements: [
@@ -316,6 +331,7 @@ describe('getTSType', () => {
     `,
       mockImporter,
     );
+
     expect(getTSType(typePath)).toEqual({
       name: 'union',
       elements: [
@@ -337,6 +353,7 @@ describe('getTSType', () => {
 
   it('detects intersection type', () => {
     const typePath = typeAlias('let x: string & xyz & "foo" & void;');
+
     expect(getTSType(typePath)).toEqual({
       name: 'intersection',
       elements: [
@@ -357,6 +374,7 @@ describe('getTSType', () => {
     `,
       mockImporter,
     );
+
     expect(getTSType(typePath)).toEqual({
       name: 'intersection',
       elements: [
@@ -380,6 +398,7 @@ describe('getTSType', () => {
     const typePath = typeAlias(
       'let x: (p1: number, p2: string, ...rest: Array<string>) => boolean;',
     );
+
     expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'function',
@@ -405,6 +424,7 @@ describe('getTSType', () => {
 
   it('detects function signature type with `this` parameter', () => {
     const typePath = typeAlias('let x: (this: Foo, p1: number) => boolean;');
+
     expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'function',
@@ -421,6 +441,7 @@ describe('getTSType', () => {
     const typePath = typeAlias(
       'let x: { (str: string): string, token: string };',
     );
+
     expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'object',
@@ -452,6 +473,7 @@ describe('getTSType', () => {
     `,
       mockImporter,
     );
+
     expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'function',
@@ -526,6 +548,7 @@ describe('getTSType', () => {
     const typePath = typeAlias(
       'let x: { [key: string]: number, [key: "xl"]: string, token: "a" | "b" };',
     );
+
     expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'object',
@@ -567,6 +590,7 @@ describe('getTSType', () => {
     `,
       mockImporter,
     );
+
     expect(getTSType(typePath)).toEqual({
       name: 'signature',
       type: 'object',
@@ -600,6 +624,7 @@ describe('getTSType', () => {
 
   it('detects tuple signature', () => {
     const typePath = typeAlias('let x: [string, number];');
+
     expect(getTSType(typePath)).toEqual({
       name: 'tuple',
       elements: [{ name: 'string' }, { name: 'number' }],
@@ -609,6 +634,7 @@ describe('getTSType', () => {
 
   it('detects tuple in union signature', () => {
     const typePath = typeAlias('let x: [string, number] | [number, string];');
+
     expect(getTSType(typePath)).toEqual({
       name: 'union',
       elements: [
@@ -636,6 +662,7 @@ describe('getTSType', () => {
     `,
       mockImporter,
     );
+
     expect(getTSType(typePath)).toEqual({
       name: 'tuple',
       elements: [{ name: 'string' }, { name: 'number' }],
@@ -675,6 +702,7 @@ describe('getTSType', () => {
 
       interface A { x: string };
     `);
+
     expect(getTSType(typePath)).toEqual({
       name: 'A["x"]',
       raw: 'A["x"]',
@@ -687,6 +715,7 @@ describe('getTSType', () => {
 
       type A = { x: string };
     `);
+
     expect(getTSType(typePath)).toEqual({
       name: 'string',
       raw: 'A["x"]',
@@ -710,6 +739,7 @@ describe('getTSType', () => {
       .get('id')
       .get('typeAnnotation')
       .get('typeAnnotation');
+
     expect(getTSType(typePath)).toEqual({
       name: 'STRING_VALS[number]',
       raw: 'typeof STRING_VALS[number]',
@@ -724,6 +754,7 @@ describe('getTSType', () => {
     `,
       mockImporter,
     );
+
     expect(getTSType(typePath)).toEqual({
       name: 'string',
       raw: 'A["x"]',

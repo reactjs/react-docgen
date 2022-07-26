@@ -43,14 +43,17 @@ const findExportedComponentDefinitions: Resolver = function (
           acc.push(definition);
         } else {
           const resolved = resolveToValue(resolveHOC(definition));
+
           if (isComponentDefinition(resolved)) {
             acc.push(resolved);
           }
         }
+
         return acc;
       }, [] as Array<NodePath<ComponentNode>>)
       .forEach(definition => {
         const resolved = resolveComponentDefinition(definition);
+
         if (resolved && components.indexOf(resolved) === -1) {
           components.push(resolved);
         }
@@ -74,6 +77,7 @@ const findExportedComponentDefinitions: Resolver = function (
       // Resolve the value of the right hand side. It should resolve to a call
       // expression, something like React.createClass
       let resolvedPath = resolveToValue(path.get('right'));
+
       if (!isComponentDefinition(resolvedPath)) {
         resolvedPath = resolveToValue(resolveHOC(resolvedPath));
         if (!isComponentDefinition(resolvedPath)) {
@@ -81,9 +85,11 @@ const findExportedComponentDefinitions: Resolver = function (
         }
       }
       const definition = resolveComponentDefinition(resolvedPath);
+
       if (definition && components.indexOf(definition) === -1) {
         components.push(definition);
       }
+
       return path.skip();
     },
   });

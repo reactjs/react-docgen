@@ -17,6 +17,7 @@ export default function resolveHOC(path: NodePath): NodePath {
   ) {
     const node = path.node;
     const argumentLength = node.arguments.length;
+
     if (argumentLength && argumentLength > 0) {
       const args = path.get('arguments');
       const firstArg = args[0];

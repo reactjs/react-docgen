@@ -18,6 +18,7 @@ describe('isReactCreateElementCall', () => {
           render() {}
         });
       `);
+
       expect(isReactCreateElementCall(def)).toBe(true);
     });
 
@@ -28,6 +29,7 @@ describe('isReactCreateElementCall', () => {
           render() {}
         });
       `);
+
       expect(isReactCreateElementCall(def)).toBe(true);
     });
 
@@ -36,6 +38,7 @@ describe('isReactCreateElementCall', () => {
         var React = require("React");
         React.isValidElement({});
       `);
+
       expect(isReactCreateElementCall(def)).toBe(false);
     });
 
@@ -46,6 +49,7 @@ describe('isReactCreateElementCall', () => {
           render() {}
         });
       `);
+
       expect(isReactCreateElementCall(def)).toBe(false);
     });
 
@@ -54,6 +58,7 @@ describe('isReactCreateElementCall', () => {
         var { createElement } = require("react");
         createElement({});
       `);
+
       expect(isReactCreateElementCall(def)).toBe(true);
     });
 
@@ -62,6 +67,7 @@ describe('isReactCreateElementCall', () => {
         var { createElement: foo } = require("react");
         foo({});
       `);
+
       expect(isReactCreateElementCall(def)).toBe(true);
     });
 
@@ -70,6 +76,7 @@ describe('isReactCreateElementCall', () => {
         import { createElement } from "react";
         createElement({});
       `);
+
       expect(isReactCreateElementCall(def)).toBe(true);
     });
 
@@ -78,6 +85,7 @@ describe('isReactCreateElementCall', () => {
         import { createElement as foo } from "react";
         foo({});
       `);
+
       expect(isReactCreateElementCall(def)).toBe(true);
     });
 
@@ -87,6 +95,7 @@ describe('isReactCreateElementCall', () => {
          foo({});`,
         mockImporter,
       );
+
       expect(isReactCreateElementCall(def)).toBe(true);
     });
   });

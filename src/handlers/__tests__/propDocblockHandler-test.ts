@@ -260,6 +260,7 @@ describe('propDocBlockHandler', () => {
   describe('does not error if propTypes cannot be found', () => {
     it('ObjectExpression', () => {
       const definition = parse.expression<ObjectExpression>('{fooBar: 42}');
+
       expect(() =>
         propDocBlockHandler(documentation, definition),
       ).not.toThrow();
@@ -267,6 +268,7 @@ describe('propDocBlockHandler', () => {
 
     it('ClassDeclaration', () => {
       const definition = parse.statement<ClassDeclaration>('class Foo {}');
+
       expect(() =>
         propDocBlockHandler(documentation, definition),
       ).not.toThrow();

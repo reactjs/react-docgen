@@ -21,6 +21,7 @@ describe('resolveToModule', () => {
       var foo = require("Foo");
       foo;
     `);
+
     expect(resolveToModule(path)).toBe('Foo');
   });
 
@@ -29,6 +30,7 @@ describe('resolveToModule', () => {
       var foo = require("Foo");
       foo();
     `);
+
     expect(resolveToModule(path)).toBe('Foo');
   });
 
@@ -37,6 +39,7 @@ describe('resolveToModule', () => {
       var foo = require("Foo");
       foo.bar().baz;
     `);
+
     expect(resolveToModule(path)).toBe('Foo');
   });
 
@@ -45,6 +48,7 @@ describe('resolveToModule', () => {
       var {foo} = require("Foo");
       foo;
     `);
+
     expect(resolveToModule(path)).toBe('Foo');
   });
 
@@ -54,6 +58,7 @@ describe('resolveToModule', () => {
         import foo from "Foo";
         foo;
       `);
+
       expect(resolveToModule(path)).toBe('Foo');
 
       path = parse.expressionLast(`
@@ -68,6 +73,7 @@ describe('resolveToModule', () => {
         import {foo, bar} from "Foo";
         bar;
       `);
+
       expect(resolveToModule(path)).toBe('Foo');
     });
 
@@ -76,6 +82,7 @@ describe('resolveToModule', () => {
         import {foo, bar as baz} from "Foo";
         baz;
       `);
+
       expect(resolveToModule(path)).toBe('Foo');
     });
 
@@ -84,6 +91,7 @@ describe('resolveToModule', () => {
         import * as foo from "Foo";
         foo;
       `);
+
       expect(resolveToModule(path)).toBe('Foo');
     });
 
@@ -95,6 +103,7 @@ describe('resolveToModule', () => {
       `,
         mockImporter,
       );
+
       expect(resolveToModule(path)).toBe('Baz');
     });
   });

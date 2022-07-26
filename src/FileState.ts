@@ -28,7 +28,9 @@ export default class FileState {
       Error: new (message?: string) => E,
     ): E & { node: Node } => {
       const err = new Error(msg);
+
       (err as E & { node: Node }).node = node;
+
       return err as E & { node: Node };
     },
   };

@@ -25,6 +25,7 @@ describe('resolveExportDeclaration', () => {
     const resolved = resolveExportDeclaration(exp);
 
     const declarations = exp.get('declaration').get('declarations');
+
     expect(resolved).toEqual([declarations[0], declarations[1]]);
   });
 
@@ -51,6 +52,7 @@ describe('resolveExportDeclaration', () => {
     const resolved = resolveExportDeclaration(exp);
 
     const specifiers = exp.get('specifiers');
+
     expect(resolved).toEqual([
       specifiers[0].get('local'),
       specifiers[1].get('local'),
@@ -65,6 +67,7 @@ describe('resolveExportDeclaration', () => {
     const resolved = resolveExportDeclaration(exp);
 
     const specifiers = exp.get('specifiers');
+
     expect(resolved).toEqual([
       specifiers[0].get('local'),
       specifiers[1].get('local'),

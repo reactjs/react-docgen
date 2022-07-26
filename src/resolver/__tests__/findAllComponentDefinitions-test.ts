@@ -53,6 +53,7 @@ describe('findAllComponentDefinitions', () => {
       `;
 
       const result = findComponentsInSource(source);
+
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(1);
       expect(result[0] instanceof NodePath).toBe(true);
@@ -68,6 +69,7 @@ describe('findAllComponentDefinitions', () => {
       `;
 
       const result = findComponentsInSource(source, mockImporter);
+
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(1);
       expect(result[0] instanceof NodePath).toBe(true);
@@ -82,6 +84,7 @@ describe('findAllComponentDefinitions', () => {
       `;
 
       const result = findComponentsInSource(source);
+
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(1);
     });
@@ -94,6 +97,7 @@ describe('findAllComponentDefinitions', () => {
       `;
 
       const result = findComponentsInSource(source);
+
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(0);
     });
@@ -107,6 +111,7 @@ describe('findAllComponentDefinitions', () => {
       `;
 
       const result = findComponentsInSource(source);
+
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(1);
     });
@@ -120,6 +125,7 @@ describe('findAllComponentDefinitions', () => {
       `;
 
       let result = findComponentsInSource(source);
+
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(2);
 
@@ -148,6 +154,7 @@ describe('findAllComponentDefinitions', () => {
       `;
 
       const result = findComponentsInSource(source);
+
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(4);
     });
@@ -161,6 +168,7 @@ describe('findAllComponentDefinitions', () => {
       `;
 
       const result = findComponentsInSource(source, mockImporter);
+
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(2);
     });
@@ -172,6 +180,7 @@ describe('findAllComponentDefinitions', () => {
       `;
 
       const result = findComponentsInSource(source);
+
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(1);
     });
@@ -183,6 +192,7 @@ describe('findAllComponentDefinitions', () => {
       `;
 
       const result = findComponentsInSource(source);
+
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(0);
     });
@@ -215,6 +225,7 @@ describe('findAllComponentDefinitions', () => {
       `;
 
       const result = findComponentsInSource(source);
+
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(7);
     });
@@ -230,6 +241,7 @@ describe('findAllComponentDefinitions', () => {
       `;
 
       const result = findComponentsInSource(source, mockImporter);
+
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(3);
     });
@@ -242,6 +254,7 @@ describe('findAllComponentDefinitions', () => {
       `;
 
       const result = findComponentsInSource(source);
+
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(1);
     });
@@ -253,6 +266,7 @@ describe('findAllComponentDefinitions', () => {
       `;
 
       const result = findComponentsInSource(source);
+
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(0);
     });
@@ -273,6 +287,7 @@ describe('findAllComponentDefinitions', () => {
       `;
 
       const result = findComponentsInSource(source);
+
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(1);
       expect(result[0].node.type).toEqual('CallExpression');
@@ -292,6 +307,7 @@ describe('findAllComponentDefinitions', () => {
       `;
 
       const result = findComponentsInSource(source);
+
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(1);
       expect(result[0].node.type).toEqual('CallExpression');
@@ -305,6 +321,7 @@ describe('findAllComponentDefinitions', () => {
       `;
 
       const result = findComponentsInSource(source, mockImporter);
+
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(1);
       expect(result[0].node.type).toEqual('CallExpression');
@@ -331,6 +348,7 @@ describe('findAllComponentDefinitions', () => {
       `;
 
       const result = findComponentsInSource(source);
+
       expect(Array.isArray(result)).toBe(true);
       expect(result.length).toBe(1);
       expect(result[0].node.type).toEqual('ArrowFunctionExpression');

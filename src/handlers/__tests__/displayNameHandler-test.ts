@@ -43,6 +43,7 @@ describe('defaultPropsHandler', () => {
     const definition = parse.expression<ObjectExpression>(
       '{displayName: "FooBar"}',
     );
+
     displayNameHandler(documentation, definition);
     expect(documentation.displayName).toBe('FooBar');
   });
@@ -53,6 +54,7 @@ describe('defaultPropsHandler', () => {
        ({displayName: foobarbaz});`,
       mockImporter,
     );
+
     displayNameHandler(documentation, definition);
     expect(documentation.displayName).toBe('FooBarBaz');
   });
@@ -62,6 +64,7 @@ describe('defaultPropsHandler', () => {
       `var name = 'abc';
        ({displayName: name})`,
     );
+
     displayNameHandler(documentation, definition);
     expect(documentation.displayName).toBe('abc');
   });
@@ -73,6 +76,7 @@ describe('defaultPropsHandler', () => {
        ({displayName: name})`,
       mockImporter,
     );
+
     displayNameHandler(documentation, definition);
     expect(documentation.displayName).toBe('FooBarBaz');
   });
@@ -83,6 +87,7 @@ describe('defaultPropsHandler', () => {
        ({displayName: foo.bar});`,
       mockImporter,
     );
+
     displayNameHandler(documentation, definition);
     expect(documentation.displayName).toBe('baz');
   });
@@ -91,6 +96,7 @@ describe('defaultPropsHandler', () => {
     const definition = parse.expression<ObjectExpression>(
       '{displayName: foo.bar}',
     );
+
     expect(() => displayNameHandler(documentation, definition)).not.toThrow();
     expect(documentation.displayName).not.toBeDefined();
   });
@@ -98,6 +104,7 @@ describe('defaultPropsHandler', () => {
   describe('ClassDeclaration', () => {
     it('considers the class name', () => {
       const definition = parse.statement<ClassDeclaration>(`class Foo {}`);
+
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('Foo');
     });
@@ -106,6 +113,7 @@ describe('defaultPropsHandler', () => {
       const definition = parse
         .statement<ExportDefaultDeclaration>(`export default class {}`)
         .get('declaration') as NodePath<ClassDeclaration>;
+
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBeUndefined();
     });
@@ -117,6 +125,7 @@ describe('defaultPropsHandler', () => {
       }
       var name = 'xyz';
     `);
+
       displayNameHandler(documentation, definition);
       expect(documentation.displayName).toBe('xyz');
     });
@@ -132,6 +141,7 @@ describe('defaultPropsHandler', () => {
     `,
         mockImporter,
       );
+
       displayNameHandler(documentation, definition);
       expect(documentation.displayName).toBe('FooBarBaz');
     });
@@ -146,6 +156,7 @@ describe('defaultPropsHandler', () => {
     `,
         mockImporter,
       );
+
       displayNameHandler(documentation, definition);
       expect(documentation.displayName).toBe('FooBarBaz');
     });
@@ -156,6 +167,7 @@ describe('defaultPropsHandler', () => {
         static displayName = foo.bar;
       }
     `);
+
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBeUndefined();
     });
@@ -170,6 +182,7 @@ describe('defaultPropsHandler', () => {
     `,
         mockImporter,
       );
+
       displayNameHandler(documentation, definition);
       expect(documentation.displayName).toBe('foo');
     });
@@ -180,6 +193,7 @@ describe('defaultPropsHandler', () => {
           static displayName = 'foo';
         }
       `);
+
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('foo');
     });
@@ -192,6 +206,7 @@ describe('defaultPropsHandler', () => {
           }
         }
       `);
+
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('foo');
     });
@@ -204,6 +219,7 @@ describe('defaultPropsHandler', () => {
           }
         }
       `);
+
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('foo');
     });
@@ -217,6 +233,7 @@ describe('defaultPropsHandler', () => {
           return 'foo';
         }
       `);
+
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('foo');
     });
@@ -230,6 +247,7 @@ describe('defaultPropsHandler', () => {
         }
         const abc = 'bar';
       `);
+
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('bar');
     });
@@ -246,6 +264,7 @@ describe('defaultPropsHandler', () => {
       `,
         mockImporter,
       );
+
       displayNameHandler(documentation, definition);
       expect(documentation.displayName).toBe('FooBarBaz');
     });
@@ -262,6 +281,7 @@ describe('defaultPropsHandler', () => {
       `,
         mockImporter,
       );
+
       displayNameHandler(documentation, definition);
       expect(documentation.displayName).toBe('baz');
     });
@@ -271,6 +291,7 @@ describe('defaultPropsHandler', () => {
     it('considers the function name', () => {
       const definition =
         parse.statement<FunctionDeclaration>('function Foo () {}');
+
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('Foo');
     });
@@ -279,6 +300,7 @@ describe('defaultPropsHandler', () => {
       const definition = parse
         .statement<ExportDefaultDeclaration>(`export default function () {}`)
         .get('declaration') as NodePath<FunctionDeclaration>;
+
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBeUndefined();
     });
@@ -288,6 +310,7 @@ describe('defaultPropsHandler', () => {
         function Foo () {}
         Foo.displayName = 'Bar';
       `);
+
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('Bar');
     });
@@ -298,6 +321,7 @@ describe('defaultPropsHandler', () => {
         Foo.displayName = bar;
         var bar = 'Bar';
       `);
+
       displayNameHandler(documentation, definition);
       expect(documentation.displayName).toBe('Bar');
     });
@@ -311,6 +335,7 @@ describe('defaultPropsHandler', () => {
       `,
         mockImporter,
       );
+
       displayNameHandler(documentation, definition);
       expect(documentation.displayName).toBe('FooBarBaz');
     });
@@ -324,6 +349,7 @@ describe('defaultPropsHandler', () => {
       `,
         mockImporter,
       );
+
       displayNameHandler(documentation, definition);
       expect(documentation.displayName).toBe('baz');
     });
@@ -334,6 +360,7 @@ describe('defaultPropsHandler', () => {
       const definition = parse
         .statement('var Foo = function () {};')
         .get('declarations.0.init') as NodePath<FunctionExpression>;
+
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('Foo');
     });
@@ -342,6 +369,7 @@ describe('defaultPropsHandler', () => {
       const definition = parse
         .statement('Foo = function () {};')
         .get('expression.right') as NodePath<FunctionExpression>;
+
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('Foo');
     });
@@ -355,6 +383,7 @@ describe('defaultPropsHandler', () => {
       `,
         )
         .get('declarations.0.init') as NodePath<FunctionExpression>;
+
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('Bar');
     });
@@ -369,6 +398,7 @@ describe('defaultPropsHandler', () => {
       `,
         )
         .get('declarations.0.init') as NodePath<FunctionExpression>;
+
       displayNameHandler(documentation, definition);
       expect(documentation.displayName).toBe('Bar');
     });
@@ -384,6 +414,7 @@ describe('defaultPropsHandler', () => {
           mockImporter,
         )
         .get('declarations.0.init') as NodePath<FunctionExpression>;
+
       displayNameHandler(documentation, definition);
       expect(documentation.displayName).toBe('FooBarBaz');
     });
@@ -399,6 +430,7 @@ describe('defaultPropsHandler', () => {
           mockImporter,
         )
         .get('declarations.0.init') as NodePath<FunctionExpression>;
+
       displayNameHandler(documentation, definition);
       expect(documentation.displayName).toBe('baz');
     });
@@ -409,6 +441,7 @@ describe('defaultPropsHandler', () => {
       const definition = parse
         .statement('var Foo = () => {};')
         .get('declarations.0.init') as NodePath<ArrowFunctionExpression>;
+
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('Foo');
     });
@@ -419,6 +452,7 @@ describe('defaultPropsHandler', () => {
         .get(
           'declarations.0.init.arguments.0',
         ) as NodePath<ArrowFunctionExpression>;
+
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('Foo');
     });
@@ -432,6 +466,7 @@ describe('defaultPropsHandler', () => {
       `,
         )
         .get('declarations.0.init') as NodePath<ArrowFunctionExpression>;
+
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('Foo');
     });
@@ -440,6 +475,7 @@ describe('defaultPropsHandler', () => {
       const definition = parse
         .statement('Foo = () => {};')
         .get('expression.right') as NodePath<ArrowFunctionExpression>;
+
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('Foo');
     });
@@ -450,6 +486,7 @@ describe('defaultPropsHandler', () => {
         .get(
           'expression.right.arguments.0',
         ) as NodePath<ArrowFunctionExpression>;
+
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('Foo');
     });
@@ -463,6 +500,7 @@ describe('defaultPropsHandler', () => {
       `,
         )
         .get('expression.right') as NodePath<ArrowFunctionExpression>;
+
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('Foo');
     });
@@ -476,6 +514,7 @@ describe('defaultPropsHandler', () => {
       `,
         )
         .get('declarations.0.init') as NodePath<ArrowFunctionExpression>;
+
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('Bar');
     });
@@ -490,6 +529,7 @@ describe('defaultPropsHandler', () => {
       `,
         )
         .get('declarations.0.init') as NodePath<ArrowFunctionExpression>;
+
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('Bar');
     });
@@ -505,6 +545,7 @@ describe('defaultPropsHandler', () => {
           mockImporter,
         )
         .get('declarations.0.init') as NodePath<ArrowFunctionExpression>;
+
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('FooBarBaz');
     });
@@ -520,6 +561,7 @@ describe('defaultPropsHandler', () => {
           mockImporter,
         )
         .get('declarations.0.init') as NodePath<ArrowFunctionExpression>;
+
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('baz');
     });
@@ -535,6 +577,7 @@ describe('defaultPropsHandler', () => {
         .get(
           'declarations.0.init.arguments.0',
         ) as NodePath<ArrowFunctionExpression>;
+
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('Bar');
     });
@@ -551,6 +594,7 @@ describe('defaultPropsHandler', () => {
         .get(
           'declarations.0.init.arguments.0',
         ) as NodePath<ArrowFunctionExpression>;
+
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('Bar');
     });
@@ -568,6 +612,7 @@ describe('defaultPropsHandler', () => {
         .get(
           'declarations.0.init.arguments.0',
         ) as NodePath<ArrowFunctionExpression>;
+
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('FooBarBaz');
     });
@@ -585,6 +630,7 @@ describe('defaultPropsHandler', () => {
         .get(
           'declarations.0.init.arguments.0',
         ) as NodePath<ArrowFunctionExpression>;
+
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('baz');
     });
@@ -593,6 +639,7 @@ describe('defaultPropsHandler', () => {
       const definition = parse
         .statement('Foo.Bar = () => {};')
         .get('expression.right') as NodePath<ArrowFunctionExpression>;
+
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).not.toBeDefined();
     });

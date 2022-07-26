@@ -36,6 +36,7 @@ describe('getMethodDocumentation', () => {
         }
       `);
       const method = def.get('body').get('body')[0] as NodePath<ClassMethod>;
+
       expect(getMethodDocumentation(method)).toEqual({
         name: 'hello',
         docblock: null,
@@ -52,6 +53,7 @@ describe('getMethodDocumentation', () => {
         }
       `);
       const method = def.get('body').get('body')[0] as NodePath<ClassProperty>;
+
       expect(getMethodDocumentation(method)).toEqual({
         name: 'hello',
         docblock: null,
@@ -68,6 +70,7 @@ describe('getMethodDocumentation', () => {
         }
       `);
       const method = def.get('body').get('body')[0] as NodePath<ClassMethod>;
+
       expect(getMethodDocumentation(method)).toMatchSnapshot();
     });
 
@@ -78,6 +81,7 @@ describe('getMethodDocumentation', () => {
         }
       `);
       const method = def.get('body').get('body')[0] as NodePath<ClassMethod>;
+
       expect(getMethodDocumentation(method)).toMatchSnapshot();
     });
 
@@ -92,6 +96,7 @@ describe('getMethodDocumentation', () => {
         mockImporter,
       );
       const method = def.get('body').get('body')[0] as NodePath<ClassProperty>;
+
       expect(getMethodDocumentation(method)).toEqual({
         name: 'hello',
         docblock: null,
@@ -113,6 +118,7 @@ describe('getMethodDocumentation', () => {
         }
       `);
       const method = def.get('body').get('body')[0] as NodePath<ClassMethod>;
+
       expect(getMethodDocumentation(method)).toEqual({
         name: 'foo',
         docblock: "Don't use this!",
@@ -132,6 +138,7 @@ describe('getMethodDocumentation', () => {
         }
       `);
       const method = def.get('body').get('body')[0] as NodePath<ClassProperty>;
+
       expect(getMethodDocumentation(method)).toEqual({
         name: 'foo',
         docblock: "Don't use this!",
@@ -150,6 +157,7 @@ describe('getMethodDocumentation', () => {
         }
       `);
       const method = def.get('body').get('body')[0] as NodePath<ClassMethod>;
+
       expect(getMethodDocumentation(method)).toMatchSnapshot();
     });
 
@@ -160,6 +168,7 @@ describe('getMethodDocumentation', () => {
         }
       `);
       const method = def.get('body').get('body')[0] as NodePath<ClassMethod>;
+
       expect(getMethodDocumentation(method)).toMatchSnapshot();
     });
 
@@ -170,6 +179,7 @@ describe('getMethodDocumentation', () => {
         }
       `);
       const method = def.get('body').get('body')[0] as NodePath<ClassMethod>;
+
       expect(getMethodDocumentation(method)).toMatchSnapshot();
     });
 
@@ -180,6 +190,7 @@ describe('getMethodDocumentation', () => {
         }
       `);
       const method = def.get('body').get('body')[0] as NodePath<ClassProperty>;
+
       expect(getMethodDocumentation(method)).toMatchSnapshot();
     });
 
@@ -194,6 +205,7 @@ describe('getMethodDocumentation', () => {
         mockImporter,
       );
       const method = def.get('body').get('body')[0] as NodePath<ClassProperty>;
+
       expect(getMethodDocumentation(method)).toMatchSnapshot();
     });
 
@@ -215,6 +227,7 @@ describe('getMethodDocumentation', () => {
           }
         `);
         const method = def.get('body').get('body')[0] as NodePath<ClassMethod>;
+
         expect(getMethodDocumentation(method)).toEqual(methodModifiersDoc([]));
       });
 
@@ -225,6 +238,7 @@ describe('getMethodDocumentation', () => {
           }
         `);
         const method = def.get('body').get('body')[0] as NodePath<ClassMethod>;
+
         expect(getMethodDocumentation(method)).toEqual(
           methodModifiersDoc(['static']),
         );
@@ -233,6 +247,7 @@ describe('getMethodDocumentation', () => {
       it('detects manually set static functions', () => {
         const def = parse.expression<ObjectExpression>(`{ foo() {} }`);
         const method = def.get('properties')[0] as NodePath<ObjectMethod>;
+
         expect(getMethodDocumentation(method, { isStatic: true })).toEqual(
           methodModifiersDoc(['static']),
         );
@@ -245,6 +260,7 @@ describe('getMethodDocumentation', () => {
           }
         `);
         const method = def.get('body').get('body')[0] as NodePath<ClassMethod>;
+
         expect(getMethodDocumentation(method)).toEqual(
           methodModifiersDoc(['generator']),
         );
@@ -257,6 +273,7 @@ describe('getMethodDocumentation', () => {
           }
         `);
         const method = def.get('body').get('body')[0] as NodePath<ClassMethod>;
+
         expect(getMethodDocumentation(method)).toEqual(
           methodModifiersDoc(['async']),
         );
@@ -269,6 +286,7 @@ describe('getMethodDocumentation', () => {
           }
         `);
         const method = def.get('body').get('body')[0] as NodePath<ClassMethod>;
+
         expect(getMethodDocumentation(method)).toEqual(
           methodModifiersDoc(['static', 'async']),
         );
@@ -293,6 +311,7 @@ describe('getMethodDocumentation', () => {
           }
         `);
         const method = def.get('body').get('body')[0] as NodePath<ClassMethod>;
+
         expect(getMethodDocumentation(method)).toEqual(methodReturnDoc(null));
       });
 
@@ -303,6 +322,7 @@ describe('getMethodDocumentation', () => {
           }
         `);
         const method = def.get('body').get('body')[0] as NodePath<ClassMethod>;
+
         expect(getMethodDocumentation(method)).toEqual(
           methodReturnDoc({
             type: { name: 'number' },
@@ -319,6 +339,7 @@ describe('getMethodDocumentation', () => {
         const method = def
           .get('body')
           .get('body')[0] as NodePath<ClassProperty>;
+
         expect(getMethodDocumentation(method)).toEqual(
           methodReturnDoc({
             type: { name: 'number' },
@@ -339,6 +360,7 @@ describe('getMethodDocumentation', () => {
         const method = def
           .get('body')
           .get('body')[0] as NodePath<ClassProperty>;
+
         expect(getMethodDocumentation(method)).toEqual(
           methodReturnDoc({
             type: { name: 'number' },
@@ -357,6 +379,7 @@ describe('getMethodDocumentation', () => {
         `,
         );
         const method = def.get('body').get('body')[0] as NodePath<ClassMethod>;
+
         expect(getMethodDocumentation(method)).toMatchSnapshot();
       });
 
@@ -370,6 +393,7 @@ describe('getMethodDocumentation', () => {
         const method = def
           .get('body')
           .get('body')[0] as NodePath<ClassPrivateMethod>;
+
         expect(getMethodDocumentation(method)).toMatchSnapshot();
       });
     });

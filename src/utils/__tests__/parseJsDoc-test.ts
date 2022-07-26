@@ -6,6 +6,7 @@ describe('parseJsDoc', () => {
       const docblock = `
         Don't use this!
       `;
+
       expect(parseJsDoc(docblock)).toMatchSnapshot();
     });
   });
@@ -20,6 +21,7 @@ describe('parseJsDoc', () => {
 
     Object.keys(docBlocks).forEach(name => {
       const docBlock = docBlocks[name];
+
       it(name, () => {
         expect(parseJsDoc(docBlock)).toMatchSnapshot();
       });
@@ -36,6 +38,7 @@ describe('parseJsDoc', () => {
 
     Object.keys(docBlocks).forEach(name => {
       const docBlock = docBlocks[name];
+
       it(name, () => {
         expect(parseJsDoc(docBlock)).toMatchSnapshot();
       });

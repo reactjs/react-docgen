@@ -90,6 +90,7 @@ function resolvesToJSXElementOrReactCall(
       const namesToResolve: NodePath[] = [];
 
       const calleeObj = calleeValue.get('object');
+
       if (calleeObj.isIdentifier()) {
         namesToResolve.push(calleeValue.get('property'));
         resolvedValue = resolveToValue(calleeObj);
@@ -122,6 +123,7 @@ function resolvesToJSXElementOrReactCall(
                 return resolveToValue(result);
               }
             }
+
             return result;
           },
           resolvedValue,
@@ -170,6 +172,7 @@ function returnsJSXElementOrReactCall(
       // Only check return statements which are part of the checked function scope
       if (returnPath.scope.getFunctionParent() !== scope) {
         path.skip();
+
         return;
       }
 
