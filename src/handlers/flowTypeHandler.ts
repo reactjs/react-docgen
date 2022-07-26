@@ -11,6 +11,8 @@ import resolveToValue from '../utils/resolveToValue';
 import setPropDescription from '../utils/setPropDescription';
 import type { NodePath } from '@babel/traverse';
 import type { FlowType } from '@babel/types';
+import type { ComponentNode } from '../resolver';
+import type { Handler } from '.';
 
 function setPropDescriptor(
   documentation: Documentation,
@@ -95,11 +97,11 @@ function setPropDescriptor(
  *
  * TODO either rename this handler or split in flow vs ts
  */
-export default function flowTypeHandler(
+const flowTypeHandler: Handler = function (
   documentation: Documentation,
-  path: NodePath,
+  componentDefinition: NodePath<ComponentNode>,
 ): void {
-  const typesPath = getTypeFromReactComponent(path);
+  const typesPath = getTypeFromReactComponent(componentDefinition);
 
   if (!typesPath) {
     return;
@@ -113,4 +115,6 @@ export default function flowTypeHandler(
     },
     null,
   );
-}
+};
+
+export default flowTypeHandler;

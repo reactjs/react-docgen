@@ -3,18 +3,13 @@ import { getDocblock } from '../utils/docblock';
 import isReactForwardRefCall from '../utils/isReactForwardRefCall';
 import resolveToValue from '../utils/resolveToValue';
 import type { NodePath, Node } from '@babel/traverse';
-import type { ClassDeclaration, ClassExpression } from '@babel/types';
-
-function isClassDefinition(
-  path: NodePath,
-): path is NodePath<ClassDeclaration | ClassExpression> {
-  return path.isClassDeclaration() || path.isClassExpression();
-}
+import type { ComponentNode } from '../resolver';
+import type { Handler } from '.';
 
 function getDocblockFromComponent(path: NodePath): string | null {
   let description: string | null = null;
 
-  if (isClassDefinition(path)) {
+  if (path.isClassDeclaration() || path.isClassExpression()) {
     // If we have a class declaration or expression, then the comment might be
     // attached to the last decorator instead as trailing comment.
     if (path.node.decorators && path.node.decorators.length > 0) {
@@ -56,9 +51,14 @@ function getDocblockFromComponent(path: NodePath): string | null {
 /**
  * Finds the nearest block comment before the component definition.
  */
-export default function componentDocblockHandler(
+const componentDocblockHandler: Handler = function (
   documentation: Documentation,
-  path: NodePath,
+  componentDefinition: NodePath<ComponentNode>,
 ): void {
-  documentation.set('description', getDocblockFromComponent(path) || '');
-}
+  documentation.set(
+    'description',
+    getDocblockFromComponent(componentDefinition) || '',
+  );
+};
+
+export default componentDocblockHandler;

@@ -4,7 +4,8 @@ import Documentation from '../../Documentation';
 import type DocumentationMock from '../../__mocks__/Documentation';
 import type { NodePath } from '@babel/traverse';
 import type { Importer } from '../../importer';
-import type { ExpressionStatement } from '@babel/types';
+import type { ClassDeclaration, ObjectExpression } from '@babel/types';
+import type { ComponentNode } from '../../resolver';
 
 jest.mock('../../Documentation');
 jest.mock('../../utils/getPropType', () => () => ({}));
@@ -36,7 +37,7 @@ describe('propTypeCompositionHandler', () => {
 
   function test(
     getSrc: (src: string) => string,
-    parseSrc: (src: string, importer?: Importer) => NodePath,
+    parseSrc: (src: string, importer?: Importer) => NodePath<ComponentNode>,
   ) {
     it('understands assignment from module', () => {
       let definition = parseSrc(`
@@ -119,7 +120,9 @@ describe('propTypeCompositionHandler', () => {
     test(
       propTypesSrc => `({propTypes: ${propTypesSrc}})`,
       (src, importer = noopImporter) =>
-        parse.statement<ExpressionStatement>(src, importer).get('expression'),
+        parse
+          .statement(src, importer)
+          .get('expression') as NodePath<ObjectExpression>,
     );
   });
 
@@ -149,15 +152,19 @@ describe('propTypeCompositionHandler', () => {
     });
   });
 
-  it('does not error if propTypes cannot be found', () => {
-    let definition = parse.expression('{fooBar: 42}');
-    expect(() =>
-      propTypeCompositionHandler(documentation, definition),
-    ).not.toThrow();
+  describe('does not error if propTypes cannot be found', () => {
+    it('ObjectExpression', () => {
+      const definition = parse.expression<ObjectExpression>('{fooBar: 42}');
+      expect(() =>
+        propTypeCompositionHandler(documentation, definition),
+      ).not.toThrow();
+    });
 
-    definition = parse.statement('class Foo {}');
-    expect(() =>
-      propTypeCompositionHandler(documentation, definition),
-    ).not.toThrow();
+    it('ClassDeclaration', () => {
+      const definition = parse.statement<ClassDeclaration>('class Foo {}');
+      expect(() =>
+        propTypeCompositionHandler(documentation, definition),
+      ).not.toThrow();
+    });
   });
 });

@@ -4,10 +4,12 @@ import displayNameHandler from '../displayNameHandler';
 import type DocumentationMock from '../../__mocks__/Documentation';
 import type {
   ArrowFunctionExpression,
+  ClassDeclaration,
   ExportDefaultDeclaration,
-  ExpressionStatement,
+  FunctionDeclaration,
   FunctionExpression,
   ObjectExpression,
+  VariableDeclaration,
 } from '@babel/types';
 import type { NodePath } from '@babel/traverse';
 
@@ -38,7 +40,9 @@ describe('defaultPropsHandler', () => {
   });
 
   it('extracts the displayName', () => {
-    const definition: NodePath = parse.expression('{displayName: "FooBar"}');
+    const definition = parse.expression<ObjectExpression>(
+      '{displayName: "FooBar"}',
+    );
     displayNameHandler(documentation, definition);
     expect(documentation.displayName).toBe('FooBar');
   });
@@ -54,50 +58,46 @@ describe('defaultPropsHandler', () => {
   });
 
   it('resolves identifiers', () => {
-    const definition = parse
-      .statement<ExpressionStatement>(
-        `
-      ({displayName: name})
-      var name = 'abc';
-    `,
-      )
-      .get('expression');
+    const definition = parse.expressionLast<ObjectExpression>(
+      `var name = 'abc';
+       ({displayName: name})`,
+    );
     displayNameHandler(documentation, definition);
     expect(documentation.displayName).toBe('abc');
   });
 
   it('resolves imported identifiers', () => {
-    const definition = parse
-      .statement<ExpressionStatement>(
-        `
-      ({displayName: name})
-      import foobarbaz from 'foobarbaz';
-      var name = foobarbaz;
-    `,
-        mockImporter,
-      )
-      .get('expression');
+    const definition = parse.expressionLast<ObjectExpression>(
+      `import foobarbaz from 'foobarbaz';
+       var name = foobarbaz;
+       ({displayName: name})`,
+      mockImporter,
+    );
     displayNameHandler(documentation, definition);
     expect(documentation.displayName).toBe('FooBarBaz');
   });
 
   it('can resolve non-literal names with appropriate importer', () => {
-    const definition = parse
-      .statement<ExpressionStatement>(
-        `
-      ({displayName: foo.bar});
-      import foo from 'foo';
-    `,
-        mockImporter,
-      )
-      .get('expression');
+    const definition = parse.expressionLast<ObjectExpression>(
+      `import foo from 'foo';
+       ({displayName: foo.bar});`,
+      mockImporter,
+    );
     displayNameHandler(documentation, definition);
     expect(documentation.displayName).toBe('baz');
   });
 
+  it('ignores non-literal names', () => {
+    const definition = parse.expression<ObjectExpression>(
+      '{displayName: foo.bar}',
+    );
+    expect(() => displayNameHandler(documentation, definition)).not.toThrow();
+    expect(documentation.displayName).not.toBeDefined();
+  });
+
   describe('ClassDeclaration', () => {
     it('considers the class name', () => {
-      const definition = parse.statement(`class Foo {}`);
+      const definition = parse.statement<ClassDeclaration>(`class Foo {}`);
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('Foo');
     });
@@ -105,13 +105,13 @@ describe('defaultPropsHandler', () => {
     it('does not crash if no name', () => {
       const definition = parse
         .statement<ExportDefaultDeclaration>(`export default class {}`)
-        .get('declaration');
+        .get('declaration') as NodePath<ClassDeclaration>;
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBeUndefined();
     });
 
     it('resolves identifiers', () => {
-      const definition = parse.statement(`
+      const definition = parse.statement<ClassDeclaration>(`
       class Foo {
         static displayName = name;
       }
@@ -122,7 +122,7 @@ describe('defaultPropsHandler', () => {
     });
 
     it('resolves imported identifiers', () => {
-      const definition = parse.statement(
+      const definition = parse.statement<ClassDeclaration>(
         `
       class Foo {
         static displayName = name;
@@ -137,7 +137,7 @@ describe('defaultPropsHandler', () => {
     });
 
     it('resolves imported displayName', () => {
-      const definition = parse.statement(
+      const definition = parse.statement<ClassDeclaration>(
         `
       class Foo {
         static displayName = foobarbaz;
@@ -151,11 +151,7 @@ describe('defaultPropsHandler', () => {
     });
 
     it('ignores non-literal names', () => {
-      let definition = parse.expression('{displayName: foo.bar}');
-      expect(() => displayNameHandler(documentation, definition)).not.toThrow();
-      expect(documentation.displayName).not.toBeDefined();
-
-      definition = parse.statement(`
+      const definition = parse.statement<ClassDeclaration>(`
       class Foo {
         static displayName = foo.bar;
       }
@@ -165,7 +161,7 @@ describe('defaultPropsHandler', () => {
     });
 
     it('can resolve non-literal names with appropriate importer', () => {
-      const definition = parse.statement(
+      const definition = parse.statement<ClassDeclaration>(
         `
       class Foo {
         static displayName = bar.baz;
@@ -179,7 +175,7 @@ describe('defaultPropsHandler', () => {
     });
 
     it('considers a static displayName class property', () => {
-      const definition = parse.statement(`
+      const definition = parse.statement<ClassDeclaration>(`
         class Foo {
           static displayName = 'foo';
         }
@@ -189,7 +185,7 @@ describe('defaultPropsHandler', () => {
     });
 
     it('considers static displayName getter', () => {
-      const definition = parse.statement(`
+      const definition = parse.statement<ClassDeclaration>(`
         class Foo {
           static get displayName() {
             return 'foo';
@@ -201,7 +197,7 @@ describe('defaultPropsHandler', () => {
     });
 
     it('considers static displayName property with function expression', () => {
-      const definition = parse.statement(`
+      const definition = parse.statement<ClassDeclaration>(`
         class Foo {
           static displayName = function() {
             return 'foo';
@@ -213,7 +209,7 @@ describe('defaultPropsHandler', () => {
     });
 
     it('considers static displayName property with function declaration', () => {
-      const definition = parse.statement(`
+      const definition = parse.statement<ClassDeclaration>(`
         class Foo {
           static displayName = displayName;
         }
@@ -226,7 +222,7 @@ describe('defaultPropsHandler', () => {
     });
 
     it('resolves variables in displayName getter', () => {
-      const definition = parse.statement(`
+      const definition = parse.statement<ClassDeclaration>(`
         class Foo {
           static get displayName() {
             return abc;
@@ -238,8 +234,8 @@ describe('defaultPropsHandler', () => {
       expect(documentation.displayName).toBe('bar');
     });
 
-    it('resolves imported variables in displayName getter', () => {
-      let definition = parse.statement(
+    it('resolves imported Identifier in displayName getter', () => {
+      const definition = parse.statement<ClassDeclaration>(
         `
         class Foo {
           static get displayName() {
@@ -252,8 +248,10 @@ describe('defaultPropsHandler', () => {
       );
       displayNameHandler(documentation, definition);
       expect(documentation.displayName).toBe('FooBarBaz');
+    });
 
-      definition = parse.statement(
+    it('resolves imported MemberExpression in displayName getter', () => {
+      const definition = parse.statement<ClassDeclaration>(
         `
         class Foo {
           static get displayName() {
@@ -271,7 +269,8 @@ describe('defaultPropsHandler', () => {
 
   describe('FunctionDeclaration', () => {
     it('considers the function name', () => {
-      const definition = parse.statement('function Foo () {}');
+      const definition =
+        parse.statement<FunctionDeclaration>('function Foo () {}');
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('Foo');
     });
@@ -279,13 +278,13 @@ describe('defaultPropsHandler', () => {
     it('does not crash if no name', () => {
       const definition = parse
         .statement<ExportDefaultDeclaration>(`export default function () {}`)
-        .get('declaration');
+        .get('declaration') as NodePath<FunctionDeclaration>;
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBeUndefined();
     });
 
     it('considers a static displayName object property', () => {
-      const definition = parse.statement(`
+      const definition = parse.statement<FunctionDeclaration>(`
         function Foo () {}
         Foo.displayName = 'Bar';
       `);
@@ -294,7 +293,7 @@ describe('defaultPropsHandler', () => {
     });
 
     it('resolves variable assigned to displayName object property', () => {
-      const definition = parse.statement(`
+      const definition = parse.statement<FunctionDeclaration>(`
         function Foo () {}
         Foo.displayName = bar;
         var bar = 'Bar';
@@ -303,8 +302,8 @@ describe('defaultPropsHandler', () => {
       expect(documentation.displayName).toBe('Bar');
     });
 
-    it('resolves imported variable assigned to displayName object property', () => {
-      let definition = parse.statement(
+    it('resolves imported Identifier assigned to displayName object property', () => {
+      const definition = parse.statement<FunctionDeclaration>(
         `
         function Foo () {}
         import foobarbaz from 'foobarbaz';
@@ -314,8 +313,10 @@ describe('defaultPropsHandler', () => {
       );
       displayNameHandler(documentation, definition);
       expect(documentation.displayName).toBe('FooBarBaz');
+    });
 
-      definition = parse.statement(
+    it('resolves imported MemberExpression assigned to displayName object property', () => {
+      const definition = parse.statement<FunctionDeclaration>(
         `
         function Foo () {}
         import foo from 'foo';
@@ -330,7 +331,7 @@ describe('defaultPropsHandler', () => {
 
   describe('FunctionExpression', () => {
     it('considers the variable name', () => {
-      const definition: NodePath = parse
+      const definition = parse
         .statement('var Foo = function () {};')
         .get('declarations.0.init') as NodePath<FunctionExpression>;
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
@@ -346,44 +347,58 @@ describe('defaultPropsHandler', () => {
     });
 
     it('considers a static displayName object property over variable name', () => {
-      const definition = parse.statement(`
+      const definition = parse
+        .statement<VariableDeclaration>(
+          `
         var Foo = function () {};
         Foo.displayName = 'Bar';
-      `);
+      `,
+        )
+        .get('declarations.0.init') as NodePath<FunctionExpression>;
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('Bar');
     });
 
     it('resolves variable assigned to displayName object property over variable name', () => {
-      const definition = parse.statement(`
+      const definition = parse
+        .statement<VariableDeclaration>(
+          `
         var Foo = function () {};
         Foo.displayName = bar;
         var bar = 'Bar';
-      `);
+      `,
+        )
+        .get('declarations.0.init') as NodePath<FunctionExpression>;
       displayNameHandler(documentation, definition);
       expect(documentation.displayName).toBe('Bar');
     });
 
-    it('resolves imported variable assigned to displayName object property over variable name', () => {
-      let definition = parse.statement(
-        `
+    it('resolves imported Identifier assigned to displayName object property over variable name', () => {
+      const definition = parse
+        .statement<VariableDeclaration>(
+          `
         var Foo = function () {};
         import foobarbaz from 'foobarbaz';
         Foo.displayName = foobarbaz;
       `,
-        mockImporter,
-      );
+          mockImporter,
+        )
+        .get('declarations.0.init') as NodePath<FunctionExpression>;
       displayNameHandler(documentation, definition);
       expect(documentation.displayName).toBe('FooBarBaz');
+    });
 
-      definition = parse.statement(
-        `
+    it('resolves imported MemberExpression assigned to displayName object property over variable name', () => {
+      const definition = parse
+        .statement<VariableDeclaration>(
+          `
         var Foo = function () {};
         import foo from 'foo';
         Foo.displayName = foo.bar;
       `,
-        mockImporter,
-      );
+          mockImporter,
+        )
+        .get('declarations.0.init') as NodePath<FunctionExpression>;
       displayNameHandler(documentation, definition);
       expect(documentation.displayName).toBe('baz');
     });
@@ -453,87 +468,123 @@ describe('defaultPropsHandler', () => {
     });
 
     it('considers a static displayName object property over variable name', () => {
-      const definition = parse.statement(`
+      const definition = parse
+        .statement(
+          `
         var Foo = () => {};
         Foo.displayName = 'Bar';
-      `);
+      `,
+        )
+        .get('declarations.0.init') as NodePath<ArrowFunctionExpression>;
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('Bar');
     });
 
     it('resolves a variable assigned to displayName object property over variable name', () => {
-      const definition = parse.statement(`
+      const definition = parse
+        .statement(
+          `
         var Foo = () => {};
         Foo.displayName = bar;
         var bar = 'Bar';
-      `);
+      `,
+        )
+        .get('declarations.0.init') as NodePath<ArrowFunctionExpression>;
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('Bar');
     });
 
-    it('resolves imported variable assigned to displayName object property over variable name', () => {
-      let definition = parse.statement(
-        `
+    it('resolves imported Identifier assigned to displayName object property over variable name', () => {
+      const definition = parse
+        .statement(
+          `
         var Foo = () => {};
         import foobarbaz from 'foobarbaz';
         Foo.displayName = foobarbaz;
       `,
-        mockImporter,
-      );
+          mockImporter,
+        )
+        .get('declarations.0.init') as NodePath<ArrowFunctionExpression>;
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('FooBarBaz');
+    });
 
-      definition = parse.statement(
-        `
+    it('resolves imported MemberExpression assigned to displayName object property over variable name', () => {
+      const definition = parse
+        .statement(
+          `
         var Foo = () => {};
         import foo from 'foo';
         Foo.displayName = foo.bar;
       `,
-        mockImporter,
-      );
+          mockImporter,
+        )
+        .get('declarations.0.init') as NodePath<ArrowFunctionExpression>;
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('baz');
     });
 
     it('considers a static displayName object property over variable name even if wrapped', () => {
-      const definition = parse.statement(`
+      const definition = parse
+        .statement(
+          `
         var Foo = React.forwardRef(() => {});
         Foo.displayName = 'Bar';
-      `);
+      `,
+        )
+        .get(
+          'declarations.0.init.arguments.0',
+        ) as NodePath<ArrowFunctionExpression>;
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('Bar');
     });
 
     it('resolves a variable assigned to displayName object property over variable name even if wrapped', () => {
-      const definition = parse.statement(`
+      const definition = parse
+        .statement(
+          `
         var Foo = React.forwardRef(() => {});
         Foo.displayName = bar;
         var bar = 'Bar';
-      `);
+      `,
+        )
+        .get(
+          'declarations.0.init.arguments.0',
+        ) as NodePath<ArrowFunctionExpression>;
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('Bar');
     });
 
-    it('resolves imported variable assigned to displayName object property over variable name even if wrapped', () => {
-      let definition = parse.statement(
-        `
+    it('resolves imported Identifier assigned to displayName object property over variable name even if wrapped', () => {
+      const definition = parse
+        .statement(
+          `
         var Foo = React.forwardRef(() => {});
         import foobarbaz from 'foobarbaz';
         Foo.displayName = foobarbaz;
       `,
-        mockImporter,
-      );
+          mockImporter,
+        )
+        .get(
+          'declarations.0.init.arguments.0',
+        ) as NodePath<ArrowFunctionExpression>;
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('FooBarBaz');
+    });
 
-      definition = parse.statement(
-        `
+    it('resolves imported MemberExpression assigned to displayName object property over variable name even if wrapped', () => {
+      const definition = parse
+        .statement(
+          `
         var Foo = React.forwardRef(() => {});
         import foo from 'foo';
         Foo.displayName = foo.bar;
       `,
-        mockImporter,
-      );
+          mockImporter,
+        )
+        .get(
+          'declarations.0.init.arguments.0',
+        ) as NodePath<ArrowFunctionExpression>;
       expect(() => displayNameHandler(documentation, definition)).not.toThrow();
       expect(documentation.displayName).toBe('baz');
     });

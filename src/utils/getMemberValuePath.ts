@@ -3,7 +3,27 @@ import getClassMemberValuePath from './getClassMemberValuePath';
 import getMemberExpressionValuePath from './getMemberExpressionValuePath';
 import getPropertyValuePath from './getPropertyValuePath';
 import resolveFunctionDefinitionToReturnValue from '../utils/resolveFunctionDefinitionToReturnValue';
-import type { ClassMethod, Expression, ObjectMethod } from '@babel/types';
+import type {
+  CallExpression,
+  ClassDeclaration,
+  ClassExpression,
+  ClassMethod,
+  Expression,
+  ObjectExpression,
+  ObjectMethod,
+  TaggedTemplateExpression,
+  VariableDeclaration,
+} from '@babel/types';
+import type { StatelessComponentNode } from '../resolver';
+
+type SupportedNodes =
+  | CallExpression
+  | ClassDeclaration
+  | ClassExpression
+  | ObjectExpression
+  | StatelessComponentNode
+  | TaggedTemplateExpression
+  | VariableDeclaration;
 
 const postprocessPropTypes = (
   path: NodePath<ClassMethod | Expression | ObjectMethod>,
@@ -12,25 +32,8 @@ const postprocessPropTypes = (
 const POSTPROCESS_MEMBERS = new Map([['propTypes', postprocessPropTypes]]);
 
 const SUPPORTED_DEFINITION_TYPES = [
-  'ObjectExpression',
-  'ClassDeclaration',
-  'ClassExpression',
-  /**
-   * Adds support for libraries such as
-   * [styled components]{@link https://github.com/styled-components} that use
-   * TaggedTemplateExpression's to generate components.
-   *
-   * While react-docgen's built-in resolvers do not support resolving
-   * TaggedTemplateExpression definitions, third-party resolvers (such as
-   * https://github.com/Jmeyering/react-docgen-annotation-resolver) could be
-   * used to add these definitions.
-   */
-  'TaggedTemplateExpression',
   // potential stateless function component
-  'VariableDeclaration',
   'ArrowFunctionExpression',
-  'FunctionDeclaration',
-  'FunctionExpression',
   /**
    * Adds support for libraries such as
    * [system-components]{@link https://jxnblk.com/styled-system/system-components} that use
@@ -42,9 +45,32 @@ const SUPPORTED_DEFINITION_TYPES = [
    * used to add these definitions.
    */
   'CallExpression',
+  'ClassDeclaration',
+  'ClassExpression',
+  // potential stateless function component
+  'FunctionDeclaration',
+  // potential stateless function component
+  'FunctionExpression',
+  'ObjectExpression',
+  // potential stateless function component
+  'ObjectMethod',
+  /**
+   * Adds support for libraries such as
+   * [styled components]{@link https://github.com/styled-components} that use
+   * TaggedTemplateExpression's to generate components.
+   *
+   * While react-docgen's built-in resolvers do not support resolving
+   * TaggedTemplateExpression definitions, third-party resolvers (such as
+   * https://github.com/Jmeyering/react-docgen-annotation-resolver) could be
+   * used to add these definitions.
+   */
+  'TaggedTemplateExpression',
+  'VariableDeclaration',
 ];
 
-export function isSupportedDefinitionType(path: NodePath): boolean {
+export function isSupportedDefinitionType(
+  path: NodePath,
+): path is NodePath<SupportedNodes> {
   return SUPPORTED_DEFINITION_TYPES.includes(path.node.type);
 }
 
@@ -62,18 +88,9 @@ export function isSupportedDefinitionType(path: NodePath): boolean {
  * `getDefaultProps` can be used interchangeably.
  */
 export default function getMemberValuePath(
-  componentDefinition: NodePath,
+  componentDefinition: NodePath<SupportedNodes>,
   memberName: string,
 ): NodePath<ClassMethod | Expression | ObjectMethod> | null {
-  // TODO test error message
-  if (!isSupportedDefinitionType(componentDefinition)) {
-    throw new TypeError(
-      `Got unsupported definition type. Definition must be one of ${SUPPORTED_DEFINITION_TYPES.join(
-        ', ',
-      )}. Got "${componentDefinition.node.type}" instead.`,
-    );
-  }
-
   let result: NodePath<ClassMethod | Expression | ObjectMethod> | null;
   if (componentDefinition.isObjectExpression()) {
     result = getPropertyValuePath(componentDefinition, memberName);

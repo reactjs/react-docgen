@@ -1,9 +1,4 @@
 import isExportsOrModuleAssignment from '../utils/isExportsOrModuleAssignment';
-import isReactComponentClass from '../utils/isReactComponentClass';
-import isReactCreateClassCall from '../utils/isReactCreateClassCall';
-import isReactForwardRefCall from '../utils/isReactForwardRefCall';
-import isStatelessComponent from '../utils/isStatelessComponent';
-import normalizeClassDefinition from '../utils/normalizeClassDefinition';
 import resolveExportDeclaration from '../utils/resolveExportDeclaration';
 import resolveToValue from '../utils/resolveToValue';
 import resolveHOC from '../utils/resolveHOC';
@@ -14,35 +9,10 @@ import type {
   ExportNamedDeclaration,
 } from '@babel/types';
 import type FileState from '../FileState';
-import type { Resolver } from '.';
-
-export function isComponentDefinition(path: NodePath): boolean {
-  return (
-    isReactCreateClassCall(path) ||
-    isReactComponentClass(path) ||
-    isStatelessComponent(path) ||
-    isReactForwardRefCall(path)
-  );
-}
-
-export function resolveDefinition(definition: NodePath): NodePath | null {
-  if (isReactCreateClassCall(definition)) {
-    // return argument
-    const resolvedPath = resolveToValue(definition.get('arguments')[0]);
-    if (resolvedPath.isObjectExpression()) {
-      return resolvedPath;
-    }
-  } else if (isReactComponentClass(definition)) {
-    normalizeClassDefinition(definition);
-    return definition;
-  } else if (
-    isStatelessComponent(definition) ||
-    isReactForwardRefCall(definition)
-  ) {
-    return definition;
-  }
-  return null;
-}
+import type { ComponentNode, Resolver } from '.';
+import resolveComponentDefinition, {
+  isComponentDefinition,
+} from '../utils/resolveComponentDefinition';
 
 /**
  * Given an AST, this function tries to find the exported component definitions.
@@ -61,13 +31,13 @@ export function resolveDefinition(definition: NodePath): NodePath | null {
  */
 const findExportedComponentDefinitions: Resolver = function (
   file: FileState,
-): NodePath[] {
-  const components: NodePath[] = [];
+): Array<NodePath<ComponentNode>> {
+  const components: Array<NodePath<ComponentNode>> = [];
 
   function exportDeclaration(
     path: NodePath<ExportDefaultDeclaration | ExportNamedDeclaration>,
   ): void {
-    const definitions = resolveExportDeclaration(path)
+    resolveExportDeclaration(path)
       .reduce((acc, definition) => {
         if (isComponentDefinition(definition)) {
           acc.push(definition);
@@ -78,17 +48,14 @@ const findExportedComponentDefinitions: Resolver = function (
           }
         }
         return acc;
-      }, [] as NodePath[])
-      .map(definition => resolveDefinition(definition));
+      }, [] as Array<NodePath<ComponentNode>>)
+      .forEach(definition => {
+        const resolved = resolveComponentDefinition(definition);
+        if (resolved && components.indexOf(resolved) === -1) {
+          components.push(resolved);
+        }
+      });
 
-    if (definitions.length === 0) {
-      return path.skip();
-    }
-    definitions.forEach(definition => {
-      if (definition && components.indexOf(definition) === -1) {
-        components.push(definition);
-      }
-    });
     return path.skip();
   }
 
@@ -113,7 +80,7 @@ const findExportedComponentDefinitions: Resolver = function (
           return path.skip();
         }
       }
-      const definition = resolveDefinition(resolvedPath);
+      const definition = resolveComponentDefinition(resolvedPath);
       if (definition && components.indexOf(definition) === -1) {
         components.push(definition);
       }

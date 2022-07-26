@@ -6,7 +6,7 @@ import normalizeClassDefinition from '../utils/normalizeClassDefinition';
 import resolveToValue from '../utils/resolveToValue';
 import type { NodePath } from '@babel/traverse';
 import type FileState from '../FileState';
-import type { Resolver } from '.';
+import type { ComponentNode, Resolver } from '.';
 
 /**
  * Given an AST, this function tries to find all object expressions that are
@@ -14,8 +14,8 @@ import type { Resolver } from '.';
  */
 const findAllComponentDefinitions: Resolver = function (
   file: FileState,
-): NodePath[] {
-  const definitions = new Set<NodePath>();
+): Array<NodePath<ComponentNode>> {
+  const definitions = new Set<NodePath<ComponentNode>>();
 
   function classVisitor(path) {
     if (isReactComponentClass(path)) {
@@ -43,7 +43,9 @@ const findAllComponentDefinitions: Resolver = function (
       if (isReactForwardRefCall(path)) {
         // If the the inner function was previously identified as a component
         // replace it with the parent node
-        const inner = resolveToValue(path.get('arguments')[0]);
+        const inner = resolveToValue(
+          path.get('arguments')[0],
+        ) as NodePath<ComponentNode>;
         definitions.delete(inner);
         definitions.add(path);
 

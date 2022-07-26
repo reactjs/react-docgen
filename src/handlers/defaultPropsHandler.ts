@@ -15,6 +15,8 @@ import type {
   RestElement,
   SpreadElement,
 } from '@babel/types';
+import type { ComponentNode } from '../resolver';
+import type { Handler } from '.';
 
 function getDefaultValue(path: NodePath): DefaultValueDescriptor | null {
   let defaultValue: string | undefined;
@@ -52,7 +54,9 @@ function getDefaultValue(path: NodePath): DefaultValueDescriptor | null {
   return null;
 }
 
-function getStatelessPropsPath(componentDefinition: NodePath): NodePath {
+function getStatelessPropsPath(
+  componentDefinition: NodePath<ComponentNode>,
+): NodePath {
   let value = resolveToValue(componentDefinition);
 
   if (isReactForwardRefCall(value)) {
@@ -62,7 +66,9 @@ function getStatelessPropsPath(componentDefinition: NodePath): NodePath {
   return value.get('params')[0];
 }
 
-function getDefaultPropsPath(componentDefinition: NodePath): NodePath | null {
+function getDefaultPropsPath(
+  componentDefinition: NodePath<ComponentNode>,
+): NodePath | null {
   let defaultPropsPath: NodePath<Node> | null = getMemberValuePath(
     componentDefinition,
     'defaultProps',
@@ -138,9 +144,9 @@ function getDefaultValuesFromProps(
   });
 }
 
-export default function defaultPropsHandler(
+const defaultPropsHandler: Handler = function (
   documentation: Documentation,
-  componentDefinition: NodePath,
+  componentDefinition: NodePath<ComponentNode>,
 ): void {
   let statelessProps: NodePath | null = null;
   const defaultPropsPath = getDefaultPropsPath(componentDefinition);
@@ -166,4 +172,6 @@ export default function defaultPropsHandler(
       false,
     );
   }
-}
+};
+
+export default defaultPropsHandler;

@@ -8,12 +8,11 @@ import type {
   ExportDefaultDeclaration,
   ExportNamedDeclaration,
 } from '@babel/types';
-import type { Resolver } from '.';
+import type { ComponentNode, Resolver } from '.';
 import type FileState from '../FileState';
-import {
+import resolveComponentDefinition, {
   isComponentDefinition,
-  resolveDefinition,
-} from './findAllExportedComponentDefinitions';
+} from '../utils/resolveComponentDefinition';
 
 const ERROR_MULTIPLE_DEFINITIONS =
   'Multiple exported component definitions found.';
@@ -35,14 +34,14 @@ const ERROR_MULTIPLE_DEFINITIONS =
  */
 const findExportedComponentDefinition: Resolver = function (
   file: FileState,
-): NodePath[] {
-  const foundDefinition: NodePath[] = [];
+): Array<NodePath<ComponentNode>> {
+  const foundDefinition: Array<NodePath<ComponentNode>> = [];
 
   function exportDeclaration(
     path: NodePath<ExportDefaultDeclaration | ExportNamedDeclaration>,
   ): void {
     const definitions = resolveExportDeclaration(path).reduce(
-      (acc: NodePath[], definition: NodePath) => {
+      (acc, definition) => {
         if (isComponentDefinition(definition)) {
           acc.push(definition);
         } else {
@@ -53,7 +52,7 @@ const findExportedComponentDefinition: Resolver = function (
         }
         return acc;
       },
-      [],
+      [] as Array<NodePath<ComponentNode>>,
     );
 
     if (definitions.length === 0) {
@@ -63,7 +62,7 @@ const findExportedComponentDefinition: Resolver = function (
       // If a file exports multiple components, ... complain!
       throw new Error(ERROR_MULTIPLE_DEFINITIONS);
     }
-    const definition = resolveDefinition(definitions[0]);
+    const definition = resolveComponentDefinition(definitions[0]);
     if (definition) {
       foundDefinition.push(definition);
     }
@@ -95,7 +94,7 @@ const findExportedComponentDefinition: Resolver = function (
         // If a file exports multiple components, ... complain!
         throw new Error(ERROR_MULTIPLE_DEFINITIONS);
       }
-      const definition = resolveDefinition(resolvedPath);
+      const definition = resolveComponentDefinition(resolvedPath);
       if (definition) {
         foundDefinition.push(definition);
       }

@@ -44,12 +44,8 @@ export default (path: NodePath): NodePath | null => {
   if (isReactComponentClass(path)) {
     const superTypes = path.get('superTypeParameters');
 
-    if (superTypes.node) {
-      const params = (
-        superTypes as NodePath<
-          TSTypeParameterInstantiation | TypeParameterInstantiation
-        >
-      ).get('params');
+    if (superTypes.hasNode()) {
+      const params = superTypes.get('params');
       typePath = params[params.length === 3 ? 1 : 0];
     } else {
       const propsMemberPath = getMemberValuePath(path, 'props');
