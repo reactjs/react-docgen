@@ -15,17 +15,17 @@ Array [
 
 exports[`resolveObjectValuesToArray can resolve spreads from imported objects 1`] = `
 Array [
-  "\\"bar\\"",
-  "\\"baz\\"",
   "\\"foo\\"",
+  "\\"baz\\"",
+  "\\"bar\\"",
 ]
 `;
 
 exports[`resolveObjectValuesToArray resolves Object.values but ignores duplicates 1`] = `
 Array [
   "1",
-  "5",
   "2",
+  "5",
 ]
 `;
 
@@ -48,8 +48,8 @@ Array [
 exports[`resolveObjectValuesToArray resolves Object.values when using resolvable spread 1`] = `
 Array [
   "1",
-  "4",
   "2",
+  "4",
 ]
 `;
 
@@ -62,8 +62,8 @@ Array [
 
 exports[`resolveObjectValuesToArray resolves Object.values with literals as computed key 1`] = `
 Array [
-  "2",
   "1",
+  "2",
 ]
 `;
 

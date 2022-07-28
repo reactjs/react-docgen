@@ -208,11 +208,11 @@ Object {
   "value": Array [
     Object {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": "\\"foo\\"",
     },
     Object {
       "computed": false,
-      "value": "\\"foo\\"",
+      "value": "\\"bar\\"",
     },
   ],
 }
@@ -348,11 +348,11 @@ Object {
   "value": Array [
     Object {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": "\\"foo\\"",
     },
     Object {
       "computed": false,
-      "value": "\\"foo\\"",
+      "value": "\\"bar\\"",
     },
   ],
 }
