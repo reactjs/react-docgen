@@ -57,10 +57,7 @@ export {
   default as resolveObjectKeysToArray,
   resolveObjectToNameArray,
 } from './resolveObjectKeysToArray';
-export {
-  default as resolveObjectValuesToArray,
-  resolveObjectToPropMap,
-} from './resolveObjectValuesToArray';
+export { default as resolveObjectValuesToArray } from './resolveObjectValuesToArray';
 export { default as resolveToModule } from './resolveToModule';
 export { default as resolveToValue } from './resolveToValue';
 export { default as setPropDescription } from './setPropDescription';
