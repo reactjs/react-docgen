@@ -53,6 +53,7 @@ export { default as resolveExportDeclaration } from './resolveExportDeclaration'
 export { default as resolveFunctionDefinitionToReturnValue } from './resolveFunctionDefinitionToReturnValue';
 export { default as resolveGenericTypeAnnotation } from './resolveGenericTypeAnnotation';
 export { default as resolveHOC } from './resolveHOC';
+export { default as resolveObjectPatternPropertyToValue } from './resolveObjectPatternPropertyToValue';
 export {
   default as resolveObjectKeysToArray,
   resolveObjectToNameArray,

@@ -2244,3 +2244,29 @@ Array [
   },
 ]
 `;
+
+exports[`main fixtures processes component "test-all-imports.tsx" without errors 1`] = `
+Array [
+  Object {
+    "description": "This is a TS component with imported stuff",
+    "displayName": "ImportedExtendedComponent",
+    "methods": Array [],
+    "props": Object {
+      "x": Object {
+        "defaultValue": Object {
+          "computed": false,
+          "value": "\\"string\\"",
+        },
+        "required": false,
+      },
+      "y": Object {
+        "defaultValue": Object {
+          "computed": false,
+          "value": "'otherstring'",
+        },
+        "required": false,
+      },
+    },
+  },
+]
+`;
