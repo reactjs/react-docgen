@@ -61,22 +61,29 @@ export default class FileState {
     this.scope = this.path.scope;
   }
 
+  /**
+   * Try to resolve and import with the `name`
+   */
   import(path: ImportPath, name: string): NodePath | null {
     return this.#importer(path, name, this);
   }
 
   /**
-   * Parse a new file
+   * Parse the content of a new file
+   * The filename is required so that potential imports inside the content can be correctly resolved
    */
-  parse(code: string): FileState {
+  parse(code: string, filename: string): FileState {
     const ast = this.#parser(code);
 
-    return new FileState(this.opts, {
-      ast,
-      code,
-      importer: this.#importer,
-      parser: this.#parser,
-    });
+    return new FileState(
+      { ...this.opts, filename },
+      {
+        ast,
+        code,
+        importer: this.#importer,
+        parser: this.#parser,
+      },
+    );
   }
 
   /**

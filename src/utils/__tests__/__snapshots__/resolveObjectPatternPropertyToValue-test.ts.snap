@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`resolveObjectPatternPropertyToValue AssignmentExpression resolved basic case 1`] = `
+Node {
+  "extra": Object {
+    "raw": "\\"string\\"",
+    "rawValue": "string",
+  },
+  "type": "StringLiteral",
+  "value": "string",
+}
+`;
+
+exports[`resolveObjectPatternPropertyToValue VariableDeclarator resolved basic case 1`] = `
+Node {
+  "extra": Object {
+    "raw": "\\"string\\"",
+    "rawValue": "string",
+  },
+  "type": "StringLiteral",
+  "value": "string",
+}
+`;

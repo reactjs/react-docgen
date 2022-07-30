@@ -1,7 +1,6 @@
 import { Scope } from '@babel/traverse';
 import type { NodePath } from '@babel/traverse';
 import type {
-  Expression,
   Identifier,
   ImportDeclaration,
   MemberExpression,
@@ -121,9 +120,46 @@ function findLastAssignedValue(
  * Else the path itself is returned.
  */
 export default function resolveToValue(path: NodePath): NodePath {
-  if (path.isVariableDeclarator()) {
-    if (path.node.init) {
-      return resolveToValue(path.get('init') as NodePath<Expression>);
+  if (path.isIdentifier()) {
+    if (
+      (path.parentPath.isClass() || path.parentPath.isFunction()) &&
+      path.parentPath.get('id') === path
+    ) {
+      return path.parentPath;
+    }
+
+    const binding = path.scope.getBinding(path.node.name);
+    let resolvedPath: NodePath | null = null;
+
+    if (binding) {
+      // The variable may be assigned a different value after initialization.
+      // We are first trying to find all assignments to the variable in the
+      // block where it is defined (i.e. we are not traversing into statements)
+      resolvedPath = findLastAssignedValue(binding.scope.path, path);
+      if (!resolvedPath) {
+        // @ts-ignore TODO fix in DT
+        const bindingMap = binding.path.getOuterBindingIdentifierPaths(
+          true,
+        ) as Record<string, Array<NodePath<Identifier>>>;
+
+        resolvedPath = findScopePath(bindingMap[path.node.name]);
+      }
+    } else {
+      // Initialize our monkey-patching of @babel/traverse 🙈
+      initialize(Scope);
+      const typeBinding = path.scope.getTypeBinding(path.node.name);
+
+      if (typeBinding) {
+        resolvedPath = findScopePath([typeBinding.identifierPath]);
+      }
+    }
+
+    return resolvedPath || path;
+  } else if (path.isVariableDeclarator()) {
+    const init = path.get('init');
+
+    if (init.hasNode()) {
+      return resolveToValue(init);
     }
   } else if (path.isMemberExpression()) {
     const root = getMemberExpressionRoot(path);
@@ -195,43 +231,6 @@ export default function resolveToValue(path: NodePath): NodePath {
     path.isTSTypeAssertion()
   ) {
     return resolveToValue(path.get('expression') as NodePath);
-  } else if (path.isIdentifier()) {
-    if (
-      (path.parentPath.isClassDeclaration() ||
-        path.parentPath.isClassExpression() ||
-        path.parentPath.isFunction()) &&
-      path.parentPath.get('id') === path
-    ) {
-      return path.parentPath;
-    }
-
-    const binding = path.scope.getBinding(path.node.name);
-    let resolvedPath: NodePath | null = null;
-
-    if (binding) {
-      // The variable may be assigned a different value after initialization.
-      // We are first trying to find all assignments to the variable in the
-      // block where it is defined (i.e. we are not traversing into statements)
-      resolvedPath = findLastAssignedValue(binding.scope.path, path);
-      if (!resolvedPath) {
-        // @ts-ignore TODO fix in DT
-        const bindingMap = binding.path.getOuterBindingIdentifierPaths(
-          true,
-        ) as Record<string, Array<NodePath<Identifier>>>;
-
-        resolvedPath = findScopePath(bindingMap[path.node.name]);
-      }
-    } else {
-      // Initialize our monkey-patching of @babel/traverse 🙈
-      initialize(Scope);
-      const typeBinding = path.scope.getTypeBinding(path.node.name);
-
-      if (typeBinding) {
-        resolvedPath = findScopePath([typeBinding.identifierPath]);
-      }
-    }
-
-    return resolvedPath || path;
   }
 
   return path;

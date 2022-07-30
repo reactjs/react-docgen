@@ -197,13 +197,18 @@ describe('main', () => {
   // even though it is not the default
   describe('fixtures', () => {
     const fixturePath = path.join(__dirname, 'fixtures');
-    const fileNames = fs.readdirSync(fixturePath);
+    const fileNames = fs.readdirSync(fixturePath, { withFileTypes: true });
 
     for (let i = 0; i < fileNames.length; i++) {
-      const filePath = path.join(fixturePath, fileNames[i]);
+      if (fileNames[i].isDirectory()) {
+        continue;
+      }
+      const name = fileNames[i].name;
+
+      const filePath = path.join(fixturePath, name);
       const fileContent = fs.readFileSync(filePath, 'utf8');
 
-      it(`processes component "${fileNames[i]}" without errors`, () => {
+      it(`processes component "${name}" without errors`, () => {
         let result;
 
         expect(() => {
