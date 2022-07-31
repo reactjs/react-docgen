@@ -3,6 +3,7 @@ import resolveExportDeclaration from '../utils/resolveExportDeclaration';
 import resolveToValue from '../utils/resolveToValue';
 import resolveHOC from '../utils/resolveHOC';
 import type { NodePath } from '@babel/traverse';
+import { visitors } from '@babel/traverse';
 import { shallowIgnoreVisitors } from '../utils/traverse';
 import type {
   ExportDefaultDeclaration,
@@ -16,6 +17,85 @@ import resolveComponentDefinition, {
 
 const ERROR_MULTIPLE_DEFINITIONS =
   'Multiple exported component definitions found.';
+
+interface TraverseState {
+  foundDefinition: NodePath<ComponentNode> | null;
+}
+
+function exportDeclaration(
+  path: NodePath<ExportDefaultDeclaration | ExportNamedDeclaration>,
+  state: TraverseState,
+): void {
+  const definitions = resolveExportDeclaration(path).reduce(
+    (acc, definition) => {
+      if (isComponentDefinition(definition)) {
+        acc.push(definition);
+      } else {
+        const resolved = resolveToValue(resolveHOC(definition));
+
+        if (isComponentDefinition(resolved)) {
+          acc.push(resolved);
+        }
+      }
+
+      return acc;
+    },
+    [] as Array<NodePath<ComponentNode>>,
+  );
+
+  if (definitions.length === 0) {
+    return path.skip();
+  }
+  if (definitions.length > 1 || state.foundDefinition) {
+    // If a file exports multiple components, ... complain!
+    throw new Error(ERROR_MULTIPLE_DEFINITIONS);
+  }
+  const definition = resolveComponentDefinition(definitions[0]);
+
+  if (definition) {
+    state.foundDefinition = definition;
+  }
+
+  return path.skip();
+}
+
+const explodedVisitors = visitors.explode<TraverseState>({
+  ...shallowIgnoreVisitors,
+
+  ExportNamedDeclaration: { enter: exportDeclaration },
+  ExportDefaultDeclaration: { enter: exportDeclaration },
+
+  AssignmentExpression: {
+    enter: function (path, state): void {
+      // Ignore anything that is not `exports.X = ...;` or
+      // `module.exports = ...;`
+      if (!isExportsOrModuleAssignment(path)) {
+        return path.skip();
+      }
+      // Resolve the value of the right hand side. It should resolve to a call
+      // expression, something like React.createClass
+      let resolvedPath = resolveToValue(path.get('right'));
+
+      if (!isComponentDefinition(resolvedPath)) {
+        resolvedPath = resolveToValue(resolveHOC(resolvedPath));
+        if (!isComponentDefinition(resolvedPath)) {
+          return path.skip();
+        }
+      }
+      if (state.foundDefinition) {
+        // If a file exports multiple components, ... complain!
+        throw new Error(ERROR_MULTIPLE_DEFINITIONS);
+      }
+      const definition = resolveComponentDefinition(resolvedPath);
+
+      if (definition) {
+        state.foundDefinition = definition;
+      }
+
+      return path.skip();
+    },
+  },
+});
 
 /**
  * Given an AST, this function tries to find the exported component definition.
@@ -35,81 +115,17 @@ const ERROR_MULTIPLE_DEFINITIONS =
 const findExportedComponentDefinition: Resolver = function (
   file: FileState,
 ): Array<NodePath<ComponentNode>> {
-  const foundDefinition: Array<NodePath<ComponentNode>> = [];
+  const state: TraverseState = {
+    foundDefinition: null,
+  };
 
-  function exportDeclaration(
-    path: NodePath<ExportDefaultDeclaration | ExportNamedDeclaration>,
-  ): void {
-    const definitions = resolveExportDeclaration(path).reduce(
-      (acc, definition) => {
-        if (isComponentDefinition(definition)) {
-          acc.push(definition);
-        } else {
-          const resolved = resolveToValue(resolveHOC(definition));
+  file.traverse(explodedVisitors, state);
 
-          if (isComponentDefinition(resolved)) {
-            acc.push(resolved);
-          }
-        }
-
-        return acc;
-      },
-      [] as Array<NodePath<ComponentNode>>,
-    );
-
-    if (definitions.length === 0) {
-      return path.skip();
-    }
-    if (definitions.length > 1 || foundDefinition.length === 1) {
-      // If a file exports multiple components, ... complain!
-      throw new Error(ERROR_MULTIPLE_DEFINITIONS);
-    }
-    const definition = resolveComponentDefinition(definitions[0]);
-
-    if (definition) {
-      foundDefinition.push(definition);
-    }
-
-    return path.skip();
+  if (state.foundDefinition) {
+    return [state.foundDefinition];
   }
 
-  file.traverse({
-    ...shallowIgnoreVisitors,
-
-    ExportNamedDeclaration: exportDeclaration,
-    ExportDefaultDeclaration: exportDeclaration,
-
-    AssignmentExpression: function (path): void {
-      // Ignore anything that is not `exports.X = ...;` or
-      // `module.exports = ...;`
-      if (!isExportsOrModuleAssignment(path)) {
-        return path.skip();
-      }
-      // Resolve the value of the right hand side. It should resolve to a call
-      // expression, something like React.createClass
-      let resolvedPath = resolveToValue(path.get('right'));
-
-      if (!isComponentDefinition(resolvedPath)) {
-        resolvedPath = resolveToValue(resolveHOC(resolvedPath));
-        if (!isComponentDefinition(resolvedPath)) {
-          return path.skip();
-        }
-      }
-      if (foundDefinition.length === 1) {
-        // If a file exports multiple components, ... complain!
-        throw new Error(ERROR_MULTIPLE_DEFINITIONS);
-      }
-      const definition = resolveComponentDefinition(resolvedPath);
-
-      if (definition) {
-        foundDefinition.push(definition);
-      }
-
-      return path.skip();
-    },
-  });
-
-  return foundDefinition;
+  return [];
 };
 
 export default findExportedComponentDefinition;

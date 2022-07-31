@@ -32,10 +32,9 @@ jobs:
         if: ${{ steps.release.outputs.release_created }}
         run: yarn install --frozen-lockfile --non-interactive
 
-      - name: Install website dependencies
+      - name: Build package
         if: ${{ steps.release.outputs.release_created }}
-        run: yarn install --frozen-lockfile --non-interactive
-        working-directory: ./website
+        run: yarn build
 
       - run: npm publish --tag=next
         env:

@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`resolveFunctionDefinitionToReturnValue can resolve easy return statement 1`] = `
+Node {
+  "extra": Object {
+    "raw": "\\"result\\"",
+    "rawValue": "result",
+  },
+  "type": "StringLiteral",
+  "value": "result",
+}
+`;
+
+exports[`resolveFunctionDefinitionToReturnValue stops after first return 1`] = `
+Node {
+  "extra": Object {
+    "raw": "\\"first\\"",
+    "rawValue": "first",
+  },
+  "type": "StringLiteral",
+  "value": "first",
+}
+`;

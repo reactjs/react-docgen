@@ -15,7 +15,7 @@ export type ImportPath = NodePath<
 export type Importer = (
   path: ImportPath,
   name: string,
-  state: FileState,
+  file: FileState,
 ) => NodePath | null;
 
 export { ignoreImports, makeFsImporter };

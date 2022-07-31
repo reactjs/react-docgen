@@ -26,13 +26,12 @@
   "main": "dist/main.js",
   "typings": "dist/main.d.ts",
   "scripts": {
-    "build": "rimraf dist/ && yarn build:ts",
-    "build:ts": "tsc",
+    "build": "rimraf dist/ && tsc",
     "lint": "eslint . --ext .js,.ts --report-unused-disable-directives",
     "fix": "eslint . --ext .js,.ts --fix --report-unused-disable-directives",
-    "prepare": "yarn build",
     "start": "cd website && yarn && yarn start",
-    "test": "yarn build && jest"
+    "test": "yarn lint && yarn build && jest",
+    "test:ci": "yarn build && jest"
   },
   "keywords": [
     "react",

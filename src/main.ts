@@ -1,7 +1,7 @@
 import * as allHandlers from './handlers';
 import parse from './parse';
-import * as AllResolver from './resolver';
-import * as AllImporter from './importer';
+import * as allResolvers from './resolver';
+import * as allImporters from './importer';
 import * as utils from './utils';
 import type { Options } from './babelParser';
 import type { DocumentationObject as Documentation } from './Documentation';
@@ -10,7 +10,7 @@ import type { Importer } from './importer';
 import type { Handler } from './handlers';
 import type FileState from './FileState';
 
-const defaultResolver: Resolver = AllResolver.findExportedComponentDefinition;
+const defaultResolver: Resolver = allResolvers.findExportedComponentDefinition;
 const defaultHandlers: Handler[] = [
   allHandlers.propTypeHandler,
   allHandlers.contextTypeHandler,
@@ -24,7 +24,8 @@ const defaultHandlers: Handler[] = [
   allHandlers.componentMethodsHandler,
   allHandlers.componentMethodsJsDocHandler,
 ];
-const defaultImporter: Importer = AllImporter.makeFsImporter();
+
+const defaultImporter: Importer = allImporters.makeFsImporter();
 
 declare module '@babel/traverse' {
   export interface HubInterface {
@@ -67,8 +68,8 @@ export {
   defaultParse as parse,
   defaultHandlers,
   allHandlers as handlers,
-  AllResolver as resolver,
-  AllImporter as importers,
+  allResolvers as resolver,
+  allImporters as importers,
   utils,
 };
 
