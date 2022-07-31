@@ -31,7 +31,7 @@
     "fix": "eslint . --ext .js,.ts --fix --report-unused-disable-directives",
     "start": "cd website && yarn && yarn start",
     "test": "yarn lint && yarn build && jest",
-    "test:ci": "yarn build && jest"
+    "test:ci": "yarn build && jest --ci --coverage"
   },
   "keywords": [
     "react",

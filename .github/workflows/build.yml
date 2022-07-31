@@ -40,7 +40,7 @@ jobs:
         run: yarn install --frozen-lockfile --non-interactive
 
       - name: Unit tests
-        run: yarn test --ci --coverage
+        run: yarn test:ci
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
