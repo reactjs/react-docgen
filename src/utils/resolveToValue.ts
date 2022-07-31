@@ -88,15 +88,13 @@ function findLastAssignedValue(
       // Ensure the RHS doesn't contain the reference we're trying to resolve.
       const candidatePath = assignmentPath.get('right');
 
-      for (
-        let p: NodePath | null = idPath;
-        p && p.node != null;
-        p = p.parentPath
+      if (
+        candidatePath.node === idPath.node ||
+        idPath.findParent(parent => parent.node === candidatePath.node)
       ) {
-        if (p.node === candidatePath.node) {
-          return;
-        }
+        return;
       }
+
       results.push(candidatePath);
 
       return assignmentPath.skip();
@@ -221,10 +219,6 @@ export default function resolveToValue(path: NodePath): NodePath {
   ) {
     // go up to the import declaration
     return path.parentPath;
-  } else if (path.isAssignmentExpression()) {
-    if (path.node.operator === '=') {
-      return resolveToValue(path.get('right'));
-    }
   } else if (
     path.isTypeCastExpression() ||
     path.isTSAsExpression() ||

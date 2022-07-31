@@ -45,7 +45,7 @@ function setPropDescriptor(
     }
     const resolvedPath = resolveToValue(id);
 
-    if (resolvedPath && resolvedPath.isTypeAlias()) {
+    if (resolvedPath.isTypeAlias()) {
       const right = resolvedPath.get('right');
 
       applyToTypeProperties(
