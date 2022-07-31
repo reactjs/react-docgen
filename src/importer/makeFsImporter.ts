@@ -1,8 +1,9 @@
-import { traverseShallow } from '../utils/traverse';
+import { shallowIgnoreVisitors } from '../utils/traverse';
 import resolve from 'resolve';
 import { dirname } from 'path';
 import fs from 'fs';
 import type { NodePath } from '@babel/traverse';
+import { visitors } from '@babel/traverse';
 import type { ExportSpecifier, Identifier, ObjectProperty } from '@babel/types';
 import type { Importer, ImportPath } from '.';
 import type FileState from '../FileState';
@@ -15,6 +16,13 @@ function defaultLookupModule(filename: string, basedir: string): string {
   });
 }
 
+interface TraverseState {
+  readonly name: string;
+  readonly file: FileState;
+  readonly seen: Set<string>;
+  resultPath?: NodePath | null;
+}
+
 // Factory for the resolveImports importer
 export default function makeFsImporter(
   lookupModule: (
@@ -23,18 +31,16 @@ export default function makeFsImporter(
   ) => string = defaultLookupModule,
   cache: Map<string, FileState> = new Map(),
 ): Importer {
-  return resolveImportedValue;
-
   function resolveImportedValue(
     path: ImportPath,
     name: string,
-    state: FileState,
+    file: FileState,
     seen: Set<string> = new Set(),
   ): NodePath | null {
     // Bail if no filename was provided for the current source file.
     // Also never traverse into react itself.
     const source = path.node.source?.value;
-    const options = state.opts;
+    const options = file.opts;
 
     if (!source || !options || !options.filename || source === 'react') {
       return null;
@@ -57,30 +63,25 @@ export default function makeFsImporter(
 
     seen.add(resolvedSource);
 
-    let nextState = cache.get(resolvedSource);
+    let nextFile = cache.get(resolvedSource);
 
-    if (!nextState) {
+    if (!nextFile) {
       // Read and parse the code
       const src = fs.readFileSync(resolvedSource, 'utf8');
 
-      nextState = state.parse(src, resolvedSource);
+      nextFile = file.parse(src, resolvedSource);
 
-      cache.set(resolvedSource, nextState);
+      cache.set(resolvedSource, nextFile);
     }
 
-    return findExportedValue(nextState, name, seen);
+    return findExportedValue(nextFile, name, seen);
   }
 
-  // Traverses the program looking for an export that matches the requested name
-  function findExportedValue(
-    state: FileState,
-    name: string,
-    seen: Set<string>,
-  ): NodePath | null {
-    let resultPath: NodePath | null | undefined;
-
-    traverseShallow(state.path, {
-      ExportNamedDeclaration(path) {
+  const explodedVisitors = visitors.explode<TraverseState>({
+    ...shallowIgnoreVisitors,
+    ExportNamedDeclaration: {
+      enter: function (path, state) {
+        const { file, name, seen } = state;
         const declaration = path.get('declaration');
 
         // export const/var ...
@@ -92,13 +93,13 @@ export default function makeFsImporter(
             if (id.isIdentifier() && id.node.name === name && init.hasNode()) {
               // export const/var a = <init>
 
-              resultPath = init;
+              state.resultPath = init;
 
               break;
             } else if (id.isObjectPattern()) {
               // export const/var { a } = <init>
 
-              resultPath = id.get('properties').find(prop => {
+              state.resultPath = id.get('properties').find(prop => {
                 if (prop.isObjectProperty()) {
                   const value = prop.get('value');
 
@@ -109,9 +110,9 @@ export default function makeFsImporter(
                 return false;
               });
 
-              if (resultPath) {
-                resultPath = resolveObjectPatternPropertyToValue(
-                  resultPath as NodePath<ObjectProperty>,
+              if (state.resultPath) {
+                state.resultPath = resolveObjectPatternPropertyToValue(
+                  state.resultPath as NodePath<ObjectProperty>,
                 );
 
                 break;
@@ -127,7 +128,7 @@ export default function makeFsImporter(
         ) {
           // export function/class/type/interface/enum ...
 
-          resultPath = declaration;
+          state.resultPath = declaration;
         } else if (path.has('specifiers')) {
           // export { ... } or export x from ... or export * as x from ...
 
@@ -144,44 +145,74 @@ export default function makeFsImporter(
                   ? specifierPath.node.local.name
                   : 'default';
 
-                resultPath = resolveImportedValue(path, local, state, seen);
-                if (resultPath) {
+                state.resultPath = resolveImportedValue(
+                  path,
+                  local,
+                  file,
+                  seen,
+                );
+                if (state.resultPath) {
                   break;
                 }
               } else {
-                resultPath = (specifierPath as NodePath<ExportSpecifier>).get(
-                  'local',
-                );
+                state.resultPath = (
+                  specifierPath as NodePath<ExportSpecifier>
+                ).get('local');
+
                 break;
               }
             }
           }
         }
 
-        resultPath ? path.stop() : path.skip();
+        state.resultPath ? path.stop() : path.skip();
       },
-      ExportDefaultDeclaration(path) {
+    },
+    ExportDefaultDeclaration: {
+      enter: function (path, state) {
+        const { name } = state;
+
         if (name === 'default') {
-          resultPath = path.get('declaration');
+          state.resultPath = path.get('declaration');
 
           return path.stop();
         }
 
         path.skip();
       },
-      ExportAllDeclaration(path) {
-        const resolvedPath = resolveImportedValue(path, name, state, seen);
+    },
+    ExportAllDeclaration: {
+      enter: function (path, state) {
+        const { name, file, seen } = state;
+        const resolvedPath = resolveImportedValue(path, name, file, seen);
 
         if (resolvedPath) {
-          resultPath = resolvedPath;
+          state.resultPath = resolvedPath;
 
           return path.stop();
         }
 
         path.skip();
       },
-    });
+    },
+  });
 
-    return resultPath || null;
+  // Traverses the program looking for an export that matches the requested name
+  function findExportedValue(
+    file: FileState,
+    name: string,
+    seen: Set<string>,
+  ): NodePath | null {
+    const state: TraverseState = {
+      file,
+      name,
+      seen,
+    };
+
+    file.traverse(explodedVisitors, state);
+
+    return state.resultPath || null;
   }
+
+  return resolveImportedValue;
 }

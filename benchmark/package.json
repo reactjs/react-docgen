@@ -3,7 +3,8 @@
   "private": true,
   "description": "Generate benchmarks for react-docgen",
   "scripts": {
-    "start": "node --expose-gc ./index.js"
+    "start": "node --expose-gc ./index.js",
+    "debug": "node --inspect-brk --expose-gc ./index.js"
   },
   "license": "MIT",
   "dependencies": {

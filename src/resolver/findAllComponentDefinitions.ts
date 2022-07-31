@@ -5,8 +5,79 @@ import isStatelessComponent from '../utils/isStatelessComponent';
 import normalizeClassDefinition from '../utils/normalizeClassDefinition';
 import resolveToValue from '../utils/resolveToValue';
 import type { NodePath } from '@babel/traverse';
+import { visitors } from '@babel/traverse';
 import type FileState from '../FileState';
 import type { ComponentNode, Resolver } from '.';
+import type {
+  ArrowFunctionExpression,
+  FunctionDeclaration,
+  FunctionExpression,
+  ObjectMethod,
+} from '@babel/types';
+
+interface TraverseState {
+  foundDefinitions: Set<NodePath<ComponentNode>>;
+}
+
+function classVisitor(path: NodePath, state: TraverseState) {
+  if (isReactComponentClass(path)) {
+    normalizeClassDefinition(path);
+    state.foundDefinitions.add(path);
+  }
+
+  path.skip();
+}
+
+function statelessVisitor(
+  path: NodePath<
+    | ArrowFunctionExpression
+    | FunctionDeclaration
+    | FunctionExpression
+    | ObjectMethod
+  >,
+  state: TraverseState,
+) {
+  if (isStatelessComponent(path)) {
+    state.foundDefinitions.add(path);
+  }
+
+  path.skip();
+}
+
+const explodedVisitors = visitors.explode<TraverseState>({
+  FunctionDeclaration: { enter: statelessVisitor },
+  FunctionExpression: { enter: statelessVisitor },
+  ObjectMethod: { enter: statelessVisitor },
+  ArrowFunctionExpression: { enter: statelessVisitor },
+  ClassExpression: { enter: classVisitor },
+  ClassDeclaration: { enter: classVisitor },
+  CallExpression: {
+    enter: function (path, state): void {
+      if (isReactForwardRefCall(path)) {
+        // If the the inner function was previously identified as a component
+        // replace it with the parent node
+        const inner = resolveToValue(
+          path.get('arguments')[0],
+        ) as NodePath<ComponentNode>;
+
+        state.foundDefinitions.delete(inner);
+        state.foundDefinitions.add(path);
+
+        // Do not traverse into arguments
+        return path.skip();
+      } else if (isReactCreateClassCall(path)) {
+        const resolvedPath = resolveToValue(path.get('arguments')[0]);
+
+        if (resolvedPath.isObjectExpression()) {
+          state.foundDefinitions.add(resolvedPath);
+        }
+
+        // Do not traverse into arguments
+        return path.skip();
+      }
+    },
+  },
+});
 
 /**
  * Given an AST, this function tries to find all object expressions that are
@@ -15,59 +86,13 @@ import type { ComponentNode, Resolver } from '.';
 const findAllComponentDefinitions: Resolver = function (
   file: FileState,
 ): Array<NodePath<ComponentNode>> {
-  const definitions = new Set<NodePath<ComponentNode>>();
+  const state: TraverseState = {
+    foundDefinitions: new Set<NodePath<ComponentNode>>(),
+  };
 
-  function classVisitor(path) {
-    if (isReactComponentClass(path)) {
-      normalizeClassDefinition(path);
-      definitions.add(path);
-    }
+  file.traverse(explodedVisitors, state);
 
-    return false;
-  }
-
-  function statelessVisitor(path) {
-    if (isStatelessComponent(path)) {
-      definitions.add(path);
-    }
-
-    return false;
-  }
-
-  file.traverse({
-    FunctionDeclaration: statelessVisitor,
-    FunctionExpression: statelessVisitor,
-    ObjectMethod: statelessVisitor,
-    ArrowFunctionExpression: statelessVisitor,
-    ClassExpression: classVisitor,
-    ClassDeclaration: classVisitor,
-    CallExpression: function (path): void {
-      if (isReactForwardRefCall(path)) {
-        // If the the inner function was previously identified as a component
-        // replace it with the parent node
-        const inner = resolveToValue(
-          path.get('arguments')[0],
-        ) as NodePath<ComponentNode>;
-
-        definitions.delete(inner);
-        definitions.add(path);
-
-        // Do not traverse into arguments
-        return path.skip();
-      } else if (isReactCreateClassCall(path)) {
-        const resolvedPath = resolveToValue(path.get('arguments')[0]);
-
-        if (resolvedPath.isObjectExpression()) {
-          definitions.add(resolvedPath);
-        }
-
-        // Do not traverse into arguments
-        return path.skip();
-      }
-    },
-  });
-
-  return Array.from(definitions);
+  return Array.from(state.foundDefinitions);
 };
 
 export default findAllComponentDefinitions;

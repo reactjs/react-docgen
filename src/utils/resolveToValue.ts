@@ -1,4 +1,4 @@
-import { Scope } from '@babel/traverse';
+import { Scope, visitors } from '@babel/traverse';
 import type { NodePath } from '@babel/traverse';
 import type {
   Identifier,
@@ -8,7 +8,7 @@ import type {
 import getMemberExpressionRoot from './getMemberExpressionRoot';
 import getPropertyValuePath from './getPropertyValuePath';
 import { Array as toArray } from './expressionTo';
-import { traverseShallow } from './traverse';
+import { shallowIgnoreVisitors } from './traverse';
 import getMemberValuePath, {
   isSupportedDefinitionType,
 } from './getMemberValuePath';
@@ -59,6 +59,47 @@ function findScopePath(
   return null;
 }
 
+interface TraverseState {
+  readonly idPath: NodePath<Identifier>;
+  resultPath?: NodePath;
+}
+
+const explodedVisitors = visitors.explode<TraverseState>({
+  ...shallowIgnoreVisitors,
+
+  AssignmentExpression: {
+    enter: function (assignmentPath, state) {
+      const node = state.idPath.node;
+      const left = assignmentPath.get('left');
+
+      // Skip anything that is not an assignment to a variable with the
+      // passed name.
+      // Ensure the LHS isn't the reference we're trying to resolve.
+      if (
+        !left.isIdentifier() ||
+        left.node === node ||
+        left.node.name !== node.name ||
+        assignmentPath.node.operator !== '='
+      ) {
+        return assignmentPath.skip();
+      }
+      // Ensure the RHS doesn't contain the reference we're trying to resolve.
+      const candidatePath = assignmentPath.get('right');
+
+      if (
+        candidatePath.node === node ||
+        state.idPath.findParent(parent => parent.node === candidatePath.node)
+      ) {
+        return assignmentPath.skip();
+      }
+
+      state.resultPath = candidatePath;
+
+      return assignmentPath.skip();
+    },
+  },
+});
+
 /**
  * Tries to find the last value assigned to `name` in the scope created by
  * `scope`. We are not descending into any statements (blocks).
@@ -67,47 +108,11 @@ function findLastAssignedValue(
   path: NodePath,
   idPath: NodePath<Identifier>,
 ): NodePath | null {
-  const results: NodePath[] = [];
-  const name = idPath.node.name;
+  const state: TraverseState = { idPath };
 
-  traverseShallow(path, {
-    AssignmentExpression(assignmentPath) {
-      const left = assignmentPath.get('left');
+  path.traverse(explodedVisitors, state);
 
-      // Skip anything that is not an assignment to a variable with the
-      // passed name.
-      // Ensure the LHS isn't the reference we're trying to resolve.
-      if (
-        !left.isIdentifier() ||
-        left.node === idPath.node ||
-        left.node.name !== name ||
-        assignmentPath.node.operator !== '='
-      ) {
-        return;
-      }
-      // Ensure the RHS doesn't contain the reference we're trying to resolve.
-      const candidatePath = assignmentPath.get('right');
-
-      if (
-        candidatePath.node === idPath.node ||
-        idPath.findParent(parent => parent.node === candidatePath.node)
-      ) {
-        return;
-      }
-
-      results.push(candidatePath);
-
-      return assignmentPath.skip();
-    },
-  });
-
-  const resultPath = results.pop();
-
-  if (resultPath == null) {
-    return null;
-  }
-
-  return resolveToValue(resultPath);
+  return state.resultPath ? resolveToValue(state.resultPath) : null;
 }
 
 /**

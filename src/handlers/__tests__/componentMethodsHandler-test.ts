@@ -351,6 +351,7 @@ describe('componentMethodsHandler', () => {
 
     it('finds static methods on a component in an assignment', () => {
       const src = `
+        let Test;
         Test = (props) => {};
         Test.doFoo = () => {};
         Test.doBar = () => {};
@@ -360,7 +361,7 @@ describe('componentMethodsHandler', () => {
       componentMethodsHandler(
         documentation,
         parse
-          .statement(src)
+          .statement(src, 1)
           .get('expression.right') as NodePath<ArrowFunctionExpression>,
       );
       expect(documentation.methods).toMatchSnapshot();
@@ -368,6 +369,7 @@ describe('componentMethodsHandler', () => {
 
     it('resolves imported methods assigned on a component in an assignment', () => {
       const src = `
+        let Test;
         Test = (props) => {};
         import doFoo from 'doFoo';
         Test.doFoo = doFoo;
@@ -376,7 +378,7 @@ describe('componentMethodsHandler', () => {
       componentMethodsHandler(
         documentation,
         parse
-          .statement(src, mockImporter)
+          .statement(src, mockImporter, 1)
           .get('expression.right') as NodePath<ArrowFunctionExpression>,
       );
       expect(documentation.methods).toMatchSnapshot();

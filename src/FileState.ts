@@ -86,10 +86,12 @@ export default class FileState {
     );
   }
 
+  traverse<S>(visitors: Visitor<S>, state?: S): void;
+  traverse(visitors: Visitor): void;
   /**
    * Traverse the current file
    */
-  traverse(visitors: Visitor, state?: unknown): void {
+  traverse(visitors: Visitor, state?: any): void {
     traverse(this.ast, visitors, this.scope, state);
   }
 }

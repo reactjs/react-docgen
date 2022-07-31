@@ -4,10 +4,10 @@ import getMethodDocumentation from '../utils/getMethodDocumentation';
 import isReactComponentClass from '../utils/isReactComponentClass';
 import isReactComponentMethod from '../utils/isReactComponentMethod';
 import type Documentation from '../Documentation';
-import match from '../utils/match';
-import { traverseShallow } from '../utils/traverse';
+import { shallowIgnoreVisitors } from '../utils/traverse';
 import resolveToValue from '../utils/resolveToValue';
-import type { NodePath } from '@babel/traverse';
+import type { NodePath, Scope } from '@babel/traverse';
+import { visitors } from '@babel/traverse';
 import type { AssignmentExpression, Identifier } from '@babel/types';
 import type { ComponentNode } from '../resolver';
 import type { Handler } from '.';
@@ -37,38 +37,61 @@ function isMethod(path: NodePath): boolean {
   return isProbablyMethod && !isReactComponentMethod(path);
 }
 
+interface TraverseState {
+  readonly scope: Scope | undefined;
+  readonly name: string;
+  methods: Array<NodePath<AssignmentExpression>>;
+}
+
+const explodedVisitors = visitors.explode<TraverseState>({
+  ...shallowIgnoreVisitors,
+
+  AssignmentExpression: {
+    enter: function (assignmentPath, state) {
+      const { name, scope } = state;
+      const left = assignmentPath.get('left');
+      const binding = assignmentPath.scope.getBinding(name);
+
+      if (
+        left.isMemberExpression() &&
+        left.get('object').isIdentifier() &&
+        (left.node.object as Identifier).name === name &&
+        binding &&
+        binding.scope === scope &&
+        resolveToValue(assignmentPath.get('right')).isFunction()
+      ) {
+        state.methods.push(assignmentPath);
+      }
+      assignmentPath.skip();
+    },
+  },
+});
+
 function findAssignedMethods(
   path: NodePath,
   idPath: NodePath<Identifier | null | undefined>,
 ): Array<NodePath<AssignmentExpression>> {
-  const results: Array<NodePath<AssignmentExpression>> = [];
-
   if (!idPath.hasNode() || !idPath.isIdentifier()) {
-    return results;
+    return [];
   }
 
   const name = idPath.node.name;
-  const idScope = idPath.scope.getBinding(idPath.node.name)?.scope;
+  const binding = idPath.scope.getBinding(name);
 
-  traverseShallow(path, {
-    AssignmentExpression(assignmentPath) {
-      const node = assignmentPath.node;
+  if (!binding) {
+    return [];
+  }
 
-      if (
-        match(node.left, {
-          type: 'MemberExpression',
-          object: { type: 'Identifier', name },
-        }) &&
-        assignmentPath.scope.getBinding(name)?.scope === idScope &&
-        resolveToValue(assignmentPath.get('right')).isFunction()
-      ) {
-        results.push(assignmentPath);
-        assignmentPath.skip();
-      }
-    },
-  });
+  const scope = binding.scope;
+  const state: TraverseState = {
+    scope,
+    name,
+    methods: [],
+  };
 
-  return results;
+  path.traverse(explodedVisitors, state);
+
+  return state.methods;
 }
 
 /**

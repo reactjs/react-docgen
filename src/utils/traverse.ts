@@ -1,32 +1,24 @@
-import type { NodePath, Visitor } from '@babel/traverse';
+import type { NodePath } from '@babel/traverse';
 
 export function ignore<T>(path: NodePath<T>): void {
   path.skip();
 }
 
-/**
- * A helper function that doesn't traverse into nested blocks / statements by
- * default.
- */
-export function traverseShallow(path: NodePath, visitors: Visitor): void {
-  path.traverse({ ...shallowIgnoreVisitors, ...visitors });
-}
-
 export const shallowIgnoreVisitors = {
-  FunctionDeclaration: ignore,
-  FunctionExpression: ignore,
-  ClassDeclaration: ignore,
-  ClassExpression: ignore,
-  IfStatement: ignore,
-  WithStatement: ignore,
-  SwitchStatement: ignore,
-  CatchClause: ignore,
-  WhileStatement: ignore,
-  DoWhileStatement: ignore,
-  ForStatement: ignore,
-  ForInStatement: ignore,
-  ForOfStatement: ignore,
-  ExportNamedDeclaration: ignore,
-  ExportDefaultDeclaration: ignore,
-  ConditionalExpression: ignore,
+  FunctionDeclaration: { enter: ignore },
+  FunctionExpression: { enter: ignore },
+  ClassDeclaration: { enter: ignore },
+  ClassExpression: { enter: ignore },
+  IfStatement: { enter: ignore },
+  WithStatement: { enter: ignore },
+  SwitchStatement: { enter: ignore },
+  CatchClause: { enter: ignore },
+  WhileStatement: { enter: ignore },
+  DoWhileStatement: { enter: ignore },
+  ForStatement: { enter: ignore },
+  ForInStatement: { enter: ignore },
+  ForOfStatement: { enter: ignore },
+  ExportNamedDeclaration: { enter: ignore },
+  ExportDefaultDeclaration: { enter: ignore },
+  ConditionalExpression: { enter: ignore },
 };
