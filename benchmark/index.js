@@ -3,12 +3,13 @@ const path = require('path');
 const Table = require('cli-table');
 const Benchmark = require('benchmark');
 const { parse } = require('..');
+const { parse: parse4 } = require('react-docgen4');
 const { parse: parse5 } = require('react-docgen5');
 const { parse: parse6old } = require('react-docgen6pre');
 
 console.log(`Node: ${process.version}`);
 
-const head = ['fixture', 'current', 'v6.0.0-alpha.3', 'v5.4.3'];
+const head = ['fixture', 'current', 'v6.0.0-alpha.3', 'v5.4.3', 'v4.1.1'];
 
 const files = ['./fixtures/CircularProgress.js'];
 
@@ -34,7 +35,9 @@ files.forEach(file => {
 
   // warmup
   parse(code, undefined, undefined, undefined, options);
+  parse6old(code, undefined, undefined, options);
   parse5(code, undefined, undefined, options);
+  parse4(code, undefined, undefined, options);
   global.gc();
   suite.add('current', () => {
     parse(code, undefined, undefined, undefined, options);
@@ -44,6 +47,9 @@ files.forEach(file => {
   });
   suite.add('v5.4.3', () => {
     parse5(code, undefined, undefined, options);
+  });
+  suite.add('v4.1.1', () => {
+    parse4(code, undefined, undefined, options);
   });
   const result = [suite.name];
 
