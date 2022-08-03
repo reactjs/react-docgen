@@ -56,7 +56,7 @@ export default class FileState {
       parent: this.ast,
       container: this.ast,
       key: 'program',
-      // @ts-expect-error TODO FIX DT https://github.com/babel/babel/blob/b58e35b6aa30a4c58da3147ae4a1fb5cef2073c9/packages/babel-traverse/src/path/context.ts#L158
+      // @ts-expect-error TODO DONE wait for update to types
     }).setContext() as NodePath<Program>;
     this.scope = this.path.scope;
   }
@@ -91,7 +91,7 @@ export default class FileState {
   /**
    * Traverse the current file
    */
-  traverse(visitors: Visitor, state?: any): void {
+  traverse(visitors: Visitor, state?: unknown): void {
     traverse(this.ast, visitors, this.scope, state);
   }
 }
