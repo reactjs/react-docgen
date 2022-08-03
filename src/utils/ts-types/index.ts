@@ -58,7 +58,6 @@ class TypeBinding {
     scope: BaseScope;
     typeKind: TypeKind;
   }) {
-    // TODO fix DT and remove existing from params
     this.identifier = data.identifier;
     this.identifierPath = data.identifierPath;
     this.path = data.path;
@@ -73,52 +72,41 @@ function registerTypeBinding(
   path: NodePath<Identifier>,
   bindingPath: NodePath<BindingNode>,
 ): void {
-  const ids = { [path.node.name]: [path.node] };
+  const id = path.node;
+  const { name } = id;
+  const local = this.getOwnTypeBinding(name);
 
-  // TODO remove loop as always one identifier?
-  for (const name of Object.keys(ids)) {
-    for (const id of ids[name]) {
-      const local = this.getOwnTypeBinding(name);
+  if (local) {
+    if (local.identifier === id) return;
 
-      if (local) {
-        if (local.identifier === id) continue;
-
-        if (
-          // <!>: collide, <=>: not collide, merge
-          // enum <!> interface
-          // enum <!> alias
-          // interface <!> alias
-          // alias <!> alias
-          // interface <=> interface
-          // enum <=> enum
-          typeKind !== local.typeKind ||
-          typeKind === 'alias' ||
-          local.typeKind === 'alias'
-        ) {
-          throw this.hub.buildError(
-            id,
-            `Duplicate type declaration "${name}"`,
-            TypeError,
-          );
-        }
-        // TODO fix in DT
-        // this.checkBlockScopedCollisions(local as any, 'let', name, id);
-      }
-
-      if (local) {
-        // two interface with the same name
-        // @ts-expect-error TODO fix DT
-        local.reassign(path);
-      } else {
-        this.typeBindings[name] = new TypeBinding({
-          identifier: id,
-          identifierPath: path,
-          path: bindingPath,
-          scope: this,
-          typeKind,
-        });
-      }
+    if (
+      // <!>: does collide,
+      // <=>: does not collide (type merging)
+      //
+      // enum <!> interface
+      // enum <!> alias
+      // interface <!> alias
+      // alias <!> alias
+      // interface <=> interface
+      // enum <=> enum
+      typeKind !== local.typeKind ||
+      typeKind === 'alias' ||
+      local.typeKind === 'alias'
+    ) {
+      throw this.hub.buildError(
+        id,
+        `Duplicate type declaration "${name}"`,
+        TypeError,
+      );
     }
+  } else {
+    this.typeBindings[name] = new TypeBinding({
+      identifier: id,
+      identifierPath: path,
+      path: bindingPath,
+      scope: this,
+      typeKind,
+    });
   }
 }
 
@@ -157,16 +145,19 @@ function registerDeclaration(this: BaseScope, path: NodePath): void {
 }
 
 export default function initialize(scopeClass: typeof BaseScope): void {
-  // @ts-expect-error The typ does not allow undefined, only internally
+  // @ts-expect-error The typ assumes getTypeBinding is always set,
+  // but we know we have to do that once and that is here
   if (scopeClass.prototype.getTypeBinding) {
     return;
   }
   scopeClass.prototype.getTypeBinding = getTypeBinding;
   scopeClass.prototype.registerTypeBinding = registerTypeBinding;
   scopeClass.prototype.getOwnTypeBinding = getOwnTypeBinding;
+
   scopeClass.prototype._realRegisterDeclaration =
     scopeClass.prototype.registerDeclaration;
   scopeClass.prototype.registerDeclaration = registerDeclaration;
+
   scopeClass.prototype._realCrawl = scopeClass.prototype.crawl;
   scopeClass.prototype.crawl = function (this: BaseScope) {
     this.typeBindings = Object.create(null);

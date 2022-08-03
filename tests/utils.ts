@@ -11,8 +11,6 @@ import type {
   Program,
   Statement,
 } from '@babel/types';
-// @ts-ignore TODO fix types in TD
-//import { File } from '@babel/core';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
