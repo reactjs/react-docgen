@@ -109,7 +109,7 @@ describe('getTSType', () => {
     simplePropTypes.forEach(type => {
       const typePath = typeAlias(`let x: ${type};`);
 
-      expect(getTSType(typePath)).toEqual({ name: type });
+      expect(getTSType(typePath)).toMatchSnapshot();
     });
   });
 
@@ -120,10 +120,7 @@ describe('getTSType', () => {
       it(`detects ${value}`, () => {
         const typePath = typeAlias(`let x: ${value};`);
 
-        expect(getTSType(typePath)).toEqual({
-          name: 'literal',
-          value: `${value}`,
-        });
+        expect(getTSType(typePath)).toMatchSnapshot();
       });
     });
   });
@@ -131,7 +128,7 @@ describe('getTSType', () => {
   it('detects external type', () => {
     const typePath = typeAlias('let x: xyz;');
 
-    expect(getTSType(typePath)).toEqual({ name: 'xyz' });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('resolves external type', () => {
@@ -143,37 +140,25 @@ describe('getTSType', () => {
       mockImporter,
     );
 
-    expect(getTSType(typePath)).toEqual({ name: 'string' });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('detects array type shorthand', () => {
     const typePath = typeAlias('let x: number[];');
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'Array',
-      elements: [{ name: 'number' }],
-      raw: 'number[]',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('detects array type', () => {
     const typePath = typeAlias('let x: Array<number>;');
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'Array',
-      elements: [{ name: 'number' }],
-      raw: 'Array<number>',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('detects array type with multiple types', () => {
     const typePath = typeAlias('let x: Array<number, xyz>;');
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'Array',
-      elements: [{ name: 'number' }, { name: 'xyz' }],
-      raw: 'Array<number, xyz>',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('resolves imported types used for arrays', () => {
@@ -185,11 +170,7 @@ describe('getTSType', () => {
       mockImporter,
     );
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'Array',
-      elements: [{ name: 'string' }],
-      raw: 'xyz[]',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
 
     typePath = typeAlias(
       `
@@ -198,11 +179,7 @@ describe('getTSType', () => {
     `,
       mockImporter,
     );
-    expect(getTSType(typePath)).toEqual({
-      name: 'Array',
-      elements: [{ name: 'string' }],
-      raw: 'Array<xyz>',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
 
     typePath = typeAlias(
       `
@@ -211,21 +188,13 @@ describe('getTSType', () => {
     `,
       mockImporter,
     );
-    expect(getTSType(typePath)).toEqual({
-      name: 'Array',
-      elements: [{ name: 'number' }, { name: 'string' }],
-      raw: 'Array<number, xyz>',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('detects class type', () => {
     const typePath = typeAlias('let x: Class<Boolean>;');
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'Class',
-      elements: [{ name: 'Boolean' }],
-      raw: 'Class<Boolean>',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('resolves imported subtype for class type', () => {
@@ -237,21 +206,13 @@ describe('getTSType', () => {
       mockImporter,
     );
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'Class',
-      elements: [{ name: 'string' }],
-      raw: 'Class<xyz>',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('detects function type with subtype', () => {
     const typePath = typeAlias('let x: Function<xyz>;');
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'Function',
-      elements: [{ name: 'xyz' }],
-      raw: 'Function<xyz>',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('resolves imported subtype for function type', () => {
@@ -263,27 +224,13 @@ describe('getTSType', () => {
       mockImporter,
     );
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'Function',
-      elements: [{ name: 'string' }],
-      raw: 'Function<xyz>',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('detects object types', () => {
     const typePath = typeAlias('let x: { a: string, b?: xyz };');
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'signature',
-      type: 'object',
-      signature: {
-        properties: [
-          { key: 'a', value: { name: 'string', required: true } },
-          { key: 'b', value: { name: 'xyz', required: false } },
-        ],
-      },
-      raw: '{ a: string, b?: xyz }',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('resolves imported types for object property types', () => {
@@ -295,32 +242,13 @@ describe('getTSType', () => {
       mockImporter,
     );
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'signature',
-      type: 'object',
-      signature: {
-        properties: [
-          { key: 'a', value: { name: 'number', required: true } },
-          { key: 'b', value: { name: 'string', required: false } },
-        ],
-      },
-      raw: '{ a: number, b?: xyz }',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('detects union type', () => {
     const typePath = typeAlias('let x: string | xyz | "foo" | void;');
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'union',
-      elements: [
-        { name: 'string' },
-        { name: 'xyz' },
-        { name: 'literal', value: '"foo"' },
-        { name: 'void' },
-      ],
-      raw: 'string | xyz | "foo" | void',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('resolves imported types within union type', () => {
@@ -332,38 +260,13 @@ describe('getTSType', () => {
       mockImporter,
     );
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'union',
-      elements: [
-        { name: 'string' },
-        {
-          name: 'union',
-          elements: [
-            { name: 'literal', value: '"bar"' },
-            { name: 'literal', value: '"baz"' },
-          ],
-          raw: '"bar" | "baz"',
-        },
-        { name: 'literal', value: '"foo"' },
-        { name: 'void' },
-      ],
-      raw: 'string | barbaz | "foo" | void',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('detects intersection type', () => {
     const typePath = typeAlias('let x: string & xyz & "foo" & void;');
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'intersection',
-      elements: [
-        { name: 'string' },
-        { name: 'xyz' },
-        { name: 'literal', value: '"foo"' },
-        { name: 'void' },
-      ],
-      raw: 'string & xyz & "foo" & void',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('resolves imported types within intersection type', () => {
@@ -375,23 +278,7 @@ describe('getTSType', () => {
       mockImporter,
     );
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'intersection',
-      elements: [
-        { name: 'string' },
-        {
-          name: 'union',
-          elements: [
-            { name: 'literal', value: '"bar"' },
-            { name: 'literal', value: '"baz"' },
-          ],
-          raw: '"bar" | "baz"',
-        },
-        { name: 'literal', value: '"foo"' },
-        { name: 'void' },
-      ],
-      raw: 'string & barbaz & "foo" & void',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('detects function signature type', () => {
@@ -399,42 +286,13 @@ describe('getTSType', () => {
       'let x: (p1: number, p2: string, ...rest: Array<string>) => boolean;',
     );
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'signature',
-      type: 'function',
-      signature: {
-        arguments: [
-          { name: 'p1', type: { name: 'number' } },
-          { name: 'p2', type: { name: 'string' } },
-          {
-            name: 'rest',
-            rest: true,
-            type: {
-              name: 'Array',
-              elements: [{ name: 'string' }],
-              raw: 'Array<string>',
-            },
-          },
-        ],
-        return: { name: 'boolean' },
-      },
-      raw: '(p1: number, p2: string, ...rest: Array<string>) => boolean',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('detects function signature type with `this` parameter', () => {
     const typePath = typeAlias('let x: (this: Foo, p1: number) => boolean;');
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'signature',
-      type: 'function',
-      signature: {
-        arguments: [{ name: 'p1', type: { name: 'number' } }],
-        this: { name: 'Foo' },
-        return: { name: 'boolean' },
-      },
-      raw: '(this: Foo, p1: number) => boolean',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('detects callable signature type', () => {
@@ -442,25 +300,7 @@ describe('getTSType', () => {
       'let x: { (str: string): string, token: string };',
     );
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'signature',
-      type: 'object',
-      signature: {
-        constructor: {
-          name: 'signature',
-          type: 'function',
-          signature: {
-            arguments: [{ name: 'str', type: { name: 'string' } }],
-            return: { name: 'string' },
-          },
-          raw: '(str: string): string,', // TODO: why does it print a comma?
-        },
-        properties: [
-          { key: 'token', value: { name: 'string', required: true } },
-        ],
-      },
-      raw: '{ (str: string): string, token: string }',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('resolves function signature types with imported types', () => {
@@ -474,27 +314,7 @@ describe('getTSType', () => {
       mockImporter,
     );
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'signature',
-      type: 'function',
-      signature: {
-        arguments: [
-          { name: 'p1', type: { name: 'number' } },
-          { name: 'p2', type: { name: 'string' } },
-          {
-            name: 'rest',
-            rest: true,
-            type: {
-              name: 'Array',
-              elements: [{ name: 'string' }],
-              raw: 'Array<xyz>',
-            },
-          },
-        ],
-        return: { name: 'boolean' },
-      },
-      raw: '(p1: abc, p2: xyz, ...rest: Array<xyz>) => def',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
 
     typePath = typeAlias(
       `
@@ -503,16 +323,8 @@ describe('getTSType', () => {
     `,
       mockImporter,
     );
-    expect(getTSType(typePath)).toEqual({
-      name: 'signature',
-      type: 'function',
-      signature: {
-        arguments: [{ name: 'p1', type: { name: 'number' } }],
-        this: { name: 'string' },
-        return: { name: 'boolean' },
-      },
-      raw: '(this: xyz, p1: number) => boolean',
-    });
+
+    expect(getTSType(typePath)).toMatchSnapshot();
 
     typePath = typeAlias(
       `
@@ -523,25 +335,8 @@ describe('getTSType', () => {
     `,
       mockImporter,
     );
-    expect(getTSType(typePath)).toEqual({
-      name: 'signature',
-      type: 'object',
-      signature: {
-        constructor: {
-          name: 'signature',
-          type: 'function',
-          signature: {
-            arguments: [{ name: 'str', type: { name: 'string' } }],
-            return: { name: 'number' },
-          },
-          raw: '(str: xyz): abc,',
-        },
-        properties: [
-          { key: 'token', value: { name: 'boolean', required: true } },
-        ],
-      },
-      raw: '{ (str: xyz): abc, token: def }',
-    });
+
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('detects map signature', () => {
@@ -549,35 +344,7 @@ describe('getTSType', () => {
       'let x: { [key: string]: number, [key: "xl"]: string, token: "a" | "b" };',
     );
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'signature',
-      type: 'object',
-      signature: {
-        properties: [
-          {
-            key: { name: 'string' },
-            value: { name: 'number', required: true },
-          },
-          {
-            key: { name: 'literal', value: '"xl"' },
-            value: { name: 'string', required: true },
-          },
-          {
-            key: 'token',
-            value: {
-              name: 'union',
-              required: true,
-              raw: '"a" | "b"',
-              elements: [
-                { name: 'literal', value: '"a"' },
-                { name: 'literal', value: '"b"' },
-              ],
-            },
-          },
-        ],
-      },
-      raw: '{ [key: string]: number, [key: "xl"]: string, token: "a" | "b" }',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('resolves imported types in map signature', () => {
@@ -591,66 +358,19 @@ describe('getTSType', () => {
       mockImporter,
     );
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'signature',
-      type: 'object',
-      signature: {
-        properties: [
-          {
-            key: { name: 'string', required: true },
-            value: { name: 'number', required: true },
-          },
-          {
-            key: { name: 'literal', value: '"xl"' },
-            value: { name: 'string', required: true },
-          },
-          {
-            key: 'token',
-            value: {
-              name: 'union',
-              required: true,
-              raw: '"bar" | "baz"',
-              elements: [
-                { name: 'literal', value: '"bar"' },
-                { name: 'literal', value: '"baz"' },
-              ],
-            },
-          },
-        ],
-      },
-      raw: '{ [key: xyz]: abc, [key: "xl"]: xyz, token: barbaz }',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('detects tuple signature', () => {
     const typePath = typeAlias('let x: [string, number];');
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'tuple',
-      elements: [{ name: 'string' }, { name: 'number' }],
-      raw: '[string, number]',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('detects tuple in union signature', () => {
     const typePath = typeAlias('let x: [string, number] | [number, string];');
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'union',
-      elements: [
-        {
-          name: 'tuple',
-          elements: [{ name: 'string' }, { name: 'number' }],
-          raw: '[string, number]',
-        },
-        {
-          name: 'tuple',
-          elements: [{ name: 'number' }, { name: 'string' }],
-          raw: '[number, string]',
-        },
-      ],
-      raw: '[string, number] | [number, string]',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('resolves imported types in tuple signatures', () => {
@@ -663,11 +383,7 @@ describe('getTSType', () => {
       mockImporter,
     );
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'tuple',
-      elements: [{ name: 'string' }, { name: 'number' }],
-      raw: '[xyz, abc]',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
 
     typePath = typeAlias(
       `
@@ -678,22 +394,7 @@ describe('getTSType', () => {
     `,
       mockImporter,
     );
-    expect(getTSType(typePath)).toEqual({
-      name: 'union',
-      elements: [
-        {
-          name: 'tuple',
-          elements: [{ name: 'string' }, { name: 'number' }],
-          raw: '[xyz, abc]',
-        },
-        {
-          name: 'tuple',
-          elements: [{ name: 'number' }, { name: 'string' }],
-          raw: '[abc, xyz]',
-        },
-      ],
-      raw: '[xyz, abc] | recTup',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('detects indexed access', () => {
@@ -703,10 +404,7 @@ describe('getTSType', () => {
       interface A { x: string };
     `);
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'A["x"]',
-      raw: 'A["x"]',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('resolves indexed access', () => {
@@ -716,10 +414,7 @@ describe('getTSType', () => {
       type A = { x: string };
     `);
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'string',
-      raw: 'A["x"]',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('resolves indexed access of array', () => {
@@ -740,10 +435,7 @@ describe('getTSType', () => {
       .get('typeAnnotation')
       .get('typeAnnotation');
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'STRING_VALS[number]',
-      raw: 'typeof STRING_VALS[number]',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('can resolve indexed access to imported type', () => {
@@ -755,10 +447,7 @@ describe('getTSType', () => {
       mockImporter,
     );
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'string',
-      raw: 'A["x"]',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('resolves types in scope', () => {
@@ -768,7 +457,7 @@ describe('getTSType', () => {
       type MyType = string;
     `);
 
-    expect(getTSType(typePath)).toEqual({ name: 'string' });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('handles typeof types', () => {
@@ -778,17 +467,7 @@ describe('getTSType', () => {
       type MyType = { a: string, b: xyz };
     `);
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'signature',
-      type: 'object',
-      signature: {
-        properties: [
-          { key: 'a', value: { name: 'string', required: true } },
-          { key: 'b', value: { name: 'xyz', required: true } },
-        ],
-      },
-      raw: '{ a: string, b: xyz }',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('resolves typeof of imported types', () => {
@@ -800,17 +479,7 @@ describe('getTSType', () => {
       mockImporter,
     );
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'signature',
-      type: 'object',
-      signature: {
-        properties: [
-          { key: 'a', value: { name: 'number', required: true } },
-          { key: 'b', value: { name: 'string', required: true } },
-        ],
-      },
-      raw: '{ a: number, b: xyz }',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('handles qualified type identifiers', () => {
@@ -820,9 +489,7 @@ describe('getTSType', () => {
       type MyType = { a: string, b: xyz };
     `);
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'MyType.x',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('handles qualified type identifiers with params', () => {
@@ -832,15 +499,7 @@ describe('getTSType', () => {
       type MyType = { a: string, b: xyz };
     `);
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'MyType.x',
-      raw: 'MyType.x<any>',
-      elements: [
-        {
-          name: 'any',
-        },
-      ],
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('handles generic types', () => {
@@ -850,31 +509,7 @@ describe('getTSType', () => {
       type MyType<T> = { a: T, b: Array<T> };
     `);
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'signature',
-      type: 'object',
-      raw: '{ a: T, b: Array<T> }',
-      signature: {
-        properties: [
-          {
-            key: 'a',
-            value: {
-              name: 'string',
-              required: true,
-            },
-          },
-          {
-            key: 'b',
-            value: {
-              name: 'Array',
-              raw: 'Array<T>',
-              required: true,
-              elements: [{ name: 'string' }],
-            },
-          },
-        ],
-      },
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('resolves imported types that need subtypes', () => {
@@ -886,31 +521,7 @@ describe('getTSType', () => {
       mockImporter,
     );
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'signature',
-      type: 'object',
-      raw: '{ a: T, b: Array<T> }',
-      signature: {
-        properties: [
-          {
-            key: 'a',
-            value: {
-              name: 'string',
-              required: true,
-            },
-          },
-          {
-            key: 'b',
-            value: {
-              name: 'Array',
-              raw: 'Array<T>',
-              required: true,
-              elements: [{ name: 'string' }],
-            },
-          },
-        ],
-      },
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('handles mapped types', () => {
@@ -918,35 +529,7 @@ describe('getTSType', () => {
       var x: { [key in 'x' | 'y']: boolean};
     `);
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'signature',
-      type: 'object',
-      raw: "{ [key in 'x' | 'y']: boolean}",
-      signature: {
-        properties: [
-          {
-            key: {
-              elements: [
-                {
-                  name: 'literal',
-                  value: "'x'",
-                },
-                {
-                  name: 'literal',
-                  value: "'y'",
-                },
-              ],
-              name: 'union',
-              raw: "'x' | 'y'",
-              required: true,
-            },
-            value: {
-              name: 'boolean',
-            },
-          },
-        ],
-      },
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('resolves imported types applied to mapped types', () => {
@@ -958,82 +541,33 @@ describe('getTSType', () => {
       mockImporter,
     );
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'signature',
-      type: 'object',
-      raw: '{ [key in barbaz]: boolean}',
-      signature: {
-        properties: [
-          {
-            key: {
-              elements: [
-                {
-                  name: 'literal',
-                  value: '"bar"',
-                },
-                {
-                  name: 'literal',
-                  value: '"baz"',
-                },
-              ],
-              name: 'union',
-              raw: '"bar" | "baz"',
-              required: true,
-            },
-            value: {
-              name: 'boolean',
-            },
-          },
-        ],
-      },
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   describe('React types', () => {
-    function test(type, expected) {
-      const typePath = typeAlias(`
-        var x: ${type} = 2;
+    const types = [
+      'React.Node',
+      'React.Key',
+      'React.ElementType',
+      'React.ChildrenArray<string>',
+      'React.Element<any>',
+      'React.Ref<typeof Component>',
+      'React.ElementProps<Component>',
+      'React.ElementRef<Component>',
+      'React.ComponentType<Props>',
+      'React.StatelessFunctionalComponent<Props2>',
+    ];
 
-        type Props = { x: string };
-      `);
+    types.forEach(type => {
+      it(type, () => {
+        const typePath = typeAlias(`
+          var x: ${type} = 2;
 
-      expect(getTSType(typePath)).toEqual({
-        ...expected,
-        name: type.replace('.', '').replace(/<.+>/, ''),
-        raw: type,
+          type Props = { x: string };
+        `);
+
+        expect(getTSType(typePath)).toMatchSnapshot();
       });
-    }
-
-    const types = {
-      'React.Node': {},
-      'React.Key': {},
-      'React.ElementType': {},
-      'React.ChildrenArray<string>': { elements: [{ name: 'string' }] },
-      'React.Element<any>': { elements: [{ name: 'any' }] },
-      'React.Ref<typeof Component>': { elements: [{ name: 'Component' }] },
-      'React.ElementProps<Component>': { elements: [{ name: 'Component' }] },
-      'React.ElementRef<Component>': { elements: [{ name: 'Component' }] },
-      'React.ComponentType<Props>': {
-        elements: [
-          {
-            name: 'signature',
-            raw: '{ x: string }',
-            signature: {
-              properties: [
-                { key: 'x', value: { name: 'string', required: true } },
-              ],
-            },
-            type: 'object',
-          },
-        ],
-      },
-      'React.StatelessFunctionalComponent<Props2>': {
-        elements: [{ name: 'Props2' }],
-      },
-    };
-
-    Object.keys(types).forEach(type => {
-      it(type, () => test(type, types[type]));
     });
   });
 
@@ -1046,14 +580,7 @@ describe('getTSType', () => {
       };
     `);
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'union',
-      elements: [
-        { name: 'literal', value: "'apple'" },
-        { name: 'literal', value: "'banana'" },
-      ],
-      raw: 'keyof typeof CONTENTS',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('resolves keyof with imported types', () => {
@@ -1065,14 +592,7 @@ describe('getTSType', () => {
       mockImporter,
     );
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'union',
-      elements: [
-        { name: 'literal', value: "'apple'" },
-        { name: 'literal', value: "'banana'" },
-      ],
-      raw: 'keyof typeof CONTENTS',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('resolves keyof with inline object to union', () => {
@@ -1080,14 +600,7 @@ describe('getTSType', () => {
       var x: keyof { apple: string, banana: string } = 2;
     `);
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'union',
-      elements: [
-        { name: 'literal', value: 'apple' },
-        { name: 'literal', value: 'banana' },
-      ],
-      raw: 'keyof { apple: string, banana: string }',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('handles multiple references to one type', () => {
@@ -1096,35 +609,7 @@ describe('getTSType', () => {
       type Action = {};
     `);
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'signature',
-      type: 'object',
-      signature: {
-        properties: [
-          {
-            key: 'a',
-            value: {
-              name: 'signature',
-              type: 'object',
-              required: true,
-              raw: '{}',
-              signature: { properties: [] },
-            },
-          },
-          {
-            key: 'b',
-            value: {
-              name: 'signature',
-              type: 'object',
-              required: true,
-              raw: '{}',
-              signature: { properties: [] },
-            },
-          },
-        ],
-      },
-      raw: '{ a: Action, b: Action }',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('handles generics of the same Name', () => {
@@ -1140,9 +625,9 @@ describe('getTSType', () => {
       )
       .get('body')
       .get('body')[0]
-      .get('typeAnnotation');
+      .get('typeAnnotation') as NodePath<TSTypeAnnotation>;
 
-    getTSType(typePath as NodePath<TSTypeAnnotation>, null);
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('handles self-referencing type cycles', () => {
@@ -1151,16 +636,7 @@ describe('getTSType', () => {
       type Action = { subAction: Action };
     `);
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'signature',
-      type: 'object',
-      signature: {
-        properties: [
-          { key: 'subAction', value: { name: 'Action', required: true } },
-        ],
-      },
-      raw: '{ subAction: Action }',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 
   it('handles long type cycles', () => {
@@ -1172,57 +648,6 @@ describe('getTSType', () => {
       type SubSubSubAction = { rootAction: Action };
     `);
 
-    expect(getTSType(typePath)).toEqual({
-      name: 'signature',
-      type: 'object',
-      signature: {
-        properties: [
-          {
-            key: 'subAction',
-            value: {
-              name: 'signature',
-              type: 'object',
-              required: true,
-              signature: {
-                properties: [
-                  {
-                    key: 'subAction',
-                    value: {
-                      name: 'signature',
-                      type: 'object',
-                      required: true,
-                      signature: {
-                        properties: [
-                          {
-                            key: 'subAction',
-                            value: {
-                              name: 'signature',
-                              type: 'object',
-                              required: true,
-                              signature: {
-                                properties: [
-                                  {
-                                    key: 'rootAction',
-                                    value: { name: 'Action', required: true },
-                                  },
-                                ],
-                              },
-                              raw: '{ rootAction: Action }',
-                            },
-                          },
-                        ],
-                      },
-                      raw: '{ subAction: SubSubSubAction }',
-                    },
-                  },
-                ],
-              },
-              raw: '{ subAction: SubSubAction }',
-            },
-          },
-        ],
-      },
-      raw: '{ subAction: SubAction }',
-    });
+    expect(getTSType(typePath)).toMatchSnapshot();
   });
 });

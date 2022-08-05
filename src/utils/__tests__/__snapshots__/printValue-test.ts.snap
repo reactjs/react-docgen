@@ -5,3 +5,23 @@ exports[`printValue deindents code 1`] = `
   return x;
 }"
 `;
+
+exports[`printValue removes trailing , for TsCallSignatureDeclaration 1`] = `"(): number"`;
+
+exports[`printValue removes trailing , for TsConstructSignatureDeclaration 1`] = `"new (x:number)"`;
+
+exports[`printValue removes trailing , for TsIndexSignature 1`] = `"[x:string]: number"`;
+
+exports[`printValue removes trailing , for TsMethodSignature 1`] = `"x(): number"`;
+
+exports[`printValue removes trailing , for TsPropertySignature 1`] = `"x: number"`;
+
+exports[`printValue removes trailing ; for TsCallSignatureDeclaration 1`] = `"(): number"`;
+
+exports[`printValue removes trailing ; for TsConstructSignatureDeclaration 1`] = `"new (x:number)"`;
+
+exports[`printValue removes trailing ; for TsIndexSignature 1`] = `"[x:string]: number"`;
+
+exports[`printValue removes trailing ; for TsMethodSignature 1`] = `"x(): number"`;
+
+exports[`printValue removes trailing ; for TsPropertySignature 1`] = `"x: number"`;
