@@ -1,4 +1,5 @@
 import type { NodePath } from '@babel/traverse';
+import { visitors } from '@babel/traverse';
 import type { Expression } from '@babel/types';
 import getNameOrValue from './getNameOrValue';
 import { String as toString } from './expressionTo';
@@ -68,23 +69,15 @@ function resolveName(path: NodePath): string | undefined {
   );
 }
 
-export default function getMemberExpressionValuePath(
-  variableDefinition: NodePath,
-  memberName: string,
-): NodePath<Expression> | null {
-  const localName = resolveName(variableDefinition);
-  const program = variableDefinition.findParent(path => path.isProgram());
+interface TraverseState {
+  readonly memberName: string;
+  readonly localName: string;
+  result: NodePath<Expression> | null;
+}
 
-  if (!localName || !program) {
-    // likely an immediately exported and therefore nameless/anonymous node
-    // passed in
-    return null;
-  }
-
-  let result: NodePath<Expression> | null = null;
-
-  program.traverse({
-    AssignmentExpression(path) {
+const explodedVisitors = visitors.explode<TraverseState>({
+  AssignmentExpression: {
+    enter: function (path, state) {
       const memberPath = path.get('left');
 
       if (!memberPath.isMemberExpression()) {
@@ -94,16 +87,35 @@ export default function getMemberExpressionValuePath(
 
       if (
         (!memberPath.node.computed || property.isLiteral()) &&
-        getNameOrValue(property) === memberName &&
-        toString(memberPath.get('object')) === localName
+        getNameOrValue(property) === state.memberName &&
+        toString(memberPath.get('object')) === state.localName
       ) {
-        result = path.get('right');
-        path.skip();
-
-        return;
+        state.result = path.get('right');
+        path.stop();
       }
     },
-  });
+  },
+});
 
-  return result;
+export default function getMemberExpressionValuePath(
+  variableDefinition: NodePath,
+  memberName: string,
+): NodePath<Expression> | null {
+  const localName = resolveName(variableDefinition);
+
+  if (!localName) {
+    // likely an immediately exported and therefore nameless/anonymous node
+    // passed in
+    return null;
+  }
+
+  const state: TraverseState = {
+    localName,
+    memberName,
+    result: null,
+  };
+
+  variableDefinition.hub.file.traverse(explodedVisitors, state);
+
+  return state.result;
 }

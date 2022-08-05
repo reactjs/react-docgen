@@ -3,8 +3,10 @@ import isReactCreateElementCall from './isReactCreateElementCall';
 import isReactCloneElementCall from './isReactCloneElementCall';
 import isReactChildrenElementCall from './isReactChildrenElementCall';
 import resolveToValue from './resolveToValue';
-import type { NodePath } from '@babel/traverse';
+import type { NodePath, Scope } from '@babel/traverse';
+import { visitors } from '@babel/traverse';
 import type { Expression } from '@babel/types';
+import { ignore } from './traverse';
 
 const validPossibleStatelessComponentTypes = [
   'ArrowFunctionExpression',
@@ -142,12 +144,43 @@ function resolvesToJSXElementOrReactCall(
   return false;
 }
 
+interface TraverseState {
+  readonly initialScope: Scope;
+  isStatelessComponent: boolean;
+  readonly seen: WeakSet<NodePath>;
+}
+
+const explodedVisitors = visitors.explode<TraverseState>({
+  Function: { enter: ignore },
+  Class: { enter: ignore },
+  ObjectExpression: { enter: ignore },
+  ReturnStatement: {
+    enter: function (path, state) {
+      // Only check return statements which are part of the checked function scope
+      if (path.scope.getFunctionParent() !== state.initialScope) {
+        path.skip();
+
+        return;
+      }
+
+      if (
+        path.node.argument &&
+        resolvesToJSXElementOrReactCall(
+          path.get('argument') as NodePath<Expression>,
+          state.seen,
+        )
+      ) {
+        state.isStatelessComponent = true;
+        path.stop();
+      }
+    },
+  },
+});
+
 function returnsJSXElementOrReactCall(
   path: NodePath,
   seen: WeakSet<NodePath> = new WeakSet(),
 ): boolean {
-  let visited = false;
-
   if (path.isObjectProperty()) {
     path = path.get('value');
   }
@@ -165,32 +198,15 @@ function returnsJSXElementOrReactCall(
     return true;
   }
 
-  const scope = path.scope;
+  const state: TraverseState = {
+    initialScope: path.scope,
+    isStatelessComponent: false,
+    seen,
+  };
 
-  path.traverse({
-    ReturnStatement(returnPath) {
-      // Only check return statements which are part of the checked function scope
-      if (returnPath.scope.getFunctionParent() !== scope) {
-        path.skip();
+  path.traverse(explodedVisitors, state);
 
-        return;
-      }
-
-      if (
-        returnPath.node.argument &&
-        resolvesToJSXElementOrReactCall(
-          returnPath.get('argument') as NodePath<Expression>,
-
-          seen,
-        )
-      ) {
-        visited = true;
-        path.skip();
-      }
-    },
-  });
-
-  return visited;
+  return state.isStatelessComponent;
 }
 
 /**

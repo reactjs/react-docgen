@@ -2,13 +2,56 @@ import { classProperty } from '@babel/types';
 import getMemberExpressionRoot from '../utils/getMemberExpressionRoot';
 import getMembers from '../utils/getMembers';
 import type { NodePath } from '@babel/traverse';
+import { visitors } from '@babel/traverse';
 import type {
   ClassDeclaration,
   ClassExpression,
   Expression,
 } from '@babel/types';
+import { ignore } from './traverse';
 
-const ignore = (path: NodePath) => path.skip();
+interface TraverseState {
+  readonly variableName: string;
+  readonly classDefinition: NodePath<ClassDeclaration | ClassExpression>;
+}
+
+const explodedVisitors = visitors.explode<TraverseState>({
+  Function: { enter: ignore },
+  Class: { enter: ignore },
+  Loop: { enter: ignore },
+  AssignmentExpression(path, state) {
+    const left = path.get('left');
+
+    if (left.isMemberExpression()) {
+      const first = getMemberExpressionRoot(left);
+
+      if (first.isIdentifier() && first.node.name === state.variableName) {
+        const [member] = getMembers(left);
+
+        if (
+          member &&
+          !member.path.has('computed') &&
+          !member.path.isPrivateName()
+        ) {
+          const property = classProperty(
+            member.path.node as Expression,
+            path.node.right,
+            null,
+            null,
+            false,
+            true,
+          );
+
+          state.classDefinition.get('body').unshiftContainer('body', property);
+          path.skip();
+          path.remove();
+        }
+      }
+    } else {
+      path.skip();
+    }
+  },
+});
 
 /**
  * Given a class definition (i.e. `class` declaration or expression), this
@@ -32,7 +75,7 @@ const ignore = (path: NodePath) => path.skip();
 export default function normalizeClassDefinition(
   classDefinition: NodePath<ClassDeclaration | ClassExpression>,
 ): void {
-  let variableName;
+  let variableName: string | undefined;
 
   if (classDefinition.isClassDeclaration()) {
     // Class declarations may not have an id, e.g.: `export default class extends React.Component {}`
@@ -70,45 +113,10 @@ export default function normalizeClassDefinition(
     return;
   }
 
-  const scopeBlock = classDefinition.parentPath.scope.block;
+  const state: TraverseState = {
+    variableName,
+    classDefinition,
+  };
 
-  classDefinition.parentPath.scope.traverse(scopeBlock, {
-    Function: ignore,
-    ClassDeclaration: ignore,
-    ClassExpression: ignore,
-    ForInStatement: ignore,
-    ForStatement: ignore,
-    AssignmentExpression(path) {
-      const left = path.get('left');
-
-      if (left.isMemberExpression()) {
-        const first = getMemberExpressionRoot(left);
-
-        if (first.isIdentifier() && first.node.name === variableName) {
-          const [member] = getMembers(left);
-
-          if (
-            member &&
-            !member.path.has('computed') &&
-            !member.path.isPrivateName()
-          ) {
-            const property = classProperty(
-              member.path.node as Expression,
-              path.node.right,
-              null,
-              null,
-              false,
-              true,
-            );
-
-            classDefinition.get('body').unshiftContainer('body', property);
-            path.skip();
-            path.remove();
-          }
-        }
-      } else {
-        path.skip();
-      }
-    },
-  });
+  classDefinition.parentPath.scope.path.traverse(explodedVisitors, state);
 }
