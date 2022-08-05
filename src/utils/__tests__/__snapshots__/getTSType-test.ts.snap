@@ -1,0 +1,1349 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getTSType React types React.ChildrenArray<string> 1`] = `
+Object {
+  "elements": Array [
+    Object {
+      "name": "string",
+    },
+  ],
+  "name": "ReactChildrenArray",
+  "raw": "React.ChildrenArray<string>",
+}
+`;
+
+exports[`getTSType React types React.ComponentType<Props> 1`] = `
+Object {
+  "elements": Array [
+    Object {
+      "name": "signature",
+      "raw": "{ x: string }",
+      "signature": Object {
+        "properties": Array [
+          Object {
+            "key": "x",
+            "value": Object {
+              "name": "string",
+              "required": true,
+            },
+          },
+        ],
+      },
+      "type": "object",
+    },
+  ],
+  "name": "ReactComponentType",
+  "raw": "React.ComponentType<Props>",
+}
+`;
+
+exports[`getTSType React types React.Element<any> 1`] = `
+Object {
+  "elements": Array [
+    Object {
+      "name": "any",
+    },
+  ],
+  "name": "ReactElement",
+  "raw": "React.Element<any>",
+}
+`;
+
+exports[`getTSType React types React.ElementProps<Component> 1`] = `
+Object {
+  "elements": Array [
+    Object {
+      "name": "Component",
+    },
+  ],
+  "name": "ReactElementProps",
+  "raw": "React.ElementProps<Component>",
+}
+`;
+
+exports[`getTSType React types React.ElementRef<Component> 1`] = `
+Object {
+  "elements": Array [
+    Object {
+      "name": "Component",
+    },
+  ],
+  "name": "ReactElementRef",
+  "raw": "React.ElementRef<Component>",
+}
+`;
+
+exports[`getTSType React types React.ElementType 1`] = `
+Object {
+  "name": "ReactElementType",
+  "raw": "React.ElementType",
+}
+`;
+
+exports[`getTSType React types React.Key 1`] = `
+Object {
+  "name": "ReactKey",
+  "raw": "React.Key",
+}
+`;
+
+exports[`getTSType React types React.Node 1`] = `
+Object {
+  "name": "ReactNode",
+  "raw": "React.Node",
+}
+`;
+
+exports[`getTSType React types React.Ref<typeof Component> 1`] = `
+Object {
+  "elements": Array [
+    Object {
+      "name": "Component",
+    },
+  ],
+  "name": "ReactRef",
+  "raw": "React.Ref<typeof Component>",
+}
+`;
+
+exports[`getTSType React types React.StatelessFunctionalComponent<Props2> 1`] = `
+Object {
+  "elements": Array [
+    Object {
+      "name": "Props2",
+    },
+  ],
+  "name": "ReactStatelessFunctionalComponent",
+  "raw": "React.StatelessFunctionalComponent<Props2>",
+}
+`;
+
+exports[`getTSType can resolve indexed access to imported type 1`] = `
+Object {
+  "name": "string",
+  "raw": "A[\\"x\\"]",
+}
+`;
+
+exports[`getTSType detects array type 1`] = `
+Object {
+  "elements": Array [
+    Object {
+      "name": "number",
+    },
+  ],
+  "name": "Array",
+  "raw": "Array<number>",
+}
+`;
+
+exports[`getTSType detects array type shorthand 1`] = `
+Object {
+  "elements": Array [
+    Object {
+      "name": "number",
+    },
+  ],
+  "name": "Array",
+  "raw": "number[]",
+}
+`;
+
+exports[`getTSType detects array type with multiple types 1`] = `
+Object {
+  "elements": Array [
+    Object {
+      "name": "number",
+    },
+    Object {
+      "name": "xyz",
+    },
+  ],
+  "name": "Array",
+  "raw": "Array<number, xyz>",
+}
+`;
+
+exports[`getTSType detects callable signature type 1`] = `
+Object {
+  "name": "signature",
+  "raw": "{ (str: string): string, token: string }",
+  "signature": Object {
+    "constructor": Object {
+      "name": "signature",
+      "raw": "(str: string): string",
+      "signature": Object {
+        "arguments": Array [
+          Object {
+            "name": "str",
+            "type": Object {
+              "name": "string",
+            },
+          },
+        ],
+        "return": Object {
+          "name": "string",
+        },
+      },
+      "type": "function",
+    },
+    "properties": Array [
+      Object {
+        "key": "token",
+        "value": Object {
+          "name": "string",
+          "required": true,
+        },
+      },
+    ],
+  },
+  "type": "object",
+}
+`;
+
+exports[`getTSType detects class type 1`] = `
+Object {
+  "elements": Array [
+    Object {
+      "name": "Boolean",
+    },
+  ],
+  "name": "Class",
+  "raw": "Class<Boolean>",
+}
+`;
+
+exports[`getTSType detects external type 1`] = `
+Object {
+  "name": "xyz",
+}
+`;
+
+exports[`getTSType detects function signature type 1`] = `
+Object {
+  "name": "signature",
+  "raw": "(p1: number, p2: string, ...rest: Array<string>) => boolean",
+  "signature": Object {
+    "arguments": Array [
+      Object {
+        "name": "p1",
+        "type": Object {
+          "name": "number",
+        },
+      },
+      Object {
+        "name": "p2",
+        "type": Object {
+          "name": "string",
+        },
+      },
+      Object {
+        "name": "rest",
+        "rest": true,
+        "type": Object {
+          "elements": Array [
+            Object {
+              "name": "string",
+            },
+          ],
+          "name": "Array",
+          "raw": "Array<string>",
+        },
+      },
+    ],
+    "return": Object {
+      "name": "boolean",
+    },
+  },
+  "type": "function",
+}
+`;
+
+exports[`getTSType detects function signature type with \`this\` parameter 1`] = `
+Object {
+  "name": "signature",
+  "raw": "(this: Foo, p1: number) => boolean",
+  "signature": Object {
+    "arguments": Array [
+      Object {
+        "name": "p1",
+        "type": Object {
+          "name": "number",
+        },
+      },
+    ],
+    "return": Object {
+      "name": "boolean",
+    },
+    "this": Object {
+      "name": "Foo",
+    },
+  },
+  "type": "function",
+}
+`;
+
+exports[`getTSType detects function type with subtype 1`] = `
+Object {
+  "elements": Array [
+    Object {
+      "name": "xyz",
+    },
+  ],
+  "name": "Function",
+  "raw": "Function<xyz>",
+}
+`;
+
+exports[`getTSType detects indexed access 1`] = `
+Object {
+  "name": "A[\\"x\\"]",
+  "raw": "A[\\"x\\"]",
+}
+`;
+
+exports[`getTSType detects intersection type 1`] = `
+Object {
+  "elements": Array [
+    Object {
+      "name": "string",
+    },
+    Object {
+      "name": "xyz",
+    },
+    Object {
+      "name": "literal",
+      "value": "\\"foo\\"",
+    },
+    Object {
+      "name": "void",
+    },
+  ],
+  "name": "intersection",
+  "raw": "string & xyz & \\"foo\\" & void",
+}
+`;
+
+exports[`getTSType detects map signature 1`] = `
+Object {
+  "name": "signature",
+  "raw": "{ [key: string]: number, [key: \\"xl\\"]: string, token: \\"a\\" | \\"b\\" }",
+  "signature": Object {
+    "properties": Array [
+      Object {
+        "key": Object {
+          "name": "string",
+        },
+        "value": Object {
+          "name": "number",
+          "required": true,
+        },
+      },
+      Object {
+        "key": Object {
+          "name": "literal",
+          "value": "\\"xl\\"",
+        },
+        "value": Object {
+          "name": "string",
+          "required": true,
+        },
+      },
+      Object {
+        "key": "token",
+        "value": Object {
+          "elements": Array [
+            Object {
+              "name": "literal",
+              "value": "\\"a\\"",
+            },
+            Object {
+              "name": "literal",
+              "value": "\\"b\\"",
+            },
+          ],
+          "name": "union",
+          "raw": "\\"a\\" | \\"b\\"",
+          "required": true,
+        },
+      },
+    ],
+  },
+  "type": "object",
+}
+`;
+
+exports[`getTSType detects object types 1`] = `
+Object {
+  "name": "signature",
+  "raw": "{ a: string, b?: xyz }",
+  "signature": Object {
+    "properties": Array [
+      Object {
+        "key": "a",
+        "value": Object {
+          "name": "string",
+          "required": true,
+        },
+      },
+      Object {
+        "key": "b",
+        "value": Object {
+          "name": "xyz",
+          "required": false,
+        },
+      },
+    ],
+  },
+  "type": "object",
+}
+`;
+
+exports[`getTSType detects simple types 1`] = `
+Object {
+  "name": "string",
+}
+`;
+
+exports[`getTSType detects simple types 2`] = `
+Object {
+  "name": "number",
+}
+`;
+
+exports[`getTSType detects simple types 3`] = `
+Object {
+  "name": "boolean",
+}
+`;
+
+exports[`getTSType detects simple types 4`] = `
+Object {
+  "name": "symbol",
+}
+`;
+
+exports[`getTSType detects simple types 5`] = `
+Object {
+  "name": "object",
+}
+`;
+
+exports[`getTSType detects simple types 6`] = `
+Object {
+  "name": "any",
+}
+`;
+
+exports[`getTSType detects simple types 7`] = `
+Object {
+  "name": "unknown",
+}
+`;
+
+exports[`getTSType detects simple types 8`] = `
+Object {
+  "name": "null",
+}
+`;
+
+exports[`getTSType detects simple types 9`] = `
+Object {
+  "name": "undefined",
+}
+`;
+
+exports[`getTSType detects simple types 10`] = `
+Object {
+  "name": "void",
+}
+`;
+
+exports[`getTSType detects simple types 11`] = `
+Object {
+  "name": "Object",
+}
+`;
+
+exports[`getTSType detects simple types 12`] = `
+Object {
+  "name": "Function",
+}
+`;
+
+exports[`getTSType detects simple types 13`] = `
+Object {
+  "name": "Boolean",
+}
+`;
+
+exports[`getTSType detects simple types 14`] = `
+Object {
+  "name": "String",
+}
+`;
+
+exports[`getTSType detects simple types 15`] = `
+Object {
+  "name": "Number",
+}
+`;
+
+exports[`getTSType detects tuple in union signature 1`] = `
+Object {
+  "elements": Array [
+    Object {
+      "elements": Array [
+        Object {
+          "name": "string",
+        },
+        Object {
+          "name": "number",
+        },
+      ],
+      "name": "tuple",
+      "raw": "[string, number]",
+    },
+    Object {
+      "elements": Array [
+        Object {
+          "name": "number",
+        },
+        Object {
+          "name": "string",
+        },
+      ],
+      "name": "tuple",
+      "raw": "[number, string]",
+    },
+  ],
+  "name": "union",
+  "raw": "[string, number] | [number, string]",
+}
+`;
+
+exports[`getTSType detects tuple signature 1`] = `
+Object {
+  "elements": Array [
+    Object {
+      "name": "string",
+    },
+    Object {
+      "name": "number",
+    },
+  ],
+  "name": "tuple",
+  "raw": "[string, number]",
+}
+`;
+
+exports[`getTSType detects union type 1`] = `
+Object {
+  "elements": Array [
+    Object {
+      "name": "string",
+    },
+    Object {
+      "name": "xyz",
+    },
+    Object {
+      "name": "literal",
+      "value": "\\"foo\\"",
+    },
+    Object {
+      "name": "void",
+    },
+  ],
+  "name": "union",
+  "raw": "string | xyz | \\"foo\\" | void",
+}
+`;
+
+exports[`getTSType handles generic types 1`] = `
+Object {
+  "name": "signature",
+  "raw": "{ a: T, b: Array<T> }",
+  "signature": Object {
+    "properties": Array [
+      Object {
+        "key": "a",
+        "value": Object {
+          "name": "string",
+          "required": true,
+        },
+      },
+      Object {
+        "key": "b",
+        "value": Object {
+          "elements": Array [
+            Object {
+              "name": "string",
+            },
+          ],
+          "name": "Array",
+          "raw": "Array<T>",
+          "required": true,
+        },
+      },
+    ],
+  },
+  "type": "object",
+}
+`;
+
+exports[`getTSType handles generics of the same Name 1`] = `
+Object {
+  "elements": Array [
+    Object {
+      "name": "T",
+    },
+  ],
+  "name": "Bar",
+  "raw": "Bar<T>",
+}
+`;
+
+exports[`getTSType handles long type cycles 1`] = `
+Object {
+  "name": "signature",
+  "raw": "{ subAction: SubAction }",
+  "signature": Object {
+    "properties": Array [
+      Object {
+        "key": "subAction",
+        "value": Object {
+          "name": "signature",
+          "raw": "{ subAction: SubSubAction }",
+          "required": true,
+          "signature": Object {
+            "properties": Array [
+              Object {
+                "key": "subAction",
+                "value": Object {
+                  "name": "signature",
+                  "raw": "{ subAction: SubSubSubAction }",
+                  "required": true,
+                  "signature": Object {
+                    "properties": Array [
+                      Object {
+                        "key": "subAction",
+                        "value": Object {
+                          "name": "signature",
+                          "raw": "{ rootAction: Action }",
+                          "required": true,
+                          "signature": Object {
+                            "properties": Array [
+                              Object {
+                                "key": "rootAction",
+                                "value": Object {
+                                  "name": "Action",
+                                  "required": true,
+                                },
+                              },
+                            ],
+                          },
+                          "type": "object",
+                        },
+                      },
+                    ],
+                  },
+                  "type": "object",
+                },
+              },
+            ],
+          },
+          "type": "object",
+        },
+      },
+    ],
+  },
+  "type": "object",
+}
+`;
+
+exports[`getTSType handles mapped types 1`] = `
+Object {
+  "name": "signature",
+  "raw": "{ [key in 'x' | 'y']: boolean}",
+  "signature": Object {
+    "properties": Array [
+      Object {
+        "key": Object {
+          "elements": Array [
+            Object {
+              "name": "literal",
+              "value": "'x'",
+            },
+            Object {
+              "name": "literal",
+              "value": "'y'",
+            },
+          ],
+          "name": "union",
+          "raw": "'x' | 'y'",
+          "required": true,
+        },
+        "value": Object {
+          "name": "boolean",
+        },
+      },
+    ],
+  },
+  "type": "object",
+}
+`;
+
+exports[`getTSType handles multiple references to one type 1`] = `
+Object {
+  "name": "signature",
+  "raw": "{ a: Action, b: Action }",
+  "signature": Object {
+    "properties": Array [
+      Object {
+        "key": "a",
+        "value": Object {
+          "name": "signature",
+          "raw": "{}",
+          "required": true,
+          "signature": Object {
+            "properties": Array [],
+          },
+          "type": "object",
+        },
+      },
+      Object {
+        "key": "b",
+        "value": Object {
+          "name": "signature",
+          "raw": "{}",
+          "required": true,
+          "signature": Object {
+            "properties": Array [],
+          },
+          "type": "object",
+        },
+      },
+    ],
+  },
+  "type": "object",
+}
+`;
+
+exports[`getTSType handles qualified type identifiers 1`] = `
+Object {
+  "name": "MyType.x",
+}
+`;
+
+exports[`getTSType handles qualified type identifiers with params 1`] = `
+Object {
+  "elements": Array [
+    Object {
+      "name": "any",
+    },
+  ],
+  "name": "MyType.x",
+  "raw": "MyType.x<any>",
+}
+`;
+
+exports[`getTSType handles self-referencing type cycles 1`] = `
+Object {
+  "name": "signature",
+  "raw": "{ subAction: Action }",
+  "signature": Object {
+    "properties": Array [
+      Object {
+        "key": "subAction",
+        "value": Object {
+          "name": "Action",
+          "required": true,
+        },
+      },
+    ],
+  },
+  "type": "object",
+}
+`;
+
+exports[`getTSType handles typeof types 1`] = `
+Object {
+  "name": "signature",
+  "raw": "{ a: string, b: xyz }",
+  "signature": Object {
+    "properties": Array [
+      Object {
+        "key": "a",
+        "value": Object {
+          "name": "string",
+          "required": true,
+        },
+      },
+      Object {
+        "key": "b",
+        "value": Object {
+          "name": "xyz",
+          "required": true,
+        },
+      },
+    ],
+  },
+  "type": "object",
+}
+`;
+
+exports[`getTSType literal types detects "foo" 1`] = `
+Object {
+  "name": "literal",
+  "value": "\\"foo\\"",
+}
+`;
+
+exports[`getTSType literal types detects \`foo\` 1`] = `
+Object {
+  "name": "literal",
+  "value": "\`foo\`",
+}
+`;
+
+exports[`getTSType literal types detects -1 1`] = `
+Object {
+  "name": "literal",
+  "value": "-1",
+}
+`;
+
+exports[`getTSType literal types detects 1234 1`] = `
+Object {
+  "name": "literal",
+  "value": "1234",
+}
+`;
+
+exports[`getTSType literal types detects true 1`] = `
+Object {
+  "name": "literal",
+  "value": "true",
+}
+`;
+
+exports[`getTSType resolves external type 1`] = `
+Object {
+  "name": "string",
+}
+`;
+
+exports[`getTSType resolves function signature types with imported types 1`] = `
+Object {
+  "name": "signature",
+  "raw": "(p1: abc, p2: xyz, ...rest: Array<xyz>) => def",
+  "signature": Object {
+    "arguments": Array [
+      Object {
+        "name": "p1",
+        "type": Object {
+          "name": "number",
+        },
+      },
+      Object {
+        "name": "p2",
+        "type": Object {
+          "name": "string",
+        },
+      },
+      Object {
+        "name": "rest",
+        "rest": true,
+        "type": Object {
+          "elements": Array [
+            Object {
+              "name": "string",
+            },
+          ],
+          "name": "Array",
+          "raw": "Array<xyz>",
+        },
+      },
+    ],
+    "return": Object {
+      "name": "boolean",
+    },
+  },
+  "type": "function",
+}
+`;
+
+exports[`getTSType resolves function signature types with imported types 2`] = `
+Object {
+  "name": "signature",
+  "raw": "(this: xyz, p1: number) => boolean",
+  "signature": Object {
+    "arguments": Array [
+      Object {
+        "name": "p1",
+        "type": Object {
+          "name": "number",
+        },
+      },
+    ],
+    "return": Object {
+      "name": "boolean",
+    },
+    "this": Object {
+      "name": "string",
+    },
+  },
+  "type": "function",
+}
+`;
+
+exports[`getTSType resolves function signature types with imported types 3`] = `
+Object {
+  "name": "signature",
+  "raw": "{ (str: xyz): abc, token: def }",
+  "signature": Object {
+    "constructor": Object {
+      "name": "signature",
+      "raw": "(str: xyz): abc",
+      "signature": Object {
+        "arguments": Array [
+          Object {
+            "name": "str",
+            "type": Object {
+              "name": "string",
+            },
+          },
+        ],
+        "return": Object {
+          "name": "number",
+        },
+      },
+      "type": "function",
+    },
+    "properties": Array [
+      Object {
+        "key": "token",
+        "value": Object {
+          "name": "boolean",
+          "required": true,
+        },
+      },
+    ],
+  },
+  "type": "object",
+}
+`;
+
+exports[`getTSType resolves imported subtype for class type 1`] = `
+Object {
+  "elements": Array [
+    Object {
+      "name": "string",
+    },
+  ],
+  "name": "Class",
+  "raw": "Class<xyz>",
+}
+`;
+
+exports[`getTSType resolves imported subtype for function type 1`] = `
+Object {
+  "elements": Array [
+    Object {
+      "name": "string",
+    },
+  ],
+  "name": "Function",
+  "raw": "Function<xyz>",
+}
+`;
+
+exports[`getTSType resolves imported types applied to mapped types 1`] = `
+Object {
+  "name": "signature",
+  "raw": "{ [key in barbaz]: boolean}",
+  "signature": Object {
+    "properties": Array [
+      Object {
+        "key": Object {
+          "elements": Array [
+            Object {
+              "name": "literal",
+              "value": "\\"bar\\"",
+            },
+            Object {
+              "name": "literal",
+              "value": "\\"baz\\"",
+            },
+          ],
+          "name": "union",
+          "raw": "\\"bar\\" | \\"baz\\"",
+          "required": true,
+        },
+        "value": Object {
+          "name": "boolean",
+        },
+      },
+    ],
+  },
+  "type": "object",
+}
+`;
+
+exports[`getTSType resolves imported types for object property types 1`] = `
+Object {
+  "name": "signature",
+  "raw": "{ a: number, b?: xyz }",
+  "signature": Object {
+    "properties": Array [
+      Object {
+        "key": "a",
+        "value": Object {
+          "name": "number",
+          "required": true,
+        },
+      },
+      Object {
+        "key": "b",
+        "value": Object {
+          "name": "string",
+          "required": false,
+        },
+      },
+    ],
+  },
+  "type": "object",
+}
+`;
+
+exports[`getTSType resolves imported types in map signature 1`] = `
+Object {
+  "name": "signature",
+  "raw": "{ [key: xyz]: abc, [key: \\"xl\\"]: xyz, token: barbaz }",
+  "signature": Object {
+    "properties": Array [
+      Object {
+        "key": Object {
+          "name": "string",
+          "required": true,
+        },
+        "value": Object {
+          "name": "number",
+          "required": true,
+        },
+      },
+      Object {
+        "key": Object {
+          "name": "literal",
+          "value": "\\"xl\\"",
+        },
+        "value": Object {
+          "name": "string",
+          "required": true,
+        },
+      },
+      Object {
+        "key": "token",
+        "value": Object {
+          "elements": Array [
+            Object {
+              "name": "literal",
+              "value": "\\"bar\\"",
+            },
+            Object {
+              "name": "literal",
+              "value": "\\"baz\\"",
+            },
+          ],
+          "name": "union",
+          "raw": "\\"bar\\" | \\"baz\\"",
+          "required": true,
+        },
+      },
+    ],
+  },
+  "type": "object",
+}
+`;
+
+exports[`getTSType resolves imported types in tuple signatures 1`] = `
+Object {
+  "elements": Array [
+    Object {
+      "name": "string",
+    },
+    Object {
+      "name": "number",
+    },
+  ],
+  "name": "tuple",
+  "raw": "[xyz, abc]",
+}
+`;
+
+exports[`getTSType resolves imported types in tuple signatures 2`] = `
+Object {
+  "elements": Array [
+    Object {
+      "elements": Array [
+        Object {
+          "name": "string",
+        },
+        Object {
+          "name": "number",
+        },
+      ],
+      "name": "tuple",
+      "raw": "[xyz, abc]",
+    },
+    Object {
+      "elements": Array [
+        Object {
+          "name": "number",
+        },
+        Object {
+          "name": "string",
+        },
+      ],
+      "name": "tuple",
+      "raw": "[abc, xyz]",
+    },
+  ],
+  "name": "union",
+  "raw": "[xyz, abc] | recTup",
+}
+`;
+
+exports[`getTSType resolves imported types that need subtypes 1`] = `
+Object {
+  "name": "signature",
+  "raw": "{ a: T, b: Array<T> }",
+  "signature": Object {
+    "properties": Array [
+      Object {
+        "key": "a",
+        "value": Object {
+          "name": "string",
+          "required": true,
+        },
+      },
+      Object {
+        "key": "b",
+        "value": Object {
+          "elements": Array [
+            Object {
+              "name": "string",
+            },
+          ],
+          "name": "Array",
+          "raw": "Array<T>",
+          "required": true,
+        },
+      },
+    ],
+  },
+  "type": "object",
+}
+`;
+
+exports[`getTSType resolves imported types used for arrays 1`] = `
+Object {
+  "elements": Array [
+    Object {
+      "name": "string",
+    },
+  ],
+  "name": "Array",
+  "raw": "xyz[]",
+}
+`;
+
+exports[`getTSType resolves imported types used for arrays 2`] = `
+Object {
+  "elements": Array [
+    Object {
+      "name": "string",
+    },
+  ],
+  "name": "Array",
+  "raw": "Array<xyz>",
+}
+`;
+
+exports[`getTSType resolves imported types used for arrays 3`] = `
+Object {
+  "elements": Array [
+    Object {
+      "name": "number",
+    },
+    Object {
+      "name": "string",
+    },
+  ],
+  "name": "Array",
+  "raw": "Array<number, xyz>",
+}
+`;
+
+exports[`getTSType resolves imported types within intersection type 1`] = `
+Object {
+  "elements": Array [
+    Object {
+      "name": "string",
+    },
+    Object {
+      "elements": Array [
+        Object {
+          "name": "literal",
+          "value": "\\"bar\\"",
+        },
+        Object {
+          "name": "literal",
+          "value": "\\"baz\\"",
+        },
+      ],
+      "name": "union",
+      "raw": "\\"bar\\" | \\"baz\\"",
+    },
+    Object {
+      "name": "literal",
+      "value": "\\"foo\\"",
+    },
+    Object {
+      "name": "void",
+    },
+  ],
+  "name": "intersection",
+  "raw": "string & barbaz & \\"foo\\" & void",
+}
+`;
+
+exports[`getTSType resolves imported types within union type 1`] = `
+Object {
+  "elements": Array [
+    Object {
+      "name": "string",
+    },
+    Object {
+      "elements": Array [
+        Object {
+          "name": "literal",
+          "value": "\\"bar\\"",
+        },
+        Object {
+          "name": "literal",
+          "value": "\\"baz\\"",
+        },
+      ],
+      "name": "union",
+      "raw": "\\"bar\\" | \\"baz\\"",
+    },
+    Object {
+      "name": "literal",
+      "value": "\\"foo\\"",
+    },
+    Object {
+      "name": "void",
+    },
+  ],
+  "name": "union",
+  "raw": "string | barbaz | \\"foo\\" | void",
+}
+`;
+
+exports[`getTSType resolves indexed access 1`] = `
+Object {
+  "name": "string",
+  "raw": "A[\\"x\\"]",
+}
+`;
+
+exports[`getTSType resolves indexed access of array 1`] = `
+Object {
+  "name": "STRING_VALS[number]",
+  "raw": "typeof STRING_VALS[number]",
+}
+`;
+
+exports[`getTSType resolves keyof to union 1`] = `
+Object {
+  "elements": Array [
+    Object {
+      "name": "literal",
+      "value": "'apple'",
+    },
+    Object {
+      "name": "literal",
+      "value": "'banana'",
+    },
+  ],
+  "name": "union",
+  "raw": "keyof typeof CONTENTS",
+}
+`;
+
+exports[`getTSType resolves keyof with imported types 1`] = `
+Object {
+  "elements": Array [
+    Object {
+      "name": "literal",
+      "value": "'apple'",
+    },
+    Object {
+      "name": "literal",
+      "value": "'banana'",
+    },
+  ],
+  "name": "union",
+  "raw": "keyof typeof CONTENTS",
+}
+`;
+
+exports[`getTSType resolves keyof with inline object to union 1`] = `
+Object {
+  "elements": Array [
+    Object {
+      "name": "literal",
+      "value": "apple",
+    },
+    Object {
+      "name": "literal",
+      "value": "banana",
+    },
+  ],
+  "name": "union",
+  "raw": "keyof { apple: string, banana: string }",
+}
+`;
+
+exports[`getTSType resolves typeof of imported types 1`] = `
+Object {
+  "name": "signature",
+  "raw": "{ a: number, b: xyz }",
+  "signature": Object {
+    "properties": Array [
+      Object {
+        "key": "a",
+        "value": Object {
+          "name": "number",
+          "required": true,
+        },
+      },
+      Object {
+        "key": "b",
+        "value": Object {
+          "name": "string",
+          "required": true,
+        },
+      },
+    ],
+  },
+  "type": "object",
+}
+`;
+
+exports[`getTSType resolves types in scope 1`] = `
+Object {
+  "name": "string",
+}
+`;
