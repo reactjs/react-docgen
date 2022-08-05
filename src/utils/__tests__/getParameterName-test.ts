@@ -1,4 +1,8 @@
-import type { ClassDeclaration, FunctionExpression } from '@babel/types';
+import type {
+  ArrayPattern,
+  ClassDeclaration,
+  FunctionExpression,
+} from '@babel/types';
 import { parse } from '../../../tests/utils';
 import getParameterName from '../getParameterName';
 
@@ -39,10 +43,10 @@ describe('getParameterName', () => {
   });
 
   it('throws when passed an invalid path', () => {
-    const def = parse.expression<FunctionExpression>('function() {}');
-    const param = def;
+    // ArrayPattern is wrong, but we test here the throwing, so we are cheating the types
+    const def = parse.expression<ArrayPattern>('function() {}');
 
-    expect(() => getParameterName(param as any)).toThrow();
+    expect(() => getParameterName(def)).toThrow();
   });
 
   it('handles typescript param property correctly', () => {
