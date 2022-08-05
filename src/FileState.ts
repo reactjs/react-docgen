@@ -56,7 +56,6 @@ export default class FileState {
       parent: this.ast,
       container: this.ast,
       key: 'program',
-      // @ts-expect-error TODO DONE wait for update to types
     }).setContext() as NodePath<Program>;
     this.scope = this.path.scope;
   }

@@ -140,7 +140,6 @@ export default function resolveToValue(path: NodePath): NodePath {
       // block where it is defined (i.e. we are not traversing into statements)
       resolvedPath = findLastAssignedValue(binding.scope.path, path);
       if (!resolvedPath) {
-        // @ts-ignore TODO fix in DT
         const bindingMap = binding.path.getOuterBindingIdentifierPaths(
           true,
         ) as Record<string, Array<NodePath<Identifier>>>;
