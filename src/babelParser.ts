@@ -34,8 +34,6 @@ function getDefaultPlugins(
   ];
 }
 
-type Parser = (src: string) => File;
-
 function buildPluginList(
   options: TransformOptions,
 ): NonNullable<ParserOptions['plugins']> {
@@ -73,20 +71,21 @@ function buildParserOptions(options: TransformOptions): ParserOptions {
   };
 }
 
-export default function buildParse(options: TransformOptions = {}): Parser {
+export default function babelParser(
+  src: string,
+  options: TransformOptions = {},
+): File {
   const parserOpts = buildParserOptions(options);
   const opts: TransformOptions = {
     ...options,
     parserOpts,
   };
 
-  return (src: string): File => {
-    const ast = parseSync(src, opts);
+  const ast = parseSync(src, opts);
 
-    if (!ast) {
-      throw new Error('Unable to parse source code.');
-    }
+  if (!ast) {
+    throw new Error('Unable to parse source code.');
+  }
 
-    return ast;
-  };
+  return ast;
 }

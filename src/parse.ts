@@ -1,7 +1,7 @@
 import Documentation from './Documentation';
 import type { DocumentationObject } from './Documentation';
 import postProcessDocumentation from './utils/postProcessDocumentation';
-import buildParser from './babelParser';
+import babelParse from './babelParser';
 import type { NodePath } from '@babel/traverse';
 import type { Handler } from './handlers';
 import type { ComponentNode } from './resolver';
@@ -47,8 +47,7 @@ export default function parse(
   config: InternalConfig,
 ): DocumentationObject[] {
   const { babelOptions, handlers, importer, resolver } = config;
-  const parser = buildParser(babelOptions);
-  const ast = parser(code);
+  const ast = babelParse(code, babelOptions);
 
   const fileState = new FileState(babelOptions, {
     ast,
