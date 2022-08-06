@@ -2,7 +2,7 @@ import type { HubInterface, Scope, Visitor } from '@babel/traverse';
 import traverse, { NodePath } from '@babel/traverse';
 import type { File, Node, Program } from '@babel/types';
 import type { Importer, ImportPath } from './importer';
-import buildParse from './babelParser';
+import babelParse from './babelParser';
 import type { TransformOptions } from '@babel/core';
 
 export default class FileState {
@@ -70,8 +70,7 @@ export default class FileState {
     const newOptions = { ...this.opts, filename };
     // We need to build a new parser, because there might be a new
     // babel config file in effect, so we need to load it
-    const parser = buildParse(newOptions);
-    const ast = parser(code);
+    const ast = babelParse(code, newOptions);
 
     return new FileState(newOptions, {
       ast,

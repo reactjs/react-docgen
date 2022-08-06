@@ -2,7 +2,7 @@ import type { Node, TransformOptions } from '@babel/core';
 import type { NodePath } from '@babel/traverse';
 import type { Importer, ImportPath } from '../src/importer';
 import FileState from '../src/FileState';
-import buildParser from '../src/babelParser';
+import babelParse from '../src/babelParser';
 import type {
   ExportDefaultDeclaration,
   Expression,
@@ -97,8 +97,7 @@ const parseDefault: ParseCall = function (
     babelrc: false,
     ...options,
   };
-  const parser = buildParser(opts);
-  const ast = parser(code);
+  const ast = babelParse(code, opts);
   const fileState = new FileState(opts, {
     ast,
     code,
