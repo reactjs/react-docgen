@@ -1,10 +1,6 @@
 import { Scope, visitors } from '@babel/traverse';
 import type { NodePath } from '@babel/traverse';
-import type {
-  Identifier,
-  ImportDeclaration,
-  MemberExpression,
-} from '@babel/types';
+import type { Identifier, ImportDeclaration } from '@babel/types';
 import getMemberExpressionRoot from './getMemberExpressionRoot';
 import getPropertyValuePath from './getPropertyValuePath';
 import { Array as toArray } from './expressionTo';
@@ -13,6 +9,7 @@ import getMemberValuePath, {
   isSupportedDefinitionType,
 } from './getMemberValuePath';
 import initialize from './ts-types';
+import getNameOrValue from './getNameOrValue';
 
 function findScopePath(
   bindingIdentifiers: Array<NodePath<Identifier>>,
@@ -199,16 +196,20 @@ export default function resolveToValue(path: NodePath): NodePath {
       // Try to find a specifier that matches the root of the member expression, and
       // find the export that matches the property name.
       for (const specifier of resolved.get('specifiers')) {
+        const property = path.get('property');
+        let propertyName: string | undefined;
+
+        if (property.isIdentifier() || property.isStringLiteral()) {
+          propertyName = getNameOrValue(property) as string;
+        }
+
         if (
           specifier.isImportNamespaceSpecifier() &&
-          specifier.node.local &&
-          specifier.node.local.name === (root.node as Identifier).name // TODO TESTME could be not an identifier
+          root.isIdentifier() &&
+          propertyName &&
+          specifier.node.local.name === root.node.name
         ) {
-          const resolvedPath = path.hub.import(
-            resolved,
-            ((root.parentPath.node as MemberExpression).property as Identifier)
-              .name, // TODO TESTME Idk what that is
-          );
+          const resolvedPath = path.hub.import(resolved, propertyName);
 
           if (resolvedPath) {
             return resolveToValue(resolvedPath);

@@ -1,0 +1,46 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`resolveToValue ImportDeclaration does not crash when resolving MemberExpression with non Identifiers 1`] = `
+Node {
+  "computed": true,
+  "object": Node {
+    "name": "bar",
+    "type": "Identifier",
+  },
+  "property": Node {
+    "async": false,
+    "body": Node {
+      "body": Array [],
+      "directives": Array [],
+      "type": "BlockStatement",
+    },
+    "generator": false,
+    "id": null,
+    "params": Array [],
+    "type": "ArrowFunctionExpression",
+  },
+  "type": "MemberExpression",
+}
+`;
+
+exports[`resolveToValue ImportDeclaration resolves namespace import references to the import declaration 1`] = `
+Node {
+  "extra": Object {
+    "raw": "3",
+    "rawValue": 3,
+  },
+  "type": "NumericLiteral",
+  "value": 3,
+}
+`;
+
+exports[`resolveToValue ImportDeclaration resolves namespace import references to the import declaration 2`] = `
+Node {
+  "extra": Object {
+    "raw": "3",
+    "rawValue": 3,
+  },
+  "type": "NumericLiteral",
+  "value": 3,
+}
+`;

@@ -139,7 +139,6 @@ function getMethodModifiers(
   const modifiers: MethodModifier[] = [];
 
   if (
-    // TODO add test for options
     options.isStatic === true ||
     ((methodPath.isClassProperty() || methodPath.isClassMethod()) &&
       methodPath.node.static)
