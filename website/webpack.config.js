@@ -1,7 +1,7 @@
 'use strict';
 
 const webpack = require('webpack');
-const path = require('path');
+const path = require('node:path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserJsPlugin = require('terser-webpack-plugin');
@@ -13,6 +13,10 @@ const targetDirectory = path.resolve(__dirname, './dist');
 const isDev = process.env.NODE_ENV !== 'production';
 
 const plugins = [
+  new webpack.NormalModuleReplacementPlugin(/^node:/, resource => {
+    // Remove node: file protocol
+    resource.request = resource.request.slice(5);
+  }),
   new HtmlWebpackPlugin({
     filename: 'index.html',
     inject: true,
@@ -96,8 +100,6 @@ module.exports = {
       assert: require.resolve('assert/'),
       buffer: require.resolve('buffer/'),
       fs: false,
-      module: false,
-      net: false,
       path: require.resolve('path-browserify'),
       process: require.resolve('process/browser'),
     },

@@ -1,5 +1,5 @@
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 import { handlers, parse, importers } from '../main';
 import { ERROR_MISSING_DEFINITION } from '../parse';
 

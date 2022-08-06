@@ -82,7 +82,7 @@ export default class App extends React.Component {
   }
 
   compile(value, options) {
-    return JSON.stringify(parse(value, null, null, options), null, 2);
+    return JSON.stringify(parse(value, options), null, 2);
   }
 
   handleChange = value => {
@@ -100,22 +100,24 @@ export default class App extends React.Component {
 
   buildOptions(language) {
     const options = {
-      babelrc: false,
-      babelrcRoots: false,
-      configFile: false,
-      filename: 'playground.js',
-      parserOptions: {
-        plugins: [...defaultPlugins],
+      babelOptions: {
+        babelrc: false,
+        babelrcRoots: false,
+        configFile: false,
+        filename: 'playground.js',
+        parserOpts: {
+          plugins: [...defaultPlugins],
+        },
       },
     };
 
     switch (language) {
       case 'ts':
-        options.parserOptions.plugins.push('typescript');
-        options.filename = 'playground.tsx';
+        options.babelOptions.parserOpts.plugins.push('typescript');
+        options.babelOptions.filename = 'playground.tsx';
         break;
       case 'flow':
-        options.parserOptions.plugins.push('flow');
+        options.babelOptions.parserOpts.plugins.push('flow');
         break;
     }
 

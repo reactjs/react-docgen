@@ -5,7 +5,7 @@ import type {
   ImportDeclaration,
 } from '@babel/types';
 import type FileState from '../FileState';
-import ignoreImports from './ignoreImports';
+import makeIgnoreImports from './makeIgnoreImports';
 import makeFsImporter from './makeFsImporter';
 
 export type ImportPath = NodePath<
@@ -18,4 +18,4 @@ export type Importer = (
   file: FileState,
 ) => NodePath | null;
 
-export { ignoreImports, makeFsImporter };
+export { makeIgnoreImports, makeFsImporter };
