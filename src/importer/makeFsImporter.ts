@@ -40,14 +40,14 @@ export default function makeFsImporter(
     // Bail if no filename was provided for the current source file.
     // Also never traverse into react itself.
     const source = path.node.source?.value;
-    const options = file.opts;
+    const { filename } = file.opts;
 
-    if (!source || !options || !options.filename || source === 'react') {
+    if (!source || !filename || source === 'react') {
       return null;
     }
 
     // Resolve the imported module using the Node resolver
-    const basedir = dirname(options.filename);
+    const basedir = dirname(filename);
     let resolvedSource: string | undefined;
 
     try {

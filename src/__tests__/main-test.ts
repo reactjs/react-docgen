@@ -12,9 +12,9 @@ describe('main', () => {
     });
 
     it('parses with custom handlers', () => {
-      const docs = parse(source, undefined, [
-        handlers.componentDocblockHandler,
-      ]);
+      const docs = parse(source, {
+        handlers: [handlers.componentDocblockHandler],
+      });
 
       expect(docs).toMatchSnapshot();
     });
@@ -212,16 +212,13 @@ describe('main', () => {
         let result;
 
         expect(() => {
-          result = parse(
-            fileContent,
-            undefined,
-            undefined,
-            importers.makeFsImporter(),
-            {
+          result = parse(fileContent, {
+            importer: importers.makeFsImporter(),
+            babelOptions: {
               filename: filePath,
               babelrc: false,
             },
-          );
+          });
         }).not.toThrowError();
         expect(result).toMatchSnapshot();
       });

@@ -1,18 +1,18 @@
-import type { Options, Parser } from './babelParser';
 import type { HubInterface, Scope, Visitor } from '@babel/traverse';
 import traverse, { NodePath } from '@babel/traverse';
 import type { File, Node, Program } from '@babel/types';
 import type { Importer, ImportPath } from './importer';
+import buildParse from './babelParser';
+import type { TransformOptions } from '@babel/core';
 
 export default class FileState {
-  opts: Options;
+  opts: TransformOptions;
   path: NodePath<Program>;
   ast: File;
   scope: Scope;
   code: string;
 
   #importer: Importer;
-  #parser: Parser;
 
   hub: HubInterface = {
     // keep it for the usage in babel-core, ex: path.hub.file.opts.filename
@@ -36,19 +36,13 @@ export default class FileState {
   };
 
   constructor(
-    options: Options,
-    {
-      code,
-      ast,
-      importer,
-      parser,
-    }: { code: string; ast: File; importer: Importer; parser: Parser },
+    options: TransformOptions,
+    { code, ast, importer }: { code: string; ast: File; importer: Importer },
   ) {
     this.opts = options;
     this.code = code;
     this.ast = ast;
     this.#importer = importer;
-    this.#parser = parser;
 
     this.path = NodePath.get({
       hub: this.hub,
@@ -61,7 +55,7 @@ export default class FileState {
   }
 
   /**
-   * Try to resolve and import with the `name`
+   * Try to resolve and import the ImportPath with the `name`
    */
   import(path: ImportPath, name: string): NodePath | null {
     return this.#importer(path, name, this);
@@ -69,20 +63,21 @@ export default class FileState {
 
   /**
    * Parse the content of a new file
-   * The filename is required so that potential imports inside the content can be correctly resolved
+   * The `filename` is required so that potential imports inside the content can be correctly resolved and
+   * the correct babel config file could be loaded. `filename` needs to be an absolute path.
    */
   parse(code: string, filename: string): FileState {
-    const ast = this.#parser(code);
+    const newOptions = { ...this.opts, filename };
+    // We need to build a new parser, because there might be a new
+    // babel config file in effect, so we need to load it
+    const parser = buildParse(newOptions);
+    const ast = parser(code);
 
-    return new FileState(
-      { ...this.opts, filename },
-      {
-        ast,
-        code,
-        importer: this.#importer,
-        parser: this.#parser,
-      },
-    );
+    return new FileState(newOptions, {
+      ast,
+      code,
+      importer: this.#importer,
+    });
   }
 
   traverse<S>(visitors: Visitor<S>, state?: S): void;
