@@ -32,15 +32,16 @@ files.forEach(file => {
   const code = fs.readFileSync(path.join(__dirname, file), 'utf-8');
   const suite = new Benchmark.Suite(file.replace(/\.\/fixtures\//, ''));
   const options = { filename: file, babelrc: false, configFile: false };
+  const newOptions = { babelOptions: options };
 
   // warmup
-  parse(code, undefined, undefined, undefined, options);
+  parse(code, newOptions);
   parse6old(code, undefined, undefined, options);
   parse5(code, undefined, undefined, options);
   parse4(code, undefined, undefined, options);
   global.gc();
   suite.add('current', () => {
-    parse(code, undefined, undefined, undefined, options);
+    parse(code, newOptions);
   });
   suite.add('v6.0.0-alpha.3', () => {
     parse6old(code, undefined, undefined, options);

@@ -2,12 +2,11 @@ import Documentation from './Documentation';
 import type { DocumentationObject } from './Documentation';
 import postProcessDocumentation from './utils/postProcessDocumentation';
 import buildParser from './babelParser';
-import type { Options } from './babelParser';
 import type { NodePath } from '@babel/traverse';
 import type { Handler } from './handlers';
-import type { Importer } from './importer';
-import type { ComponentNode, Resolver } from './resolver';
+import type { ComponentNode } from './resolver';
 import FileState from './FileState';
+import type { InternalConfig } from './config';
 
 const ERROR_MISSING_DEFINITION = 'No suitable component definition found.';
 
@@ -45,19 +44,16 @@ function executeHandlers(
  */
 export default function parse(
   code: string,
-  resolver: Resolver,
-  handlers: Handler[],
-  importer: Importer,
-  options: Options = {},
+  config: InternalConfig,
 ): DocumentationObject[] {
-  const parser = buildParser(options);
+  const { babelOptions, handlers, importer, resolver } = config;
+  const parser = buildParser(babelOptions);
   const ast = parser(code);
 
-  const fileState = new FileState(options, {
+  const fileState = new FileState(babelOptions, {
     ast,
     code,
     importer,
-    parser,
   });
 
   const componentDefinitions = resolver(fileState);

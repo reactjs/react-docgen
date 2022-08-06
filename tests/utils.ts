@@ -1,6 +1,5 @@
-import type { Node } from '@babel/core';
+import type { Node, TransformOptions } from '@babel/core';
 import type { NodePath } from '@babel/traverse';
-import type { Options, Parser } from '../src/babelParser';
 import type { Importer, ImportPath } from '../src/importer';
 import FileState from '../src/FileState';
 import buildParser from '../src/babelParser';
@@ -22,27 +21,26 @@ declare global {
   }
 }
 
-export function getParser(options: Options = {}): Parser {
-  return buildParser(options);
-}
-
 interface ParseCall {
   (code: string, importer: Importer): NodePath<Program>;
-  (code: string, options: Options): NodePath<Program>;
+  (code: string, options: TransformOptions): NodePath<Program>;
   <B extends boolean = false>(
     code: string,
-    options?: Options,
+    options?: TransformOptions,
     importer?: Importer,
     returnFileState?: B,
   ): B extends true ? FileState : NodePath<Program>;
 }
 
 interface Parse extends ParseCall {
-  expression<T = Expression>(src: string, options?: Options): NodePath<T>;
+  expression<T = Expression>(
+    src: string,
+    options?: TransformOptions,
+  ): NodePath<T>;
   expression<T = Expression>(
     src: string,
     importer: Importer,
-    options?: Options,
+    options?: TransformOptions,
   ): NodePath<T>;
   statement<T = Statement>(src: string, index?: number): NodePath<T>;
   statement<T = Statement>(
@@ -52,26 +50,32 @@ interface Parse extends ParseCall {
   ): NodePath<T>;
   statement<T = Statement>(
     src: string,
-    options: Options,
+    options: TransformOptions,
     index?: number,
   ): NodePath<T>;
   statement<T = Statement>(
     src: string,
     importer: Importer,
-    options: Options,
+    options: TransformOptions,
     index?: number,
   ): NodePath<T>;
-  expressionLast<T = Expression>(src: string, options?: Options): NodePath<T>;
+  expressionLast<T = Expression>(
+    src: string,
+    options?: TransformOptions,
+  ): NodePath<T>;
   expressionLast<T = Expression>(
     src: string,
     importer: Importer,
-    options?: Options,
+    options?: TransformOptions,
   ): NodePath<T>;
-  statementLast<T = Expression>(src: string, options?: Options): NodePath<T>;
+  statementLast<T = Expression>(
+    src: string,
+    options?: TransformOptions,
+  ): NodePath<T>;
   statementLast<T = Expression>(
     src: string,
     importer: Importer,
-    options?: Options,
+    options?: TransformOptions,
   ): NodePath<T>;
 }
 
@@ -81,7 +85,7 @@ interface Parse extends ParseCall {
  */
 const parseDefault: ParseCall = function (
   code: string,
-  options: Importer | Options = {},
+  options: Importer | TransformOptions = {},
   importer: Importer = noopImporter,
   returnFileState = false,
 ): typeof returnFileState extends true ? FileState : NodePath<Program> {
@@ -93,13 +97,12 @@ const parseDefault: ParseCall = function (
     babelrc: false,
     ...options,
   };
-  const parser = getParser(opts);
+  const parser = buildParser(opts);
   const ast = parser(code);
   const fileState = new FileState(opts, {
     ast,
     code,
     importer,
-    parser,
   });
 
   if (returnFileState) {
@@ -111,7 +114,7 @@ const parseDefault: ParseCall = function (
 
 const parseTS: ParseCall = function (
   code: string,
-  options: Importer | Options = {},
+  options: Importer | TransformOptions = {},
   importer: Importer = noopImporter,
 ): NodePath<Program> {
   if (typeof options !== 'object') {
@@ -123,7 +126,7 @@ const parseTS: ParseCall = function (
     code,
     {
       filename: 'file.tsx',
-      parserOptions: { plugins: ['typescript'] },
+      parserOpts: { plugins: ['typescript'] },
       ...options,
     },
     importer,
@@ -138,8 +141,8 @@ function buildTestParser(parseFunction: Parse): Parse {
   parseFunction.statement = function <T = Statement>(
     this: Parse,
     src: string,
-    importer: Importer | Options | number = noopImporter,
-    options: Options | number = {},
+    importer: Importer | TransformOptions | number = noopImporter,
+    options: TransformOptions | number = {},
     index = 0,
   ): NodePath<T> {
     if (typeof options === 'number') {
@@ -165,8 +168,8 @@ function buildTestParser(parseFunction: Parse): Parse {
   parseFunction.statementLast = function <T = Expression>(
     this: Parse,
     src: string,
-    importer: Importer | Options = noopImporter,
-    options: Options = {},
+    importer: Importer | TransformOptions = noopImporter,
+    options: TransformOptions = {},
   ): NodePath<T> {
     if (typeof importer === 'object') {
       options = importer;
@@ -179,8 +182,8 @@ function buildTestParser(parseFunction: Parse): Parse {
   parseFunction.expression = function <T = Expression>(
     this: Parse,
     src: string,
-    importer: Importer | Options = noopImporter,
-    options: Options = {},
+    importer: Importer | TransformOptions = noopImporter,
+    options: TransformOptions = {},
   ): NodePath<T> {
     if (typeof importer === 'object') {
       options = importer;
@@ -197,8 +200,8 @@ function buildTestParser(parseFunction: Parse): Parse {
   parseFunction.expressionLast = function <T = Expression>(
     this: Parse,
     src: string,
-    importer: Importer | Options = noopImporter,
-    options: Options = {},
+    importer: Importer | TransformOptions = noopImporter,
+    options: TransformOptions = {},
   ): NodePath<T> {
     if (typeof importer === 'object') {
       options = importer;

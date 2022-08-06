@@ -3,29 +3,13 @@ import parse from './parse';
 import * as allResolvers from './resolver';
 import * as allImporters from './importer';
 import * as utils from './utils';
-import type { Options } from './babelParser';
 import type { DocumentationObject as Documentation } from './Documentation';
 import type { Resolver } from './resolver';
 import type { Importer } from './importer';
 import type { Handler } from './handlers';
 import type FileState from './FileState';
-
-const defaultResolver: Resolver = allResolvers.findExportedComponentDefinition;
-const defaultHandlers: Handler[] = [
-  allHandlers.propTypeHandler,
-  allHandlers.contextTypeHandler,
-  allHandlers.childContextTypeHandler,
-  allHandlers.propTypeCompositionHandler,
-  allHandlers.propDocBlockHandler,
-  allHandlers.codeTypeHandler,
-  allHandlers.defaultPropsHandler,
-  allHandlers.componentDocblockHandler,
-  allHandlers.displayNameHandler,
-  allHandlers.componentMethodsHandler,
-  allHandlers.componentMethodsJsDocHandler,
-];
-
-const defaultImporter: Importer = allImporters.makeFsImporter();
+import type { Config } from './config';
+import { createConfig, defaultHandlers } from './config';
 
 declare module '@babel/traverse' {
   export interface HubInterface {
@@ -52,16 +36,15 @@ declare module '@babel/traverse' {
  * provided object expression, and extract prop type information, prop
  * documentation (from docblocks), default prop values and component
  * documentation (from a docblock).
+ * TODO jsdoc
  */
 function defaultParse(
   src: Buffer | string,
-  resolver: Resolver = defaultResolver,
-  handlers: Handler[] = defaultHandlers,
-  importer: Importer = defaultImporter,
-  // Used for backwards compatibility of this method
-  options: Options = {},
-): Documentation | Documentation[] {
-  return parse(String(src), resolver, handlers, importer, options);
+  config: Config = {},
+): Documentation[] {
+  const defaultConfig = createConfig(config);
+
+  return parse(String(src), defaultConfig);
 }
 
 export {
@@ -73,4 +56,4 @@ export {
   utils,
 };
 
-export type { Importer, Handler, Resolver, FileState, Options, Documentation };
+export type { Importer, Handler, Resolver, FileState, Config, Documentation };

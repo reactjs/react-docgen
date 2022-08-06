@@ -388,7 +388,7 @@ describe('getMethodDocumentation', () => {
           `class Foo {
             #foo() {}
           }`,
-          { parserOptions: { plugins: ['classPrivateMethods'] } },
+          { parserOpts: { plugins: ['classPrivateMethods'] } },
         );
         const method = def
           .get('body')

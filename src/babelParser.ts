@@ -1,7 +1,7 @@
 import type { ParserOptions, TransformOptions } from '@babel/core';
 import { loadPartialConfig, parseSync } from '@babel/core';
 import type { File } from '@babel/types';
-import path from 'path';
+import { extname } from 'node:path';
 
 const TYPESCRIPT_EXTS = {
   '.cts': true,
@@ -15,9 +15,7 @@ function getDefaultPlugins(
 ): NonNullable<ParserOptions['plugins']> {
   return [
     'jsx',
-    TYPESCRIPT_EXTS[path.extname(options.filename || '')]
-      ? 'typescript'
-      : 'flow',
+    TYPESCRIPT_EXTS[extname(options.filename || '')] ? 'typescript' : 'flow',
     'asyncDoExpressions',
     'decimal',
     ['decorators', { decoratorsBeforeExport: false }],
@@ -36,27 +34,27 @@ function getDefaultPlugins(
   ];
 }
 
-export type Options = TransformOptions & { parserOptions?: ParserOptions };
-export type Parser = (src: string) => File;
+type Parser = (src: string) => File;
 
 function buildPluginList(
-  parserOptions: ParserOptions | undefined,
-  babelOptions: TransformOptions,
+  options: TransformOptions,
 ): NonNullable<ParserOptions['plugins']> {
   let plugins: NonNullable<ParserOptions['plugins']> = [];
 
-  if (parserOptions && parserOptions.plugins) {
-    plugins = [...parserOptions.plugins];
+  if (options.parserOpts?.plugins) {
+    plugins = [...options.parserOpts.plugins];
   }
 
-  const partialConfig = loadPartialConfig(babelOptions);
+  // Let's check if babel finds a config file for this source file
+  // If babel does find a config file we do not apply our defaults
+  const partialConfig = loadPartialConfig(options);
 
   if (
+    plugins.length === 0 &&
     partialConfig &&
-    !partialConfig.hasFilesystemConfig() &&
-    plugins.length === 0
+    !partialConfig.hasFilesystemConfig()
   ) {
-    plugins = getDefaultPlugins(babelOptions);
+    plugins = getDefaultPlugins(options);
   }
 
   // Ensure that the estree plugin is never active
@@ -64,26 +62,22 @@ function buildPluginList(
   return plugins.filter(plugin => plugin !== 'estree');
 }
 
-function buildOptions(
-  parserOptions: ParserOptions | undefined,
-  babelOptions: TransformOptions,
-): ParserOptions {
-  const plugins = buildPluginList(parserOptions, babelOptions);
+function buildParserOptions(options: TransformOptions): ParserOptions {
+  const plugins = buildPluginList(options);
 
   return {
     sourceType: 'unambiguous',
-    tokens: false,
-    ...(parserOptions || {}),
+    ...(options.parserOpts || {}),
     plugins,
+    tokens: false,
   };
 }
 
-export default function buildParse(options: Options = {}): Parser {
-  const { parserOptions, ...babelOptions } = options;
-  const parserOpts = buildOptions(parserOptions, babelOptions);
+export default function buildParse(options: TransformOptions = {}): Parser {
+  const parserOpts = buildParserOptions(options);
   const opts: TransformOptions = {
+    ...options,
     parserOpts,
-    ...babelOptions,
   };
 
   return (src: string): File => {
