@@ -1,5 +1,6 @@
 import type { NodePath } from '@babel/traverse';
 import {
+  ExportNamedDeclaration,
   identifier,
   memberExpression,
   numericLiteral,
@@ -11,10 +12,20 @@ import type {
   CallExpression,
   Identifier,
 } from '@babel/types';
-import { parse, parseTypescript } from '../../../tests/utils';
+import { makeMockImporter, parse, parseTypescript } from '../../../tests/utils';
 import resolveToValue from '../resolveToValue';
 
 describe('resolveToValue', () => {
+  const mockImporter = makeMockImporter({
+    Foo: stmtLast =>
+      stmtLast<ExportNamedDeclaration>(`
+        const baz = 3;
+        export { baz };
+      `)
+        .get('specifiers')[0]
+        .get('local') as NodePath,
+  });
+
   it('resolves simple variable declarations', () => {
     const path = parse.expressionLast(['var foo  = 42;', 'foo;'].join('\n'));
 
@@ -160,7 +171,7 @@ describe('resolveToValue', () => {
   });
 
   describe('ImportDeclaration', () => {
-    it('resolves default import references to the import declaration', () => {
+    it('resolves unresolvable default import references to the import declaration', () => {
       const path = parse.expressionLast<Identifier>(
         ['import foo from "Foo"', 'foo;'].join('\n'),
       );
@@ -169,7 +180,7 @@ describe('resolveToValue', () => {
       expect(value.node.type).toBe('ImportDeclaration');
     });
 
-    it('resolves named import references to the import declaration', () => {
+    it('resolves unresolvable named import references to the import declaration', () => {
       const path = parse.expressionLast(
         ['import {foo} from "Foo"', 'foo;'].join('\n'),
       );
@@ -178,7 +189,7 @@ describe('resolveToValue', () => {
       expect(value.node.type).toBe('ImportDeclaration');
     });
 
-    it('resolves aliased import references to the import declaration', () => {
+    it('resolves unresolvable aliased import references to the import declaration', () => {
       const path = parse.expressionLast(
         ['import {foo as bar} from "Foo"', 'bar;'].join('\n'),
       );
@@ -187,13 +198,43 @@ describe('resolveToValue', () => {
       expect(value.node.type).toBe('ImportDeclaration');
     });
 
-    it('resolves namespace import references to the import declaration', () => {
+    it('resolves unresolvable namespace import references to the import declaration', () => {
       const path = parse.expressionLast(
         ['import * as bar from "Foo"', 'bar;'].join('\n'),
       );
       const value = resolveToValue(path);
 
       expect(value.node.type).toBe('ImportDeclaration');
+    });
+
+    it('resolves namespace import references to the import declaration', () => {
+      const path = parse.expressionLast(
+        `import * as bar from "Foo"; bar.baz`,
+        mockImporter,
+      );
+      const value = resolveToValue(path);
+
+      expect(value).toMatchSnapshot();
+    });
+
+    it('resolves namespace import references to the import declaration', () => {
+      const path = parse.expressionLast(
+        `import * as bar from "Foo"; bar['baz']`,
+        mockImporter,
+      );
+      const value = resolveToValue(path);
+
+      expect(value).toMatchSnapshot();
+    });
+
+    it('does not crash when resolving MemberExpression with non Identifiers', () => {
+      const path = parse.expressionLast(
+        `import * as bar from "Foo"; bar[()=>{}]`,
+        mockImporter,
+      );
+      const value = resolveToValue(path);
+
+      expect(value).toMatchSnapshot();
     });
   });
 
