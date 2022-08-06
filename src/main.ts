@@ -26,17 +26,16 @@ declare module '@babel/traverse' {
 }
 
 /**
- * See `parse.js` for more information about the arguments. This function
- * simply sets default values for convenience.
+ * Parse the *src* and scan for react components based on the config
+ * that gets supplied.
  *
- * The default resolver looks for *exported* `React.createClass(def)` calls
- * and expected `def` to resolve to an object expression.
+ * The default resolvers look for *exported* react components.
  *
- * The default `handlers` look for `propTypes` and `getDefaultProps` in the
- * provided object expression, and extract prop type information, prop
- * documentation (from docblocks), default prop values and component
- * documentation (from a docblock).
- * TODO jsdoc
+ * By default all handlers are applied, so that all possible
+ * different use cases are covered.
+ *
+ * The default importer is the fs-importer that tries to resolve
+ * files based on the nodejs resolve algorithm.
  */
 function defaultParse(
   src: Buffer | string,
