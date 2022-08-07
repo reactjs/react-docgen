@@ -79,16 +79,28 @@ interface Parse extends ParseCall {
   ): NodePath<T>;
 }
 
+function parseDefault(
+  code: string,
+  options: Importer | TransformOptions,
+  importer: Importer,
+  returnFileState: true,
+): FileState;
+function parseDefault(
+  code: string,
+  options: Importer | TransformOptions,
+  importer: Importer,
+  returnFileState: false,
+): NodePath<Program>;
 /**
  * Returns a NodePath to the program path of the passed node
  * Parses JS and Flow
  */
-const parseDefault: ParseCall = function (
+function parseDefault(
   code: string,
   options: Importer | TransformOptions = {},
   importer: Importer = noopImporter,
   returnFileState = false,
-): typeof returnFileState extends true ? FileState : NodePath<Program> {
+): FileState | NodePath<Program> {
   if (typeof options !== 'object') {
     importer = options;
     options = {};
@@ -105,11 +117,11 @@ const parseDefault: ParseCall = function (
   });
 
   if (returnFileState) {
-    return fileState as any;
+    return fileState;
   }
 
-  return fileState.path as any;
-};
+  return fileState.path;
+}
 
 const parseTS: ParseCall = function (
   code: string,

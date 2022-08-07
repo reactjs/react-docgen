@@ -1,6 +1,5 @@
 import type { NodePath } from '@babel/traverse';
 import {
-  ExportNamedDeclaration,
   identifier,
   memberExpression,
   numericLiteral,
@@ -11,6 +10,7 @@ import type {
   AssignmentExpression,
   CallExpression,
   Identifier,
+  ExportNamedDeclaration,
 } from '@babel/types';
 import { makeMockImporter, parse, parseTypescript } from '../../../tests/utils';
 import resolveToValue from '../resolveToValue';
