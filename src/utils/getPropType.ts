@@ -255,8 +255,11 @@ export default function getPropType(path: NodePath): PropTypeDescriptor {
         descriptor = { name };
 
         return true;
-      } else if (propTypes.has(name) && member.argumentPaths.length) {
-        descriptor = propTypes.get(name)!(member.argumentPaths[0]);
+      }
+      const propTypeHandler = propTypes.get(name);
+
+      if (propTypeHandler && member.argumentPaths.length) {
+        descriptor = propTypeHandler(member.argumentPaths[0]);
 
         return true;
       }
@@ -271,11 +274,17 @@ export default function getPropType(path: NodePath): PropTypeDescriptor {
 
   if (path.isIdentifier() && isSimplePropType(path.node.name)) {
     return { name: path.node.name };
-  } else if (path.isCallExpression()) {
+  }
+
+  if (path.isCallExpression()) {
     const callee = path.get('callee');
 
-    if (callee.isIdentifier() && propTypes.has(callee.node.name)) {
-      return propTypes.get(callee.node.name)!(path.get('arguments')[0]);
+    if (callee.isIdentifier()) {
+      const propTypeHandler = propTypes.get(callee.node.name);
+
+      if (propTypeHandler) {
+        return propTypeHandler(path.get('arguments')[0]);
+      }
     }
   }
 
