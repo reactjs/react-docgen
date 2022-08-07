@@ -26,6 +26,11 @@
     {
       "matchFiles": ["benchmark/package.json", "website/package.json"],
       "semanticCommitType": "chore"
+    },
+    {
+      "matchFiles": ["benchmark/package.json"],
+      "matchPackageNames": ["react-docgen"],
+      "enabled": false
     }
   ]
 }
