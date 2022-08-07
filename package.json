@@ -46,6 +46,9 @@
     "@babel/core": "^7.18.9",
     "@babel/traverse": "^7.18.9",
     "@babel/types": "^7.18.9",
+    "@types/babel__traverse": "^7.18.0",
+    "@types/doctrine": "^0.0.5",
+    "@types/resolve": "^1.20.2",
     "commander": "^2.19.0",
     "doctrine": "^3.0.0",
     "neo-async": "^2.6.2",
@@ -54,11 +57,8 @@
     "strip-indent": "^3.0.0"
   },
   "devDependencies": {
-    "@types/babel__traverse": "7.18.0",
     "@types/cross-spawn": "6.0.2",
-    "@types/doctrine": "0.0.5",
     "@types/jest": "28.1.6",
-    "@types/resolve": "1.20.2",
     "@types/rimraf": "3.0.2",
     "@typescript-eslint/eslint-plugin": "5.32.0",
     "@typescript-eslint/parser": "5.32.0",

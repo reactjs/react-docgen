@@ -654,7 +654,7 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
-"@types/babel__traverse@7.18.0":
+"@types/babel__traverse@^7.18.0":
   version "7.18.0"
   resolved "https://registry.yarnpkg.com/@types/babel__traverse/-/babel__traverse-7.18.0.tgz#8134fd78cb39567465be65b9fdc16d378095f41f"
   integrity sha512-v4Vwdko+pgymgS+A2UIaJru93zQd85vIGWObM5ekZNdXCKtDYqATlEYnWgfo86Q6I1Lh0oXnksDnMU1cwmlPDw==
@@ -668,7 +668,7 @@
   dependencies:
     "@types/node" "*"
 
-"@types/doctrine@0.0.5":
+"@types/doctrine@^0.0.5":
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/@types/doctrine/-/doctrine-0.0.5.tgz#9768264221e8fd422e4989c8cfdab2ff781f4eb6"
   integrity sha512-JJwEeFy8Sl9ctiugU4h4DGN9hCB47oyhUkM2H8g8xZr4tHTEXtmV4U6krKrU8Ng0S7RlG/J7fkta1rGu3pq+YQ==
@@ -735,7 +735,7 @@
   resolved "https://registry.yarnpkg.com/@types/prettier/-/prettier-2.6.4.tgz#ad899dad022bab6b5a9f0a0fe67c2f7a4a8950ed"
   integrity sha512-fOwvpvQYStpb/zHMx0Cauwywu9yLDmzWiiQBC7gJyq5tYLUXFZvDG7VK1B7WBxxjBJNKFOZ0zLoOQn8vmATbhw==
 
-"@types/resolve@1.20.2":
+"@types/resolve@^1.20.2":
   version "1.20.2"
   resolved "https://registry.yarnpkg.com/@types/resolve/-/resolve-1.20.2.tgz#97d26e00cd4a0423b4af620abecf3e6f442b7975"
   integrity sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==
