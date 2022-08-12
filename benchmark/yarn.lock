@@ -637,10 +637,10 @@ make-dir@^3.0.0:
   dependencies:
     semver "^6.0.0"
 
-microtime@3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/microtime/-/microtime-3.1.0.tgz#599a71250e3116c59f0fe5271dae4cc44321869c"
-  integrity sha512-GcjhfC2y/DF2znac8IRwri7+YUIy34QRHz/iZK3bHrh74qrNNOpAJQwiOMnIG+v1J0K4eiqd+RiGzN3F1eofTQ==
+microtime@3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/microtime/-/microtime-3.1.1.tgz#f3ce12f4091c55fb2982c87205e2e7698afdcd0c"
+  integrity sha512-to1r7o24cDsud9IhN6/8wGmMx5R2kT0w2Xwm5okbYI3d1dk6Xv0m+Z+jg2vS9pt+ocgQHTCtgs/YuyJhySzxNg==
   dependencies:
     node-addon-api "^5.0.0"
     node-gyp-build "^4.4.0"
