@@ -24,6 +24,11 @@
       "automerge": true
     },
     {
+      "matchFiles": ["benchmark/package.json"],
+      "updateTypes": ["minor", "patch"],
+      "automerge": true
+    },
+    {
       "matchFiles": ["benchmark/package.json", "website/package.json"],
       "semanticCommitType": "chore"
     },
