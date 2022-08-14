@@ -17,8 +17,14 @@ jobs:
     strategy:
       matrix:
         node: ['14', '16', '18']
-        os: ['ubuntu', 'macos', 'windows']
-    name: Tests (Node.js v${{ matrix.node }}, ${{ matrix.node }})
+        os: ['ubuntu']
+        include:
+          - os: macos
+            node: '18'
+          - os: windows
+            node: '18'
+
+    name: Tests (Node.js v${{ matrix.node }}, ${{ matrix.os }})
     runs-on: ${{ matrix.os }}-latest
 
     steps:
