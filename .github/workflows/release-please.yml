@@ -12,8 +12,7 @@ jobs:
       - uses: google-github-actions/release-please-action@v3
         id: release
         with:
-          release-type: node
-          package-name: react-docgen
+          command: manifest
           token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
 
       - name: Checkout
