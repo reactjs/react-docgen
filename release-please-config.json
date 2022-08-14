@@ -1,0 +1,7 @@
+{
+  "bootstrap-sha": "0a8213b1c559e83b2a7c106bfc6fc1e930f988f9",
+  "always-link-local": true,
+  "prerelease": true,
+  "packages": { "packages/react-docgen": {}, "packages/react-docgen-cli": {} },
+  "plugins": ["node-workspace"]
+}

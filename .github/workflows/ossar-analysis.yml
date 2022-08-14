@@ -9,7 +9,8 @@ on:
   schedule:
     - cron: '38 4 * * 1'
 
-permissions: {}
+permissions:
+  security-events: write
 
 jobs:
   OSSAR-Scan:
