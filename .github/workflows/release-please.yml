@@ -36,7 +36,12 @@ jobs:
         if: ${{ steps.release.outputs.release_created }}
         run: yarn build
 
-      - run: npm publish --tag=next
+      - run: npm publish packages/react-docgen/ --tag=next
+        if: ${{ steps.release.outputs['packages/react-docgen--version'] }}
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        if: ${{ steps.release.outputs.release_created }}
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+
+      - run: npm publish packages/react-docgen-cli/
+        if: ${{ steps.release.outputs['packages/react-docgen-cli--version'] }}
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}

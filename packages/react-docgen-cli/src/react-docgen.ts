@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const argv = require('commander');
+import argv from 'commander';
 
 function collect(val, memo) {
   memo.push(val);
@@ -15,7 +15,7 @@ argv
   .usage('[path...] [options]')
   .description(
     'Extract meta information from React components.\n' +
-      '  If a directory is passed, it is recursively traversed.'
+      '  If a directory is passed, it is recursively traversed.',
   )
   .option('-o, --out <file>', 'Store extracted information in the FILE')
   .option('--pretty', 'pretty print JSON')
@@ -24,35 +24,35 @@ argv
     'File extensions to consider. Repeat to define multiple extensions. Default: ' +
       JSON.stringify(defaultExtensions),
     collect,
-    ['js', 'jsx']
+    ['js', 'jsx'],
   )
   .option(
     '-e, --exclude <path>',
     'Filename or regex to exclude. Default: ' + JSON.stringify(defaultExclude),
     collect,
-    []
+    [],
   )
   .option(
     '-i, --ignore <path>',
     'Folders to ignore. Default: ' + JSON.stringify(defaultIgnore),
     collect,
-    ['node_modules', '__tests__', '__mocks__']
+    ['node_modules', '__tests__', '__mocks__'],
   )
   .option(
     '--resolver <resolver>',
     'Resolver name (findAllComponentDefinitions, findExportedComponentDefinition) or path to a module that exports ' +
       'a resolver. Default: findExportedComponentDefinition',
-    'findExportedComponentDefinition'
+    'findExportedComponentDefinition',
   )
   .arguments('<path>');
 
 argv.parse(process.argv);
 
-const async = require('neo-async');
-const dir = require('node-dir');
-const fs = require('fs');
-const parser = require('../dist/main');
-const path = require('path');
+import async from 'neo-async';
+import dir from 'node-dir';
+import fs from 'fs';
+import parser from 'react-docgen';
+import path from 'path';
 
 const output = argv.out;
 const paths = argv.args || [];
@@ -76,7 +76,7 @@ if (
 if (argv.resolver) {
   try {
     // Look for built-in resolver
-    resolver = require(`../dist/resolver/${argv.resolver}`).default;
+    //  resolver from `../dist/resolver/${argv.resolver}`).default;
   } catch (error) {
     if (error.code !== 'MODULE_NOT_FOUND') {
       throw error;
@@ -85,7 +85,7 @@ if (argv.resolver) {
 
     try {
       // Look for local resolver
-      resolver = require(resolverPath);
+      //resolver from resolverPath);
     } catch (localError) {
       if (localError.code !== 'MODULE_NOT_FOUND') {
         throw localError;
@@ -99,9 +99,9 @@ if (argv.resolver) {
 }
 
 function parse(source, filename) {
-  return parser.parse(source, resolver, null, {
+  /*return parser.parse(source, resolver, null, {
     filename,
-  });
+  });*/
 }
 
 function writeError(msg, filePath) {
@@ -149,7 +149,7 @@ function traverseDir(filePath, result, done) {
         throw error;
       }
       done();
-    }
+    },
   );
 }
 
@@ -230,6 +230,6 @@ if (errorMessage) {
       } else {
         writeResult(result);
       }
-    }
+    },
   );
 }

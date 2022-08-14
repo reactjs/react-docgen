@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-  extends: ['../.eslintrc.js'],
+  extends: ['../.eslintrc.cjs'],
   parser: '@babel/eslint-parser',
   parserOptions: {
     babelOptions: {

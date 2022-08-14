@@ -28,7 +28,6 @@ module.exports = {
       },
     ],
     'prefer-const': 'error',
-    strict: ['error', 'never'],
   },
   env: {
     node: true,
@@ -36,9 +35,9 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['*rc.js', '*.config.js'],
+      files: ['*.cjs'],
       parserOptions: {
-        ecmaVersion: 2019,
+        ecmaVersion: 2020,
         sourceType: 'script',
       },
       rules: {
@@ -59,7 +58,7 @@ module.exports = {
       },
     },
     {
-      files: '@(src|bin)/**/__tests__/*-test.js',
+      files: '**/__tests__/*-test.js',
       env: { jest: true },
     },
   ],

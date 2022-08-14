@@ -1,0 +1,44 @@
+{
+  "name": "react-docgen",
+  "version": "6.0.0-alpha.3",
+  "description": "A library to extract information from React components for documentation generation.",
+  "repository": "reactjs/react-docgen",
+  "browser": {
+    "./src/importer/makeFsImporter.ts": "./src/importer/makeIgnoreImports.ts",
+    "./dist/importer/makeFsImporter.js": "./dist/importer/makeIgnoreImports.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "main": "dist/main.js",
+  "typings": "dist/main.d.ts",
+  "scripts": {
+    "build": "rimraf dist/ && tsc",
+    "test": "yarn build && jest"
+  },
+  "keywords": [
+    "react",
+    "documentation-generation"
+  ],
+  "author": {
+    "name": "Felix Kling (http://github.com/fkling)"
+  },
+  "contributors": [
+    "Daniel Tschinder (http://github.com/danez)"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@babel/core": "^7.18.9",
+    "@babel/traverse": "^7.18.9",
+    "@babel/types": "^7.18.9",
+    "@types/babel__traverse": "^7.18.0",
+    "@types/doctrine": "^0.0.5",
+    "@types/resolve": "^1.20.2",
+    "doctrine": "^3.0.0",
+    "resolve": "^1.22.1",
+    "strip-indent": "^3.0.0"
+  }
+}
