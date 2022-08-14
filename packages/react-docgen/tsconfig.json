@@ -4,6 +4,6 @@
     "declaration": true,
     "outDir": "./dist"
   },
-  "exclude": ["**/__tests__/**/*", "**/__mocks__/**/*"],
+  "exclude": ["**/__tests__/**/*", "**/__mocks__/**/*", "**/__fixtures__/**/*"],
   "include": ["src/**/*"]
 }
