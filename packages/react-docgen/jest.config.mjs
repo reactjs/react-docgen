@@ -1,12 +1,12 @@
-'use strict';
-
-module.exports = {
+export default {
+  displayName: {
+    name: 'react-docgen',
+    color: 'blue',
+  },
   collectCoverageFrom: ['src/**/*.ts', '!**/__tests__/**', '!**/__mocks__/**'],
   coverageReporters: ['cobertura', 'text'],
-  displayName: 'Unit',
   snapshotSerializers: ['./tests/NodePathSerializer.js'],
-  setupFilesAfterEnv: ['<rootDir>/tests/setupTestFramework.ts'],
-  roots: ['bin', 'src'],
+  setupFilesAfterEnv: ['./tests/setupTestFramework.ts'],
   preset: 'ts-jest',
-  testRegex: '/__tests__/.*-test\\.ts$',
+  testRegex: '(/__tests__/|/tests/integration/).*-test\\.ts$',
 };

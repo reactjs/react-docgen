@@ -10,7 +10,7 @@
     "automerge": true
   },
   "postUpdateOptions": ["yarnDedupeHighest"],
-  "semanticCommits": true,
+  "semanticCommits": "enabled",
   "semanticCommitType": "fix",
   "automergeType": "branch",
   "packageRules": [

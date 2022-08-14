@@ -104,7 +104,10 @@ module.exports = {
       process: require.resolve('process/browser'),
     },
     alias: {
-      'react-docgen': path.resolve(__dirname, '../src/main.ts'),
+      'react-docgen': path.resolve(
+        __dirname,
+        '../packages/react-docgen/src/main.ts',
+      ),
     },
   },
   plugins,

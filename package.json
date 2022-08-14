@@ -1,61 +1,21 @@
 {
-  "name": "react-docgen",
-  "version": "6.0.0-alpha.3",
-  "description": "A CLI and toolkit to extract information from React components for documentation generation.",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/reactjs/react-docgen.git"
-  },
-  "bugs": {
-    "url": "https://github.com/reactjs/react-docgen/issues"
-  },
-  "bin": {
-    "react-docgen": "bin/react-docgen.js"
-  },
-  "browser": {
-    "./src/importer/makeFsImporter.ts": "./src/importer/makeIgnoreImports.ts",
-    "./dist/importer/makeFsImporter.js": "./dist/importer/makeIgnoreImports.js"
-  },
-  "files": [
-    "bin",
-    "dist"
-  ],
+  "private": true,
   "engines": {
     "node": ">=14.0.0"
   },
-  "main": "dist/main.js",
-  "typings": "dist/main.d.ts",
   "scripts": {
-    "build": "rimraf dist/ && tsc",
+    "build": "yarn workspaces run build",
     "lint": "eslint . --ext .js,.ts --report-unused-disable-directives",
     "fix": "eslint . --ext .js,.ts --fix --report-unused-disable-directives",
-    "test": "yarn website:install && yarn lint && yarn build && jest",
+    "test": "yarn build && jest",
     "test:ci": "yarn build && jest --ci --coverage",
     "website:install": "cd website && yarn",
     "website:start": "yarn website:install && cd website && yarn start"
   },
-  "keywords": [
-    "react",
-    "documentation-generation"
-  ],
-  "author": {
-    "name": "Felix Kling"
-  },
   "license": "MIT",
-  "dependencies": {
-    "@babel/core": "^7.18.9",
-    "@babel/traverse": "^7.18.9",
-    "@babel/types": "^7.18.9",
-    "@types/babel__traverse": "^7.18.0",
-    "@types/doctrine": "^0.0.5",
-    "@types/resolve": "^1.20.2",
-    "commander": "^2.19.0",
-    "doctrine": "^3.0.0",
-    "neo-async": "^2.6.2",
-    "node-dir": "^0.1.17",
-    "resolve": "^1.22.1",
-    "strip-indent": "^3.0.0"
-  },
+  "workspaces": [
+    "packages/*"
+  ],
   "devDependencies": {
     "@types/cross-spawn": "6.0.2",
     "@types/jest": "28.1.6",

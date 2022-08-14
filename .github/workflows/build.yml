@@ -7,6 +7,8 @@ on:
       - renovate/**
   pull_request:
 
+permissions: {}
+
 env:
   NODE_VERSION: 18
 
@@ -15,8 +17,9 @@ jobs:
     strategy:
       matrix:
         node: ['14', '16', '18']
-    name: Unit tests (Node v${{ matrix.node }})
-    runs-on: ubuntu-latest
+        os: ['ubuntu', 'macos', 'windows']
+    name: Tests (Node.js v${{ matrix.node }}, ${{ matrix.node }})
+    runs-on: ${{ matrix.os }}-latest
 
     steps:
       - name: Checkout
@@ -113,6 +116,8 @@ jobs:
 
   deploy:
     name: Deploy website
+    permissions:
+      contents: write
     needs: [tests, lint]
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
