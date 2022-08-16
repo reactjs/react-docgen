@@ -1,6 +1,7 @@
 dist
 node_modules/
 .idea/
+.jest-cache/
 coverage/
 yarn-error.log
 .pnp.*

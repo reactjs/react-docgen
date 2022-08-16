@@ -9,7 +9,7 @@
     "lint": "eslint . --ext .js,.ts --report-unused-disable-directives",
     "fix": "eslint . --ext .js,.ts --fix --report-unused-disable-directives",
     "test": "yarn build && jest",
-    "test:ci": "yarn build && jest --ci --coverage",
+    "test:ci": "yarn build && jest --ci --cacheDirectory $(pwd)/.jest-cache/ --coverage",
     "website:build": "yarn workspace website run build",
     "website:start": "yarn workspace website run start"
   },
