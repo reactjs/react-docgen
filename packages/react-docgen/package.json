@@ -4,8 +4,8 @@
   "description": "A library to extract information from React components for documentation generation.",
   "repository": "reactjs/react-docgen",
   "browser": {
-    "./src/importer/makeFsImporter.ts": "./src/importer/makeIgnoreImports.ts",
-    "./dist/importer/makeFsImporter.js": "./dist/importer/makeIgnoreImports.js"
+    "./dist/importer/makeFsImporter.js": "./dist/importer/makeIgnoreImports.js",
+    "./src/importer/makeFsImporter.ts": "./src/importer/makeIgnoreImports.ts"
   },
   "files": [
     "dist"

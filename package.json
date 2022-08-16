@@ -1,20 +1,23 @@
 {
   "private": true,
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=14.0.0",
+    "yarn": ">=3.2.2"
   },
   "scripts": {
-    "build": "yarn workspaces run build",
+    "build": "yarn --verbose workspaces foreach --exclude 'benchmark' --exclude 'website' -p run build",
     "lint": "eslint . --ext .js,.ts --report-unused-disable-directives",
     "fix": "eslint . --ext .js,.ts --fix --report-unused-disable-directives",
     "test": "yarn build && jest",
-    "test:ci": "yarn build && jest --ci --coverage",
-    "website:install": "cd website && yarn",
-    "website:start": "yarn website:install && cd website && yarn start"
+    "test:ci": "yarn build && jest --ci --cacheDirectory $(pwd)/.jest-cache/ --coverage",
+    "website:build": "yarn workspace website run build",
+    "website:start": "yarn workspace website run start"
   },
   "license": "MIT",
   "workspaces": [
-    "packages/*"
+    "benchmark",
+    "packages/*",
+    "website"
   ],
   "devDependencies": {
     "@types/cross-spawn": "6.0.2",
@@ -34,5 +37,6 @@
     "tempy": "1.0.1",
     "ts-jest": "28.0.8",
     "typescript": "4.7.4"
-  }
+  },
+  "packageManager": "yarn@3.2.2"
 }
