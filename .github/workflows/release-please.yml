@@ -16,11 +16,11 @@ jobs:
           token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
 
       - name: Checkout
-        if: ${{ steps.release.outputs.release_created }}
+        if: ${{ steps.release.outputs.releases_created }}
         uses: actions/checkout@v3
 
       - name: Setup Node.js
-        if: ${{ steps.release.outputs.release_created }}
+        if: ${{ steps.release.outputs.releases_created }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
@@ -28,19 +28,19 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
-        if: ${{ steps.release.outputs.release_created }}
-        run: yarn install --frozen-lockfile --non-interactive
+        if: ${{ steps.release.outputs.releases_created }}
+        run: yarn install --immutable
 
       - name: Build package
-        if: ${{ steps.release.outputs.release_created }}
+        if: ${{ steps.release.outputs.releases_created }}
         run: yarn build
 
-      - run: npm publish packages/react-docgen/ --tag=next
-        if: ${{ steps.release.outputs['packages/react-docgen--version'] }}
+      - run: npm publish packages/react-docgen/ --tag=next --access=public
+        if: ${{ steps.release.outputs['packages/react-docgen--release_created'] }}
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 
-      - run: npm publish packages/react-docgen-cli/
-        if: ${{ steps.release.outputs['packages/react-docgen-cli--version'] }}
+      - run: npm publish packages/react-docgen-cli/ --tag=next --access=public
+        if: ${{ steps.release.outputs['packages/react-docgen-cli--release_created'] }}
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}

@@ -1,5 +1,5 @@
 {
-  "name": "react-docgen-benchmark",
+  "name": "benchmark",
   "private": true,
   "description": "Generate benchmarks for react-docgen",
   "scripts": {

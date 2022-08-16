@@ -37,16 +37,8 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: 'yarn'
 
-      - name: Cache node_modules
-        uses: actions/cache@v3
-        id: cache-nodemodules
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-${{ env.NODE_VERSION }}-nodemodules-${{ hashFiles('**/yarn.lock') }}
-
       - name: Install dependencies
-        if: steps.cache-nodemodules.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile --non-interactive
+        run: yarn install --immutable
 
       - name: Unit tests
         run: yarn test:ci
@@ -68,20 +60,8 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
 
-      - name: Cache node_modules
-        uses: actions/cache@v3
-        id: cache-nodemodules
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-${{ env.NODE_VERSION }}-nodemodules-${{ hashFiles('**/yarn.lock') }}
-
       - name: Install dependencies
-        if: steps.cache-nodemodules.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile --non-interactive
-
-      - name: Install website dependencies
-        run: yarn install --frozen-lockfile --non-interactive
-        working-directory: ./website
+        run: yarn install --immutable
 
       - name: Lint
         run: yarn lint
@@ -101,24 +81,11 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
 
-      - name: Cache node_modules
-        uses: actions/cache@v3
-        id: cache-nodemodules
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-${{ env.NODE_VERSION }}-nodemodules-${{ hashFiles('**/yarn.lock') }}
-
       - name: Install dependencies
-        if: steps.cache-nodemodules.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile --non-interactive
-
-      - name: Install website dependencies
-        run: yarn install --frozen-lockfile --non-interactive
-        working-directory: ./website
+        run: yarn install --immutable
 
       - name: Build website
-        run: yarn build
-        working-directory: ./website
+        run: yarn website:build
 
   deploy:
     name: Deploy website
@@ -137,24 +104,11 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'yarn'
 
-      - name: Cache node_modules
-        uses: actions/cache@v3
-        id: cache-nodemodules
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-${{ env.NODE_VERSION }}-nodemodules-${{ hashFiles('**/yarn.lock') }}
-
       - name: Install dependencies
-        if: steps.cache-nodemodules.outputs.cache-hit != 'true'
-        run: yarn install --frozen-lockfile --non-interactive
-
-      - name: Install website dependencies
-        run: yarn install --frozen-lockfile --non-interactive
-        working-directory: ./website
+        run: yarn install --immutable
 
       - name: Build
-        run: yarn build
-        working-directory: ./website
+        run: yarn website:build
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
