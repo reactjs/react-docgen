@@ -38,7 +38,7 @@ jobs:
           cache: 'yarn'
 
       - name: Update yarn lock
-        run: yarn install
+        run: yarn install --mode=update-lockfile
 
       - name: Commiting and push changes
         run: |
