@@ -29,6 +29,6 @@
     "commander": "9.4.0",
     "neo-async": "2.6.2",
     "node-dir": "0.1.17",
-    "react-docgen": "workspace:*"
+    "react-docgen": "6.0.0-alpha.3"
   }
 }
