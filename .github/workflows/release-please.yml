@@ -69,12 +69,14 @@ jobs:
       - name: Build package
         run: yarn build
 
-      - run: npm publish packages/react-docgen/ --tag=next --access=public
+      - run: yarn npm publish --tag=next --access=public
+        working-directory: packages/react-docgen
         if: ${{ needs.release.outputs['packages/react-docgen--release_created'] }}
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 
-      - run: npm publish packages/react-docgen-cli/ --tag=next --access=public
+      - run: yarn npm publish --tag=next --access=public
+        working-directory: packages/react-docgen-cli
         if: ${{ needs.release.outputs['packages/react-docgen-cli--release_created'] }}
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
