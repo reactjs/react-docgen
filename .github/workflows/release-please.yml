@@ -6,8 +6,13 @@ name: release-please
 env:
   NODE_VERSION: 18
 jobs:
-  release-please:
+  release:
     runs-on: ubuntu-latest
+    outputs:
+      releases_created: ${{ steps.release.outputs.releases_created }}
+      pr: ${{ steps.release.outputs.pr }}
+      'packages/react-docgen--release_created': ${{ steps.release.outputs['packages/react-docgen--release_created'] }}
+      'packages/react-docgen-cli--release_created': ${{ steps.release.outputs['packages/react-docgen-cli--release_created'] }}
     steps:
       - uses: google-github-actions/release-please-action@v3
         id: release
@@ -15,12 +20,41 @@ jobs:
           command: manifest
           token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
 
+  update-lock:
+    runs-on: ubuntu-latest
+    needs: release
+    if: ${{ needs.release.outputs.pr && !needs.release.outputs.releases_created }}
+    steps:
       - name: Checkout
-        if: ${{ steps.release.outputs.releases_created }}
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ needs.release.outputs.pr.headBranchName }}
+          fetch-depth: 2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'yarn'
+
+      - name: Update yarn lock
+        run: yarn install
+
+      - name: Commiting and push changes
+        run: |
+          git add yarn.lock
+          git commit --amend --no-edit
+          git push --force
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: release
+    if: ${{ needs.release.outputs.releases_created }}
+    steps:
+      - name: Checkout
         uses: actions/checkout@v3
 
       - name: Setup Node.js
-        if: ${{ steps.release.outputs.releases_created }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
@@ -28,19 +62,17 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
-        if: ${{ steps.release.outputs.releases_created }}
         run: yarn install --immutable
 
       - name: Build package
-        if: ${{ steps.release.outputs.releases_created }}
         run: yarn build
 
       - run: npm publish packages/react-docgen/ --tag=next --access=public
-        if: ${{ steps.release.outputs['packages/react-docgen--release_created'] }}
+        if: ${{ needs.release.outputs['packages/react-docgen--release_created'] }}
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 
       - run: npm publish packages/react-docgen-cli/ --tag=next --access=public
-        if: ${{ steps.release.outputs['packages/react-docgen-cli--release_created'] }}
+        if: ${{ needs.release.outputs['packages/react-docgen-cli--release_created'] }}
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
