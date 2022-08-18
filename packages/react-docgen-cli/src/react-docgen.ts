@@ -48,7 +48,6 @@ argv
 
 argv.parse(process.argv);
 
-import dir from 'node-dir';
 import fs from 'fs';
 import parser from 'react-docgen';
 import path from 'path';

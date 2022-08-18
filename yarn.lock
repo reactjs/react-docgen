@@ -1837,7 +1837,6 @@ __metadata:
   resolution: "@react-docgen/cli@workspace:packages/react-docgen-cli"
   dependencies:
     commander: 9.4.0
-    node-dir: 0.1.17
     react-docgen: 6.0.0-alpha.3
   bin:
     react-docgen: bin/react-docgen.js
@@ -6846,7 +6845,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-dir@npm:0.1.17, node-dir@npm:^0.1.10":
+"node-dir@npm:^0.1.10":
   version: 0.1.17
   resolution: "node-dir@npm:0.1.17"
   dependencies:
