@@ -48,7 +48,6 @@ argv
 
 argv.parse(process.argv);
 
-import async from 'neo-async';
 import dir from 'node-dir';
 import fs from 'fs';
 import parser from 'react-docgen';

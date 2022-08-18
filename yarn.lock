@@ -1837,7 +1837,6 @@ __metadata:
   resolution: "@react-docgen/cli@workspace:packages/react-docgen-cli"
   dependencies:
     commander: 9.4.0
-    neo-async: 2.6.2
     node-dir: 0.1.17
     react-docgen: 6.0.0-alpha.3
   bin:
@@ -6821,7 +6820,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"neo-async@npm:2.6.2, neo-async@npm:^2.6.1, neo-async@npm:^2.6.2":
+"neo-async@npm:^2.6.1, neo-async@npm:^2.6.2":
   version: 2.6.2
   resolution: "neo-async@npm:2.6.2"
   checksum: deac9f8d00eda7b2e5cd1b2549e26e10a0faa70adaa6fdadca701cc55f49ee9018e427f424bac0c790b7c7e2d3068db97f3093f1093975f2acb8f8818b936ed9
