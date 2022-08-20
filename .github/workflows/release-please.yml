@@ -30,6 +30,7 @@ jobs:
         with:
           ref: release-please--branches--main
           fetch-depth: 2
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -40,7 +41,7 @@ jobs:
       - name: Update yarn lock
         run: yarn install --mode=update-lockfile
 
-      - name: Commiting and push changes
+      - name: Committing and push changes
         run: |
           git config user.name "$(git log -n 1 --pretty=format:%an)"
           git config user.email "$(git log -n 1 --pretty=format:%ae)"
