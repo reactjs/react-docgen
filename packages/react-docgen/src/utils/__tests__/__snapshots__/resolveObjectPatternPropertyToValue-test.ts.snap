@@ -2,8 +2,8 @@
 
 exports[`resolveObjectPatternPropertyToValue AssignmentExpression resolved basic case 1`] = `
 Node {
-  "extra": Object {
-    "raw": "\\"string\\"",
+  "extra": {
+    "raw": ""string"",
     "rawValue": "string",
   },
   "type": "StringLiteral",
@@ -13,8 +13,8 @@ Node {
 
 exports[`resolveObjectPatternPropertyToValue VariableDeclarator resolved basic case 1`] = `
 Node {
-  "extra": Object {
-    "raw": "\\"string\\"",
+  "extra": {
+    "raw": ""string"",
     "rawValue": "string",
   },
   "type": "StringLiteral",

@@ -1,28 +1,28 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`main Class definition parses with custom handlers 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "Example component description",
   },
 ]
 `;
 
 exports[`main Class definition parses with default resolver/handlers 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "Example component description",
     "displayName": "ABC",
-    "methods": Array [],
-    "props": Object {
-      "foo": Object {
-        "defaultValue": Object {
+    "methods": [],
+    "props": {
+      "foo": {
+        "defaultValue": {
           "computed": false,
           "value": "true",
         },
         "description": "Example prop description",
         "required": false,
-        "type": Object {
+        "type": {
           "name": "bool",
         },
       },
@@ -32,36 +32,36 @@ Array [
 `;
 
 exports[`main React.createClass parses with custom handlers 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "Example component description",
   },
 ]
 `;
 
 exports[`main React.createClass parses with default resolver/handlers 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "Example component description",
     "displayName": "ABC",
-    "methods": Array [
-      Object {
+    "methods": [
+      {
         "docblock": null,
-        "modifiers": Array [],
+        "modifiers": [],
         "name": "getDefaultProps",
-        "params": Array [],
+        "params": [],
         "returns": null,
       },
     ],
-    "props": Object {
-      "foo": Object {
-        "defaultValue": Object {
+    "props": {
+      "foo": {
+        "defaultValue": {
           "computed": false,
           "value": "true",
         },
         "description": "Example prop description",
         "required": false,
-        "type": Object {
+        "type": {
           "name": "bool",
         },
       },
@@ -71,28 +71,28 @@ Array [
 `;
 
 exports[`main Stateless Component definition: ArrowFunctionExpression parses with custom handlers 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "Example component description",
   },
 ]
 `;
 
 exports[`main Stateless Component definition: ArrowFunctionExpression parses with default resolver/handlers 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "Example component description",
     "displayName": "ABC",
-    "methods": Array [],
-    "props": Object {
-      "foo": Object {
-        "defaultValue": Object {
+    "methods": [],
+    "props": {
+      "foo": {
+        "defaultValue": {
           "computed": false,
           "value": "true",
         },
         "description": "Example prop description",
         "required": false,
-        "type": Object {
+        "type": {
           "name": "bool",
         },
       },
@@ -102,28 +102,28 @@ Array [
 `;
 
 exports[`main Stateless Component definition: FunctionDeclaration parses with custom handlers 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "Example component description",
   },
 ]
 `;
 
 exports[`main Stateless Component definition: FunctionDeclaration parses with default resolver/handlers 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "Example component description",
     "displayName": "ABC",
-    "methods": Array [],
-    "props": Object {
-      "foo": Object {
-        "defaultValue": Object {
+    "methods": [],
+    "props": {
+      "foo": {
+        "defaultValue": {
           "computed": false,
           "value": "true",
         },
         "description": "Example prop description",
         "required": false,
-        "type": Object {
+        "type": {
           "name": "bool",
         },
       },
@@ -133,28 +133,28 @@ Array [
 `;
 
 exports[`main Stateless Component definition: FunctionExpression parses with custom handlers 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "Example component description",
   },
 ]
 `;
 
 exports[`main Stateless Component definition: FunctionExpression parses with default resolver/handlers 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "Example component description",
     "displayName": "ABC",
-    "methods": Array [],
-    "props": Object {
-      "foo": Object {
-        "defaultValue": Object {
+    "methods": [],
+    "props": {
+      "foo": {
+        "defaultValue": {
           "computed": false,
           "value": "true",
         },
         "description": "Example prop description",
         "required": false,
-        "type": Object {
+        "type": {
           "name": "bool",
         },
       },

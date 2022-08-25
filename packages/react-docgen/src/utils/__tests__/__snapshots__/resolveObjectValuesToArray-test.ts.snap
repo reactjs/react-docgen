@@ -1,52 +1,52 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`resolveObjectValuesToArray can resolve imported objects passed to Object.values 1`] = `
-Array [
-  "\\"bar\\"",
-  "\\"foo\\"",
+[
+  ""bar"",
+  ""foo"",
   "0",
   "5",
   "null",
   "null",
   "7",
-  "\\"foo\\"",
+  ""foo"",
 ]
 `;
 
 exports[`resolveObjectValuesToArray can resolve spreads from imported objects 1`] = `
-Array [
-  "\\"foo\\"",
-  "\\"baz\\"",
-  "\\"bar\\"",
+[
+  ""foo"",
+  ""baz"",
+  ""bar"",
 ]
 `;
 
 exports[`resolveObjectValuesToArray resolves Object.values but ignores duplicates 1`] = `
-Array [
+[
   "1",
   "2",
   "5",
 ]
 `;
 
-exports[`resolveObjectValuesToArray resolves Object.values but ignores duplicates with getter and setter 1`] = `Array []`;
+exports[`resolveObjectValuesToArray resolves Object.values but ignores duplicates with getter and setter 1`] = `[]`;
 
 exports[`resolveObjectValuesToArray resolves Object.values when using getters 1`] = `
-Array [
+[
   "1",
   "2",
 ]
 `;
 
 exports[`resolveObjectValuesToArray resolves Object.values when using methods 1`] = `
-Array [
+[
   "1",
   "2",
 ]
 `;
 
 exports[`resolveObjectValuesToArray resolves Object.values when using resolvable spread 1`] = `
-Array [
+[
   "1",
   "2",
   "4",
@@ -54,35 +54,35 @@ Array [
 `;
 
 exports[`resolveObjectValuesToArray resolves Object.values when using setters 1`] = `
-Array [
+[
   "1",
   "2",
 ]
 `;
 
 exports[`resolveObjectValuesToArray resolves Object.values with literals as computed key 1`] = `
-Array [
+[
   "1",
   "2",
 ]
 `;
 
 exports[`resolveObjectValuesToArray resolves Object.values with numbers 1`] = `
-Array [
+[
   "0",
   "5",
 ]
 `;
 
 exports[`resolveObjectValuesToArray resolves Object.values with strings 1`] = `
-Array [
-  "\\"bar\\"",
-  "\\"foo\\"",
+[
+  ""bar"",
+  ""foo"",
 ]
 `;
 
 exports[`resolveObjectValuesToArray resolves Object.values with undefined or null 1`] = `
-Array [
+[
   "null",
   "null",
 ]

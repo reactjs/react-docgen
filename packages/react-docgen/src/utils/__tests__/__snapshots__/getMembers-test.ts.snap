@@ -1,12 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`getMembers does work with custom expressions in arguments 1`] = `
-Array [
-  Object {
-    "argumentPaths": Array [
+[
+  {
+    "argumentPaths": [
       Node {
         "left": Node {
-          "extra": Object {
+          "extra": {
             "raw": "123",
             "rawValue": 123,
           },
@@ -15,7 +15,7 @@ Array [
         },
         "operator": "+",
         "right": Node {
-          "extra": Object {
+          "extra": {
             "raw": "123",
             "rawValue": 123,
           },
@@ -31,12 +31,12 @@ Array [
       "type": "Identifier",
     },
   },
-  Object {
-    "argumentPaths": Array [],
+  {
+    "argumentPaths": [],
     "computed": true,
     "path": Node {
-      "extra": Object {
-        "raw": "\\"baz\\"",
+      "extra": {
+        "raw": ""baz"",
         "rawValue": "baz",
       },
       "type": "StringLiteral",
@@ -47,11 +47,11 @@ Array [
 `;
 
 exports[`getMembers does work with custom expressions in chain 1`] = `
-Array [
-  Object {
-    "argumentPaths": Array [
+[
+  {
+    "argumentPaths": [
       Node {
-        "extra": Object {
+        "extra": {
           "raw": "123",
           "rawValue": 123,
         },
@@ -65,13 +65,13 @@ Array [
       "type": "Identifier",
     },
   },
-  Object {
-    "argumentPaths": Array [],
+  {
+    "argumentPaths": [],
     "computed": true,
     "path": Node {
       "left": Node {
-        "extra": Object {
-          "raw": "\\"\\"",
+        "extra": {
+          "raw": """",
           "rawValue": "",
         },
         "type": "StringLiteral",
@@ -79,8 +79,8 @@ Array [
       },
       "operator": "+",
       "right": Node {
-        "extra": Object {
-          "raw": "\\"\\"",
+        "extra": {
+          "raw": """",
           "rawValue": "",
         },
         "type": "StringLiteral",
@@ -93,11 +93,11 @@ Array [
 `;
 
 exports[`getMembers finds all "members" "inside" a MemberExpression 1`] = `
-Array [
-  Object {
-    "argumentPaths": Array [
+[
+  {
+    "argumentPaths": [
       Node {
-        "extra": Object {
+        "extra": {
           "raw": "123",
           "rawValue": 123,
         },
@@ -111,19 +111,19 @@ Array [
       "type": "Identifier",
     },
   },
-  Object {
-    "argumentPaths": Array [],
+  {
+    "argumentPaths": [],
     "computed": true,
     "path": Node {
       "name": "baz",
       "type": "Identifier",
     },
   },
-  Object {
-    "argumentPaths": Array [],
+  {
+    "argumentPaths": [],
     "computed": true,
     "path": Node {
-      "extra": Object {
+      "extra": {
         "raw": "42",
         "rawValue": 42,
       },
@@ -135,19 +135,19 @@ Array [
 `;
 
 exports[`getMembers includes the root if option set to true 1`] = `
-Array [
-  Object {
-    "argumentPaths": Array [],
+[
+  {
+    "argumentPaths": [],
     "computed": false,
     "path": Node {
       "name": "foo",
       "type": "Identifier",
     },
   },
-  Object {
-    "argumentPaths": Array [
+  {
+    "argumentPaths": [
       Node {
-        "extra": Object {
+        "extra": {
           "raw": "123",
           "rawValue": 123,
         },
@@ -161,8 +161,8 @@ Array [
       "type": "Identifier",
     },
   },
-  Object {
-    "argumentPaths": Array [],
+  {
+    "argumentPaths": [],
     "computed": true,
     "path": Node {
       "name": "baz",

@@ -1,11 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`getMethodDocumentation name handles computed method name 1`] = `
-Object {
+{
   "docblock": null,
-  "modifiers": Array [],
+  "modifiers": [],
   "name": "@computed#foo",
-  "params": Array [],
+  "params": [],
   "returns": null,
 }
 `;
@@ -13,18 +13,18 @@ Object {
 exports[`getMethodDocumentation name ignores complex computed method name 1`] = `null`;
 
 exports[`getMethodDocumentation parameters does not add type parameters to alias 1`] = `
-Object {
+{
   "docblock": null,
-  "modifiers": Array [],
+  "modifiers": [],
   "name": "foo",
-  "params": Array [
-    Object {
+  "params": [
+    {
       "name": "bar",
       "optional": false,
-      "type": Object {
+      "type": {
         "alias": "Foo",
-        "elements": Array [
-          Object {
+        "elements": [
+          {
             "name": "T",
           },
         ],
@@ -38,15 +38,15 @@ Object {
 `;
 
 exports[`getMethodDocumentation parameters extracts flow type info 1`] = `
-Object {
+{
   "docblock": null,
-  "modifiers": Array [],
+  "modifiers": [],
   "name": "foo",
-  "params": Array [
-    Object {
+  "params": [
+    {
       "name": "bar",
       "optional": false,
-      "type": Object {
+      "type": {
         "name": "number",
       },
     },
@@ -56,15 +56,15 @@ Object {
 `;
 
 exports[`getMethodDocumentation parameters extracts flow type info 2`] = `
-Object {
+{
   "docblock": null,
-  "modifiers": Array [],
+  "modifiers": [],
   "name": "foo",
-  "params": Array [
-    Object {
+  "params": [
+    {
       "name": "bar",
       "optional": false,
-      "type": Object {
+      "type": {
         "name": "number",
       },
     },
@@ -74,15 +74,15 @@ Object {
 `;
 
 exports[`getMethodDocumentation parameters extracts flow type info on function assignment 1`] = `
-Object {
+{
   "docblock": null,
-  "modifiers": Array [],
+  "modifiers": [],
   "name": "foo",
-  "params": Array [
-    Object {
+  "params": [
+    {
       "name": "bar",
       "optional": false,
-      "type": Object {
+      "type": {
         "name": "number",
       },
     },
@@ -96,15 +96,15 @@ exports[`getMethodDocumentation parameters private ignores private methods 1`] =
 exports[`getMethodDocumentation parameters private ignores private typescript methods 1`] = `null`;
 
 exports[`getMethodDocumentation parameters resolves flow type info on imported functions 1`] = `
-Object {
+{
   "docblock": null,
-  "modifiers": Array [],
+  "modifiers": [],
   "name": "foo",
-  "params": Array [
-    Object {
+  "params": [
+    {
       "name": "bar",
       "optional": false,
-      "type": Object {
+      "type": {
         "name": "number",
       },
     },

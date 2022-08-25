@@ -1,39 +1,39 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`findAllExportedComponentDefinitions CommonJS module exports React.createClass does not process X.createClass of other modules 1`] = `Array []`;
+exports[`findAllExportedComponentDefinitions CommonJS module exports React.createClass does not process X.createClass of other modules 1`] = `[]`;
 
 exports[`findAllExportedComponentDefinitions CommonJS module exports React.createClass finds React.createClass 1`] = `
-Array [
+[
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions CommonJS module exports React.createClass finds React.createClass, independent of the var name 1`] = `
-Array [
+[
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions CommonJS module exports React.createClass resolves an imported variable to React.createClass 1`] = `
-Array [
+[
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions CommonJS module exports class definitions finds class declarations 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": Node {
@@ -58,10 +58,10 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions CommonJS module exports class definitions finds class definition, independent of the var name 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": Node {
@@ -86,10 +86,10 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions CommonJS module exports class definitions finds class expression 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": null,
@@ -111,10 +111,10 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions CommonJS module exports class definitions resolves an imported variable to class declaration 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": Node {
@@ -139,10 +139,10 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions CommonJS module exports class definitions resolves an imported variable to class expression 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": null,
@@ -164,20 +164,20 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions CommonJS module exports forwardRef components finds forwardRef components 1`] = `
-Array [
+[
   Node {
-    "arguments": Array [
+    "arguments": [
       Node {
         "async": false,
         "body": Node {
-          "children": Array [],
+          "children": [],
           "closingElement": null,
-          "extra": Object {
+          "extra": {
             "parenStart": 209,
             "parenthesized": true,
           },
           "openingElement": Node {
-            "attributes": Array [
+            "attributes": [
               Node {
                 "name": Node {
                   "name": "ref",
@@ -200,7 +200,7 @@ Array [
                 "type": "JSXAttribute",
                 "value": Node {
                   "expression": Node {
-                    "properties": Array [
+                    "properties": [
                       Node {
                         "computed": false,
                         "key": Node {
@@ -241,7 +241,7 @@ Array [
         },
         "generator": false,
         "id": null,
-        "params": Array [
+        "params": [
           Node {
             "name": "props",
             "type": "Identifier",
@@ -272,9 +272,9 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions CommonJS module exports forwardRef components finds none inline forwardRef components 1`] = `
-Array [
+[
   Node {
-    "arguments": Array [
+    "arguments": [
       Node {
         "name": "ColoredView",
         "type": "Identifier",
@@ -298,20 +298,20 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions CommonJS module exports forwardRef components resolves an imported forwardRef component 1`] = `
-Array [
+[
   Node {
-    "arguments": Array [
+    "arguments": [
       Node {
         "async": false,
         "body": Node {
-          "children": Array [],
+          "children": [],
           "closingElement": null,
-          "extra": Object {
+          "extra": {
             "parenStart": 87,
             "parenthesized": true,
           },
           "openingElement": Node {
-            "attributes": Array [
+            "attributes": [
               Node {
                 "name": Node {
                   "name": "ref",
@@ -334,7 +334,7 @@ Array [
                 "type": "JSXAttribute",
                 "value": Node {
                   "expression": Node {
-                    "properties": Array [
+                    "properties": [
                       Node {
                         "computed": false,
                         "key": Node {
@@ -375,7 +375,7 @@ Array [
         },
         "generator": false,
         "id": null,
-        "params": Array [
+        "params": [
           Node {
             "name": "props",
             "type": "Identifier",
@@ -406,81 +406,81 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions CommonJS module exports module.exports = <C>; / exports.foo = <C>; React.createClass finds assignments to exports 1`] = `
-Array [
+[
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions CommonJS module exports module.exports = <C>; / exports.foo = <C>; React.createClass finds exported components only once 1`] = `
-Array [
+[
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions CommonJS module exports module.exports = <C>; / exports.foo = <C>; React.createClass finds multiple exported components 1`] = `
-Array [
+[
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions CommonJS module exports module.exports = <C>; / exports.foo = <C>; React.createClass finds multiple exported components with hocs 1`] = `
-Array [
+[
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions CommonJS module exports module.exports = <C>; / exports.foo = <C>; React.createClass finds only exported components 1`] = `
-Array [
+[
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions CommonJS module exports module.exports = <C>; / exports.foo = <C>; React.createClass finds only exported components on export 1`] = `
-Array [
+[
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions CommonJS module exports module.exports = <C>; / exports.foo = <C>; React.createClass supports imported components 1`] = `
-Array [
+[
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions CommonJS module exports module.exports = <C>; / exports.foo = <C>; class definition finds assignments to exports 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": Node {
@@ -505,10 +505,10 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions CommonJS module exports module.exports = <C>; / exports.foo = <C>; class definition finds exported components only once 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": Node {
@@ -533,10 +533,10 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions CommonJS module exports module.exports = <C>; / exports.foo = <C>; class definition finds multiple exported components 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": Node {
@@ -559,7 +559,7 @@ Array [
   },
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": Node {
@@ -584,10 +584,10 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions CommonJS module exports module.exports = <C>; / exports.foo = <C>; class definition finds only exported components 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": Node {
@@ -612,10 +612,10 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions CommonJS module exports module.exports = <C>; / exports.foo = <C>; class definition finds only exported components on export 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": Node {
@@ -640,10 +640,10 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions CommonJS module exports module.exports = <C>; / exports.foo = <C>; class definition supports imported components 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": Node {
@@ -667,17 +667,17 @@ Array [
 ]
 `;
 
-exports[`findAllExportedComponentDefinitions CommonJS module exports stateless components does not process X.createElement of other modules 1`] = `Array []`;
+exports[`findAllExportedComponentDefinitions CommonJS module exports stateless components does not process X.createElement of other modules 1`] = `[]`;
 
 exports[`findAllExportedComponentDefinitions CommonJS module exports stateless components finds stateless component with JSX 1`] = `
-Array [
+[
   Node {
     "async": false,
     "body": Node {
-      "children": Array [],
+      "children": [],
       "closingElement": null,
       "openingElement": Node {
-        "attributes": Array [],
+        "attributes": [],
         "name": Node {
           "name": "div",
           "type": "JSXIdentifier",
@@ -689,20 +689,20 @@ Array [
     },
     "generator": false,
     "id": null,
-    "params": Array [],
+    "params": [],
     "type": "ArrowFunctionExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions CommonJS module exports stateless components finds stateless components with React.createElement, independent of the var name 1`] = `
-Array [
+[
   Node {
     "async": false,
     "body": Node {
-      "arguments": Array [
+      "arguments": [
         Node {
-          "extra": Object {
+          "extra": {
             "raw": "'div'",
             "rawValue": "div",
           },
@@ -710,7 +710,7 @@ Array [
           "value": "div",
         },
         Node {
-          "properties": Array [],
+          "properties": [],
           "type": "ObjectExpression",
         },
       ],
@@ -730,21 +730,21 @@ Array [
     },
     "generator": false,
     "id": null,
-    "params": Array [],
+    "params": [],
     "type": "ArrowFunctionExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions CommonJS module exports stateless components resolves an imported stateless component with JSX 1`] = `
-Array [
+[
   Node {
     "async": false,
     "body": Node {
-      "children": Array [],
+      "children": [],
       "closingElement": null,
       "openingElement": Node {
-        "attributes": Array [],
+        "attributes": [],
         "name": Node {
           "name": "div",
           "type": "JSXIdentifier",
@@ -756,20 +756,20 @@ Array [
     },
     "generator": false,
     "id": null,
-    "params": Array [],
+    "params": [],
     "type": "ArrowFunctionExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions CommonJS module exports stateless components resolves an imported stateless component with React.createElement 1`] = `
-Array [
+[
   Node {
     "async": false,
     "body": Node {
-      "arguments": Array [
+      "arguments": [
         Node {
-          "extra": Object {
+          "extra": {
             "raw": "'div'",
             "rawValue": "div",
           },
@@ -777,7 +777,7 @@ Array [
           "value": "div",
         },
         Node {
-          "properties": Array [],
+          "properties": [],
           "type": "ObjectExpression",
         },
       ],
@@ -797,17 +797,17 @@ Array [
     },
     "generator": false,
     "id": null,
-    "params": Array [],
+    "params": [],
     "type": "ArrowFunctionExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export <C>; class definition finds multiple components 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": Node {
@@ -830,7 +830,7 @@ Array [
   },
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": Node {
@@ -855,10 +855,10 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export <C>; class definition finds named exports 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": Node {
@@ -883,10 +883,10 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export <C>; class definition finds only exported components 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": Node {
@@ -911,17 +911,17 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export <C>; function declaration finds multiple components 1`] = `
-Array [
+[
   Node {
     "async": false,
     "body": Node {
-      "body": Array [
+      "body": [
         Node {
           "argument": Node {
-            "children": Array [],
+            "children": [],
             "closingElement": null,
             "openingElement": Node {
-              "attributes": Array [],
+              "attributes": [],
               "name": Node {
                 "name": "div",
                 "type": "JSXIdentifier",
@@ -934,7 +934,7 @@ Array [
           "type": "ReturnStatement",
         },
       ],
-      "directives": Array [],
+      "directives": [],
       "type": "BlockStatement",
     },
     "generator": false,
@@ -942,19 +942,19 @@ Array [
       "name": "ComponentA",
       "type": "Identifier",
     },
-    "params": Array [],
+    "params": [],
     "type": "FunctionDeclaration",
   },
   Node {
     "async": false,
     "body": Node {
-      "body": Array [
+      "body": [
         Node {
           "argument": Node {
-            "children": Array [],
+            "children": [],
             "closingElement": null,
             "openingElement": Node {
-              "attributes": Array [],
+              "attributes": [],
               "name": Node {
                 "name": "div",
                 "type": "JSXIdentifier",
@@ -967,7 +967,7 @@ Array [
           "type": "ReturnStatement",
         },
       ],
-      "directives": Array [],
+      "directives": [],
       "type": "BlockStatement",
     },
     "generator": false,
@@ -975,24 +975,24 @@ Array [
       "name": "ComponentB",
       "type": "Identifier",
     },
-    "params": Array [],
+    "params": [],
     "type": "FunctionDeclaration",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export <C>; function declaration finds named exports 1`] = `
-Array [
+[
   Node {
     "async": false,
     "body": Node {
-      "body": Array [
+      "body": [
         Node {
           "argument": Node {
-            "children": Array [],
+            "children": [],
             "closingElement": null,
             "openingElement": Node {
-              "attributes": Array [],
+              "attributes": [],
               "name": Node {
                 "name": "div",
                 "type": "JSXIdentifier",
@@ -1005,7 +1005,7 @@ Array [
           "type": "ReturnStatement",
         },
       ],
-      "directives": Array [],
+      "directives": [],
       "type": "BlockStatement",
     },
     "generator": false,
@@ -1013,24 +1013,24 @@ Array [
       "name": "Component",
       "type": "Identifier",
     },
-    "params": Array [],
+    "params": [],
     "type": "FunctionDeclaration",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export <C>; function declaration finds only exported components 1`] = `
-Array [
+[
   Node {
     "async": false,
     "body": Node {
-      "body": Array [
+      "body": [
         Node {
           "argument": Node {
-            "children": Array [],
+            "children": [],
             "closingElement": null,
             "openingElement": Node {
-              "attributes": Array [],
+              "attributes": [],
               "name": Node {
                 "name": "div",
                 "type": "JSXIdentifier",
@@ -1043,7 +1043,7 @@ Array [
           "type": "ReturnStatement",
         },
       ],
-      "directives": Array [],
+      "directives": [],
       "type": "BlockStatement",
     },
     "generator": false,
@@ -1051,97 +1051,97 @@ Array [
       "name": "ComponentB",
       "type": "Identifier",
     },
-    "params": Array [],
+    "params": [],
     "type": "FunctionDeclaration",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export {<C>}; React.createClass finds exported components only once 1`] = `
-Array [
+[
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export {<C>}; React.createClass finds exported specifiers 1`] = `
-Array [
+[
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export {<C>}; React.createClass finds exported specifiers 2 1`] = `
-Array [
+[
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export {<C>}; React.createClass finds exported specifiers 3 1`] = `
-Array [
+[
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export {<C>}; React.createClass finds multiple components 1`] = `
-Array [
+[
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export {<C>}; React.createClass finds multiple components with hocs 1`] = `
-Array [
+[
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export {<C>}; React.createClass finds only exported components 1`] = `
-Array [
+[
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export {<C>}; React.createClass supports imported components 1`] = `
-Array [
+[
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export {<C>}; class definition finds exported components only once 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": null,
@@ -1163,10 +1163,10 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export {<C>}; class definition finds exported specifiers 1 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": null,
@@ -1188,10 +1188,10 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export {<C>}; class definition finds exported specifiers 2 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": null,
@@ -1213,10 +1213,10 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export {<C>}; class definition finds exported specifiers 3 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": null,
@@ -1238,10 +1238,10 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export {<C>}; class definition finds multiple components 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": null,
@@ -1261,7 +1261,7 @@ Array [
   },
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": null,
@@ -1283,10 +1283,10 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export {<C>}; class definition finds multiple components with hocs 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": Node {
@@ -1309,7 +1309,7 @@ Array [
   },
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": Node {
@@ -1334,10 +1334,10 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export {<C>}; class definition finds only exported components 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": null,
@@ -1359,10 +1359,10 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export {<C>}; class definition supports imported components 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": Node {
@@ -1387,20 +1387,20 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export {<C>}; forwardRef components finds forwardRef components 1`] = `
-Array [
+[
   Node {
-    "arguments": Array [
+    "arguments": [
       Node {
         "async": false,
         "body": Node {
-          "children": Array [],
+          "children": [],
           "closingElement": null,
-          "extra": Object {
+          "extra": {
             "parenStart": 230,
             "parenthesized": true,
           },
           "openingElement": Node {
-            "attributes": Array [
+            "attributes": [
               Node {
                 "name": Node {
                   "name": "ref",
@@ -1423,7 +1423,7 @@ Array [
                 "type": "JSXAttribute",
                 "value": Node {
                   "expression": Node {
-                    "properties": Array [
+                    "properties": [
                       Node {
                         "computed": false,
                         "key": Node {
@@ -1464,7 +1464,7 @@ Array [
         },
         "generator": false,
         "id": null,
-        "params": Array [
+        "params": [
           Node {
             "name": "props",
             "type": "Identifier",
@@ -1495,20 +1495,20 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export {<C>}; forwardRef components supports imported components 1`] = `
-Array [
+[
   Node {
-    "arguments": Array [
+    "arguments": [
       Node {
         "async": false,
         "body": Node {
-          "children": Array [],
+          "children": [],
           "closingElement": null,
-          "extra": Object {
+          "extra": {
             "parenStart": 87,
             "parenthesized": true,
           },
           "openingElement": Node {
-            "attributes": Array [
+            "attributes": [
               Node {
                 "name": Node {
                   "name": "ref",
@@ -1531,7 +1531,7 @@ Array [
                 "type": "JSXAttribute",
                 "value": Node {
                   "expression": Node {
-                    "properties": Array [
+                    "properties": [
                       Node {
                         "computed": false,
                         "key": Node {
@@ -1572,7 +1572,7 @@ Array [
         },
         "generator": false,
         "id": null,
-        "params": Array [
+        "params": [
           Node {
             "name": "props",
             "type": "Identifier",
@@ -1603,14 +1603,14 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export {<C>}; stateless components finds exported components only once 1`] = `
-Array [
+[
   Node {
     "async": false,
     "body": Node {
-      "children": Array [],
+      "children": [],
       "closingElement": null,
       "openingElement": Node {
-        "attributes": Array [],
+        "attributes": [],
         "name": Node {
           "name": "div",
           "type": "JSXIdentifier",
@@ -1622,24 +1622,24 @@ Array [
     },
     "generator": false,
     "id": null,
-    "params": Array [],
+    "params": [],
     "type": "ArrowFunctionExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export {<C>}; stateless components finds exported specifiers 1 1`] = `
-Array [
+[
   Node {
     "async": false,
     "body": Node {
-      "body": Array [
+      "body": [
         Node {
           "argument": Node {
-            "children": Array [],
+            "children": [],
             "closingElement": null,
             "openingElement": Node {
-              "attributes": Array [],
+              "attributes": [],
               "name": Node {
                 "name": "div",
                 "type": "JSXIdentifier",
@@ -1652,7 +1652,7 @@ Array [
           "type": "ReturnStatement",
         },
       ],
-      "directives": Array [],
+      "directives": [],
       "type": "BlockStatement",
     },
     "generator": false,
@@ -1660,21 +1660,21 @@ Array [
       "name": "Component",
       "type": "Identifier",
     },
-    "params": Array [],
+    "params": [],
     "type": "FunctionDeclaration",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export {<C>}; stateless components finds exported specifiers 2 1`] = `
-Array [
+[
   Node {
     "async": false,
     "body": Node {
-      "children": Array [],
+      "children": [],
       "closingElement": null,
       "openingElement": Node {
-        "attributes": Array [],
+        "attributes": [],
         "name": Node {
           "name": "div",
           "type": "JSXIdentifier",
@@ -1686,24 +1686,24 @@ Array [
     },
     "generator": false,
     "id": null,
-    "params": Array [],
+    "params": [],
     "type": "ArrowFunctionExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export {<C>}; stateless components finds exported specifiers 3 1`] = `
-Array [
+[
   Node {
     "async": false,
     "body": Node {
-      "body": Array [
+      "body": [
         Node {
           "argument": Node {
-            "children": Array [],
+            "children": [],
             "closingElement": null,
             "openingElement": Node {
-              "attributes": Array [],
+              "attributes": [],
               "name": Node {
                 "name": "div",
                 "type": "JSXIdentifier",
@@ -1716,26 +1716,26 @@ Array [
           "type": "ReturnStatement",
         },
       ],
-      "directives": Array [],
+      "directives": [],
       "type": "BlockStatement",
     },
     "generator": false,
     "id": null,
-    "params": Array [],
+    "params": [],
     "type": "FunctionExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export {<C>}; stateless components finds multiple components 1`] = `
-Array [
+[
   Node {
     "async": false,
     "body": Node {
-      "children": Array [],
+      "children": [],
       "closingElement": null,
       "openingElement": Node {
-        "attributes": Array [],
+        "attributes": [],
         "name": Node {
           "name": "div",
           "type": "JSXIdentifier",
@@ -1747,19 +1747,19 @@ Array [
     },
     "generator": false,
     "id": null,
-    "params": Array [],
+    "params": [],
     "type": "ArrowFunctionExpression",
   },
   Node {
     "async": false,
     "body": Node {
-      "body": Array [
+      "body": [
         Node {
           "argument": Node {
-            "children": Array [],
+            "children": [],
             "closingElement": null,
             "openingElement": Node {
-              "attributes": Array [],
+              "attributes": [],
               "name": Node {
                 "name": "div",
                 "type": "JSXIdentifier",
@@ -1772,7 +1772,7 @@ Array [
           "type": "ReturnStatement",
         },
       ],
-      "directives": Array [],
+      "directives": [],
       "type": "BlockStatement",
     },
     "generator": false,
@@ -1780,21 +1780,21 @@ Array [
       "name": "ComponentB",
       "type": "Identifier",
     },
-    "params": Array [],
+    "params": [],
     "type": "FunctionDeclaration",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export {<C>}; stateless components finds only exported components 1`] = `
-Array [
+[
   Node {
     "async": false,
     "body": Node {
-      "children": Array [],
+      "children": [],
       "closingElement": null,
       "openingElement": Node {
-        "attributes": Array [],
+        "attributes": [],
         "name": Node {
           "name": "div",
           "type": "JSXIdentifier",
@@ -1806,21 +1806,21 @@ Array [
     },
     "generator": false,
     "id": null,
-    "params": Array [],
+    "params": [],
     "type": "ArrowFunctionExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export {<C>}; stateless components supports imported components 1`] = `
-Array [
+[
   Node {
     "async": false,
     "body": Node {
-      "children": Array [],
+      "children": [],
       "closingElement": null,
       "openingElement": Node {
-        "attributes": Array [],
+        "attributes": [],
         "name": Node {
           "name": "div",
           "type": "JSXIdentifier",
@@ -1832,15 +1832,15 @@ Array [
     },
     "generator": false,
     "id": null,
-    "params": Array [],
+    "params": [],
     "type": "ArrowFunctionExpression",
   },
   Node {
     "async": false,
     "body": Node {
-      "arguments": Array [
+      "arguments": [
         Node {
-          "extra": Object {
+          "extra": {
             "raw": "'div'",
             "rawValue": "div",
           },
@@ -1848,7 +1848,7 @@ Array [
           "value": "div",
         },
         Node {
-          "properties": Array [],
+          "properties": [],
           "type": "ObjectExpression",
         },
       ],
@@ -1868,79 +1868,79 @@ Array [
     },
     "generator": false,
     "id": null,
-    "params": Array [],
+    "params": [],
     "type": "ArrowFunctionExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export default <component>; React.createClass finds default export 1`] = `
-Array [
+[
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export default <component>; React.createClass finds multiple exported components with export var 1`] = `
-Array [
+[
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export default <component>; React.createClass finds multiple exported components with named export 1`] = `
-Array [
+[
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export default <component>; React.createClass finds only exported components 1`] = `
-Array [
+[
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export default <component>; React.createClass finds reassigned default export 1`] = `
-Array [
+[
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export default <component>; React.createClass supports imported components 1`] = `
-Array [
+[
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export default <component>; class definition finds default export 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": Node {
@@ -1965,10 +1965,10 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export default <component>; class definition finds default export inline 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": Node {
@@ -1993,10 +1993,10 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export default <component>; class definition finds multiple exported components with export var 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": null,
@@ -2016,7 +2016,7 @@ Array [
   },
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": Node {
@@ -2041,10 +2041,10 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export default <component>; class definition finds multiple exported components with named export 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": null,
@@ -2064,7 +2064,7 @@ Array [
   },
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": Node {
@@ -2089,10 +2089,10 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export default <component>; class definition finds only exported components 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": Node {
@@ -2117,10 +2117,10 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export default <component>; class definition supports imported components 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": Node {
@@ -2145,20 +2145,20 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export default <component>; forwardRef components finds forwardRef components 1`] = `
-Array [
+[
   Node {
-    "arguments": Array [
+    "arguments": [
       Node {
         "async": false,
         "body": Node {
-          "children": Array [],
+          "children": [],
           "closingElement": null,
-          "extra": Object {
+          "extra": {
             "parenStart": 217,
             "parenthesized": true,
           },
           "openingElement": Node {
-            "attributes": Array [
+            "attributes": [
               Node {
                 "name": Node {
                   "name": "ref",
@@ -2181,7 +2181,7 @@ Array [
                 "type": "JSXAttribute",
                 "value": Node {
                   "expression": Node {
-                    "properties": Array [
+                    "properties": [
                       Node {
                         "computed": false,
                         "key": Node {
@@ -2222,7 +2222,7 @@ Array [
         },
         "generator": false,
         "id": null,
-        "params": Array [
+        "params": [
           Node {
             "name": "props",
             "type": "Identifier",
@@ -2253,9 +2253,9 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export default <component>; forwardRef components finds none inline forwardRef components 1`] = `
-Array [
+[
   Node {
-    "arguments": Array [
+    "arguments": [
       Node {
         "name": "ColoredView",
         "type": "Identifier",
@@ -2279,20 +2279,20 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export default <component>; forwardRef components supports imported components 1`] = `
-Array [
+[
   Node {
-    "arguments": Array [
+    "arguments": [
       Node {
         "async": false,
         "body": Node {
-          "children": Array [],
+          "children": [],
           "closingElement": null,
-          "extra": Object {
+          "extra": {
             "parenStart": 87,
             "parenthesized": true,
           },
           "openingElement": Node {
-            "attributes": Array [
+            "attributes": [
               Node {
                 "name": Node {
                   "name": "ref",
@@ -2315,7 +2315,7 @@ Array [
                 "type": "JSXAttribute",
                 "value": Node {
                   "expression": Node {
-                    "properties": Array [
+                    "properties": [
                       Node {
                         "computed": false,
                         "key": Node {
@@ -2356,7 +2356,7 @@ Array [
         },
         "generator": false,
         "id": null,
-        "params": Array [
+        "params": [
           Node {
             "name": "props",
             "type": "Identifier",
@@ -2387,90 +2387,90 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export var foo = <C>, ...; React.createClass finds multiple components 1`] = `
-Array [
+[
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export var foo = <C>, ...; React.createClass finds multiple components with separate export statements 1`] = `
-Array [
+[
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export var foo = <C>, ...; React.createClass finds named exports 1 1`] = `
-Array [
+[
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export var foo = <C>, ...; React.createClass finds named exports 2 1`] = `
-Array [
+[
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export var foo = <C>, ...; React.createClass finds named exports 3 1`] = `
-Array [
+[
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export var foo = <C>, ...; React.createClass finds named exports 4 1`] = `
-Array [
+[
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export var foo = <C>, ...; React.createClass finds only exported components 1`] = `
-Array [
+[
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export var foo = <C>, ...; React.createClass supports imported components 1`] = `
-Array [
+[
   Node {
-    "properties": Array [],
+    "properties": [],
     "type": "ObjectExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export var foo = <C>, ...; class definition finds multiple components 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": null,
@@ -2490,7 +2490,7 @@ Array [
   },
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": null,
@@ -2512,10 +2512,10 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export var foo = <C>, ...; class definition finds multiple components with assigned component 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": null,
@@ -2535,7 +2535,7 @@ Array [
   },
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": null,
@@ -2557,10 +2557,10 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export var foo = <C>, ...; class definition finds named exports 1 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": null,
@@ -2582,10 +2582,10 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export var foo = <C>, ...; class definition finds named exports 2 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": null,
@@ -2607,10 +2607,10 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export var foo = <C>, ...; class definition finds named exports 3 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": null,
@@ -2632,10 +2632,10 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export var foo = <C>, ...; class definition finds named exports 4 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": null,
@@ -2657,10 +2657,10 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export var foo = <C>, ...; class definition finds only exported components 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": null,
@@ -2682,10 +2682,10 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export var foo = <C>, ...; class definition supports imported components 1`] = `
-Array [
+[
   Node {
     "body": Node {
-      "body": Array [],
+      "body": [],
       "type": "ClassBody",
     },
     "id": Node {
@@ -2710,20 +2710,20 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export var foo = <C>, ...; forwardRef components finds forwardRef components 1`] = `
-Array [
+[
   Node {
-    "arguments": Array [
+    "arguments": [
       Node {
         "async": false,
         "body": Node {
-          "children": Array [],
+          "children": [],
           "closingElement": null,
-          "extra": Object {
+          "extra": {
             "parenStart": 237,
             "parenthesized": true,
           },
           "openingElement": Node {
-            "attributes": Array [
+            "attributes": [
               Node {
                 "name": Node {
                   "name": "ref",
@@ -2746,7 +2746,7 @@ Array [
                 "type": "JSXAttribute",
                 "value": Node {
                   "expression": Node {
-                    "properties": Array [
+                    "properties": [
                       Node {
                         "computed": false,
                         "key": Node {
@@ -2787,7 +2787,7 @@ Array [
         },
         "generator": false,
         "id": null,
-        "params": Array [
+        "params": [
           Node {
             "name": "props",
             "type": "Identifier",
@@ -2818,20 +2818,20 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export var foo = <C>, ...; forwardRef components supports imported components 1`] = `
-Array [
+[
   Node {
-    "arguments": Array [
+    "arguments": [
       Node {
         "async": false,
         "body": Node {
-          "children": Array [],
+          "children": [],
           "closingElement": null,
-          "extra": Object {
+          "extra": {
             "parenStart": 87,
             "parenthesized": true,
           },
           "openingElement": Node {
-            "attributes": Array [
+            "attributes": [
               Node {
                 "name": Node {
                   "name": "ref",
@@ -2854,7 +2854,7 @@ Array [
                 "type": "JSXAttribute",
                 "value": Node {
                   "expression": Node {
-                    "properties": Array [
+                    "properties": [
                       Node {
                         "computed": false,
                         "key": Node {
@@ -2895,7 +2895,7 @@ Array [
         },
         "generator": false,
         "id": null,
-        "params": Array [
+        "params": [
           Node {
             "name": "props",
             "type": "Identifier",
@@ -2926,14 +2926,14 @@ Array [
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export var foo = <C>, ...; stateless components finds multiple components 1`] = `
-Array [
+[
   Node {
     "async": false,
     "body": Node {
-      "children": Array [],
+      "children": [],
       "closingElement": null,
       "openingElement": Node {
-        "attributes": Array [],
+        "attributes": [],
         "name": Node {
           "name": "div",
           "type": "JSXIdentifier",
@@ -2945,16 +2945,16 @@ Array [
     },
     "generator": false,
     "id": null,
-    "params": Array [],
+    "params": [],
     "type": "ArrowFunctionExpression",
   },
   Node {
     "async": false,
     "body": Node {
-      "children": Array [],
+      "children": [],
       "closingElement": null,
       "openingElement": Node {
-        "attributes": Array [],
+        "attributes": [],
         "name": Node {
           "name": "div",
           "type": "JSXIdentifier",
@@ -2966,21 +2966,21 @@ Array [
     },
     "generator": false,
     "id": null,
-    "params": Array [],
+    "params": [],
     "type": "ArrowFunctionExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export var foo = <C>, ...; stateless components finds multiple components with named export 1`] = `
-Array [
+[
   Node {
     "async": false,
     "body": Node {
-      "children": Array [],
+      "children": [],
       "closingElement": null,
       "openingElement": Node {
-        "attributes": Array [],
+        "attributes": [],
         "name": Node {
           "name": "div",
           "type": "JSXIdentifier",
@@ -2992,16 +2992,16 @@ Array [
     },
     "generator": false,
     "id": null,
-    "params": Array [],
+    "params": [],
     "type": "ArrowFunctionExpression",
   },
   Node {
     "async": false,
     "body": Node {
-      "children": Array [],
+      "children": [],
       "closingElement": null,
       "openingElement": Node {
-        "attributes": Array [],
+        "attributes": [],
         "name": Node {
           "name": "div",
           "type": "JSXIdentifier",
@@ -3013,21 +3013,21 @@ Array [
     },
     "generator": false,
     "id": null,
-    "params": Array [],
+    "params": [],
     "type": "ArrowFunctionExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export var foo = <C>, ...; stateless components finds named exports 1 1`] = `
-Array [
+[
   Node {
     "async": false,
     "body": Node {
-      "children": Array [],
+      "children": [],
       "closingElement": null,
       "openingElement": Node {
-        "attributes": Array [],
+        "attributes": [],
         "name": Node {
           "name": "div",
           "type": "JSXIdentifier",
@@ -3039,24 +3039,24 @@ Array [
     },
     "generator": false,
     "id": null,
-    "params": Array [],
+    "params": [],
     "type": "ArrowFunctionExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export var foo = <C>, ...; stateless components finds only exported components 1`] = `
-Array [
+[
   Node {
     "async": false,
     "body": Node {
-      "body": Array [
+      "body": [
         Node {
           "argument": Node {
-            "children": Array [],
+            "children": [],
             "closingElement": null,
             "openingElement": Node {
-              "attributes": Array [],
+              "attributes": [],
               "name": Node {
                 "name": "div",
                 "type": "JSXIdentifier",
@@ -3069,26 +3069,26 @@ Array [
           "type": "ReturnStatement",
         },
       ],
-      "directives": Array [],
+      "directives": [],
       "type": "BlockStatement",
     },
     "generator": false,
     "id": null,
-    "params": Array [],
+    "params": [],
     "type": "FunctionExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export var foo = <C>, ...; stateless components supports imported components 1`] = `
-Array [
+[
   Node {
     "async": false,
     "body": Node {
-      "children": Array [],
+      "children": [],
       "closingElement": null,
       "openingElement": Node {
-        "attributes": Array [],
+        "attributes": [],
         "name": Node {
           "name": "div",
           "type": "JSXIdentifier",
@@ -3100,15 +3100,15 @@ Array [
     },
     "generator": false,
     "id": null,
-    "params": Array [],
+    "params": [],
     "type": "ArrowFunctionExpression",
   },
   Node {
     "async": false,
     "body": Node {
-      "arguments": Array [
+      "arguments": [
         Node {
-          "extra": Object {
+          "extra": {
             "raw": "'div'",
             "rawValue": "div",
           },
@@ -3116,7 +3116,7 @@ Array [
           "value": "div",
         },
         Node {
-          "properties": Array [],
+          "properties": [],
           "type": "ObjectExpression",
         },
       ],
@@ -3136,21 +3136,21 @@ Array [
     },
     "generator": false,
     "id": null,
-    "params": Array [],
+    "params": [],
     "type": "ArrowFunctionExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export var foo = <C>, ...; stateless components supports imported components 2 1`] = `
-Array [
+[
   Node {
     "async": false,
     "body": Node {
-      "children": Array [],
+      "children": [],
       "closingElement": null,
       "openingElement": Node {
-        "attributes": Array [],
+        "attributes": [],
         "name": Node {
           "name": "div",
           "type": "JSXIdentifier",
@@ -3162,21 +3162,21 @@ Array [
     },
     "generator": false,
     "id": null,
-    "params": Array [],
+    "params": [],
     "type": "ArrowFunctionExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export var foo = <C>, ...; stateless components supports imported components 3 1`] = `
-Array [
+[
   Node {
     "async": false,
     "body": Node {
-      "children": Array [],
+      "children": [],
       "closingElement": null,
       "openingElement": Node {
-        "attributes": Array [],
+        "attributes": [],
         "name": Node {
           "name": "div",
           "type": "JSXIdentifier",
@@ -3188,21 +3188,21 @@ Array [
     },
     "generator": false,
     "id": null,
-    "params": Array [],
+    "params": [],
     "type": "ArrowFunctionExpression",
   },
 ]
 `;
 
 exports[`findAllExportedComponentDefinitions ES6 export declarations export var foo = <C>, ...; stateless components supports imported components 4 1`] = `
-Array [
+[
   Node {
     "async": false,
     "body": Node {
-      "children": Array [],
+      "children": [],
       "closingElement": null,
       "openingElement": Node {
-        "attributes": Array [],
+        "attributes": [],
         "name": Node {
           "name": "div",
           "type": "JSXIdentifier",
@@ -3214,7 +3214,7 @@ Array [
     },
     "generator": false,
     "id": null,
-    "params": Array [],
+    "params": [],
     "type": "ArrowFunctionExpression",
   },
 ]
