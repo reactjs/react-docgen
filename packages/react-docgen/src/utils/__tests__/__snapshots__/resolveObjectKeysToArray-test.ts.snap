@@ -1,79 +1,79 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`resolveObjectKeysToArray can resolve imported objects passed to Object.keys 1`] = `
-Array [
-  "\\"bar\\"",
-  "\\"foo\\"",
-  "\\"1\\"",
-  "\\"2\\"",
-  "\\"3\\"",
-  "\\"baz\\"",
+[
+  ""bar"",
+  ""foo"",
+  ""1"",
+  ""2"",
+  ""3"",
+  ""baz"",
 ]
 `;
 
 exports[`resolveObjectKeysToArray can resolve spreads from imported objects 1`] = `
-Array [
-  "\\"foo\\"",
-  "\\"baz\\"",
-  "\\"bar\\"",
+[
+  ""foo"",
+  ""baz"",
+  ""bar"",
 ]
 `;
 
 exports[`resolveObjectKeysToArray resolves Object.keys but ignores duplicates 1`] = `
-Array [
-  "\\"boo\\"",
-  "\\"foo\\"",
-  "\\"doo\\"",
+[
+  ""boo"",
+  ""foo"",
+  ""doo"",
 ]
 `;
 
 exports[`resolveObjectKeysToArray resolves Object.keys but ignores duplicates with getter and setter 1`] = `
-Array [
-  "\\"x\\"",
+[
+  ""x"",
 ]
 `;
 
 exports[`resolveObjectKeysToArray resolves Object.keys when using getters 1`] = `
-Array [
-  "\\"boo\\"",
-  "\\"foo\\"",
-  "\\"bar\\"",
+[
+  ""boo"",
+  ""foo"",
+  ""bar"",
 ]
 `;
 
 exports[`resolveObjectKeysToArray resolves Object.keys when using resolvable spread 1`] = `
-Array [
-  "\\"boo\\"",
-  "\\"foo\\"",
-  "\\"doo\\"",
+[
+  ""boo"",
+  ""foo"",
+  ""doo"",
 ]
 `;
 
 exports[`resolveObjectKeysToArray resolves Object.keys when using setters 1`] = `
-Array [
-  "\\"boo\\"",
-  "\\"foo\\"",
-  "\\"bar\\"",
+[
+  ""boo"",
+  ""foo"",
+  ""bar"",
 ]
 `;
 
 exports[`resolveObjectKeysToArray resolves Object.keys with identifiers 1`] = `
-Array [
-  "\\"bar\\"",
-  "\\"foo\\"",
+[
+  ""bar"",
+  ""foo"",
 ]
 `;
 
 exports[`resolveObjectKeysToArray resolves Object.keys with literals 1`] = `
-Array [
-  "\\"bar\\"",
-  "\\"5\\"",
+[
+  ""bar"",
+  ""5"",
 ]
 `;
 
 exports[`resolveObjectKeysToArray resolves Object.keys with literals as computed key 1`] = `
-Array [
-  "\\"bar\\"",
-  "\\"5\\"",
+[
+  ""bar"",
+  ""5"",
 ]
 `;

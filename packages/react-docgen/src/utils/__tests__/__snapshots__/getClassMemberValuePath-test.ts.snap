@@ -4,8 +4,8 @@ exports[`getClassMemberValuePath ClassDeclaration Getters and Setters finds gett
 Node {
   "async": false,
   "body": Node {
-    "body": Array [],
-    "directives": Array [],
+    "body": [],
+    "directives": [],
     "type": "BlockStatement",
   },
   "computed": false,
@@ -16,7 +16,7 @@ Node {
     "type": "Identifier",
   },
   "kind": "get",
-  "params": Array [],
+  "params": [],
   "static": false,
   "type": "ClassMethod",
 }
@@ -26,8 +26,8 @@ exports[`getClassMemberValuePath ClassDeclaration MethodDefinitions finds "norma
 Node {
   "async": false,
   "body": Node {
-    "body": Array [],
-    "directives": Array [],
+    "body": [],
+    "directives": [],
     "type": "BlockStatement",
   },
   "computed": false,
@@ -38,7 +38,7 @@ Node {
     "type": "Identifier",
   },
   "kind": "method",
-  "params": Array [],
+  "params": [],
   "static": false,
   "type": "ClassMethod",
 }
@@ -48,15 +48,15 @@ exports[`getClassMemberValuePath ClassDeclaration MethodDefinitions finds comput
 Node {
   "async": false,
   "body": Node {
-    "body": Array [],
-    "directives": Array [],
+    "body": [],
+    "directives": [],
     "type": "BlockStatement",
   },
   "computed": true,
   "generator": false,
   "id": null,
   "key": Node {
-    "extra": Object {
+    "extra": {
       "raw": "'render'",
       "rawValue": "render",
     },
@@ -64,7 +64,7 @@ Node {
     "value": "render",
   },
   "kind": "method",
-  "params": Array [],
+  "params": [],
   "static": false,
   "type": "ClassMethod",
 }
@@ -74,8 +74,8 @@ exports[`getClassMemberValuePath ClassExpression finds "normal" method definitio
 Node {
   "async": false,
   "body": Node {
-    "body": Array [],
-    "directives": Array [],
+    "body": [],
+    "directives": [],
     "type": "BlockStatement",
   },
   "computed": false,
@@ -86,7 +86,7 @@ Node {
     "type": "Identifier",
   },
   "kind": "method",
-  "params": Array [],
+  "params": [],
   "static": false,
   "type": "ClassMethod",
 }

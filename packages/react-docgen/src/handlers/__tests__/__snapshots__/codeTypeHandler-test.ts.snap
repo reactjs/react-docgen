@@ -1,130 +1,130 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`codeTypeHandler TypeAlias class definition for flow <0.53 ignores hash map entry 1`] = `
-Object {
-  "bar": Object {
+{
+  "bar": {
     "description": "",
-    "flowType": Object {},
+    "flowType": {},
     "required": false,
   },
 }
 `;
 
 exports[`codeTypeHandler TypeAlias class definition for flow >=0.53 with State ignores hash map entry 1`] = `
-Object {
-  "bar": Object {
+{
+  "bar": {
     "description": "",
-    "flowType": Object {},
+    "flowType": {},
     "required": false,
   },
 }
 `;
 
 exports[`codeTypeHandler TypeAlias class definition for flow >=0.53 without State ignores hash map entry 1`] = `
-Object {
-  "bar": Object {
+{
+  "bar": {
     "description": "",
-    "flowType": Object {},
+    "flowType": {},
     "required": false,
   },
 }
 `;
 
 exports[`codeTypeHandler TypeAlias class definition with inline props ignores hash map entry 1`] = `
-Object {
-  "bar": Object {
+{
+  "bar": {
     "description": "",
-    "flowType": Object {},
+    "flowType": {},
     "required": false,
   },
 }
 `;
 
 exports[`codeTypeHandler TypeAlias stateless component ignores hash map entry 1`] = `
-Object {
-  "bar": Object {
+{
+  "bar": {
     "description": "",
-    "flowType": Object {},
+    "flowType": {},
     "required": false,
   },
 }
 `;
 
 exports[`codeTypeHandler does support utility types inline 1`] = `
-Object {
-  "foo": Object {
+{
+  "foo": {
     "description": "",
-    "flowType": Object {},
+    "flowType": {},
     "required": true,
   },
 }
 `;
 
 exports[`codeTypeHandler imported prop types imported 1`] = `
-Object {
-  "abc": Object {
+{
+  "abc": {
     "description": "",
-    "flowType": Object {},
+    "flowType": {},
     "required": true,
   },
-  "bar": Object {
+  "bar": {
     "description": "",
-    "flowType": Object {},
+    "flowType": {},
     "required": false,
   },
-  "def": Object {
+  "def": {
     "description": "",
-    "flowType": Object {},
+    "flowType": {},
     "required": true,
   },
-  "foo": Object {
+  "foo": {
     "description": "",
-    "flowType": Object {},
+    "flowType": {},
     "required": true,
   },
-  "foobar": Object {
+  "foobar": {
     "description": "",
-    "flowType": Object {},
+    "flowType": {},
     "required": true,
   },
-  "hal": Object {
+  "hal": {
     "description": "",
-    "flowType": Object {},
+    "flowType": {},
     "required": true,
   },
 }
 `;
 
 exports[`codeTypeHandler imported prop types type imported 1`] = `
-Object {
-  "abc": Object {
+{
+  "abc": {
     "description": "",
-    "flowType": Object {},
+    "flowType": {},
     "required": true,
   },
-  "bar": Object {
+  "bar": {
     "description": "",
-    "flowType": Object {},
+    "flowType": {},
     "required": false,
   },
-  "def": Object {
+  "def": {
     "description": "",
-    "flowType": Object {},
+    "flowType": {},
     "required": true,
   },
-  "foo": Object {
+  "foo": {
     "description": "",
-    "flowType": Object {},
+    "flowType": {},
     "required": true,
   },
-  "foobar": Object {
+  "foobar": {
     "description": "",
-    "flowType": Object {},
+    "flowType": {},
     "required": true,
   },
-  "hal": Object {
+  "hal": {
     "description": "",
-    "flowType": Object {},
+    "flowType": {},
     "required": true,
   },
 }

@@ -1,25 +1,25 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`componentMethodsJsDocHandler adds descriptions 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "The foo method.",
     "docblock": "
         The foo method.
         @param test The test
         @returns The number
       ",
-    "modifiers": Array [],
+    "modifiers": [],
     "name": "foo",
-    "params": Array [
-      Object {
+    "params": [
+      {
         "description": "The test",
         "name": "test",
         "optional": false,
         "type": null,
       },
     ],
-    "returns": Object {
+    "returns": {
       "description": "The number",
       "type": null,
     },
@@ -28,28 +28,28 @@ Array [
 `;
 
 exports[`componentMethodsJsDocHandler adds js doc types when no flow types 1`] = `
-Array [
-  Object {
+[
+  {
     "description": null,
     "docblock": "
         @param {string} test
         @returns {string}
       ",
-    "modifiers": Array [],
+    "modifiers": [],
     "name": "foo",
-    "params": Array [
-      Object {
+    "params": [
+      {
         "description": null,
         "name": "test",
         "optional": false,
-        "type": Object {
+        "type": {
           "name": "string",
         },
       },
     ],
-    "returns": Object {
+    "returns": {
       "description": null,
-      "type": Object {
+      "type": {
         "name": "string",
       },
     },
@@ -58,28 +58,28 @@ Array [
 `;
 
 exports[`componentMethodsJsDocHandler keeps flow types over js doc types 1`] = `
-Array [
-  Object {
+[
+  {
     "description": null,
     "docblock": "
         @param {string} test
         @returns {string}
       ",
-    "modifiers": Array [],
+    "modifiers": [],
     "name": "foo",
-    "params": Array [
-      Object {
+    "params": [
+      {
         "description": null,
         "name": "test",
         "optional": false,
-        "type": Object {
+        "type": {
           "name": "number",
         },
       },
     ],
-    "returns": Object {
+    "returns": {
       "description": null,
-      "type": Object {
+      "type": {
         "name": "number",
       },
     },

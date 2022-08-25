@@ -10,13 +10,13 @@ Node {
   "property": Node {
     "async": false,
     "body": Node {
-      "body": Array [],
-      "directives": Array [],
+      "body": [],
+      "directives": [],
       "type": "BlockStatement",
     },
     "generator": false,
     "id": null,
-    "params": Array [],
+    "params": [],
     "type": "ArrowFunctionExpression",
   },
   "type": "MemberExpression",
@@ -25,7 +25,7 @@ Node {
 
 exports[`resolveToValue ImportDeclaration resolves namespace import references to the import declaration 1`] = `
 Node {
-  "extra": Object {
+  "extra": {
     "raw": "3",
     "rawValue": 3,
   },
@@ -36,7 +36,7 @@ Node {
 
 exports[`resolveToValue ImportDeclaration resolves namespace import references to the import declaration 2`] = `
 Node {
-  "extra": Object {
+  "extra": {
     "raw": "3",
     "rawValue": 3,
   },

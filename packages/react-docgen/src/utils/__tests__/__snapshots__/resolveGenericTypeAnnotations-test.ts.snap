@@ -2,12 +2,12 @@
 
 exports[`resolveGenericTypeAnnotation resolves type 1`] = `
 Node {
-  "callProperties": Array [],
+  "callProperties": [],
   "exact": false,
-  "indexers": Array [],
+  "indexers": [],
   "inexact": false,
-  "internalSlots": Array [],
-  "properties": Array [
+  "internalSlots": [],
+  "properties": [
     Node {
       "key": Node {
         "name": "x",

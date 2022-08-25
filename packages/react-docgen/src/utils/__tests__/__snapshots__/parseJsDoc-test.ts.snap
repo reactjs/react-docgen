@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`parseJsDoc @param extracts jsdoc description 1`] = `
-Object {
+{
   "description": null,
-  "params": Array [
-    Object {
+  "params": [
+    {
       "description": "test",
       "name": "bar",
       "optional": false,
@@ -16,14 +16,14 @@ Object {
 `;
 
 exports[`parseJsDoc @param extracts jsdoc empty description 1`] = `
-Object {
+{
   "description": null,
-  "params": Array [
-    Object {
+  "params": [
+    {
       "description": null,
       "name": "bar",
       "optional": false,
-      "type": Object {
+      "type": {
         "name": "string",
       },
     },
@@ -33,14 +33,14 @@ Object {
 `;
 
 exports[`parseJsDoc @param extracts jsdoc optional 1`] = `
-Object {
+{
   "description": null,
-  "params": Array [
-    Object {
+  "params": [
+    {
       "description": null,
       "name": "bar",
       "optional": true,
-      "type": Object {
+      "type": {
         "name": "string",
       },
     },
@@ -50,19 +50,19 @@ Object {
 `;
 
 exports[`parseJsDoc @param extracts jsdoc typed array 1`] = `
-Object {
+{
   "description": null,
-  "params": Array [
-    Object {
+  "params": [
+    {
       "description": null,
       "name": "bar",
       "optional": false,
-      "type": Object {
-        "elements": Array [
-          Object {
+      "type": {
+        "elements": [
+          {
             "name": "string",
           },
-          Object {
+          {
             "name": "number",
           },
         ],
@@ -75,24 +75,24 @@ Object {
 `;
 
 exports[`parseJsDoc @param extracts jsdoc union type param 1`] = `
-Object {
+{
   "description": null,
-  "params": Array [
-    Object {
+  "params": [
+    {
       "description": null,
       "name": "bar",
       "optional": false,
-      "type": Object {
-        "elements": Array [
-          Object {
+      "type": {
+        "elements": [
+          {
             "name": "string",
           },
-          Object {
+          {
             "name": "Object",
           },
-          Object {
-            "elements": Array [
-              Object {
+          {
+            "elements": [
+              {
                 "name": "some",
               },
             ],
@@ -108,10 +108,10 @@ Object {
 `;
 
 exports[`parseJsDoc @returns extracts description from jsdoc 1`] = `
-Object {
+{
   "description": null,
-  "params": Array [],
-  "returns": Object {
+  "params": [],
+  "returns": {
     "description": "The number",
     "type": null,
   },
@@ -119,12 +119,12 @@ Object {
 `;
 
 exports[`parseJsDoc @returns extracts jsdoc mixed types 1`] = `
-Object {
+{
   "description": null,
-  "params": Array [],
-  "returns": Object {
+  "params": [],
+  "returns": {
     "description": null,
-    "type": Object {
+    "type": {
       "name": "mixed",
     },
   },
@@ -132,19 +132,19 @@ Object {
 `;
 
 exports[`parseJsDoc @returns extracts jsdoc typed array 1`] = `
-Object {
+{
   "description": null,
-  "params": Array [
-    Object {
+  "params": [
+    {
       "description": null,
       "name": "bar",
       "optional": false,
-      "type": Object {
-        "elements": Array [
-          Object {
+      "type": {
+        "elements": [
+          {
             "name": "string",
           },
-          Object {
+          {
             "name": "number",
           },
         ],
@@ -157,12 +157,12 @@ Object {
 `;
 
 exports[`parseJsDoc @returns extracts jsdoc types 1`] = `
-Object {
+{
   "description": null,
-  "params": Array [],
-  "returns": Object {
+  "params": [],
+  "returns": {
     "description": null,
-    "type": Object {
+    "type": {
       "name": "string",
     },
   },
@@ -170,10 +170,10 @@ Object {
 `;
 
 exports[`parseJsDoc @returns works with @return 1`] = `
-Object {
+{
   "description": null,
-  "params": Array [],
-  "returns": Object {
+  "params": [],
+  "returns": {
     "description": "The number",
     "type": null,
   },
@@ -181,9 +181,9 @@ Object {
 `;
 
 exports[`parseJsDoc description extracts the method description in jsdoc 1`] = `
-Object {
+{
   "description": "Don't use this!",
-  "params": Array [],
+  "params": [],
   "returns": null,
 }
 `;

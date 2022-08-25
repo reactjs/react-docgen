@@ -1,15 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`integration fixtures processes component "class-without-id.tsx" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "",
-    "methods": Array [],
-    "props": Object {
-      "value": Object {
+    "methods": [],
+    "props": {
+      "value": {
         "description": "",
         "required": true,
-        "tsType": Object {
+        "tsType": {
           "name": "string",
         },
       },
@@ -19,47 +19,47 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_1.js" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "The is a component to test the document generation",
     "displayName": "Component",
-    "methods": Array [],
+    "methods": [],
   },
 ]
 `;
 
 exports[`integration fixtures processes component "component_2.js" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "",
     "displayName": "button",
-    "methods": Array [
-      Object {
+    "methods": [
+      {
         "docblock": null,
-        "modifiers": Array [
+        "modifiers": [
           "static",
           "get",
         ],
         "name": "displayName",
-        "params": Array [],
+        "params": [],
         "returns": null,
       },
-      Object {
+      {
         "docblock": null,
-        "modifiers": Array [
+        "modifiers": [
           "static",
           "get",
         ],
         "name": "defaultProps",
-        "params": Array [],
+        "params": [],
         "returns": null,
       },
     ],
-    "props": Object {
-      "type": Object {
-        "defaultValue": Object {
+    "props": {
+      "type": {
+        "defaultValue": {
           "computed": false,
-          "value": "\\"primary\\"",
+          "value": ""primary"",
         },
         "required": false,
       },
@@ -69,16 +69,16 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_3.js" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "",
     "displayName": "Test",
-    "methods": Array [],
-    "props": Object {
-      "style": Object {
+    "methods": [],
+    "props": {
+      "style": {
         "description": "",
         "required": false,
-        "type": Object {
+        "type": {
           "name": "object",
         },
       },
@@ -88,60 +88,60 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_4.js" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "",
     "displayName": "Parent",
-    "methods": Array [],
-    "props": Object {
-      "child": Object {
+    "methods": [],
+    "props": {
+      "child": {
         "description": "",
         "required": true,
-        "type": Object {
+        "type": {
           "computed": true,
           "name": "shape",
           "value": "Child.propTypes",
         },
       },
-      "childExact": Object {
+      "childExact": {
         "description": "",
         "required": true,
-        "type": Object {
+        "type": {
           "computed": true,
           "name": "exact",
           "value": "Child.propTypes",
         },
       },
-      "extendedChild": Object {
+      "extendedChild": {
         "description": "",
         "required": true,
-        "type": Object {
+        "type": {
           "name": "shape",
-          "value": Object {
-            "adopted": Object {
+          "value": {
+            "adopted": {
               "name": "bool",
               "required": true,
             },
           },
         },
       },
-      "extendedChildExact": Object {
+      "extendedChildExact": {
         "description": "",
         "required": true,
-        "type": Object {
+        "type": {
           "name": "exact",
-          "value": Object {
-            "adopted": Object {
+          "value": {
+            "adopted": {
               "name": "bool",
               "required": true,
             },
           },
         },
       },
-      "something": Object {
+      "something": {
         "description": "",
         "required": true,
-        "type": Object {
+        "type": {
           "name": "string",
         },
       },
@@ -151,50 +151,50 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_5.js" without errors 1`] = `
-Array [
-  Object {
-    "childContext": Object {
-      "color": Object {
+[
+  {
+    "childContext": {
+      "color": {
         "required": false,
-        "type": Object {
+        "type": {
           "name": "string",
         },
       },
     },
-    "context": Object {
-      "config": Object {
+    "context": {
+      "config": {
         "required": false,
-        "type": Object {
+        "type": {
           "name": "object",
         },
       },
     },
     "description": "",
     "displayName": "Button",
-    "methods": Array [],
-    "props": Object {
-      "children": Object {
+    "methods": [],
+    "props": {
+      "children": {
         "description": "",
         "required": true,
-        "type": Object {
+        "type": {
           "name": "string",
         },
       },
-      "onClick": Object {
+      "onClick": {
         "description": "",
         "required": false,
-        "type": Object {
+        "type": {
           "name": "func",
         },
       },
-      "style": Object {
-        "defaultValue": Object {
+      "style": {
+        "defaultValue": {
           "computed": false,
           "value": "{}",
         },
         "description": "",
         "required": false,
-        "type": Object {
+        "type": {
           "name": "object",
         },
       },
@@ -204,50 +204,50 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_6.js" without errors 1`] = `
-Array [
-  Object {
-    "childContext": Object {
-      "color": Object {
+[
+  {
+    "childContext": {
+      "color": {
         "required": false,
-        "type": Object {
+        "type": {
           "name": "string",
         },
       },
     },
-    "context": Object {
-      "config": Object {
+    "context": {
+      "config": {
         "required": false,
-        "type": Object {
+        "type": {
           "name": "object",
         },
       },
     },
     "description": "",
     "displayName": "Button",
-    "methods": Array [],
-    "props": Object {
-      "children": Object {
+    "methods": [],
+    "props": {
+      "children": {
         "description": "",
         "required": true,
-        "type": Object {
+        "type": {
           "name": "string",
         },
       },
-      "onClick": Object {
+      "onClick": {
         "description": "",
         "required": false,
-        "type": Object {
+        "type": {
           "name": "func",
         },
       },
-      "style": Object {
-        "defaultValue": Object {
+      "style": {
+        "defaultValue": {
           "computed": false,
           "value": "{}",
         },
         "description": "",
         "required": false,
-        "type": Object {
+        "type": {
           "name": "object",
         },
       },
@@ -257,27 +257,27 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_7.js" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "The is a component to test the document generation",
     "displayName": "Component",
-    "methods": Array [],
+    "methods": [],
   },
 ]
 `;
 
 exports[`integration fixtures processes component "component_8.js" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "",
     "displayName": "Parent",
-    "methods": Array [
-      Object {
+    "methods": [
+      {
         "docblock": null,
-        "modifiers": Array [],
+        "modifiers": [],
         "name": "onChangeSlider",
-        "params": Array [
-          Object {
+        "params": [
+          {
             "name": "[min, max]",
             "optional": false,
             "type": null,
@@ -291,66 +291,66 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_9.js" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "Should be recognized as component.",
     "displayName": "ExampleComponent",
-    "methods": Array [],
+    "methods": [],
   },
 ]
 `;
 
 exports[`integration fixtures processes component "component_10.js" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "React component that display current time at current location.",
     "displayName": "Clock",
-    "methods": Array [
-      Object {
+    "methods": [
+      {
         "description": "Update clock state with new time",
         "docblock": "Update clock state with new time",
-        "modifiers": Array [],
+        "modifiers": [],
         "name": "updateClock",
-        "params": Array [],
+        "params": [],
         "returns": null,
       },
-      Object {
+      {
         "description": "Parse current Date object",
         "docblock": "Parse current Date object
 
 @returns {Object} currentTime
    @returns {int} currentTime.hour
    @returns {int} currentTime.minutes
-   @returns {string} currentTime.ampm \\"am\\" or \\"pm\\"
+   @returns {string} currentTime.ampm "am" or "pm"
    @returns {string} currentTime.dayOfWeek
    @returns {string} currentTime.month
    @returns {int} currentTime.date",
-        "modifiers": Array [],
+        "modifiers": [],
         "name": "getTime",
-        "params": Array [],
-        "returns": Object {
+        "params": [],
+        "returns": {
           "description": "currentTime",
-          "type": Object {
+          "type": {
             "name": "Object",
           },
         },
       },
-      Object {
+      {
         "description": "Update current clock for every 1 second",
         "docblock": "Update current clock for every 1 second",
-        "modifiers": Array [],
+        "modifiers": [],
         "name": "setTimer",
-        "params": Array [],
+        "params": [],
         "returns": null,
       },
     ],
-    "props": Object {
-      "title": Object {
+    "props": {
+      "title": {
         "description": "A text display current's user identity,
- \\"Nobody\\" if no one is detected in the background,
- \\"Hi, ..name\\" if an user is detected",
+ "Nobody" if no one is detected in the background,
+ "Hi, ..name" if an user is detected",
         "required": false,
-        "type": Object {
+        "type": {
           "name": "string",
         },
       },
@@ -360,32 +360,32 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_11.js" without errors 1`] = `
-Array [
-  Object {
-    "composes": Array [
+[
+  {
+    "composes": [
       "OtherProps",
     ],
     "description": "",
     "displayName": "MyComponent",
-    "methods": Array [],
-    "props": Object {
-      "fooProp": Object {
+    "methods": [],
+    "props": {
+      "fooProp": {
         "description": "fooProp is spread in from a locally resolved type",
-        "flowType": Object {
+        "flowType": {
           "name": "string",
         },
         "required": false,
       },
-      "prop1": Object {
+      "prop1": {
         "description": "The first prop",
-        "flowType": Object {
+        "flowType": {
           "name": "string",
         },
         "required": true,
       },
-      "prop2": Object {
+      "prop2": {
         "description": "The second, covariant prop",
-        "flowType": Object {
+        "flowType": {
           "name": "number",
         },
         "required": true,
@@ -396,14 +396,14 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_12.js" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "",
     "displayName": "Paper",
-    "methods": Array [],
-    "props": Object {
-      "anchorOrigin": Object {
-        "defaultValue": Object {
+    "methods": [],
+    "props": {
+      "anchorOrigin": {
+        "defaultValue": {
           "computed": false,
           "value": "{
   vertical: 'top',
@@ -417,31 +417,31 @@ anchorReference is 'anchorPosition'.
 Options:
 vertical: [top, center, bottom];
 horizontal: [left, center, right].",
-        "flowType": Object {
+        "flowType": {
           "name": "signature",
           "raw": "{
   horizontal: 'left' | 'center' | 'right' | number,
   vertical: 'top' | 'center' | 'bottom' | number,
 }",
-          "signature": Object {
-            "properties": Array [
-              Object {
+          "signature": {
+            "properties": [
+              {
                 "key": "horizontal",
-                "value": Object {
-                  "elements": Array [
-                    Object {
+                "value": {
+                  "elements": [
+                    {
                       "name": "literal",
                       "value": "'left'",
                     },
-                    Object {
+                    {
                       "name": "literal",
                       "value": "'center'",
                     },
-                    Object {
+                    {
                       "name": "literal",
                       "value": "'right'",
                     },
-                    Object {
+                    {
                       "name": "number",
                     },
                   ],
@@ -450,23 +450,23 @@ horizontal: [left, center, right].",
                   "required": true,
                 },
               },
-              Object {
+              {
                 "key": "vertical",
-                "value": Object {
-                  "elements": Array [
-                    Object {
+                "value": {
+                  "elements": [
+                    {
                       "name": "literal",
                       "value": "'top'",
                     },
-                    Object {
+                    {
                       "name": "literal",
                       "value": "'center'",
                     },
-                    Object {
+                    {
                       "name": "literal",
                       "value": "'bottom'",
                     },
-                    Object {
+                    {
                       "name": "number",
                     },
                   ],
@@ -481,58 +481,58 @@ horizontal: [left, center, right].",
         },
         "required": false,
       },
-      "children": Object {
+      "children": {
         "description": "@ignore",
-        "flowType": Object {
+        "flowType": {
           "name": "Node",
         },
         "required": false,
       },
-      "classes": Object {
+      "classes": {
         "description": "Useful to extend the style applied to components.",
-        "flowType": Object {
+        "flowType": {
           "name": "Object",
         },
         "required": false,
       },
-      "component": Object {
-        "defaultValue": Object {
+      "component": {
+        "defaultValue": {
           "computed": false,
           "value": "'div'",
         },
         "description": "The component used for the root node.
 This currently has to be flow cast in defaultProps as of flow 0.59.0",
-        "flowType": Object {
+        "flowType": {
           "name": "ElementType",
         },
         "required": false,
       },
-      "elevation": Object {
-        "defaultValue": Object {
+      "elevation": {
+        "defaultValue": {
           "computed": false,
           "value": "2",
         },
         "description": "Shadow depth, corresponds to \`dp\` in the spec.
 It's accepting values between 0 and 24 inclusive.",
-        "flowType": Object {
+        "flowType": {
           "name": "number",
         },
         "required": false,
       },
-      "labelRowsPerPage": Object {
-        "defaultValue": Object {
+      "labelRowsPerPage": {
+        "defaultValue": {
           "computed": false,
           "value": "'Rows per page:'",
         },
         "description": "Useful to customize the rows per page label. Invoked with a \`{ from, to, count, page }\`
 object.",
-        "flowType": Object {
+        "flowType": {
           "name": "Node",
         },
         "required": false,
       },
-      "timeout": Object {
-        "defaultValue": Object {
+      "timeout": {
+        "defaultValue": {
           "computed": false,
           "value": "300",
         },
@@ -540,26 +540,26 @@ object.",
 You may specify a single timeout for all transitions, or individually with an object.
 
 Set to 'auto' to automatically calculate transition time based on height.",
-        "flowType": Object {
-          "elements": Array [
-            Object {
+        "flowType": {
+          "elements": [
+            {
               "name": "number",
             },
-            Object {
+            {
               "name": "signature",
               "raw": "{ enter?: number, exit?: number }",
-              "signature": Object {
-                "properties": Array [
-                  Object {
+              "signature": {
+                "properties": [
+                  {
                     "key": "enter",
-                    "value": Object {
+                    "value": {
                       "name": "number",
                       "required": false,
                     },
                   },
-                  Object {
+                  {
                     "key": "exit",
-                    "value": Object {
+                    "value": {
                       "name": "number",
                       "required": false,
                     },
@@ -568,7 +568,7 @@ Set to 'auto' to automatically calculate transition time based on height.",
               },
               "type": "object",
             },
-            Object {
+            {
               "name": "literal",
               "value": "'auto'",
             },
@@ -578,11 +578,11 @@ Set to 'auto' to automatically calculate transition time based on height.",
         },
         "required": false,
       },
-      "transition": Object {
+      "transition": {
         "description": "Transition component.",
-        "flowType": Object {
-          "elements": Array [
-            Object {
+        "flowType": {
+          "elements": [
+            {
               "name": "unknown",
             },
           ],
@@ -597,253 +597,253 @@ Set to 'auto' to automatically calculate transition time based on height.",
 `;
 
 exports[`integration fixtures processes component "component_13.js" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "",
     "displayName": "Foo",
-    "methods": Array [],
-    "props": Object {
-      "RootComponent": Object {
+    "methods": [],
+    "props": {
+      "RootComponent": {
         "description": "",
-        "flowType": Object {
+        "flowType": {
           "name": "ReactElementType",
           "raw": "React.ElementType",
         },
         "required": false,
       },
-      "align": Object {
+      "align": {
         "description": "",
-        "flowType": Object {
-          "elements": Array [
-            Object {
+        "flowType": {
+          "elements": [
+            {
               "name": "literal",
-              "value": "\\"left\\"",
+              "value": ""left"",
             },
-            Object {
+            {
               "name": "literal",
-              "value": "\\"center\\"",
+              "value": ""center"",
             },
-            Object {
+            {
               "name": "literal",
-              "value": "\\"right\\"",
+              "value": ""right"",
             },
-            Object {
+            {
               "name": "literal",
-              "value": "\\"justify\\"",
+              "value": ""justify"",
             },
           ],
           "name": "union",
-          "raw": "\\"left\\" | \\"center\\" | \\"right\\" | \\"justify\\"",
+          "raw": ""left" | "center" | "right" | "justify"",
         },
         "required": false,
       },
-      "capitalize": Object {
+      "capitalize": {
         "description": "",
-        "flowType": Object {
+        "flowType": {
           "name": "boolean",
         },
         "required": false,
       },
-      "center": Object {
+      "center": {
         "description": "",
-        "flowType": Object {
+        "flowType": {
           "name": "boolean",
         },
         "required": false,
       },
-      "children": Object {
+      "children": {
         "description": "",
-        "flowType": Object {
+        "flowType": {
           "name": "ReactNode",
           "raw": "React.Node",
         },
         "required": false,
       },
-      "className": Object {
+      "className": {
         "description": "",
-        "flowType": Object {
+        "flowType": {
           "name": "string",
         },
         "required": false,
       },
-      "color": Object {
+      "color": {
         "description": "",
-        "flowType": Object {
+        "flowType": {
           "name": "string",
         },
         "required": false,
       },
-      "justify": Object {
+      "justify": {
         "description": "",
-        "flowType": Object {
+        "flowType": {
           "name": "boolean",
         },
         "required": false,
       },
-      "leading": Object {
+      "leading": {
         "description": "",
-        "flowType": Object {
-          "elements": Array [
-            Object {
+        "flowType": {
+          "elements": [
+            {
               "name": "literal",
-              "value": "\\"none\\"",
+              "value": ""none"",
             },
-            Object {
+            {
               "name": "literal",
-              "value": "\\"tight\\"",
+              "value": ""tight"",
             },
-            Object {
+            {
               "name": "literal",
-              "value": "\\"normal\\"",
+              "value": ""normal"",
             },
-            Object {
+            {
               "name": "literal",
-              "value": "\\"loose\\"",
+              "value": ""loose"",
             },
           ],
           "name": "union",
-          "raw": "\\"none\\" | \\"tight\\" | \\"normal\\" | \\"loose\\"",
+          "raw": ""none" | "tight" | "normal" | "loose"",
         },
         "required": false,
       },
-      "leadingLoose": Object {
+      "leadingLoose": {
         "description": "",
-        "flowType": Object {
+        "flowType": {
           "name": "boolean",
         },
         "required": false,
       },
-      "leadingNone": Object {
+      "leadingNone": {
         "description": "",
-        "flowType": Object {
+        "flowType": {
           "name": "boolean",
         },
         "required": false,
       },
-      "leadingNormal": Object {
+      "leadingNormal": {
         "description": "",
-        "flowType": Object {
+        "flowType": {
           "name": "boolean",
         },
         "required": false,
       },
-      "leadingTight": Object {
+      "leadingTight": {
         "description": "",
-        "flowType": Object {
+        "flowType": {
           "name": "boolean",
         },
         "required": false,
       },
-      "left": Object {
+      "left": {
         "description": "",
-        "flowType": Object {
+        "flowType": {
           "name": "boolean",
         },
         "required": false,
       },
-      "lowercase": Object {
+      "lowercase": {
         "description": "",
-        "flowType": Object {
+        "flowType": {
           "name": "boolean",
         },
         "required": false,
       },
-      "muted": Object {
+      "muted": {
         "description": "",
-        "flowType": Object {
+        "flowType": {
           "name": "boolean",
         },
         "required": false,
       },
-      "right": Object {
+      "right": {
         "description": "",
-        "flowType": Object {
+        "flowType": {
           "name": "boolean",
         },
         "required": false,
       },
-      "size": Object {
+      "size": {
         "description": "",
-        "flowType": Object {
+        "flowType": {
           "name": "string",
         },
         "required": false,
       },
-      "tracking": Object {
+      "tracking": {
         "description": "",
-        "flowType": Object {
-          "elements": Array [
-            Object {
+        "flowType": {
+          "elements": [
+            {
               "name": "literal",
-              "value": "\\"tight\\"",
+              "value": ""tight"",
             },
-            Object {
+            {
               "name": "literal",
-              "value": "\\"normal\\"",
+              "value": ""normal"",
             },
-            Object {
+            {
               "name": "literal",
-              "value": "\\"wide\\"",
-            },
-          ],
-          "name": "union",
-          "raw": "\\"tight\\" | \\"normal\\" | \\"wide\\"",
-        },
-        "required": false,
-      },
-      "trackingNormal": Object {
-        "description": "",
-        "flowType": Object {
-          "name": "boolean",
-        },
-        "required": false,
-      },
-      "trackingTight": Object {
-        "description": "",
-        "flowType": Object {
-          "name": "boolean",
-        },
-        "required": false,
-      },
-      "trackingWide": Object {
-        "description": "",
-        "flowType": Object {
-          "name": "boolean",
-        },
-        "required": false,
-      },
-      "transform": Object {
-        "description": "",
-        "flowType": Object {
-          "elements": Array [
-            Object {
-              "name": "literal",
-              "value": "\\"lowercase\\"",
-            },
-            Object {
-              "name": "literal",
-              "value": "\\"uppercase\\"",
-            },
-            Object {
-              "name": "literal",
-              "value": "\\"capitalize\\"",
+              "value": ""wide"",
             },
           ],
           "name": "union",
-          "raw": "\\"lowercase\\" | \\"uppercase\\" | \\"capitalize\\"",
+          "raw": ""tight" | "normal" | "wide"",
         },
         "required": false,
       },
-      "uppercase": Object {
+      "trackingNormal": {
         "description": "",
-        "flowType": Object {
+        "flowType": {
           "name": "boolean",
         },
         "required": false,
       },
-      "wrap": Object {
+      "trackingTight": {
         "description": "",
-        "flowType": Object {
+        "flowType": {
+          "name": "boolean",
+        },
+        "required": false,
+      },
+      "trackingWide": {
+        "description": "",
+        "flowType": {
+          "name": "boolean",
+        },
+        "required": false,
+      },
+      "transform": {
+        "description": "",
+        "flowType": {
+          "elements": [
+            {
+              "name": "literal",
+              "value": ""lowercase"",
+            },
+            {
+              "name": "literal",
+              "value": ""uppercase"",
+            },
+            {
+              "name": "literal",
+              "value": ""capitalize"",
+            },
+          ],
+          "name": "union",
+          "raw": ""lowercase" | "uppercase" | "capitalize"",
+        },
+        "required": false,
+      },
+      "uppercase": {
+        "description": "",
+        "flowType": {
+          "name": "boolean",
+        },
+        "required": false,
+      },
+      "wrap": {
+        "description": "",
+        "flowType": {
           "name": "boolean",
         },
         "required": false,
@@ -854,15 +854,15 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_14.js" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "",
     "displayName": "UncoloredView",
-    "methods": Array [],
-    "props": Object {
-      "color": Object {
+    "methods": [],
+    "props": {
+      "color": {
         "description": "",
-        "flowType": Object {
+        "flowType": {
           "name": "string",
           "nullable": true,
         },
@@ -874,60 +874,60 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_15.js" without errors 1`] = `
-Array [
-  Object {
-    "composes": Array [
+[
+  {
+    "composes": [
       "BarProps",
       "BarProps2",
       "BarProps3",
     ],
     "description": "",
     "displayName": "Foo",
-    "methods": Array [],
-    "props": Object {
-      "other": Object {
+    "methods": [],
+    "props": {
+      "other": {
         "description": "",
-        "flowType": Object {
+        "flowType": {
           "name": "literal",
           "value": "'a'",
         },
         "required": true,
       },
-      "other2": Object {
+      "other2": {
         "description": "",
-        "flowType": Object {
+        "flowType": {
           "name": "literal",
           "value": "'b'",
         },
         "required": true,
       },
-      "other3": Object {
+      "other3": {
         "description": "",
-        "flowType": Object {
+        "flowType": {
           "name": "literal",
           "value": "'c'",
         },
         "required": true,
       },
-      "other4": Object {
+      "other4": {
         "description": "",
-        "flowType": Object {
+        "flowType": {
           "name": "literal",
           "value": "'g'",
         },
         "required": true,
       },
-      "other5": Object {
+      "other5": {
         "description": "",
-        "flowType": Object {
+        "flowType": {
           "name": "literal",
           "value": "'f'",
         },
         "required": true,
       },
-      "somePropOverride": Object {
+      "somePropOverride": {
         "description": "",
-        "flowType": Object {
+        "flowType": {
           "name": "literal",
           "value": "'baz'",
         },
@@ -939,20 +939,20 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_16.js" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "",
     "displayName": "Foo",
-    "methods": Array [],
-    "props": Object {
-      "bar": Object {
-        "defaultValue": Object {
+    "methods": [],
+    "props": {
+      "bar": {
+        "defaultValue": {
           "computed": false,
           "value": "null",
         },
         "description": "This does something.",
         "required": false,
-        "type": Object {
+        "type": {
           "name": "custom",
           "raw": "PropTypes.node",
         },
@@ -963,58 +963,58 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_17.js" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "",
     "displayName": "Foo",
-    "methods": Array [],
-    "props": Object {
-      "exactProp": Object {
+    "methods": [],
+    "props": {
+      "exactProp": {
         "description": "",
         "required": false,
-        "type": Object {
+        "type": {
           "name": "exact",
-          "value": Object {
-            "c": Object {
+          "value": {
+            "c": {
               "description": "Comment for property c",
               "name": "string",
               "required": false,
             },
-            "d": Object {
+            "d": {
               "name": "number",
               "required": false,
             },
           },
         },
       },
-      "oneOfTypeProp": Object {
+      "oneOfTypeProp": {
         "description": "",
         "required": false,
-        "type": Object {
+        "type": {
           "name": "union",
-          "value": Array [
-            Object {
+          "value": [
+            {
               "description": "Comment for type string",
               "name": "string",
             },
-            Object {
+            {
               "name": "number",
             },
           ],
         },
       },
-      "shapeProp": Object {
+      "shapeProp": {
         "description": "",
         "required": false,
-        "type": Object {
+        "type": {
           "name": "shape",
-          "value": Object {
-            "a": Object {
+          "value": {
+            "a": {
               "description": "Comment for property a",
               "name": "string",
               "required": false,
             },
-            "b": Object {
+            "b": {
               "name": "number",
               "required": false,
             },
@@ -1027,31 +1027,31 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_18.js" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "",
     "displayName": "UncoloredView",
-    "methods": Array [],
-    "props": Object {
-      "color": Object {
+    "methods": [],
+    "props": {
+      "color": {
         "description": "",
-        "flowType": Object {
+        "flowType": {
           "name": "string",
           "nullable": true,
         },
         "required": false,
-        "type": Object {
+        "type": {
           "name": "string",
         },
       },
-      "id": Object {
-        "defaultValue": Object {
+      "id": {
+        "defaultValue": {
           "computed": false,
           "value": "'test-forward-ref-default'",
         },
         "description": "",
         "required": false,
-        "type": Object {
+        "type": {
           "name": "string",
         },
       },
@@ -1061,17 +1061,17 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_19.js" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "",
     "displayName": "Component",
-    "methods": Array [],
-    "props": Object {
-      "data": Object {
+    "methods": [],
+    "props": {
+      "data": {
         "description": "",
-        "flowType": Object {
-          "elements": Array [
-            Object {
+        "flowType": {
+          "elements": [
+            {
               "name": "mixed",
             },
           ],
@@ -1086,20 +1086,20 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_20.js" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "",
     "displayName": "Button",
-    "methods": Array [],
-    "props": Object {
-      "@computed#children": Object {
-        "defaultValue": Object {
+    "methods": [],
+    "props": {
+      "@computed#children": {
+        "defaultValue": {
           "computed": false,
-          "value": "\\"default\\"",
+          "value": ""default"",
         },
         "description": "This is a test",
         "required": false,
-        "type": Object {
+        "type": {
           "name": "string",
         },
       },
@@ -1109,42 +1109,42 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_21.tsx" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "This is a typescript class component",
     "displayName": "TSComponent",
-    "methods": Array [],
-    "props": Object {
-      "bar": Object {
+    "methods": [],
+    "props": {
+      "bar": {
         "description": "Required prop",
         "required": true,
-        "tsType": Object {
+        "tsType": {
           "name": "number",
         },
       },
-      "baz": Object {
+      "baz": {
         "description": "Complex union prop",
         "required": true,
-        "tsType": Object {
-          "elements": Array [
-            Object {
+        "tsType": {
+          "elements": [
+            {
               "name": "number",
             },
-            Object {
+            {
               "name": "signature",
               "raw": "{ enter?: number, exit?: number }",
-              "signature": Object {
-                "properties": Array [
-                  Object {
+              "signature": {
+                "properties": [
+                  {
                     "key": "enter",
-                    "value": Object {
+                    "value": {
                       "name": "number",
                       "required": false,
                     },
                   },
-                  Object {
+                  {
                     "key": "exit",
-                    "value": Object {
+                    "value": {
                       "name": "number",
                       "required": false,
                     },
@@ -1153,7 +1153,7 @@ Array [
               },
               "type": "object",
             },
-            Object {
+            {
               "name": "literal",
               "value": "'auto'",
             },
@@ -1162,10 +1162,10 @@ Array [
           "raw": "number | { enter?: number, exit?: number } | 'auto'",
         },
       },
-      "foo": Object {
+      "foo": {
         "description": "Optional prop",
         "required": false,
-        "tsType": Object {
+        "tsType": {
           "name": "string",
         },
       },
@@ -1175,63 +1175,63 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_22.tsx" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "This is a TypeScript function component",
     "displayName": "TSFunctionComponent",
-    "methods": Array [],
-    "props": Object {
-      "align": Object {
+    "methods": [],
+    "props": {
+      "align": {
         "description": "",
         "required": false,
-        "tsType": Object {
-          "elements": Array [
-            Object {
+        "tsType": {
+          "elements": [
+            {
               "name": "literal",
-              "value": "\\"left\\"",
+              "value": ""left"",
             },
-            Object {
+            {
               "name": "literal",
-              "value": "\\"center\\"",
+              "value": ""center"",
             },
-            Object {
+            {
               "name": "literal",
-              "value": "\\"right\\"",
+              "value": ""right"",
             },
-            Object {
+            {
               "name": "literal",
-              "value": "\\"justify\\"",
+              "value": ""justify"",
             },
           ],
           "name": "union",
-          "raw": "\\"left\\" | \\"center\\" | \\"right\\" | \\"justify\\"",
+          "raw": ""left" | "center" | "right" | "justify"",
         },
       },
-      "center": Object {
+      "center": {
         "description": "",
         "required": false,
-        "tsType": Object {
+        "tsType": {
           "name": "boolean",
         },
       },
-      "justify": Object {
+      "justify": {
         "description": "",
         "required": false,
-        "tsType": Object {
+        "tsType": {
           "name": "boolean",
         },
       },
-      "left": Object {
+      "left": {
         "description": "",
         "required": false,
-        "tsType": Object {
+        "tsType": {
           "name": "boolean",
         },
       },
-      "right": Object {
+      "right": {
         "description": "",
         "required": false,
-        "tsType": Object {
+        "tsType": {
           "name": "boolean",
         },
       },
@@ -1241,45 +1241,45 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_23.tsx" without errors 1`] = `
-Array [
-  Object {
-    "composes": Array [
+[
+  {
+    "composes": [
       "OtherProps",
     ],
     "description": "This is a typescript class component",
     "displayName": "TSComponent",
-    "methods": Array [],
-    "props": Object {
-      "bar": Object {
+    "methods": [],
+    "props": {
+      "bar": {
         "description": "Required prop",
         "required": true,
-        "tsType": Object {
+        "tsType": {
           "name": "number",
         },
       },
-      "baz": Object {
+      "baz": {
         "description": "Complex union prop",
         "required": true,
-        "tsType": Object {
-          "elements": Array [
-            Object {
+        "tsType": {
+          "elements": [
+            {
               "name": "number",
             },
-            Object {
+            {
               "name": "signature",
               "raw": "{ enter?: number, exit?: number }",
-              "signature": Object {
-                "properties": Array [
-                  Object {
+              "signature": {
+                "properties": [
+                  {
                     "key": "enter",
-                    "value": Object {
+                    "value": {
                       "name": "number",
                       "required": false,
                     },
                   },
-                  Object {
+                  {
                     "key": "exit",
-                    "value": Object {
+                    "value": {
                       "name": "number",
                       "required": false,
                     },
@@ -1288,7 +1288,7 @@ Array [
               },
               "type": "object",
             },
-            Object {
+            {
               "name": "literal",
               "value": "'auto'",
             },
@@ -1297,10 +1297,10 @@ Array [
           "raw": "number | { enter?: number, exit?: number } | 'auto'",
         },
       },
-      "foo": Object {
+      "foo": {
         "description": "Optional prop",
         "required": false,
-        "tsType": Object {
+        "tsType": {
           "name": "string",
         },
       },
@@ -1310,44 +1310,44 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_24.js" without errors 1`] = `
-Array [
-  Object {
-    "composes": Array [
+[
+  {
+    "composes": [
       "OtherProps",
     ],
     "description": "This is a flow class component with an interface as props",
     "displayName": "FlowComponent",
-    "methods": Array [],
-    "props": Object {
-      "bar": Object {
+    "methods": [],
+    "props": {
+      "bar": {
         "description": "Required prop",
-        "flowType": Object {
+        "flowType": {
           "name": "number",
         },
         "required": true,
       },
-      "baz": Object {
+      "baz": {
         "description": "Complex union prop",
-        "flowType": Object {
-          "elements": Array [
-            Object {
+        "flowType": {
+          "elements": [
+            {
               "name": "number",
             },
-            Object {
+            {
               "name": "signature",
               "raw": "{ enter?: number, exit?: number }",
-              "signature": Object {
-                "properties": Array [
-                  Object {
+              "signature": {
+                "properties": [
+                  {
                     "key": "enter",
-                    "value": Object {
+                    "value": {
                       "name": "number",
                       "required": false,
                     },
                   },
-                  Object {
+                  {
                     "key": "exit",
-                    "value": Object {
+                    "value": {
                       "name": "number",
                       "required": false,
                     },
@@ -1356,7 +1356,7 @@ Array [
               },
               "type": "object",
             },
-            Object {
+            {
               "name": "literal",
               "value": "'auto'",
             },
@@ -1366,9 +1366,9 @@ Array [
         },
         "required": true,
       },
-      "foo": Object {
+      "foo": {
         "description": "Optional prop",
-        "flowType": Object {
+        "flowType": {
           "name": "string",
         },
         "required": false,
@@ -1379,18 +1379,18 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_25.tsx" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "This is a typescript class component",
     "displayName": "TSComponent",
-    "methods": Array [],
-    "props": Object {
-      "bar": Object {
+    "methods": [],
+    "props": {
+      "bar": {
         "description": "Required prop",
         "required": true,
-        "tsType": Object {
-          "elements": Array [
-            Object {
+        "tsType": {
+          "elements": [
+            {
               "name": "Child",
             },
           ],
@@ -1398,17 +1398,17 @@ Array [
           "raw": "Array<X>",
         },
       },
-      "baz": Object {
+      "baz": {
         "description": "Complex union prop",
         "required": true,
-        "tsType": Object {
+        "tsType": {
           "name": "number",
         },
       },
-      "foo": Object {
+      "foo": {
         "description": "Optional prop",
         "required": false,
-        "tsType": Object {
+        "tsType": {
           "name": "Child",
         },
       },
@@ -1418,17 +1418,17 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_26.js" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "This is a typescript class component",
     "displayName": "FlowComponent",
-    "methods": Array [],
-    "props": Object {
-      "bar": Object {
+    "methods": [],
+    "props": {
+      "bar": {
         "description": "Required prop",
-        "flowType": Object {
-          "elements": Array [
-            Object {
+        "flowType": {
+          "elements": [
+            {
               "name": "Child",
             },
           ],
@@ -1437,16 +1437,16 @@ Array [
         },
         "required": true,
       },
-      "baz": Object {
+      "baz": {
         "description": "Complex union prop",
-        "flowType": Object {
+        "flowType": {
           "name": "number",
         },
         "required": true,
       },
-      "foo": Object {
+      "foo": {
         "description": "Optional prop",
-        "flowType": Object {
+        "flowType": {
           "name": "Child",
         },
         "required": false,
@@ -1457,57 +1457,57 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_27.tsx" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "This is a typescript class component",
     "displayName": "TSComponent",
-    "methods": Array [
-      Object {
+    "methods": [
+      {
         "description": "This is a method",
         "docblock": "This is a method",
-        "modifiers": Array [],
+        "modifiers": [],
         "name": "foo",
-        "params": Array [
-          Object {
+        "params": [
+          {
             "name": "a",
             "optional": false,
-            "type": Object {
+            "type": {
               "name": "string",
             },
           },
         ],
-        "returns": Object {
-          "type": Object {
+        "returns": {
+          "type": {
             "name": "string",
           },
         },
       },
-      Object {
+      {
         "description": "This is a public method",
         "docblock": "This is a public method",
-        "modifiers": Array [],
+        "modifiers": [],
         "name": "bar",
-        "params": Array [
-          Object {
+        "params": [
+          {
             "name": "a",
             "optional": false,
-            "type": Object {
+            "type": {
               "name": "string",
             },
           },
         ],
-        "returns": Object {
-          "type": Object {
+        "returns": {
+          "type": {
             "name": "string",
           },
         },
       },
     ],
-    "props": Object {
-      "foo": Object {
+    "props": {
+      "foo": {
         "description": "",
         "required": true,
-        "tsType": Object {
+        "tsType": {
           "name": "string",
         },
       },
@@ -1517,20 +1517,20 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_28.tsx" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "Example component description",
     "displayName": "ABC",
-    "methods": Array [],
-    "props": Object {
-      "foo": Object {
-        "defaultValue": Object {
+    "methods": [],
+    "props": {
+      "foo": {
+        "defaultValue": {
           "computed": false,
           "value": "true",
         },
         "description": "Example prop description",
         "required": false,
-        "tsType": Object {
+        "tsType": {
           "name": "boolean",
         },
       },
@@ -1540,15 +1540,15 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_29.js" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "",
     "displayName": "MyComponent",
-    "methods": Array [],
-    "props": Object {
-      "prop": Object {
+    "methods": [],
+    "props": {
+      "prop": {
         "description": "",
-        "flowType": Object {
+        "flowType": {
           "name": "T",
         },
         "required": true,
@@ -1559,15 +1559,15 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_30.js" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "",
     "displayName": "MyComponent",
-    "methods": Array [],
-    "props": Object {
-      "prop": Object {
+    "methods": [],
+    "props": {
+      "prop": {
         "description": "",
-        "flowType": Object {
+        "flowType": {
           "name": "string",
         },
         "required": true,
@@ -1578,15 +1578,15 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_31.js" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "",
     "displayName": "MyComponent",
-    "methods": Array [],
-    "props": Object {
-      "prop": Object {
+    "methods": [],
+    "props": {
+      "prop": {
         "description": "",
-        "flowType": Object {
+        "flowType": {
           "name": "T",
         },
         "required": true,
@@ -1597,32 +1597,32 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_32.js" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "",
     "displayName": "Segments",
-    "methods": Array [
-      Object {
+    "methods": [
+      {
         "docblock": null,
-        "modifiers": Array [],
+        "modifiers": [],
         "name": "foo",
-        "params": Array [
-          Object {
+        "params": [
+          {
             "name": "props",
             "optional": false,
-            "type": Object {
+            "type": {
               "alias": "Props",
               "name": "signature",
               "raw": "{
   segments: Array<T>,
 }",
-              "signature": Object {
-                "properties": Array [
-                  Object {
+              "signature": {
+                "properties": [
+                  {
                     "key": "segments",
-                    "value": Object {
-                      "elements": Array [
-                        Object {
+                    "value": {
+                      "elements": [
+                        {
                           "name": "T",
                         },
                       ],
@@ -1640,12 +1640,12 @@ Array [
         "returns": null,
       },
     ],
-    "props": Object {
-      "segments": Object {
+    "props": {
+      "segments": {
         "description": "",
-        "flowType": Object {
-          "elements": Array [
-            Object {
+        "flowType": {
+          "elements": [
+            {
               "name": "T",
             },
           ],
@@ -1660,23 +1660,23 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_33.tsx" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "This is a typescript component with imported prop types",
     "displayName": "ImportedExtendedComponent",
-    "methods": Array [],
-    "props": Object {
-      "bar": Object {
+    "methods": [],
+    "props": {
+      "bar": {
         "description": "",
         "required": true,
-        "tsType": Object {
+        "tsType": {
           "name": "number",
         },
       },
-      "foo": Object {
+      "foo": {
         "description": "",
         "required": true,
-        "tsType": Object {
+        "tsType": {
           "name": "string",
         },
       },
@@ -1686,37 +1686,37 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_34.js" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "",
     "displayName": "CustomButton",
-    "methods": Array [],
-    "props": Object {
-      "children": Object {
+    "methods": [],
+    "props": {
+      "children": {
         "description": "",
         "required": true,
-        "type": Object {
+        "type": {
           "name": "string",
         },
       },
-      "color": Object {
+      "color": {
         "description": "",
         "required": false,
-        "type": Object {
+        "type": {
           "name": "string",
         },
       },
-      "onClick": Object {
+      "onClick": {
         "description": "",
         "required": false,
-        "type": Object {
+        "type": {
           "name": "func",
         },
       },
-      "style": Object {
+      "style": {
         "description": "",
         "required": false,
-        "type": Object {
+        "type": {
           "name": "object",
         },
       },
@@ -1726,30 +1726,30 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_35.js" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "",
     "displayName": "SuperCustomButton",
-    "methods": Array [],
-    "props": Object {
-      "children": Object {
+    "methods": [],
+    "props": {
+      "children": {
         "description": "",
         "required": true,
-        "type": Object {
+        "type": {
           "name": "string",
         },
       },
-      "onClick": Object {
+      "onClick": {
         "description": "",
         "required": false,
-        "type": Object {
+        "type": {
           "name": "func",
         },
       },
-      "style": Object {
+      "style": {
         "description": "",
         "required": false,
-        "type": Object {
+        "type": {
           "name": "object",
         },
       },
@@ -1759,30 +1759,30 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_36.js" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "",
     "displayName": "SuperDuperCustomButton",
-    "methods": Array [],
-    "props": Object {
-      "children": Object {
+    "methods": [],
+    "props": {
+      "children": {
         "description": "",
         "required": true,
-        "type": Object {
+        "type": {
           "name": "string",
         },
       },
-      "onClick": Object {
+      "onClick": {
         "description": "",
         "required": false,
-        "type": Object {
+        "type": {
           "name": "func",
         },
       },
-      "style": Object {
+      "style": {
         "description": "",
         "required": false,
-        "type": Object {
+        "type": {
           "name": "object",
         },
       },
@@ -1792,30 +1792,30 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_37.js" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "",
     "displayName": "SuperDuperCustomButton",
-    "methods": Array [],
-    "props": Object {
-      "children": Object {
+    "methods": [],
+    "props": {
+      "children": {
         "description": "",
         "required": true,
-        "type": Object {
+        "type": {
           "name": "string",
         },
       },
-      "onClick": Object {
+      "onClick": {
         "description": "",
         "required": false,
-        "type": Object {
+        "type": {
           "name": "func",
         },
       },
-      "style": Object {
+      "style": {
         "description": "",
         "required": false,
-        "type": Object {
+        "type": {
           "name": "object",
         },
       },
@@ -1825,30 +1825,30 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_38.js" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "",
     "displayName": "SuperDuperCustomButton",
-    "methods": Array [],
-    "props": Object {
-      "children": Object {
+    "methods": [],
+    "props": {
+      "children": {
         "description": "",
         "required": true,
-        "type": Object {
+        "type": {
           "name": "string",
         },
       },
-      "onClick": Object {
+      "onClick": {
         "description": "",
         "required": false,
-        "type": Object {
+        "type": {
           "name": "func",
         },
       },
-      "style": Object {
+      "style": {
         "description": "",
         "required": false,
-        "type": Object {
+        "type": {
           "name": "object",
         },
       },
@@ -1858,16 +1858,16 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_39.tsx" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "This is a typescript component with imported prop types",
     "displayName": "ImportedComponent",
-    "methods": Array [],
-    "props": Object {
-      "foo": Object {
+    "methods": [],
+    "props": {
+      "foo": {
         "description": "",
         "required": true,
-        "tsType": Object {
+        "tsType": {
           "name": "string",
         },
       },
@@ -1877,20 +1877,20 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_40.js" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "",
     "displayName": "SuperDuperCustomButton",
-    "methods": Array [],
-    "props": Object {
-      "size": Object {
-        "defaultValue": Object {
+    "methods": [],
+    "props": {
+      "size": {
+        "defaultValue": {
           "computed": true,
           "value": "Sizes.EXTRA_LARGE",
         },
         "description": "",
         "required": false,
-        "type": Object {
+        "type": {
           "computed": true,
           "name": "enum",
           "value": "Object.values(Sizes)",
@@ -1902,16 +1902,16 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_41.tsx" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "",
     "displayName": "MyComponent",
-    "methods": Array [],
-    "props": Object {
-      "value": Object {
+    "methods": [],
+    "props": {
+      "value": {
         "description": "String value of a number",
         "required": false,
-        "tsType": Object {
+        "tsType": {
           "name": "STRING_VALS[number]",
           "raw": "typeof STRING_VALS[number]",
         },
@@ -1922,13 +1922,13 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_42.js" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "",
-    "methods": Array [],
-    "props": Object {
-      "foo": Object {
-        "defaultValue": Object {
+    "methods": [],
+    "props": {
+      "foo": {
+        "defaultValue": {
           "computed": false,
           "value": "'bar'",
         },
@@ -1940,35 +1940,35 @@ Array [
 `;
 
 exports[`integration fixtures processes component "component_43.tsx" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "",
     "displayName": "MenuItem",
-    "methods": Array [],
-    "props": Object {
-      "children": Object {
+    "methods": [],
+    "props": {
+      "children": {
         "description": "Menu item contents.",
         "required": false,
-        "type": Object {
+        "type": {
           "name": "node",
         },
       },
-      "classes": Object {
+      "classes": {
         "description": "Override or extend the styles applied to the component. See CSS API below for more details.",
         "required": false,
-        "type": Object {
+        "type": {
           "name": "object",
         },
       },
-      "component": Object {
-        "defaultValue": Object {
+      "component": {
+        "defaultValue": {
           "computed": false,
           "value": "'li'",
         },
         "required": false,
       },
-      "disableGutters": Object {
-        "defaultValue": Object {
+      "disableGutters": {
+        "defaultValue": {
           "computed": false,
           "value": "false",
         },
@@ -1980,54 +1980,54 @@ Array [
 `;
 
 exports[`integration fixtures processes component "flow-export-type.js" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "This is a Flow class component",
     "displayName": "FlowComponent",
-    "methods": Array [
-      Object {
+    "methods": [
+      {
         "docblock": null,
-        "modifiers": Array [],
+        "modifiers": [],
         "name": "foo",
-        "params": Array [
-          Object {
+        "params": [
+          {
             "name": "a",
             "optional": false,
-            "type": Object {
+            "type": {
               "name": "string",
             },
           },
         ],
-        "returns": Object {
-          "type": Object {
+        "returns": {
+          "type": {
             "name": "string",
           },
         },
       },
-      Object {
+      {
         "docblock": null,
-        "modifiers": Array [],
+        "modifiers": [],
         "name": "bar",
-        "params": Array [
-          Object {
+        "params": [
+          {
             "name": "a",
             "optional": false,
-            "type": Object {
+            "type": {
               "name": "string",
             },
           },
         ],
-        "returns": Object {
-          "type": Object {
+        "returns": {
+          "type": {
             "name": "string",
           },
         },
       },
     ],
-    "props": Object {
-      "foo": Object {
+    "props": {
+      "foo": {
         "description": "",
-        "flowType": Object {
+        "flowType": {
           "name": "string",
         },
         "required": true,
@@ -2038,15 +2038,15 @@ Array [
 `;
 
 exports[`integration fixtures processes component "flow-import-type.js" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "This is a Flow component with imported prop types",
     "displayName": "ImportedComponent",
-    "methods": Array [],
-    "props": Object {
-      "foo": Object {
+    "methods": [],
+    "props": {
+      "foo": {
         "description": "",
-        "flowType": Object {
+        "flowType": {
           "name": "string",
         },
         "required": true,
@@ -2057,22 +2057,22 @@ Array [
 `;
 
 exports[`integration fixtures processes component "flow-spread-import-type.js" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "This is a Flow component with imported prop types",
     "displayName": "ImportedExtendedComponent",
-    "methods": Array [],
-    "props": Object {
-      "bar": Object {
+    "methods": [],
+    "props": {
+      "bar": {
         "description": "",
-        "flowType": Object {
+        "flowType": {
           "name": "number",
         },
         "required": true,
       },
-      "foo": Object {
+      "foo": {
         "description": "",
-        "flowType": Object {
+        "flowType": {
           "name": "string",
         },
         "required": true,
@@ -2083,21 +2083,21 @@ Array [
 `;
 
 exports[`integration fixtures processes component "test-all-imports.tsx" without errors 1`] = `
-Array [
-  Object {
+[
+  {
     "description": "This is a TS component with imported stuff",
     "displayName": "ImportedExtendedComponent",
-    "methods": Array [],
-    "props": Object {
-      "x": Object {
-        "defaultValue": Object {
+    "methods": [],
+    "props": {
+      "x": {
+        "defaultValue": {
           "computed": false,
-          "value": "\\"string\\"",
+          "value": ""string"",
         },
         "required": false,
       },
-      "y": Object {
-        "defaultValue": Object {
+      "y": {
+        "defaultValue": {
           "computed": false,
           "value": "'otherstring'",
         },

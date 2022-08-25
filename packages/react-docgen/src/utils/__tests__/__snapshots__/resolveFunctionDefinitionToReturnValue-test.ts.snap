@@ -2,8 +2,8 @@
 
 exports[`resolveFunctionDefinitionToReturnValue can resolve easy return statement 1`] = `
 Node {
-  "extra": Object {
-    "raw": "\\"result\\"",
+  "extra": {
+    "raw": ""result"",
     "rawValue": "result",
   },
   "type": "StringLiteral",
@@ -13,8 +13,8 @@ Node {
 
 exports[`resolveFunctionDefinitionToReturnValue stops after first return 1`] = `
 Node {
-  "extra": Object {
-    "raw": "\\"first\\"",
+  "extra": {
+    "raw": ""first"",
     "rawValue": "first",
   },
   "type": "StringLiteral",

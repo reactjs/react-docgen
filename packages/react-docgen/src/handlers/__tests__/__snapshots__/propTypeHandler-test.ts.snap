@@ -1,189 +1,189 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`propTypeHandler React.createClass can resolve individual imported variables assigned to props 1`] = `
-Object {
-  "@computed#bar": Object {
+{
+  "@computed#bar": {
     "required": false,
-    "type": Object {},
+    "type": {},
   },
-  "baz": Object {
+  "baz": {
     "required": false,
-    "type": Object {},
+    "type": {},
   },
-  "complex_prop": Object {
+  "complex_prop": {
     "required": true,
-    "type": Object {},
+    "type": {},
   },
-  "foo": Object {
+  "foo": {
     "required": false,
-    "type": Object {},
+    "type": {},
   },
-  "simple_prop": Object {
+  "simple_prop": {
     "required": true,
-    "type": Object {},
+    "type": {},
   },
 }
 `;
 
 exports[`propTypeHandler React.createClass handles computed properties 1`] = `
-Object {
-  "@computed#foo": Object {
+{
+  "@computed#foo": {
     "required": true,
-    "type": Object {},
+    "type": {},
   },
-  "complex_prop": Object {
+  "complex_prop": {
     "required": true,
-    "type": Object {},
+    "type": {},
   },
 }
 `;
 
 exports[`propTypeHandler React.createClass ignores complex computed properties 1`] = `
-Object {
-  "complex_prop": Object {
+{
+  "complex_prop": {
     "required": true,
-    "type": Object {},
+    "type": {},
   },
 }
 `;
 
 exports[`propTypeHandler class definition class property can resolve individual imported variables assigned to props 1`] = `
-Object {
-  "@computed#bar": Object {
+{
+  "@computed#bar": {
     "required": false,
-    "type": Object {},
+    "type": {},
   },
-  "baz": Object {
+  "baz": {
     "required": false,
-    "type": Object {},
+    "type": {},
   },
-  "complex_prop": Object {
+  "complex_prop": {
     "required": true,
-    "type": Object {},
+    "type": {},
   },
-  "foo": Object {
+  "foo": {
     "required": false,
-    "type": Object {},
+    "type": {},
   },
-  "simple_prop": Object {
+  "simple_prop": {
     "required": true,
-    "type": Object {},
+    "type": {},
   },
 }
 `;
 
 exports[`propTypeHandler class definition class property handles computed properties 1`] = `
-Object {
-  "@computed#foo": Object {
+{
+  "@computed#foo": {
     "required": true,
-    "type": Object {},
+    "type": {},
   },
-  "complex_prop": Object {
+  "complex_prop": {
     "required": true,
-    "type": Object {},
+    "type": {},
   },
 }
 `;
 
 exports[`propTypeHandler class definition class property ignores complex computed properties 1`] = `
-Object {
-  "complex_prop": Object {
+{
+  "complex_prop": {
     "required": true,
-    "type": Object {},
+    "type": {},
   },
 }
 `;
 
 exports[`propTypeHandler class definition static getter can resolve individual imported variables assigned to props 1`] = `
-Object {
-  "@computed#bar": Object {
+{
+  "@computed#bar": {
     "required": false,
-    "type": Object {},
+    "type": {},
   },
-  "baz": Object {
+  "baz": {
     "required": false,
-    "type": Object {},
+    "type": {},
   },
-  "complex_prop": Object {
+  "complex_prop": {
     "required": true,
-    "type": Object {},
+    "type": {},
   },
-  "foo": Object {
+  "foo": {
     "required": false,
-    "type": Object {},
+    "type": {},
   },
-  "simple_prop": Object {
+  "simple_prop": {
     "required": true,
-    "type": Object {},
+    "type": {},
   },
 }
 `;
 
 exports[`propTypeHandler class definition static getter handles computed properties 1`] = `
-Object {
-  "@computed#foo": Object {
+{
+  "@computed#foo": {
     "required": true,
-    "type": Object {},
+    "type": {},
   },
-  "complex_prop": Object {
+  "complex_prop": {
     "required": true,
-    "type": Object {},
+    "type": {},
   },
 }
 `;
 
 exports[`propTypeHandler class definition static getter ignores complex computed properties 1`] = `
-Object {
-  "complex_prop": Object {
+{
+  "complex_prop": {
     "required": true,
-    "type": Object {},
+    "type": {},
   },
 }
 `;
 
 exports[`propTypeHandler stateless component can resolve individual imported variables assigned to props 1`] = `
-Object {
-  "@computed#bar": Object {
+{
+  "@computed#bar": {
     "required": false,
-    "type": Object {},
+    "type": {},
   },
-  "baz": Object {
+  "baz": {
     "required": false,
-    "type": Object {},
+    "type": {},
   },
-  "complex_prop": Object {
+  "complex_prop": {
     "required": true,
-    "type": Object {},
+    "type": {},
   },
-  "foo": Object {
+  "foo": {
     "required": false,
-    "type": Object {},
+    "type": {},
   },
-  "simple_prop": Object {
+  "simple_prop": {
     "required": true,
-    "type": Object {},
+    "type": {},
   },
 }
 `;
 
 exports[`propTypeHandler stateless component handles computed properties 1`] = `
-Object {
-  "@computed#foo": Object {
+{
+  "@computed#foo": {
     "required": true,
-    "type": Object {},
+    "type": {},
   },
-  "complex_prop": Object {
+  "complex_prop": {
     "required": true,
-    "type": Object {},
+    "type": {},
   },
 }
 `;
 
 exports[`propTypeHandler stateless component ignores complex computed properties 1`] = `
-Object {
-  "complex_prop": Object {
+{
+  "complex_prop": {
     "required": true,
-    "type": Object {},
+    "type": {},
   },
 }
 `;
