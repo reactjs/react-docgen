@@ -117,6 +117,7 @@ export interface ObjectSignatureType<T = FunctionSignatureType>
     properties: Array<{
       key: TypeDescriptor<T> | string;
       value: TypeDescriptor<T>;
+      description?: string;
     }>;
     constructor?: TypeDescriptor<T>;
   };

@@ -36,6 +36,7 @@ import type {
   RestElement,
   TypeScript,
 } from '@babel/types';
+import { getDocblock } from './docblock';
 
 const tsTypes = {
   TSAnyKeyword: 'any',
@@ -188,9 +189,17 @@ function handleTSTypeLiteral(
       if (!propName) {
         return;
       }
+      const docblock = getDocblock(param);
+      let doc = {};
+
+      if (docblock) {
+        doc = { description: docblock };
+      }
+
       type.signature.properties.push({
         key: propName,
         value: getTSTypeWithRequirements(typeAnnotation, typeParams),
+        ...doc,
       });
     } else if (param.isTSCallSignatureDeclaration()) {
       type.signature.constructor = handleTSFunctionType(param, typeParams);
