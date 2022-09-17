@@ -2145,3 +2145,22 @@ exports[`integration fixtures processes component "test-all-imports.tsx" without
   },
 ]
 `;
+
+exports[`integration fixtures processes component "ts-extends-hoc.tsx" without errors 1`] = `
+[
+  {
+    "description": "",
+    "displayName": "MyComponent",
+    "methods": [],
+    "props": {
+      "value": {
+        "description": "description of value",
+        "required": true,
+        "tsType": {
+          "name": "string",
+        },
+      },
+    },
+  },
+]
+`;

@@ -19,6 +19,8 @@ import type {
   TSTypeParameterInstantiation,
   TypeParameterDeclaration,
   TypeParameterInstantiation,
+  ClassDeclaration,
+  ClassExpression,
 } from '@babel/types';
 import getTypeIdentifier from './getTypeIdentifier';
 
@@ -34,6 +36,40 @@ function getStatelessPropsPath(componentDefinition: NodePath): NodePath {
   }
 
   return value.get('params')[0];
+}
+
+function isInheritedFromHoc(
+  path: NodePath<ClassDeclaration | ClassExpression>,
+): boolean {
+  const superClass = path.get('superClass');
+
+  if (superClass.isCallExpression()) {
+    return true;
+  } else return false;
+}
+
+function propTypeFromInheritedHoc(
+  path: NodePath<ClassDeclaration | ClassExpression>,
+): NodePath | null {
+  const parent = path.get('superClass.arguments')[0];
+
+  if (parent.hasNode()) {
+    const typeParams = parent.get('typeParameters');
+
+    if (typeParams.hasNode()) {
+      const typeParam = typeParams.get('params.0');
+
+      if (
+        !Array.isArray(typeParam) &&
+        typeParam.hasNode() &&
+        typeParam.isTSTypeReference()
+      ) {
+        return typeParam;
+      }
+    }
+  }
+
+  return null;
 }
 
 /**
@@ -52,6 +88,12 @@ export default (path: NodePath): NodePath | null => {
 
       typePath = params[params.length === 3 ? 1 : 0];
     } else {
+      if (isInheritedFromHoc(path)) {
+        typePath = propTypeFromInheritedHoc(path);
+        if (typePath) {
+          return typePath;
+        }
+      }
       const propsMemberPath = getMemberValuePath(path, 'props');
 
       if (!propsMemberPath) {
