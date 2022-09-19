@@ -8355,7 +8355,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"selfsigned@npm:^2.0.1":
+"selfsigned@npm:^2.1.1":
   version: 2.1.1
   resolution: "selfsigned@npm:2.1.1"
   dependencies:
@@ -9359,9 +9359,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-dev-server@npm:4.11.0":
-  version: 4.11.0
-  resolution: "webpack-dev-server@npm:4.11.0"
+"webpack-dev-server@npm:4.11.1":
+  version: 4.11.1
+  resolution: "webpack-dev-server@npm:4.11.1"
   dependencies:
     "@types/bonjour": ^3.5.9
     "@types/connect-history-api-fallback": ^1.3.5
@@ -9386,7 +9386,7 @@ __metadata:
     p-retry: ^4.5.0
     rimraf: ^3.0.2
     schema-utils: ^4.0.0
-    selfsigned: ^2.0.1
+    selfsigned: ^2.1.1
     serve-index: ^1.9.1
     sockjs: ^0.3.24
     spdy: ^4.0.2
@@ -9399,7 +9399,7 @@ __metadata:
       optional: true
   bin:
     webpack-dev-server: bin/webpack-dev-server.js
-  checksum: b2c7e9810138d0c6fa670a890410a74b29d4dd23d428e92e61e0233c542689f57caf9b31c031fbcc772170b6710b0752e81fa9cbc41ac0deefdc32d5749ce08d
+  checksum: b7601a39ee0f413988259e29a36835b0a68522cfaa161de5b7ec99b3399acdd99d44189add4aaf4a5191258bb130f9cf3e68919324a1955c7557f5fe6ab0d96c
   languageName: node
   linkType: hard
 
@@ -9494,7 +9494,7 @@ __metadata:
     terser-webpack-plugin: 5.3.6
     webpack: 5.74.0
     webpack-cli: 4.10.0
-    webpack-dev-server: 4.11.0
+    webpack-dev-server: 4.11.1
   languageName: unknown
   linkType: soft
 
