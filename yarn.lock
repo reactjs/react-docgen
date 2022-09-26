@@ -31,7 +31,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:7.19.1, @babel/core@npm:^7.0.0, @babel/core@npm:^7.11.6, @babel/core@npm:^7.12.3, @babel/core@npm:^7.18.9, @babel/core@npm:^7.7.5":
+"@babel/core@npm:7.19.1, @babel/core@npm:^7.11.6, @babel/core@npm:^7.12.3, @babel/core@npm:^7.18.9, @babel/core@npm:^7.7.5":
   version: 7.19.1
   resolution: "@babel/core@npm:7.19.1"
   dependencies:
@@ -1354,7 +1354,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.7.6, @babel/runtime@npm:^7.8.4":
+"@babel/runtime@npm:^7.7.6, @babel/runtime@npm:^7.8.4":
   version: 7.19.0
   resolution: "@babel/runtime@npm:7.19.0"
   dependencies:
@@ -2827,28 +2827,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ast-types@npm:0.12.4":
-  version: 0.12.4
-  resolution: "ast-types@npm:0.12.4"
-  checksum: 600963596f380e75ad01273713ccee6a16ca6e85ad42d9f4eca2747ce88f8f3ac9375a7832d868649ad4fa0e6669a41a6278d57cee1088107a031c92ee932f38
-  languageName: node
-  linkType: hard
-
 "ast-types@npm:^0.14.2":
   version: 0.14.2
   resolution: "ast-types@npm:0.14.2"
   dependencies:
     tslib: ^2.0.1
   checksum: 8674a77307764979f0a0b2006b7223a4b789abffaa7acbf6a1132650a799252155170173a1ff6a7fb6897f59437fc955f2707bdfc391b0797750898876e6c9ed
-  languageName: node
-  linkType: hard
-
-"async@npm:^2.1.4":
-  version: 2.6.4
-  resolution: "async@npm:2.6.4"
-  dependencies:
-    lodash: ^4.17.14
-  checksum: a52083fb32e1ebe1d63e5c5624038bb30be68ff07a6c8d7dfe35e47c93fc144bd8652cbec869e0ac07d57dde387aa5f1386be3559cdee799cb1f789678d88e19
   languageName: node
   linkType: hard
 
@@ -3033,7 +3017,7 @@ __metadata:
     benchmark: 2.1.4
     cli-table: 0.3.11
     microtime: 3.1.1
-    react-docgen4: "npm:react-docgen@4.1.1"
+    react-docgen4: "npm:react-docgen@5.4.3"
     react-docgen5: "npm:react-docgen@5.4.3"
     react-docgen6pre: "npm:react-docgen@6.0.0-alpha.3"
   languageName: unknown
@@ -4376,7 +4360,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esprima@npm:^4.0.0, esprima@npm:~4.0.0":
+"esprima@npm:^4.0.0":
   version: 4.0.1
   resolution: "esprima@npm:4.0.1"
   bin:
@@ -6465,7 +6449,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.17.14, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.17.4, lodash@npm:^4.17.5":
+"lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.17.4, lodash@npm:^4.17.5":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: eb835a2e51d381e561e508ce932ea50a8e5a68f4ebdd771ea240d3048244a8d13658acbd502cd4829768c56f2e16bdd4340b9ea141297d472517b83868e677f7
@@ -7761,13 +7745,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"private@npm:^0.1.8":
-  version: 0.1.8
-  resolution: "private@npm:0.1.8"
-  checksum: a00abd713d25389f6de7294f0e7879b8a5d09a9ec5fd81cc2f21b29d4f9a80ec53bc4222927d3a281d4aadd4cd373d9a28726fca3935921950dc75fd71d1fdbb
-  languageName: node
-  linkType: hard
-
 "process-nextick-args@npm:~2.0.0":
   version: 2.0.1
   resolution: "process-nextick-args@npm:2.0.1"
@@ -7877,24 +7854,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-docgen4@npm:react-docgen@4.1.1":
-  version: 4.1.1
-  resolution: "react-docgen@npm:4.1.1"
-  dependencies:
-    "@babel/core": ^7.0.0
-    "@babel/runtime": ^7.0.0
-    async: ^2.1.4
-    commander: ^2.19.0
-    doctrine: ^3.0.0
-    node-dir: ^0.1.10
-    recast: ^0.17.3
-  bin:
-    react-docgen: bin/react-docgen.js
-  checksum: d2189b0aa8385555e3bad71e39b11e68cbe3f274f68400fb15a19e5c9a106acda320967bc60dec2ba465b1bcca2aebed14cade8eaaec020e270149c772ac3d4b
-  languageName: node
-  linkType: hard
-
-"react-docgen5@npm:react-docgen@5.4.3":
+"react-docgen4@npm:react-docgen@5.4.3, react-docgen5@npm:react-docgen@5.4.3":
   version: 5.4.3
   resolution: "react-docgen@npm:5.4.3"
   dependencies:
@@ -7990,18 +7950,6 @@ __metadata:
   dependencies:
     picomatch: ^2.2.1
   checksum: 1ced032e6e45670b6d7352d71d21ce7edf7b9b928494dcaba6f11fba63180d9da6cd7061ebc34175ffda6ff529f481818c962952004d273178acd70f7059b320
-  languageName: node
-  linkType: hard
-
-"recast@npm:^0.17.3":
-  version: 0.17.6
-  resolution: "recast@npm:0.17.6"
-  dependencies:
-    ast-types: 0.12.4
-    esprima: ~4.0.0
-    private: ^0.1.8
-    source-map: ~0.6.1
-  checksum: 3a565f0825de91cb65d4eea21fa0c74c512f5d88672940920b6d34495066b4df131bb63f602c884017b0ffecd1eba8be1add299ccdf1a0213b66877fafc5cd38
   languageName: node
   linkType: hard
 
