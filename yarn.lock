@@ -1853,7 +1853,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@react-docgen/cli@workspace:packages/react-docgen-cli"
   dependencies:
-    commander: 9.4.0
+    commander: 9.4.1
     react-docgen: 6.0.0-alpha.3
   bin:
     react-docgen: bin/react-docgen.js
@@ -3505,10 +3505,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:9.4.0, commander@npm:^9.4.0":
-  version: 9.4.0
-  resolution: "commander@npm:9.4.0"
-  checksum: a322de584a6ccd1ea83c24f6a660e52d16ffbe2613fcfbb8d2cc68bc9dec637492456d754fe8bb5b039ad843ed8e04fb0b107e581a75f62cde9e1a0ab1546e09
+"commander@npm:9.4.1, commander@npm:^9.4.0":
+  version: 9.4.1
+  resolution: "commander@npm:9.4.1"
+  checksum: bfb18e325a5bdf772763c2213d5c7d9e77144d944124e988bcd8e5e65fb6d45d5d4e86b09155d0f2556c9a59c31e428720e57968bcd050b2306e910a0bf3cf13
   languageName: node
   linkType: hard
 

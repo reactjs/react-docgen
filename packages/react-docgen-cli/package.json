@@ -26,7 +26,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "commander": "9.4.0",
+    "commander": "9.4.1",
     "react-docgen": "6.0.0-alpha.3"
   }
 }
