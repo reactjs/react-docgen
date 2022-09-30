@@ -2168,10 +2168,10 @@ flatted@^3.1.0:
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-3.2.7.tgz#609f39207cb614b89d0765b477cb2d437fbf9787"
   integrity sha512-5nqDSxl8nn5BSNxyR3n4I6eDmbolI6WT+QqR547RwxQapgjQBmtktdP+HTBb/a/zLsbzERTONyUB5pefh5TtjQ==
 
-flow-bin@0.188.0:
-  version "0.188.0"
-  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.188.0.tgz#5d6e2c918fdf1d1d1d083f739ad8812ecd6f0b46"
-  integrity sha512-VGCvufWjCQgbM+S2inUeq4mpU/cSAVKUrJFn0iQ+68dHnQdXUdDKd0Mtt18mToPgu3Dsxgi20529V5vlyzYKEQ==
+flow-bin@0.188.1:
+  version "0.188.1"
+  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.188.1.tgz#1043ec955eec8cd402ec9fb4c49054bf14368c06"
+  integrity sha512-tQehbFoeXKz/MZqEClBB2ezuT1HHKoBlv6t8mAoUdFk1PaFhqcEmjx+1Bn0xygykrqHy0FY6C3z+AGleOnFbdQ==
 
 foreground-child@^2.0.0:
   version "2.0.0"
