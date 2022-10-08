@@ -6,6 +6,19 @@ type Props = {
   center?: boolean,
   right?: boolean,
   justify?: boolean,
+  /**
+   * position doc
+   */
+  position: {
+    /**
+     * x coordinate doc
+     */
+    x: number,
+    /**
+     * y coordinate doc
+     */
+    y: number
+  }
 };
 
 /**

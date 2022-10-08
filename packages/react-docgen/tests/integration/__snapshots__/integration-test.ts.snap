@@ -1228,6 +1228,44 @@ exports[`integration fixtures processes component "component_22.tsx" without err
           "name": "boolean",
         },
       },
+      "position": {
+        "description": "position doc",
+        "required": true,
+        "tsType": {
+          "name": "signature",
+          "raw": "{
+  /**
+   * x coordinate doc
+   */
+  x: number,
+  /**
+   * y coordinate doc
+   */
+  y: number
+}",
+          "signature": {
+            "properties": [
+              {
+                "description": "x coordinate doc",
+                "key": "x",
+                "value": {
+                  "name": "number",
+                  "required": true,
+                },
+              },
+              {
+                "description": "y coordinate doc",
+                "key": "y",
+                "value": {
+                  "name": "number",
+                  "required": true,
+                },
+              },
+            ],
+          },
+          "type": "object",
+        },
+      },
       "right": {
         "description": "",
         "required": false,
