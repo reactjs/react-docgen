@@ -4,11 +4,15 @@ import Documentation from '../../Documentation';
 import type DocumentationMock from '../../__mocks__/Documentation';
 import type {
   ArrowFunctionExpression,
+  AssignmentExpression,
   ClassDeclaration,
   ExportDefaultDeclaration,
   FunctionDeclaration,
+  FunctionExpression,
+  VariableDeclaration,
 } from '@babel/types';
 import type { NodePath } from '@babel/traverse';
+import type { ComponentNode } from '../../resolver';
 
 jest.mock('../../Documentation');
 
@@ -80,6 +84,108 @@ describe('componentMethodsHandler', () => {
       },
     ]);
   }
+
+  describe('useImperativeHandle', () => {
+    // Other cases BlockScopeBody with return, both assigned and useImperativeHandles
+
+    const methodDefinitions = {
+      'direct ObjectExpression': '({ method: () => {} })',
+      'regular ReturnStatement': '{x; return { method: () => {} };}',
+      'assigned ReturnStatement': '{const r = { method: () => {} }; return r;}',
+    };
+
+    Object.entries(methodDefinitions).forEach(([name, code]) => {
+      describe(name, () => {
+        it('FunctionExpression Component', () => {
+          const definition = parse.expressionLast<FunctionExpression>(
+            `import { useImperativeHandle } from 'react';
+         (function () {
+           useImperativeHandle(ref, () => ${code});
+           return <div />;
+         });`,
+          );
+
+          componentMethodsHandler(documentation, definition);
+
+          expect(documentation.methods).toHaveLength(1);
+          expect(documentation.methods).toMatchSnapshot();
+        });
+
+        it('FunctionDeclaration Component', () => {
+          const definition = parse.statementLast<FunctionDeclaration>(
+            `import { useImperativeHandle } from 'react';
+         function Component() {
+           useImperativeHandle(ref, () => ${code});
+           return <div />;
+         }`,
+          );
+
+          componentMethodsHandler(documentation, definition);
+
+          expect(documentation.methods).toHaveLength(1);
+          expect(documentation.methods).toMatchSnapshot();
+        });
+
+        it('ArrowFunctionExpression Component', () => {
+          const definition = parse.expressionLast<FunctionExpression>(
+            `import { useImperativeHandle } from 'react';
+         (() => {
+           useImperativeHandle(ref, () => ${code});
+           return <div />;
+         });`,
+          );
+
+          componentMethodsHandler(documentation, definition);
+
+          expect(documentation.methods).toHaveLength(1);
+          expect(documentation.methods).toMatchSnapshot();
+        });
+      });
+    });
+
+    it('AssignmentExpression and useImperativeHandle', () => {
+      const definition = parse
+        .statement<AssignmentExpression>(
+          `import { useImperativeHandle } from 'react';
+            let Component;
+            Component = function () {
+              test();
+              useImperativeHandle(ref, () => ({ method: () => {} }));
+
+              return <div />;
+            };
+            Component.other = () => {};
+          `,
+          -2,
+        )
+        .get('expression.right') as NodePath<ComponentNode>;
+
+      componentMethodsHandler(documentation, definition);
+
+      expect(documentation.methods).toMatchSnapshot();
+    });
+
+    it('VariableDeclaration and useImperativeHandle', () => {
+      const definition = parse
+        .statement<VariableDeclaration>(
+          `import { useImperativeHandle } from 'react';
+            let Component = function () {
+              test();
+              useImperativeHandle(ref, () => ({ method: () => {} }));
+
+              return <div />;
+            };
+            Component.other = () => {};
+          `,
+          -2,
+        )
+        .get('declarations.0.init') as NodePath<ComponentNode>;
+
+      componentMethodsHandler(documentation, definition);
+
+      expect(documentation.methods).toMatchSnapshot();
+    });
+  });
 
   it('extracts the documentation for an ObjectExpression', () => {
     const src = `
