@@ -15,7 +15,10 @@ export default function isReactChildrenElementCall(path: NodePath): boolean {
     path = path.get('expression');
   }
 
-  if (!match(path.node, { callee: { property: { name: 'only' } } })) {
+  if (
+    !match(path.node, { callee: { property: { name: 'only' } } }) &&
+    !match(path.node, { callee: { property: { name: 'map' } } })
+  ) {
     return false;
   }
 
