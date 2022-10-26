@@ -8,9 +8,20 @@ import { shallowIgnoreVisitors } from '../utils/traverse';
 import resolveToValue from '../utils/resolveToValue';
 import type { NodePath, Scope } from '@babel/traverse';
 import { visitors } from '@babel/traverse';
-import type { AssignmentExpression, Identifier } from '@babel/types';
+import type {
+  AssignmentExpression,
+  BlockStatement,
+  Identifier,
+  ObjectExpression,
+} from '@babel/types';
 import type { ComponentNode } from '../resolver';
 import type { Handler } from '.';
+import {
+  isReactBuiltinCall,
+  isReactForwardRefCall,
+  isStatelessComponent,
+} from '../utils';
+import findFunctionReturn from '../utils/findFunctionReturn';
 
 /**
  * The following values/constructs are considered methods:
@@ -20,7 +31,7 @@ import type { Handler } from '.';
  * - Public class fields in classes whose value are a functions
  * - Object properties whose values are functions
  */
-function isMethod(path: NodePath): boolean {
+function isMethod(path: NodePath): path is MethodNodePath {
   let isProbablyMethod =
     (path.isClassMethod() && path.node.kind !== 'constructor') ||
     path.isObjectMethod();
@@ -53,10 +64,10 @@ const explodedVisitors = visitors.explode<TraverseState>({
       const binding = assignmentPath.scope.getBinding(name);
 
       if (
+        binding &&
         left.isMemberExpression() &&
         left.get('object').isIdentifier() &&
         (left.node.object as Identifier).name === name &&
-        binding &&
         binding.scope === scope &&
         resolveToValue(assignmentPath.get('right')).isFunction()
       ) {
@@ -67,10 +78,98 @@ const explodedVisitors = visitors.explode<TraverseState>({
   },
 });
 
+interface MethodDefinition {
+  path: MethodNodePath;
+  isStatic?: boolean;
+}
+
+interface TraverseImperativeHandleState {
+  results: MethodNodePath[];
+}
+
+function isObjectExpression(path: NodePath): boolean {
+  return path.isObjectExpression();
+}
+
+const explodedImperativeHandleVisitors =
+  visitors.explode<TraverseImperativeHandleState>({
+    ...shallowIgnoreVisitors,
+
+    CallExpression: {
+      enter: function (path, state) {
+        if (!isReactBuiltinCall(path, 'useImperativeHandle')) {
+          return path.skip();
+        }
+
+        // useImperativeHandle(ref, () => ({ name: () => {}, ...}))
+        const arg = path.get('arguments')[1];
+
+        if (arg && !arg.isFunction()) {
+          return path.skip();
+        }
+
+        const body = resolveToValue(arg.get('body') as NodePath);
+
+        let definition: NodePath<ObjectExpression> | undefined;
+
+        if (body.isObjectExpression()) {
+          definition = body;
+        } else {
+          definition = findFunctionReturn(arg, isObjectExpression) as
+            | NodePath<ObjectExpression>
+            | undefined;
+        }
+
+        // We found the object body, now add all of the properties as methods.
+        definition?.get('properties').forEach(p => {
+          if (isMethod(p)) {
+            state.results.push(p);
+          }
+        });
+
+        path.skip();
+      },
+    },
+  });
+
+function findStatelessComponentBody(
+  componentDefinition: NodePath,
+): NodePath<BlockStatement> | undefined {
+  if (isStatelessComponent(componentDefinition)) {
+    const body = componentDefinition.get('body');
+
+    if (body.isBlockStatement()) {
+      return body;
+    }
+  } else if (isReactForwardRefCall(componentDefinition)) {
+    const inner = resolveToValue(componentDefinition.get('arguments')[0]);
+
+    return findStatelessComponentBody(inner);
+  }
+
+  return undefined;
+}
+
+function findImperativeHandleMethods(
+  componentDefinition: NodePath<ComponentNode>,
+): MethodDefinition[] {
+  const body = findStatelessComponentBody(componentDefinition);
+
+  if (!body) {
+    return [];
+  }
+
+  const state: TraverseImperativeHandleState = { results: [] };
+
+  body.traverse(explodedImperativeHandleVisitors, state);
+
+  return state.results.map(p => ({ path: p }));
+}
+
 function findAssignedMethods(
   path: NodePath,
   idPath: NodePath<Identifier | null | undefined>,
-): Array<NodePath<AssignmentExpression>> {
+): MethodDefinition[] {
   if (!idPath.hasNode() || !idPath.isIdentifier()) {
     return [];
   }
@@ -91,7 +190,7 @@ function findAssignedMethods(
 
   path.traverse(explodedVisitors, state);
 
-  return state.methods;
+  return state.methods.map(p => ({ path: p }));
 }
 
 /**
@@ -103,20 +202,19 @@ const componentMethodsHandler: Handler = function (
   componentDefinition: NodePath<ComponentNode>,
 ): void {
   // Extract all methods from the class or object.
-  let methodPaths: Array<{ path: MethodNodePath; isStatic?: boolean }> = [];
+  let methodPaths: MethodDefinition[] = [];
+  const parent = componentDefinition.parentPath;
 
   if (isReactComponentClass(componentDefinition)) {
     methodPaths = (
       componentDefinition
         .get('body')
         .get('body')
-        .filter(body => isMethod(body)) as MethodNodePath[]
+        .filter(isMethod) as MethodNodePath[]
     ).map(p => ({ path: p }));
   } else if (componentDefinition.isObjectExpression()) {
     methodPaths = (
-      componentDefinition
-        .get('properties')
-        .filter(props => isMethod(props)) as MethodNodePath[]
+      componentDefinition.get('properties').filter(isMethod) as MethodNodePath[]
     ).map(p => ({ path: p }));
 
     // Add the statics object properties.
@@ -126,37 +224,41 @@ const componentMethodsHandler: Handler = function (
       statics.get('properties').forEach(property => {
         if (isMethod(property)) {
           methodPaths.push({
-            path: property as MethodNodePath,
+            path: property,
             isStatic: true,
           });
         }
       });
     }
   } else if (
-    componentDefinition.parentPath &&
-    componentDefinition.parentPath.isVariableDeclarator() &&
-    componentDefinition.parentPath.node.init === componentDefinition.node &&
-    componentDefinition.parentPath.get('id').isIdentifier()
+    parent.isVariableDeclarator() &&
+    parent.node.init === componentDefinition.node &&
+    parent.get('id').isIdentifier()
   ) {
     methodPaths = findAssignedMethods(
-      componentDefinition.parentPath.scope.path,
-      componentDefinition.parentPath.get('id') as NodePath<Identifier>,
-    ).map(p => ({ path: p }));
+      parent.scope.path,
+      parent.get('id') as NodePath<Identifier>,
+    );
   } else if (
-    componentDefinition.parentPath &&
-    componentDefinition.parentPath.isAssignmentExpression() &&
-    componentDefinition.parentPath.node.right === componentDefinition.node &&
-    componentDefinition.parentPath.get('left').isIdentifier()
+    parent.isAssignmentExpression() &&
+    parent.node.right === componentDefinition.node &&
+    parent.get('left').isIdentifier()
   ) {
     methodPaths = findAssignedMethods(
-      componentDefinition.parentPath.scope.path,
-      componentDefinition.parentPath.get('left') as NodePath<Identifier>,
-    ).map(p => ({ path: p }));
+      parent.scope.path,
+      parent.get('left') as NodePath<Identifier>,
+    );
   } else if (componentDefinition.isFunctionDeclaration()) {
     methodPaths = findAssignedMethods(
-      componentDefinition.parentPath.scope.path,
+      parent.scope.path,
       componentDefinition.get('id'),
-    ).map(p => ({ path: p }));
+    );
+  }
+
+  const imperativeHandles = findImperativeHandleMethods(componentDefinition);
+
+  if (imperativeHandles) {
+    methodPaths = [...methodPaths, ...imperativeHandles];
   }
 
   documentation.set(

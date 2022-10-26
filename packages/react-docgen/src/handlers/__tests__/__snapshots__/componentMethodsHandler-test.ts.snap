@@ -158,3 +158,153 @@ exports[`componentMethodsHandler should handle and ignore computed methods 1`] =
   },
 ]
 `;
+
+exports[`componentMethodsHandler useImperativeHandle AssignmentExpression and useImperativeHandle 1`] = `
+[
+  {
+    "docblock": null,
+    "modifiers": [
+      "static",
+    ],
+    "name": "other",
+    "params": [],
+    "returns": null,
+  },
+  {
+    "docblock": null,
+    "modifiers": [],
+    "name": "method",
+    "params": [],
+    "returns": null,
+  },
+]
+`;
+
+exports[`componentMethodsHandler useImperativeHandle VariableDeclaration and useImperativeHandle 1`] = `
+[
+  {
+    "docblock": null,
+    "modifiers": [
+      "static",
+    ],
+    "name": "other",
+    "params": [],
+    "returns": null,
+  },
+  {
+    "docblock": null,
+    "modifiers": [],
+    "name": "method",
+    "params": [],
+    "returns": null,
+  },
+]
+`;
+
+exports[`componentMethodsHandler useImperativeHandle assigned ReturnStatement ArrowFunctionExpression Component 1`] = `
+[
+  {
+    "docblock": null,
+    "modifiers": [],
+    "name": "method",
+    "params": [],
+    "returns": null,
+  },
+]
+`;
+
+exports[`componentMethodsHandler useImperativeHandle assigned ReturnStatement FunctionDeclaration Component 1`] = `
+[
+  {
+    "docblock": null,
+    "modifiers": [],
+    "name": "method",
+    "params": [],
+    "returns": null,
+  },
+]
+`;
+
+exports[`componentMethodsHandler useImperativeHandle assigned ReturnStatement FunctionExpression Component 1`] = `
+[
+  {
+    "docblock": null,
+    "modifiers": [],
+    "name": "method",
+    "params": [],
+    "returns": null,
+  },
+]
+`;
+
+exports[`componentMethodsHandler useImperativeHandle direct ObjectExpression ArrowFunctionExpression Component 1`] = `
+[
+  {
+    "docblock": null,
+    "modifiers": [],
+    "name": "method",
+    "params": [],
+    "returns": null,
+  },
+]
+`;
+
+exports[`componentMethodsHandler useImperativeHandle direct ObjectExpression FunctionDeclaration Component 1`] = `
+[
+  {
+    "docblock": null,
+    "modifiers": [],
+    "name": "method",
+    "params": [],
+    "returns": null,
+  },
+]
+`;
+
+exports[`componentMethodsHandler useImperativeHandle direct ObjectExpression FunctionExpression Component 1`] = `
+[
+  {
+    "docblock": null,
+    "modifiers": [],
+    "name": "method",
+    "params": [],
+    "returns": null,
+  },
+]
+`;
+
+exports[`componentMethodsHandler useImperativeHandle regular ReturnStatement ArrowFunctionExpression Component 1`] = `
+[
+  {
+    "docblock": null,
+    "modifiers": [],
+    "name": "method",
+    "params": [],
+    "returns": null,
+  },
+]
+`;
+
+exports[`componentMethodsHandler useImperativeHandle regular ReturnStatement FunctionDeclaration Component 1`] = `
+[
+  {
+    "docblock": null,
+    "modifiers": [],
+    "name": "method",
+    "params": [],
+    "returns": null,
+  },
+]
+`;
+
+exports[`componentMethodsHandler useImperativeHandle regular ReturnStatement FunctionExpression Component 1`] = `
+[
+  {
+    "docblock": null,
+    "modifiers": [],
+    "name": "method",
+    "params": [],
+    "returns": null,
+  },
+]
+`;
