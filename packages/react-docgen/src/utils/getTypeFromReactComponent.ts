@@ -24,14 +24,16 @@ import getTypeIdentifier from './getTypeIdentifier';
 
 // TODO TESTME
 
-function getStatelessPropsPath(componentDefinition: NodePath): NodePath {
-  const value = resolveToValue(componentDefinition);
+function getStatelessPropsPath(
+  componentDefinition: NodePath,
+): NodePath | undefined {
+  let value = resolveToValue(componentDefinition);
 
   if (isReactForwardRefCall(value)) {
-    const inner = resolveToValue(value.get('arguments')[0]);
-
-    return inner.get('params')[0];
+    value = resolveToValue(value.get('arguments')[0]);
   }
+
+  if (!value.isFunction()) return;
 
   return value.get('params')[0];
 }
