@@ -21,7 +21,7 @@
   ],
   "devDependencies": {
     "@types/cross-spawn": "6.0.2",
-    "@types/jest": "29.2.1",
+    "@types/jest": "29.2.2",
     "@types/rimraf": "3.0.2",
     "@typescript-eslint/eslint-plugin": "5.42.0",
     "@typescript-eslint/parser": "5.42.0",
