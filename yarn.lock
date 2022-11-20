@@ -3421,10 +3421,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"codemirror@npm:5.65.9":
-  version: 5.65.9
-  resolution: "codemirror@npm:5.65.9"
-  checksum: bbdb3991d4641d5c2a044c53907fb7b0d856f67e1190b7063e6a164e7b17f1390faf961d8264394b1ef8ca7e1f21acea2117bb4a0ed8394b3a92875f07beae3d
+"codemirror@npm:5.65.10":
+  version: 5.65.10
+  resolution: "codemirror@npm:5.65.10"
+  checksum: 393cdd67abf9535a0b01d92a25f5921c7a80f021d8bbea22459b708a61dab373c804788c6d2b4463632f026a603e5e1e746ad5e19324c998c65f7e231ad962fc
   languageName: node
   linkType: hard
 
@@ -9188,7 +9188,7 @@ __metadata:
     assert: 2.0.0
     babel-loader: 9.1.0
     buffer: 6.0.3
-    codemirror: 5.65.9
+    codemirror: 5.65.10
     css-loader: 6.7.2
     html-loader: 4.2.0
     html-webpack-plugin: 5.5.0
