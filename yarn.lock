@@ -4844,11 +4844,11 @@ __metadata:
   linkType: hard
 
 "globals@npm:^13.15.0":
-  version: 13.17.0
-  resolution: "globals@npm:13.17.0"
+  version: 13.18.0
+  resolution: "globals@npm:13.18.0"
   dependencies:
     type-fest: ^0.20.2
-  checksum: fbaf4112e59b92c9f5575e85ce65e9e17c0b82711196ec5f58beb08599bbd92fd72703d6dfc9b080381fd35b644e1b11dcf25b38cc2341ec21df942594cbc8ce
+  checksum: 9fdaa74cfd5d4ac91319662f512c29b11d1d2deb9c8a20d3998097671deba83d195f20730b2345887de3ddab958a6fa68952feed9ae836ee4594a82ace62fdb4
   languageName: node
   linkType: hard
 
@@ -5800,14 +5800,14 @@ __metadata:
   linkType: hard
 
 "jest-pnp-resolver@npm:^1.2.2":
-  version: 1.2.2
-  resolution: "jest-pnp-resolver@npm:1.2.2"
+  version: 1.2.3
+  resolution: "jest-pnp-resolver@npm:1.2.3"
   peerDependencies:
     jest-resolve: "*"
   peerDependenciesMeta:
     jest-resolve:
       optional: true
-  checksum: bd85dcc0e76e0eb0c3d56382ec140f08d25ff4068cda9d0e360bb78fb176cb726d0beab82dc0e8694cafd09f55fee7622b8bcb240afa5fad301f4ed3eebb4f47
+  checksum: db1a8ab2cb97ca19c01b1cfa9a9c8c69a143fde833c14df1fab0766f411b1148ff0df878adea09007ac6a2085ec116ba9a996a6ad104b1e58c20adbf88eed9b2
   languageName: node
   linkType: hard
 
@@ -6393,11 +6393,11 @@ __metadata:
   linkType: hard
 
 "memfs@npm:^3.4.3":
-  version: 3.4.11
-  resolution: "memfs@npm:3.4.11"
+  version: 3.4.12
+  resolution: "memfs@npm:3.4.12"
   dependencies:
     fs-monkey: ^1.0.3
-  checksum: 47a9b0ea5d96da7978ac190df1420340ff3d010e087b8e4e1a971b1913a82f892eb0603b71a1b913d833e9b919113e3a7e541fe366e759bb16ff30d5940c8bcb
+  checksum: dab8dec1ae0b2a92e4d563ac86846047cd7aeb17cde4ad51da85cff6e580c32d12b886354527788e36eb75f733dd8edbaf174476b7cea73fed9c5a0e45a6b428
   languageName: node
   linkType: hard
 
@@ -6661,15 +6661,15 @@ __metadata:
   linkType: hard
 
 "needle@npm:^3.1.0":
-  version: 3.1.0
-  resolution: "needle@npm:3.1.0"
+  version: 3.2.0
+  resolution: "needle@npm:3.2.0"
   dependencies:
     debug: ^3.2.6
     iconv-lite: ^0.6.3
     sax: ^1.2.4
   bin:
     needle: bin/needle
-  checksum: 662c8a019d0b2b30137f43e1641aa03d96f9da7ce0d3951af8d6d23c1526c123a992d82fcf9f4e68cba6a52e361a7decfb2c71a56cc0e60230248e5a3520f6ad
+  checksum: d6f3e8668bbaf943d28ced0ad843eff793b56025e80152e511fd02313b8974e4dd9674bcbe3d8f9aa31882adb190dafe29ea5fce03a92b4724adf4850070bcfc
   languageName: node
   linkType: hard
 
@@ -7026,11 +7026,11 @@ __metadata:
   linkType: hard
 
 "parse5@npm:^7.0.0":
-  version: 7.1.1
-  resolution: "parse5@npm:7.1.1"
+  version: 7.1.2
+  resolution: "parse5@npm:7.1.2"
   dependencies:
     entities: ^4.4.0
-  checksum: 8f72fbfa6df83a3f29f58e1818f7bd46b47ff3e26d79c74e10b8fc7ef7ee76163f205113f1b2f6a5b8dc4e31e726f490444f04890cead6e974dbcbe8172b1321
+  checksum: 59465dd05eb4c5ec87b76173d1c596e152a10e290b7abcda1aecf0f33be49646ea74840c69af975d7887543ea45564801736356c568d6b5e71792fd0f4055713
   languageName: node
   linkType: hard
 
@@ -7471,12 +7471,12 @@ __metadata:
   linkType: hard
 
 "postcss-selector-parser@npm:^6.0.2, postcss-selector-parser@npm:^6.0.4, postcss-selector-parser@npm:^6.0.5, postcss-selector-parser@npm:^6.0.9":
-  version: 6.0.10
-  resolution: "postcss-selector-parser@npm:6.0.10"
+  version: 6.0.11
+  resolution: "postcss-selector-parser@npm:6.0.11"
   dependencies:
     cssesc: ^3.0.0
     util-deprecate: ^1.0.2
-  checksum: 46afaa60e3d1998bd7adf6caa374baf857cc58d3ff944e29459c9a9e4680a7fe41597bd5b755fc81d7c388357e9bf67c0251d047c640a09f148e13606b8a8608
+  checksum: 0b01aa9c2d2c8dbeb51e9b204796b678284be9823abc8d6d40a8b16d4149514e922c264a8ed4deb4d6dbced564b9be390f5942c058582d8656351516d6c49cde
   languageName: node
   linkType: hard
 
@@ -7837,18 +7837,18 @@ __metadata:
   linkType: hard
 
 "regenerator-runtime@npm:^0.13.10":
-  version: 0.13.10
-  resolution: "regenerator-runtime@npm:0.13.10"
-  checksum: 09893f5a9e82932642d9a999716b6c626dc53ef2a01307c952ebbf8e011802360163a37c304c18a6c358548be5a72b448e37209954a18696f21e438c81cbb4b9
+  version: 0.13.11
+  resolution: "regenerator-runtime@npm:0.13.11"
+  checksum: 27481628d22a1c4e3ff551096a683b424242a216fee44685467307f14d58020af1e19660bf2e26064de946bad7eff28950eae9f8209d55723e2d9351e632bbb4
   languageName: node
   linkType: hard
 
 "regenerator-transform@npm:^0.15.0":
-  version: 0.15.0
-  resolution: "regenerator-transform@npm:0.15.0"
+  version: 0.15.1
+  resolution: "regenerator-transform@npm:0.15.1"
   dependencies:
     "@babel/runtime": ^7.8.4
-  checksum: 86e54849ab1167618d28bb56d214c52a983daf29b0d115c976d79840511420049b6b42c9ebdf187defa8e7129bdd74b6dd266420d0d3868c9fa7f793b5d15d49
+  checksum: 2d15bdeadbbfb1d12c93f5775493d85874dbe1d405bec323da5c61ec6e701bc9eea36167483e1a5e752de9b2df59ab9a2dfff6bf3784f2b28af2279a673d29a4
   languageName: node
   linkType: hard
 
@@ -7860,16 +7860,16 @@ __metadata:
   linkType: hard
 
 "regexpu-core@npm:^5.1.0":
-  version: 5.2.1
-  resolution: "regexpu-core@npm:5.2.1"
+  version: 5.2.2
+  resolution: "regexpu-core@npm:5.2.2"
   dependencies:
     regenerate: ^1.4.2
     regenerate-unicode-properties: ^10.1.0
     regjsgen: ^0.7.1
     regjsparser: ^0.9.1
     unicode-match-property-ecmascript: ^2.0.0
-    unicode-match-property-value-ecmascript: ^2.0.0
-  checksum: c1244db79f7a4597414cd7fdf5171fa73905f0cbc684385c78127fc6198f9cade8fe829a1c4036c8ec57ac75b1ffb8c196451abdd2e153f26a4d8043fa10bbb3
+    unicode-match-property-value-ecmascript: ^2.1.0
+  checksum: 87c56815e20d213848d38f6b047ba52f0d632f36e791b777f59327e8d350c0743b27cc25feab64c0eadc9fe9959dde6b1261af71108a9371b72c8c26beda05ef
   languageName: node
   linkType: hard
 
@@ -8861,10 +8861,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"unicode-match-property-value-ecmascript@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "unicode-match-property-value-ecmascript@npm:2.0.0"
-  checksum: 8fe6a09d9085a625cabcead5d95bdbc1a2d5d481712856092ce0347231e81a60b93a68f1b69e82b3076a07e415a72c708044efa2aa40ae23e2e7b5c99ed4a9ea
+"unicode-match-property-value-ecmascript@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "unicode-match-property-value-ecmascript@npm:2.1.0"
+  checksum: 8d6f5f586b9ce1ed0e84a37df6b42fdba1317a05b5df0c249962bd5da89528771e2d149837cad11aa26bcb84c35355cb9f58a10c3d41fa3b899181ece6c85220
   languageName: node
   linkType: hard
 
