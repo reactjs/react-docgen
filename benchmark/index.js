@@ -1,5 +1,5 @@
-const fs = require('node:fs');
-const path = require('node:path');
+const fs = require('fs');
+const path = require('path');
 const Table = require('cli-table');
 const Benchmark = require('benchmark');
 const { parse } = require('../packages/react-docgen');

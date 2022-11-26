@@ -3,8 +3,8 @@
 
 const TEST_TIMEOUT = 120000;
 
-import fs, { promises } from 'node:fs';
-import path from 'node:path';
+import fs, { promises } from 'fs';
+import path from 'path';
 import rimraf from 'rimraf';
 import { directory as tempDirectory, file as tempFile } from 'tempy';
 import spawn from 'cross-spawn';

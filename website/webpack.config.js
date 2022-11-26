@@ -1,7 +1,7 @@
 'use strict';
 
 const webpack = require('webpack');
-const path = require('node:path');
+const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserJsPlugin = require('terser-webpack-plugin');

@@ -1,7 +1,7 @@
 import type { ParserOptions, TransformOptions } from '@babel/core';
 import { loadPartialConfig, parseSync } from '@babel/core';
 import type { File } from '@babel/types';
-import { extname } from 'node:path';
+import { extname } from 'path';
 
 const TYPESCRIPT_EXTS = {
   '.cts': true,
