@@ -6,11 +6,11 @@
   },
   "scripts": {
     "build": "yarn --verbose workspaces foreach --exclude 'benchmark' --exclude 'website' run build",
+    "watch": "yarn --verbose workspaces foreach --exclude 'benchmark' --exclude 'website' -p run watch",
     "lint": "eslint . --ext .js,.ts --report-unused-disable-directives",
     "fix": "eslint . --ext .js,.ts --fix --report-unused-disable-directives",
     "test": "yarn build && vitest run",
-    "test:dev": "yarn --verbose workspaces foreach --exclude 'benchmark' --exclude 'website' run test",
-    "test:ci": "yarn build && vitest run --coverage",
+    "test:dev": "vitest",
     "website:build": "yarn workspace website run build",
     "website:start": "yarn workspace website run start"
   },

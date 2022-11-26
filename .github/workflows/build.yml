@@ -40,10 +40,16 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
+      - name: Unit tests with coverage
+        if: '${{ matrix.node == env.NODE_VERSION }}'
+        run: yarn test --coverage
+
       - name: Unit tests
-        run: yarn test:ci
+        if: '${{ matrix.node != env.NODE_VERSION }}'
+        run: yarn test
 
       - name: Upload coverage to Codecov
+        if: '${{ matrix.node == env.NODE_VERSION }}'
         uses: codecov/codecov-action@v3
 
   lint:

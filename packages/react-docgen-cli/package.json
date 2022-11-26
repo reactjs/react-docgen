@@ -14,7 +14,8 @@
     "node": ">=14.15.0"
   },
   "scripts": {
-    "build": "echo 'done'"
+    "build": "echo 'done'",
+    "watch": "echo 'done'"
   },
   "keywords": [
     "react",
