@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`integration fixtures processes component "class-without-id.tsx" without errors 1`] = `
+exports[`integration > fixtures > processes component "class-without-id.tsx" without errors 1`] = `
 [
   {
     "description": "",
@@ -18,7 +18,7 @@ exports[`integration fixtures processes component "class-without-id.tsx" without
 ]
 `;
 
-exports[`integration fixtures processes component "component_1.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_1.js" without errors 1`] = `
 [
   {
     "description": "The is a component to test the document generation",
@@ -28,7 +28,7 @@ exports[`integration fixtures processes component "component_1.js" without error
 ]
 `;
 
-exports[`integration fixtures processes component "component_2.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_2.js" without errors 1`] = `
 [
   {
     "description": "",
@@ -59,7 +59,7 @@ exports[`integration fixtures processes component "component_2.js" without error
       "type": {
         "defaultValue": {
           "computed": false,
-          "value": ""primary"",
+          "value": "\\"primary\\"",
         },
         "required": false,
       },
@@ -68,7 +68,7 @@ exports[`integration fixtures processes component "component_2.js" without error
 ]
 `;
 
-exports[`integration fixtures processes component "component_3.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_3.js" without errors 1`] = `
 [
   {
     "description": "",
@@ -87,7 +87,7 @@ exports[`integration fixtures processes component "component_3.js" without error
 ]
 `;
 
-exports[`integration fixtures processes component "component_4.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_4.js" without errors 1`] = `
 [
   {
     "description": "",
@@ -150,7 +150,7 @@ exports[`integration fixtures processes component "component_4.js" without error
 ]
 `;
 
-exports[`integration fixtures processes component "component_5.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_5.js" without errors 1`] = `
 [
   {
     "childContext": {
@@ -203,7 +203,7 @@ exports[`integration fixtures processes component "component_5.js" without error
 ]
 `;
 
-exports[`integration fixtures processes component "component_6.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_6.js" without errors 1`] = `
 [
   {
     "childContext": {
@@ -256,7 +256,7 @@ exports[`integration fixtures processes component "component_6.js" without error
 ]
 `;
 
-exports[`integration fixtures processes component "component_7.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_7.js" without errors 1`] = `
 [
   {
     "description": "The is a component to test the document generation",
@@ -266,7 +266,7 @@ exports[`integration fixtures processes component "component_7.js" without error
 ]
 `;
 
-exports[`integration fixtures processes component "component_8.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_8.js" without errors 1`] = `
 [
   {
     "description": "",
@@ -290,7 +290,7 @@ exports[`integration fixtures processes component "component_8.js" without error
 ]
 `;
 
-exports[`integration fixtures processes component "component_9.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_9.js" without errors 1`] = `
 [
   {
     "description": "Should be recognized as component.",
@@ -300,7 +300,7 @@ exports[`integration fixtures processes component "component_9.js" without error
 ]
 `;
 
-exports[`integration fixtures processes component "component_10.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_10.js" without errors 1`] = `
 [
   {
     "description": "React component that display current time at current location.",
@@ -321,7 +321,7 @@ exports[`integration fixtures processes component "component_10.js" without erro
 @returns {Object} currentTime
    @returns {int} currentTime.hour
    @returns {int} currentTime.minutes
-   @returns {string} currentTime.ampm "am" or "pm"
+   @returns {string} currentTime.ampm \\"am\\" or \\"pm\\"
    @returns {string} currentTime.dayOfWeek
    @returns {string} currentTime.month
    @returns {int} currentTime.date",
@@ -347,8 +347,8 @@ exports[`integration fixtures processes component "component_10.js" without erro
     "props": {
       "title": {
         "description": "A text display current's user identity,
- "Nobody" if no one is detected in the background,
- "Hi, ..name" if an user is detected",
+ \\"Nobody\\" if no one is detected in the background,
+ \\"Hi, ..name\\" if an user is detected",
         "required": false,
         "type": {
           "name": "string",
@@ -359,7 +359,7 @@ exports[`integration fixtures processes component "component_10.js" without erro
 ]
 `;
 
-exports[`integration fixtures processes component "component_11.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_11.js" without errors 1`] = `
 [
   {
     "composes": [
@@ -395,7 +395,7 @@ exports[`integration fixtures processes component "component_11.js" without erro
 ]
 `;
 
-exports[`integration fixtures processes component "component_12.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_12.js" without errors 1`] = `
 [
   {
     "description": "",
@@ -596,7 +596,7 @@ Set to 'auto' to automatically calculate transition time based on height.",
 ]
 `;
 
-exports[`integration fixtures processes component "component_13.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_13.js" without errors 1`] = `
 [
   {
     "description": "",
@@ -617,23 +617,23 @@ exports[`integration fixtures processes component "component_13.js" without erro
           "elements": [
             {
               "name": "literal",
-              "value": ""left"",
+              "value": "\\"left\\"",
             },
             {
               "name": "literal",
-              "value": ""center"",
+              "value": "\\"center\\"",
             },
             {
               "name": "literal",
-              "value": ""right"",
+              "value": "\\"right\\"",
             },
             {
               "name": "literal",
-              "value": ""justify"",
+              "value": "\\"justify\\"",
             },
           ],
           "name": "union",
-          "raw": ""left" | "center" | "right" | "justify"",
+          "raw": "\\"left\\" | \\"center\\" | \\"right\\" | \\"justify\\"",
         },
         "required": false,
       },
@@ -686,23 +686,23 @@ exports[`integration fixtures processes component "component_13.js" without erro
           "elements": [
             {
               "name": "literal",
-              "value": ""none"",
+              "value": "\\"none\\"",
             },
             {
               "name": "literal",
-              "value": ""tight"",
+              "value": "\\"tight\\"",
             },
             {
               "name": "literal",
-              "value": ""normal"",
+              "value": "\\"normal\\"",
             },
             {
               "name": "literal",
-              "value": ""loose"",
+              "value": "\\"loose\\"",
             },
           ],
           "name": "union",
-          "raw": ""none" | "tight" | "normal" | "loose"",
+          "raw": "\\"none\\" | \\"tight\\" | \\"normal\\" | \\"loose\\"",
         },
         "required": false,
       },
@@ -775,19 +775,19 @@ exports[`integration fixtures processes component "component_13.js" without erro
           "elements": [
             {
               "name": "literal",
-              "value": ""tight"",
+              "value": "\\"tight\\"",
             },
             {
               "name": "literal",
-              "value": ""normal"",
+              "value": "\\"normal\\"",
             },
             {
               "name": "literal",
-              "value": ""wide"",
+              "value": "\\"wide\\"",
             },
           ],
           "name": "union",
-          "raw": ""tight" | "normal" | "wide"",
+          "raw": "\\"tight\\" | \\"normal\\" | \\"wide\\"",
         },
         "required": false,
       },
@@ -818,19 +818,19 @@ exports[`integration fixtures processes component "component_13.js" without erro
           "elements": [
             {
               "name": "literal",
-              "value": ""lowercase"",
+              "value": "\\"lowercase\\"",
             },
             {
               "name": "literal",
-              "value": ""uppercase"",
+              "value": "\\"uppercase\\"",
             },
             {
               "name": "literal",
-              "value": ""capitalize"",
+              "value": "\\"capitalize\\"",
             },
           ],
           "name": "union",
-          "raw": ""lowercase" | "uppercase" | "capitalize"",
+          "raw": "\\"lowercase\\" | \\"uppercase\\" | \\"capitalize\\"",
         },
         "required": false,
       },
@@ -853,7 +853,7 @@ exports[`integration fixtures processes component "component_13.js" without erro
 ]
 `;
 
-exports[`integration fixtures processes component "component_14.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_14.js" without errors 1`] = `
 [
   {
     "description": "",
@@ -873,7 +873,7 @@ exports[`integration fixtures processes component "component_14.js" without erro
 ]
 `;
 
-exports[`integration fixtures processes component "component_15.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_15.js" without errors 1`] = `
 [
   {
     "composes": [
@@ -938,7 +938,7 @@ exports[`integration fixtures processes component "component_15.js" without erro
 ]
 `;
 
-exports[`integration fixtures processes component "component_16.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_16.js" without errors 1`] = `
 [
   {
     "description": "",
@@ -962,7 +962,7 @@ exports[`integration fixtures processes component "component_16.js" without erro
 ]
 `;
 
-exports[`integration fixtures processes component "component_17.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_17.js" without errors 1`] = `
 [
   {
     "description": "",
@@ -1026,7 +1026,7 @@ exports[`integration fixtures processes component "component_17.js" without erro
 ]
 `;
 
-exports[`integration fixtures processes component "component_18.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_18.js" without errors 1`] = `
 [
   {
     "description": "",
@@ -1060,7 +1060,7 @@ exports[`integration fixtures processes component "component_18.js" without erro
 ]
 `;
 
-exports[`integration fixtures processes component "component_19.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_19.js" without errors 1`] = `
 [
   {
     "description": "",
@@ -1085,7 +1085,7 @@ exports[`integration fixtures processes component "component_19.js" without erro
 ]
 `;
 
-exports[`integration fixtures processes component "component_20.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_20.js" without errors 1`] = `
 [
   {
     "description": "",
@@ -1095,7 +1095,7 @@ exports[`integration fixtures processes component "component_20.js" without erro
       "@computed#children": {
         "defaultValue": {
           "computed": false,
-          "value": ""default"",
+          "value": "\\"default\\"",
         },
         "description": "This is a test",
         "required": false,
@@ -1108,7 +1108,7 @@ exports[`integration fixtures processes component "component_20.js" without erro
 ]
 `;
 
-exports[`integration fixtures processes component "component_21.tsx" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_21.tsx" without errors 1`] = `
 [
   {
     "description": "This is a typescript class component",
@@ -1174,7 +1174,7 @@ exports[`integration fixtures processes component "component_21.tsx" without err
 ]
 `;
 
-exports[`integration fixtures processes component "component_22.tsx" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_22.tsx" without errors 1`] = `
 [
   {
     "description": "This is a TypeScript function component",
@@ -1188,23 +1188,23 @@ exports[`integration fixtures processes component "component_22.tsx" without err
           "elements": [
             {
               "name": "literal",
-              "value": ""left"",
+              "value": "\\"left\\"",
             },
             {
               "name": "literal",
-              "value": ""center"",
+              "value": "\\"center\\"",
             },
             {
               "name": "literal",
-              "value": ""right"",
+              "value": "\\"right\\"",
             },
             {
               "name": "literal",
-              "value": ""justify"",
+              "value": "\\"justify\\"",
             },
           ],
           "name": "union",
-          "raw": ""left" | "center" | "right" | "justify"",
+          "raw": "\\"left\\" | \\"center\\" | \\"right\\" | \\"justify\\"",
         },
       },
       "center": {
@@ -1278,7 +1278,7 @@ exports[`integration fixtures processes component "component_22.tsx" without err
 ]
 `;
 
-exports[`integration fixtures processes component "component_23.tsx" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_23.tsx" without errors 1`] = `
 [
   {
     "composes": [
@@ -1347,7 +1347,7 @@ exports[`integration fixtures processes component "component_23.tsx" without err
 ]
 `;
 
-exports[`integration fixtures processes component "component_24.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_24.js" without errors 1`] = `
 [
   {
     "composes": [
@@ -1416,7 +1416,7 @@ exports[`integration fixtures processes component "component_24.js" without erro
 ]
 `;
 
-exports[`integration fixtures processes component "component_25.tsx" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_25.tsx" without errors 1`] = `
 [
   {
     "description": "This is a typescript class component",
@@ -1455,7 +1455,7 @@ exports[`integration fixtures processes component "component_25.tsx" without err
 ]
 `;
 
-exports[`integration fixtures processes component "component_26.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_26.js" without errors 1`] = `
 [
   {
     "description": "This is a typescript class component",
@@ -1494,7 +1494,7 @@ exports[`integration fixtures processes component "component_26.js" without erro
 ]
 `;
 
-exports[`integration fixtures processes component "component_27.tsx" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_27.tsx" without errors 1`] = `
 [
   {
     "description": "This is a typescript class component",
@@ -1554,7 +1554,7 @@ exports[`integration fixtures processes component "component_27.tsx" without err
 ]
 `;
 
-exports[`integration fixtures processes component "component_28.tsx" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_28.tsx" without errors 1`] = `
 [
   {
     "description": "Example component description",
@@ -1577,7 +1577,7 @@ exports[`integration fixtures processes component "component_28.tsx" without err
 ]
 `;
 
-exports[`integration fixtures processes component "component_29.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_29.js" without errors 1`] = `
 [
   {
     "description": "",
@@ -1596,7 +1596,7 @@ exports[`integration fixtures processes component "component_29.js" without erro
 ]
 `;
 
-exports[`integration fixtures processes component "component_30.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_30.js" without errors 1`] = `
 [
   {
     "description": "",
@@ -1615,7 +1615,7 @@ exports[`integration fixtures processes component "component_30.js" without erro
 ]
 `;
 
-exports[`integration fixtures processes component "component_31.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_31.js" without errors 1`] = `
 [
   {
     "description": "",
@@ -1634,7 +1634,7 @@ exports[`integration fixtures processes component "component_31.js" without erro
 ]
 `;
 
-exports[`integration fixtures processes component "component_32.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_32.js" without errors 1`] = `
 [
   {
     "description": "",
@@ -1697,7 +1697,7 @@ exports[`integration fixtures processes component "component_32.js" without erro
 ]
 `;
 
-exports[`integration fixtures processes component "component_33.tsx" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_33.tsx" without errors 1`] = `
 [
   {
     "description": "This is a typescript component with imported prop types",
@@ -1723,7 +1723,7 @@ exports[`integration fixtures processes component "component_33.tsx" without err
 ]
 `;
 
-exports[`integration fixtures processes component "component_34.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_34.js" without errors 1`] = `
 [
   {
     "description": "",
@@ -1763,7 +1763,7 @@ exports[`integration fixtures processes component "component_34.js" without erro
 ]
 `;
 
-exports[`integration fixtures processes component "component_35.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_35.js" without errors 1`] = `
 [
   {
     "description": "",
@@ -1796,7 +1796,7 @@ exports[`integration fixtures processes component "component_35.js" without erro
 ]
 `;
 
-exports[`integration fixtures processes component "component_36.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_36.js" without errors 1`] = `
 [
   {
     "description": "",
@@ -1829,7 +1829,7 @@ exports[`integration fixtures processes component "component_36.js" without erro
 ]
 `;
 
-exports[`integration fixtures processes component "component_37.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_37.js" without errors 1`] = `
 [
   {
     "description": "",
@@ -1862,7 +1862,7 @@ exports[`integration fixtures processes component "component_37.js" without erro
 ]
 `;
 
-exports[`integration fixtures processes component "component_38.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_38.js" without errors 1`] = `
 [
   {
     "description": "",
@@ -1895,7 +1895,7 @@ exports[`integration fixtures processes component "component_38.js" without erro
 ]
 `;
 
-exports[`integration fixtures processes component "component_39.tsx" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_39.tsx" without errors 1`] = `
 [
   {
     "description": "This is a typescript component with imported prop types",
@@ -1914,7 +1914,7 @@ exports[`integration fixtures processes component "component_39.tsx" without err
 ]
 `;
 
-exports[`integration fixtures processes component "component_40.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_40.js" without errors 1`] = `
 [
   {
     "description": "",
@@ -1939,7 +1939,7 @@ exports[`integration fixtures processes component "component_40.js" without erro
 ]
 `;
 
-exports[`integration fixtures processes component "component_41.tsx" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_41.tsx" without errors 1`] = `
 [
   {
     "description": "",
@@ -1959,7 +1959,7 @@ exports[`integration fixtures processes component "component_41.tsx" without err
 ]
 `;
 
-exports[`integration fixtures processes component "component_42.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_42.js" without errors 1`] = `
 [
   {
     "description": "",
@@ -1977,7 +1977,7 @@ exports[`integration fixtures processes component "component_42.js" without erro
 ]
 `;
 
-exports[`integration fixtures processes component "component_43.tsx" without errors 1`] = `
+exports[`integration > fixtures > processes component "component_43.tsx" without errors 1`] = `
 [
   {
     "description": "",
@@ -2017,7 +2017,7 @@ exports[`integration fixtures processes component "component_43.tsx" without err
 ]
 `;
 
-exports[`integration fixtures processes component "flow-export-type.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "flow-export-type.js" without errors 1`] = `
 [
   {
     "description": "This is a Flow class component",
@@ -2075,7 +2075,7 @@ exports[`integration fixtures processes component "flow-export-type.js" without 
 ]
 `;
 
-exports[`integration fixtures processes component "flow-import-type.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "flow-import-type.js" without errors 1`] = `
 [
   {
     "description": "This is a Flow component with imported prop types",
@@ -2094,7 +2094,7 @@ exports[`integration fixtures processes component "flow-import-type.js" without 
 ]
 `;
 
-exports[`integration fixtures processes component "flow-spread-import-type.js" without errors 1`] = `
+exports[`integration > fixtures > processes component "flow-spread-import-type.js" without errors 1`] = `
 [
   {
     "description": "This is a Flow component with imported prop types",
@@ -2120,7 +2120,7 @@ exports[`integration fixtures processes component "flow-spread-import-type.js" w
 ]
 `;
 
-exports[`integration fixtures processes component "test-all-imports.tsx" without errors 1`] = `
+exports[`integration > fixtures > processes component "test-all-imports.tsx" without errors 1`] = `
 [
   {
     "description": "This is a TS component with imported stuff",
@@ -2130,7 +2130,7 @@ exports[`integration fixtures processes component "test-all-imports.tsx" without
       "x": {
         "defaultValue": {
           "computed": false,
-          "value": ""string"",
+          "value": "\\"string\\"",
         },
         "required": false,
       },

@@ -1,5 +1,5 @@
 import React from 'react';
-import { objDestruct, defaultFrom } from './support/some-exports';
+import { objDestruct, defaultFrom } from './support/some-exports.js';
 
 /**
  * This is a TS component with imported stuff

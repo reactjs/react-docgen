@@ -6,10 +6,11 @@ import type {
   VariableDeclaration,
 } from '@babel/types';
 import { parse } from '../../../tests/utils';
-import resolveObjectPatternPropertyToValue from '../resolveObjectPatternPropertyToValue';
+import resolveObjectPatternPropertyToValue from '../resolveObjectPatternPropertyToValue.js';
+import { describe, expect, test } from 'vitest';
 
 describe('resolveObjectPatternPropertyToValue', () => {
-  it('does not resolve if not in ObjectProperty', () => {
+  test('does not resolve if not in ObjectProperty', () => {
     const path = parse
       .expressionLast<ObjectExpression>(
         `const x = { a : "string" };
@@ -20,7 +21,7 @@ describe('resolveObjectPatternPropertyToValue', () => {
     expect(resolveObjectPatternPropertyToValue(path)).toBeNull();
   });
 
-  it('does not resolve if not in VariableDeclarator or AssignmentExpression', () => {
+  test('does not resolve if not in VariableDeclarator or AssignmentExpression', () => {
     const path = parse
       .expression<ObjectExpression>(`({ a }) => {}`)
       .get('params.0.properties.0') as NodePath<ObjectProperty>;
@@ -29,7 +30,7 @@ describe('resolveObjectPatternPropertyToValue', () => {
   });
 
   describe('VariableDeclarator', () => {
-    it('resolved basic case', () => {
+    test('resolved basic case', () => {
       const path = parse
         .statementLast<VariableDeclaration>(
           `const x = { a : "string" };
@@ -40,7 +41,7 @@ describe('resolveObjectPatternPropertyToValue', () => {
       expect(resolveObjectPatternPropertyToValue(path)).toMatchSnapshot();
     });
 
-    it('does not resolve if property not found', () => {
+    test('does not resolve if property not found', () => {
       const path = parse
         .statementLast<VariableDeclaration>(
           `const x = { b : "string" };
@@ -51,7 +52,7 @@ describe('resolveObjectPatternPropertyToValue', () => {
       expect(resolveObjectPatternPropertyToValue(path)).toBeNull();
     });
 
-    it('does not resolve when init not resolvable', () => {
+    test('does not resolve when init not resolvable', () => {
       const path = parse
         .statementLast<VariableDeclaration>(`const { a } = x;`)
         .get('declarations.0.id.properties.0') as NodePath<ObjectProperty>;
@@ -60,7 +61,7 @@ describe('resolveObjectPatternPropertyToValue', () => {
     });
   });
   describe('AssignmentExpression', () => {
-    it('resolved basic case', () => {
+    test('resolved basic case', () => {
       const path = parse
         .expressionLast<AssignmentExpression>(
           `const x = { a : "string" };
@@ -71,7 +72,7 @@ describe('resolveObjectPatternPropertyToValue', () => {
       expect(resolveObjectPatternPropertyToValue(path)).toMatchSnapshot();
     });
 
-    it('does not resolve if property not found', () => {
+    test('does not resolve if property not found', () => {
       const path = parse
         .expressionLast<AssignmentExpression>(
           `const x = { b : "string" };
@@ -82,7 +83,7 @@ describe('resolveObjectPatternPropertyToValue', () => {
       expect(resolveObjectPatternPropertyToValue(path)).toBeNull();
     });
 
-    it('does not resolve when init not resolvable', () => {
+    test('does not resolve when init not resolvable', () => {
       const path = parse
         .expression<AssignmentExpression>(`{ a } = x`)
         .get('left.properties.0') as NodePath<ObjectProperty>;

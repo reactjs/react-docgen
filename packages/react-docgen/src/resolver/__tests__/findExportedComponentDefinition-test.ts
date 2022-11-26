@@ -1,6 +1,7 @@
 import type { NodePath } from '@babel/traverse';
 import { noopImporter, makeMockImporter, parse } from '../../../tests/utils';
-import findExportedComponentDefinition from '../findExportedComponentDefinition';
+import findExportedComponentDefinition from '../findExportedComponentDefinition.js';
+import { describe, expect, test } from 'vitest';
 
 describe('findExportedComponentDefinition', () => {
   function findComponentsInSource(
@@ -50,7 +51,7 @@ describe('findExportedComponentDefinition', () => {
 
   describe('CommonJS module exports', () => {
     describe('React.createClass', () => {
-      it('finds React.createClass', () => {
+      test('finds React.createClass', () => {
         const source = `
           var React = require("React");
           var Component = React.createClass({});
@@ -63,7 +64,7 @@ describe('findExportedComponentDefinition', () => {
         expect(result).toHaveLength(1);
       });
 
-      it('finds React.createClass with hoc', () => {
+      test('finds React.createClass with hoc', () => {
         const source = `
           var React = require("React");
           var Component = React.createClass({});
@@ -76,7 +77,7 @@ describe('findExportedComponentDefinition', () => {
         expect(result).toHaveLength(1);
       });
 
-      it('finds React.createClass with hoc and args', () => {
+      test('finds React.createClass with hoc and args', () => {
         const source = `
           var React = require("React");
           var Component = React.createClass({});
@@ -89,7 +90,7 @@ describe('findExportedComponentDefinition', () => {
         expect(result).toHaveLength(1);
       });
 
-      it('finds React.createClass with two hocs', () => {
+      test('finds React.createClass with two hocs', () => {
         const source = `
           var React = require("React");
           var Component = React.createClass({});
@@ -104,7 +105,7 @@ describe('findExportedComponentDefinition', () => {
         expect(result).toHaveLength(1);
       });
 
-      it('finds React.createClass with three hocs', () => {
+      test('finds React.createClass with three hocs', () => {
         const source = `
           var React = require("React");
           var Component = React.createClass({});
@@ -121,7 +122,7 @@ describe('findExportedComponentDefinition', () => {
         expect(result).toHaveLength(1);
       });
 
-      it('finds React.createClass, independent of the var name', () => {
+      test('finds React.createClass, independent of the var name', () => {
         const source = `
           var R = require("React");
           var Component = R.createClass({});
@@ -134,7 +135,7 @@ describe('findExportedComponentDefinition', () => {
         expect(result).toHaveLength(1);
       });
 
-      it('does not process X.createClass of other modules', () => {
+      test('does not process X.createClass of other modules', () => {
         const source = `
           var R = require("NoReact");
           var Component = R.createClass({});
@@ -147,7 +148,7 @@ describe('findExportedComponentDefinition', () => {
         expect(result).toHaveLength(0);
       });
 
-      it('resolves an imported variable to React.createClass', () => {
+      test('resolves an imported variable to React.createClass', () => {
         const source = `
           import Component from 'createClass';
           module.exports = Component;
@@ -161,7 +162,7 @@ describe('findExportedComponentDefinition', () => {
     });
 
     describe('class definitions', () => {
-      it('finds class declarations', () => {
+      test('finds class declarations', () => {
         const source = `
           var React = require("React");
           class Component extends React.Component {}
@@ -175,7 +176,7 @@ describe('findExportedComponentDefinition', () => {
         expect(result[0].node.type).toBe('ClassDeclaration');
       });
 
-      it('finds class expression', () => {
+      test('finds class expression', () => {
         const source = `
           var React = require("React");
           var Component = class extends React.Component {}
@@ -189,7 +190,7 @@ describe('findExportedComponentDefinition', () => {
         expect(result[0].node.type).toBe('ClassExpression');
       });
 
-      it('finds class definition, independent of the var name', () => {
+      test('finds class definition, independent of the var name', () => {
         const source = `
           var R = require("React");
           class Component extends R.Component {}
@@ -203,7 +204,7 @@ describe('findExportedComponentDefinition', () => {
         expect(result[0].node.type).toBe('ClassDeclaration');
       });
 
-      it('resolves an imported variable to class declaration', () => {
+      test('resolves an imported variable to class declaration', () => {
         const source = `
           import Component from 'classDec';
           module.exports = Component;
@@ -216,7 +217,7 @@ describe('findExportedComponentDefinition', () => {
         expect(result[0].node.type).toBe('ClassDeclaration');
       });
 
-      it('resolves an imported variable to class expression', () => {
+      test('resolves an imported variable to class expression', () => {
         const source = `
           import Component from 'classExpr';
           module.exports = Component;
@@ -231,7 +232,7 @@ describe('findExportedComponentDefinition', () => {
     });
 
     describe('stateless components', () => {
-      it('finds stateless component with JSX', () => {
+      test('finds stateless component with JSX', () => {
         const source = `
           var React = require("React");
           var Component = () => <div />;
@@ -244,7 +245,7 @@ describe('findExportedComponentDefinition', () => {
         expect(result).toHaveLength(1);
       });
 
-      it('finds stateless components with React.createElement, independent of the var name', () => {
+      test('finds stateless components with React.createElement, independent of the var name', () => {
         const source = `
           var R = require("React");
           var Component = () => R.createElement('div', {});
@@ -257,7 +258,7 @@ describe('findExportedComponentDefinition', () => {
         expect(result).toHaveLength(1);
       });
 
-      it('does not process X.createElement of other modules', () => {
+      test('does not process X.createElement of other modules', () => {
         const source = `
           var R = require("NoReact");
           var Component = () => R.createElement({});
@@ -270,7 +271,7 @@ describe('findExportedComponentDefinition', () => {
         expect(result).toHaveLength(0);
       });
 
-      it('resolves an imported stateless component with JSX', () => {
+      test('resolves an imported stateless component with JSX', () => {
         const source = `
           import Component from 'statelessJsx';
           module.exports = Component;
@@ -282,7 +283,7 @@ describe('findExportedComponentDefinition', () => {
         expect(result).toHaveLength(1);
       });
 
-      it('resolves an imported stateless component with React.createElement', () => {
+      test('resolves an imported stateless component with React.createElement', () => {
         const source = `
           import Component from 'statelessCreateElement';
           module.exports = Component;
@@ -297,7 +298,7 @@ describe('findExportedComponentDefinition', () => {
 
     describe('module.exports = <C>; / exports.foo = <C>;', () => {
       describe('React.createClass', () => {
-        it('finds assignments to exports', () => {
+        test('finds assignments to exports', () => {
           const source = `
             var R = require("React");
             var Component = R.createClass({});
@@ -311,7 +312,7 @@ describe('findExportedComponentDefinition', () => {
           expect(result).toHaveLength(1);
         });
 
-        it('errors if multiple components are exported', () => {
+        test('errors if multiple components are exported', () => {
           const source = `
             var R = require("React");
             var ComponentA = R.createClass({});
@@ -323,7 +324,7 @@ describe('findExportedComponentDefinition', () => {
           expect(() => findComponentsInSource(source)).toThrow();
         });
 
-        it('accepts multiple definitions if only one is exported on exports', () => {
+        test('accepts multiple definitions if only one is exported on exports', () => {
           const source = `
             var R = require("React");
             var ComponentA = R.createClass({});
@@ -337,7 +338,7 @@ describe('findExportedComponentDefinition', () => {
           expect(result).toHaveLength(1);
         });
 
-        it('accepts multiple definitions if only one is exported', () => {
+        test('accepts multiple definitions if only one is exported', () => {
           const source = `
             var R = require("React");
             var ComponentA = R.createClass({});
@@ -351,7 +352,7 @@ describe('findExportedComponentDefinition', () => {
           expect(result).toHaveLength(1);
         });
 
-        it('supports imported components', () => {
+        test('supports imported components', () => {
           const source = `
             import Component from 'createClass';
             exports.ComponentB = Component;
@@ -365,7 +366,7 @@ describe('findExportedComponentDefinition', () => {
       });
 
       describe('class definition', () => {
-        it('finds assignments to exports', () => {
+        test('finds assignments to exports', () => {
           const source = `
             var R = require("React");
             class Component extends R.Component {}
@@ -380,7 +381,7 @@ describe('findExportedComponentDefinition', () => {
           expect(result[0].node.type).toBe('ClassDeclaration');
         });
 
-        it('errors if multiple components are exported', () => {
+        test('errors if multiple components are exported', () => {
           const source = `
             var R = require("React");
             class ComponentA extends R.Component {}
@@ -392,7 +393,7 @@ describe('findExportedComponentDefinition', () => {
           expect(() => findComponentsInSource(source)).toThrow();
         });
 
-        it('accepts multiple definitions if only one is exported', () => {
+        test('accepts multiple definitions if only one is exported', () => {
           let source = `
             var R = require("React");
             class ComponentA extends R.Component {}
@@ -419,7 +420,7 @@ describe('findExportedComponentDefinition', () => {
           expect(result[0].node.type).toBe('ClassDeclaration');
         });
 
-        it('supports imported components', () => {
+        test('supports imported components', () => {
           const source = `
             import Component from 'classDec';
             exports.ComponentB = Component;
@@ -438,7 +439,7 @@ describe('findExportedComponentDefinition', () => {
   describe('ES6 export declarations', () => {
     describe('export default <component>;', () => {
       describe('React.createClass', () => {
-        it('finds default export', () => {
+        test('finds default export', () => {
           const source = `
             var React = require("React");
             var Component = React.createClass({});
@@ -451,7 +452,7 @@ describe('findExportedComponentDefinition', () => {
           expect(result).toHaveLength(1);
         });
 
-        it('finds default export inline', () => {
+        test('finds default export inline', () => {
           const source = `
             var React = require("React");
             export default React.createClass({});
@@ -463,7 +464,7 @@ describe('findExportedComponentDefinition', () => {
           expect(result).toHaveLength(1);
         });
 
-        it('errors if multiple components are exported', () => {
+        test('errors if multiple components are exported', () => {
           const source = `
             import React, { createElement } from "React"
             export var Component = React.createClass({})
@@ -473,7 +474,7 @@ describe('findExportedComponentDefinition', () => {
           expect(() => findComponentsInSource(source)).toThrow();
         });
 
-        it('errors if multiple components are exported with named export', () => {
+        test('errors if multiple components are exported with named export', () => {
           const source = `
             import React, { createElement } from "React"
             var Component = React.createClass({})
@@ -484,7 +485,7 @@ describe('findExportedComponentDefinition', () => {
           expect(() => findComponentsInSource(source)).toThrow();
         });
 
-        it('accepts multiple definitions if only one is exported', () => {
+        test('accepts multiple definitions if only one is exported', () => {
           const source = `
             import React, { createElement } from "React"
             var Component = React.createClass({})
@@ -497,7 +498,7 @@ describe('findExportedComponentDefinition', () => {
           expect(result).toHaveLength(1);
         });
 
-        it('supports imported components', () => {
+        test('supports imported components', () => {
           const source = `
             import Component from 'createClass';
             export default Component;
@@ -511,7 +512,7 @@ describe('findExportedComponentDefinition', () => {
       });
 
       describe('class definition', () => {
-        it('finds default export', () => {
+        test('finds default export', () => {
           let source = `
             import React from 'React';
             class Component extends React.Component {}
@@ -535,7 +536,7 @@ describe('findExportedComponentDefinition', () => {
           expect(result[0].node.type).toBe('ClassDeclaration');
         });
 
-        it('finds default export with hoc', () => {
+        test('finds default export with hoc', () => {
           const source = `
             import React from 'React';
             class Component extends React.Component {}
@@ -549,7 +550,7 @@ describe('findExportedComponentDefinition', () => {
           expect(result[0].node.type).toBe('ClassDeclaration');
         });
 
-        it('finds default export with hoc and args', () => {
+        test('finds default export with hoc and args', () => {
           const source = `
             import React from 'React';
             class Component extends React.Component {}
@@ -563,7 +564,7 @@ describe('findExportedComponentDefinition', () => {
           expect(result[0].node.type).toBe('ClassDeclaration');
         });
 
-        it('finds default export with two hocs', () => {
+        test('finds default export with two hocs', () => {
           const source = `
             import React from 'React';
             class Component extends React.Component {}
@@ -579,7 +580,7 @@ describe('findExportedComponentDefinition', () => {
           expect(result[0].node.type).toBe('ClassDeclaration');
         });
 
-        it('errors if multiple components are exported', () => {
+        test('errors if multiple components are exported', () => {
           let source = `
             import React from 'React';
             export var Component = class extends React.Component {};
@@ -597,7 +598,7 @@ describe('findExportedComponentDefinition', () => {
           expect(() => findComponentsInSource(source)).toThrow();
         });
 
-        it('accepts multiple definitions if only one is exported', () => {
+        test('accepts multiple definitions if only one is exported', () => {
           const source = `
             import React from 'React';
             var Component = class extends React.Component {};
@@ -611,7 +612,7 @@ describe('findExportedComponentDefinition', () => {
           expect(result[0].node.type).toBe('ClassDeclaration');
         });
 
-        it('supports imported components', () => {
+        test('supports imported components', () => {
           const source = `
             import Component from 'classDec';
             export default Component;
@@ -628,7 +629,7 @@ describe('findExportedComponentDefinition', () => {
 
     describe('export var foo = <C>, ...;', () => {
       describe('React.createClass', () => {
-        it('finds named exports with export var', () => {
+        test('finds named exports with export var', () => {
           const source = `
             var React = require("React");
             export var somethingElse = 42, Component = React.createClass({});
@@ -640,7 +641,7 @@ describe('findExportedComponentDefinition', () => {
           expect(result).toHaveLength(1);
         });
 
-        it('finds named exports with export let', () => {
+        test('finds named exports with export let', () => {
           const source = `
             var React = require("React");
             export let Component = React.createClass({}), somethingElse = 42;
@@ -652,7 +653,7 @@ describe('findExportedComponentDefinition', () => {
           expect(result).toHaveLength(1);
         });
 
-        it('finds named exports with export const', () => {
+        test('finds named exports with export const', () => {
           const source = `
             var React = require("React");
             export const something = 21,
@@ -666,7 +667,7 @@ describe('findExportedComponentDefinition', () => {
           expect(result).toHaveLength(1);
         });
 
-        it('finds named exports with export let and additional export', () => {
+        test('finds named exports with export let and additional export', () => {
           const source = `
             var React = require("React");
             export var somethingElse = function() {};
@@ -679,7 +680,7 @@ describe('findExportedComponentDefinition', () => {
           expect(result).toHaveLength(1);
         });
 
-        it('errors if multiple components are exported', () => {
+        test('errors if multiple components are exported', () => {
           let source = `
             var R = require("React");
             export var ComponentA = R.createClass({}),
@@ -698,7 +699,7 @@ describe('findExportedComponentDefinition', () => {
           expect(() => findComponentsInSource(source)).toThrow();
         });
 
-        it('accepts multiple definitions if only one is exported', () => {
+        test('accepts multiple definitions if only one is exported', () => {
           const source = `
             var R = require("React");
             var ComponentA = R.createClass({});
@@ -711,7 +712,7 @@ describe('findExportedComponentDefinition', () => {
           expect(result).toHaveLength(1);
         });
 
-        it('supports imported components', () => {
+        test('supports imported components', () => {
           const source = `
             import Component from 'createClass';
             export let ComponentB = Component;
@@ -725,7 +726,7 @@ describe('findExportedComponentDefinition', () => {
       });
 
       describe('class definition', () => {
-        it('finds named exports', () => {
+        test('finds named exports', () => {
           let source = `
             import React from 'React';
             export var somethingElse = 42,
@@ -769,7 +770,7 @@ describe('findExportedComponentDefinition', () => {
           expect(result[0].node.type).toBe('ClassExpression');
         });
 
-        it('errors if multiple components are exported', () => {
+        test('errors if multiple components are exported', () => {
           let source = `
             import React from 'React';
             export var ComponentA  = class extends React.Component {};
@@ -787,7 +788,7 @@ describe('findExportedComponentDefinition', () => {
           expect(() => findComponentsInSource(source)).toThrow();
         });
 
-        it('accepts multiple definitions if only one is exported', () => {
+        test('accepts multiple definitions if only one is exported', () => {
           const source = `
             import React from 'React';
             var ComponentA  = class extends React.Component {}
@@ -800,7 +801,7 @@ describe('findExportedComponentDefinition', () => {
           expect(result[0].node.type).toBe('ClassExpression');
         });
 
-        it('supports imported components', () => {
+        test('supports imported components', () => {
           const source = `
             import Component from 'classDec';
             export let ComponentB = Component;
@@ -815,7 +816,7 @@ describe('findExportedComponentDefinition', () => {
       });
 
       describe('stateless components', () => {
-        it('finds named exports', () => {
+        test('finds named exports', () => {
           let source = `
             import React from 'React';
             export var somethingElse = 42,
@@ -859,7 +860,7 @@ describe('findExportedComponentDefinition', () => {
           expect(result[0].node.type).toBe('ArrowFunctionExpression');
         });
 
-        it('errors if multiple components are exported', () => {
+        test('errors if multiple components are exported', () => {
           let source = `
             import React from 'React';
             export var ComponentA = () => <div />
@@ -877,7 +878,7 @@ describe('findExportedComponentDefinition', () => {
           expect(() => findComponentsInSource(source)).toThrow();
         });
 
-        it('accepts multiple definitions if only one is exported', () => {
+        test('accepts multiple definitions if only one is exported', () => {
           const source = `
             import React from 'React';
             var ComponentA  = class extends React.Component {}
@@ -890,7 +891,7 @@ describe('findExportedComponentDefinition', () => {
           expect(result[0].node.type).toBe('FunctionExpression');
         });
 
-        it('supports imported components', () => {
+        test('supports imported components', () => {
           let source = `
             import Component from 'statelessJsx';
             export var ComponentA = Component;
@@ -917,7 +918,7 @@ describe('findExportedComponentDefinition', () => {
 
     describe('export {<C>};', () => {
       describe('React.createClass', () => {
-        it('finds exported specifiers 1', () => {
+        test('finds exported specifiers 1', () => {
           const source = `
             var React = require("React");
             var foo = 42;
@@ -930,7 +931,7 @@ describe('findExportedComponentDefinition', () => {
           expect(result).toHaveLength(1);
         });
 
-        it('finds exported specifiers 2', () => {
+        test('finds exported specifiers 2', () => {
           const source = `
             import React from "React"
             var foo = 42;
@@ -944,7 +945,7 @@ describe('findExportedComponentDefinition', () => {
           expect(result).toHaveLength(1);
         });
 
-        it('finds exported specifiers 3', () => {
+        test('finds exported specifiers 3', () => {
           const source = `
             import React, { createElement } from "React"
             var foo = 42;
@@ -959,7 +960,7 @@ describe('findExportedComponentDefinition', () => {
           expect(result).toHaveLength(1);
         });
 
-        it('errors if multiple components are exported', () => {
+        test('errors if multiple components are exported', () => {
           const source = `
             var R = require("React");
             var ComponentA = R.createClass({});
@@ -970,7 +971,7 @@ describe('findExportedComponentDefinition', () => {
           expect(() => findComponentsInSource(source)).toThrow();
         });
 
-        it('accepts multiple definitions if only one is exported', () => {
+        test('accepts multiple definitions if only one is exported', () => {
           const source = `
             var R = require("React");
             var ComponentA = R.createClass({});
@@ -984,7 +985,7 @@ describe('findExportedComponentDefinition', () => {
           expect(result).toHaveLength(1);
         });
 
-        it('supports imported components', () => {
+        test('supports imported components', () => {
           const source = `
             import Component from 'createClass';
             export { Component };
@@ -998,7 +999,7 @@ describe('findExportedComponentDefinition', () => {
       });
 
       describe('class definition', () => {
-        it('finds exported specifiers', () => {
+        test('finds exported specifiers', () => {
           let source = `
             import React from 'React';
             var foo = 42;
@@ -1035,7 +1036,7 @@ describe('findExportedComponentDefinition', () => {
           expect(result[0].node.type).toBe('ClassExpression');
         });
 
-        it('errors if multiple components are exported', () => {
+        test('errors if multiple components are exported', () => {
           const source = `
             import React from 'React';
             var ComponentA = class extends React.Component {};
@@ -1046,7 +1047,7 @@ describe('findExportedComponentDefinition', () => {
           expect(() => findComponentsInSource(source)).toThrow();
         });
 
-        it('accepts multiple definitions if only one is exported', () => {
+        test('accepts multiple definitions if only one is exported', () => {
           const source = `
             import React from 'React';
             var ComponentA = class extends React.Component {};
@@ -1060,7 +1061,7 @@ describe('findExportedComponentDefinition', () => {
           expect(result[0].node.type).toBe('ClassExpression');
         });
 
-        it('supports imported components', () => {
+        test('supports imported components', () => {
           const source = `
             import Component from 'classDec';
             export { Component };
@@ -1075,7 +1076,7 @@ describe('findExportedComponentDefinition', () => {
       });
 
       describe('stateless components', () => {
-        it('finds exported specifiers', () => {
+        test('finds exported specifiers', () => {
           let source = `
             import React from 'React';
             var foo = 42;
@@ -1112,7 +1113,7 @@ describe('findExportedComponentDefinition', () => {
           expect(result[0].node.type).toBe('FunctionExpression');
         });
 
-        it('errors if multiple components are exported', () => {
+        test('errors if multiple components are exported', () => {
           const source = `
             import React from 'React';
             var ComponentA = () => <div />;
@@ -1123,7 +1124,7 @@ describe('findExportedComponentDefinition', () => {
           expect(() => findComponentsInSource(source)).toThrow();
         });
 
-        it('accepts multiple definitions if only one is exported', () => {
+        test('accepts multiple definitions if only one is exported', () => {
           const source = `
             import React from 'React';
             var ComponentA = () => <div />;
@@ -1137,7 +1138,7 @@ describe('findExportedComponentDefinition', () => {
           expect(result[0].node.type).toBe('ArrowFunctionExpression');
         });
 
-        it('supports imported components', () => {
+        test('supports imported components', () => {
           let source = `
             import Component from 'statelessJsx';
             export { Component as ComponentA };
@@ -1164,7 +1165,7 @@ describe('findExportedComponentDefinition', () => {
 
     // Only applies to classes
     describe('export <C>;', () => {
-      it('finds named exports', () => {
+      test('finds named exports', () => {
         const source = `
           import React from 'React';
           export var foo = 42;
@@ -1177,7 +1178,7 @@ describe('findExportedComponentDefinition', () => {
         expect(result[0].node.type).toBe('ClassDeclaration');
       });
 
-      it('errors if multiple components are exported', () => {
+      test('errors if multiple components are exported', () => {
         const source = `
           import React from 'React';
           export class ComponentA extends React.Component {};
@@ -1187,7 +1188,7 @@ describe('findExportedComponentDefinition', () => {
         expect(() => findComponentsInSource(source)).toThrow();
       });
 
-      it('accepts multiple definitions if only one is exported', () => {
+      test('accepts multiple definitions if only one is exported', () => {
         const source = `
           import React from 'React';
           class ComponentA extends React.Component {};

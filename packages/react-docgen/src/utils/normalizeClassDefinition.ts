@@ -1,6 +1,6 @@
 import { classProperty } from '@babel/types';
-import getMemberExpressionRoot from '../utils/getMemberExpressionRoot';
-import getMembers from '../utils/getMembers';
+import getMemberExpressionRoot from '../utils/getMemberExpressionRoot.js';
+import getMembers from '../utils/getMembers.js';
 import type { NodePath } from '@babel/traverse';
 import { visitors } from '@babel/traverse';
 import type {
@@ -8,7 +8,7 @@ import type {
   ClassExpression,
   Expression,
 } from '@babel/types';
-import { ignore } from './traverse';
+import { ignore } from './traverse.js';
 
 interface TraverseState {
   readonly variableName: string;

@@ -11,10 +11,11 @@ import type {
   VariableDeclaration,
 } from '@babel/types';
 import { parse } from '../../../tests/utils';
-import normalizeClassDefinition from '../normalizeClassDefinition';
+import normalizeClassDefinition from '../normalizeClassDefinition.js';
+import { describe, expect, test } from 'vitest';
 
 describe('normalizeClassDefinition', () => {
-  it('finds assignments to class declarations', () => {
+  test('finds assignments to class declarations', () => {
     const classDefinition = parse.statement<ClassDeclaration>(`
       class Foo {}
       Foo.propTypes = 42;
@@ -29,7 +30,7 @@ describe('normalizeClassDefinition', () => {
     expect(classProperty.static).toBe(true);
   });
 
-  it('should not fail on classes without ids', () => {
+  test('should not fail on classes without ids', () => {
     const classDefinition = parse
       .statement<ExportDefaultDeclaration>(
         `
@@ -46,7 +47,7 @@ describe('normalizeClassDefinition', () => {
     expect(classProperty).toBeDefined();
   });
 
-  it('finds assignments to class expressions with variable declaration', () => {
+  test('finds assignments to class expressions with variable declaration', () => {
     const classDefinition = parse
       .statement<VariableDeclaration>(
         `
@@ -66,7 +67,7 @@ describe('normalizeClassDefinition', () => {
     expect(classProperty.static).toBe(true);
   });
 
-  it('finds assignments to class expressions with assignment', () => {
+  test('finds assignments to class expressions with assignment', () => {
     const classDefinition = (
       parse
         .statement<ExpressionStatement>(
@@ -87,7 +88,7 @@ describe('normalizeClassDefinition', () => {
     expect(classProperty.static).toBe(true);
   });
 
-  it('ignores assignments further up the tree', () => {
+  test('ignores assignments further up the tree', () => {
     const classDefinition = parse
       .statement(
         `

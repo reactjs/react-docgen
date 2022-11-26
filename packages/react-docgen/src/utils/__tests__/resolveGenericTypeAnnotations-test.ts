@@ -1,8 +1,9 @@
 import { parse } from '../../../tests/utils';
-import resolveGenericTypeAnnotation from '../resolveGenericTypeAnnotation';
+import resolveGenericTypeAnnotation from '../resolveGenericTypeAnnotation.js';
+import { describe, expect, test } from 'vitest';
 
 describe('resolveGenericTypeAnnotation', () => {
-  it('resolves type', () => {
+  test('resolves type', () => {
     const code = `
         var x: Props;
         type Props = { x: string };

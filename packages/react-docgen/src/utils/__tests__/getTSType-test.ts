@@ -13,7 +13,8 @@ import {
   noopImporter,
 } from '../../../tests/utils';
 import type { Importer } from '../../importer';
-import getTSType from '../getTSType';
+import getTSType from '../getTSType.js';
+import { describe, expect, test } from 'vitest';
 
 function typeAlias(
   stmt: string,
@@ -87,7 +88,7 @@ const mockImporter = makeMockImporter({
 });
 
 describe('getTSType', () => {
-  it('detects simple types', () => {
+  test('detects simple types', () => {
     const simplePropTypes = [
       'string',
       'number',
@@ -117,7 +118,7 @@ describe('getTSType', () => {
     const literalTypes = ['"foo"', 1234, true, -1, '`foo`'];
 
     literalTypes.forEach(value => {
-      it(`detects ${value}`, () => {
+      test(`detects ${value}`, () => {
         const typePath = typeAlias(`let x: ${value};`);
 
         expect(getTSType(typePath)).toMatchSnapshot();
@@ -125,13 +126,13 @@ describe('getTSType', () => {
     });
   });
 
-  it('detects external type', () => {
+  test('detects external type', () => {
     const typePath = typeAlias('let x: xyz;');
 
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('resolves external type', () => {
+  test('resolves external type', () => {
     const typePath = typeAlias(
       `
       let x: xyz;
@@ -143,25 +144,25 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('detects array type shorthand', () => {
+  test('detects array type shorthand', () => {
     const typePath = typeAlias('let x: number[];');
 
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('detects array type', () => {
+  test('detects array type', () => {
     const typePath = typeAlias('let x: Array<number>;');
 
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('detects array type with multiple types', () => {
+  test('detects array type with multiple types', () => {
     const typePath = typeAlias('let x: Array<number, xyz>;');
 
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('resolves imported types used for arrays', () => {
+  test('resolves imported types used for arrays', () => {
     let typePath = typeAlias(
       `
       let x: xyz[];
@@ -191,13 +192,13 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('detects class type', () => {
+  test('detects class type', () => {
     const typePath = typeAlias('let x: Class<Boolean>;');
 
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('resolves imported subtype for class type', () => {
+  test('resolves imported subtype for class type', () => {
     const typePath = typeAlias(
       `
       let x: Class<xyz>;
@@ -209,13 +210,13 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('detects function type with subtype', () => {
+  test('detects function type with subtype', () => {
     const typePath = typeAlias('let x: Function<xyz>;');
 
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('resolves imported subtype for function type', () => {
+  test('resolves imported subtype for function type', () => {
     const typePath = typeAlias(
       `
       let x: Function<xyz>;
@@ -227,13 +228,13 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('detects object types', () => {
+  test('detects object types', () => {
     const typePath = typeAlias('let x: { a: string, b?: xyz };');
 
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('resolves imported types for object property types', () => {
+  test('resolves imported types for object property types', () => {
     const typePath = typeAlias(
       `
       let x: { a: number, b?: xyz };
@@ -245,13 +246,13 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('detects union type', () => {
+  test('detects union type', () => {
     const typePath = typeAlias('let x: string | xyz | "foo" | void;');
 
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('resolves imported types within union type', () => {
+  test('resolves imported types within union type', () => {
     const typePath = typeAlias(
       `
       let x: string | barbaz | "foo" | void;
@@ -263,13 +264,13 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('detects intersection type', () => {
+  test('detects intersection type', () => {
     const typePath = typeAlias('let x: string & xyz & "foo" & void;');
 
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('resolves imported types within intersection type', () => {
+  test('resolves imported types within intersection type', () => {
     const typePath = typeAlias(
       `
       let x: string & barbaz & "foo" & void;
@@ -281,7 +282,7 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('detects function signature type', () => {
+  test('detects function signature type', () => {
     const typePath = typeAlias(
       'let x: (p1: number, p2: string, ...rest: Array<string>) => boolean;',
     );
@@ -289,13 +290,13 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('detects function signature type with `this` parameter', () => {
+  test('detects function signature type with `this` parameter', () => {
     const typePath = typeAlias('let x: (this: Foo, p1: number) => boolean;');
 
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('detects callable signature type', () => {
+  test('detects callable signature type', () => {
     const typePath = typeAlias(
       'let x: { (str: string): string, token: string };',
     );
@@ -303,7 +304,7 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('resolves function signature types with imported types', () => {
+  test('resolves function signature types with imported types', () => {
     let typePath = typeAlias(
       `
       let x: (p1: abc, p2: xyz, ...rest: Array<xyz>) => def;
@@ -339,7 +340,7 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('detects map signature', () => {
+  test('detects map signature', () => {
     const typePath = typeAlias(
       'let x: { [key: string]: number, [key: "xl"]: string, token: "a" | "b" };',
     );
@@ -347,7 +348,7 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('resolves imported types in map signature', () => {
+  test('resolves imported types in map signature', () => {
     const typePath = typeAlias(
       `
       let x: { [key: xyz]: abc, [key: "xl"]: xyz, token: barbaz };
@@ -361,19 +362,19 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('detects tuple signature', () => {
+  test('detects tuple signature', () => {
     const typePath = typeAlias('let x: [string, number];');
 
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('detects tuple in union signature', () => {
+  test('detects tuple in union signature', () => {
     const typePath = typeAlias('let x: [string, number] | [number, string];');
 
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('resolves imported types in tuple signatures', () => {
+  test('resolves imported types in tuple signatures', () => {
     let typePath = typeAlias(
       `
       let x: [xyz, abc];
@@ -397,7 +398,7 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('detects indexed access', () => {
+  test('detects indexed access', () => {
     const typePath = typeAlias(`
       var x: A["x"] = 2;
 
@@ -407,7 +408,7 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('resolves indexed access', () => {
+  test('resolves indexed access', () => {
     const typePath = typeAlias(`
       var x: A["x"] = 2;
 
@@ -417,7 +418,7 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('resolves indexed access of array', () => {
+  test('resolves indexed access of array', () => {
     const typePath = parseTypescript
       .statement(
         `
@@ -438,7 +439,7 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('can resolve indexed access to imported type', () => {
+  test('can resolve indexed access to imported type', () => {
     const typePath = typeAlias(
       `
       var x: A["x"] = 2;
@@ -450,7 +451,7 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('resolves types in scope', () => {
+  test('resolves types in scope', () => {
     const typePath = typeAlias(`
       var x: MyType = 2;
 
@@ -460,7 +461,7 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('handles typeof types', () => {
+  test('handles typeof types', () => {
     const typePath = typeAlias(`
       var x: typeof MyType = {};
 
@@ -470,7 +471,7 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('resolves typeof of imported types', () => {
+  test('resolves typeof of imported types', () => {
     const typePath = typeAlias(
       `
       var x: typeof MyType = {};
@@ -482,7 +483,7 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('handles qualified type identifiers', () => {
+  test('handles qualified type identifiers', () => {
     const typePath = typeAlias(`
       var x: MyType.x = {};
 
@@ -492,7 +493,7 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('handles qualified type identifiers with params', () => {
+  test('handles qualified type identifiers with params', () => {
     const typePath = typeAlias(`
       var x: MyType.x<any> = {};
 
@@ -502,7 +503,7 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('handles generic types', () => {
+  test('handles generic types', () => {
     const typePath = typeAlias(`
       var x: MyType<string> = {};
 
@@ -512,7 +513,7 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('resolves imported types that need subtypes', () => {
+  test('resolves imported types that need subtypes', () => {
     const typePath = typeAlias(
       `
       var x: MyGenericType<string> = {};
@@ -524,7 +525,7 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('handles mapped types', () => {
+  test('handles mapped types', () => {
     const typePath = typeAlias(`
       var x: { [key in 'x' | 'y']: boolean};
     `);
@@ -532,7 +533,7 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('resolves imported types applied to mapped types', () => {
+  test('resolves imported types applied to mapped types', () => {
     const typePath = typeAlias(
       `
       var x: { [key in barbaz]: boolean};
@@ -559,7 +560,7 @@ describe('getTSType', () => {
     ];
 
     types.forEach(type => {
-      it(type, () => {
+      test(type, () => {
         const typePath = typeAlias(`
           var x: ${type} = 2;
 
@@ -571,7 +572,7 @@ describe('getTSType', () => {
     });
   });
 
-  it('resolves keyof to union', () => {
+  test('resolves keyof to union', () => {
     const typePath = typeAlias(`
       var x: keyof typeof CONTENTS = 2;
       const CONTENTS = {
@@ -583,7 +584,7 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('resolves keyof with imported types', () => {
+  test('resolves keyof with imported types', () => {
     const typePath = typeAlias(
       `
       var x: keyof typeof CONTENTS = 2;
@@ -595,7 +596,7 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('resolves keyof with inline object to union', () => {
+  test('resolves keyof with inline object to union', () => {
     const typePath = typeAlias(`
       var x: keyof { apple: string, banana: string } = 2;
     `);
@@ -603,7 +604,7 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('handles multiple references to one type', () => {
+  test('handles multiple references to one type', () => {
     const typePath = typeAlias(`
       let action: { a: Action, b: Action };
       type Action = {};
@@ -612,7 +613,7 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('handles generics of the same Name', () => {
+  test('handles generics of the same Name', () => {
     const typePath = parseTypescript
       .statement<TSInterfaceDeclaration>(
         `
@@ -630,7 +631,7 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('handles self-referencing type cycles', () => {
+  test('handles self-referencing type cycles', () => {
     const typePath = typeAlias(`
       let action: Action;
       type Action = { subAction: Action };
@@ -639,7 +640,7 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  it('handles long type cycles', () => {
+  test('handles long type cycles', () => {
     const typePath = typeAlias(`
       let action: Action;
       type Action = { subAction: SubAction };

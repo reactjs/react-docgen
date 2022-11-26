@@ -1,10 +1,15 @@
 import fs from 'fs';
-import path from 'path';
+import { dirname, join } from 'path';
+import { describe, expect, test } from 'vitest';
 import { parse, importers } from '../../src/main';
+import { fileURLToPath } from 'url';
 
 describe('integration', () => {
   describe('fixtures', () => {
-    const fixturePath = path.join(__dirname, '__fixtures__');
+    const fixturePath = join(
+      dirname(fileURLToPath(import.meta.url)),
+      '__fixtures__',
+    );
     const fileNames = fs.readdirSync(fixturePath, { withFileTypes: true });
 
     for (let i = 0; i < fileNames.length; i++) {
@@ -13,10 +18,10 @@ describe('integration', () => {
       }
       const name = fileNames[i].name;
 
-      const filePath = path.join(fixturePath, name);
+      const filePath = join(fixturePath, name);
       const fileContent = fs.readFileSync(filePath, 'utf8');
 
-      it(`processes component "${name}" without errors`, () => {
+      test(`processes component "${name}" without errors`, () => {
         let result;
 
         expect(() => {

@@ -1,11 +1,11 @@
-import getMemberValuePath from '../utils/getMemberValuePath';
-import type { MethodNodePath } from '../utils/getMethodDocumentation';
-import getMethodDocumentation from '../utils/getMethodDocumentation';
-import isReactComponentClass from '../utils/isReactComponentClass';
-import isReactComponentMethod from '../utils/isReactComponentMethod';
-import type Documentation from '../Documentation';
-import { shallowIgnoreVisitors } from '../utils/traverse';
-import resolveToValue from '../utils/resolveToValue';
+import getMemberValuePath from '../utils/getMemberValuePath.js';
+import type { MethodNodePath } from '../utils/getMethodDocumentation.js';
+import getMethodDocumentation from '../utils/getMethodDocumentation.js';
+import isReactComponentClass from '../utils/isReactComponentClass.js';
+import isReactComponentMethod from '../utils/isReactComponentMethod.js';
+import type Documentation from '../Documentation.js';
+import { shallowIgnoreVisitors } from '../utils/traverse.js';
+import resolveToValue from '../utils/resolveToValue.js';
 import type { NodePath, Scope } from '@babel/traverse';
 import { visitors } from '@babel/traverse';
 import type {
@@ -14,14 +14,14 @@ import type {
   Identifier,
   ObjectExpression,
 } from '@babel/types';
-import type { ComponentNode } from '../resolver';
-import type { Handler } from '.';
+import type { ComponentNode } from '../resolver/index.js';
+import type { Handler } from './index.js';
 import {
   isReactBuiltinCall,
   isReactForwardRefCall,
   isStatelessComponent,
-} from '../utils';
-import findFunctionReturn from '../utils/findFunctionReturn';
+  findFunctionReturn,
+} from '../utils/index.js';
 
 /**
  * The following values/constructs are considered methods:

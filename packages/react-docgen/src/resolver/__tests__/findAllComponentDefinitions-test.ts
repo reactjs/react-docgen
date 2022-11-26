@@ -1,6 +1,7 @@
 import { NodePath } from '@babel/traverse';
 import { parse, makeMockImporter, noopImporter } from '../../../tests/utils';
-import findAllComponentDefinitions from '../findAllComponentDefinitions';
+import findAllComponentDefinitions from '../findAllComponentDefinitions.js';
+import { describe, expect, test } from 'vitest';
 
 describe('findAllComponentDefinitions', () => {
   function findComponentsInSource(
@@ -45,7 +46,7 @@ describe('findAllComponentDefinitions', () => {
   });
 
   describe('React.createClass', () => {
-    it('finds React.createClass', () => {
+    test('finds React.createClass', () => {
       const source = `
         var React = require("React");
         var Component = React.createClass({});
@@ -60,7 +61,7 @@ describe('findAllComponentDefinitions', () => {
       expect(result[0].node.type).toBe('ObjectExpression');
     });
 
-    it('resolves imported values inside React.createClass', () => {
+    test('resolves imported values inside React.createClass', () => {
       const source = `
         import obj from 'obj';
         var React = require("React");
@@ -76,7 +77,7 @@ describe('findAllComponentDefinitions', () => {
       expect(result[0].node.type).toBe('ObjectExpression');
     });
 
-    it('finds React.createClass, independent of the var name', () => {
+    test('finds React.createClass, independent of the var name', () => {
       const source = `
         var R = require("React");
         var Component = R.createClass({});
@@ -89,7 +90,7 @@ describe('findAllComponentDefinitions', () => {
       expect(result.length).toBe(1);
     });
 
-    it('does not process X.createClass of other modules', () => {
+    test('does not process X.createClass of other modules', () => {
       const source = `
         var R = require("NoReact");
         var Component = R.createClass({});
@@ -102,7 +103,7 @@ describe('findAllComponentDefinitions', () => {
       expect(result.length).toBe(0);
     });
 
-    it('finds assignments to exports', () => {
+    test('finds assignments to exports', () => {
       const source = `
         var R = require("React");
         var Component = R.createClass({});
@@ -116,7 +117,7 @@ describe('findAllComponentDefinitions', () => {
       expect(result.length).toBe(1);
     });
 
-    it('accepts multiple definitions', () => {
+    test('accepts multiple definitions', () => {
       let source = `
         var R = require("React");
         var ComponentA = R.createClass({});
@@ -143,7 +144,7 @@ describe('findAllComponentDefinitions', () => {
   });
 
   describe('class definitions', () => {
-    it('finds component classes', () => {
+    test('finds component classes', () => {
       const source = `
         import React from 'React';
         class ComponentA extends React.Component {}
@@ -159,7 +160,7 @@ describe('findAllComponentDefinitions', () => {
       expect(result.length).toBe(4);
     });
 
-    it('resolves extends React.Component/React.PureComponent from import', () => {
+    test('resolves extends React.Component/React.PureComponent from import', () => {
       const source = `
         import Component from 'reactComponent';
         import PureComponent from 'reactPureComponent';
@@ -173,7 +174,7 @@ describe('findAllComponentDefinitions', () => {
       expect(result.length).toBe(2);
     });
 
-    it('finds React.Component, independent of the var name', () => {
+    test('finds React.Component, independent of the var name', () => {
       const source = `
         import R from 'React';
         class Component extends R.Component {};
@@ -185,7 +186,7 @@ describe('findAllComponentDefinitions', () => {
       expect(result.length).toBe(1);
     });
 
-    it('does not process X.Component of other modules', () => {
+    test('does not process X.Component of other modules', () => {
       const source = `
         import R from 'FakeReact';
         class Component extends R.Component {};
@@ -199,7 +200,7 @@ describe('findAllComponentDefinitions', () => {
   });
 
   describe('stateless components', () => {
-    it('finds stateless components', () => {
+    test('finds stateless components', () => {
       const source = `
         import React from 'React';
         let ComponentA = () => <div />;
@@ -230,7 +231,7 @@ describe('findAllComponentDefinitions', () => {
       expect(result.length).toBe(7);
     });
 
-    it('resolve renders from imports', () => {
+    test('resolve renders from imports', () => {
       const source = `
         import jsxDiv from 'jsxDiv';
         import createElement from 'createElement';
@@ -246,7 +247,7 @@ describe('findAllComponentDefinitions', () => {
       expect(result.length).toBe(3);
     });
 
-    it('finds React.createElement, independent of the var name', () => {
+    test('finds React.createElement, independent of the var name', () => {
       const source = `
         import AlphaBetters from 'react';
         function ComponentA () { return AlphaBetters.createElement('div', null); }
@@ -259,7 +260,7 @@ describe('findAllComponentDefinitions', () => {
       expect(result.length).toBe(1);
     });
 
-    it('does not process X.createElement of other modules', () => {
+    test('does not process X.createElement of other modules', () => {
       const source = `
         import R from 'FakeReact';
         const ComponentA = () => R.createElement('div', null);
@@ -273,7 +274,7 @@ describe('findAllComponentDefinitions', () => {
   });
 
   describe('forwardRef components', () => {
-    it('finds forwardRef components', () => {
+    test('finds forwardRef components', () => {
       const source = `
         import React from 'react';
         import PropTypes from 'prop-types';
@@ -293,7 +294,7 @@ describe('findAllComponentDefinitions', () => {
       expect(result[0].node.type).toEqual('CallExpression');
     });
 
-    it('finds none inline forwardRef components', () => {
+    test('finds none inline forwardRef components', () => {
       const source = `
         import React from 'react';
         import PropTypes from 'prop-types';
@@ -313,7 +314,7 @@ describe('findAllComponentDefinitions', () => {
       expect(result[0].node.type).toEqual('CallExpression');
     });
 
-    it('resolves imported component wrapped with forwardRef', () => {
+    test('resolves imported component wrapped with forwardRef', () => {
       const source = `
         import React from 'react';
         import ColoredView from 'coloredView';
@@ -329,7 +330,7 @@ describe('findAllComponentDefinitions', () => {
   });
 
   describe('regressions', () => {
-    it('finds component wrapped in HOC', () => {
+    test('finds component wrapped in HOC', () => {
       const source = `
         /**
          * @flow

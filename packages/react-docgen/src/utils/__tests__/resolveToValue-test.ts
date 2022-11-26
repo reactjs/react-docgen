@@ -1,11 +1,4 @@
 import type { NodePath } from '@babel/traverse';
-import {
-  identifier,
-  memberExpression,
-  numericLiteral,
-  objectProperty,
-  restElement,
-} from '@babel/types';
 import type {
   AssignmentExpression,
   CallExpression,
@@ -13,7 +6,8 @@ import type {
   ExportNamedDeclaration,
 } from '@babel/types';
 import { makeMockImporter, parse, parseTypescript } from '../../../tests/utils';
-import resolveToValue from '../resolveToValue';
+import resolveToValue from '../resolveToValue.js';
+import { describe, expect, test } from 'vitest';
 
 describe('resolveToValue', () => {
   const mockImporter = makeMockImporter({
@@ -26,55 +20,43 @@ describe('resolveToValue', () => {
         .get('local') as NodePath,
   });
 
-  it('resolves simple variable declarations', () => {
+  test('resolves simple variable declarations', () => {
     const path = parse.expressionLast(['var foo  = 42;', 'foo;'].join('\n'));
 
-    expect(resolveToValue(path)).toEqualASTNode(numericLiteral(42));
+    expect(resolveToValue(path)).toMatchSnapshot();
   });
 
-  it('resolves object destructuring', () => {
+  test('resolves object destructuring', () => {
     const path = parse.expressionLast(
       ['var {foo: {bar: baz}} = bar;', 'baz;'].join('\n'),
     );
 
-    const expected = objectProperty(
-      identifier('bar'),
-      identifier('baz'),
-      undefined,
-      undefined,
-      undefined,
-    );
-
-    expected.decorators = undefined;
-    // @ts-ignore BABEL types bug
-    expected.method = false;
-    // Resolves to identifier in destructuring
-    expect(resolveToValue(path)).toEqualASTNode(expected);
+    expect(resolveToValue(path)).toMatchSnapshot();
   });
 
-  it('handles RestElements properly', () => {
+  test('handles RestElements properly', () => {
     const path = parse.expressionLast(
       ['var {foo: {bar}, ...baz} = bar;', 'baz;'].join('\n'),
     );
 
-    expect(resolveToValue(path)).toEqualASTNode(restElement(identifier('baz')));
+    expect(resolveToValue(path)).toMatchSnapshot();
   });
 
-  it('returns the original path if it cannot be resolved', () => {
+  test('returns the original path if it cannot be resolved', () => {
     const path = parse.expressionLast(
       ['function foo() {}', 'foo()'].join('\n'),
     );
 
-    expect(resolveToValue(path)).toEqualASTNode(path);
+    expect(resolveToValue(path)).toBe(path);
   });
 
-  it('resolves variable declarators to their init value', () => {
+  test('resolves variable declarators to their init value', () => {
     const path = parse.statement('var foo = 42;').get('declarations')[0];
 
-    expect(resolveToValue(path)).toEqualASTNode(numericLiteral(42));
+    expect(resolveToValue(path)).toMatchSnapshot();
   });
 
-  it('resolves to class declarations', () => {
+  test('resolves to class declarations', () => {
     const path = parse.expressionLast(`
       class Foo {}
       Foo;
@@ -83,7 +65,7 @@ describe('resolveToValue', () => {
     expect(resolveToValue(path).node.type).toBe('ClassDeclaration');
   });
 
-  it('resolves to class function declaration', () => {
+  test('resolves to class function declaration', () => {
     const path = parse.expressionLast(`
       function foo() {}
       foo;
@@ -93,7 +75,7 @@ describe('resolveToValue', () => {
   });
 
   describe('flow', () => {
-    it('resolves type cast expressions', () => {
+    test('resolves type cast expressions', () => {
       const path = parse.expressionLast(`
       function foo() {}
       (foo: any);
@@ -104,7 +86,7 @@ describe('resolveToValue', () => {
   });
 
   describe('typescript', () => {
-    it('resolves type as expressions', () => {
+    test('resolves type as expressions', () => {
       const path = parseTypescript.expressionLast(`
       function foo() {}
       (foo as any);
@@ -113,7 +95,7 @@ describe('resolveToValue', () => {
       expect(resolveToValue(path).node.type).toBe('FunctionDeclaration');
     });
 
-    it('resolves type assertions', () => {
+    test('resolves type assertions', () => {
       const path = parseTypescript.expressionLast(`
       function foo() {}
       (<any> foo);
@@ -122,7 +104,7 @@ describe('resolveToValue', () => {
       expect(resolveToValue(path).node.type).toBe('FunctionDeclaration');
     });
 
-    it('resolves type alias', () => {
+    test('resolves type alias', () => {
       const path = parseTypescript.statement(
         `let action: Action;
          type Action = {};`,
@@ -139,25 +121,23 @@ describe('resolveToValue', () => {
   });
 
   describe('assignments', () => {
-    it('resolves to assigned values', () => {
+    test('resolves to assigned values', () => {
       const path = parse.expressionLast(
         ['var foo;', 'foo = 42;', 'foo;'].join('\n'),
       );
 
-      expect(resolveToValue(path)).toEqualASTNode(numericLiteral(42));
+      expect(resolveToValue(path)).toMatchSnapshot();
     });
 
-    it('resolves to other assigned value if ref is in an assignment lhs', () => {
+    test('resolves to other assigned value if ref is in an assignment lhs', () => {
       const path = parse.expressionLast<AssignmentExpression>(
         ['var foo;', 'foo = 42;', 'foo = wrap(foo);'].join('\n'),
       );
 
-      expect(resolveToValue(path.get('left'))).toEqualASTNode(
-        numericLiteral(42),
-      );
+      expect(resolveToValue(path.get('left'))).toMatchSnapshot();
     });
 
-    it('resolves to other assigned value if ref is in an assignment rhs', () => {
+    test('resolves to other assigned value if ref is in an assignment rhs', () => {
       const path = parse.expressionLast<AssignmentExpression>(
         ['var foo;', 'foo = 42;', 'foo = wrap(foo);'].join('\n'),
       );
@@ -166,12 +146,12 @@ describe('resolveToValue', () => {
         resolveToValue(
           (path.get('right') as NodePath<CallExpression>).get('arguments')[0],
         ),
-      ).toEqualASTNode(numericLiteral(42));
+      ).toMatchSnapshot();
     });
   });
 
   describe('ImportDeclaration', () => {
-    it('resolves unresolvable default import references to the import declaration', () => {
+    test('resolves unresolvable default import references to the import declaration', () => {
       const path = parse.expressionLast<Identifier>(
         ['import foo from "Foo"', 'foo;'].join('\n'),
       );
@@ -180,7 +160,7 @@ describe('resolveToValue', () => {
       expect(value.node.type).toBe('ImportDeclaration');
     });
 
-    it('resolves unresolvable named import references to the import declaration', () => {
+    test('resolves unresolvable named import references to the import declaration', () => {
       const path = parse.expressionLast(
         ['import {foo} from "Foo"', 'foo;'].join('\n'),
       );
@@ -189,7 +169,7 @@ describe('resolveToValue', () => {
       expect(value.node.type).toBe('ImportDeclaration');
     });
 
-    it('resolves unresolvable aliased import references to the import declaration', () => {
+    test('resolves unresolvable aliased import references to the import declaration', () => {
       const path = parse.expressionLast(
         ['import {foo as bar} from "Foo"', 'bar;'].join('\n'),
       );
@@ -198,7 +178,7 @@ describe('resolveToValue', () => {
       expect(value.node.type).toBe('ImportDeclaration');
     });
 
-    it('resolves unresolvable namespace import references to the import declaration', () => {
+    test('resolves unresolvable namespace import references to the import declaration', () => {
       const path = parse.expressionLast(
         ['import * as bar from "Foo"', 'bar;'].join('\n'),
       );
@@ -207,7 +187,7 @@ describe('resolveToValue', () => {
       expect(value.node.type).toBe('ImportDeclaration');
     });
 
-    it('resolves namespace import references to the import declaration', () => {
+    test('resolves namespace import references to the import declaration', () => {
       const path = parse.expressionLast(
         `import * as bar from "Foo"; bar.baz`,
         mockImporter,
@@ -217,7 +197,7 @@ describe('resolveToValue', () => {
       expect(value).toMatchSnapshot();
     });
 
-    it('resolves namespace import references to the import declaration', () => {
+    test('resolves namespace import references to the import declaration', () => {
       const path = parse.expressionLast(
         `import * as bar from "Foo"; bar['baz']`,
         mockImporter,
@@ -227,7 +207,7 @@ describe('resolveToValue', () => {
       expect(value).toMatchSnapshot();
     });
 
-    it('does not crash when resolving MemberExpression with non Identifiers', () => {
+    test('does not crash when resolving MemberExpression with non Identifiers', () => {
       const path = parse.expressionLast(
         `import * as bar from "Foo"; bar[()=>{}]`,
         mockImporter,
@@ -239,23 +219,23 @@ describe('resolveToValue', () => {
   });
 
   describe('MemberExpression', () => {
-    it("resolves a MemberExpression to it's init value", () => {
+    test("resolves a MemberExpression to it's init value", () => {
       const path = parse.expressionLast(
         ['var foo = { bar: 1 };', 'foo.bar;'].join('\n'),
       );
 
-      expect(resolveToValue(path)).toEqualASTNode(numericLiteral(1));
+      expect(resolveToValue(path)).toMatchSnapshot();
     });
 
-    it('resolves a MemberExpression in the scope chain', () => {
+    test('resolves a MemberExpression in the scope chain', () => {
       const path = parse.expressionLast(
         ['var foo = 1;', 'var bar = { baz: foo };', 'bar.baz;'].join('\n'),
       );
 
-      expect(resolveToValue(path)).toEqualASTNode(numericLiteral(1));
+      expect(resolveToValue(path)).toMatchSnapshot();
     });
 
-    it('resolves a nested MemberExpression in the scope chain', () => {
+    test('resolves a nested MemberExpression in the scope chain', () => {
       const path = parse.expressionLast(
         [
           'var foo = { bar: 1 };',
@@ -264,10 +244,10 @@ describe('resolveToValue', () => {
         ].join('\n'),
       );
 
-      expect(resolveToValue(path)).toEqualASTNode(numericLiteral(1));
+      expect(resolveToValue(path)).toMatchSnapshot();
     });
 
-    it('returns the last resolvable MemberExpression', () => {
+    test('returns the last resolvable MemberExpression', () => {
       const path = parse.expressionLast(
         [
           'import foo from "bar";',
@@ -276,19 +256,17 @@ describe('resolveToValue', () => {
         ].join('\n'),
       );
 
-      expect(resolveToValue(path)).toEqualASTNode(
-        memberExpression(identifier('foo'), identifier('bar'), false, false),
-      );
+      expect(resolveToValue(path)).toMatchSnapshot();
     });
 
-    it('returns the path itself if it can not resolve it any further', () => {
+    test('returns the path itself if it can not resolve it any further', () => {
       const path = parse.expressionLast(
         `var foo = {};
         foo.bar = 1;
         foo.bar;`,
       );
 
-      expect(resolveToValue(path)).toEqualASTNode(path);
+      expect(resolveToValue(path)).toBe(path);
     });
   });
 });

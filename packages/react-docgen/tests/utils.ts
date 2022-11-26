@@ -1,8 +1,8 @@
 import type { Node, TransformOptions } from '@babel/core';
 import type { NodePath } from '@babel/traverse';
-import type { Importer, ImportPath } from '../src/importer';
-import FileState from '../src/FileState';
-import babelParse from '../src/babelParser';
+import type { Importer, ImportPath } from '../src/importer/index.js';
+import FileState from '../src/FileState.js';
+import babelParse from '../src/babelParser.js';
 import type {
   ExportDefaultDeclaration,
   Expression,
@@ -10,16 +10,7 @@ import type {
   Program,
   Statement,
 } from '@babel/types';
-
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace jest {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    interface Matchers<R> {
-      toEqualASTNode: (expected: Node | NodePath) => CustomMatcherResult;
-    }
-  }
-}
+import { afterEach } from 'vitest';
 
 interface ParseCall {
   (code: string, importer: Importer): NodePath<Program>;

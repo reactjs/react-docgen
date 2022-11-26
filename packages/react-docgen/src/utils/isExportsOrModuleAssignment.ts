@@ -1,5 +1,5 @@
 import type { NodePath } from '@babel/traverse';
-import * as expressionTo from './expressionTo';
+import * as expressionTo from './expressionTo.js';
 
 /**
  * Returns true if the expression is of form `exports.foo = ...;` or

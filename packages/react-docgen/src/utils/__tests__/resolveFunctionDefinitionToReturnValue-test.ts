@@ -1,9 +1,10 @@
 import type { FunctionDeclaration } from '@babel/types';
 import { parse } from '../../../tests/utils';
-import resolveFunctionDefinitionToReturnValue from '../resolveFunctionDefinitionToReturnValue';
+import resolveFunctionDefinitionToReturnValue from '../resolveFunctionDefinitionToReturnValue.js';
+import { describe, expect, test } from 'vitest';
 
 describe('resolveFunctionDefinitionToReturnValue', () => {
-  it('can resolve easy return statement', () => {
+  test('can resolve easy return statement', () => {
     const path = parse.statement<FunctionDeclaration>(`
         function x () { return "result"; }
     `);
@@ -11,7 +12,7 @@ describe('resolveFunctionDefinitionToReturnValue', () => {
     expect(resolveFunctionDefinitionToReturnValue(path)).toMatchSnapshot();
   });
 
-  it('stops after first return', () => {
+  test('stops after first return', () => {
     const path = parse.statement<FunctionDeclaration>(`
         function x () { return "first"; return "second"; }
     `);
@@ -19,7 +20,7 @@ describe('resolveFunctionDefinitionToReturnValue', () => {
     expect(resolveFunctionDefinitionToReturnValue(path)).toMatchSnapshot();
   });
 
-  it('ignores return values in other blocks', () => {
+  test('ignores return values in other blocks', () => {
     const path = parse.statement<FunctionDeclaration>(`
         function x () {
           const a = function () { return "funcexpr"; }

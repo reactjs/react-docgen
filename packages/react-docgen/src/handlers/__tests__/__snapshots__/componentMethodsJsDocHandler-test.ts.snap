@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`componentMethodsJsDocHandler adds descriptions 1`] = `
+exports[`componentMethodsJsDocHandler > adds descriptions 1`] = `
 [
   {
     "description": "The foo method.",
@@ -27,7 +27,7 @@ exports[`componentMethodsJsDocHandler adds descriptions 1`] = `
 ]
 `;
 
-exports[`componentMethodsJsDocHandler adds js doc types when no flow types 1`] = `
+exports[`componentMethodsJsDocHandler > adds js doc types when no flow types 1`] = `
 [
   {
     "description": null,
@@ -57,7 +57,7 @@ exports[`componentMethodsJsDocHandler adds js doc types when no flow types 1`] =
 ]
 `;
 
-exports[`componentMethodsJsDocHandler keeps flow types over js doc types 1`] = `
+exports[`componentMethodsJsDocHandler > keeps flow types over js doc types 1`] = `
 [
   {
     "description": null,

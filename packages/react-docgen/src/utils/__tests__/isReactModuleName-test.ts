@@ -1,4 +1,5 @@
-import isReactModuleName from '../isReactModuleName';
+import isReactModuleName from '../isReactModuleName.js';
+import { describe, expect, test } from 'vitest';
 
 describe('isReactModuleName', () => {
   const reactModules = [
@@ -10,12 +11,12 @@ describe('isReactModuleName', () => {
   ];
 
   reactModules.forEach(module => {
-    it(`returns true for ${module}`, () => {
+    test(`returns true for ${module}`, () => {
       expect(isReactModuleName(module)).toBe(true);
     });
   });
 
-  it(`returns false by default`, () => {
+  test(`returns false by default`, () => {
     expect(isReactModuleName('not-react')).toBe(false);
   });
 });

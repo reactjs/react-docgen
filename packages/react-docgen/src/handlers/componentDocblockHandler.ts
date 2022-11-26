@@ -1,10 +1,10 @@
-import type Documentation from '../Documentation';
-import { getDocblock } from '../utils/docblock';
-import isReactForwardRefCall from '../utils/isReactForwardRefCall';
-import resolveToValue from '../utils/resolveToValue';
+import type Documentation from '../Documentation.js';
+import { getDocblock } from '../utils/docblock.js';
+import isReactForwardRefCall from '../utils/isReactForwardRefCall.js';
+import resolveToValue from '../utils/resolveToValue.js';
 import type { NodePath, Node } from '@babel/traverse';
-import type { ComponentNode } from '../resolver';
-import type { Handler } from '.';
+import type { ComponentNode } from '../resolver/index.js';
+import type { Handler } from './index.js';
 
 function getDocblockFromComponent(path: NodePath): string | null {
   let description: string | null = null;

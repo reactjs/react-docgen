@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`getMembers does work with custom expressions in arguments 1`] = `
+exports[`getMembers > does work with custom expressions in arguments 1`] = `
 [
   {
     "argumentPaths": [
@@ -36,7 +36,7 @@ exports[`getMembers does work with custom expressions in arguments 1`] = `
     "computed": true,
     "path": Node {
       "extra": {
-        "raw": ""baz"",
+        "raw": "\\"baz\\"",
         "rawValue": "baz",
       },
       "type": "StringLiteral",
@@ -46,7 +46,7 @@ exports[`getMembers does work with custom expressions in arguments 1`] = `
 ]
 `;
 
-exports[`getMembers does work with custom expressions in chain 1`] = `
+exports[`getMembers > does work with custom expressions in chain 1`] = `
 [
   {
     "argumentPaths": [
@@ -71,7 +71,7 @@ exports[`getMembers does work with custom expressions in chain 1`] = `
     "path": Node {
       "left": Node {
         "extra": {
-          "raw": """",
+          "raw": "\\"\\"",
           "rawValue": "",
         },
         "type": "StringLiteral",
@@ -80,7 +80,7 @@ exports[`getMembers does work with custom expressions in chain 1`] = `
       "operator": "+",
       "right": Node {
         "extra": {
-          "raw": """",
+          "raw": "\\"\\"",
           "rawValue": "",
         },
         "type": "StringLiteral",
@@ -92,7 +92,7 @@ exports[`getMembers does work with custom expressions in chain 1`] = `
 ]
 `;
 
-exports[`getMembers finds all "members" "inside" a MemberExpression 1`] = `
+exports[`getMembers > finds all "members" "inside" a MemberExpression 1`] = `
 [
   {
     "argumentPaths": [
@@ -134,7 +134,7 @@ exports[`getMembers finds all "members" "inside" a MemberExpression 1`] = `
 ]
 `;
 
-exports[`getMembers includes the root if option set to true 1`] = `
+exports[`getMembers > includes the root if option set to true 1`] = `
 [
   {
     "argumentPaths": [],

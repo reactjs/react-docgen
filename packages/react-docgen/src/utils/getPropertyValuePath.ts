@@ -1,6 +1,6 @@
 import type { NodePath } from '@babel/traverse';
 import type { Expression, ObjectExpression, ObjectMethod } from '@babel/types';
-import getPropertyName from './getPropertyName';
+import getPropertyName from './getPropertyName.js';
 
 /**
  * Given an ObjectExpression, this function returns the path of the value of

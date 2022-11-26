@@ -57,9 +57,5 @@ module.exports = {
         '@typescript-eslint/sort-type-union-intersection-members': 'error',
       },
     },
-    {
-      files: '**/__tests__/*-test.js',
-      env: { jest: true },
-    },
   ],
 };

@@ -1,5 +1,5 @@
 import { makeMockImporter, parse } from '../../../tests/utils';
-import componentDocblockHandler from '../componentDocblockHandler';
+import componentDocblockHandler from '../componentDocblockHandler.js';
 import Documentation from '../../Documentation';
 import type DocumentationMock from '../../__mocks__/Documentation';
 import type { NodePath } from '@babel/traverse';
@@ -15,8 +15,9 @@ import type {
   VariableDeclaration,
 } from '@babel/types';
 import type { ComponentNode } from '../../resolver';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 
-jest.mock('../../Documentation');
+vi.mock('../../Documentation.js');
 
 describe('componentDocblockHandler', () => {
   let documentation: Documentation & DocumentationMock;
@@ -25,11 +26,11 @@ describe('componentDocblockHandler', () => {
     documentation = new Documentation() as Documentation & DocumentationMock;
   });
 
-  function test(
+  function testDockblockHandler(
     definitionSrc: string,
     parseFunc: (src: string) => NodePath<ComponentNode>,
   ) {
-    it('finds docblocks for component definitions', () => {
+    test('finds docblocks for component definitions', () => {
       const definition = parseFunc(`
         import something from 'somewhere';
 
@@ -43,7 +44,7 @@ describe('componentDocblockHandler', () => {
       expect(documentation.description).toBe('Component description');
     });
 
-    it('ignores other types of comments', () => {
+    test('ignores other types of comments', () => {
       let definition = parseFunc(`
         import something from 'somewhere';
 
@@ -65,7 +66,7 @@ describe('componentDocblockHandler', () => {
       expect(documentation.description).toBe('');
     });
 
-    it('only considers the docblock directly above the definition', () => {
+    test('only considers the docblock directly above the definition', () => {
       const definition = parseFunc(`
         import something from 'somewhere';
 
@@ -91,7 +92,7 @@ describe('componentDocblockHandler', () => {
     exportSrc = '',
   ) {
     describe('decorators', () => {
-      it("uses the docblock above the decorator if it's the only one", () => {
+      test("uses the docblock above the decorator if it's the only one", () => {
         const definition = parseFunc(`
           import something from 'somewhere';
           /**
@@ -107,7 +108,7 @@ describe('componentDocblockHandler', () => {
         expect(documentation.description).toBe('Component description');
       });
 
-      it('uses the component docblock if present', () => {
+      test('uses the component docblock if present', () => {
         const definition = parseFunc(`
           import something from 'somewhere';
 
@@ -157,7 +158,7 @@ describe('componentDocblockHandler', () => {
     });
 
     describe('imports', () => {
-      it('can use a custom importer to resolve docblocks on imported components', () => {
+      test('can use a custom importer to resolve docblocks on imported components', () => {
         const program = parse
           .statementLast(
             `import ${importDef} from 'test1';
@@ -171,7 +172,7 @@ describe('componentDocblockHandler', () => {
       });
     });
 
-    it('traverses multiple imports', () => {
+    test('traverses multiple imports', () => {
       const program = parse
         .statementLast(
           `import ${importDef} from 'test2';
@@ -186,55 +187,75 @@ describe('componentDocblockHandler', () => {
   }
 
   describe('React.createClass', () => {
-    test('var Component = React.createClass({})', src =>
-      parse
-        .statementLast(src)
-        .get('declarations.0.init.arguments.0') as NodePath<ObjectExpression>);
+    testDockblockHandler(
+      'var Component = React.createClass({})',
+      src =>
+        parse
+          .statementLast(src)
+          .get('declarations.0.init.arguments.0') as NodePath<ObjectExpression>,
+    );
     testImports('export var Component = React.createClass({})', 'Component');
   });
 
   describe('ClassDeclaration', () => {
-    test('class Component {}', src => parse.statementLast(src));
+    testDockblockHandler('class Component {}', src => parse.statementLast(src));
     testDecorators('class Component {}', src => parse.statementLast(src));
     testImports('export class Component {}', 'Component');
   });
 
   describe('ClassExpression', () => {
-    test('var Component = class {};', src =>
-      parse
-        .statementLast<VariableDeclaration>(src)
-        .get('declarations.0.init') as NodePath<ClassExpression>);
+    testDockblockHandler(
+      'var Component = class {};',
+      src =>
+        parse
+          .statementLast<VariableDeclaration>(src)
+          .get('declarations.0.init') as NodePath<ClassExpression>,
+    );
     testImports('export var Component = class {};', 'Component');
   });
 
   describe('Stateless functions', () => {
-    test('function Component() {}', src => parse.statementLast(src));
+    testDockblockHandler('function Component() {}', src =>
+      parse.statementLast(src),
+    );
     testImports('export function Component() {}', 'Component');
-    test('var Component = function () {};', src =>
-      parse
-        .statementLast<VariableDeclaration>(src)
-        .get('declarations.0.init') as NodePath<FunctionExpression>);
+    testDockblockHandler(
+      'var Component = function () {};',
+      src =>
+        parse
+          .statementLast<VariableDeclaration>(src)
+          .get('declarations.0.init') as NodePath<FunctionExpression>,
+    );
     testImports('export var Component = function () {};', 'Component');
-    test('var Component = () => {}', src =>
-      parse
-        .statementLast<VariableDeclaration>(src)
-        .get('declarations.0.init') as NodePath<ArrowFunctionExpression>);
+    testDockblockHandler(
+      'var Component = () => {}',
+      src =>
+        parse
+          .statementLast<VariableDeclaration>(src)
+          .get('declarations.0.init') as NodePath<ArrowFunctionExpression>,
+    );
     testImports('export var Component = () => {}', 'Component');
   });
 
   describe('ESM default export', () => {
     describe('Default React.createClass export', () => {
-      test('export default React.createClass({});', src =>
-        parse
-          .statementLast(src)
-          .get('declaration.arguments.0') as NodePath<ObjectExpression>);
+      testDockblockHandler(
+        'export default React.createClass({});',
+        src =>
+          parse
+            .statementLast(src)
+            .get('declaration.arguments.0') as NodePath<ObjectExpression>,
+      );
     });
 
     describe('Default class declaration export', () => {
-      test('export default class Component {}', src =>
-        parse
-          .statementLast(src)
-          .get('declaration') as NodePath<ClassDeclaration>);
+      testDockblockHandler(
+        'export default class Component {}',
+        src =>
+          parse
+            .statementLast(src)
+            .get('declaration') as NodePath<ClassDeclaration>,
+      );
       testDecorators(
         'class Component {}',
         src =>
@@ -246,10 +267,13 @@ describe('componentDocblockHandler', () => {
     });
 
     describe('Default class expression export', () => {
-      test('export default class {}', src =>
-        parse
-          .statementLast(src)
-          .get('declaration') as NodePath<ClassExpression>);
+      testDockblockHandler(
+        'export default class {}',
+        src =>
+          parse
+            .statementLast(src)
+            .get('declaration') as NodePath<ClassExpression>,
+      );
       testDecorators(
         'class {}',
         src =>
@@ -262,43 +286,58 @@ describe('componentDocblockHandler', () => {
 
     describe('Default stateless function export', () => {
       describe('named function', () => {
-        test('export default function Component() {}', src =>
-          parse
-            .statementLast(src)
-            .get('declaration') as NodePath<FunctionDeclaration>);
+        testDockblockHandler(
+          'export default function Component() {}',
+          src =>
+            parse
+              .statementLast(src)
+              .get('declaration') as NodePath<FunctionDeclaration>,
+        );
       });
 
       describe('anonymous function', () => {
-        test('export default function() {}', src =>
-          parse
-            .statementLast(src)
-            .get('declaration') as NodePath<FunctionDeclaration>);
+        testDockblockHandler(
+          'export default function() {}',
+          src =>
+            parse
+              .statementLast(src)
+              .get('declaration') as NodePath<FunctionDeclaration>,
+        );
       });
 
       describe('arrow function', () => {
-        test('export default () => {}', src =>
-          parse
-            .statementLast<ExportDefaultDeclaration>(src)
-            .get('declaration') as NodePath<ArrowFunctionExpression>);
+        testDockblockHandler(
+          'export default () => {}',
+          src =>
+            parse
+              .statementLast<ExportDefaultDeclaration>(src)
+              .get('declaration') as NodePath<ArrowFunctionExpression>,
+        );
       });
     });
   });
 
   describe('ESM named export', () => {
     describe('Named React.createClass export', () => {
-      test('export var Component = React.createClass({});', src =>
-        parse
-          .statementLast(src)
-          .get(
-            'declaration.declarations.0.init.arguments.0',
-          ) as NodePath<ObjectExpression>);
+      testDockblockHandler(
+        'export var Component = React.createClass({});',
+        src =>
+          parse
+            .statementLast(src)
+            .get(
+              'declaration.declarations.0.init.arguments.0',
+            ) as NodePath<ObjectExpression>,
+      );
     });
 
     describe('Named class declaration export', () => {
-      test('export class Component {}', src =>
-        parse
-          .statementLast(src)
-          .get('declaration') as NodePath<ClassDeclaration>);
+      testDockblockHandler(
+        'export class Component {}',
+        src =>
+          parse
+            .statementLast(src)
+            .get('declaration') as NodePath<ClassDeclaration>,
+      );
       testDecorators(
         'class Component {}',
         src =>
@@ -311,24 +350,33 @@ describe('componentDocblockHandler', () => {
 
     describe('Named stateless function', () => {
       describe('named function', () => {
-        test('export function Component() {}', src =>
-          parse
-            .statementLast(src)
-            .get('declaration') as NodePath<FunctionDeclaration>);
+        testDockblockHandler(
+          'export function Component() {}',
+          src =>
+            parse
+              .statementLast(src)
+              .get('declaration') as NodePath<FunctionDeclaration>,
+        );
       });
 
       describe('anonymous function', () => {
-        test('export var Component = function() {}', src =>
-          parse
-            .statementLast(src)
-            .get('declaration') as NodePath<FunctionExpression>);
+        testDockblockHandler(
+          'export var Component = function() {}',
+          src =>
+            parse
+              .statementLast(src)
+              .get('declaration') as NodePath<FunctionExpression>,
+        );
       });
 
       describe('arrow function', () => {
-        test('export var Component = () => {}', src =>
-          parse
-            .statementLast(src)
-            .get('declaration') as NodePath<ArrowFunctionExpression>);
+        testDockblockHandler(
+          'export var Component = () => {}',
+          src =>
+            parse
+              .statementLast(src)
+              .get('declaration') as NodePath<ArrowFunctionExpression>,
+        );
       });
     });
   });
@@ -337,10 +385,15 @@ describe('componentDocblockHandler', () => {
     const useDefault = true;
 
     describe('inline implementation', () => {
-      test(`
+      testDockblockHandler(
+        `
         React.forwardRef((props, ref) => {});
-        import React from "react";`, src =>
-        parse.statement(src, -2).get('expression') as NodePath<CallExpression>);
+        import React from "react";`,
+        src =>
+          parse
+            .statement(src, -2)
+            .get('expression') as NodePath<CallExpression>,
+      );
 
       testImports(
         `import React from 'react';
@@ -351,11 +404,16 @@ describe('componentDocblockHandler', () => {
     });
 
     describe('inline implementation with memo', () => {
-      test(`
+      testDockblockHandler(
+        `
         React.memo(React.forwardRef((props, ref) => {}));
         import React from "react";
-        `, src =>
-        parse.statement(src, -2).get('expression') as NodePath<CallExpression>);
+        `,
+        src =>
+          parse
+            .statement(src, -2)
+            .get('expression') as NodePath<CallExpression>,
+      );
 
       testImports(
         `
@@ -368,12 +426,17 @@ describe('componentDocblockHandler', () => {
     });
 
     describe('out of line implementation', () => {
-      test(`
+      testDockblockHandler(
+        `
         let Component = (props, ref) => {};
         React.forwardRef(Component);
         import React from "react";
-        `, src =>
-        parse.statement(src, -2).get('expression') as NodePath<CallExpression>);
+        `,
+        src =>
+          parse
+            .statement(src, -2)
+            .get('expression') as NodePath<CallExpression>,
+      );
 
       testImports(
         `

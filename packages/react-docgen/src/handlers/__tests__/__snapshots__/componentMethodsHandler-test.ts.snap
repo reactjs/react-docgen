@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`componentMethodsHandler function components finds static methods on a component in a variable declaration 1`] = `
+exports[`componentMethodsHandler > function components > finds static methods on a component in a variable declaration 1`] = `
 [
   {
     "docblock": null,
@@ -23,7 +23,7 @@ exports[`componentMethodsHandler function components finds static methods on a c
 ]
 `;
 
-exports[`componentMethodsHandler function components finds static methods on a component in an assignment 1`] = `
+exports[`componentMethodsHandler > function components > finds static methods on a component in an assignment 1`] = `
 [
   {
     "docblock": null,
@@ -46,7 +46,7 @@ exports[`componentMethodsHandler function components finds static methods on a c
 ]
 `;
 
-exports[`componentMethodsHandler function components finds static methods on a function declaration 1`] = `
+exports[`componentMethodsHandler > function components > finds static methods on a function declaration 1`] = `
 [
   {
     "docblock": null,
@@ -69,7 +69,7 @@ exports[`componentMethodsHandler function components finds static methods on a f
 ]
 `;
 
-exports[`componentMethodsHandler function components resolves imported methods assigned on a component in an assignment 1`] = `
+exports[`componentMethodsHandler > function components > resolves imported methods assigned on a component in an assignment 1`] = `
 [
   {
     "docblock": null,
@@ -83,7 +83,7 @@ exports[`componentMethodsHandler function components resolves imported methods a
 ]
 `;
 
-exports[`componentMethodsHandler function components resolves imported methods assigned to static properties on a component 1`] = `
+exports[`componentMethodsHandler > function components > resolves imported methods assigned to static properties on a component 1`] = `
 [
   {
     "docblock": null,
@@ -97,7 +97,7 @@ exports[`componentMethodsHandler function components resolves imported methods a
 ]
 `;
 
-exports[`componentMethodsHandler function components resolves imported methods on a function declaration 1`] = `
+exports[`componentMethodsHandler > function components > resolves imported methods on a function declaration 1`] = `
 [
   {
     "docblock": null,
@@ -111,7 +111,7 @@ exports[`componentMethodsHandler function components resolves imported methods o
 ]
 `;
 
-exports[`componentMethodsHandler resolves imported methods assigned to computed properties 1`] = `
+exports[`componentMethodsHandler > resolves imported methods assigned to computed properties 1`] = `
 [
   {
     "docblock": "The foo method",
@@ -135,7 +135,7 @@ exports[`componentMethodsHandler resolves imported methods assigned to computed 
 ]
 `;
 
-exports[`componentMethodsHandler should handle and ignore computed methods 1`] = `
+exports[`componentMethodsHandler > should handle and ignore computed methods 1`] = `
 [
   {
     "docblock": "The foo method",
@@ -159,7 +159,7 @@ exports[`componentMethodsHandler should handle and ignore computed methods 1`] =
 ]
 `;
 
-exports[`componentMethodsHandler useImperativeHandle AssignmentExpression and useImperativeHandle 1`] = `
+exports[`componentMethodsHandler > useImperativeHandle > AssignmentExpression and useImperativeHandle 1`] = `
 [
   {
     "docblock": null,
@@ -180,7 +180,7 @@ exports[`componentMethodsHandler useImperativeHandle AssignmentExpression and us
 ]
 `;
 
-exports[`componentMethodsHandler useImperativeHandle VariableDeclaration and useImperativeHandle 1`] = `
+exports[`componentMethodsHandler > useImperativeHandle > VariableDeclaration and useImperativeHandle 1`] = `
 [
   {
     "docblock": null,
@@ -201,7 +201,7 @@ exports[`componentMethodsHandler useImperativeHandle VariableDeclaration and use
 ]
 `;
 
-exports[`componentMethodsHandler useImperativeHandle assigned ReturnStatement ArrowFunctionExpression Component 1`] = `
+exports[`componentMethodsHandler > useImperativeHandle > assigned ReturnStatement > ArrowFunctionExpression Component 1`] = `
 [
   {
     "docblock": null,
@@ -213,7 +213,7 @@ exports[`componentMethodsHandler useImperativeHandle assigned ReturnStatement Ar
 ]
 `;
 
-exports[`componentMethodsHandler useImperativeHandle assigned ReturnStatement FunctionDeclaration Component 1`] = `
+exports[`componentMethodsHandler > useImperativeHandle > assigned ReturnStatement > FunctionDeclaration Component 1`] = `
 [
   {
     "docblock": null,
@@ -225,7 +225,7 @@ exports[`componentMethodsHandler useImperativeHandle assigned ReturnStatement Fu
 ]
 `;
 
-exports[`componentMethodsHandler useImperativeHandle assigned ReturnStatement FunctionExpression Component 1`] = `
+exports[`componentMethodsHandler > useImperativeHandle > assigned ReturnStatement > FunctionExpression Component 1`] = `
 [
   {
     "docblock": null,
@@ -237,7 +237,7 @@ exports[`componentMethodsHandler useImperativeHandle assigned ReturnStatement Fu
 ]
 `;
 
-exports[`componentMethodsHandler useImperativeHandle direct ObjectExpression ArrowFunctionExpression Component 1`] = `
+exports[`componentMethodsHandler > useImperativeHandle > direct ObjectExpression > ArrowFunctionExpression Component 1`] = `
 [
   {
     "docblock": null,
@@ -249,7 +249,7 @@ exports[`componentMethodsHandler useImperativeHandle direct ObjectExpression Arr
 ]
 `;
 
-exports[`componentMethodsHandler useImperativeHandle direct ObjectExpression FunctionDeclaration Component 1`] = `
+exports[`componentMethodsHandler > useImperativeHandle > direct ObjectExpression > FunctionDeclaration Component 1`] = `
 [
   {
     "docblock": null,
@@ -261,7 +261,7 @@ exports[`componentMethodsHandler useImperativeHandle direct ObjectExpression Fun
 ]
 `;
 
-exports[`componentMethodsHandler useImperativeHandle direct ObjectExpression FunctionExpression Component 1`] = `
+exports[`componentMethodsHandler > useImperativeHandle > direct ObjectExpression > FunctionExpression Component 1`] = `
 [
   {
     "docblock": null,
@@ -273,7 +273,7 @@ exports[`componentMethodsHandler useImperativeHandle direct ObjectExpression Fun
 ]
 `;
 
-exports[`componentMethodsHandler useImperativeHandle regular ReturnStatement ArrowFunctionExpression Component 1`] = `
+exports[`componentMethodsHandler > useImperativeHandle > regular ReturnStatement > ArrowFunctionExpression Component 1`] = `
 [
   {
     "docblock": null,
@@ -285,7 +285,7 @@ exports[`componentMethodsHandler useImperativeHandle regular ReturnStatement Arr
 ]
 `;
 
-exports[`componentMethodsHandler useImperativeHandle regular ReturnStatement FunctionDeclaration Component 1`] = `
+exports[`componentMethodsHandler > useImperativeHandle > regular ReturnStatement > FunctionDeclaration Component 1`] = `
 [
   {
     "docblock": null,
@@ -297,7 +297,7 @@ exports[`componentMethodsHandler useImperativeHandle regular ReturnStatement Fun
 ]
 `;
 
-exports[`componentMethodsHandler useImperativeHandle regular ReturnStatement FunctionExpression Component 1`] = `
+exports[`componentMethodsHandler > useImperativeHandle > regular ReturnStatement > FunctionExpression Component 1`] = `
 [
   {
     "docblock": null,

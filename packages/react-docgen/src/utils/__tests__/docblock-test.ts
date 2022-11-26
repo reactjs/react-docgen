@@ -1,23 +1,24 @@
 import { parse } from '../../../tests/utils';
-import { getDoclets, getDocblock } from '../docblock';
+import { getDoclets, getDocblock } from '../docblock.js';
+import { describe, expect, test } from 'vitest';
 
 describe('docblock', () => {
   describe('getDoclets', () => {
-    it('extracts single line doclets', () => {
+    test('extracts single line doclets', () => {
       expect(getDoclets('@foo bar\n@bar baz')).toEqual({
         foo: 'bar',
         bar: 'baz',
       });
     });
 
-    it('extracts multi line doclets', () => {
+    test('extracts multi line doclets', () => {
       expect(getDoclets('@foo bar\nbaz\n@bar baz')).toEqual({
         foo: 'bar\nbaz',
         bar: 'baz',
       });
     });
 
-    it('extracts boolean doclets', () => {
+    test('extracts boolean doclets', () => {
       expect(getDoclets('@foo bar\nbaz\n@abc\n@bar baz')).toEqual({
         foo: 'bar\nbaz',
         abc: true,
@@ -36,7 +37,7 @@ describe('docblock', () => {
       'foo;',
     ];
 
-    it('gets the closest docblock of the given node', () => {
+    test('gets the closest docblock of the given node', () => {
       const node = parse.statement(source.join('\n'));
 
       expect(getDocblock(node)).toEqual(comment.join('\n'));
@@ -51,14 +52,14 @@ describe('docblock', () => {
     ];
 
     terminators.forEach(t => {
-      it('can handle ' + escape(t) + ' as line terminator', () => {
+      test('can handle ' + escape(t) + ' as line terminator', () => {
         const node = parse.statement(source.join(t));
 
         expect(getDocblock(node)).toEqual(comment.join(t));
       });
     });
 
-    it('supports "short" docblocks', () => {
+    test('supports "short" docblocks', () => {
       const node = parse.statement('/** bar */\nfoo;');
 
       expect(getDocblock(node)).toEqual('bar');

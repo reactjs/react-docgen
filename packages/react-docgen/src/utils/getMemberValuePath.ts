@@ -1,8 +1,8 @@
 import type { NodePath } from '@babel/traverse';
-import getClassMemberValuePath from './getClassMemberValuePath';
-import getMemberExpressionValuePath from './getMemberExpressionValuePath';
-import getPropertyValuePath from './getPropertyValuePath';
-import resolveFunctionDefinitionToReturnValue from '../utils/resolveFunctionDefinitionToReturnValue';
+import getClassMemberValuePath from './getClassMemberValuePath.js';
+import getMemberExpressionValuePath from './getMemberExpressionValuePath.js';
+import getPropertyValuePath from './getPropertyValuePath.js';
+import resolveFunctionDefinitionToReturnValue from '../utils/resolveFunctionDefinitionToReturnValue.js';
 import type {
   CallExpression,
   ClassDeclaration,
@@ -14,7 +14,7 @@ import type {
   TaggedTemplateExpression,
   VariableDeclaration,
 } from '@babel/types';
-import type { StatelessComponentNode } from '../resolver';
+import type { StatelessComponentNode } from '../resolver/index.js';
 
 type SupportedNodes =
   | CallExpression

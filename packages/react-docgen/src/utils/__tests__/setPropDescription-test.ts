@@ -1,10 +1,11 @@
 import { parse, makeMockImporter } from '../../../tests/utils';
-import setPropDescription from '../setPropDescription';
+import setPropDescription from '../setPropDescription.js';
 import Documentation from '../../Documentation';
 import type { default as DocumentationMock } from '../../__mocks__/Documentation';
 import type { ExpressionStatement } from '@babel/types';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
-jest.mock('../../Documentation');
+vi.mock('../../Documentation.js');
 
 describe('setPropDescription', () => {
   let defaultDocumentation: Documentation & DocumentationMock;
@@ -26,7 +27,7 @@ describe('setPropDescription', () => {
     return documentation.descriptors;
   }
 
-  it('detects comments', () => {
+  test('detects comments', () => {
     const descriptors = getDescriptors(`{
      /**
        * my description 3
@@ -42,7 +43,7 @@ describe('setPropDescription', () => {
     });
   });
 
-  it('does not update description if already set', () => {
+  test('does not update description if already set', () => {
     defaultDocumentation.getPropDescriptor('foo').description = '12345678';
 
     const descriptors = getDescriptors(
@@ -60,7 +61,7 @@ describe('setPropDescription', () => {
     });
   });
 
-  it('sets an empty description if comment does not exist', () => {
+  test('sets an empty description if comment does not exist', () => {
     const descriptors = getDescriptors(`{
       hal: boolean,
     }`);
@@ -72,7 +73,7 @@ describe('setPropDescription', () => {
     });
   });
 
-  it('resolves computed props to imported values', () => {
+  test('resolves computed props to imported values', () => {
     const src = `
       ({
         /**

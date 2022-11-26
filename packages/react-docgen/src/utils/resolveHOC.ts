@@ -1,7 +1,7 @@
 import type { NodePath } from '@babel/traverse';
-import isReactCreateClassCall from './isReactCreateClassCall';
-import isReactForwardRefCall from './isReactForwardRefCall';
-import resolveToValue from './resolveToValue';
+import isReactCreateClassCall from './isReactCreateClassCall.js';
+import isReactForwardRefCall from './isReactForwardRefCall.js';
+import resolveToValue from './resolveToValue.js';
 
 /**
  * If the path is a call expression, it recursively resolves to the

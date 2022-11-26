@@ -1,9 +1,10 @@
 import type { ExpressionStatement } from '@babel/types';
 import { parse, makeMockImporter } from '../../../tests/utils';
-import getPropType from '../getPropType';
+import getPropType from '../getPropType.js';
+import { describe, expect, test } from 'vitest';
 
 describe('getPropType', () => {
-  it('detects simple prop types', () => {
+  test('detects simple prop types', () => {
     const simplePropTypes = [
       'array',
       'bool',
@@ -39,7 +40,7 @@ describe('getPropType', () => {
     );
   });
 
-  it('detects complex prop types', () => {
+  test('detects complex prop types', () => {
     expect(getPropType(parse.expression('oneOf(["foo", "bar"])'))).toEqual({
       name: 'enum',
       value: [
@@ -201,7 +202,7 @@ describe('getPropType', () => {
       `).get('declaration'),
     });
 
-    it('resolves variables to their values', () => {
+    test('resolves variables to their values', () => {
       const propTypeExpression = parse
         .statement<ExpressionStatement>(
           `
@@ -214,7 +215,7 @@ describe('getPropType', () => {
       expect(getPropType(propTypeExpression)).toMatchSnapshot();
     });
 
-    it('resolves imported variables to their values', () => {
+    test('resolves imported variables to their values', () => {
       const propTypeExpression = parse
         .statement<ExpressionStatement>(
           `
@@ -228,7 +229,7 @@ describe('getPropType', () => {
       expect(getPropType(propTypeExpression)).toMatchSnapshot();
     });
 
-    it('resolves simple identifier to their initialization value', () => {
+    test('resolves simple identifier to their initialization value', () => {
       const propTypeIdentifier = parse
         .statement<ExpressionStatement>(
           `
@@ -241,7 +242,7 @@ describe('getPropType', () => {
       expect(getPropType(propTypeIdentifier)).toMatchSnapshot();
     });
 
-    it('resolves importer identifier to initialization value', () => {
+    test('resolves importer identifier to initialization value', () => {
       const propTypeIdentifier = parse
         .statement<ExpressionStatement>(
           `
@@ -255,7 +256,7 @@ describe('getPropType', () => {
       expect(getPropType(propTypeIdentifier)).toMatchSnapshot();
     });
 
-    it('resolves simple identifier to their initialization value in array', () => {
+    test('resolves simple identifier to their initialization value in array', () => {
       const identifierInsideArray = parse
         .statement<ExpressionStatement>(
           `
@@ -269,7 +270,7 @@ describe('getPropType', () => {
       expect(getPropType(identifierInsideArray)).toMatchSnapshot();
     });
 
-    it('resolves imported identifier to their initialization value in array', () => {
+    test('resolves imported identifier to their initialization value in array', () => {
       const identifierInsideArray = parse
         .statement<ExpressionStatement>(
           `
@@ -284,7 +285,7 @@ describe('getPropType', () => {
       expect(getPropType(identifierInsideArray)).toMatchSnapshot();
     });
 
-    it('resolves memberExpressions', () => {
+    test('resolves memberExpressions', () => {
       const propTypeExpression = parse
         .statement<ExpressionStatement>(
           `
@@ -297,7 +298,7 @@ describe('getPropType', () => {
       expect(getPropType(propTypeExpression)).toMatchSnapshot();
     });
 
-    it('resolves memberExpressions from imported objects', () => {
+    test('resolves memberExpressions from imported objects', () => {
       const propTypeExpression = parse
         .statement<ExpressionStatement>(
           `
@@ -311,7 +312,7 @@ describe('getPropType', () => {
       expect(getPropType(propTypeExpression)).toMatchSnapshot();
     });
 
-    it('correctly resolves SpreadElements in arrays', () => {
+    test('correctly resolves SpreadElements in arrays', () => {
       const propTypeExpression = parse
         .statement<ExpressionStatement>(
           `
@@ -324,7 +325,7 @@ describe('getPropType', () => {
       expect(getPropType(propTypeExpression)).toMatchSnapshot();
     });
 
-    it('correctly resolves SpreadElements in arrays from imported values', () => {
+    test('correctly resolves SpreadElements in arrays from imported values', () => {
       const propTypeExpression = parse
         .statement<ExpressionStatement>(
           `
@@ -338,7 +339,7 @@ describe('getPropType', () => {
       expect(getPropType(propTypeExpression)).toMatchSnapshot();
     });
 
-    it('correctly resolves nested SpreadElements in arrays', () => {
+    test('correctly resolves nested SpreadElements in arrays', () => {
       const propTypeExpression = parse
         .statement<ExpressionStatement>(
           `
@@ -352,7 +353,7 @@ describe('getPropType', () => {
       expect(getPropType(propTypeExpression)).toMatchSnapshot();
     });
 
-    it('does resolve object keys values', () => {
+    test('does resolve object keys values', () => {
       const propTypeExpression = parse
         .statement<ExpressionStatement>(
           `
@@ -365,7 +366,7 @@ describe('getPropType', () => {
       expect(getPropType(propTypeExpression)).toMatchSnapshot();
     });
 
-    it('resolves values from imported Object.keys call', () => {
+    test('resolves values from imported Object.keys call', () => {
       const propTypeExpression = parse
         .statement<ExpressionStatement>(
           `
@@ -379,7 +380,7 @@ describe('getPropType', () => {
       expect(getPropType(propTypeExpression)).toMatchSnapshot();
     });
 
-    it('does resolve object values', () => {
+    test('does resolve object values', () => {
       const propTypeExpression = parse
         .statement<ExpressionStatement>(
           `
@@ -392,7 +393,7 @@ describe('getPropType', () => {
       expect(getPropType(propTypeExpression)).toMatchSnapshot();
     });
 
-    it('resolves values from imported Object.values call', () => {
+    test('resolves values from imported Object.values call', () => {
       const propTypeExpression = parse
         .statement<ExpressionStatement>(
           `
@@ -406,12 +407,12 @@ describe('getPropType', () => {
       expect(getPropType(propTypeExpression)).toMatchSnapshot();
     });
 
-    it('does not resolve external values without proper importer', () => {
+    test('does not resolve external values without proper importer', () => {
       const propTypeExpression = parse
         .statement<ExpressionStatement>(
           `
         PropTypes.oneOf(TYPES);
-        import { TYPES } from './foo';
+        import { TYPES } from './foo.js';
       `,
         )
         .get('expression');
@@ -420,15 +421,15 @@ describe('getPropType', () => {
     });
   });
 
-  it('detects custom validation functions for function', () => {
+  test('detects custom validation functions for function', () => {
     expect(getPropType(parse.expression('(function() {})'))).toMatchSnapshot();
   });
 
-  it('detects custom validation functions for arrow function', () => {
+  test('detects custom validation functions for arrow function', () => {
     expect(getPropType(parse.expression('() => {}'))).toMatchSnapshot();
   });
 
-  it('detects descriptions on nested types in arrayOf', () => {
+  test('detects descriptions on nested types in arrayOf', () => {
     expect(
       getPropType(
         parse.expression(`arrayOf(
@@ -441,7 +442,7 @@ describe('getPropType', () => {
     ).toMatchSnapshot();
   });
 
-  it('detects descriptions on nested types in objectOf', () => {
+  test('detects descriptions on nested types in objectOf', () => {
     expect(
       getPropType(
         parse.expression(`objectOf(
@@ -454,7 +455,7 @@ describe('getPropType', () => {
     ).toMatchSnapshot();
   });
 
-  it('detects descriptions on nested types in shapes', () => {
+  test('detects descriptions on nested types in shapes', () => {
     expect(
       getPropType(
         parse.expression(`shape({
@@ -471,7 +472,7 @@ describe('getPropType', () => {
     ).toMatchSnapshot();
   });
 
-  it('detects required notations of nested types in shapes', () => {
+  test('detects required notations of nested types in shapes', () => {
     expect(
       getPropType(
         parse.expression(`shape({
@@ -482,7 +483,7 @@ describe('getPropType', () => {
     ).toMatchSnapshot();
   });
 
-  it('detects descriptions on nested types in exacts', () => {
+  test('detects descriptions on nested types in exacts', () => {
     expect(
       getPropType(
         parse.expression(`exact({
@@ -499,7 +500,7 @@ describe('getPropType', () => {
     ).toMatchSnapshot();
   });
 
-  it('detects required notations of nested types in exacts', () => {
+  test('detects required notations of nested types in exacts', () => {
     expect(
       getPropType(
         parse.expression(`exact({
@@ -510,7 +511,7 @@ describe('getPropType', () => {
     ).toMatchSnapshot();
   });
 
-  it('handles computed properties', () => {
+  test('handles computed properties', () => {
     expect(
       getPropType(
         parse.expression(`exact({
@@ -521,7 +522,7 @@ describe('getPropType', () => {
     ).toMatchSnapshot();
   });
 
-  it('ignores complex computed properties', () => {
+  test('ignores complex computed properties', () => {
     expect(
       getPropType(
         parse.expression(`exact({

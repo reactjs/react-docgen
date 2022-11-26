@@ -1,20 +1,20 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`getPropType detects custom validation functions for arrow function 1`] = `
+exports[`getPropType > detects custom validation functions for arrow function 1`] = `
 {
   "name": "custom",
   "raw": "() => {}",
 }
 `;
 
-exports[`getPropType detects custom validation functions for function 1`] = `
+exports[`getPropType > detects custom validation functions for function 1`] = `
 {
   "name": "custom",
   "raw": "function() {}",
 }
 `;
 
-exports[`getPropType detects descriptions on nested types in arrayOf 1`] = `
+exports[`getPropType > detects descriptions on nested types in arrayOf 1`] = `
 {
   "description": "test2",
   "name": "arrayOf",
@@ -24,7 +24,7 @@ exports[`getPropType detects descriptions on nested types in arrayOf 1`] = `
 }
 `;
 
-exports[`getPropType detects descriptions on nested types in exacts 1`] = `
+exports[`getPropType > detects descriptions on nested types in exacts 1`] = `
 {
   "name": "exact",
   "value": {
@@ -42,7 +42,7 @@ exports[`getPropType detects descriptions on nested types in exacts 1`] = `
 }
 `;
 
-exports[`getPropType detects descriptions on nested types in objectOf 1`] = `
+exports[`getPropType > detects descriptions on nested types in objectOf 1`] = `
 {
   "description": "test2",
   "name": "objectOf",
@@ -52,7 +52,7 @@ exports[`getPropType detects descriptions on nested types in objectOf 1`] = `
 }
 `;
 
-exports[`getPropType detects descriptions on nested types in shapes 1`] = `
+exports[`getPropType > detects descriptions on nested types in shapes 1`] = `
 {
   "name": "shape",
   "value": {
@@ -70,7 +70,7 @@ exports[`getPropType detects descriptions on nested types in shapes 1`] = `
 }
 `;
 
-exports[`getPropType detects required notations of nested types in exacts 1`] = `
+exports[`getPropType > detects required notations of nested types in exacts 1`] = `
 {
   "name": "exact",
   "value": {
@@ -86,7 +86,7 @@ exports[`getPropType detects required notations of nested types in exacts 1`] = 
 }
 `;
 
-exports[`getPropType detects required notations of nested types in shapes 1`] = `
+exports[`getPropType > detects required notations of nested types in shapes 1`] = `
 {
   "name": "shape",
   "value": {
@@ -102,7 +102,7 @@ exports[`getPropType detects required notations of nested types in shapes 1`] = 
 }
 `;
 
-exports[`getPropType handles computed properties 1`] = `
+exports[`getPropType > handles computed properties 1`] = `
 {
   "name": "exact",
   "value": {
@@ -118,7 +118,7 @@ exports[`getPropType handles computed properties 1`] = `
 }
 `;
 
-exports[`getPropType ignores complex computed properties 1`] = `
+exports[`getPropType > ignores complex computed properties 1`] = `
 {
   "name": "exact",
   "value": {
@@ -130,55 +130,55 @@ exports[`getPropType ignores complex computed properties 1`] = `
 }
 `;
 
-exports[`getPropType resolve identifier to their values correctly resolves SpreadElements in arrays 1`] = `
+exports[`getPropType > resolve identifier to their values > correctly resolves SpreadElements in arrays 1`] = `
 {
   "name": "enum",
   "value": [
     {
       "computed": false,
-      "value": ""foo"",
+      "value": "\\"foo\\"",
     },
     {
       "computed": false,
-      "value": ""bar"",
+      "value": "\\"bar\\"",
     },
   ],
 }
 `;
 
-exports[`getPropType resolve identifier to their values correctly resolves SpreadElements in arrays from imported values 1`] = `
+exports[`getPropType > resolve identifier to their values > correctly resolves SpreadElements in arrays from imported values 1`] = `
 {
   "name": "enum",
   "value": [
     {
       "computed": false,
-      "value": ""foo"",
+      "value": "\\"foo\\"",
     },
     {
       "computed": false,
-      "value": ""bar"",
+      "value": "\\"bar\\"",
     },
   ],
 }
 `;
 
-exports[`getPropType resolve identifier to their values correctly resolves nested SpreadElements in arrays 1`] = `
+exports[`getPropType > resolve identifier to their values > correctly resolves nested SpreadElements in arrays 1`] = `
 {
   "name": "enum",
   "value": [
     {
       "computed": false,
-      "value": ""foo"",
+      "value": "\\"foo\\"",
     },
     {
       "computed": false,
-      "value": ""bar"",
+      "value": "\\"bar\\"",
     },
   ],
 }
 `;
 
-exports[`getPropType resolve identifier to their values does not resolve external values without proper importer 1`] = `
+exports[`getPropType > resolve identifier to their values > does not resolve external values without proper importer 1`] = `
 {
   "computed": true,
   "name": "enum",
@@ -186,55 +186,55 @@ exports[`getPropType resolve identifier to their values does not resolve externa
 }
 `;
 
-exports[`getPropType resolve identifier to their values does resolve object keys values 1`] = `
+exports[`getPropType > resolve identifier to their values > does resolve object keys values 1`] = `
 {
   "name": "enum",
   "value": [
     {
       "computed": false,
-      "value": ""FOO"",
+      "value": "\\"FOO\\"",
     },
     {
       "computed": false,
-      "value": ""BAR"",
+      "value": "\\"BAR\\"",
     },
   ],
 }
 `;
 
-exports[`getPropType resolve identifier to their values does resolve object values 1`] = `
+exports[`getPropType > resolve identifier to their values > does resolve object values 1`] = `
 {
   "name": "enum",
   "value": [
     {
       "computed": false,
-      "value": ""foo"",
+      "value": "\\"foo\\"",
     },
     {
       "computed": false,
-      "value": ""bar"",
+      "value": "\\"bar\\"",
     },
   ],
 }
 `;
 
-exports[`getPropType resolve identifier to their values resolves imported identifier to their initialization value in array 1`] = `
+exports[`getPropType > resolve identifier to their values > resolves imported identifier to their initialization value in array 1`] = `
 {
   "name": "enum",
   "value": [
     {
       "computed": false,
-      "value": ""foo"",
+      "value": "\\"foo\\"",
     },
     {
       "computed": false,
-      "value": ""bar"",
+      "value": "\\"bar\\"",
     },
   ],
 }
 `;
 
-exports[`getPropType resolve identifier to their values resolves imported variables to their values 1`] = `
+exports[`getPropType > resolve identifier to their values > resolves imported variables to their values 1`] = `
 {
   "name": "shape",
   "value": {
@@ -246,119 +246,119 @@ exports[`getPropType resolve identifier to their values resolves imported variab
 }
 `;
 
-exports[`getPropType resolve identifier to their values resolves importer identifier to initialization value 1`] = `
+exports[`getPropType > resolve identifier to their values > resolves importer identifier to initialization value 1`] = `
 {
   "name": "enum",
   "value": [
     {
       "computed": false,
-      "value": ""foo"",
+      "value": "\\"foo\\"",
     },
     {
       "computed": false,
-      "value": ""bar"",
+      "value": "\\"bar\\"",
     },
   ],
 }
 `;
 
-exports[`getPropType resolve identifier to their values resolves memberExpressions 1`] = `
+exports[`getPropType > resolve identifier to their values > resolves memberExpressions 1`] = `
 {
   "name": "enum",
   "value": [
     {
       "computed": false,
-      "value": ""foo"",
+      "value": "\\"foo\\"",
     },
     {
       "computed": false,
-      "value": ""bar"",
+      "value": "\\"bar\\"",
     },
   ],
 }
 `;
 
-exports[`getPropType resolve identifier to their values resolves memberExpressions from imported objects 1`] = `
+exports[`getPropType > resolve identifier to their values > resolves memberExpressions from imported objects 1`] = `
 {
   "name": "enum",
   "value": [
     {
       "computed": false,
-      "value": ""foo"",
+      "value": "\\"foo\\"",
     },
     {
       "computed": false,
-      "value": ""bar"",
+      "value": "\\"bar\\"",
     },
   ],
 }
 `;
 
-exports[`getPropType resolve identifier to their values resolves simple identifier to their initialization value 1`] = `
+exports[`getPropType > resolve identifier to their values > resolves simple identifier to their initialization value 1`] = `
 {
   "name": "enum",
   "value": [
     {
       "computed": false,
-      "value": ""foo"",
+      "value": "\\"foo\\"",
     },
     {
       "computed": false,
-      "value": ""bar"",
+      "value": "\\"bar\\"",
     },
   ],
 }
 `;
 
-exports[`getPropType resolve identifier to their values resolves simple identifier to their initialization value in array 1`] = `
+exports[`getPropType > resolve identifier to their values > resolves simple identifier to their initialization value in array 1`] = `
 {
   "name": "enum",
   "value": [
     {
       "computed": false,
-      "value": ""foo"",
+      "value": "\\"foo\\"",
     },
     {
       "computed": false,
-      "value": ""bar"",
+      "value": "\\"bar\\"",
     },
   ],
 }
 `;
 
-exports[`getPropType resolve identifier to their values resolves values from imported Object.keys call 1`] = `
+exports[`getPropType > resolve identifier to their values > resolves values from imported Object.keys call 1`] = `
 {
   "name": "enum",
   "value": [
     {
       "computed": false,
-      "value": ""FOO"",
+      "value": "\\"FOO\\"",
     },
     {
       "computed": false,
-      "value": ""BAR"",
+      "value": "\\"BAR\\"",
     },
   ],
 }
 `;
 
-exports[`getPropType resolve identifier to their values resolves values from imported Object.values call 1`] = `
+exports[`getPropType > resolve identifier to their values > resolves values from imported Object.values call 1`] = `
 {
   "name": "enum",
   "value": [
     {
       "computed": false,
-      "value": ""foo"",
+      "value": "\\"foo\\"",
     },
     {
       "computed": false,
-      "value": ""bar"",
+      "value": "\\"bar\\"",
     },
   ],
 }
 `;
 
-exports[`getPropType resolve identifier to their values resolves variables to their values 1`] = `
+exports[`getPropType > resolve identifier to their values > resolves variables to their values 1`] = `
 {
   "name": "shape",
   "value": {

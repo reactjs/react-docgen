@@ -11,8 +11,8 @@ import type {
   TSMethodSignature,
   TSPropertySignature,
 } from '@babel/types';
-import getNameOrValue from './getNameOrValue';
-import resolveToValue from './resolveToValue';
+import getNameOrValue from './getNameOrValue.js';
+import resolveToValue from './resolveToValue.js';
 
 export const COMPUTED_PREFIX = '@computed#';
 

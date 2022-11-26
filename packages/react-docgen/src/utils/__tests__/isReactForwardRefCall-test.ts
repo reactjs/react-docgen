@@ -1,5 +1,6 @@
 import { makeMockImporter, parse } from '../../../tests/utils';
-import isReactForwardRefCall from '../isReactForwardRefCall';
+import isReactForwardRefCall from '../isReactForwardRefCall.js';
+import { describe, expect, test } from 'vitest';
 
 describe('isReactForwardRefCall', () => {
   const mockImporter = makeMockImporter({
@@ -11,7 +12,7 @@ describe('isReactForwardRefCall', () => {
   });
 
   describe('built in React.forwardRef', () => {
-    it('accepts forwardRef called on React', () => {
+    test('accepts forwardRef called on React', () => {
       const def = parse.expressionLast(`
         var React = require("React");
         React.forwardRef({
@@ -22,7 +23,7 @@ describe('isReactForwardRefCall', () => {
       expect(isReactForwardRefCall(def)).toBe(true);
     });
 
-    it('accepts forwardRef called on aliased React', () => {
+    test('accepts forwardRef called on aliased React', () => {
       const def = parse.expressionLast(`
         var other = require("React");
         other.forwardRef({
@@ -33,7 +34,7 @@ describe('isReactForwardRefCall', () => {
       expect(isReactForwardRefCall(def)).toBe(true);
     });
 
-    it('ignores other React calls', () => {
+    test('ignores other React calls', () => {
       const def = parse.expressionLast(`
         var React = require("React");
         React.isValidElement({});
@@ -42,7 +43,7 @@ describe('isReactForwardRefCall', () => {
       expect(isReactForwardRefCall(def)).toBe(false);
     });
 
-    it('ignores non React calls to forwardRef', () => {
+    test('ignores non React calls to forwardRef', () => {
       const def = parse.expressionLast(`
         var React = require("bob");
         React.forwardRef({
@@ -53,7 +54,7 @@ describe('isReactForwardRefCall', () => {
       expect(isReactForwardRefCall(def)).toBe(false);
     });
 
-    it('accepts forwardRef called on destructed value', () => {
+    test('accepts forwardRef called on destructed value', () => {
       const def = parse.expressionLast(`
         var { forwardRef } = require("react");
         forwardRef({});
@@ -62,7 +63,7 @@ describe('isReactForwardRefCall', () => {
       expect(isReactForwardRefCall(def)).toBe(true);
     });
 
-    it('accepts forwardRef called on destructed aliased value', () => {
+    test('accepts forwardRef called on destructed aliased value', () => {
       const def = parse.expressionLast(`
         var { forwardRef: foo } = require("react");
         foo({});
@@ -71,7 +72,7 @@ describe('isReactForwardRefCall', () => {
       expect(isReactForwardRefCall(def)).toBe(true);
     });
 
-    it('accepts forwardRef called on imported value', () => {
+    test('accepts forwardRef called on imported value', () => {
       const def = parse.expressionLast(`
         import { forwardRef } from "react";
         forwardRef({});
@@ -80,7 +81,7 @@ describe('isReactForwardRefCall', () => {
       expect(isReactForwardRefCall(def)).toBe(true);
     });
 
-    it('does not accept forwardRef if not outer call', () => {
+    test('does not accept forwardRef if not outer call', () => {
       const def = parse.expressionLast(`
         import { forwardRef, memo } from "react";
         memo(forwardRef({}));
@@ -89,7 +90,7 @@ describe('isReactForwardRefCall', () => {
       expect(isReactForwardRefCall(def)).toBe(false);
     });
 
-    it('accepts forwardRef called on imported aliased value', () => {
+    test('accepts forwardRef called on imported aliased value', () => {
       const def = parse.expressionLast(`
         import { forwardRef as foo } from "react";
         foo({});
@@ -98,7 +99,7 @@ describe('isReactForwardRefCall', () => {
       expect(isReactForwardRefCall(def)).toBe(true);
     });
 
-    it('can resolve forwardRef imported from an intermediate module', () => {
+    test('can resolve forwardRef imported from an intermediate module', () => {
       const def = parse.expressionLast(
         `
         import foo from "foo";

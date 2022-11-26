@@ -1,11 +1,12 @@
-import getClassMemberValuePath from '../getClassMemberValuePath';
+import getClassMemberValuePath from '../getClassMemberValuePath.js';
 import { parse } from '../../../tests/utils';
 import type { ClassDeclaration, ClassExpression } from '@babel/types';
+import { describe, expect, test } from 'vitest';
 
 describe('getClassMemberValuePath', () => {
   describe('ClassDeclaration', () => {
     describe('MethodDefinitions', () => {
-      it('finds "normal" method definitions', () => {
+      test('finds "normal" method definitions', () => {
         const def = parse.statement<ClassDeclaration>(`
         class Foo {
           render() {}
@@ -15,7 +16,7 @@ describe('getClassMemberValuePath', () => {
         expect(getClassMemberValuePath(def, 'render')).toMatchSnapshot();
       });
 
-      it('finds computed method definitions with literal keys', () => {
+      test('finds computed method definitions with literal keys', () => {
         const def = parse.statement<ClassDeclaration>(`
         class Foo {
           ['render']() {}
@@ -25,7 +26,7 @@ describe('getClassMemberValuePath', () => {
         expect(getClassMemberValuePath(def, 'render')).toMatchSnapshot();
       });
 
-      it('ignores computed method definitions with expression', () => {
+      test('ignores computed method definitions with expression', () => {
         const def = parse.statement<ClassDeclaration>(`
         class Foo {
           [render]() {}
@@ -37,7 +38,7 @@ describe('getClassMemberValuePath', () => {
     });
 
     describe('Getters and Setters', () => {
-      it('finds getters', () => {
+      test('finds getters', () => {
         const def = parse.statement<ClassDeclaration>(`
         class Foo {
           get foo() {}
@@ -47,7 +48,7 @@ describe('getClassMemberValuePath', () => {
         expect(getClassMemberValuePath(def, 'foo')).toMatchSnapshot();
       });
 
-      it('ignores setters', () => {
+      test('ignores setters', () => {
         const def = parse.statement<ClassDeclaration>(`
         class Foo {
           set foo(val) {}
@@ -59,7 +60,7 @@ describe('getClassMemberValuePath', () => {
     });
 
     describe('ClassProperty', () => {
-      it('finds "normal" class properties', () => {
+      test('finds "normal" class properties', () => {
         const def = parse.statement<ClassDeclaration>(`
         class Foo {
           foo = 42;
@@ -73,7 +74,7 @@ describe('getClassMemberValuePath', () => {
     });
 
     describe('private', () => {
-      it('ignores private class properties', () => {
+      test('ignores private class properties', () => {
         const def = parse.statement<ClassDeclaration>(`
         class Foo {
           #foo = 42;
@@ -83,7 +84,7 @@ describe('getClassMemberValuePath', () => {
         expect(getClassMemberValuePath(def, 'foo')).toBeNull();
       });
 
-      it('ignores private class methods', () => {
+      test('ignores private class methods', () => {
         const def = parse.statement<ClassDeclaration>(`
         class Foo {
           #foo() {}
@@ -93,7 +94,7 @@ describe('getClassMemberValuePath', () => {
         expect(getClassMemberValuePath(def, 'foo')).toBeNull();
       });
 
-      it('finds "normal" class properties with private present', () => {
+      test('finds "normal" class properties with private present', () => {
         const def = parse.statement<ClassDeclaration>(`
         class Foo {
           #private = 54;
@@ -109,7 +110,7 @@ describe('getClassMemberValuePath', () => {
   });
 
   describe('ClassExpression', () => {
-    it('finds "normal" method definitions', () => {
+    test('finds "normal" method definitions', () => {
       const def = parse.expression<ClassExpression>(`
       class Foo {
         render() {}

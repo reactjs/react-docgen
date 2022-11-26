@@ -1,4 +1,4 @@
-import resolveGenericTypeAnnotation from '../utils/resolveGenericTypeAnnotation';
+import resolveGenericTypeAnnotation from '../utils/resolveGenericTypeAnnotation.js';
 import type { NodePath } from '@babel/traverse';
 import type {
   FlowType,

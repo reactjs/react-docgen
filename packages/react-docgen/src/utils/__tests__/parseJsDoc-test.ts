@@ -1,8 +1,9 @@
-import parseJsDoc from '../parseJsDoc';
+import parseJsDoc from '../parseJsDoc.js';
+import { describe, expect, test } from 'vitest';
 
 describe('parseJsDoc', () => {
   describe('description', () => {
-    it('extracts the method description in jsdoc', () => {
+    test('extracts the method description in jsdoc', () => {
       const docblock = `
         Don't use this!
       `;
@@ -22,7 +23,7 @@ describe('parseJsDoc', () => {
     Object.keys(docBlocks).forEach(name => {
       const docBlock = docBlocks[name];
 
-      it(name, () => {
+      test(name, () => {
         expect(parseJsDoc(docBlock)).toMatchSnapshot();
       });
     });
@@ -39,7 +40,7 @@ describe('parseJsDoc', () => {
     Object.keys(docBlocks).forEach(name => {
       const docBlock = docBlocks[name];
 
-      it(name, () => {
+      test(name, () => {
         expect(parseJsDoc(docBlock)).toMatchSnapshot();
       });
     });

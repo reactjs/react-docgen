@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`propTypeHandler React.createClass can resolve individual imported variables assigned to props 1`] = `
+exports[`propTypeHandler > React.createClass > can resolve individual imported variables assigned to props 1`] = `
 {
   "@computed#bar": {
     "required": false,
@@ -25,7 +25,7 @@ exports[`propTypeHandler React.createClass can resolve individual imported varia
 }
 `;
 
-exports[`propTypeHandler React.createClass handles computed properties 1`] = `
+exports[`propTypeHandler > React.createClass > handles computed properties 1`] = `
 {
   "@computed#foo": {
     "required": true,
@@ -38,7 +38,7 @@ exports[`propTypeHandler React.createClass handles computed properties 1`] = `
 }
 `;
 
-exports[`propTypeHandler React.createClass ignores complex computed properties 1`] = `
+exports[`propTypeHandler > React.createClass > ignores complex computed properties 1`] = `
 {
   "complex_prop": {
     "required": true,
@@ -47,7 +47,37 @@ exports[`propTypeHandler React.createClass ignores complex computed properties 1
 }
 `;
 
-exports[`propTypeHandler class definition class property can resolve individual imported variables assigned to props 1`] = `
+exports[`propTypeHandler > React.createClass > passes the correct argument to getPropType 1`] = `
+Node {
+  "computed": false,
+  "object": Node {
+    "name": "PropTypes",
+    "type": "Identifier",
+  },
+  "property": Node {
+    "name": "bool",
+    "type": "Identifier",
+  },
+  "type": "MemberExpression",
+}
+`;
+
+exports[`propTypeHandler > React.createClass > passes the correct argument to getPropType 2`] = `
+Node {
+  "computed": false,
+  "object": Node {
+    "name": "PropTypes",
+    "type": "Identifier",
+  },
+  "property": Node {
+    "name": "xyz",
+    "type": "Identifier",
+  },
+  "type": "MemberExpression",
+}
+`;
+
+exports[`propTypeHandler > class definition > class property > can resolve individual imported variables assigned to props 1`] = `
 {
   "@computed#bar": {
     "required": false,
@@ -72,7 +102,7 @@ exports[`propTypeHandler class definition class property can resolve individual 
 }
 `;
 
-exports[`propTypeHandler class definition class property handles computed properties 1`] = `
+exports[`propTypeHandler > class definition > class property > handles computed properties 1`] = `
 {
   "@computed#foo": {
     "required": true,
@@ -85,7 +115,7 @@ exports[`propTypeHandler class definition class property handles computed proper
 }
 `;
 
-exports[`propTypeHandler class definition class property ignores complex computed properties 1`] = `
+exports[`propTypeHandler > class definition > class property > ignores complex computed properties 1`] = `
 {
   "complex_prop": {
     "required": true,
@@ -94,7 +124,37 @@ exports[`propTypeHandler class definition class property ignores complex compute
 }
 `;
 
-exports[`propTypeHandler class definition static getter can resolve individual imported variables assigned to props 1`] = `
+exports[`propTypeHandler > class definition > class property > passes the correct argument to getPropType 1`] = `
+Node {
+  "computed": false,
+  "object": Node {
+    "name": "PropTypes",
+    "type": "Identifier",
+  },
+  "property": Node {
+    "name": "bool",
+    "type": "Identifier",
+  },
+  "type": "MemberExpression",
+}
+`;
+
+exports[`propTypeHandler > class definition > class property > passes the correct argument to getPropType 2`] = `
+Node {
+  "computed": false,
+  "object": Node {
+    "name": "PropTypes",
+    "type": "Identifier",
+  },
+  "property": Node {
+    "name": "xyz",
+    "type": "Identifier",
+  },
+  "type": "MemberExpression",
+}
+`;
+
+exports[`propTypeHandler > class definition > static getter > can resolve individual imported variables assigned to props 1`] = `
 {
   "@computed#bar": {
     "required": false,
@@ -119,7 +179,7 @@ exports[`propTypeHandler class definition static getter can resolve individual i
 }
 `;
 
-exports[`propTypeHandler class definition static getter handles computed properties 1`] = `
+exports[`propTypeHandler > class definition > static getter > handles computed properties 1`] = `
 {
   "@computed#foo": {
     "required": true,
@@ -132,7 +192,7 @@ exports[`propTypeHandler class definition static getter handles computed propert
 }
 `;
 
-exports[`propTypeHandler class definition static getter ignores complex computed properties 1`] = `
+exports[`propTypeHandler > class definition > static getter > ignores complex computed properties 1`] = `
 {
   "complex_prop": {
     "required": true,
@@ -141,7 +201,37 @@ exports[`propTypeHandler class definition static getter ignores complex computed
 }
 `;
 
-exports[`propTypeHandler stateless component can resolve individual imported variables assigned to props 1`] = `
+exports[`propTypeHandler > class definition > static getter > passes the correct argument to getPropType 1`] = `
+Node {
+  "computed": false,
+  "object": Node {
+    "name": "PropTypes",
+    "type": "Identifier",
+  },
+  "property": Node {
+    "name": "bool",
+    "type": "Identifier",
+  },
+  "type": "MemberExpression",
+}
+`;
+
+exports[`propTypeHandler > class definition > static getter > passes the correct argument to getPropType 2`] = `
+Node {
+  "computed": false,
+  "object": Node {
+    "name": "PropTypes",
+    "type": "Identifier",
+  },
+  "property": Node {
+    "name": "xyz",
+    "type": "Identifier",
+  },
+  "type": "MemberExpression",
+}
+`;
+
+exports[`propTypeHandler > stateless component > can resolve individual imported variables assigned to props 1`] = `
 {
   "@computed#bar": {
     "required": false,
@@ -166,7 +256,7 @@ exports[`propTypeHandler stateless component can resolve individual imported var
 }
 `;
 
-exports[`propTypeHandler stateless component handles computed properties 1`] = `
+exports[`propTypeHandler > stateless component > handles computed properties 1`] = `
 {
   "@computed#foo": {
     "required": true,
@@ -179,11 +269,41 @@ exports[`propTypeHandler stateless component handles computed properties 1`] = `
 }
 `;
 
-exports[`propTypeHandler stateless component ignores complex computed properties 1`] = `
+exports[`propTypeHandler > stateless component > ignores complex computed properties 1`] = `
 {
   "complex_prop": {
     "required": true,
     "type": {},
   },
+}
+`;
+
+exports[`propTypeHandler > stateless component > passes the correct argument to getPropType 1`] = `
+Node {
+  "computed": false,
+  "object": Node {
+    "name": "PropTypes",
+    "type": "Identifier",
+  },
+  "property": Node {
+    "name": "bool",
+    "type": "Identifier",
+  },
+  "type": "MemberExpression",
+}
+`;
+
+exports[`propTypeHandler > stateless component > passes the correct argument to getPropType 2`] = `
+Node {
+  "computed": false,
+  "object": Node {
+    "name": "PropTypes",
+    "type": "Identifier",
+  },
+  "property": Node {
+    "name": "xyz",
+    "type": "Identifier",
+  },
+  "type": "MemberExpression",
 }
 `;

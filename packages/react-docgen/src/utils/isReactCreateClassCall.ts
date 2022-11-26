@@ -1,6 +1,6 @@
 import type { NodePath } from '@babel/traverse';
-import resolveToModule from './resolveToModule';
-import isReactBuiltinCall from './isReactBuiltinCall';
+import resolveToModule from './resolveToModule.js';
+import isReactBuiltinCall from './isReactBuiltinCall.js';
 
 /**
  * Returns true if the expression is a function call of the form

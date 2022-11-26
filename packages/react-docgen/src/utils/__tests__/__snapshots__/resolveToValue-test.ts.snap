@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`resolveToValue ImportDeclaration does not crash when resolving MemberExpression with non Identifiers 1`] = `
+exports[`resolveToValue > ImportDeclaration > does not crash when resolving MemberExpression with non Identifiers 1`] = `
 Node {
   "computed": true,
   "object": Node {
@@ -23,7 +23,7 @@ Node {
 }
 `;
 
-exports[`resolveToValue ImportDeclaration resolves namespace import references to the import declaration 1`] = `
+exports[`resolveToValue > ImportDeclaration > resolves namespace import references to the import declaration 1`] = `
 Node {
   "extra": {
     "raw": "3",
@@ -34,7 +34,7 @@ Node {
 }
 `;
 
-exports[`resolveToValue ImportDeclaration resolves namespace import references to the import declaration 2`] = `
+exports[`resolveToValue > ImportDeclaration > resolves namespace import references to the import declaration 2`] = `
 Node {
   "extra": {
     "raw": "3",
@@ -42,5 +42,135 @@ Node {
   },
   "type": "NumericLiteral",
   "value": 3,
+}
+`;
+
+exports[`resolveToValue > MemberExpression > resolves a MemberExpression in the scope chain 1`] = `
+Node {
+  "extra": {
+    "raw": "1",
+    "rawValue": 1,
+  },
+  "type": "NumericLiteral",
+  "value": 1,
+}
+`;
+
+exports[`resolveToValue > MemberExpression > resolves a MemberExpression to it's init value 1`] = `
+Node {
+  "extra": {
+    "raw": "1",
+    "rawValue": 1,
+  },
+  "type": "NumericLiteral",
+  "value": 1,
+}
+`;
+
+exports[`resolveToValue > MemberExpression > resolves a nested MemberExpression in the scope chain 1`] = `
+Node {
+  "extra": {
+    "raw": "1",
+    "rawValue": 1,
+  },
+  "type": "NumericLiteral",
+  "value": 1,
+}
+`;
+
+exports[`resolveToValue > MemberExpression > returns the last resolvable MemberExpression 1`] = `
+Node {
+  "computed": false,
+  "object": Node {
+    "name": "foo",
+    "type": "Identifier",
+  },
+  "property": Node {
+    "name": "bar",
+    "type": "Identifier",
+  },
+  "type": "MemberExpression",
+}
+`;
+
+exports[`resolveToValue > assignments > resolves to assigned values 1`] = `
+Node {
+  "extra": {
+    "raw": "42",
+    "rawValue": 42,
+  },
+  "type": "NumericLiteral",
+  "value": 42,
+}
+`;
+
+exports[`resolveToValue > assignments > resolves to other assigned value if ref is in an assignment lhs 1`] = `
+Node {
+  "extra": {
+    "raw": "42",
+    "rawValue": 42,
+  },
+  "type": "NumericLiteral",
+  "value": 42,
+}
+`;
+
+exports[`resolveToValue > assignments > resolves to other assigned value if ref is in an assignment rhs 1`] = `
+Node {
+  "extra": {
+    "raw": "42",
+    "rawValue": 42,
+  },
+  "type": "NumericLiteral",
+  "value": 42,
+}
+`;
+
+exports[`resolveToValue > handles RestElements properly 1`] = `
+Node {
+  "argument": Node {
+    "name": "baz",
+    "type": "Identifier",
+  },
+  "type": "RestElement",
+}
+`;
+
+exports[`resolveToValue > resolves object destructuring 1`] = `
+Node {
+  "computed": false,
+  "key": Node {
+    "name": "bar",
+    "type": "Identifier",
+  },
+  "method": false,
+  "shorthand": false,
+  "type": "ObjectProperty",
+  "value": Node {
+    "name": "baz",
+    "type": "Identifier",
+  },
+}
+`;
+
+exports[`resolveToValue > resolves simple variable declarations 1`] = `
+Node {
+  "extra": {
+    "raw": "42",
+    "rawValue": 42,
+  },
+  "type": "NumericLiteral",
+  "value": 42,
+}
+`;
+
+exports[`resolveToValue > resolves variable declarators to their init value 1`] = `
+Node {
+  "extra": {
+    "raw": "42",
+    "rawValue": 42,
+  },
+  "type": "NumericLiteral",
+  "value": 42,
 }
 `;

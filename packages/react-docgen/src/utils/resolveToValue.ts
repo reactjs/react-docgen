@@ -1,15 +1,15 @@
 import { Scope, visitors } from '@babel/traverse';
 import type { NodePath } from '@babel/traverse';
 import type { Identifier, ImportDeclaration } from '@babel/types';
-import getMemberExpressionRoot from './getMemberExpressionRoot';
-import getPropertyValuePath from './getPropertyValuePath';
-import { Array as toArray } from './expressionTo';
-import { shallowIgnoreVisitors } from './traverse';
+import getMemberExpressionRoot from './getMemberExpressionRoot.js';
+import getPropertyValuePath from './getPropertyValuePath.js';
+import { Array as toArray } from './expressionTo.js';
+import { shallowIgnoreVisitors } from './traverse.js';
 import getMemberValuePath, {
   isSupportedDefinitionType,
-} from './getMemberValuePath';
-import initialize from './ts-types';
-import getNameOrValue from './getNameOrValue';
+} from './getMemberValuePath.js';
+import initialize from './ts-types/index.js';
+import getNameOrValue from './getNameOrValue.js';
 
 function findScopePath(
   bindingIdentifiers: Array<NodePath<Identifier>>,

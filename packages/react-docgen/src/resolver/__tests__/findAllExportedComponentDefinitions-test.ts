@@ -1,6 +1,7 @@
 import type { NodePath } from '@babel/traverse';
 import { parse, noopImporter, makeMockImporter } from '../../../tests/utils';
-import findAllExportedComponentDefinitions from '../findAllExportedComponentDefinitions';
+import findAllExportedComponentDefinitions from '../findAllExportedComponentDefinitions.js';
+import { describe, expect, test } from 'vitest';
 
 describe('findAllExportedComponentDefinitions', () => {
   function findComponentsInSource(
@@ -54,7 +55,7 @@ describe('findAllExportedComponentDefinitions', () => {
 
   describe('CommonJS module exports', () => {
     describe('React.createClass', () => {
-      it('finds React.createClass', () => {
+      test('finds React.createClass', () => {
         const result = findComponentsInSource(`
           var React = require("React");
           var Component = React.createClass({});
@@ -64,7 +65,7 @@ describe('findAllExportedComponentDefinitions', () => {
         expect(result).toMatchSnapshot();
       });
 
-      it('finds React.createClass, independent of the var name', () => {
+      test('finds React.createClass, independent of the var name', () => {
         const result = findComponentsInSource(`
           var R = require("React");
           var Component = R.createClass({});
@@ -74,7 +75,7 @@ describe('findAllExportedComponentDefinitions', () => {
         expect(result).toMatchSnapshot();
       });
 
-      it('does not process X.createClass of other modules', () => {
+      test('does not process X.createClass of other modules', () => {
         const result = findComponentsInSource(`
           var R = require("NoReact");
           var Component = R.createClass({});
@@ -84,7 +85,7 @@ describe('findAllExportedComponentDefinitions', () => {
         expect(result).toMatchSnapshot();
       });
 
-      it('resolves an imported variable to React.createClass', () => {
+      test('resolves an imported variable to React.createClass', () => {
         const result = findComponentsInSource(
           `
           import Component from 'createClass';
@@ -98,7 +99,7 @@ describe('findAllExportedComponentDefinitions', () => {
     });
 
     describe('class definitions', () => {
-      it('finds class declarations', () => {
+      test('finds class declarations', () => {
         const result = findComponentsInSource(`
           var React = require("React");
           class Component extends React.Component {}
@@ -108,7 +109,7 @@ describe('findAllExportedComponentDefinitions', () => {
         expect(result).toMatchSnapshot();
       });
 
-      it('finds class expression', () => {
+      test('finds class expression', () => {
         const result = findComponentsInSource(`
           var React = require("React");
           var Component = class extends React.Component {}
@@ -118,7 +119,7 @@ describe('findAllExportedComponentDefinitions', () => {
         expect(result).toMatchSnapshot();
       });
 
-      it('finds class definition, independent of the var name', () => {
+      test('finds class definition, independent of the var name', () => {
         const result = findComponentsInSource(`
           var R = require("React");
           class Component extends R.Component {}
@@ -128,7 +129,7 @@ describe('findAllExportedComponentDefinitions', () => {
         expect(result).toMatchSnapshot();
       });
 
-      it('resolves an imported variable to class declaration', () => {
+      test('resolves an imported variable to class declaration', () => {
         const result = findComponentsInSource(
           `
           import Component from 'classDec';
@@ -140,7 +141,7 @@ describe('findAllExportedComponentDefinitions', () => {
         expect(result).toMatchSnapshot();
       });
 
-      it('resolves an imported variable to class expression', () => {
+      test('resolves an imported variable to class expression', () => {
         const result = findComponentsInSource(
           `
           import Component from 'classExpr';
@@ -154,7 +155,7 @@ describe('findAllExportedComponentDefinitions', () => {
     });
 
     describe('stateless components', () => {
-      it('finds stateless component with JSX', () => {
+      test('finds stateless component with JSX', () => {
         const result = findComponentsInSource(`
           var React = require("React");
           var Component = () => <div />;
@@ -164,7 +165,7 @@ describe('findAllExportedComponentDefinitions', () => {
         expect(result).toMatchSnapshot();
       });
 
-      it('finds stateless components with React.createElement, independent of the var name', () => {
+      test('finds stateless components with React.createElement, independent of the var name', () => {
         const result = findComponentsInSource(`
           var R = require("React");
           var Component = () => R.createElement('div', {});
@@ -174,7 +175,7 @@ describe('findAllExportedComponentDefinitions', () => {
         expect(result).toMatchSnapshot();
       });
 
-      it('does not process X.createElement of other modules', () => {
+      test('does not process X.createElement of other modules', () => {
         const result = findComponentsInSource(`
           var R = require("NoReact");
           var Component = () => R.createElement({});
@@ -184,7 +185,7 @@ describe('findAllExportedComponentDefinitions', () => {
         expect(result).toMatchSnapshot();
       });
 
-      it('resolves an imported stateless component with JSX', () => {
+      test('resolves an imported stateless component with JSX', () => {
         const result = findComponentsInSource(
           `
           import Component from 'statelessJsx';
@@ -196,7 +197,7 @@ describe('findAllExportedComponentDefinitions', () => {
         expect(result).toMatchSnapshot();
       });
 
-      it('resolves an imported stateless component with React.createElement', () => {
+      test('resolves an imported stateless component with React.createElement', () => {
         const result = findComponentsInSource(
           `
           import Component from 'statelessCreateElement';
@@ -210,7 +211,7 @@ describe('findAllExportedComponentDefinitions', () => {
     });
 
     describe('forwardRef components', () => {
-      it('finds forwardRef components', () => {
+      test('finds forwardRef components', () => {
         const result = findComponentsInSource(`
           import React from 'react';
           import PropTypes from 'prop-types';
@@ -226,7 +227,7 @@ describe('findAllExportedComponentDefinitions', () => {
         expect(result).toMatchSnapshot();
       });
 
-      it('finds none inline forwardRef components', () => {
+      test('finds none inline forwardRef components', () => {
         const result = findComponentsInSource(`
           import React from 'react';
           import PropTypes from 'prop-types';
@@ -244,7 +245,7 @@ describe('findAllExportedComponentDefinitions', () => {
         expect(result).toMatchSnapshot();
       });
 
-      it('resolves an imported forwardRef component', () => {
+      test('resolves an imported forwardRef component', () => {
         const result = findComponentsInSource(
           `
           import Component from 'forwardRef';
@@ -259,7 +260,7 @@ describe('findAllExportedComponentDefinitions', () => {
 
     describe('module.exports = <C>; / exports.foo = <C>;', () => {
       describe('React.createClass', () => {
-        it('finds assignments to exports', () => {
+        test('finds assignments to exports', () => {
           const result = findComponentsInSource(`
             var R = require("React");
             var Component = R.createClass({});
@@ -270,7 +271,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds multiple exported components', () => {
+        test('finds multiple exported components', () => {
           const result = findComponentsInSource(`
             var R = require("React");
             var ComponentA = R.createClass({});
@@ -282,7 +283,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds multiple exported components with hocs', () => {
+        test('finds multiple exported components with hocs', () => {
           const result = findComponentsInSource(`
             var R = require("React");
             var ComponentA = R.createClass({});
@@ -294,7 +295,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds only exported components on export', () => {
+        test('finds only exported components on export', () => {
           const result = findComponentsInSource(`
             var R = require("React");
             var ComponentA = R.createClass({});
@@ -305,7 +306,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds only exported components', () => {
+        test('finds only exported components', () => {
           const result = findComponentsInSource(`
             var R = require("React");
             var ComponentA = R.createClass({});
@@ -316,7 +317,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds exported components only once', () => {
+        test('finds exported components only once', () => {
           const result = findComponentsInSource(`
             var R = require("React");
             var ComponentA = R.createClass({});
@@ -327,7 +328,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('supports imported components', () => {
+        test('supports imported components', () => {
           const result = findComponentsInSource(
             `
             import Component from 'createClass';
@@ -342,7 +343,7 @@ describe('findAllExportedComponentDefinitions', () => {
       });
 
       describe('class definition', () => {
-        it('finds assignments to exports', () => {
+        test('finds assignments to exports', () => {
           const result = findComponentsInSource(`
             var R = require("React");
             class Component extends R.Component {}
@@ -353,7 +354,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds multiple exported components', () => {
+        test('finds multiple exported components', () => {
           const result = findComponentsInSource(`
             var R = require("React");
             class ComponentA extends R.Component {}
@@ -365,7 +366,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds only exported components on export', () => {
+        test('finds only exported components on export', () => {
           const result = findComponentsInSource(`
             var R = require("React");
             class ComponentA extends R.Component {}
@@ -376,7 +377,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds only exported components', () => {
+        test('finds only exported components', () => {
           const result = findComponentsInSource(`
             var R = require("React");
             class ComponentA extends R.Component {}
@@ -387,7 +388,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds exported components only once', () => {
+        test('finds exported components only once', () => {
           const result = findComponentsInSource(`
             var R = require("React");
             class ComponentA extends R.Component {}
@@ -398,7 +399,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('supports imported components', () => {
+        test('supports imported components', () => {
           const result = findComponentsInSource(
             `
             import Component from 'classDec';
@@ -417,7 +418,7 @@ describe('findAllExportedComponentDefinitions', () => {
   describe('ES6 export declarations', () => {
     describe('export default <component>;', () => {
       describe('React.createClass', () => {
-        it('finds reassigned default export', () => {
+        test('finds reassigned default export', () => {
           const result = findComponentsInSource(`
             var React = require("React");
             var Component = React.createClass({});
@@ -427,7 +428,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds default export', () => {
+        test('finds default export', () => {
           const result = findComponentsInSource(`
             var React = require("React");
             export default React.createClass({});
@@ -436,7 +437,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds multiple exported components with export var', () => {
+        test('finds multiple exported components with export var', () => {
           const result = findComponentsInSource(`
             import React, { createElement } from "React"
             export var Component = React.createClass({});
@@ -446,7 +447,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds multiple exported components with named export', () => {
+        test('finds multiple exported components with named export', () => {
           const result = findComponentsInSource(`
             import React, { createElement } from "React"
             var Component = React.createClass({})
@@ -457,7 +458,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds only exported components', () => {
+        test('finds only exported components', () => {
           const result = findComponentsInSource(`
             import React, { createElement } from "React"
             var Component = React.createClass({})
@@ -467,7 +468,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('supports imported components', () => {
+        test('supports imported components', () => {
           const result = findComponentsInSource(
             `import Component from 'createClass';
              export default Component;`,
@@ -479,7 +480,7 @@ describe('findAllExportedComponentDefinitions', () => {
       });
 
       describe('class definition', () => {
-        it('finds default export', () => {
+        test('finds default export', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             class Component extends React.Component {}
@@ -489,7 +490,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds default export inline', () => {
+        test('finds default export inline', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             export default class Component extends React.Component {};
@@ -498,7 +499,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds multiple exported components with export var', () => {
+        test('finds multiple exported components with export var', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             export var Component = class extends React.Component {};
@@ -508,7 +509,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds multiple exported components with named export', () => {
+        test('finds multiple exported components with named export', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             var Component = class extends React.Component {};
@@ -519,7 +520,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds only exported components', () => {
+        test('finds only exported components', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             var Component = class extends React.Component {};
@@ -529,7 +530,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('supports imported components', () => {
+        test('supports imported components', () => {
           const result = findComponentsInSource(
             `import Component from 'classDec';
              export default Component;`,
@@ -541,7 +542,7 @@ describe('findAllExportedComponentDefinitions', () => {
       });
 
       describe('forwardRef components', () => {
-        it('finds forwardRef components', () => {
+        test('finds forwardRef components', () => {
           const result = findComponentsInSource(`
             import React from 'react';
             import PropTypes from 'prop-types';
@@ -557,7 +558,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds none inline forwardRef components', () => {
+        test('finds none inline forwardRef components', () => {
           const result = findComponentsInSource(`
             import React from 'react';
             import PropTypes from 'prop-types';
@@ -575,7 +576,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('supports imported components', () => {
+        test('supports imported components', () => {
           const result = findComponentsInSource(
             `import Component from 'forwardRef';
              export default Component;`,
@@ -589,7 +590,7 @@ describe('findAllExportedComponentDefinitions', () => {
 
     describe('export var foo = <C>, ...;', () => {
       describe('React.createClass', () => {
-        it('finds named exports 1', () => {
+        test('finds named exports 1', () => {
           const result = findComponentsInSource(`
             var React = require("React");
             export var somethingElse = 42, Component = React.createClass({});
@@ -598,7 +599,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds named exports 2', () => {
+        test('finds named exports 2', () => {
           const result = findComponentsInSource(`
             var React = require("React");
             export let Component = React.createClass({}), somethingElse = 42;
@@ -607,7 +608,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds named exports 3', () => {
+        test('finds named exports 3', () => {
           const result = findComponentsInSource(`
             var React = require("React");
             export const something = 21,
@@ -618,7 +619,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds named exports 4', () => {
+        test('finds named exports 4', () => {
           const result = findComponentsInSource(`
             var React = require("React");
             export var somethingElse = function() {};
@@ -628,7 +629,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds multiple components', () => {
+        test('finds multiple components', () => {
           const result = findComponentsInSource(`
             var R = require("React");
             export var ComponentA = R.createClass({}),
@@ -638,7 +639,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds multiple components with separate export statements', () => {
+        test('finds multiple components with separate export statements', () => {
           const result = findComponentsInSource(`
             var R = require("React");
             export var ComponentA = R.createClass({});
@@ -649,7 +650,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds only exported components', () => {
+        test('finds only exported components', () => {
           const result = findComponentsInSource(`
             var R = require("React");
             var ComponentA = R.createClass({});
@@ -659,7 +660,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('supports imported components', () => {
+        test('supports imported components', () => {
           const result = findComponentsInSource(
             `import Component from 'createClass';
              export let ComponentA = Component;
@@ -672,7 +673,7 @@ describe('findAllExportedComponentDefinitions', () => {
       });
 
       describe('class definition', () => {
-        it('finds named exports 1', () => {
+        test('finds named exports 1', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             export var somethingElse = 42,
@@ -682,7 +683,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds named exports 2', () => {
+        test('finds named exports 2', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             export let Component = class extends React.Component {},
@@ -692,7 +693,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds named exports 3', () => {
+        test('finds named exports 3', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             export const something = 21,
@@ -703,7 +704,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds named exports 4', () => {
+        test('finds named exports 4', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             export var somethingElse = function() {};
@@ -713,7 +714,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds multiple components', () => {
+        test('finds multiple components', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             export var ComponentA  = class extends React.Component {};
@@ -723,7 +724,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds multiple components with assigned component', () => {
+        test('finds multiple components with assigned component', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             export var ComponentA = class extends React.Component {};
@@ -734,7 +735,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds only exported components', () => {
+        test('finds only exported components', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             var ComponentA  = class extends React.Component {}
@@ -744,7 +745,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('supports imported components', () => {
+        test('supports imported components', () => {
           const result = findComponentsInSource(
             `
             import Component from 'classDec';
@@ -759,7 +760,7 @@ describe('findAllExportedComponentDefinitions', () => {
       });
 
       describe('stateless components', () => {
-        it('finds named exports 1', () => {
+        test('finds named exports 1', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             export var somethingElse = 42,
@@ -769,7 +770,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('supports imported components 2', () => {
+        test('supports imported components 2', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             export let Component = () => <div />,
@@ -779,7 +780,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('supports imported components 3', () => {
+        test('supports imported components 3', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             export const something = 21,
@@ -790,7 +791,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('supports imported components 4', () => {
+        test('supports imported components 4', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             export var somethingElse = function() {};
@@ -800,7 +801,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds multiple components', () => {
+        test('finds multiple components', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             export var ComponentA = () => <div />
@@ -810,7 +811,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds multiple components with named export', () => {
+        test('finds multiple components with named export', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             export var ComponentA = () => <div />
@@ -821,7 +822,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds only exported components', () => {
+        test('finds only exported components', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             var ComponentA  = class extends React.Component {}
@@ -831,7 +832,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('supports imported components', () => {
+        test('supports imported components', () => {
           const result = findComponentsInSource(
             `import Component1 from 'statelessJsx';
              import Component2 from 'statelessCreateElement';
@@ -844,7 +845,7 @@ describe('findAllExportedComponentDefinitions', () => {
       });
 
       describe('forwardRef components', () => {
-        it('finds forwardRef components', () => {
+        test('finds forwardRef components', () => {
           const result = findComponentsInSource(`
             import React from 'react';
             import PropTypes from 'prop-types';
@@ -858,7 +859,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('supports imported components', () => {
+        test('supports imported components', () => {
           const result = findComponentsInSource(
             `
             import Component from 'forwardRef';
@@ -875,7 +876,7 @@ describe('findAllExportedComponentDefinitions', () => {
 
     describe('export {<C>};', () => {
       describe('React.createClass', () => {
-        it('finds exported specifiers', () => {
+        test('finds exported specifiers', () => {
           const result = findComponentsInSource(`
             var React = require("React");
             var foo = 42;
@@ -886,7 +887,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds exported specifiers 2', () => {
+        test('finds exported specifiers 2', () => {
           const result = findComponentsInSource(`
             import React from "React"
             var foo = 42;
@@ -897,7 +898,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds exported specifiers 3', () => {
+        test('finds exported specifiers 3', () => {
           const result = findComponentsInSource(`
             import React, { createElement } from "React"
             var foo = 42;
@@ -909,7 +910,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds multiple components', () => {
+        test('finds multiple components', () => {
           const result = findComponentsInSource(`
             var R = require("React");
             var ComponentA = R.createClass({});
@@ -920,7 +921,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds multiple components with hocs', () => {
+        test('finds multiple components with hocs', () => {
           const result = findComponentsInSource(`
             var R = require("React");
             var ComponentA = hoc(R.createClass({}));
@@ -931,7 +932,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds only exported components', () => {
+        test('finds only exported components', () => {
           const result = findComponentsInSource(`
             var R = require("React");
             var ComponentA = R.createClass({});
@@ -942,7 +943,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds exported components only once', () => {
+        test('finds exported components only once', () => {
           const result = findComponentsInSource(`
             var R = require("React");
             var ComponentA = R.createClass({});
@@ -952,7 +953,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('supports imported components', () => {
+        test('supports imported components', () => {
           const result = findComponentsInSource(
             `import Component from 'createClass';
              export { Component, Component as ComponentB };`,
@@ -964,7 +965,7 @@ describe('findAllExportedComponentDefinitions', () => {
       });
 
       describe('class definition', () => {
-        it('finds exported specifiers 1', () => {
+        test('finds exported specifiers 1', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             var foo = 42;
@@ -975,7 +976,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds exported specifiers 2', () => {
+        test('finds exported specifiers 2', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             var foo = 42;
@@ -986,7 +987,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds exported specifiers 3', () => {
+        test('finds exported specifiers 3', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             var foo = 42;
@@ -998,7 +999,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds multiple components', () => {
+        test('finds multiple components', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             var ComponentA = class extends React.Component {};
@@ -1009,7 +1010,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds multiple components with hocs', () => {
+        test('finds multiple components with hocs', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             class ComponentA extends React.Component {};
@@ -1022,7 +1023,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds only exported components', () => {
+        test('finds only exported components', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             var ComponentA = class extends React.Component {};
@@ -1033,7 +1034,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds exported components only once', () => {
+        test('finds exported components only once', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             var ComponentA = class extends React.Component {};
@@ -1044,7 +1045,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('supports imported components', () => {
+        test('supports imported components', () => {
           const result = findComponentsInSource(
             `
             import Component from 'classDec';
@@ -1058,7 +1059,7 @@ describe('findAllExportedComponentDefinitions', () => {
       });
 
       describe('stateless components', () => {
-        it('finds exported specifiers 1', () => {
+        test('finds exported specifiers 1', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             var foo = 42;
@@ -1069,7 +1070,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds exported specifiers 2', () => {
+        test('finds exported specifiers 2', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             var foo = 42;
@@ -1080,7 +1081,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds exported specifiers 3', () => {
+        test('finds exported specifiers 3', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             var foo = 42;
@@ -1092,7 +1093,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds multiple components', () => {
+        test('finds multiple components', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             var ComponentA = () => <div />;
@@ -1103,7 +1104,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds only exported components', () => {
+        test('finds only exported components', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             var ComponentA = () => <div />;
@@ -1114,7 +1115,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds exported components only once', () => {
+        test('finds exported components only once', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             var ComponentA = () => <div />;
@@ -1125,7 +1126,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('supports imported components', () => {
+        test('supports imported components', () => {
           const result = findComponentsInSource(
             `
             import ComponentA from 'statelessJsx';
@@ -1140,7 +1141,7 @@ describe('findAllExportedComponentDefinitions', () => {
       });
 
       describe('forwardRef components', () => {
-        it('finds forwardRef components', () => {
+        test('finds forwardRef components', () => {
           const result = findComponentsInSource(`
             import React from 'react';
             import PropTypes from 'prop-types';
@@ -1156,7 +1157,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('supports imported components', () => {
+        test('supports imported components', () => {
           const result = findComponentsInSource(
             `
             import Component from 'forwardRef';
@@ -1172,7 +1173,7 @@ describe('findAllExportedComponentDefinitions', () => {
 
     describe('export <C>;', () => {
       describe('class definition', () => {
-        it('finds named exports', () => {
+        test('finds named exports', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             export var foo = 42;
@@ -1182,7 +1183,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds multiple components', () => {
+        test('finds multiple components', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             export class ComponentA extends React.Component {};
@@ -1192,7 +1193,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds only exported components', () => {
+        test('finds only exported components', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             class ComponentA extends React.Component {};
@@ -1204,7 +1205,7 @@ describe('findAllExportedComponentDefinitions', () => {
       });
 
       describe('function declaration', () => {
-        it('finds named exports', () => {
+        test('finds named exports', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             export var foo = 42;
@@ -1214,7 +1215,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds multiple components', () => {
+        test('finds multiple components', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             export function ComponentA() { return <div />; };
@@ -1224,7 +1225,7 @@ describe('findAllExportedComponentDefinitions', () => {
           expect(result).toMatchSnapshot();
         });
 
-        it('finds only exported components', () => {
+        test('finds only exported components', () => {
           const result = findComponentsInSource(`
             import React from 'React';
             function ComponentA() { return <div />; }

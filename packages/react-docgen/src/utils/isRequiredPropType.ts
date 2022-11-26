@@ -1,5 +1,5 @@
 import type { Node, NodePath } from '@babel/traverse';
-import getMembers from '../utils/getMembers';
+import getMembers from '../utils/getMembers.js';
 
 /**
  * Returns true of the prop is required, according to its type definition

@@ -4,21 +4,20 @@ import type {
   ExportNamedDeclaration,
 } from '@babel/types';
 import { parse } from '../../../tests/utils';
-import resolveExportDeclaration from '../resolveExportDeclaration';
+import resolveExportDeclaration from '../resolveExportDeclaration.js';
+import { describe, expect, test, vi } from 'vitest';
 
-jest.mock('../resolveToValue', () => {
-  return (path: NodePath) => path;
-});
+vi.mock('../resolveToValue.js', () => ({ default: (path: NodePath) => path }));
 
 describe('resolveExportDeclaration', () => {
-  it('resolves default exports', () => {
+  test('resolves default exports', () => {
     const exp = parse.statement<ExportDefaultDeclaration>('export default 42;');
     const resolved = resolveExportDeclaration(exp);
 
     expect(resolved).toEqual([exp.get('declaration')]);
   });
 
-  it('resolves named variable exports', () => {
+  test('resolves named variable exports', () => {
     const exp = parse.statement<ExportNamedDeclaration>(
       'export var foo = 42, bar = 21;',
     );
@@ -29,7 +28,7 @@ describe('resolveExportDeclaration', () => {
     expect(resolved).toEqual([declarations[0], declarations[1]]);
   });
 
-  it('resolves named function exports', () => {
+  test('resolves named function exports', () => {
     const exp = parse.statement<ExportNamedDeclaration>(
       'export function foo(){}',
     );
@@ -38,14 +37,14 @@ describe('resolveExportDeclaration', () => {
     expect(resolved).toEqual([exp.get('declaration')]);
   });
 
-  it('resolves named class exports', () => {
+  test('resolves named class exports', () => {
     const exp = parse.statement<ExportNamedDeclaration>('export class Foo {}');
     const resolved = resolveExportDeclaration(exp);
 
     expect(resolved).toEqual([exp.get('declaration')]);
   });
 
-  it('resolves named exports', () => {
+  test('resolves named exports', () => {
     const exp = parse.statement<ExportNamedDeclaration>(
       'export {foo, bar, baz}; var foo, bar, baz;',
     );
@@ -60,7 +59,7 @@ describe('resolveExportDeclaration', () => {
     ]);
   });
 
-  it('resolves named exports from', () => {
+  test('resolves named exports from', () => {
     const exp = parse.statement<ExportNamedDeclaration>(
       'export {foo, bar, baz} from "";',
     );

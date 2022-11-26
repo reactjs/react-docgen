@@ -1,4 +1,4 @@
-import {CustomButton, sharedProps} from './component_34';
+import {CustomButton, sharedProps} from './component_34.js';
 import PropTypes from 'prop-types';
 
 export function SuperCustomButton({color, ...otherProps}) {
@@ -7,4 +7,4 @@ export function SuperCustomButton({color, ...otherProps}) {
 
 SuperCustomButton.propTypes = sharedProps;
 export {sharedProps};
-export * from './component_36';
+export * from './component_36.js';

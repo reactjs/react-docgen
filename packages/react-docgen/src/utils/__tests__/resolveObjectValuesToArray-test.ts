@@ -1,5 +1,6 @@
 import { makeMockImporter, parse } from '../../../tests/utils';
-import resolveObjectValuesToArray from '../resolveObjectValuesToArray';
+import resolveObjectValuesToArray from '../resolveObjectValuesToArray.js';
+import { describe, expect, test } from 'vitest';
 
 describe('resolveObjectValuesToArray', () => {
   const mockImporter = makeMockImporter({
@@ -25,7 +26,7 @@ describe('resolveObjectValuesToArray', () => {
     `).get('declaration'),
   });
 
-  it('resolves Object.values with strings', () => {
+  test('resolves Object.values with strings', () => {
     const path = parse.expressionLast(
       ['var foo = { 1: "bar", 2: "foo" };', 'Object.values(foo);'].join('\n'),
     );
@@ -33,7 +34,7 @@ describe('resolveObjectValuesToArray', () => {
     expect(resolveObjectValuesToArray(path)).toMatchSnapshot();
   });
 
-  it('resolves Object.values with numbers', () => {
+  test('resolves Object.values with numbers', () => {
     const path = parse.expressionLast(
       ['var foo = { 1: 0, 2: 5 };', 'Object.values(foo);'].join('\n'),
     );
@@ -41,7 +42,7 @@ describe('resolveObjectValuesToArray', () => {
     expect(resolveObjectValuesToArray(path)).toMatchSnapshot();
   });
 
-  it('resolves Object.values with undefined or null', () => {
+  test('resolves Object.values with undefined or null', () => {
     const path = parse.expressionLast(
       ['var foo = { 1: null, 2: undefined };', 'Object.values(foo);'].join(
         '\n',
@@ -51,7 +52,7 @@ describe('resolveObjectValuesToArray', () => {
     expect(resolveObjectValuesToArray(path)).toMatchSnapshot();
   });
 
-  it('resolves Object.values with literals as computed key', () => {
+  test('resolves Object.values with literals as computed key', () => {
     const path = parse.expressionLast(
       ['var foo = { ["bar"]: 1, [5]: 2};', 'Object.values(foo);'].join('\n'),
     );
@@ -59,7 +60,7 @@ describe('resolveObjectValuesToArray', () => {
     expect(resolveObjectValuesToArray(path)).toMatchSnapshot();
   });
 
-  it('does not resolve Object.values with complex computed key', () => {
+  test('does not resolve Object.values with complex computed key', () => {
     const path = parse.expressionLast(
       ['var foo = { [()=>{}]: 1, [5]: 2};', 'Object.values(foo);'].join('\n'),
     );
@@ -67,7 +68,7 @@ describe('resolveObjectValuesToArray', () => {
     expect(resolveObjectValuesToArray(path)).toBeNull();
   });
 
-  it('resolves Object.values when using resolvable spread', () => {
+  test('resolves Object.values when using resolvable spread', () => {
     const path = parse.expressionLast(
       [
         'var bar = { doo: 4 }',
@@ -79,7 +80,7 @@ describe('resolveObjectValuesToArray', () => {
     expect(resolveObjectValuesToArray(path)).toMatchSnapshot();
   });
 
-  it('resolves Object.values when using getters', () => {
+  test('resolves Object.values when using getters', () => {
     const path = parse.expressionLast(
       [
         'var foo = { boo: 1, foo: 2, get bar() {} };',
@@ -90,7 +91,7 @@ describe('resolveObjectValuesToArray', () => {
     expect(resolveObjectValuesToArray(path)).toMatchSnapshot();
   });
 
-  it('resolves Object.values when using setters', () => {
+  test('resolves Object.values when using setters', () => {
     const path = parse.expressionLast(
       [
         'var foo = { boo: 1, foo: 2, set bar(e) {} };',
@@ -101,7 +102,7 @@ describe('resolveObjectValuesToArray', () => {
     expect(resolveObjectValuesToArray(path)).toMatchSnapshot();
   });
 
-  it('resolves Object.values when using methods', () => {
+  test('resolves Object.values when using methods', () => {
     const path = parse.expressionLast(
       ['var foo = { boo: 1, foo: 2, bar(e) {} };', 'Object.values(foo);'].join(
         '\n',
@@ -111,7 +112,7 @@ describe('resolveObjectValuesToArray', () => {
     expect(resolveObjectValuesToArray(path)).toMatchSnapshot();
   });
 
-  it('resolves Object.values but ignores duplicates', () => {
+  test('resolves Object.values but ignores duplicates', () => {
     const path = parse.expressionLast(
       [
         'var bar = { doo: 4, doo: 5 }',
@@ -123,7 +124,7 @@ describe('resolveObjectValuesToArray', () => {
     expect(resolveObjectValuesToArray(path)).toMatchSnapshot();
   });
 
-  it('resolves Object.values but ignores duplicates with getter and setter', () => {
+  test('resolves Object.values but ignores duplicates with getter and setter', () => {
     const path = parse.expressionLast(
       ['var foo = { get x() {}, set x(a) {} };', 'Object.values(foo);'].join(
         '\n',
@@ -133,7 +134,7 @@ describe('resolveObjectValuesToArray', () => {
     expect(resolveObjectValuesToArray(path)).toMatchSnapshot();
   });
 
-  it('does not resolve Object.values when using unresolvable spread', () => {
+  test('does not resolve Object.values when using unresolvable spread', () => {
     const path = parse.expressionLast(
       ['var foo = { bar: 1, foo: 2, ...bar };', 'Object.values(foo);'].join(
         '\n',
@@ -143,7 +144,7 @@ describe('resolveObjectValuesToArray', () => {
     expect(resolveObjectValuesToArray(path)).toBeNull();
   });
 
-  it('can resolve imported objects passed to Object.values', () => {
+  test('can resolve imported objects passed to Object.values', () => {
     const path = parse.expressionLast(
       `import foo from 'foo';
        Object.values(foo);`,
@@ -153,7 +154,7 @@ describe('resolveObjectValuesToArray', () => {
     expect(resolveObjectValuesToArray(path)).toMatchSnapshot();
   });
 
-  it('can resolve spreads from imported objects', () => {
+  test('can resolve spreads from imported objects', () => {
     const path = parse.expressionLast(
       `import bar from 'bar';
        var abc = { foo: 'foo', baz: 'baz', ...bar };

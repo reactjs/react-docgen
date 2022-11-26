@@ -3,21 +3,22 @@
   "version": "6.0.0-alpha.3",
   "description": "A library to extract information from React components for documentation generation.",
   "repository": "reactjs/react-docgen",
+  "type": "module",
   "browser": {
-    "./dist/importer/makeFsImporter.js": "./dist/importer/makeIgnoreImports.js",
-    "./src/importer/makeFsImporter.ts": "./src/importer/makeIgnoreImports.ts"
+    "./dist/importer/fsImporter.js": "./dist/importer/ignoreImports.js",
+    "./src/importer/fsImporter.ts": "./src/importer/ignoreImports.ts"
   },
   "files": [
     "dist"
   ],
   "engines": {
-    "node": ">=14.15.0"
+    "node": ">=14.17.0"
   },
   "main": "dist/main.js",
   "typings": "dist/main.d.ts",
   "scripts": {
     "build": "rimraf dist/ && tsc",
-    "test": "yarn build && jest"
+    "watch": "rimraf dist/ && tsc --watch"
   },
   "keywords": [
     "react",

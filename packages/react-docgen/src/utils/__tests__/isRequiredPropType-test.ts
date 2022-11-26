@@ -1,8 +1,9 @@
 import { parse } from '../../../tests/utils';
-import isRequiredPropType from '../isRequiredPropType';
+import isRequiredPropType from '../isRequiredPropType.js';
+import { describe, expect, test } from 'vitest';
 
 describe('isRequiredPropType', () => {
-  it('considers isRequired', () => {
+  test('considers isRequired', () => {
     expect(isRequiredPropType(parse.expression('foo.bar.isRequired'))).toEqual(
       true,
     );
@@ -11,7 +12,7 @@ describe('isRequiredPropType', () => {
     );
   });
 
-  it('considers ["isRequired"]', () => {
+  test('considers ["isRequired"]', () => {
     expect(
       isRequiredPropType(parse.expression('foo.bar["isRequired"]')),
     ).toEqual(true);
@@ -20,7 +21,7 @@ describe('isRequiredPropType', () => {
     ).toEqual(true);
   });
 
-  it('ignores variables', () => {
+  test('ignores variables', () => {
     expect(isRequiredPropType(parse.expression('foo.bar[isRequired]'))).toEqual(
       false,
     );

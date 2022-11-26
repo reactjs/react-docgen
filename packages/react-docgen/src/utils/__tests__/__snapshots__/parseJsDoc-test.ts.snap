@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`parseJsDoc @param extracts jsdoc description 1`] = `
+exports[`parseJsDoc > @param > extracts jsdoc description 1`] = `
 {
   "description": null,
   "params": [
@@ -15,7 +15,7 @@ exports[`parseJsDoc @param extracts jsdoc description 1`] = `
 }
 `;
 
-exports[`parseJsDoc @param extracts jsdoc empty description 1`] = `
+exports[`parseJsDoc > @param > extracts jsdoc empty description 1`] = `
 {
   "description": null,
   "params": [
@@ -32,7 +32,7 @@ exports[`parseJsDoc @param extracts jsdoc empty description 1`] = `
 }
 `;
 
-exports[`parseJsDoc @param extracts jsdoc optional 1`] = `
+exports[`parseJsDoc > @param > extracts jsdoc optional 1`] = `
 {
   "description": null,
   "params": [
@@ -49,7 +49,7 @@ exports[`parseJsDoc @param extracts jsdoc optional 1`] = `
 }
 `;
 
-exports[`parseJsDoc @param extracts jsdoc typed array 1`] = `
+exports[`parseJsDoc > @param > extracts jsdoc typed array 1`] = `
 {
   "description": null,
   "params": [
@@ -74,7 +74,7 @@ exports[`parseJsDoc @param extracts jsdoc typed array 1`] = `
 }
 `;
 
-exports[`parseJsDoc @param extracts jsdoc union type param 1`] = `
+exports[`parseJsDoc > @param > extracts jsdoc union type param 1`] = `
 {
   "description": null,
   "params": [
@@ -107,7 +107,7 @@ exports[`parseJsDoc @param extracts jsdoc union type param 1`] = `
 }
 `;
 
-exports[`parseJsDoc @returns extracts description from jsdoc 1`] = `
+exports[`parseJsDoc > @returns > extracts description from jsdoc 1`] = `
 {
   "description": null,
   "params": [],
@@ -118,7 +118,7 @@ exports[`parseJsDoc @returns extracts description from jsdoc 1`] = `
 }
 `;
 
-exports[`parseJsDoc @returns extracts jsdoc mixed types 1`] = `
+exports[`parseJsDoc > @returns > extracts jsdoc mixed types 1`] = `
 {
   "description": null,
   "params": [],
@@ -131,7 +131,7 @@ exports[`parseJsDoc @returns extracts jsdoc mixed types 1`] = `
 }
 `;
 
-exports[`parseJsDoc @returns extracts jsdoc typed array 1`] = `
+exports[`parseJsDoc > @returns > extracts jsdoc typed array 1`] = `
 {
   "description": null,
   "params": [
@@ -156,7 +156,7 @@ exports[`parseJsDoc @returns extracts jsdoc typed array 1`] = `
 }
 `;
 
-exports[`parseJsDoc @returns extracts jsdoc types 1`] = `
+exports[`parseJsDoc > @returns > extracts jsdoc types 1`] = `
 {
   "description": null,
   "params": [],
@@ -169,7 +169,7 @@ exports[`parseJsDoc @returns extracts jsdoc types 1`] = `
 }
 `;
 
-exports[`parseJsDoc @returns works with @return 1`] = `
+exports[`parseJsDoc > @returns > works with @return 1`] = `
 {
   "description": null,
   "params": [],
@@ -180,7 +180,7 @@ exports[`parseJsDoc @returns works with @return 1`] = `
 }
 `;
 
-exports[`parseJsDoc description extracts the method description in jsdoc 1`] = `
+exports[`parseJsDoc > description > extracts the method description in jsdoc 1`] = `
 {
   "description": "Don't use this!",
   "params": [],

@@ -1,11 +1,11 @@
 import type { NodePath } from '@babel/traverse';
 import type { Node } from '@babel/types';
-import getMemberValuePath from '../utils/getMemberValuePath';
-import resolveToValue from '../utils/resolveToValue';
-import setPropDescription from '../utils/setPropDescription';
-import type Documentation from '../Documentation';
-import type { ComponentNode } from '../resolver';
-import type { Handler } from '.';
+import getMemberValuePath from '../utils/getMemberValuePath.js';
+import resolveToValue from '../utils/resolveToValue.js';
+import setPropDescription from '../utils/setPropDescription.js';
+import type Documentation from '../Documentation.js';
+import type { ComponentNode } from '../resolver/index.js';
+import type { Handler } from './index.js';
 
 function resolveDocumentation(
   documentation: Documentation,

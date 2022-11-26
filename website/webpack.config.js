@@ -104,12 +104,6 @@ module.exports = {
       path: require.resolve('path-browserify'),
       process: require.resolve('process/browser'),
     },
-    alias: {
-      'react-docgen': path.resolve(
-        __dirname,
-        '../packages/react-docgen/src/main.ts',
-      ),
-    },
   },
   plugins,
 };

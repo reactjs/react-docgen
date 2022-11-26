@@ -1,13 +1,13 @@
-import isReactComponentClass from '../utils/isReactComponentClass';
-import isReactCreateClassCall from '../utils/isReactCreateClassCall';
-import isReactForwardRefCall from '../utils/isReactForwardRefCall';
-import isStatelessComponent from '../utils/isStatelessComponent';
-import normalizeClassDefinition from '../utils/normalizeClassDefinition';
-import resolveToValue from '../utils/resolveToValue';
+import isReactComponentClass from '../utils/isReactComponentClass.js';
+import isReactCreateClassCall from '../utils/isReactCreateClassCall.js';
+import isReactForwardRefCall from '../utils/isReactForwardRefCall.js';
+import isStatelessComponent from '../utils/isStatelessComponent.js';
+import normalizeClassDefinition from '../utils/normalizeClassDefinition.js';
+import resolveToValue from '../utils/resolveToValue.js';
 import type { NodePath } from '@babel/traverse';
 import { visitors } from '@babel/traverse';
-import type FileState from '../FileState';
-import type { ComponentNode, Resolver } from '.';
+import type FileState from '../FileState.js';
+import type { ComponentNode, Resolver } from './index.js';
 import type {
   ArrowFunctionExpression,
   FunctionDeclaration,

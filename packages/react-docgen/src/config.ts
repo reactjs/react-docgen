@@ -1,5 +1,5 @@
 import type { TransformOptions } from '@babel/core';
-import type { Handler } from './handlers';
+import type { Handler } from './handlers/index.js';
 import {
   childContextTypeHandler,
   codeTypeHandler,
@@ -12,11 +12,11 @@ import {
   propDocBlockHandler,
   propTypeCompositionHandler,
   propTypeHandler,
-} from './handlers';
-import type { Importer } from './importer';
-import { fsImporter } from './importer';
-import type { Resolver } from './resolver';
-import { findExportedComponentDefinition } from './resolver';
+} from './handlers/index.js';
+import type { Importer } from './importer/index.js';
+import { fsImporter } from './importer/index.js';
+import type { Resolver } from './resolver/index.js';
+import { findExportedComponentDefinition } from './resolver/index.js';
 
 export interface Config {
   handlers?: Handler[];

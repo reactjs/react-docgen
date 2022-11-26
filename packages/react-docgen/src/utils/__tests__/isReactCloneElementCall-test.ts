@@ -1,5 +1,6 @@
 import { parse, makeMockImporter } from '../../../tests/utils';
-import isReactCloneElementCall from '../isReactCloneElementCall';
+import isReactCloneElementCall from '../isReactCloneElementCall.js';
+import { describe, expect, test } from 'vitest';
 
 describe('isReactCloneElementCall', () => {
   const mockImporter = makeMockImporter({
@@ -11,7 +12,7 @@ describe('isReactCloneElementCall', () => {
   });
 
   describe('built in React.createClass', () => {
-    it('accepts cloneElement called on React', () => {
+    test('accepts cloneElement called on React', () => {
       const def = parse.expressionLast(`
         var React = require("React");
         React.cloneElement({});
@@ -20,7 +21,7 @@ describe('isReactCloneElementCall', () => {
       expect(isReactCloneElementCall(def)).toBe(true);
     });
 
-    it('accepts cloneElement called on aliased React', () => {
+    test('accepts cloneElement called on aliased React', () => {
       const def = parse.expressionLast(`
         var other = require("React");
         other.cloneElement({});
@@ -29,7 +30,7 @@ describe('isReactCloneElementCall', () => {
       expect(isReactCloneElementCall(def)).toBe(true);
     });
 
-    it('ignores other React calls', () => {
+    test('ignores other React calls', () => {
       const def = parse.expressionLast(`
         var React = require("React");
         React.isValidElement({});
@@ -38,7 +39,7 @@ describe('isReactCloneElementCall', () => {
       expect(isReactCloneElementCall(def)).toBe(false);
     });
 
-    it('ignores non React calls to cloneElement', () => {
+    test('ignores non React calls to cloneElement', () => {
       const def = parse.expressionLast(`
         var React = require("bob");
         React.cloneElement({});
@@ -47,7 +48,7 @@ describe('isReactCloneElementCall', () => {
       expect(isReactCloneElementCall(def)).toBe(false);
     });
 
-    it('accepts cloneElement called on destructed value', () => {
+    test('accepts cloneElement called on destructed value', () => {
       const def = parse.expressionLast(`
         var { cloneElement } = require("react");
         cloneElement({});
@@ -56,7 +57,7 @@ describe('isReactCloneElementCall', () => {
       expect(isReactCloneElementCall(def)).toBe(true);
     });
 
-    it('accepts cloneElement called on destructed aliased value', () => {
+    test('accepts cloneElement called on destructed aliased value', () => {
       const def = parse.expressionLast(`
         var { cloneElement: foo } = require("react");
         foo({});
@@ -65,7 +66,7 @@ describe('isReactCloneElementCall', () => {
       expect(isReactCloneElementCall(def)).toBe(true);
     });
 
-    it('accepts cloneElement called on imported value', () => {
+    test('accepts cloneElement called on imported value', () => {
       const def = parse.expressionLast(`
         import { cloneElement } from "react";
         cloneElement({});
@@ -74,7 +75,7 @@ describe('isReactCloneElementCall', () => {
       expect(isReactCloneElementCall(def)).toBe(true);
     });
 
-    it('accepts cloneElement called on imported aliased value', () => {
+    test('accepts cloneElement called on imported aliased value', () => {
       const def = parse.expressionLast(`
         import { cloneElement as foo } from "react";
         foo({});
@@ -83,7 +84,7 @@ describe('isReactCloneElementCall', () => {
       expect(isReactCloneElementCall(def)).toBe(true);
     });
 
-    it('can resolve cloneElement imported from an intermediate module', () => {
+    test('can resolve cloneElement imported from an intermediate module', () => {
       const def = parse.expressionLast(
         `
         import foo from "foo";

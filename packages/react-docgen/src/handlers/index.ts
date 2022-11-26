@@ -1,20 +1,20 @@
 import type { NodePath } from '@babel/traverse';
-import type Documentation from '../Documentation';
-import type { ComponentNode } from '../resolver';
+import type Documentation from '../Documentation.js';
+import type { ComponentNode } from '../resolver/index.js';
 
-export { default as componentDocblockHandler } from './componentDocblockHandler';
-export { default as componentMethodsHandler } from './componentMethodsHandler';
-export { default as componentMethodsJsDocHandler } from './componentMethodsJsDocHandler';
-export { default as defaultPropsHandler } from './defaultPropsHandler';
-export { default as displayNameHandler } from './displayNameHandler';
-export { default as codeTypeHandler } from './codeTypeHandler';
-export { default as propDocBlockHandler } from './propDocBlockHandler';
-export { default as propTypeCompositionHandler } from './propTypeCompositionHandler';
+export { default as componentDocblockHandler } from './componentDocblockHandler.js';
+export { default as componentMethodsHandler } from './componentMethodsHandler.js';
+export { default as componentMethodsJsDocHandler } from './componentMethodsJsDocHandler.js';
+export { default as defaultPropsHandler } from './defaultPropsHandler.js';
+export { default as displayNameHandler } from './displayNameHandler.js';
+export { default as codeTypeHandler } from './codeTypeHandler.js';
+export { default as propDocBlockHandler } from './propDocBlockHandler.js';
+export { default as propTypeCompositionHandler } from './propTypeCompositionHandler.js';
 export {
   propTypeHandler,
   contextTypeHandler,
   childContextTypeHandler,
-} from './propTypeHandler';
+} from './propTypeHandler.js';
 
 export type Handler = (
   documentation: Documentation,

@@ -1,18 +1,18 @@
-import type Documentation from '../Documentation';
-import { unwrapUtilityType } from '../utils/flowUtilityTypes';
-import getFlowType from '../utils/getFlowType';
+import type Documentation from '../Documentation.js';
+import { unwrapUtilityType } from '../utils/flowUtilityTypes.js';
+import getFlowType from '../utils/getFlowType.js';
 import getTypeFromReactComponent, {
   applyToTypeProperties,
-} from '../utils/getTypeFromReactComponent';
-import getPropertyName from '../utils/getPropertyName';
-import getTSType from '../utils/getTSType';
-import type { TypeParameters } from '../utils/getTypeParameters';
-import resolveToValue from '../utils/resolveToValue';
-import setPropDescription from '../utils/setPropDescription';
+} from '../utils/getTypeFromReactComponent.js';
+import getPropertyName from '../utils/getPropertyName.js';
+import getTSType from '../utils/getTSType.js';
+import type { TypeParameters } from '../utils/getTypeParameters.js';
+import resolveToValue from '../utils/resolveToValue.js';
+import setPropDescription from '../utils/setPropDescription.js';
 import type { NodePath } from '@babel/traverse';
 import type { FlowType } from '@babel/types';
-import type { ComponentNode } from '../resolver';
-import type { Handler } from '.';
+import type { ComponentNode } from '../resolver/index.js';
+import type { Handler } from './index.js';
 
 function setPropDescriptor(
   documentation: Documentation,

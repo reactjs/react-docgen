@@ -1,8 +1,8 @@
 import type { NodePath } from '@babel/traverse';
 import type { MemberExpression } from '@babel/types';
-import isReactModuleName from './isReactModuleName';
-import match from './match';
-import resolveToModule from './resolveToModule';
+import isReactModuleName from './isReactModuleName.js';
+import match from './match.js';
+import resolveToModule from './resolveToModule.js';
 
 // TODO unit tests
 

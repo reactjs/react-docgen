@@ -1,7 +1,7 @@
 import type { NodePath } from '@babel/traverse';
-import type Documentation from '../Documentation';
-import getPropertyName from './getPropertyName';
-import { getDocblock } from './docblock';
+import type Documentation from '../Documentation.js';
+import getPropertyName from './getPropertyName.js';
+import { getDocblock } from './docblock.js';
 import type {
   ObjectMethod,
   ObjectProperty,

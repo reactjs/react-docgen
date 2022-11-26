@@ -1,8 +1,8 @@
-import isReactModuleName from './isReactModuleName';
-import match from './match';
-import resolveToModule from './resolveToModule';
-import resolveToValue from './resolveToValue';
-import isDestructuringAssignment from './isDestructuringAssignment';
+import isReactModuleName from './isReactModuleName.js';
+import match from './match.js';
+import resolveToModule from './resolveToModule.js';
+import resolveToValue from './resolveToValue.js';
+import isDestructuringAssignment from './isDestructuringAssignment.js';
 import type { NodePath } from '@babel/traverse';
 import type { CallExpression, MemberExpression } from '@babel/types';
 

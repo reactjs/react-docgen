@@ -1,8 +1,9 @@
 import { parse } from '../../../tests/utils';
-import isStatelessComponent from '../isStatelessComponent';
+import isStatelessComponent from '../isStatelessComponent.js';
+import { describe, expect, test } from 'vitest';
 
 describe('isStatelessComponent', () => {
-  it('accepts jsx', () => {
+  test('accepts jsx', () => {
     const def = parse(`
         var React = require('react');
         var Foo = () => <div />;
@@ -14,7 +15,7 @@ describe('isStatelessComponent', () => {
     expect(isStatelessComponent(def)).toBe(true);
   });
 
-  it('accepts jsx fragment', () => {
+  test('accepts jsx fragment', () => {
     const def = parse(`
         var React = require('react');
         var Foo = () => <></>;
@@ -26,7 +27,7 @@ describe('isStatelessComponent', () => {
     expect(isStatelessComponent(def)).toBe(true);
   });
 
-  it('accepts createElement', () => {
+  test('accepts createElement', () => {
     const def = parse(`
         var React = require('react');
         var Foo = () => React.createElement("div", null);
@@ -38,7 +39,7 @@ describe('isStatelessComponent', () => {
     expect(isStatelessComponent(def)).toBe(true);
   });
 
-  it('accepts cloneElement', () => {
+  test('accepts cloneElement', () => {
     const def = parse(`
         var React = require('react');
         var Foo = () => React.cloneElement("div", null);
@@ -50,7 +51,7 @@ describe('isStatelessComponent', () => {
     expect(isStatelessComponent(def)).toBe(true);
   });
 
-  it('accepts React.Children.only', () => {
+  test('accepts React.Children.only', () => {
     const def = parse(`
         var React = require('react');
         var Foo = () => React.Children.only(children);
@@ -62,7 +63,7 @@ describe('isStatelessComponent', () => {
     expect(isStatelessComponent(def)).toBe(true);
   });
 
-  it('accepts React.Children.map', () => {
+  test('accepts React.Children.map', () => {
     const def = parse(`
         var React = require('react');
         var Foo = () => React.Children.map(children, child => child);
@@ -74,7 +75,7 @@ describe('isStatelessComponent', () => {
     expect(isStatelessComponent(def)).toBe(true);
   });
 
-  it('accepts different name than React', () => {
+  test('accepts different name than React', () => {
     const def = parse(`
         var AlphaBetters = require('react');
         var Foo = () => AlphaBetters.createElement("div", null);
@@ -86,7 +87,7 @@ describe('isStatelessComponent', () => {
     expect(isStatelessComponent(def)).toBe(true);
   });
 
-  it('Stateless Function Components inside module pattern', () => {
+  test('Stateless Function Components inside module pattern', () => {
     const def = parse(`
         var React = require('react');
         var Foo = {
@@ -115,7 +116,7 @@ describe('isStatelessComponent', () => {
   });
 
   describe('is not overzealous', () => {
-    it('does not accept declarations with a render method', () => {
+    test('does not accept declarations with a render method', () => {
       const def = parse.statement(`
         class Foo {
           render() {
@@ -127,7 +128,7 @@ describe('isStatelessComponent', () => {
       expect(isStatelessComponent(def)).toBe(false);
     });
 
-    it('does not accept React.Component classes', () => {
+    test('does not accept React.Component classes', () => {
       const def = parse(`
         var React = require('react');
         class Foo extends React.Component {
@@ -140,7 +141,7 @@ describe('isStatelessComponent', () => {
       expect(isStatelessComponent(def)).toBe(false);
     });
 
-    it('does not accept React.createClass calls', () => {
+    test('does not accept React.createClass calls', () => {
       const def = parse.statement(`
         React.createClass({
           render() {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Props as ImportedProps } from './component_27';
+import { Props as ImportedProps } from './component_27.jsx';
 
 export default interface ExtendedProps extends ImportedProps {
   bar: number

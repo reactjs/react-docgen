@@ -10,21 +10,21 @@ import type {
   ObjectProperty,
   TSType,
 } from '@babel/types';
-import { getDocblock } from './docblock';
-import getFlowType from './getFlowType';
-import getTSType from './getTSType';
-import getParameterName from './getParameterName';
-import getPropertyName from './getPropertyName';
-import getTypeAnnotation from './getTypeAnnotation';
-import resolveToValue from './resolveToValue';
-import printValue from './printValue';
+import { getDocblock } from './docblock.js';
+import getFlowType from './getFlowType.js';
+import getTSType from './getTSType.js';
+import getParameterName from './getParameterName.js';
+import getPropertyName from './getPropertyName.js';
+import getTypeAnnotation from './getTypeAnnotation.js';
+import resolveToValue from './resolveToValue.js';
+import printValue from './printValue.js';
 import type {
   MethodDescriptor,
   MethodModifier,
   MethodParameter,
   MethodReturn,
   TypeDescriptor,
-} from '../Documentation';
+} from '../Documentation.js';
 
 export type MethodNodePath =
   | NodePath<AssignmentExpression>

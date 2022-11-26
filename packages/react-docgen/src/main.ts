@@ -1,15 +1,15 @@
-import * as allHandlers from './handlers';
-import parse from './parse';
-import * as allResolvers from './resolver';
-import * as allImporters from './importer';
-import * as utils from './utils';
-import type { DocumentationObject as Documentation } from './Documentation';
-import type { Resolver } from './resolver';
-import type { Importer } from './importer';
-import type { Handler } from './handlers';
-import type FileState from './FileState';
-import type { Config } from './config';
-import { createConfig, defaultHandlers } from './config';
+import * as allHandlers from './handlers/index.js';
+import parse from './parse.js';
+import * as allResolvers from './resolver/index.js';
+import * as allImporters from './importer/index.js';
+import * as utils from './utils/index.js';
+import type { DocumentationObject as Documentation } from './Documentation.js';
+import type { Resolver } from './resolver/index.js';
+import type { Importer } from './importer/index.js';
+import type { Handler } from './handlers/index.js';
+import type FileState from './FileState.js';
+import type { Config } from './config.js';
+import { createConfig, defaultHandlers } from './config.js';
 
 declare module '@babel/traverse' {
   export interface HubInterface {

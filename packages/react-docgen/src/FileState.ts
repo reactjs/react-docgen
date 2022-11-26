@@ -1,8 +1,8 @@
 import type { HubInterface, Scope, Visitor } from '@babel/traverse';
 import traverse, { NodePath } from '@babel/traverse';
 import type { File, Node, Program } from '@babel/types';
-import type { Importer, ImportPath } from './importer';
-import babelParse from './babelParser';
+import type { Importer, ImportPath } from './importer/index.js';
+import babelParse from './babelParser.js';
 import type { TransformOptions } from '@babel/core';
 
 export default class FileState {
@@ -85,6 +85,6 @@ export default class FileState {
    * Traverse the current file
    */
   traverse(visitors: Visitor, state?: unknown): void {
-    traverse(this.ast, visitors, this.scope, state);
+    traverse.default(this.ast, visitors, this.scope, state);
   }
 }
