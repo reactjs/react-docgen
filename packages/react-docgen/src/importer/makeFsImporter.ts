@@ -1,7 +1,7 @@
 import { shallowIgnoreVisitors } from '../utils/traverse';
 import resolve from 'resolve';
-import { dirname } from 'node:path';
-import fs from 'node:fs';
+import { dirname } from 'path';
+import fs from 'fs';
 import type { NodePath } from '@babel/traverse';
 import { visitors } from '@babel/traverse';
 import type { ExportSpecifier, Identifier, ObjectProperty } from '@babel/types';
