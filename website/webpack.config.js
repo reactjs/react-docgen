@@ -4,8 +4,7 @@ const webpack = require('webpack');
 const path = require('node:path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const TerserJsPlugin = require('terser-webpack-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 const sourceDirectory = path.resolve(__dirname, './src');
 const targetDirectory = path.resolve(__dirname, './dist');
@@ -53,7 +52,7 @@ module.exports = {
     app: './index.js',
   },
   optimization: {
-    minimizer: [new TerserJsPlugin(), new OptimizeCSSAssetsPlugin({})],
+    minimizer: ['...', new CssMinimizerPlugin()],
   },
   output: {
     path: targetDirectory,
@@ -100,6 +99,8 @@ module.exports = {
       assert: require.resolve('assert/'),
       buffer: require.resolve('buffer/'),
       fs: false,
+      module: false,
+      os: require.resolve('os-browserify/browser'),
       path: require.resolve('path-browserify'),
       process: require.resolve('process/browser'),
     },
