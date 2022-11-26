@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { chainPropTypes } from '@material-ui/utils';
-import withStyles from '../styles/withStyles';
-import { capitalize } from '../utils/helpers';
+import withStyles from '../styles/withStyles.js';
+import { capitalize } from '../utils/helpers.js';
 
 const SIZE = 44;
 

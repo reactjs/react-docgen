@@ -1,5 +1,6 @@
 import { parse, makeMockImporter } from '../../../tests/utils';
-import resolveToModule from '../resolveToModule';
+import resolveToModule from '../resolveToModule.js';
+import { describe, expect, test } from 'vitest';
 
 describe('resolveToModule', () => {
   const mockImporter = makeMockImporter({
@@ -16,7 +17,7 @@ describe('resolveToModule', () => {
       `).get('declaration'),
   });
 
-  it('resolves identifiers', () => {
+  test('resolves identifiers', () => {
     const path = parse.expressionLast(`
       var foo = require("Foo");
       foo;
@@ -25,7 +26,7 @@ describe('resolveToModule', () => {
     expect(resolveToModule(path)).toBe('Foo');
   });
 
-  it('resolves function calls', () => {
+  test('resolves function calls', () => {
     const path = parse.expressionLast(`
       var foo = require("Foo");
       foo();
@@ -34,7 +35,7 @@ describe('resolveToModule', () => {
     expect(resolveToModule(path)).toBe('Foo');
   });
 
-  it('resolves member expressions', () => {
+  test('resolves member expressions', () => {
     const path = parse.expressionLast(`
       var foo = require("Foo");
       foo.bar().baz;
@@ -43,7 +44,7 @@ describe('resolveToModule', () => {
     expect(resolveToModule(path)).toBe('Foo');
   });
 
-  it('understands destructuring', () => {
+  test('understands destructuring', () => {
     const path = parse.expressionLast(`
       var {foo} = require("Foo");
       foo;
@@ -53,7 +54,7 @@ describe('resolveToModule', () => {
   });
 
   describe('ES6 import declarations', () => {
-    it('resolves ImportDefaultSpecifier', () => {
+    test('resolves ImportDefaultSpecifier', () => {
       let path = parse.expressionLast(`
         import foo from "Foo";
         foo;
@@ -68,7 +69,7 @@ describe('resolveToModule', () => {
       expect(resolveToModule(path)).toBe('Foo');
     });
 
-    it('resolves ImportSpecifier', () => {
+    test('resolves ImportSpecifier', () => {
       const path = parse.expressionLast(`
         import {foo, bar} from "Foo";
         bar;
@@ -77,7 +78,7 @@ describe('resolveToModule', () => {
       expect(resolveToModule(path)).toBe('Foo');
     });
 
-    it('resolves aliased ImportSpecifier', () => {
+    test('resolves aliased ImportSpecifier', () => {
       const path = parse.expressionLast(`
         import {foo, bar as baz} from "Foo";
         baz;
@@ -86,7 +87,7 @@ describe('resolveToModule', () => {
       expect(resolveToModule(path)).toBe('Foo');
     });
 
-    it('resolves ImportNamespaceSpecifier', () => {
+    test('resolves ImportNamespaceSpecifier', () => {
       const path = parse.expressionLast(`
         import * as foo from "Foo";
         foo;
@@ -95,7 +96,7 @@ describe('resolveToModule', () => {
       expect(resolveToModule(path)).toBe('Foo');
     });
 
-    it('can resolve imports until one not expanded', () => {
+    test('can resolve imports until one not expanded', () => {
       const path = parse.expressionLast(
         `
         import foo from "Foo";

@@ -2,13 +2,14 @@ import type { ObjectExpression } from '@babel/types';
 import fs from 'fs';
 import { directory as tempDirectory } from 'tempy';
 import { parse as testParse, noopImporter } from '../../tests/utils';
-import parse, { ERROR_MISSING_DEFINITION } from '../parse';
+import parse, { ERROR_MISSING_DEFINITION } from '../parse.js';
+import { describe, expect, test, vi } from 'vitest';
 
 describe('parse', () => {
-  it('allows custom component definition resolvers', () => {
+  test('allows custom component definition resolvers', () => {
     const path = testParse.expression<ObjectExpression>('{foo: "bar"}');
-    const resolver = jest.fn(() => [path]);
-    const handler = jest.fn();
+    const resolver = vi.fn(() => [path]);
+    const handler = vi.fn();
 
     parse('//empty', {
       resolver,
@@ -21,8 +22,8 @@ describe('parse', () => {
     expect(handler.mock.calls[0][1]).toBe(path);
   });
 
-  it('errors if component definition is not found', () => {
-    const resolver = jest.fn(() => []);
+  test('errors if component definition is not found', () => {
+    const resolver = vi.fn(() => []);
 
     expect(() =>
       parse('//empty', {
@@ -45,7 +46,7 @@ describe('parse', () => {
     expect(resolver).toBeCalled();
   });
 
-  it('uses local babelrc', () => {
+  test('uses local babelrc', () => {
     const dir = tempDirectory();
 
     try {
@@ -68,7 +69,7 @@ describe('parse', () => {
     }
   });
 
-  it('supports custom parserOptions with plugins', () => {
+  test('supports custom parserOptions with plugins', () => {
     expect(() =>
       parse('const chained: Type = 1;', {
         resolver: () => [],
@@ -86,7 +87,7 @@ describe('parse', () => {
     ).toThrowError(/.*\(1:13\).*/);
   });
 
-  it('supports custom parserOptions without plugins', () => {
+  test('supports custom parserOptions without plugins', () => {
     expect(() =>
       parse('const chained: Type = 1;', {
         resolver: () => [],

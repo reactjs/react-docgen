@@ -1,4 +1,4 @@
-import resolveToValue from './resolveToValue';
+import resolveToValue from './resolveToValue.js';
 import type { NodePath } from '@babel/traverse';
 import type {
   CallExpression,

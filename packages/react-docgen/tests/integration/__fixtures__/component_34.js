@@ -1,4 +1,4 @@
-import Button from './component_6';
+import Button from './component_6.js';
 import PropTypes from 'prop-types';
 
 export function CustomButton({color, ...otherProps}) {

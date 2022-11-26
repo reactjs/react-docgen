@@ -1,6 +1,7 @@
 import { identifier, numericLiteral } from '@babel/types';
 import { makeMockImporter, parse } from '../../../tests/utils';
-import resolveHOC from '../resolveHOC';
+import resolveHOC from '../resolveHOC.js';
+import { describe, expect, test } from 'vitest';
 
 describe('resolveHOC', () => {
   const mockImporter = makeMockImporter({
@@ -16,31 +17,31 @@ describe('resolveHOC', () => {
     `).get('declaration'),
   });
 
-  it('resolves simple hoc', () => {
+  test('resolves simple hoc', () => {
     const path = parse.expressionLast(['hoc(Component);'].join('\n'));
 
-    expect(resolveHOC(path)).toEqualASTNode(identifier('Component'));
+    expect(resolveHOC(path)).toMatchSnapshot();
   });
 
-  it('resolves simple hoc w/ multiple args', () => {
+  test('resolves simple hoc w/ multiple args', () => {
     const path = parse.expressionLast(
       ['hoc1(arg1a, arg1b)(Component);'].join('\n'),
     );
 
-    expect(resolveHOC(path)).toEqualASTNode(identifier('Component'));
+    expect(resolveHOC(path)).toMatchSnapshot();
   });
 
-  it('resolves nested hocs', () => {
+  test('resolves nested hocs', () => {
     const path = parse.expressionLast(
       `hoc2(arg2b, arg2b)(
         hoc1(arg1a, arg2a)(Component)
       );`,
     );
 
-    expect(resolveHOC(path)).toEqualASTNode(identifier('Component'));
+    expect(resolveHOC(path)).toMatchSnapshot();
   });
 
-  it('resolves really nested hocs', () => {
+  test('resolves really nested hocs', () => {
     const path = parse.expressionLast(
       `hoc3(arg3a, arg3b)(
         hoc2(arg2b, arg2b)(
@@ -49,48 +50,48 @@ describe('resolveHOC', () => {
       );`,
     );
 
-    expect(resolveHOC(path)).toEqualASTNode(identifier('Component'));
+    expect(resolveHOC(path)).toMatchSnapshot();
   });
 
-  it('resolves HOC with additional params', () => {
+  test('resolves HOC with additional params', () => {
     const path = parse.expressionLast(`hoc3(Component, {})`);
 
-    expect(resolveHOC(path)).toEqualASTNode(identifier('Component'));
+    expect(resolveHOC(path)).toMatchSnapshot();
   });
 
-  it('resolves HOC as last element if first is literal', () => {
+  test('resolves HOC as last element if first is literal', () => {
     const path = parse.expressionLast(`hoc3(41, Component)`);
 
-    expect(resolveHOC(path)).toEqualASTNode(identifier('Component'));
+    expect(resolveHOC(path)).toMatchSnapshot();
   });
 
-  it('resolves HOC as last element if first is array', () => {
+  test('resolves HOC as last element if first is array', () => {
     const path = parse.expressionLast(`hoc3([], Component)`);
 
-    expect(resolveHOC(path)).toEqualASTNode(identifier('Component'));
+    expect(resolveHOC(path)).toMatchSnapshot();
   });
 
-  it('resolves HOC as last element if first is object', () => {
+  test('resolves HOC as last element if first is object', () => {
     const path = parse.expressionLast(`hoc3({}, Component)`);
 
-    expect(resolveHOC(path)).toEqualASTNode(identifier('Component'));
+    expect(resolveHOC(path)).toMatchSnapshot();
   });
 
-  it('resolves HOC as last element if first is spread', () => {
+  test('resolves HOC as last element if first is spread', () => {
     const path = parse.expressionLast(`hoc3(...params, Component)`);
 
-    expect(resolveHOC(path)).toEqualASTNode(identifier('Component'));
+    expect(resolveHOC(path)).toMatchSnapshot();
   });
 
-  it('resolves intermediate hocs', () => {
+  test('resolves intermediate hocs', () => {
     const path = parse.expressionLast(
       ['const Component = React.memo(42);', 'hoc()(Component);'].join('\n'),
     );
 
-    expect(resolveHOC(path)).toEqualASTNode(numericLiteral(42));
+    expect(resolveHOC(path)).toMatchSnapshot();
   });
 
-  it('can resolve an imported component passed to hoc', () => {
+  test('can resolve an imported component passed to hoc', () => {
     const path = parse.expressionLast(
       `
       import foo from 'component';
@@ -99,10 +100,10 @@ describe('resolveHOC', () => {
       mockImporter,
     );
 
-    expect(resolveHOC(path)).toEqualASTNode(identifier('Component'));
+    expect(resolveHOC(path)).toMatchSnapshot();
   });
 
-  it('can resolve an imported component passed to nested hoc', () => {
+  test('can resolve an imported component passed to nested hoc', () => {
     const path = parse.expressionLast(
       `
       import foo from 'component';
@@ -113,16 +114,16 @@ describe('resolveHOC', () => {
       mockImporter,
     );
 
-    expect(resolveHOC(path)).toEqualASTNode(identifier('Component'));
+    expect(resolveHOC(path)).toMatchSnapshot();
   });
 
-  it('can resolve an hocs inside imported component passed to hoc', () => {
+  test('can resolve an hocs inside imported component passed to hoc', () => {
     const path = parse.expressionLast(
       `import bar from 'hoc';
        hoc(bar);`,
       mockImporter,
     );
 
-    expect(resolveHOC(path)).toEqualASTNode(identifier('Component'));
+    expect(resolveHOC(path)).toMatchSnapshot();
   });
 });

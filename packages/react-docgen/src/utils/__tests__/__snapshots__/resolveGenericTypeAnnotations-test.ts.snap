@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`resolveGenericTypeAnnotation resolves type 1`] = `
+exports[`resolveGenericTypeAnnotation > resolves type 1`] = `
 Node {
   "callProperties": [],
   "exact": false,

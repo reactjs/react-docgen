@@ -2,7 +2,8 @@ import type { NodePath } from '@babel/traverse';
 import Documentation from '../../Documentation';
 import type { ComponentNode } from '../../resolver';
 import type DocumentationMock from '../../__mocks__/Documentation';
-import componentMethodsJsDocHandler from '../componentMethodsJsDocHandler';
+import componentMethodsJsDocHandler from '../componentMethodsJsDocHandler.js';
+import { beforeEach, describe, expect, test } from 'vitest';
 
 describe('componentMethodsJsDocHandler', () => {
   let documentation: Documentation & DocumentationMock;
@@ -11,7 +12,7 @@ describe('componentMethodsJsDocHandler', () => {
     documentation = new Documentation() as Documentation & DocumentationMock;
   });
 
-  it('stays the same when no docblock is present', () => {
+  test('stays the same when no docblock is present', () => {
     const methods = [
       {
         name: 'foo',
@@ -32,7 +33,7 @@ describe('componentMethodsJsDocHandler', () => {
     expect(documentation.get('methods')).toEqual(methods);
   });
 
-  it('adds js doc types when no flow types', () => {
+  test('adds js doc types when no flow types', () => {
     documentation.set('methods', [
       {
         name: 'foo',
@@ -54,7 +55,7 @@ describe('componentMethodsJsDocHandler', () => {
     expect(documentation.get('methods')).toMatchSnapshot();
   });
 
-  it('keeps flow types over js doc types', () => {
+  test('keeps flow types over js doc types', () => {
     documentation.set('methods', [
       {
         name: 'foo',
@@ -78,7 +79,7 @@ describe('componentMethodsJsDocHandler', () => {
     expect(documentation.get('methods')).toMatchSnapshot();
   });
 
-  it('adds descriptions', () => {
+  test('adds descriptions', () => {
     documentation.set('methods', [
       {
         name: 'foo',

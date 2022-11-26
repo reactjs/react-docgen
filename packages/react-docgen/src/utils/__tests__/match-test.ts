@@ -1,5 +1,6 @@
 import type { Node } from '@babel/types';
-import match from '../match';
+import match from '../match.js';
+import { describe, expect, test } from 'vitest';
 
 describe('match', () => {
   const toASTNode = (obj: Record<string, unknown>): Node => {
@@ -7,19 +8,19 @@ describe('match', () => {
     return obj as any;
   };
 
-  it('matches with exact properties', () => {
+  test('matches with exact properties', () => {
     expect(match(toASTNode({ foo: { bar: 42 } }), { foo: { bar: 42 } })).toBe(
       true,
     );
   });
 
-  it('matches a subset of properties in the target', () => {
+  test('matches a subset of properties in the target', () => {
     expect(
       match(toASTNode({ foo: { bar: 42, baz: 'xyz' } }), { foo: { bar: 42 } }),
     ).toBe(true);
   });
 
-  it('does not match if properties are different/missing', () => {
+  test('does not match if properties are different/missing', () => {
     expect(
       match(toASTNode({ foo: { bar: 42, baz: 'xyz' } }), {
         foo: { bar: 21, baz: 'xyz' },

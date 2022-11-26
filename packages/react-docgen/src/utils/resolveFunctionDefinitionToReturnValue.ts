@@ -1,8 +1,8 @@
 import type { NodePath } from '@babel/traverse';
 import { visitors } from '@babel/traverse';
 import type { Expression, Function as BabelFunction } from '@babel/types';
-import resolveToValue from './resolveToValue';
-import { ignore, shallowIgnoreVisitors } from './traverse';
+import resolveToValue from './resolveToValue.js';
+import { ignore, shallowIgnoreVisitors } from './traverse.js';
 
 interface TraverseState {
   returnPath?: NodePath<Expression>;

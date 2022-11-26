@@ -1,4 +1,4 @@
-import getFlowType from '../getFlowType';
+import getFlowType from '../getFlowType.js';
 import { parse, makeMockImporter } from '../../../tests/utils';
 import type {
   ExportNamedDeclaration,
@@ -10,6 +10,7 @@ import type {
   VariableDeclaration,
 } from '@babel/types';
 import type { NodePath } from '@babel/traverse';
+import { describe, expect, test } from 'vitest';
 
 describe('getFlowType', () => {
   const mockImporter = makeMockImporter({
@@ -69,7 +70,7 @@ describe('getFlowType', () => {
     `).get('declaration') as NodePath<TypeAlias>,
   });
 
-  it('detects simple types', () => {
+  test('detects simple types', () => {
     const simplePropTypes = [
       'string',
       'number',
@@ -96,7 +97,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('detects literal types', () => {
+  test('detects literal types', () => {
     const literalTypes = ['"foo"', 1234, true];
 
     literalTypes.forEach(value => {
@@ -112,7 +113,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('detects external type', () => {
+  test('detects external type', () => {
     const typePath = parse
       .expression<TypeCastExpression>('x: xyz')
       .get('typeAnnotation')
@@ -121,7 +122,7 @@ describe('getFlowType', () => {
     expect(getFlowType(typePath)).toEqual({ name: 'xyz' });
   });
 
-  it('resolves an imported type', () => {
+  test('resolves an imported type', () => {
     const typePath = (
       parse
         .statement<ExpressionStatement>(
@@ -141,7 +142,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('detects external nullable type', () => {
+  test('detects external nullable type', () => {
     const typePath = parse
       .expression<TypeCastExpression>('x: ?xyz')
       .get('typeAnnotation')
@@ -153,7 +154,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('resolves an imported nullable type', () => {
+  test('resolves an imported nullable type', () => {
     const typePath = (
       parse
         .statement<ExpressionStatement>(
@@ -174,7 +175,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('detects array type shorthand optional', () => {
+  test('detects array type shorthand optional', () => {
     const typePath = parse
       .expression<TypeCastExpression>('x: ?number[]')
       .get('typeAnnotation')
@@ -188,7 +189,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('detects array type shorthand optional type', () => {
+  test('detects array type shorthand optional type', () => {
     const typePath = parse
       .expression<TypeCastExpression>('x: (?number)[]')
       .get('typeAnnotation')
@@ -201,7 +202,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('detects array type shorthand', () => {
+  test('detects array type shorthand', () => {
     const typePath = parse
       .expression<TypeCastExpression>('x: number[]')
       .get('typeAnnotation')
@@ -214,7 +215,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('detects array type', () => {
+  test('detects array type', () => {
     const typePath = parse
       .expression<TypeCastExpression>('x: Array<number>')
       .get('typeAnnotation')
@@ -227,7 +228,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('resolves imported types used for arrays', () => {
+  test('resolves imported types used for arrays', () => {
     let typePath = (
       parse
         .statement<ExpressionStatement>(
@@ -307,7 +308,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('detects array type with multiple types', () => {
+  test('detects array type with multiple types', () => {
     const typePath = parse
       .expression<TypeCastExpression>('x: Array<number, xyz>')
       .get('typeAnnotation')
@@ -320,7 +321,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('resolves array type with multiple imported types', () => {
+  test('resolves array type with multiple imported types', () => {
     const typePath = (
       parse
         .statement<ExpressionStatement>(
@@ -343,7 +344,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('detects class type', () => {
+  test('detects class type', () => {
     const typePath = parse
       .expression<TypeCastExpression>('x: Class<Boolean>')
       .get('typeAnnotation')
@@ -356,7 +357,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('resolves imported subtype for class type', () => {
+  test('resolves imported subtype for class type', () => {
     const typePath = (
       parse
         .statement<ExpressionStatement>(
@@ -378,7 +379,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('detects function type with subtype', () => {
+  test('detects function type with subtype', () => {
     const typePath = parse
       .expression<TypeCastExpression>('x: Function<xyz>')
       .get('typeAnnotation')
@@ -391,7 +392,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('resolves imported subtype for function type', () => {
+  test('resolves imported subtype for function type', () => {
     const typePath = (
       parse
         .statement<ExpressionStatement>(
@@ -413,7 +414,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('detects object types', () => {
+  test('detects object types', () => {
     const typePath = parse
       .expression<TypeCastExpression>('x: { a: string, b?: xyz }')
       .get('typeAnnotation')
@@ -432,7 +433,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('detects object types with maybe type', () => {
+  test('detects object types with maybe type', () => {
     const typePath = parse
       .expression<TypeCastExpression>('x: { a: string, b: ?xyz }')
       .get('typeAnnotation')
@@ -451,7 +452,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('resolves imported types used for objects', () => {
+  test('resolves imported types used for objects', () => {
     const typePath = (
       parse
         .statement<ExpressionStatement>(
@@ -496,7 +497,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('detects union type', () => {
+  test('detects union type', () => {
     const typePath = parse
       .expression<TypeCastExpression>('x: string | xyz | "foo" | void')
       .get('typeAnnotation')
@@ -514,7 +515,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('resolves imported types within union type', () => {
+  test('resolves imported types within union type', () => {
     const typePath = (
       parse
         .statement<ExpressionStatement>(
@@ -548,7 +549,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('detects intersection type', () => {
+  test('detects intersection type', () => {
     const typePath = parse
       .expression<TypeCastExpression>('x: string & xyz & "foo" & void')
       .get('typeAnnotation')
@@ -566,7 +567,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('resolves imported types within intersection type', () => {
+  test('resolves imported types within intersection type', () => {
     const typePath = (
       parse
         .statement<ExpressionStatement>(
@@ -600,7 +601,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('detects function signature type', () => {
+  test('detects function signature type', () => {
     const typePath = parse
       .expression<TypeCastExpression>(
         'x: (p1: number, p2: ?string, ...rest: Array<string>) => boolean',
@@ -631,7 +632,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('detects function signature types without parameter names', () => {
+  test('detects function signature types without parameter names', () => {
     const typePath = parse
       .expression<TypeCastExpression>('x: (number, ?string) => boolean')
       .get('typeAnnotation')
@@ -651,7 +652,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('detects function signature type with single parmeter without name', () => {
+  test('detects function signature type with single parmeter without name', () => {
     const typePath = parse
       .expression<TypeCastExpression>('x: string => boolean')
       .get('typeAnnotation')
@@ -668,7 +669,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('detects callable signature type', () => {
+  test('detects callable signature type', () => {
     const typePath = parse
       .expression<TypeCastExpression>(
         'x: { (str: string): string, token: string }',
@@ -697,7 +698,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('resolves function signature types with imported types', () => {
+  test('resolves function signature types with imported types', () => {
     let typePath = (
       parse
         .statement<ExpressionStatement>(
@@ -827,7 +828,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('detects map signature', () => {
+  test('detects map signature', () => {
     const typePath = parse
       .expression<TypeCastExpression>(
         'x: { [key: string]: number, [key: "xl"]: string, token: "a" | "b" }',
@@ -866,7 +867,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('resolves imported types in map signature', () => {
+  test('resolves imported types in map signature', () => {
     const typePath = (
       parse
         .statement<ExpressionStatement>(
@@ -915,7 +916,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('detects tuple signature', () => {
+  test('detects tuple signature', () => {
     const typePath = parse
       .expression<TypeCastExpression>('x: [string, number]')
       .get('typeAnnotation')
@@ -928,7 +929,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('detects tuple in union signature', () => {
+  test('detects tuple in union signature', () => {
     const typePath = parse
       .expression<TypeCastExpression>('x: [string, number] | [number, string]')
       .get('typeAnnotation')
@@ -952,7 +953,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('resolves imported types used in tuple signature', () => {
+  test('resolves imported types used in tuple signature', () => {
     let typePath = (
       parse
         .statement<ExpressionStatement>(
@@ -1008,7 +1009,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('resolves types in scope', () => {
+  test('resolves types in scope', () => {
     const typePath = (
       parse
         .statement<VariableDeclaration>(
@@ -1029,7 +1030,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('handles typeof types', () => {
+  test('handles typeof types', () => {
     const typePath = (
       parse
         .statement<VariableDeclaration>(
@@ -1058,7 +1059,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('resolves typeof of imported types', () => {
+  test('resolves typeof of imported types', () => {
     const typePath = (
       parse
         .statement<VariableDeclaration>(
@@ -1090,7 +1091,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('handles qualified type identifiers', () => {
+  test('handles qualified type identifiers', () => {
     const typePath = (
       parse
         .statement<VariableDeclaration>(
@@ -1111,7 +1112,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('handles qualified type identifiers with params', () => {
+  test('handles qualified type identifiers with params', () => {
     const typePath = (
       parse
         .statement<VariableDeclaration>(
@@ -1138,7 +1139,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('handles generic types', () => {
+  test('handles generic types', () => {
     const typePath = (
       parse
         .statement<VariableDeclaration>(
@@ -1181,7 +1182,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('resolves imported types that need subtypes', () => {
+  test('resolves imported types that need subtypes', () => {
     const typePath = (
       parse
         .statement<VariableDeclaration>(
@@ -1225,7 +1226,7 @@ describe('getFlowType', () => {
   });
 
   describe('React types', () => {
-    function test(type, expected) {
+    function testReactType(type, expected) {
       const typePath = (
         parse
           .statement<VariableDeclaration>(
@@ -1277,11 +1278,11 @@ describe('getFlowType', () => {
     };
 
     Object.keys(types).forEach(type => {
-      it(type, () => test(type, types[type]));
+      test(type, () => testReactType(type, types[type]));
     });
   });
 
-  it('resolves $Keys to union', () => {
+  test('resolves $Keys to union', () => {
     const typePath = (
       parse
         .statement<VariableDeclaration>(
@@ -1309,7 +1310,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('resolves $Keys without typeof to union', () => {
+  test('resolves $Keys without typeof to union', () => {
     const typePath = (
       parse
         .statement<VariableDeclaration>(
@@ -1337,7 +1338,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('resolves $Keys with an ObjectTypeAnnotation typeParameter to union', () => {
+  test('resolves $Keys with an ObjectTypeAnnotation typeParameter to union', () => {
     const typePath = (
       parse
         .statement<VariableDeclaration>(
@@ -1361,7 +1362,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('resolves $Keys with an ObjectTypeAnnotation typeParameter to union with an ObjectTypeSpreadProperty', () => {
+  test('resolves $Keys with an ObjectTypeAnnotation typeParameter to union with an ObjectTypeSpreadProperty', () => {
     const typePath = (
       parse
         .statement<VariableDeclaration>(
@@ -1387,7 +1388,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('resolves $Keys to imported types', () => {
+  test('resolves $Keys to imported types', () => {
     let typePath = (
       parse
         .statement<VariableDeclaration>(
@@ -1462,7 +1463,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('handles multiple references to one type', () => {
+  test('handles multiple references to one type', () => {
     const typePath = (
       parse
         .statement<VariableDeclaration>(
@@ -1508,7 +1509,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('handles self-referencing type cycles', () => {
+  test('handles self-referencing type cycles', () => {
     const typePath = (
       parse
         .statement<VariableDeclaration>(
@@ -1535,7 +1536,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('handles long type cycles', () => {
+  test('handles long type cycles', () => {
     const typePath = (
       parse
         .statement<VariableDeclaration>(
@@ -1607,7 +1608,7 @@ describe('getFlowType', () => {
     });
   });
 
-  it('handles ObjectTypeSpreadProperty', () => {
+  test('handles ObjectTypeSpreadProperty', () => {
     const typePath = (
       parse
         .statement<VariableDeclaration>(
@@ -1625,7 +1626,7 @@ describe('getFlowType', () => {
     expect(getFlowType(typePath)).toMatchSnapshot();
   });
 
-  it('handles ObjectTypeSpreadProperty from imported types', () => {
+  test('handles ObjectTypeSpreadProperty from imported types', () => {
     const typePath = (
       parse
         .statement<VariableDeclaration>(
@@ -1644,7 +1645,7 @@ describe('getFlowType', () => {
     expect(getFlowType(typePath)).toMatchSnapshot();
   });
 
-  it('handles unresolved ObjectTypeSpreadProperty', () => {
+  test('handles unresolved ObjectTypeSpreadProperty', () => {
     const typePath = (
       parse
         .statement<VariableDeclaration>(
@@ -1660,7 +1661,7 @@ describe('getFlowType', () => {
     expect(getFlowType(typePath)).toMatchSnapshot();
   });
 
-  it('handles nested ObjectTypeSpreadProperty', () => {
+  test('handles nested ObjectTypeSpreadProperty', () => {
     const typePath = (
       parse
         .statement<VariableDeclaration>(

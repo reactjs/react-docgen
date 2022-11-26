@@ -6,7 +6,7 @@ import type {
   ClassProperty,
   Expression,
 } from '@babel/types';
-import getNameOrValue from './getNameOrValue';
+import getNameOrValue from './getNameOrValue.js';
 
 export default function getClassMemberValuePath(
   classDefinition: NodePath<ClassDeclaration | ClassExpression>,

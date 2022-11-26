@@ -1,6 +1,6 @@
 import React from 'react';
-import Panel from './CodeMirrorPanel';
-import Header from './Header';
+import Panel from './CodeMirrorPanel.js';
+import Header from './Header.js';
 import { parse } from 'react-docgen';
 
 const codeSample = `import React, { Component } from 'react';

@@ -1,9 +1,10 @@
 import { parse } from '../../../tests/utils';
-import getMemberExpressionValuePath from '../getMemberExpressionValuePath';
+import getMemberExpressionValuePath from '../getMemberExpressionValuePath.js';
+import { describe, expect, test } from 'vitest';
 
 describe('getMemberExpressionValuePath', () => {
   describe('MethodExpression', () => {
-    it('finds "normal" property definitions', () => {
+    test('finds "normal" property definitions', () => {
       const def = parse.statement(`
         var Foo = () => {};
         Foo.propTypes = {};
@@ -14,7 +15,7 @@ describe('getMemberExpressionValuePath', () => {
       );
     });
 
-    it('takes the correct property definitions', () => {
+    test('takes the correct property definitions', () => {
       const def = parse.statement(`
         var Foo = () => {};
         Foo.propTypes = {};
@@ -26,7 +27,7 @@ describe('getMemberExpressionValuePath', () => {
       );
     });
 
-    it('finds computed property definitions with literal keys', () => {
+    test('finds computed property definitions with literal keys', () => {
       const def = parse.statement(`
         function Foo () {}
         Foo['render'] = () => {};
@@ -37,7 +38,7 @@ describe('getMemberExpressionValuePath', () => {
       );
     });
 
-    it('ignores computed property definitions with expression', () => {
+    test('ignores computed property definitions with expression', () => {
       const def = parse.statement(`
         var Foo = function Bar() {};
         Foo[imComputed] = () => {};
@@ -47,7 +48,7 @@ describe('getMemberExpressionValuePath', () => {
     });
   });
   describe('TaggedTemplateLiteral', () => {
-    it('finds "normal" property definitions', () => {
+    test('finds "normal" property definitions', () => {
       const def = parse.statement(`
         var Foo = foo\`bar\`
         Foo.propTypes = {};
@@ -59,7 +60,7 @@ describe('getMemberExpressionValuePath', () => {
     });
   });
   describe('CallExpression', () => {
-    it('finds "normal" property definitions', () => {
+    test('finds "normal" property definitions', () => {
       const def = parse.statement(`
         const Foo = system({is: "button"}, "space");
         Foo.propTypes = {};

@@ -1,9 +1,9 @@
-import isReactCreateElementCall from './isReactCreateElementCall';
-import isReactCloneElementCall from './isReactCloneElementCall';
-import isReactChildrenElementCall from './isReactChildrenElementCall';
+import isReactCreateElementCall from './isReactCreateElementCall.js';
+import isReactCloneElementCall from './isReactCloneElementCall.js';
+import isReactChildrenElementCall from './isReactChildrenElementCall.js';
 import type { NodePath } from '@babel/traverse';
-import type { StatelessComponentNode } from '../resolver';
-import findFunctionReturn from './findFunctionReturn';
+import type { StatelessComponentNode } from '../resolver/index.js';
+import findFunctionReturn from './findFunctionReturn.js';
 
 const validPossibleStatelessComponentTypes = [
   'ArrowFunctionExpression',

@@ -1,4 +1,4 @@
-import type { DocumentationObject } from '../Documentation';
+import type { DocumentationObject } from '../Documentation.js';
 
 export default function (
   documentation: DocumentationObject,

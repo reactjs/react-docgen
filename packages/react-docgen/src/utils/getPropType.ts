@@ -1,14 +1,14 @@
 /*eslint no-use-before-define: 0*/
 import type { NodePath } from '@babel/traverse';
-import { getDocblock } from '../utils/docblock';
-import getMembers from './getMembers';
-import getPropertyName from './getPropertyName';
-import isRequiredPropType from '../utils/isRequiredPropType';
-import printValue from './printValue';
-import resolveToValue from './resolveToValue';
-import resolveObjectKeysToArray from './resolveObjectKeysToArray';
-import resolveObjectValuesToArray from './resolveObjectValuesToArray';
-import type { PropTypeDescriptor, PropDescriptor } from '../Documentation';
+import { getDocblock } from '../utils/docblock.js';
+import getMembers from './getMembers.js';
+import getPropertyName from './getPropertyName.js';
+import isRequiredPropType from '../utils/isRequiredPropType.js';
+import printValue from './printValue.js';
+import resolveToValue from './resolveToValue.js';
+import resolveObjectKeysToArray from './resolveObjectKeysToArray.js';
+import resolveObjectValuesToArray from './resolveObjectValuesToArray.js';
+import type { PropTypeDescriptor, PropDescriptor } from '../Documentation.js';
 import type {
   ArrayExpression,
   Expression,

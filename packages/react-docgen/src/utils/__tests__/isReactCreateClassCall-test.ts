@@ -1,5 +1,6 @@
 import { parse, makeMockImporter } from '../../../tests/utils';
-import isReactCreateClassCall from '../isReactCreateClassCall';
+import isReactCreateClassCall from '../isReactCreateClassCall.js';
+import { describe, expect, test } from 'vitest';
 
 describe('isReactCreateClassCall', () => {
   const mockImporter = makeMockImporter({
@@ -17,7 +18,7 @@ describe('isReactCreateClassCall', () => {
   });
 
   describe('built in React.createClass', () => {
-    it('accepts createClass called on React', () => {
+    test('accepts createClass called on React', () => {
       const def = parse.expressionLast(`
         var React = require("React");
         React.createClass({
@@ -28,7 +29,7 @@ describe('isReactCreateClassCall', () => {
       expect(isReactCreateClassCall(def)).toBe(true);
     });
 
-    it('accepts createClass called on aliased React', () => {
+    test('accepts createClass called on aliased React', () => {
       const def = parse.expressionLast(`
         var other = require("React");
         other.createClass({
@@ -39,7 +40,7 @@ describe('isReactCreateClassCall', () => {
       expect(isReactCreateClassCall(def)).toBe(true);
     });
 
-    it('ignores other React calls', () => {
+    test('ignores other React calls', () => {
       const def = parse.expressionLast(`
         var React = require("React");
         React.isValidElement({});
@@ -48,7 +49,7 @@ describe('isReactCreateClassCall', () => {
       expect(isReactCreateClassCall(def)).toBe(false);
     });
 
-    it('ignores non React calls to createClass', () => {
+    test('ignores non React calls to createClass', () => {
       const def = parse.expressionLast(`
         var React = require("bob");
         React.createClass({
@@ -59,7 +60,7 @@ describe('isReactCreateClassCall', () => {
       expect(isReactCreateClassCall(def)).toBe(false);
     });
 
-    it('accepts createClass called on destructed value', () => {
+    test('accepts createClass called on destructed value', () => {
       const def = parse.expressionLast(`
         var { createClass } = require("react");
         createClass({});
@@ -68,7 +69,7 @@ describe('isReactCreateClassCall', () => {
       expect(isReactCreateClassCall(def)).toBe(true);
     });
 
-    it('accepts createClass called on destructed aliased value', () => {
+    test('accepts createClass called on destructed aliased value', () => {
       const def = parse.expressionLast(`
         var { createClass: foo } = require("react");
         foo({});
@@ -77,7 +78,7 @@ describe('isReactCreateClassCall', () => {
       expect(isReactCreateClassCall(def)).toBe(true);
     });
 
-    it('accepts createClass called on imported value', () => {
+    test('accepts createClass called on imported value', () => {
       const def = parse.expressionLast(`
         import { createClass } from "react";
         createClass({});
@@ -86,7 +87,7 @@ describe('isReactCreateClassCall', () => {
       expect(isReactCreateClassCall(def)).toBe(true);
     });
 
-    it('accepts createClass called on imported aliased value', () => {
+    test('accepts createClass called on imported aliased value', () => {
       const def = parse.expressionLast(`
         import { createClass as foo } from "react";
         foo({});
@@ -95,7 +96,7 @@ describe('isReactCreateClassCall', () => {
       expect(isReactCreateClassCall(def)).toBe(true);
     });
 
-    it('resolves createClass imported from intermediate module', () => {
+    test('resolves createClass imported from intermediate module', () => {
       const def = parse.expressionLast(
         `
         import foo from "foo";
@@ -109,7 +110,7 @@ describe('isReactCreateClassCall', () => {
   });
 
   describe('modular in create-react-class', () => {
-    it('accepts create-react-class', () => {
+    test('accepts create-react-class', () => {
       const def = parse.expressionLast(`
         var createReactClass = require("create-react-class");
         createReactClass({
@@ -120,7 +121,7 @@ describe('isReactCreateClassCall', () => {
       expect(isReactCreateClassCall(def)).toBe(true);
     });
 
-    it('accepts create-react-class calls on another name', () => {
+    test('accepts create-react-class calls on another name', () => {
       const def = parse.expressionLast(`
         var makeClass = require("create-react-class");
         makeClass({
@@ -131,7 +132,7 @@ describe('isReactCreateClassCall', () => {
       expect(isReactCreateClassCall(def)).toBe(true);
     });
 
-    it('ignores non create-react-class calls to createReactClass', () => {
+    test('ignores non create-react-class calls to createReactClass', () => {
       const def = parse.expressionLast(`
         var createReactClass = require("bob");
         createReactClass({
@@ -142,7 +143,7 @@ describe('isReactCreateClassCall', () => {
       expect(isReactCreateClassCall(def)).toBe(false);
     });
 
-    it('resolves create-react-class imported from intermediate module', () => {
+    test('resolves create-react-class imported from intermediate module', () => {
       const def = parse.expressionLast(
         `
         import bar from "bar";

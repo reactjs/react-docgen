@@ -1,34 +1,34 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`defaultPropsHandler ClassDeclaration with static defaultProps can resolve default props that are imported given a custom importer 1`] = `
+exports[`defaultPropsHandler > ClassDeclaration with static defaultProps > can resolve default props that are imported given a custom importer 1`] = `
 {
   "baz": {
     "defaultValue": {
       "computed": false,
-      "value": "["foo", "bar"]",
+      "value": "[\\"foo\\", \\"bar\\"]",
     },
   },
 }
 `;
 
-exports[`defaultPropsHandler ClassDeclaration with static defaultProps resolves imported spreads 1`] = `
+exports[`defaultPropsHandler > ClassDeclaration with static defaultProps > resolves imported spreads 1`] = `
 {
   "bar": {
     "defaultValue": {
       "computed": false,
-      "value": ""foo"",
+      "value": "\\"foo\\"",
     },
   },
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": ""bar"",
+      "value": "\\"bar\\"",
     },
   },
 }
 `;
 
-exports[`defaultPropsHandler ClassDeclaration with static defaultProps resolves imported values assigned as default props 1`] = `
+exports[`defaultPropsHandler > ClassDeclaration with static defaultProps > resolves imported values assigned as default props 1`] = `
 {
   "abc": {
     "defaultValue": {
@@ -45,19 +45,19 @@ exports[`defaultPropsHandler ClassDeclaration with static defaultProps resolves 
   "baz": {
     "defaultValue": {
       "computed": false,
-      "value": "["foo", "bar"]",
+      "value": "[\\"foo\\", \\"bar\\"]",
     },
   },
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": ""bar"",
+      "value": "\\"bar\\"",
     },
   },
 }
 `;
 
-exports[`defaultPropsHandler ClassDeclaration with static defaultProps should find prop default values that are imported variables 1`] = `
+exports[`defaultPropsHandler > ClassDeclaration with static defaultProps > should find prop default values that are imported variables 1`] = `
 {
   "foo": {
     "defaultValue": {
@@ -68,7 +68,7 @@ exports[`defaultPropsHandler ClassDeclaration with static defaultProps should fi
 }
 `;
 
-exports[`defaultPropsHandler ClassDeclaration with static defaultProps should find prop default values that are literals 1`] = `
+exports[`defaultPropsHandler > ClassDeclaration with static defaultProps > should find prop default values that are literals 1`] = `
 {
   "abc": {
     "defaultValue": {
@@ -85,47 +85,47 @@ exports[`defaultPropsHandler ClassDeclaration with static defaultProps should fi
   "baz": {
     "defaultValue": {
       "computed": false,
-      "value": "["foo", "bar"]",
+      "value": "[\\"foo\\", \\"bar\\"]",
     },
   },
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": ""bar"",
+      "value": "\\"bar\\"",
     },
   },
 }
 `;
 
-exports[`defaultPropsHandler ClassDeclaration with static defaultProps should find prop default values that are literals 2`] = `
+exports[`defaultPropsHandler > ClassDeclaration with static defaultProps > should find prop default values that are literals 2`] = `
 {
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": ""bar"",
+      "value": "\\"bar\\"",
     },
   },
 }
 `;
 
-exports[`defaultPropsHandler ClassDeclaration with static defaultProps should resolve local spreads 1`] = `
+exports[`defaultPropsHandler > ClassDeclaration with static defaultProps > should resolve local spreads 1`] = `
 {
   "bar": {
     "defaultValue": {
       "computed": false,
-      "value": ""foo"",
+      "value": "\\"foo\\"",
     },
   },
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": ""bar"",
+      "value": "\\"bar\\"",
     },
   },
 }
 `;
 
-exports[`defaultPropsHandler ClassExpression with static defaultProps resolves imported values assigned as default props 1`] = `
+exports[`defaultPropsHandler > ClassExpression with static defaultProps > resolves imported values assigned as default props 1`] = `
 {
   "abc": {
     "defaultValue": {
@@ -142,19 +142,19 @@ exports[`defaultPropsHandler ClassExpression with static defaultProps resolves i
   "baz": {
     "defaultValue": {
       "computed": false,
-      "value": "["foo", "bar"]",
+      "value": "[\\"foo\\", \\"bar\\"]",
     },
   },
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": ""bar"",
+      "value": "\\"bar\\"",
     },
   },
 }
 `;
 
-exports[`defaultPropsHandler ClassExpression with static defaultProps should find prop default values that are literals 1`] = `
+exports[`defaultPropsHandler > ClassExpression with static defaultProps > should find prop default values that are literals 1`] = `
 {
   "abc": {
     "defaultValue": {
@@ -171,86 +171,86 @@ exports[`defaultPropsHandler ClassExpression with static defaultProps should fin
   "baz": {
     "defaultValue": {
       "computed": false,
-      "value": "["foo", "bar"]",
+      "value": "[\\"foo\\", \\"bar\\"]",
     },
   },
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": ""bar"",
+      "value": "\\"bar\\"",
     },
   },
 }
 `;
 
-exports[`defaultPropsHandler Functional components with default params allows imported defaults to be aliased 1`] = `
+exports[`defaultPropsHandler > Functional components with default params > allows imported defaults to be aliased 1`] = `
 {
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": "["foo", "bar"]",
+      "value": "[\\"foo\\", \\"bar\\"]",
     },
   },
 }
 `;
 
-exports[`defaultPropsHandler Functional components with default params can use imported values as default props 1`] = `
+exports[`defaultPropsHandler > Functional components with default params > can use imported values as default props 1`] = `
 {
   "bar": {
     "defaultValue": {
       "computed": false,
-      "value": "["foo", "bar"]",
+      "value": "[\\"foo\\", \\"bar\\"]",
     },
   },
 }
 `;
 
-exports[`defaultPropsHandler Functional components with default params overrides with imported defaultProps 1`] = `
+exports[`defaultPropsHandler > Functional components with default params > overrides with imported defaultProps 1`] = `
 {
   "bar": {
     "defaultValue": {
       "computed": false,
-      "value": ""foo"",
+      "value": "\\"foo\\"",
     },
   },
 }
 `;
 
-exports[`defaultPropsHandler Functional components with default params resolves imported spreads 1`] = `
+exports[`defaultPropsHandler > Functional components with default params > resolves imported spreads 1`] = `
 {
   "bar": {
     "defaultValue": {
       "computed": false,
-      "value": ""foo"",
-    },
-  },
-  "foo": {
-    "defaultValue": {
-      "computed": false,
-      "value": ""bar"",
-    },
-  },
-}
-`;
-
-exports[`defaultPropsHandler Functional components with default params resolves local spreads 1`] = `
-{
-  "bar": {
-    "defaultValue": {
-      "computed": false,
-      "value": ""foo"",
+      "value": "\\"foo\\"",
     },
   },
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": ""bar"",
+      "value": "\\"bar\\"",
     },
   },
 }
 `;
 
-exports[`defaultPropsHandler Functional components with default params should find default props that are literals 1`] = `
+exports[`defaultPropsHandler > Functional components with default params > resolves local spreads 1`] = `
+{
+  "bar": {
+    "defaultValue": {
+      "computed": false,
+      "value": "\\"foo\\"",
+    },
+  },
+  "foo": {
+    "defaultValue": {
+      "computed": false,
+      "value": "\\"bar\\"",
+    },
+  },
+}
+`;
+
+exports[`defaultPropsHandler > Functional components with default params > should find default props that are literals 1`] = `
 {
   "abc": {
     "defaultValue": {
@@ -267,19 +267,19 @@ exports[`defaultPropsHandler Functional components with default params should fi
   "baz": {
     "defaultValue": {
       "computed": false,
-      "value": "["foo", "bar"]",
+      "value": "[\\"foo\\", \\"bar\\"]",
     },
   },
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": ""bar"",
+      "value": "\\"bar\\"",
     },
   },
 }
 `;
 
-exports[`defaultPropsHandler Functional components with default params should find prop default values that are imported variables 1`] = `
+exports[`defaultPropsHandler > Functional components with default params > should find prop default values that are imported variables 1`] = `
 {
   "foo": {
     "defaultValue": {
@@ -290,7 +290,7 @@ exports[`defaultPropsHandler Functional components with default params should fi
 }
 `;
 
-exports[`defaultPropsHandler Functional components with default params should override with defaultProps if available 1`] = `
+exports[`defaultPropsHandler > Functional components with default params > should override with defaultProps if available 1`] = `
 {
   "abc": {
     "defaultValue": {
@@ -307,19 +307,19 @@ exports[`defaultPropsHandler Functional components with default params should ov
   "baz": {
     "defaultValue": {
       "computed": false,
-      "value": "["foo", "bar"]",
+      "value": "[\\"foo\\", \\"bar\\"]",
     },
   },
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": ""bar"",
+      "value": "\\"bar\\"",
     },
   },
 }
 `;
 
-exports[`defaultPropsHandler Functional components with default params should work with aliases 1`] = `
+exports[`defaultPropsHandler > Functional components with default params > should work with aliases 1`] = `
 {
   "abc": {
     "defaultValue": {
@@ -336,21 +336,21 @@ exports[`defaultPropsHandler Functional components with default params should wo
   "baz": {
     "defaultValue": {
       "computed": false,
-      "value": "["foo", "bar"]",
+      "value": "[\\"foo\\", \\"bar\\"]",
     },
   },
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": ""bar"",
+      "value": "\\"bar\\"",
     },
   },
 }
 `;
 
-exports[`defaultPropsHandler Functional components with default params should work with no defaults 1`] = `{}`;
+exports[`defaultPropsHandler > Functional components with default params > should work with no defaults 1`] = `{}`;
 
-exports[`defaultPropsHandler ObjectExpression can resolve declared functions 1`] = `
+exports[`defaultPropsHandler > ObjectExpression > can resolve declared functions 1`] = `
 {
   "abc": {
     "defaultValue": {
@@ -367,30 +367,30 @@ exports[`defaultPropsHandler ObjectExpression can resolve declared functions 1`]
   "baz": {
     "defaultValue": {
       "computed": false,
-      "value": "["foo", "bar"]",
+      "value": "[\\"foo\\", \\"bar\\"]",
     },
   },
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": ""bar"",
+      "value": "\\"bar\\"",
     },
   },
 }
 `;
 
-exports[`defaultPropsHandler ObjectExpression can resolve object methods 1`] = `
+exports[`defaultPropsHandler > ObjectExpression > can resolve object methods 1`] = `
 {
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": ""bar"",
+      "value": "\\"bar\\"",
     },
   },
 }
 `;
 
-exports[`defaultPropsHandler ObjectExpression handles computed properties 1`] = `
+exports[`defaultPropsHandler > ObjectExpression > handles computed properties 1`] = `
 {
   "@computed#bar": {
     "defaultValue": {
@@ -401,86 +401,86 @@ exports[`defaultPropsHandler ObjectExpression handles computed properties 1`] = 
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": ""bar"",
+      "value": "\\"bar\\"",
     },
   },
 }
 `;
 
-exports[`defaultPropsHandler ObjectExpression handles imported values assigned to computed properties 1`] = `
+exports[`defaultPropsHandler > ObjectExpression > handles imported values assigned to computed properties 1`] = `
 {
   "@computed#bar": {
     "defaultValue": {
       "computed": false,
-      "value": "["foo", "bar"]",
+      "value": "[\\"foo\\", \\"bar\\"]",
     },
   },
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": ""bar"",
+      "value": "\\"bar\\"",
     },
   },
 }
 `;
 
-exports[`defaultPropsHandler ObjectExpression ignores complex computed properties 1`] = `
+exports[`defaultPropsHandler > ObjectExpression > ignores complex computed properties 1`] = `
 {
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": ""bar"",
+      "value": "\\"bar\\"",
     },
   },
 }
 `;
 
-exports[`defaultPropsHandler ObjectExpression ignores imported values assigned to complex computed properties 1`] = `
+exports[`defaultPropsHandler > ObjectExpression > ignores imported values assigned to complex computed properties 1`] = `
 {
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": ""bar"",
+      "value": "\\"bar\\"",
     },
   },
 }
 `;
 
-exports[`defaultPropsHandler ObjectExpression resolves imported spreads 1`] = `
-{
-  "bar": {
-    "defaultValue": {
-      "computed": false,
-      "value": ""foo"",
-    },
-  },
-  "foo": {
-    "defaultValue": {
-      "computed": false,
-      "value": ""bar"",
-    },
-  },
-}
-`;
-
-exports[`defaultPropsHandler ObjectExpression resolves local spreads 1`] = `
+exports[`defaultPropsHandler > ObjectExpression > resolves imported spreads 1`] = `
 {
   "bar": {
     "defaultValue": {
       "computed": false,
-      "value": ""foo"",
+      "value": "\\"foo\\"",
     },
   },
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": ""bar"",
+      "value": "\\"bar\\"",
     },
   },
 }
 `;
 
-exports[`defaultPropsHandler ObjectExpression should find prop default values that are literals 1`] = `
+exports[`defaultPropsHandler > ObjectExpression > resolves local spreads 1`] = `
+{
+  "bar": {
+    "defaultValue": {
+      "computed": false,
+      "value": "\\"foo\\"",
+    },
+  },
+  "foo": {
+    "defaultValue": {
+      "computed": false,
+      "value": "\\"bar\\"",
+    },
+  },
+}
+`;
+
+exports[`defaultPropsHandler > ObjectExpression > should find prop default values that are literals 1`] = `
 {
   "abc": {
     "defaultValue": {
@@ -497,7 +497,7 @@ exports[`defaultPropsHandler ObjectExpression should find prop default values th
   "baz": {
     "defaultValue": {
       "computed": false,
-      "value": "["foo", "bar"]",
+      "value": "[\\"foo\\", \\"bar\\"]",
     },
   },
   "bigint": {
@@ -515,7 +515,7 @@ exports[`defaultPropsHandler ObjectExpression should find prop default values th
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": ""bar"",
+      "value": "\\"bar\\"",
     },
   },
   "nullliteral": {
@@ -539,7 +539,7 @@ exports[`defaultPropsHandler ObjectExpression should find prop default values th
 }
 `;
 
-exports[`defaultPropsHandler ObjectExpression should find prop default values that are literals from imported functions 1`] = `
+exports[`defaultPropsHandler > ObjectExpression > should find prop default values that are literals from imported functions 1`] = `
 {
   "abc": {
     "defaultValue": {
@@ -556,19 +556,19 @@ exports[`defaultPropsHandler ObjectExpression should find prop default values th
   "baz": {
     "defaultValue": {
       "computed": false,
-      "value": "["foo", "bar"]",
+      "value": "[\\"foo\\", \\"bar\\"]",
     },
   },
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": ""bar"",
+      "value": "\\"bar\\"",
     },
   },
 }
 `;
 
-exports[`defaultPropsHandler can have an importer that resolves spread properties 1`] = `
+exports[`defaultPropsHandler > can have an importer that resolves spread properties 1`] = `
 {
   "123": {
     "defaultValue": {
@@ -591,18 +591,18 @@ exports[`defaultPropsHandler can have an importer that resolves spread propertie
 }
 `;
 
-exports[`defaultPropsHandler forwardRef also resolves imports when the function is not inline 1`] = `
+exports[`defaultPropsHandler > forwardRef > also resolves imports when the function is not inline 1`] = `
 {
   "bar": {
     "defaultValue": {
       "computed": false,
-      "value": "["foo", "bar"]",
+      "value": "[\\"foo\\", \\"bar\\"]",
     },
   },
 }
 `;
 
-exports[`defaultPropsHandler forwardRef resolves default props in the parameters 1`] = `
+exports[`defaultPropsHandler > forwardRef > resolves default props in the parameters 1`] = `
 {
   "foo": {
     "defaultValue": {
@@ -613,7 +613,7 @@ exports[`defaultPropsHandler forwardRef resolves default props in the parameters
 }
 `;
 
-exports[`defaultPropsHandler forwardRef resolves defaultProps 1`] = `
+exports[`defaultPropsHandler > forwardRef > resolves defaultProps 1`] = `
 {
   "foo": {
     "defaultValue": {
@@ -624,29 +624,29 @@ exports[`defaultPropsHandler forwardRef resolves defaultProps 1`] = `
 }
 `;
 
-exports[`defaultPropsHandler forwardRef resolves imported default props in the parameters 1`] = `
+exports[`defaultPropsHandler > forwardRef > resolves imported default props in the parameters 1`] = `
 {
   "bar": {
     "defaultValue": {
       "computed": false,
-      "value": "["foo", "bar"]",
+      "value": "[\\"foo\\", \\"bar\\"]",
     },
   },
 }
 `;
 
-exports[`defaultPropsHandler forwardRef resolves imported defaultProps 1`] = `
+exports[`defaultPropsHandler > forwardRef > resolves imported defaultProps 1`] = `
 {
   "bar": {
     "defaultValue": {
       "computed": false,
-      "value": ""foo"",
+      "value": "\\"foo\\"",
     },
   },
 }
 `;
 
-exports[`defaultPropsHandler forwardRef resolves when the function is not inline 1`] = `
+exports[`defaultPropsHandler > forwardRef > resolves when the function is not inline 1`] = `
 {
   "foo": {
     "defaultValue": {
@@ -657,7 +657,7 @@ exports[`defaultPropsHandler forwardRef resolves when the function is not inline
 }
 `;
 
-exports[`defaultPropsHandler should only consider Property nodes, not e.g. spread properties 1`] = `
+exports[`defaultPropsHandler > should only consider Property nodes, not e.g. spread properties 1`] = `
 {
   "bar": {
     "defaultValue": {

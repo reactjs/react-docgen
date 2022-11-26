@@ -37,12 +37,6 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: 'yarn'
 
-      - uses: actions/cache@v3
-        name: Cache jest cache
-        with:
-          path: .jest-cache
-          key: ${{ runner.os }}-${{ matrix.node }}-jest
-
       - name: Install dependencies
         run: yarn install --immutable
 

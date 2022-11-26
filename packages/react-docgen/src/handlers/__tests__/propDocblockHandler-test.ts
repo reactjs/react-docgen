@@ -5,9 +5,10 @@ import Documentation from '../../Documentation';
 import type { Importer } from '../../importer';
 import type { ComponentNode } from '../../resolver';
 import type DocumentationMock from '../../__mocks__/Documentation';
-import propDocBlockHandler from '../propDocBlockHandler';
+import propDocBlockHandler from '../propDocBlockHandler.js';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 
-jest.mock('../../Documentation');
+vi.mock('../../Documentation.js');
 
 describe('propDocBlockHandler', () => {
   let documentation: Documentation & DocumentationMock;
@@ -28,11 +29,11 @@ describe('propDocBlockHandler', () => {
     `).get('declaration'),
   });
 
-  function test(
+  function testDocBlockHandler(
     getSrc: (src: string) => string,
     parseSrc: (src: string, importer?: Importer) => NodePath<ComponentNode>,
   ) {
-    it('finds docblocks for prop types', () => {
+    test('finds docblocks for prop types', () => {
       const definition = parseSrc(
         getSrc(
           `{
@@ -59,7 +60,7 @@ describe('propDocBlockHandler', () => {
       });
     });
 
-    it('can handle multline comments', () => {
+    test('can handle multline comments', () => {
       const definition = parseSrc(
         getSrc(
           `{
@@ -83,7 +84,7 @@ describe('propDocBlockHandler', () => {
       });
     });
 
-    it('ignores non-docblock comments', () => {
+    test('ignores non-docblock comments', () => {
       const definition = parseSrc(
         getSrc(
           `{
@@ -112,7 +113,7 @@ describe('propDocBlockHandler', () => {
       });
     });
 
-    it('only considers the comment with the property below it', () => {
+    test('only considers the comment with the property below it', () => {
       const definition = parseSrc(
         getSrc(
           `{
@@ -136,7 +137,7 @@ describe('propDocBlockHandler', () => {
       });
     });
 
-    it('understands and ignores the spread operator', () => {
+    test('understands and ignores the spread operator', () => {
       const definition = parseSrc(
         getSrc(
           `{
@@ -157,7 +158,7 @@ describe('propDocBlockHandler', () => {
       });
     });
 
-    it('resolves variables', () => {
+    test('resolves variables', () => {
       const definition = parseSrc(`
         ${getSrc('Props')}
         var Props = {
@@ -176,7 +177,7 @@ describe('propDocBlockHandler', () => {
       });
     });
 
-    it('resolves imported variables', () => {
+    test('resolves imported variables', () => {
       const definition = parseSrc(
         `
         ${getSrc('Props')}
@@ -193,7 +194,7 @@ describe('propDocBlockHandler', () => {
       });
     });
 
-    it('resolves imported variables that are spread', () => {
+    test('resolves imported variables that are spread', () => {
       const definition = parseSrc(
         `
         ${getSrc('Props')}
@@ -222,7 +223,7 @@ describe('propDocBlockHandler', () => {
   }
 
   describe('React.createClass', () => {
-    test(
+    testDocBlockHandler(
       propTypesSrc => `({propTypes: ${propTypesSrc}})`,
       (src, importer = noopImporter) =>
         parse
@@ -233,7 +234,7 @@ describe('propDocBlockHandler', () => {
 
   describe('ClassDefinition', () => {
     describe('class property', () => {
-      test(
+      testDocBlockHandler(
         propTypesSrc => `
           class Foo{
             static propTypes = ${propTypesSrc};
@@ -244,7 +245,7 @@ describe('propDocBlockHandler', () => {
     });
 
     describe('static getter', () => {
-      test(
+      testDocBlockHandler(
         propTypesSrc => `
           class Foo{
             static get propTypes() {
@@ -258,7 +259,7 @@ describe('propDocBlockHandler', () => {
   });
 
   describe('does not error if propTypes cannot be found', () => {
-    it('ObjectExpression', () => {
+    test('ObjectExpression', () => {
       const definition = parse.expression<ObjectExpression>('{fooBar: 42}');
 
       expect(() =>
@@ -266,7 +267,7 @@ describe('propDocBlockHandler', () => {
       ).not.toThrow();
     });
 
-    it('ClassDeclaration', () => {
+    test('ClassDeclaration', () => {
       const definition = parse.statement<ClassDeclaration>('class Foo {}');
 
       expect(() =>

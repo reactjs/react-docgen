@@ -1,11 +1,11 @@
-import getMemberValuePath from '../utils/getMemberValuePath';
-import resolveToModule from '../utils/resolveToModule';
-import resolveToValue from '../utils/resolveToValue';
-import type Documentation from '../Documentation';
+import getMemberValuePath from '../utils/getMemberValuePath.js';
+import resolveToModule from '../utils/resolveToModule.js';
+import resolveToValue from '../utils/resolveToValue.js';
+import type Documentation from '../Documentation.js';
 import type { NodePath } from '@babel/traverse';
 import type { ObjectExpression, Node } from '@babel/types';
-import type { Handler } from '.';
-import type { ComponentNode } from '../resolver';
+import type { Handler } from './index.js';
+import type { ComponentNode } from '../resolver/index.js';
 
 /**
  * It resolves the path to its module name and adds it to the "composes" entry

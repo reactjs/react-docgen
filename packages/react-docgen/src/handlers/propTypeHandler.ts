@@ -1,17 +1,17 @@
-import getPropType from '../utils/getPropType';
-import getPropertyName from '../utils/getPropertyName';
-import getMemberValuePath from '../utils/getMemberValuePath';
-import isReactModuleName from '../utils/isReactModuleName';
-import isRequiredPropType from '../utils/isRequiredPropType';
-import printValue from '../utils/printValue';
-import resolveToModule from '../utils/resolveToModule';
-import resolveToValue from '../utils/resolveToValue';
-import type Documentation from '../Documentation';
-import type { PropDescriptor, PropTypeDescriptor } from '../Documentation';
+import getPropType from '../utils/getPropType.js';
+import getPropertyName from '../utils/getPropertyName.js';
+import getMemberValuePath from '../utils/getMemberValuePath.js';
+import isReactModuleName from '../utils/isReactModuleName.js';
+import isRequiredPropType from '../utils/isRequiredPropType.js';
+import printValue from '../utils/printValue.js';
+import resolveToModule from '../utils/resolveToModule.js';
+import resolveToValue from '../utils/resolveToValue.js';
+import type Documentation from '../Documentation.js';
+import type { PropDescriptor, PropTypeDescriptor } from '../Documentation.js';
 import type { NodePath } from '@babel/traverse';
 import type { Node } from '@babel/types';
-import type { Handler } from '.';
-import type { ComponentNode } from '../resolver';
+import type { Handler } from './index.js';
+import type { ComponentNode } from '../resolver/index.js';
 
 function isPropTypesExpression(path: NodePath): boolean {
   const moduleName = resolveToModule(path);

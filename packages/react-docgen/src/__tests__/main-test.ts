@@ -1,16 +1,17 @@
-import { handlers, parse } from '../main';
-import { ERROR_MISSING_DEFINITION } from '../parse';
+import { handlers, parse } from '../main.js';
+import { ERROR_MISSING_DEFINITION } from '../parse.js';
+import { describe, expect, test } from 'vitest';
 
 // TODO make fixtures out of them?
 describe('main', () => {
-  function test(source: string) {
-    it('parses with default resolver/handlers', () => {
+  function testMain(source: string) {
+    test('parses with default resolver/handlers', () => {
       const docs = parse(source);
 
       expect(docs).toMatchSnapshot();
     });
 
-    it('parses with custom handlers', () => {
+    test('parses with custom handlers', () => {
       const docs = parse(source, {
         handlers: [handlers.componentDocblockHandler],
       });
@@ -20,7 +21,7 @@ describe('main', () => {
   }
 
   describe('React.createClass', () => {
-    test(`
+    testMain(`
       var React = require("react");
       var PropTypes = React.PropTypes;
 
@@ -49,7 +50,7 @@ describe('main', () => {
   });
 
   describe('Class definition', () => {
-    test(`
+    testMain(`
       const React = require("react");
       const PropTypes = React.PropTypes;
 
@@ -76,7 +77,7 @@ describe('main', () => {
   });
 
   describe('Stateless Component definition: ArrowFunctionExpression', () => {
-    test(`
+    testMain(`
       import React, {PropTypes} from "react";
 
       const defaultProps = {
@@ -102,7 +103,7 @@ describe('main', () => {
   });
 
   describe('Stateless Component definition: FunctionDeclaration', () => {
-    test(`
+    testMain(`
       import React, {PropTypes} from "react";
 
       const defaultProps = {
@@ -131,7 +132,7 @@ describe('main', () => {
   });
 
   describe('Stateless Component definition: FunctionExpression', () => {
-    test(`
+    testMain(`
       import React, {PropTypes} from "react";
 
       const defaultProps = {
@@ -160,7 +161,7 @@ describe('main', () => {
   });
 
   describe('Stateless Component definition', () => {
-    it('is not so greedy', () => {
+    test('is not so greedy', () => {
       const source = `
         import React, {PropTypes} from "react";
 

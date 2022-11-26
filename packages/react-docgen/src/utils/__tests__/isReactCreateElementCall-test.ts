@@ -1,5 +1,6 @@
 import { parse, makeMockImporter } from '../../../tests/utils';
-import isReactCreateElementCall from '../isReactCreateElementCall';
+import isReactCreateElementCall from '../isReactCreateElementCall.js';
+import { describe, expect, test } from 'vitest';
 
 describe('isReactCreateElementCall', () => {
   const mockImporter = makeMockImporter({
@@ -11,7 +12,7 @@ describe('isReactCreateElementCall', () => {
   });
 
   describe('built in React.createElement', () => {
-    it('accepts createElement called on React', () => {
+    test('accepts createElement called on React', () => {
       const def = parse.expressionLast(`
         var React = require("React");
         React.createElement({
@@ -22,7 +23,7 @@ describe('isReactCreateElementCall', () => {
       expect(isReactCreateElementCall(def)).toBe(true);
     });
 
-    it('accepts createElement called on aliased React', () => {
+    test('accepts createElement called on aliased React', () => {
       const def = parse.expressionLast(`
         var other = require("React");
         other.createElement({
@@ -33,7 +34,7 @@ describe('isReactCreateElementCall', () => {
       expect(isReactCreateElementCall(def)).toBe(true);
     });
 
-    it('ignores other React calls', () => {
+    test('ignores other React calls', () => {
       const def = parse.expressionLast(`
         var React = require("React");
         React.isValidElement({});
@@ -42,7 +43,7 @@ describe('isReactCreateElementCall', () => {
       expect(isReactCreateElementCall(def)).toBe(false);
     });
 
-    it('ignores non React calls to createElement', () => {
+    test('ignores non React calls to createElement', () => {
       const def = parse.expressionLast(`
         var React = require("bob");
         React.createElement({
@@ -53,7 +54,7 @@ describe('isReactCreateElementCall', () => {
       expect(isReactCreateElementCall(def)).toBe(false);
     });
 
-    it('accepts createElement called on destructed value', () => {
+    test('accepts createElement called on destructed value', () => {
       const def = parse.expressionLast(`
         var { createElement } = require("react");
         createElement({});
@@ -62,7 +63,7 @@ describe('isReactCreateElementCall', () => {
       expect(isReactCreateElementCall(def)).toBe(true);
     });
 
-    it('accepts createElement called on destructed aliased value', () => {
+    test('accepts createElement called on destructed aliased value', () => {
       const def = parse.expressionLast(`
         var { createElement: foo } = require("react");
         foo({});
@@ -71,7 +72,7 @@ describe('isReactCreateElementCall', () => {
       expect(isReactCreateElementCall(def)).toBe(true);
     });
 
-    it('accepts createElement called on imported value', () => {
+    test('accepts createElement called on imported value', () => {
       const def = parse.expressionLast(`
         import { createElement } from "react";
         createElement({});
@@ -80,7 +81,7 @@ describe('isReactCreateElementCall', () => {
       expect(isReactCreateElementCall(def)).toBe(true);
     });
 
-    it('accepts createElement called on imported aliased value', () => {
+    test('accepts createElement called on imported aliased value', () => {
       const def = parse.expressionLast(`
         import { createElement as foo } from "react";
         foo({});
@@ -89,7 +90,7 @@ describe('isReactCreateElementCall', () => {
       expect(isReactCreateElementCall(def)).toBe(true);
     });
 
-    it('can resolve createElement imported from an intermediate module', () => {
+    test('can resolve createElement imported from an intermediate module', () => {
       const def = parse.expressionLast(
         `import foo from "foo";
          foo({});`,

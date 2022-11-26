@@ -3,6 +3,7 @@
   "version": "6.0.0-alpha.3",
   "description": "A CLI and toolkit to extract information from React components for documentation generation.",
   "repository": "reactjs/react-docgen",
+  "type": "module",
   "bin": {
     "react-docgen": "bin/react-docgen.js"
   },
@@ -13,8 +14,7 @@
     "node": ">=14.15.0"
   },
   "scripts": {
-    "build": "echo 'done'",
-    "test": "yarn build && jest"
+    "build": "echo 'done'"
   },
   "keywords": [
     "react",

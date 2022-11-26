@@ -1,12 +1,12 @@
-import getPropertyName from '../utils/getPropertyName';
-import getMemberValuePath from '../utils/getMemberValuePath';
-import printValue from '../utils/printValue';
-import resolveToValue from '../utils/resolveToValue';
-import resolveFunctionDefinitionToReturnValue from '../utils/resolveFunctionDefinitionToReturnValue';
-import isReactComponentClass from '../utils/isReactComponentClass';
-import isReactForwardRefCall from '../utils/isReactForwardRefCall';
-import type Documentation from '../Documentation';
-import type { DefaultValueDescriptor } from '../Documentation';
+import getPropertyName from '../utils/getPropertyName.js';
+import getMemberValuePath from '../utils/getMemberValuePath.js';
+import printValue from '../utils/printValue.js';
+import resolveToValue from '../utils/resolveToValue.js';
+import resolveFunctionDefinitionToReturnValue from '../utils/resolveFunctionDefinitionToReturnValue.js';
+import isReactComponentClass from '../utils/isReactComponentClass.js';
+import isReactForwardRefCall from '../utils/isReactForwardRefCall.js';
+import type Documentation from '../Documentation.js';
+import type { DefaultValueDescriptor } from '../Documentation.js';
 import type { NodePath } from '@babel/traverse';
 import type {
   Node,
@@ -15,8 +15,8 @@ import type {
   RestElement,
   SpreadElement,
 } from '@babel/types';
-import type { ComponentNode } from '../resolver';
-import type { Handler } from '.';
+import type { ComponentNode } from '../resolver/index.js';
+import type { Handler } from './index.js';
 
 function getDefaultValue(path: NodePath): DefaultValueDescriptor | null {
   let defaultValue: string | undefined;

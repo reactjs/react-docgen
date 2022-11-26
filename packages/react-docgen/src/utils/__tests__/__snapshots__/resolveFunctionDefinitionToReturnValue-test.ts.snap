@@ -1,9 +1,9 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`resolveFunctionDefinitionToReturnValue can resolve easy return statement 1`] = `
+exports[`resolveFunctionDefinitionToReturnValue > can resolve easy return statement 1`] = `
 Node {
   "extra": {
-    "raw": ""result"",
+    "raw": "\\"result\\"",
     "rawValue": "result",
   },
   "type": "StringLiteral",
@@ -11,10 +11,10 @@ Node {
 }
 `;
 
-exports[`resolveFunctionDefinitionToReturnValue stops after first return 1`] = `
+exports[`resolveFunctionDefinitionToReturnValue > stops after first return 1`] = `
 Node {
   "extra": {
-    "raw": ""first"",
+    "raw": "\\"first\\"",
     "rawValue": "first",
   },
   "type": "StringLiteral",

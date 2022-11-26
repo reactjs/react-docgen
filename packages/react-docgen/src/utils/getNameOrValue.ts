@@ -1,5 +1,5 @@
 import type { NodePath } from '@babel/traverse';
-import printValue from './printValue';
+import printValue from './printValue.js';
 
 /**
  * If node is an Identifier, it returns its name. If it is a literal, it returns

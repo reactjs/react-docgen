@@ -1,10 +1,10 @@
-import getPropertyName from './getPropertyName';
-import printValue from './printValue';
-import getTypeAnnotation from '../utils/getTypeAnnotation';
-import resolveToValue from '../utils/resolveToValue';
-import { resolveObjectToNameArray } from '../utils/resolveObjectKeysToArray';
-import type { TypeParameters } from '../utils/getTypeParameters';
-import getTypeParameters from '../utils/getTypeParameters';
+import getPropertyName from './getPropertyName.js';
+import printValue from './printValue.js';
+import getTypeAnnotation from '../utils/getTypeAnnotation.js';
+import resolveToValue from '../utils/resolveToValue.js';
+import { resolveObjectToNameArray } from '../utils/resolveObjectKeysToArray.js';
+import type { TypeParameters } from '../utils/getTypeParameters.js';
+import getTypeParameters from '../utils/getTypeParameters.js';
 import type {
   ElementsType,
   FunctionArgumentType,
@@ -13,7 +13,7 @@ import type {
   SimpleType,
   TypeDescriptor,
   TSFunctionSignatureType,
-} from '../Documentation';
+} from '../Documentation.js';
 import type { NodePath } from '@babel/traverse';
 import type {
   TSUnionType,
@@ -36,7 +36,7 @@ import type {
   RestElement,
   TypeScript,
 } from '@babel/types';
-import { getDocblock } from './docblock';
+import { getDocblock } from './docblock.js';
 
 const tsTypes = {
   TSAnyKeyword: 'any',

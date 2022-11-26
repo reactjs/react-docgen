@@ -8,7 +8,8 @@ import type {
   ObjectMethod,
 } from '@babel/types';
 import { parse, makeMockImporter, parseTypescript } from '../../../tests/utils';
-import getMethodDocumentation from '../getMethodDocumentation';
+import getMethodDocumentation from '../getMethodDocumentation.js';
+import { describe, expect, test } from 'vitest';
 
 describe('getMethodDocumentation', () => {
   const mockImporter = makeMockImporter({
@@ -29,7 +30,7 @@ describe('getMethodDocumentation', () => {
   });
 
   describe('name', () => {
-    it('extracts the method name', () => {
+    test('extracts the method name', () => {
       const def = parse.statement<ClassDeclaration>(`
         class Foo {
           hello() {}
@@ -46,7 +47,7 @@ describe('getMethodDocumentation', () => {
       });
     });
 
-    it('handles function assignment', () => {
+    test('handles function assignment', () => {
       const def = parse.statement<ClassDeclaration>(`
         class Foo {
           hello = () => {}
@@ -63,7 +64,7 @@ describe('getMethodDocumentation', () => {
       });
     });
 
-    it('handles computed method name', () => {
+    test('handles computed method name', () => {
       const def = parse.statement<ClassDeclaration>(`
         class Foo {
           [foo]() {}
@@ -74,7 +75,7 @@ describe('getMethodDocumentation', () => {
       expect(getMethodDocumentation(method)).toMatchSnapshot();
     });
 
-    it('ignores complex computed method name', () => {
+    test('ignores complex computed method name', () => {
       const def = parse.statement<ClassDeclaration>(`
         class Foo {
           [() => {}]() {}
@@ -85,7 +86,7 @@ describe('getMethodDocumentation', () => {
       expect(getMethodDocumentation(method)).toMatchSnapshot();
     });
 
-    it('resolves assignment of imported function', () => {
+    test('resolves assignment of imported function', () => {
       const def = parse.statement<ClassDeclaration>(
         `
         class Foo {
@@ -108,7 +109,7 @@ describe('getMethodDocumentation', () => {
   });
 
   describe('docblock', () => {
-    it('extracts the method docblock', () => {
+    test('extracts the method docblock', () => {
       const def = parse.statement<ClassDeclaration>(`
         class Foo {
           /**
@@ -128,7 +129,7 @@ describe('getMethodDocumentation', () => {
       });
     });
 
-    it('extracts docblock on function assignment', () => {
+    test('extracts docblock on function assignment', () => {
       const def = parse.statement<ClassDeclaration>(`
         class Foo {
           /**
@@ -150,7 +151,7 @@ describe('getMethodDocumentation', () => {
   });
 
   describe('parameters', () => {
-    it('extracts flow type info', () => {
+    test('extracts flow type info', () => {
       const def = parse.statement<ClassDeclaration>(`
         class Foo {
           foo(bar: number) {}
@@ -161,7 +162,7 @@ describe('getMethodDocumentation', () => {
       expect(getMethodDocumentation(method)).toMatchSnapshot();
     });
 
-    it('extracts flow type info', () => {
+    test('extracts flow type info', () => {
       const def = parseTypescript.statement<ClassDeclaration>(`
         class Foo {
           foo(bar: number) {}
@@ -172,7 +173,7 @@ describe('getMethodDocumentation', () => {
       expect(getMethodDocumentation(method)).toMatchSnapshot();
     });
 
-    it('does not add type parameters to alias', () => {
+    test('does not add type parameters to alias', () => {
       const def = parseTypescript.statement<ClassDeclaration>(`
         class Foo<T> {
           foo(bar: Foo<T>) {}
@@ -183,7 +184,7 @@ describe('getMethodDocumentation', () => {
       expect(getMethodDocumentation(method)).toMatchSnapshot();
     });
 
-    it('extracts flow type info on function assignment', () => {
+    test('extracts flow type info on function assignment', () => {
       const def = parse.statement<ClassDeclaration>(`
         class Foo {
           foo = (bar: number) => {}
@@ -194,7 +195,7 @@ describe('getMethodDocumentation', () => {
       expect(getMethodDocumentation(method)).toMatchSnapshot();
     });
 
-    it('resolves flow type info on imported functions', () => {
+    test('resolves flow type info on imported functions', () => {
       const def = parse.statement<ClassDeclaration>(
         `
         class Foo {
@@ -220,7 +221,7 @@ describe('getMethodDocumentation', () => {
         };
       }
 
-      it('detects no modifiers', () => {
+      test('detects no modifiers', () => {
         const def = parse.statement<ClassDeclaration>(`
           class Foo {
             foo() {}
@@ -231,7 +232,7 @@ describe('getMethodDocumentation', () => {
         expect(getMethodDocumentation(method)).toEqual(methodModifiersDoc([]));
       });
 
-      it('detects static functions', () => {
+      test('detects static functions', () => {
         const def = parse.statement<ClassDeclaration>(`
           class Foo {
             static foo() {}
@@ -244,7 +245,7 @@ describe('getMethodDocumentation', () => {
         );
       });
 
-      it('detects manually set static functions', () => {
+      test('detects manually set static functions', () => {
         const def = parse.expression<ObjectExpression>(`{ foo() {} }`);
         const method = def.get('properties')[0] as NodePath<ObjectMethod>;
 
@@ -253,7 +254,7 @@ describe('getMethodDocumentation', () => {
         );
       });
 
-      it('detects generators', () => {
+      test('detects generators', () => {
         const def = parse.statement<ClassDeclaration>(`
           class Foo {
             *foo () {}
@@ -266,7 +267,7 @@ describe('getMethodDocumentation', () => {
         );
       });
 
-      it('detects async functions', () => {
+      test('detects async functions', () => {
         const def = parse.statement<ClassDeclaration>(`
           class Foo {
             async foo () {}
@@ -279,7 +280,7 @@ describe('getMethodDocumentation', () => {
         );
       });
 
-      it('detects static async functions', () => {
+      test('detects static async functions', () => {
         const def = parse.statement<ClassDeclaration>(`
           class Foo {
             static async foo () {}
@@ -304,7 +305,7 @@ describe('getMethodDocumentation', () => {
         };
       }
 
-      it('returns null if return is not documented', () => {
+      test('returns null if return is not documented', () => {
         const def = parse.statement<ClassDeclaration>(`
           class Foo {
             foo () {}
@@ -315,7 +316,7 @@ describe('getMethodDocumentation', () => {
         expect(getMethodDocumentation(method)).toEqual(methodReturnDoc(null));
       });
 
-      it('extracts flow types', () => {
+      test('extracts flow types', () => {
         const def = parse.statement<ClassDeclaration>(`
           class Foo {
             foo (): number {}
@@ -330,7 +331,7 @@ describe('getMethodDocumentation', () => {
         );
       });
 
-      it('extracts flow types on function assignment', () => {
+      test('extracts flow types on function assignment', () => {
         const def = parse.statement<ClassDeclaration>(`
           class Foo {
             foo = (): number => {}
@@ -347,7 +348,7 @@ describe('getMethodDocumentation', () => {
         );
       });
 
-      it('resolves flow types on imported functions', () => {
+      test('resolves flow types on imported functions', () => {
         const def = parse.statement<ClassDeclaration>(
           `
           class Foo {
@@ -370,7 +371,7 @@ describe('getMethodDocumentation', () => {
     });
 
     describe('private', () => {
-      it('ignores private typescript methods', () => {
+      test('ignores private typescript methods', () => {
         const def = parseTypescript.statement<ClassDeclaration>(
           `
           class Foo {
@@ -383,7 +384,7 @@ describe('getMethodDocumentation', () => {
         expect(getMethodDocumentation(method)).toMatchSnapshot();
       });
 
-      it('ignores private methods', () => {
+      test('ignores private methods', () => {
         const def = parse.statement<ClassDeclaration>(
           `class Foo {
             #foo() {}

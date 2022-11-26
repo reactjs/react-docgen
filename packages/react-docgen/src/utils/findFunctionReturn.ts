@@ -1,7 +1,7 @@
 import type { NodePath } from '@babel/traverse';
 import { visitors } from '@babel/traverse';
-import resolveToValue from './resolveToValue';
-import { ignore } from './traverse';
+import resolveToValue from './resolveToValue.js';
+import { ignore } from './traverse.js';
 
 type Predicate = (p: NodePath) => boolean;
 interface TraverseState {

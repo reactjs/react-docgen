@@ -1,8 +1,8 @@
-import findAllComponentDefinitions from './findAllComponentDefinitions';
-import findAllExportedComponentDefinitions from './findAllExportedComponentDefinitions';
-import findExportedComponentDefinition from './findExportedComponentDefinition';
+import findAllComponentDefinitions from './findAllComponentDefinitions.js';
+import findAllExportedComponentDefinitions from './findAllExportedComponentDefinitions.js';
+import findExportedComponentDefinition from './findExportedComponentDefinition.js';
 import type { NodePath } from '@babel/traverse';
-import type FileState from '../FileState';
+import type FileState from '../FileState.js';
 import type {
   ArrowFunctionExpression,
   CallExpression,

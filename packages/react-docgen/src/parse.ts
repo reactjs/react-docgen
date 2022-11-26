@@ -1,12 +1,12 @@
-import Documentation from './Documentation';
-import type { DocumentationObject } from './Documentation';
-import postProcessDocumentation from './utils/postProcessDocumentation';
-import babelParse from './babelParser';
+import Documentation from './Documentation.js';
+import type { DocumentationObject } from './Documentation.js';
+import postProcessDocumentation from './utils/postProcessDocumentation.js';
+import babelParse from './babelParser.js';
 import type { NodePath } from '@babel/traverse';
-import type { Handler } from './handlers';
-import type { ComponentNode } from './resolver';
-import FileState from './FileState';
-import type { InternalConfig } from './config';
+import type { Handler } from './handlers/index.js';
+import type { ComponentNode } from './resolver/index.js';
+import FileState from './FileState.js';
+import type { InternalConfig } from './config.js';
 
 const ERROR_MISSING_DEFINITION = 'No suitable component definition found.';
 

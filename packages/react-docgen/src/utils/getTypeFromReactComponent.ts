@@ -1,13 +1,13 @@
 import type { NodePath } from '@babel/traverse';
-import type Documentation from '../Documentation';
-import getMemberValuePath from './getMemberValuePath';
-import getTypeAnnotation from './getTypeAnnotation';
-import getTypeParameters from './getTypeParameters';
-import isReactComponentClass from './isReactComponentClass';
-import isReactForwardRefCall from './isReactForwardRefCall';
-import resolveGenericTypeAnnotation from './resolveGenericTypeAnnotation';
-import resolveToValue from './resolveToValue';
-import type { TypeParameters } from './getTypeParameters';
+import type Documentation from '../Documentation.js';
+import getMemberValuePath from './getMemberValuePath.js';
+import getTypeAnnotation from './getTypeAnnotation.js';
+import getTypeParameters from './getTypeParameters.js';
+import isReactComponentClass from './isReactComponentClass.js';
+import isReactForwardRefCall from './isReactForwardRefCall.js';
+import resolveGenericTypeAnnotation from './resolveGenericTypeAnnotation.js';
+import resolveToValue from './resolveToValue.js';
+import type { TypeParameters } from './getTypeParameters.js';
 import type {
   FlowType,
   InterfaceDeclaration,
@@ -20,7 +20,7 @@ import type {
   TypeParameterDeclaration,
   TypeParameterInstantiation,
 } from '@babel/types';
-import getTypeIdentifier from './getTypeIdentifier';
+import getTypeIdentifier from './getTypeIdentifier.js';
 
 // TODO TESTME
 

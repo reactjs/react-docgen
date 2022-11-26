@@ -1,0 +1,96 @@
+// Vitest Snapshot v1
+
+exports[`resolveHOC > can resolve an hocs inside imported component passed to hoc 1`] = `
+Node {
+  "name": "Component",
+  "type": "Identifier",
+}
+`;
+
+exports[`resolveHOC > can resolve an imported component passed to hoc 1`] = `
+Node {
+  "name": "Component",
+  "type": "Identifier",
+}
+`;
+
+exports[`resolveHOC > can resolve an imported component passed to nested hoc 1`] = `
+Node {
+  "name": "Component",
+  "type": "Identifier",
+}
+`;
+
+exports[`resolveHOC > resolves HOC as last element if first is array 1`] = `
+Node {
+  "name": "Component",
+  "type": "Identifier",
+}
+`;
+
+exports[`resolveHOC > resolves HOC as last element if first is literal 1`] = `
+Node {
+  "name": "Component",
+  "type": "Identifier",
+}
+`;
+
+exports[`resolveHOC > resolves HOC as last element if first is object 1`] = `
+Node {
+  "name": "Component",
+  "type": "Identifier",
+}
+`;
+
+exports[`resolveHOC > resolves HOC as last element if first is spread 1`] = `
+Node {
+  "name": "Component",
+  "type": "Identifier",
+}
+`;
+
+exports[`resolveHOC > resolves HOC with additional params 1`] = `
+Node {
+  "name": "Component",
+  "type": "Identifier",
+}
+`;
+
+exports[`resolveHOC > resolves intermediate hocs 1`] = `
+Node {
+  "extra": {
+    "raw": "42",
+    "rawValue": 42,
+  },
+  "type": "NumericLiteral",
+  "value": 42,
+}
+`;
+
+exports[`resolveHOC > resolves nested hocs 1`] = `
+Node {
+  "name": "Component",
+  "type": "Identifier",
+}
+`;
+
+exports[`resolveHOC > resolves really nested hocs 1`] = `
+Node {
+  "name": "Component",
+  "type": "Identifier",
+}
+`;
+
+exports[`resolveHOC > resolves simple hoc 1`] = `
+Node {
+  "name": "Component",
+  "type": "Identifier",
+}
+`;
+
+exports[`resolveHOC > resolves simple hoc w/ multiple args 1`] = `
+Node {
+  "name": "Component",
+  "type": "Identifier",
+}
+`;

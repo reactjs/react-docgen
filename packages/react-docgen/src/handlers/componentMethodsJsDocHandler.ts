@@ -1,9 +1,9 @@
-import parseJsDoc from '../utils/parseJsDoc';
+import parseJsDoc from '../utils/parseJsDoc.js';
 import type {
   default as Documentation,
   MethodDescriptor,
-} from '../Documentation';
-import type { Handler } from '.';
+} from '../Documentation.js';
+import type { Handler } from './index.js';
 
 // Merges two objects ignoring null/undefined.
 function merge<T, U>(obj1: T, obj2: U): (T & U) | null {

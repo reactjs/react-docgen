@@ -1,7 +1,7 @@
 import { parse, makeMockImporter, noopImporter } from '../../../tests/utils';
 import Documentation from '../../Documentation';
 import type DocumentationMock from '../../__mocks__/Documentation';
-import { propTypeHandler } from '../propTypeHandler';
+import { propTypeHandler } from '../propTypeHandler.js';
 import getPropType from '../../utils/getPropType';
 import type { NodePath } from '@babel/traverse';
 import type { Importer } from '../../importer';
@@ -12,11 +12,12 @@ import type {
   ObjectExpression,
 } from '@babel/types';
 import type { ComponentNode } from '../../resolver';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 
-const getPropTypeMock = getPropType as jest.Mock;
+const getPropTypeMock = vi.mocked(getPropType);
 
-jest.mock('../../Documentation');
-jest.mock('../../utils/getPropType', () => jest.fn(() => ({})));
+vi.mock('../../Documentation.js');
+vi.mock('../../utils/getPropType.js', () => ({ default: vi.fn(() => ({})) }));
 
 describe('propTypeHandler', () => {
   let documentation: Documentation & DocumentationMock;
@@ -73,28 +74,24 @@ describe('propTypeHandler', () => {
     `;
   }
 
-  function test(
+  function testPropTypes(
     getSrc: (src: string) => string,
     parseSrc: (src: string, importer?: Importer) => NodePath<ComponentNode>,
   ) {
-    it('passes the correct argument to getPropType', () => {
+    test('passes the correct argument to getPropType', () => {
       const propTypesSrc = `{
           foo: PropTypes.bool,
           abc: PropTypes.xyz,
         }`;
       const definition = parseSrc(getSrc(propTypesSrc));
-      const propTypesAST = parse.expression(propTypesSrc);
-
-      const fooPath = propTypesAST.get('properties.0.value') as NodePath;
-      const xyzPath = propTypesAST.get('properties.1.value') as NodePath;
 
       propTypeHandler(documentation, definition);
 
-      expect(getPropTypeMock.mock.calls[0][0]).toEqualASTNode(fooPath);
-      expect(getPropTypeMock.mock.calls[1][0]).toEqualASTNode(xyzPath);
+      expect(getPropTypeMock.mock.calls[0][0]).toMatchSnapshot();
+      expect(getPropTypeMock.mock.calls[1][0]).toMatchSnapshot();
     });
 
-    it('finds definitions via React.PropTypes', () => {
+    test('finds definitions via React.PropTypes', () => {
       const definition = parseSrc(
         getSrc(
           `{
@@ -122,7 +119,7 @@ describe('propTypeHandler', () => {
       });
     });
 
-    it('finds definitions via the ReactPropTypes module', () => {
+    test('finds definitions via the ReactPropTypes module', () => {
       const definition = parseSrc(
         getSrc(
           `{
@@ -140,7 +137,7 @@ describe('propTypeHandler', () => {
       });
     });
 
-    it('detects whether a prop is required', () => {
+    test('detects whether a prop is required', () => {
       const definition = parseSrc(
         getSrc(
           `{
@@ -164,7 +161,7 @@ describe('propTypeHandler', () => {
       });
     });
 
-    it('handles computed properties', () => {
+    test('handles computed properties', () => {
       const definition = parseSrc(
         getSrc(
           `{
@@ -179,7 +176,7 @@ describe('propTypeHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('ignores complex computed properties', () => {
+    test('ignores complex computed properties', () => {
       const definition = parseSrc(
         getSrc(
           `{
@@ -194,7 +191,7 @@ describe('propTypeHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('only considers definitions from React or ReactPropTypes', () => {
+    test('only considers definitions from React or ReactPropTypes', () => {
       const definition = parseSrc(
         getSrc(
           `{
@@ -220,7 +217,7 @@ describe('propTypeHandler', () => {
       });
     });
 
-    it('resolves variables', () => {
+    test('resolves variables', () => {
       const definitionSrc = getSrc('props');
       const definition = parseSrc(`
         ${definitionSrc}
@@ -236,7 +233,7 @@ describe('propTypeHandler', () => {
       });
     });
 
-    it('resolves imported variables', () => {
+    test('resolves imported variables', () => {
       const definitionSrc = getSrc('props');
       const definition = parseSrc(
         `
@@ -255,7 +252,7 @@ describe('propTypeHandler', () => {
       });
     });
 
-    it('can resolve individual imported variables assigned to props', () => {
+    test('can resolve individual imported variables assigned to props', () => {
       const definitionSrc = getSrc(`{
         foo: foo,
         [bar]: bar,
@@ -281,7 +278,7 @@ describe('propTypeHandler', () => {
   }
 
   describe('React.createClass', () => {
-    test(
+    testPropTypes(
       propTypesSrc => template(`({propTypes: ${propTypesSrc}})`),
       (src, importer = noopImporter) =>
         parse
@@ -292,7 +289,7 @@ describe('propTypeHandler', () => {
 
   describe('class definition', () => {
     describe('class property', () => {
-      test(
+      testPropTypes(
         propTypesSrc =>
           template(`
           class Component {
@@ -304,7 +301,7 @@ describe('propTypeHandler', () => {
     });
 
     describe('static getter', () => {
-      test(
+      testPropTypes(
         propTypesSrc =>
           template(`
           class Component {
@@ -319,7 +316,7 @@ describe('propTypeHandler', () => {
   });
 
   describe('stateless component', () => {
-    test(
+    testPropTypes(
       propTypesSrc =>
         template(`
         var Component = (props) => <div />;
@@ -330,26 +327,26 @@ describe('propTypeHandler', () => {
   });
 
   describe('does not error if propTypes cannot be found', () => {
-    it('ObjectExpression', () => {
+    test('ObjectExpression', () => {
       const definition = parse.expression<ObjectExpression>('{fooBar: 42}');
 
       expect(() => propTypeHandler(documentation, definition)).not.toThrow();
     });
 
-    it('ClassDeclaration', () => {
+    test('ClassDeclaration', () => {
       const definition = parse.statement<ClassDeclaration>('class Foo {}');
 
       expect(() => propTypeHandler(documentation, definition)).not.toThrow();
     });
 
-    it('FunctionDeclaration', () => {
+    test('FunctionDeclaration', () => {
       const definition =
         parse.statement<FunctionDeclaration>('function Foo() {}');
 
       expect(() => propTypeHandler(documentation, definition)).not.toThrow();
     });
 
-    it('ArrowFunctionExpression', () => {
+    test('ArrowFunctionExpression', () => {
       const definition = parse.expression<ArrowFunctionExpression>('() => {}');
 
       expect(() => propTypeHandler(documentation, definition)).not.toThrow();
@@ -357,7 +354,7 @@ describe('propTypeHandler', () => {
   });
 
   // This case is handled by propTypeCompositionHandler
-  it('does not error if propTypes is a member expression', () => {
+  test('does not error if propTypes is a member expression', () => {
     const definition = parse.expression<ObjectExpression>(
       '{propTypes: Foo.propTypes}',
     );

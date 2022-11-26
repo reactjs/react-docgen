@@ -2,7 +2,8 @@ import type { NodePath } from '@babel/traverse';
 import type { StringLiteral } from '@babel/types';
 import { parse, makeMockImporter, noopImporter } from '../../../tests/utils';
 import type { Importer } from '../../importer';
-import findFunctionReturn from '../findFunctionReturn';
+import findFunctionReturn from '../findFunctionReturn.js';
+import { describe, expect, test } from 'vitest';
 
 const predicate = (path: NodePath): boolean =>
   path.isStringLiteral() &&
@@ -95,7 +96,7 @@ describe('findFunctionReturn', () => {
             Object.keys(modifiers).forEach(modifierName => {
               const modifierFactory = modifiers[modifierName];
 
-              it(modifierName, () => {
+              test(modifierName, () => {
                 const code = caseFactory(modifierFactory(), functionFactory);
                 const def: NodePath = parse(code).get(
                   `${caseSelector}.${functionSelector}`.replace(/\.$/, ''),
@@ -108,7 +109,7 @@ describe('findFunctionReturn', () => {
             Object.keys(negativeModifiers).forEach(modifierName => {
               const modifierFactory = negativeModifiers[modifierName];
 
-              it(modifierName, () => {
+              test(modifierName, () => {
                 const code = caseFactory(modifierFactory(), functionFactory);
 
                 const def: NodePath = parse(code).get(
@@ -125,12 +126,12 @@ describe('findFunctionReturn', () => {
   });
 
   describe('resolving return values', () => {
-    function test(
+    function testReturnValues(
       desc: string,
       src: string,
       importer: Importer = noopImporter,
     ) {
-      it(desc, () => {
+      test(desc, () => {
         const def = parse(src, importer).get('body')[0];
 
         expectValue(findFunctionReturn(def, predicate));
@@ -141,7 +142,7 @@ describe('findFunctionReturn', () => {
       bar: stmtLast => stmtLast(`export default "value";`).get('declaration'),
     });
 
-    it('handles recursive function calls', () => {
+    test('handles recursive function calls', () => {
       const def = parse.statement(`
         function Foo (props) {
           return props && Foo(props);
@@ -151,7 +152,7 @@ describe('findFunctionReturn', () => {
       expect(findFunctionReturn(def, predicate)).toBeUndefined();
     });
 
-    test(
+    testReturnValues(
       'does not see ifs as separate block',
       `
       function Foo (props) {
@@ -162,7 +163,7 @@ describe('findFunctionReturn', () => {
     `,
     );
 
-    test(
+    testReturnValues(
       'handles simple resolves',
       `
       function Foo (props) {
@@ -175,7 +176,7 @@ describe('findFunctionReturn', () => {
     `,
     );
 
-    test(
+    testReturnValues(
       'handles reference resolves',
       `
       function Foo (props) {
@@ -190,7 +191,7 @@ describe('findFunctionReturn', () => {
     `,
     );
 
-    test(
+    testReturnValues(
       'handles shallow member call expression resolves',
       `
       function Foo (props) {
@@ -205,7 +206,7 @@ describe('findFunctionReturn', () => {
     `,
     );
 
-    test(
+    testReturnValues(
       'handles deep member call expression resolves',
       `
       function Foo (props) {
@@ -222,7 +223,7 @@ describe('findFunctionReturn', () => {
     `,
     );
 
-    test(
+    testReturnValues(
       'handles external reference member call expression resolves',
       `
       function Foo (props) {
@@ -238,7 +239,7 @@ describe('findFunctionReturn', () => {
     `,
     );
 
-    test(
+    testReturnValues(
       'handles all sorts of JavaScript things',
       `
       function Foo (props) {
@@ -252,7 +253,7 @@ describe('findFunctionReturn', () => {
     `,
     );
 
-    test(
+    testReturnValues(
       'resolves imported values as return',
       `
       function Foo (props) {

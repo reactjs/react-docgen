@@ -1,14 +1,15 @@
 import { parse, makeMockImporter, noopImporter } from '../../../tests/utils';
-import propTypeCompositionHandler from '../propTypeCompositionHandler';
+import propTypeCompositionHandler from '../propTypeCompositionHandler.js';
 import Documentation from '../../Documentation';
 import type DocumentationMock from '../../__mocks__/Documentation';
 import type { NodePath } from '@babel/traverse';
 import type { Importer } from '../../importer';
 import type { ClassDeclaration, ObjectExpression } from '@babel/types';
 import type { ComponentNode } from '../../resolver';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 
-jest.mock('../../Documentation');
-jest.mock('../../utils/getPropType', () => () => ({}));
+vi.mock('../../Documentation.js');
+vi.mock('../../utils/getPropType.js', () => () => ({}));
 
 describe('propTypeCompositionHandler', () => {
   let documentation: Documentation & DocumentationMock;
@@ -35,11 +36,11 @@ describe('propTypeCompositionHandler', () => {
     `).get('declaration'),
   });
 
-  function test(
+  function testCompositionHandler(
     getSrc: (src: string) => string,
     parseSrc: (src: string, importer?: Importer) => NodePath<ComponentNode>,
   ) {
-    it('understands assignment from module', () => {
+    test('understands assignment from module', () => {
       let definition = parseSrc(`
         ${getSrc('Foo.propTypes')}
         var Foo = require("Foo.react");
@@ -58,7 +59,7 @@ describe('propTypeCompositionHandler', () => {
       expect(documentation.composes).toEqual(['SharedProps']);
     });
 
-    it('understands the spread operator', () => {
+    test('understands the spread operator', () => {
       const definitionSrc = getSrc(
         `{
           ...Foo.propTypes,
@@ -75,7 +76,7 @@ describe('propTypeCompositionHandler', () => {
       expect(documentation.composes).toEqual(['Foo.react', 'SharedProps']);
     });
 
-    it('does not add any composes if spreads can be fully resolved with the importer', () => {
+    test('does not add any composes if spreads can be fully resolved with the importer', () => {
       const definitionSrc = getSrc(
         `{
           ...Foo.propTypes,
@@ -95,7 +96,7 @@ describe('propTypeCompositionHandler', () => {
       expect(documentation.composes).toEqual([]);
     });
 
-    it('still adds a composes if the importer cannot resolve a value', () => {
+    test('still adds a composes if the importer cannot resolve a value', () => {
       const definitionSrc = getSrc(
         `{
           ...Foo.propTypes,
@@ -117,7 +118,7 @@ describe('propTypeCompositionHandler', () => {
   }
 
   describe('React.createClass', () => {
-    test(
+    testCompositionHandler(
       propTypesSrc => `({propTypes: ${propTypesSrc}})`,
       (src, importer = noopImporter) =>
         parse
@@ -128,7 +129,7 @@ describe('propTypeCompositionHandler', () => {
 
   describe('class definition', () => {
     describe('class properties', () => {
-      test(
+      testCompositionHandler(
         propTypesSrc => `
           class Component {
             static propTypes = ${propTypesSrc};
@@ -139,7 +140,7 @@ describe('propTypeCompositionHandler', () => {
     });
 
     describe('static getter', () => {
-      test(
+      testCompositionHandler(
         propTypesSrc => `
           class Component {
             static get propTypes() {
@@ -153,7 +154,7 @@ describe('propTypeCompositionHandler', () => {
   });
 
   describe('does not error if propTypes cannot be found', () => {
-    it('ObjectExpression', () => {
+    test('ObjectExpression', () => {
       const definition = parse.expression<ObjectExpression>('{fooBar: 42}');
 
       expect(() =>
@@ -161,7 +162,7 @@ describe('propTypeCompositionHandler', () => {
       ).not.toThrow();
     });
 
-    it('ClassDeclaration', () => {
+    test('ClassDeclaration', () => {
       const definition = parse.statement<ClassDeclaration>('class Foo {}');
 
       expect(() =>

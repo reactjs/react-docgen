@@ -1,5 +1,5 @@
 import type { NodePath } from '@babel/traverse';
-import getPropertyName from './getPropertyName';
+import getPropertyName from './getPropertyName.js';
 
 const componentMethods = [
   'componentDidMount',

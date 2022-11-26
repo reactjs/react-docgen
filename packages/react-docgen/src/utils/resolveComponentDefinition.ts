@@ -1,11 +1,11 @@
 import type { NodePath } from '@babel/traverse';
-import type { ComponentNode } from '../resolver';
-import isReactComponentClass from './isReactComponentClass';
-import isReactCreateClassCall from './isReactCreateClassCall';
-import isReactForwardRefCall from './isReactForwardRefCall';
-import isStatelessComponent from './isStatelessComponent';
-import normalizeClassDefinition from './normalizeClassDefinition';
-import resolveToValue from './resolveToValue';
+import type { ComponentNode } from '../resolver/index.js';
+import isReactComponentClass from './isReactComponentClass.js';
+import isReactCreateClassCall from './isReactCreateClassCall.js';
+import isReactForwardRefCall from './isReactForwardRefCall.js';
+import isStatelessComponent from './isStatelessComponent.js';
+import normalizeClassDefinition from './normalizeClassDefinition.js';
+import resolveToValue from './resolveToValue.js';
 
 export function isComponentDefinition(
   path: NodePath,

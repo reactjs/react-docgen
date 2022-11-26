@@ -1,19 +1,19 @@
-import isExportsOrModuleAssignment from '../utils/isExportsOrModuleAssignment';
-import resolveExportDeclaration from '../utils/resolveExportDeclaration';
-import resolveToValue from '../utils/resolveToValue';
-import resolveHOC from '../utils/resolveHOC';
+import isExportsOrModuleAssignment from '../utils/isExportsOrModuleAssignment.js';
+import resolveExportDeclaration from '../utils/resolveExportDeclaration.js';
+import resolveToValue from '../utils/resolveToValue.js';
+import resolveHOC from '../utils/resolveHOC.js';
 import type { NodePath } from '@babel/traverse';
 import { visitors } from '@babel/traverse';
-import { shallowIgnoreVisitors } from '../utils/traverse';
+import { shallowIgnoreVisitors } from '../utils/traverse.js';
 import type {
   ExportDefaultDeclaration,
   ExportNamedDeclaration,
 } from '@babel/types';
-import type FileState from '../FileState';
-import type { ComponentNode, Resolver } from '.';
+import type FileState from '../FileState.js';
+import type { ComponentNode, Resolver } from './index.js';
 import resolveComponentDefinition, {
   isComponentDefinition,
-} from '../utils/resolveComponentDefinition';
+} from '../utils/resolveComponentDefinition.js';
 
 interface TraverseState {
   foundDefinitions: Array<NodePath<ComponentNode>>;

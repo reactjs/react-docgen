@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`getClassMemberValuePath ClassDeclaration Getters and Setters finds getters 1`] = `
+exports[`getClassMemberValuePath > ClassDeclaration > Getters and Setters > finds getters 1`] = `
 Node {
   "async": false,
   "body": Node {
@@ -22,7 +22,7 @@ Node {
 }
 `;
 
-exports[`getClassMemberValuePath ClassDeclaration MethodDefinitions finds "normal" method definitions 1`] = `
+exports[`getClassMemberValuePath > ClassDeclaration > MethodDefinitions > finds "normal" method definitions 1`] = `
 Node {
   "async": false,
   "body": Node {
@@ -44,7 +44,7 @@ Node {
 }
 `;
 
-exports[`getClassMemberValuePath ClassDeclaration MethodDefinitions finds computed method definitions with literal keys 1`] = `
+exports[`getClassMemberValuePath > ClassDeclaration > MethodDefinitions > finds computed method definitions with literal keys 1`] = `
 Node {
   "async": false,
   "body": Node {
@@ -70,7 +70,7 @@ Node {
 }
 `;
 
-exports[`getClassMemberValuePath ClassExpression finds "normal" method definitions 1`] = `
+exports[`getClassMemberValuePath > ClassExpression > finds "normal" method definitions 1`] = `
 Node {
   "async": false,
   "body": Node {

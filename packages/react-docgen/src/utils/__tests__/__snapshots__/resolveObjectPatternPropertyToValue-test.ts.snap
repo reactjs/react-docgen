@@ -1,9 +1,9 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`resolveObjectPatternPropertyToValue AssignmentExpression resolved basic case 1`] = `
+exports[`resolveObjectPatternPropertyToValue > AssignmentExpression > resolved basic case 1`] = `
 Node {
   "extra": {
-    "raw": ""string"",
+    "raw": "\\"string\\"",
     "rawValue": "string",
   },
   "type": "StringLiteral",
@@ -11,10 +11,10 @@ Node {
 }
 `;
 
-exports[`resolveObjectPatternPropertyToValue VariableDeclarator resolved basic case 1`] = `
+exports[`resolveObjectPatternPropertyToValue > VariableDeclarator > resolved basic case 1`] = `
 Node {
   "extra": {
-    "raw": ""string"",
+    "raw": "\\"string\\"",
     "rawValue": "string",
   },
   "type": "StringLiteral",

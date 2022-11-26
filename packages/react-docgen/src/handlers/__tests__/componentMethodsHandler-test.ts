@@ -1,5 +1,5 @@
 import { parse, makeMockImporter } from '../../../tests/utils';
-import componentMethodsHandler from '../componentMethodsHandler';
+import componentMethodsHandler from '../componentMethodsHandler.js';
 import Documentation from '../../Documentation';
 import type DocumentationMock from '../../__mocks__/Documentation';
 import type {
@@ -13,8 +13,9 @@ import type {
 } from '@babel/types';
 import type { NodePath } from '@babel/traverse';
 import type { ComponentNode } from '../../resolver';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 
-jest.mock('../../Documentation');
+vi.mock('../../Documentation.js');
 
 describe('componentMethodsHandler', () => {
   let documentation: Documentation & DocumentationMock;
@@ -42,7 +43,7 @@ describe('componentMethodsHandler', () => {
     `).get('declaration'),
   });
 
-  function test(definition) {
+  function testMethodsHandler(definition) {
     componentMethodsHandler(documentation, definition);
     expect(documentation.methods).toEqual([
       {
@@ -96,7 +97,7 @@ describe('componentMethodsHandler', () => {
 
     Object.entries(methodDefinitions).forEach(([name, code]) => {
       describe(name, () => {
-        it('FunctionExpression Component', () => {
+        test('FunctionExpression Component', () => {
           const definition = parse.expressionLast<FunctionExpression>(
             `import { useImperativeHandle } from 'react';
          (function () {
@@ -111,7 +112,7 @@ describe('componentMethodsHandler', () => {
           expect(documentation.methods).toMatchSnapshot();
         });
 
-        it('FunctionDeclaration Component', () => {
+        test('FunctionDeclaration Component', () => {
           const definition = parse.statementLast<FunctionDeclaration>(
             `import { useImperativeHandle } from 'react';
          function Component() {
@@ -126,7 +127,7 @@ describe('componentMethodsHandler', () => {
           expect(documentation.methods).toMatchSnapshot();
         });
 
-        it('ArrowFunctionExpression Component', () => {
+        test('ArrowFunctionExpression Component', () => {
           const definition = parse.expressionLast<FunctionExpression>(
             `import { useImperativeHandle } from 'react';
          (() => {
@@ -143,7 +144,7 @@ describe('componentMethodsHandler', () => {
       });
     });
 
-    it('AssignmentExpression and useImperativeHandle', () => {
+    test('AssignmentExpression and useImperativeHandle', () => {
       const definition = parse
         .statement<AssignmentExpression>(
           `import { useImperativeHandle } from 'react';
@@ -165,7 +166,7 @@ describe('componentMethodsHandler', () => {
       expect(documentation.methods).toMatchSnapshot();
     });
 
-    it('VariableDeclaration and useImperativeHandle', () => {
+    test('VariableDeclaration and useImperativeHandle', () => {
       const definition = parse
         .statement<VariableDeclaration>(
           `import { useImperativeHandle } from 'react';
@@ -187,7 +188,7 @@ describe('componentMethodsHandler', () => {
     });
   });
 
-  it('extracts the documentation for an ObjectExpression', () => {
+  test('extracts the documentation for an ObjectExpression', () => {
     const src = `
       {
         /**
@@ -216,10 +217,10 @@ describe('componentMethodsHandler', () => {
       }
     `;
 
-    test(parse.expression(src));
+    testMethodsHandler(parse.expression(src));
   });
 
-  it('can resolve an imported method on an ObjectExpression', () => {
+  test('can resolve an imported method on an ObjectExpression', () => {
     const src = `
       import baz from 'baz';
       ({
@@ -249,10 +250,10 @@ describe('componentMethodsHandler', () => {
       })
     `;
 
-    test(parse.expressionLast(src, mockImporter));
+    testMethodsHandler(parse.expressionLast(src, mockImporter));
   });
 
-  it('extracts the documentation for a ClassDeclaration', () => {
+  test('extracts the documentation for a ClassDeclaration', () => {
     const src = `
       class Test extends React.Component {
         /**
@@ -284,10 +285,10 @@ describe('componentMethodsHandler', () => {
       }
     `;
 
-    test(parse.statement<ClassDeclaration>(src));
+    testMethodsHandler(parse.statement<ClassDeclaration>(src));
   });
 
-  it('can resolve an imported method on a ClassDeclaration', () => {
+  test('can resolve an imported method on a ClassDeclaration', () => {
     const src = `
       import baz from 'baz';
       class Test extends React.Component {
@@ -320,10 +321,10 @@ describe('componentMethodsHandler', () => {
       }
     `;
 
-    test(parse.statementLast(src, mockImporter));
+    testMethodsHandler(parse.statementLast(src, mockImporter));
   });
 
-  it('should handle and ignore computed methods', () => {
+  test('should handle and ignore computed methods', () => {
     const src = `
       class Test extends React.Component {
         /**
@@ -355,7 +356,7 @@ describe('componentMethodsHandler', () => {
     expect(documentation.methods).toMatchSnapshot();
   });
 
-  it('resolves imported methods assigned to computed properties', () => {
+  test('resolves imported methods assigned to computed properties', () => {
     const src = `
       import foo from 'foo';
       class Test extends React.Component {
@@ -386,7 +387,7 @@ describe('componentMethodsHandler', () => {
     expect(documentation.methods).toMatchSnapshot();
   });
 
-  it('should handle and ignore private properties', () => {
+  test('should handle and ignore private properties', () => {
     const src = `
       class Test extends React.Component {
         #privateProperty = () => {
@@ -409,7 +410,7 @@ describe('componentMethodsHandler', () => {
   });
 
   describe('function components', () => {
-    it('no methods', () => {
+    test('no methods', () => {
       const src = `
         (props) => {}
       `;
@@ -422,7 +423,7 @@ describe('componentMethodsHandler', () => {
       expect(documentation.methods).toEqual([]);
     });
 
-    it('finds static methods on a component in a variable declaration', () => {
+    test('finds static methods on a component in a variable declaration', () => {
       const src = `
         const Test = (props) => {};
         Test.doFoo = () => {};
@@ -439,7 +440,7 @@ describe('componentMethodsHandler', () => {
       expect(documentation.methods).toMatchSnapshot();
     });
 
-    it('resolves imported methods assigned to static properties on a component', () => {
+    test('resolves imported methods assigned to static properties on a component', () => {
       const src = `
         const Test = (props) => {};
         import doFoo from 'doFoo';
@@ -455,7 +456,7 @@ describe('componentMethodsHandler', () => {
       expect(documentation.methods).toMatchSnapshot();
     });
 
-    it('finds static methods on a component in an assignment', () => {
+    test('finds static methods on a component in an assignment', () => {
       const src = `
         let Test;
         Test = (props) => {};
@@ -473,7 +474,7 @@ describe('componentMethodsHandler', () => {
       expect(documentation.methods).toMatchSnapshot();
     });
 
-    it('resolves imported methods assigned on a component in an assignment', () => {
+    test('resolves imported methods assigned on a component in an assignment', () => {
       const src = `
         let Test;
         Test = (props) => {};
@@ -490,7 +491,7 @@ describe('componentMethodsHandler', () => {
       expect(documentation.methods).toMatchSnapshot();
     });
 
-    it('finds static methods on a function declaration', () => {
+    test('finds static methods on a function declaration', () => {
       const src = `
         function Test(props) {}
         Test.doFoo = () => {};
@@ -505,7 +506,7 @@ describe('componentMethodsHandler', () => {
       expect(documentation.methods).toMatchSnapshot();
     });
 
-    it('resolves imported methods on a function declaration', () => {
+    test('resolves imported methods on a function declaration', () => {
       const src = `
         function Test(props) {}
         import doFoo from 'doFoo';

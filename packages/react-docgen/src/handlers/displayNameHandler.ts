@@ -1,13 +1,13 @@
-import getMemberValuePath from '../utils/getMemberValuePath';
-import getNameOrValue from '../utils/getNameOrValue';
-import isReactForwardRefCall from '../utils/isReactForwardRefCall';
-import resolveToValue from '../utils/resolveToValue';
-import resolveFunctionDefinitionToReturnValue from '../utils/resolveFunctionDefinitionToReturnValue';
-import type Documentation from '../Documentation';
+import getMemberValuePath from '../utils/getMemberValuePath.js';
+import getNameOrValue from '../utils/getNameOrValue.js';
+import isReactForwardRefCall from '../utils/isReactForwardRefCall.js';
+import resolveToValue from '../utils/resolveToValue.js';
+import resolveFunctionDefinitionToReturnValue from '../utils/resolveFunctionDefinitionToReturnValue.js';
+import type Documentation from '../Documentation.js';
 import type { NodePath } from '@babel/traverse';
 import type { Identifier } from '@babel/types';
-import type { Handler } from '.';
-import type { ComponentNode } from '../resolver';
+import type { Handler } from './index.js';
+import type { ComponentNode } from '../resolver/index.js';
 
 const displayNameHandler: Handler = function (
   documentation: Documentation,

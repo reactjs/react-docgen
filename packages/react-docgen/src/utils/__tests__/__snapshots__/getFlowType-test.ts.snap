@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`getFlowType handles ObjectTypeSpreadProperty 1`] = `
+exports[`getFlowType > handles ObjectTypeSpreadProperty 1`] = `
 {
   "name": "signature",
   "raw": "{| apple: string, banana: string, ...OtherFruits |}",
@@ -33,7 +33,7 @@ exports[`getFlowType handles ObjectTypeSpreadProperty 1`] = `
 }
 `;
 
-exports[`getFlowType handles ObjectTypeSpreadProperty from imported types 1`] = `
+exports[`getFlowType > handles ObjectTypeSpreadProperty from imported types 1`] = `
 {
   "name": "signature",
   "raw": "{| apple: string, banana: string, ...MyType |}",
@@ -74,7 +74,7 @@ exports[`getFlowType handles ObjectTypeSpreadProperty from imported types 1`] = 
 }
 `;
 
-exports[`getFlowType handles nested ObjectTypeSpreadProperty 1`] = `
+exports[`getFlowType > handles nested ObjectTypeSpreadProperty 1`] = `
 {
   "name": "signature",
   "raw": "{| apple: string, banana: string, ...BreakfastFruits |}",
@@ -121,7 +121,7 @@ exports[`getFlowType handles nested ObjectTypeSpreadProperty 1`] = `
 }
 `;
 
-exports[`getFlowType handles unresolved ObjectTypeSpreadProperty 1`] = `
+exports[`getFlowType > handles unresolved ObjectTypeSpreadProperty 1`] = `
 {
   "name": "signature",
   "raw": "{| apple: string, banana: string, ...MyType |}",

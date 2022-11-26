@@ -10,9 +10,10 @@ import type {
 import { parse, makeMockImporter } from '../../../tests/utils';
 import Documentation from '../../Documentation';
 import type DocumentationMock from '../../__mocks__/Documentation';
-import defaultPropsHandler from '../defaultPropsHandler';
+import defaultPropsHandler from '../defaultPropsHandler.js';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 
-jest.mock('../../Documentation');
+vi.mock('../../Documentation.js');
 
 describe('defaultPropsHandler', () => {
   let documentation: Documentation & DocumentationMock;
@@ -57,7 +58,7 @@ describe('defaultPropsHandler', () => {
   });
 
   describe('ObjectExpression', () => {
-    it('should find prop default values that are literals', () => {
+    test('should find prop default values that are literals', () => {
       const src = `
         {
           getDefaultProps: function() {
@@ -83,7 +84,7 @@ describe('defaultPropsHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('can resolve object methods', () => {
+    test('can resolve object methods', () => {
       const src = `
         {
           getDefaultProps() {
@@ -101,7 +102,7 @@ describe('defaultPropsHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('can resolve declared functions', () => {
+    test('can resolve declared functions', () => {
       const src = `
         function getDefaultProps() {
           return {
@@ -120,7 +121,7 @@ describe('defaultPropsHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('should find prop default values that are literals from imported functions', () => {
+    test('should find prop default values that are literals from imported functions', () => {
       const src = `
         import getDefaultProps from 'getDefaultProps';
 
@@ -136,7 +137,7 @@ describe('defaultPropsHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('handles computed properties', () => {
+    test('handles computed properties', () => {
       const src = `
         {
           getDefaultProps: function() {
@@ -155,7 +156,7 @@ describe('defaultPropsHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('handles imported values assigned to computed properties', () => {
+    test('handles imported values assigned to computed properties', () => {
       const src = `
         import baz from 'baz';
         ({
@@ -175,7 +176,7 @@ describe('defaultPropsHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('ignores complex computed properties', () => {
+    test('ignores complex computed properties', () => {
       const src = `
         ({
           getDefaultProps: function() {
@@ -191,7 +192,7 @@ describe('defaultPropsHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('ignores imported values assigned to complex computed properties', () => {
+    test('ignores imported values assigned to complex computed properties', () => {
       const src = `
         import baz from 'baz';
         ({
@@ -211,7 +212,7 @@ describe('defaultPropsHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('resolves local spreads', () => {
+    test('resolves local spreads', () => {
       const src = `
         const other = { bar: "foo" };
 
@@ -229,7 +230,7 @@ describe('defaultPropsHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('resolves imported spreads', () => {
+    test('resolves imported spreads', () => {
       const src = `
         import other from 'other';
         ({
@@ -251,7 +252,7 @@ describe('defaultPropsHandler', () => {
   });
 
   describe('ClassDeclaration with static defaultProps', () => {
-    it('should find prop default values that are literals', () => {
+    test('should find prop default values that are literals', () => {
       const src = `
         class Foo {
           static defaultProps = {
@@ -270,7 +271,7 @@ describe('defaultPropsHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('should find prop default values that are literals', () => {
+    test('should find prop default values that are literals', () => {
       const src = `
         class Foo {
           static get defaultProps() {
@@ -288,7 +289,7 @@ describe('defaultPropsHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('resolves imported values assigned as default props', () => {
+    test('resolves imported values assigned as default props', () => {
       const src = `
         import defaultProps from 'defaultProps';
         class Foo {
@@ -303,7 +304,7 @@ describe('defaultPropsHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('should resolve local spreads', () => {
+    test('should resolve local spreads', () => {
       const src = `
         const other = { bar: "foo" };
 
@@ -319,7 +320,7 @@ describe('defaultPropsHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('resolves imported spreads', () => {
+    test('resolves imported spreads', () => {
       const src = `
         import other from 'other';
         class Foo {
@@ -337,9 +338,9 @@ describe('defaultPropsHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('should find prop default values that are imported variables', () => {
+    test('should find prop default values that are imported variables', () => {
       const src = `
-        import ImportedComponent from './ImportedComponent';
+        import ImportedComponent from './ImportedComponent.js';
 
         class Foo {
           static defaultProps = {
@@ -352,7 +353,7 @@ describe('defaultPropsHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('can resolve default props that are imported given a custom importer', () => {
+    test('can resolve default props that are imported given a custom importer', () => {
       const src = `
         import baz from 'baz';
 
@@ -372,7 +373,7 @@ describe('defaultPropsHandler', () => {
   });
 
   describe('ClassExpression with static defaultProps', () => {
-    it('should find prop default values that are literals', () => {
+    test('should find prop default values that are literals', () => {
       const src = `
         var Bar = class {
           static defaultProps = {
@@ -392,7 +393,7 @@ describe('defaultPropsHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('resolves imported values assigned as default props', () => {
+    test('resolves imported values assigned as default props', () => {
       const src = `
         import defaultProps from 'defaultProps';
         var Bar = class {
@@ -410,7 +411,7 @@ describe('defaultPropsHandler', () => {
     });
   });
 
-  it('should only consider Property nodes, not e.g. spread properties', () => {
+  test('should only consider Property nodes, not e.g. spread properties', () => {
     const src = `
       {
         getDefaultProps: function() {
@@ -427,7 +428,7 @@ describe('defaultPropsHandler', () => {
     expect(documentation.descriptors).toMatchSnapshot();
   });
 
-  it('can have an importer that resolves spread properties', () => {
+  test('can have an importer that resolves spread properties', () => {
     const src = `
       import Props from 'defaultProps';
       ({
@@ -449,7 +450,7 @@ describe('defaultPropsHandler', () => {
   });
 
   describe('Functional components with default params', () => {
-    it('should find default props that are literals', () => {
+    test('should find default props that are literals', () => {
       const src = `
         ({
           foo = "bar",
@@ -463,7 +464,7 @@ describe('defaultPropsHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('can use imported values as default props', () => {
+    test('can use imported values as default props', () => {
       const src = `
         import baz from 'baz';
         ({
@@ -478,7 +479,7 @@ describe('defaultPropsHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('should override with defaultProps if available', () => {
+    test('should override with defaultProps if available', () => {
       const src = `
         var Foo = ({
           foo = "bar",
@@ -498,7 +499,7 @@ describe('defaultPropsHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('overrides with imported defaultProps', () => {
+    test('overrides with imported defaultProps', () => {
       const src = `
         import other from 'other';
         var Foo = ({
@@ -516,7 +517,7 @@ describe('defaultPropsHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('resolves local spreads', () => {
+    test('resolves local spreads', () => {
       const src = `
         const other = { bar: "foo" };
         var Foo = (props) => <div />
@@ -532,7 +533,7 @@ describe('defaultPropsHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('resolves imported spreads', () => {
+    test('resolves imported spreads', () => {
       const src = `
         import other from 'other';
         var Foo = (props) => <div />
@@ -548,7 +549,7 @@ describe('defaultPropsHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('should work with aliases', () => {
+    test('should work with aliases', () => {
       const src = `
         ({
           foo = "bar",
@@ -565,7 +566,7 @@ describe('defaultPropsHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('allows imported defaults to be aliased', () => {
+    test('allows imported defaults to be aliased', () => {
       const src = `
         import baz from 'baz';
         ({
@@ -580,9 +581,9 @@ describe('defaultPropsHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('should find prop default values that are imported variables', () => {
+    test('should find prop default values that are imported variables', () => {
       const src = `
-        import ImportedComponent from './ImportedComponent';
+        import ImportedComponent from './ImportedComponent.js';
 
         ({
           foo = ImportedComponent,
@@ -596,7 +597,7 @@ describe('defaultPropsHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('should work with no defaults', () => {
+    test('should work with no defaults', () => {
       const src = `({ foo }) => <div />`;
 
       defaultPropsHandler(
@@ -608,7 +609,7 @@ describe('defaultPropsHandler', () => {
   });
 
   describe('forwardRef', () => {
-    it('resolves default props in the parameters', () => {
+    test('resolves default props in the parameters', () => {
       const src = `
         import React from 'react';
         React.forwardRef(({ foo = 'bar' }, ref) => <div ref={ref}>{foo}</div>);
@@ -621,7 +622,7 @@ describe('defaultPropsHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('resolves imported default props in the parameters', () => {
+    test('resolves imported default props in the parameters', () => {
       const src = `
         import baz from 'baz';
         import React from 'react';
@@ -635,7 +636,7 @@ describe('defaultPropsHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('resolves defaultProps', () => {
+    test('resolves defaultProps', () => {
       const src = `
         import React from 'react';
         const Component = React.forwardRef(({ foo }, ref) => <div ref={ref}>{foo}</div>);
@@ -651,7 +652,7 @@ describe('defaultPropsHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('resolves imported defaultProps', () => {
+    test('resolves imported defaultProps', () => {
       const src = `
         import other from 'other';
         import React from 'react';
@@ -668,7 +669,7 @@ describe('defaultPropsHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('resolves when the function is not inline', () => {
+    test('resolves when the function is not inline', () => {
       const src = `
         import React from 'react';
         const ComponentImpl = ({ foo = 'bar' }, ref) => <div ref={ref}>{foo}</div>;
@@ -682,7 +683,7 @@ describe('defaultPropsHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('also resolves imports when the function is not inline', () => {
+    test('also resolves imports when the function is not inline', () => {
       const src = `
         import baz from 'baz';
         import React from 'react';

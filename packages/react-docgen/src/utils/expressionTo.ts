@@ -1,6 +1,6 @@
 /*eslint no-loop-func: 0, no-use-before-define: 0*/
 
-import resolveToValue from './resolveToValue';
+import resolveToValue from './resolveToValue.js';
 import type { Node, NodePath } from '@babel/traverse';
 
 /**

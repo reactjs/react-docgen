@@ -3,7 +3,7 @@
  */
 
 import React, { Component } from 'react';
-import type { Props as ImportedProps } from './flow-export-type';
+import type { Props as ImportedProps } from './flow-export-type.js';
 
 export type ExtendedProps = {
   ...ImportedProps,

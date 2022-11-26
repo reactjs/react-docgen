@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ExtendedProps from './component_39';
+import ExtendedProps from './component_39.jsx';
 
 /**
  * This is a typescript component with imported prop types

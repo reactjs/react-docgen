@@ -1,9 +1,10 @@
 import { parse, parseTypescript } from '../../../tests/utils';
-import { Array as expressionToArray } from '../expressionTo';
+import { Array as expressionToArray } from '../expressionTo.js';
+import { describe, expect, test } from 'vitest';
 
 describe('expressionTo', () => {
   describe('MemberExpression', () => {
-    it('with only identifiers', () => {
+    test('with only identifiers', () => {
       expect(expressionToArray(parse.expression('foo.bar.baz'))).toEqual([
         'foo',
         'bar',
@@ -11,7 +12,7 @@ describe('expressionTo', () => {
       ]);
     });
 
-    it('with one computed literal', () => {
+    test('with one computed literal', () => {
       expect(expressionToArray(parse.expression('foo["bar"].baz'))).toEqual([
         'foo',
         '"bar"',
@@ -19,7 +20,7 @@ describe('expressionTo', () => {
       ]);
     });
 
-    it('with one computed identifier', () => {
+    test('with one computed identifier', () => {
       expect(expressionToArray(parse.expression('foo[bar].baz'))).toEqual([
         'foo',
         'bar',
@@ -27,13 +28,13 @@ describe('expressionTo', () => {
       ]);
     });
 
-    it('with one computed object', () => {
+    test('with one computed object', () => {
       expect(
         expressionToArray(parse.expression('foo[{ a: "true"}].baz')),
       ).toEqual(['foo', '{a: "true"}', 'baz']);
     });
 
-    it('with one computed object with spread', () => {
+    test('with one computed object with spread', () => {
       expect(expressionToArray(parse.expression('foo[{ ...a }].baz'))).toEqual([
         'foo',
         '{...a}',
@@ -41,13 +42,13 @@ describe('expressionTo', () => {
       ]);
     });
 
-    it('with one computed object with method', () => {
+    test('with one computed object with method', () => {
       expect(expressionToArray(parse.expression('foo[{ a(){} }].baz'))).toEqual(
         ['foo', '{a: <function>}', 'baz'],
       );
     });
 
-    it('with TSAsExpression', () => {
+    test('with TSAsExpression', () => {
       expect(
         expressionToArray(parseTypescript.expression('(baz as X).prop')),
       ).toEqual(['baz', 'prop']);

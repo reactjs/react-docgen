@@ -1,7 +1,7 @@
 import type { NodePath } from '@babel/traverse';
 import type { Identifier, ObjectProperty } from '@babel/types';
-import getPropertyValuePath from './getPropertyValuePath';
-import resolveToValue from './resolveToValue';
+import getPropertyValuePath from './getPropertyValuePath.js';
+import resolveToValue from './resolveToValue.js';
 
 function resolveToObjectExpression(path: NodePath): NodePath | null {
   if (path.isVariableDeclarator()) {

@@ -1,6 +1,6 @@
 import { parse, makeMockImporter } from '../../../tests/utils';
 import Documentation from '../../Documentation';
-import codeTypeHandler from '../codeTypeHandler';
+import codeTypeHandler from '../codeTypeHandler.js';
 import type DocumentationMock from '../../__mocks__/Documentation';
 import type {
   ArrowFunctionExpression,
@@ -11,9 +11,10 @@ import type {
 } from '@babel/types';
 import type { NodePath } from '@babel/traverse';
 import type { ComponentNode } from '../../resolver';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 
-jest.mock('../../Documentation');
-jest.mock('../../utils/getFlowType', () => ({
+vi.mock('../../Documentation.js');
+vi.mock('../../utils/getFlowType.js', () => ({
   default: () => ({}),
   __esModule: true,
 }));
@@ -50,8 +51,10 @@ describe('codeTypeHandler', () => {
     `;
   }
 
-  function test(getSrc: (src: string) => NodePath<ComponentNode>) {
-    it('detects types correctly', () => {
+  function testCodeTypeHandler(
+    getSrc: (src: string) => NodePath<ComponentNode>,
+  ) {
+    test('detects types correctly', () => {
       const flowTypesSrc = `
       {
         foo: string,
@@ -82,7 +85,7 @@ describe('codeTypeHandler', () => {
       });
     });
 
-    it('detects whether a prop is required', () => {
+    test('detects whether a prop is required', () => {
       const flowTypesSrc = `
       {
         foo: string,
@@ -107,7 +110,7 @@ describe('codeTypeHandler', () => {
       });
     });
 
-    it('ignores hash map entry', () => {
+    test('ignores hash map entry', () => {
       const flowTypesSrc = `
       {
         [key: string]: string,
@@ -121,7 +124,7 @@ describe('codeTypeHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('detects union types', () => {
+    test('detects union types', () => {
       const flowTypesSrc = `
       {
         foo: string | number,
@@ -146,7 +149,7 @@ describe('codeTypeHandler', () => {
       });
     });
 
-    it('detects intersection types', () => {
+    test('detects intersection types', () => {
       const flowTypesSrc = `
       {
         foo: Foo & Bar,
@@ -167,7 +170,7 @@ describe('codeTypeHandler', () => {
 
     describe('special generic type annotations', () => {
       ['$ReadOnly', '$Exact'].forEach(annotation => {
-        it(`unwraps ${annotation}<...>`, () => {
+        test(`unwraps ${annotation}<...>`, () => {
           const flowTypesSrc = `
             ${annotation}<{
               foo: string | number,
@@ -192,7 +195,7 @@ describe('codeTypeHandler', () => {
 
   describe('TypeAlias', () => {
     describe('class definition for flow <0.53', () => {
-      test(propTypesSrc =>
+      testCodeTypeHandler(propTypesSrc =>
         parse.statement(
           template(
             'class Foo extends Component<void, Props, void> {}',
@@ -203,7 +206,7 @@ describe('codeTypeHandler', () => {
     });
 
     describe('class definition for flow >=0.53 without State', () => {
-      test(propTypesSrc =>
+      testCodeTypeHandler(propTypesSrc =>
         parse.statement(
           template('class Foo extends Component<Props> {}', propTypesSrc),
         ),
@@ -211,7 +214,7 @@ describe('codeTypeHandler', () => {
     });
 
     describe('class definition for flow >=0.53 with State', () => {
-      test(propTypesSrc =>
+      testCodeTypeHandler(propTypesSrc =>
         parse.statement(
           template(
             'class Foo extends Component<Props, State> {}',
@@ -222,7 +225,7 @@ describe('codeTypeHandler', () => {
     });
 
     describe('class definition with inline props', () => {
-      test(propTypesSrc =>
+      testCodeTypeHandler(propTypesSrc =>
         parse.statement(
           template(
             'class Foo extends Component { props: Props; }',
@@ -233,7 +236,7 @@ describe('codeTypeHandler', () => {
     });
 
     describe('stateless component', () => {
-      test(
+      testCodeTypeHandler(
         propTypesSrc =>
           parse
             .statement(template('(props: Props) => <div />;', propTypesSrc))
@@ -243,13 +246,13 @@ describe('codeTypeHandler', () => {
   });
 
   describe('does not error if flowTypes cannot be found', () => {
-    it('ObjectExpression', () => {
+    test('ObjectExpression', () => {
       const definition = parse.expression<ObjectExpression>('{fooBar: 42}');
 
       expect(() => codeTypeHandler(documentation, definition)).not.toThrow();
     });
 
-    it('ClassDeclaration', () => {
+    test('ClassDeclaration', () => {
       const definition = parse.statement<ClassDeclaration>(
         'class Foo extends Component {}',
       );
@@ -257,7 +260,7 @@ describe('codeTypeHandler', () => {
       expect(() => codeTypeHandler(documentation, definition)).not.toThrow();
     });
 
-    it('ArrowFunctionExpression', () => {
+    test('ArrowFunctionExpression', () => {
       const definition =
         parse.statement<ArrowFunctionExpression>('() => <div />');
 
@@ -265,7 +268,7 @@ describe('codeTypeHandler', () => {
     });
   });
 
-  it('supports intersection proptypes', () => {
+  test('supports intersection proptypes', () => {
     const definition = parse
       .statement(
         `(props: Props) => <div />;
@@ -286,7 +289,7 @@ describe('codeTypeHandler', () => {
     });
   });
 
-  it('does support utility types inline', () => {
+  test('does support utility types inline', () => {
     const definition = parse
       .statement(
         `(props: $ReadOnly<Props>) => <div />;
@@ -299,7 +302,7 @@ describe('codeTypeHandler', () => {
     expect(documentation.descriptors).toMatchSnapshot();
   });
 
-  it('does not support union proptypes', () => {
+  test('does not support union proptypes', () => {
     const definition = parse
       .statement(
         `(props: Props) => <div />;
@@ -315,7 +318,7 @@ describe('codeTypeHandler', () => {
   });
 
   describe('imported prop types', () => {
-    it('does not resolve type included by require', () => {
+    test('does not resolve type included by require', () => {
       const definition = parse
         .statement(
           `(props: Props) => <div />;
@@ -330,7 +333,7 @@ describe('codeTypeHandler', () => {
       expect(documentation.descriptors).toEqual({});
     });
 
-    it('imported', () => {
+    test('imported', () => {
       const definition = parse
         .statement(
           `(props: Props) => <div />;
@@ -345,7 +348,7 @@ describe('codeTypeHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('type not imported', () => {
+    test('type not imported', () => {
       const definition = parse
         .statement(
           `(props: Props) => <div />;
@@ -359,7 +362,7 @@ describe('codeTypeHandler', () => {
       expect(documentation.descriptors).toEqual({});
     });
 
-    it('type imported', () => {
+    test('type imported', () => {
       const definition = parse
         .statement(
           `(props: Props) => <div />;
@@ -374,7 +377,7 @@ describe('codeTypeHandler', () => {
       expect(documentation.descriptors).toMatchSnapshot();
     });
 
-    it('does not resolve types not in scope', () => {
+    test('does not resolve types not in scope', () => {
       const definition = parse
         .statement(
           `(props: Props) => <div />;
@@ -388,7 +391,7 @@ describe('codeTypeHandler', () => {
       expect(documentation.descriptors).toEqual({});
     });
 
-    it('does not resolve types not in scope', () => {
+    test('does not resolve types not in scope', () => {
       const definition = parse
         .statement(
           `(props: Props) => <div />;
@@ -404,7 +407,7 @@ describe('codeTypeHandler', () => {
   });
 
   describe('forwardRef', () => {
-    it('resolves prop type from function expression', () => {
+    test('resolves prop type from function expression', () => {
       const src = `
         import React from 'react';
         type Props = { foo: string };
@@ -421,7 +424,7 @@ describe('codeTypeHandler', () => {
       });
     });
 
-    it('resolves when the function is not inline', () => {
+    test('resolves when the function is not inline', () => {
       const src = `
         import React from 'react';
         type Props = { foo: string };
@@ -439,7 +442,7 @@ describe('codeTypeHandler', () => {
       });
     });
 
-    it('resolves when the function is rebound and not inline', () => {
+    test('resolves when the function is rebound and not inline', () => {
       const src = `
         import React from 'react';
         type Props = { foo: string };

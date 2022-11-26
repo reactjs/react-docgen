@@ -1,9 +1,9 @@
 import type { NodePath } from '@babel/traverse';
 import { visitors } from '@babel/traverse';
 import type { Expression } from '@babel/types';
-import getNameOrValue from './getNameOrValue';
-import { String as toString } from './expressionTo';
-import isReactForwardRefCall from './isReactForwardRefCall';
+import getNameOrValue from './getNameOrValue.js';
+import { String as toString } from './expressionTo.js';
+import isReactForwardRefCall from './isReactForwardRefCall.js';
 
 function resolveName(path: NodePath): string | undefined {
   if (path.isVariableDeclaration()) {

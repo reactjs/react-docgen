@@ -1,4 +1,4 @@
-import { Sizes } from '../common';
+import { Sizes } from '../common.js';
 import T from 'prop-types';
 
 function SuperDuperCustomButton() {

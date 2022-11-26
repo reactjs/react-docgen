@@ -1,19 +1,58 @@
-import { shallowIgnoreVisitors } from '../utils/traverse';
+import { shallowIgnoreVisitors } from '../utils/traverse.js';
 import resolve from 'resolve';
-import { dirname } from 'path';
+import { dirname, extname } from 'path';
 import fs from 'fs';
 import type { NodePath } from '@babel/traverse';
 import { visitors } from '@babel/traverse';
 import type { ExportSpecifier, Identifier, ObjectProperty } from '@babel/types';
-import type { Importer, ImportPath } from '.';
-import type FileState from '../FileState';
-import { resolveObjectPatternPropertyToValue } from '../utils';
+import type { Importer, ImportPath } from './index.js';
+import type FileState from '../FileState.js';
+import { resolveObjectPatternPropertyToValue } from '../utils/index.js';
+
+const RESOLVE_EXTENSIONS = [
+  '.js',
+  '.jsx',
+  '.cjs',
+  '.mjs',
+  '.ts',
+  '.tsx',
+  '.mts',
+  '.cts',
+];
 
 function defaultLookupModule(filename: string, basedir: string): string {
-  return resolve.sync(filename, {
-    basedir,
-    extensions: ['.js', '.jsx', '.mjs', '.ts', '.tsx'],
-  });
+  try {
+    return resolve.sync(filename, {
+      basedir,
+      extensions: RESOLVE_EXTENSIONS,
+    });
+  } catch (error) {
+    const ext = extname(filename);
+    let newFilename: string;
+
+    // if we try to import a JavaScript file it might be that we are actually pointing to
+    // a TypeScript file. This can happen in ES modules as TypeScript requires to import other
+    // TypeScript files with JavaScript extensions
+    // https://www.typescriptlang.org/docs/handbook/esm-node.html#type-in-packagejson-and-new-extensions
+    switch (ext) {
+      case '.js':
+      case '.mjs':
+      case '.cjs':
+        newFilename = `${filename.slice(0, -2)}ts`;
+        break;
+
+      case '.jsx':
+        newFilename = `${filename.slice(0, -3)}tsx`;
+        break;
+      default:
+        throw error;
+    }
+
+    return resolve.sync(newFilename, {
+      basedir,
+      extensions: RESOLVE_EXTENSIONS,
+    });
+  }
 }
 
 interface TraverseState {
@@ -52,8 +91,14 @@ export function makeFsImporter(
 
     try {
       resolvedSource = lookupModule(source, basedir);
-    } catch (err) {
-      return null;
+    } catch (error) {
+      const { code } = error as NodeJS.ErrnoException;
+
+      if (code === 'MODULE_NOT_FOUND' || code === 'INVALID_PACKAGE_MAIN') {
+        return null;
+      }
+
+      throw error;
     }
 
     // Prevent recursive imports

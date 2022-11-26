@@ -1,0 +1,32 @@
+// Vitest Snapshot v1
+
+exports[`getMemberExpressionRoot > returns the root of a member expression 1`] = `
+Node {
+  "name": "foo",
+  "type": "Identifier",
+}
+`;
+
+exports[`getMemberExpressionRoot > returns the same path if identifier 1`] = `
+Node {
+  "extra": {
+    "parenStart": 0,
+    "parenthesized": true,
+  },
+  "name": "foo",
+  "type": "Identifier",
+}
+`;
+
+exports[`getMemberExpressionRoot > returns the same path if literal 1`] = `
+Node {
+  "extra": {
+    "parenStart": 0,
+    "parenthesized": true,
+    "raw": "1",
+    "rawValue": 1,
+  },
+  "type": "NumericLiteral",
+  "value": 1,
+}
+`;

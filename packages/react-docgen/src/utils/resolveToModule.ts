@@ -1,7 +1,7 @@
 import type { NodePath } from '@babel/traverse';
 import type { Expression, StringLiteral } from '@babel/types';
-import getMemberExpressionRoot from './getMemberExpressionRoot';
-import resolveToValue from './resolveToValue';
+import getMemberExpressionRoot from './getMemberExpressionRoot.js';
+import resolveToValue from './resolveToValue.js';
 
 /**
  * Given a path (e.g. call expression, member expression or identifier),

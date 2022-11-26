@@ -7,7 +7,7 @@ import type {
   RestElement,
   TSParameterProperty,
 } from '@babel/types';
-import printValue from './printValue';
+import printValue from './printValue.js';
 
 type ParameterNodePath = NodePath<
   | ArrayPattern

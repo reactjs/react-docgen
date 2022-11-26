@@ -8,6 +8,7 @@ import path from 'path';
 import rimraf from 'rimraf';
 import { directory as tempDirectory, file as tempFile } from 'tempy';
 import spawn from 'cross-spawn';
+import { afterEach, describe, expect, test } from 'vitest';
 
 const { writeFile, mkdir } = promises;
 
@@ -85,7 +86,7 @@ describe.skip('react-docgen CLI', () => {
     tempNoComponents = [];
   }, TEST_TIMEOUT);
 
-  it(
+  test(
     'reads from stdin',
     async () => {
       return run([], component).then(([stdout, stderr]) => {
@@ -96,7 +97,7 @@ describe.skip('react-docgen CLI', () => {
     TEST_TIMEOUT,
   );
 
-  it(
+  test(
     'reads files provided as command line arguments',
     async () => {
       await createTempfiles();
@@ -110,7 +111,7 @@ describe.skip('react-docgen CLI', () => {
     TEST_TIMEOUT,
   );
 
-  it(
+  test(
     'reads directories provided as command line arguments',
     async () => {
       await createTempfiles();
@@ -122,7 +123,7 @@ describe.skip('react-docgen CLI', () => {
     TEST_TIMEOUT,
   );
 
-  it(
+  test(
     'considers js and jsx by default',
     async () => {
       await createTempfiles();
@@ -141,7 +142,7 @@ describe.skip('react-docgen CLI', () => {
     TEST_TIMEOUT,
   );
 
-  it(
+  test(
     'considers files with the specified extension',
     async () => {
       await createTempfiles('foo');
@@ -162,7 +163,7 @@ describe.skip('react-docgen CLI', () => {
     TEST_TIMEOUT,
   );
 
-  it(
+  test(
     'considers files with the specified extension shortcut',
     async () => {
       await createTempfiles('foo');
@@ -179,7 +180,7 @@ describe.skip('react-docgen CLI', () => {
     TEST_TIMEOUT,
   );
 
-  it(
+  test(
     'ignores files in node_modules, __tests__ and __mocks__ by default',
     async () => {
       await createTempfiles(undefined, 'node_modules');
@@ -194,7 +195,7 @@ describe.skip('react-docgen CLI', () => {
     TEST_TIMEOUT,
   );
 
-  it(
+  test(
     'ignores specified folders',
     async () => {
       await createTempfiles(undefined, 'foo');
@@ -207,7 +208,7 @@ describe.skip('react-docgen CLI', () => {
     TEST_TIMEOUT,
   );
 
-  it(
+  test(
     'ignores specified folders shortcut',
     async () => {
       await createTempfiles(undefined, 'foo');
@@ -220,7 +221,7 @@ describe.skip('react-docgen CLI', () => {
     TEST_TIMEOUT,
   );
 
-  it(
+  test(
     'writes to stdout',
     async () => {
       const [stdout, stderr] = await run([], component);
@@ -231,7 +232,7 @@ describe.skip('react-docgen CLI', () => {
     TEST_TIMEOUT,
   );
 
-  it(
+  test(
     'writes to stderr',
     async () => {
       const [stdout, stderr] = await run([], '{}');
@@ -242,7 +243,7 @@ describe.skip('react-docgen CLI', () => {
     TEST_TIMEOUT,
   );
 
-  it(
+  test(
     'writes to a file if provided',
     async () => {
       const outFile = tempFile();
@@ -257,7 +258,7 @@ describe.skip('react-docgen CLI', () => {
     TEST_TIMEOUT,
   );
 
-  it(
+  test(
     'writes to a file if provided shortcut',
     async () => {
       const outFile = tempFile();
@@ -274,7 +275,7 @@ describe.skip('react-docgen CLI', () => {
 
   describe('--resolver', () => {
     describe('accepts the names of built in resolvers', () => {
-      it(
+      test(
         'findExportedComponentDefinition (default)',
         async () => {
           // No option passed: same as --resolver=findExportedComponentDefinition
@@ -287,7 +288,7 @@ describe.skip('react-docgen CLI', () => {
         TEST_TIMEOUT,
       );
 
-      it(
+      test(
         'findExportedComponentDefinition',
         async () => {
           const [stdout] = await run([
@@ -300,7 +301,7 @@ describe.skip('react-docgen CLI', () => {
         TEST_TIMEOUT,
       );
 
-      it(
+      test(
         'findAllComponentDefinitions',
         async () => {
           const [stdout] = await run([
@@ -314,7 +315,7 @@ describe.skip('react-docgen CLI', () => {
         TEST_TIMEOUT,
       );
 
-      it(
+      test(
         'findAllExportedComponentDefinitions',
         async () => {
           const [stdout] = await run([
@@ -329,7 +330,7 @@ describe.skip('react-docgen CLI', () => {
       );
     });
 
-    it(
+    test(
       'accepts a path to a resolver function',
       async () => {
         const [stdout] = await run([
@@ -347,7 +348,7 @@ describe.skip('react-docgen CLI', () => {
   });
 
   describe('--exclude/-e', () => {
-    it(
+    test(
       'ignores files by name',
       async () => {
         await createTempfiles(undefined, 'foo');
@@ -365,7 +366,7 @@ describe.skip('react-docgen CLI', () => {
       TEST_TIMEOUT,
     );
 
-    it(
+    test(
       'ignores files by name shortcut',
       async () => {
         await createTempfiles(undefined, 'foo');
@@ -385,7 +386,7 @@ describe.skip('react-docgen CLI', () => {
       TEST_TIMEOUT,
     );
 
-    it(
+    test(
       'ignores files by regex',
       async () => {
         await createTempfiles(undefined, 'foo');
@@ -402,7 +403,7 @@ describe.skip('react-docgen CLI', () => {
       TEST_TIMEOUT,
     );
 
-    it(
+    test(
       'ignores files by regex shortcut',
       async () => {
         await createTempfiles(undefined, 'foo');

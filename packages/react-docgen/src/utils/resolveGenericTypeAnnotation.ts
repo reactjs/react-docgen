@@ -1,8 +1,8 @@
 import type { NodePath } from '@babel/traverse';
-import isUnreachableFlowType from '../utils/isUnreachableFlowType';
-import resolveToValue from '../utils/resolveToValue';
-import { unwrapUtilityType } from './flowUtilityTypes';
-import getTypeIdentifier from './getTypeIdentifier';
+import isUnreachableFlowType from '../utils/isUnreachableFlowType.js';
+import resolveToValue from '../utils/resolveToValue.js';
+import { unwrapUtilityType } from './flowUtilityTypes.js';
+import getTypeIdentifier from './getTypeIdentifier.js';
 
 function tryResolveGenericTypeAnnotation(path: NodePath): NodePath | undefined {
   let typePath = unwrapUtilityType(path);
