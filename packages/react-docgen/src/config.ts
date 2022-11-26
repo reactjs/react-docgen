@@ -14,7 +14,7 @@ import {
   propTypeHandler,
 } from './handlers';
 import type { Importer } from './importer';
-import { makeFsImporter } from './importer';
+import { fsImporter } from './importer';
 import type { Resolver } from './resolver';
 import { findExportedComponentDefinition } from './resolver';
 
@@ -33,7 +33,7 @@ export interface Config {
 export type InternalConfig = Omit<Required<Config>, 'filename'>;
 
 const defaultResolver: Resolver = findExportedComponentDefinition;
-const defaultImporter: Importer = makeFsImporter();
+const defaultImporter: Importer = fsImporter;
 
 export const defaultHandlers: Handler[] = [
   propTypeHandler,

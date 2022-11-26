@@ -24,7 +24,7 @@ interface TraverseState {
 }
 
 // Factory for the resolveImports importer
-export default function makeFsImporter(
+export function makeFsImporter(
   lookupModule: (
     filename: string,
     basedir: string,
@@ -216,3 +216,7 @@ export default function makeFsImporter(
 
   return resolveImportedValue;
 }
+
+const defaultFsImporter = makeFsImporter();
+
+export default defaultFsImporter;
