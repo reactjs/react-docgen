@@ -5,8 +5,8 @@
   "repository": "reactjs/react-docgen",
   "type": "module",
   "browser": {
-    "./dist/importer/makeFsImporter.js": "./dist/importer/makeIgnoreImports.js",
-    "./src/importer/makeFsImporter.ts": "./src/importer/makeIgnoreImports.ts"
+    "./dist/importer/fsImporter.js": "./dist/importer/ignoreImports.js",
+    "./src/importer/fsImporter.ts": "./src/importer/ignoreImports.ts"
   },
   "files": [
     "dist"

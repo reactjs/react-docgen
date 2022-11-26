@@ -6,7 +6,8 @@ import type {
 } from '@babel/types';
 import type FileState from '../FileState.js';
 import ignoreImports from './ignoreImports.js';
-import fsImporter, { makeFsImporter } from './fsImporter.js';
+import fsImporter from './fsImporter.js';
+import makeFsImporter from './makeFsImporter.js';
 
 export type ImportPath = NodePath<
   ExportAllDeclaration | ExportNamedDeclaration | ImportDeclaration
