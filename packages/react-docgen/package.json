@@ -12,7 +12,7 @@
     "dist"
   ],
   "engines": {
-    "node": ">=14.15.0"
+    "node": ">=14.17.0"
   },
   "main": "dist/main.js",
   "typings": "dist/main.d.ts",

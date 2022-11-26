@@ -11,7 +11,7 @@
     "bin"
   ],
   "engines": {
-    "node": ">=14.15.0"
+    "node": ">=14.17.0"
   },
   "scripts": {
     "build": "echo 'done'",
