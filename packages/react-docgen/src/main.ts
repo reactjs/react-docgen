@@ -1,7 +1,11 @@
-import * as allHandlers from './handlers/index.js';
+import * as builtinHandlers from './handlers/index.js';
 import parse from './parse.js';
-import * as allResolvers from './resolver/index.js';
-import * as allImporters from './importer/index.js';
+import * as builtinResolvers from './resolver/index.js';
+import {
+  fsImporter,
+  ignoreImporter,
+  makeFsImporter,
+} from './importer/index.js';
 import * as utils from './utils/index.js';
 import type { DocumentationObject as Documentation } from './Documentation.js';
 import type { Resolver } from './resolver/index.js';
@@ -10,6 +14,11 @@ import type { Handler } from './handlers/index.js';
 import type FileState from './FileState.js';
 import type { Config } from './config.js';
 import { createConfig, defaultHandlers } from './config.js';
+
+const builtinImporters = {
+  fsImporter,
+  ignoreImporter,
+};
 
 declare module '@babel/traverse' {
   export interface HubInterface {
@@ -47,11 +56,12 @@ function defaultParse(
 }
 
 export {
-  defaultParse as parse,
+  builtinHandlers,
+  builtinResolvers,
+  builtinImporters,
   defaultHandlers,
-  allHandlers as handlers,
-  allResolvers as resolver,
-  allImporters as importers,
+  makeFsImporter,
+  defaultParse as parse,
   utils,
 };
 
