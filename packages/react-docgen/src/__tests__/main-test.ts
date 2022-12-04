@@ -1,4 +1,4 @@
-import { handlers, parse } from '../main.js';
+import { builtinHandlers, parse } from '../main.js';
 import { ERROR_MISSING_DEFINITION } from '../parse.js';
 import { describe, expect, test } from 'vitest';
 
@@ -13,7 +13,7 @@ describe('main', () => {
 
     test('parses with custom handlers', () => {
       const docs = parse(source, {
-        handlers: [handlers.componentDocblockHandler],
+        handlers: [builtinHandlers.componentDocblockHandler],
       });
 
       expect(docs).toMatchSnapshot();

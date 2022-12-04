@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { dirname, join } from 'path';
 import { describe, expect, test } from 'vitest';
-import { parse, importers } from '../../src/main';
+import { parse, makeFsImporter } from '../../src/main';
 import { fileURLToPath } from 'url';
 
 describe('integration', () => {
@@ -26,7 +26,7 @@ describe('integration', () => {
 
         expect(() => {
           result = parse(fileContent, {
-            importer: importers.makeFsImporter(),
+            importer: makeFsImporter(),
             babelOptions: {
               filename: filePath,
               babelrc: false,
