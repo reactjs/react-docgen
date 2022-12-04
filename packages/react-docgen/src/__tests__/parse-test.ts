@@ -2,8 +2,9 @@ import type { ObjectExpression } from '@babel/types';
 import fs from 'fs';
 import { directory as tempDirectory } from 'tempy';
 import { parse as testParse, noopImporter } from '../../tests/utils';
-import parse, { ERROR_MISSING_DEFINITION } from '../parse.js';
+import parse from '../parse.js';
 import { describe, expect, test, vi } from 'vitest';
+import { ERROR_CODES } from '../error';
 
 describe('parse', () => {
   test('allows custom component definition resolvers', () => {
@@ -32,7 +33,11 @@ describe('parse', () => {
         importer: noopImporter,
         babelOptions: {},
       }),
-    ).toThrowError(ERROR_MISSING_DEFINITION);
+    ).toThrowError(
+      expect.objectContaining({
+        code: ERROR_CODES.MISSING_DEFINITION,
+      }),
+    );
     expect(resolver).toBeCalled();
 
     expect(() =>
@@ -42,7 +47,11 @@ describe('parse', () => {
         importer: noopImporter,
         babelOptions: {},
       }),
-    ).toThrowError(ERROR_MISSING_DEFINITION);
+    ).toThrowError(
+      expect.objectContaining({
+        code: ERROR_CODES.MISSING_DEFINITION,
+      }),
+    );
     expect(resolver).toBeCalled();
   });
 
@@ -99,6 +108,10 @@ describe('parse', () => {
           },
         },
       }),
-    ).toThrowError(ERROR_MISSING_DEFINITION);
+    ).toThrowError(
+      expect.objectContaining({
+        code: ERROR_CODES.MISSING_DEFINITION,
+      }),
+    );
   });
 });

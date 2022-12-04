@@ -7,8 +7,7 @@ import type { Handler } from './handlers/index.js';
 import type { ComponentNode } from './resolver/index.js';
 import FileState from './FileState.js';
 import type { InternalConfig } from './config.js';
-
-const ERROR_MISSING_DEFINITION = 'No suitable component definition found.';
+import { ERROR_CODES, ReactDocgenError } from './error.js';
 
 function executeHandlers(
   handlers: Handler[],
@@ -58,10 +57,8 @@ export default function parse(
   const componentDefinitions = resolver(fileState);
 
   if (componentDefinitions.length === 0) {
-    throw new Error(ERROR_MISSING_DEFINITION);
+    throw new ReactDocgenError(ERROR_CODES.MISSING_DEFINITION);
   }
 
   return executeHandlers(handlers, componentDefinitions);
 }
-
-export { ERROR_MISSING_DEFINITION };
