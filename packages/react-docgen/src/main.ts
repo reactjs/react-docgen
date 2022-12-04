@@ -14,6 +14,7 @@ import type { Handler } from './handlers/index.js';
 import type FileState from './FileState.js';
 import type { Config } from './config.js';
 import { createConfig, defaultHandlers } from './config.js';
+import { ERROR_CODES } from './error.js';
 
 const builtinImporters = {
   fsImporter,
@@ -63,6 +64,7 @@ export {
   makeFsImporter,
   defaultParse as parse,
   utils,
+  ERROR_CODES,
 };
 
 export type { Importer, Handler, Resolver, FileState, Config, Documentation };

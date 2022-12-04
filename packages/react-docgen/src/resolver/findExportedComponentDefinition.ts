@@ -14,9 +14,7 @@ import type FileState from '../FileState.js';
 import resolveComponentDefinition, {
   isComponentDefinition,
 } from '../utils/resolveComponentDefinition.js';
-
-const ERROR_MULTIPLE_DEFINITIONS =
-  'Multiple exported component definitions found.';
+import { ERROR_CODES, ReactDocgenError } from '../error.js';
 
 interface TraverseState {
   foundDefinition: NodePath<ComponentNode> | null;
@@ -48,7 +46,7 @@ function exportDeclaration(
   }
   if (definitions.length > 1 || state.foundDefinition) {
     // If a file exports multiple components, ... complain!
-    throw new Error(ERROR_MULTIPLE_DEFINITIONS);
+    throw new ReactDocgenError(ERROR_CODES.MULTIPLE_DEFINITIONS);
   }
   const definition = resolveComponentDefinition(definitions[0]);
 
@@ -84,7 +82,7 @@ const explodedVisitors = visitors.explode<TraverseState>({
       }
       if (state.foundDefinition) {
         // If a file exports multiple components, ... complain!
-        throw new Error(ERROR_MULTIPLE_DEFINITIONS);
+        throw new ReactDocgenError(ERROR_CODES.MULTIPLE_DEFINITIONS);
       }
       const definition = resolveComponentDefinition(resolvedPath);
 

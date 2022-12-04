@@ -1,5 +1,4 @@
-import { builtinHandlers, parse } from '../main.js';
-import { ERROR_MISSING_DEFINITION } from '../parse.js';
+import { builtinHandlers, parse, ERROR_CODES } from '../main.js';
 import { describe, expect, test } from 'vitest';
 
 // TODO make fixtures out of them?
@@ -189,7 +188,11 @@ describe('main', () => {
         export default NotAComponent;
       `;
 
-      expect(() => parse(source)).toThrowError(ERROR_MISSING_DEFINITION);
+      expect(() => parse(source)).toThrowError(
+        expect.objectContaining({
+          code: ERROR_CODES.MISSING_DEFINITION,
+        }),
+      );
     });
   });
 });
