@@ -2075,13 +2075,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitest/coverage-c8@npm:0.25.4":
-  version: 0.25.4
-  resolution: "@vitest/coverage-c8@npm:0.25.4"
+"@vitest/coverage-c8@npm:0.25.5":
+  version: 0.25.5
+  resolution: "@vitest/coverage-c8@npm:0.25.5"
   dependencies:
     c8: ^7.12.0
-    vitest: 0.25.4
-  checksum: 809f2545dcdb4af18c38b1f94057195697fa279743293cdb8c214c57511c5cdce4ffd997c0d003a3d89726cdcf7afcf85509a3cb20cf960987637727f25014df
+    vitest: 0.25.5
+  checksum: a2c3d8172dbd742b88d3cf35bfb4e4c7d9b8221a7803f75a8009a482f3f017176d0c2938aa40c66cff63b60764e5305f792c3a5cc14af6e3d3e564950393f62b
   languageName: node
   linkType: hard
 
@@ -7232,7 +7232,7 @@ __metadata:
     "@types/rimraf": 3.0.2
     "@typescript-eslint/eslint-plugin": 5.45.1
     "@typescript-eslint/parser": 5.45.1
-    "@vitest/coverage-c8": 0.25.4
+    "@vitest/coverage-c8": 0.25.5
     eslint: 8.29.0
     eslint-config-prettier: 8.5.0
     eslint-plugin-prettier: 4.2.1
@@ -7240,7 +7240,7 @@ __metadata:
     rimraf: 3.0.2
     tempy: 1.0.1
     typescript: 4.9.3
-    vitest: 0.25.4
+    vitest: 0.25.5
   languageName: unknown
   linkType: soft
 
@@ -8157,9 +8157,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vitest@npm:0.25.4":
-  version: 0.25.4
-  resolution: "vitest@npm:0.25.4"
+"vitest@npm:0.25.5":
+  version: 0.25.5
+  resolution: "vitest@npm:0.25.5"
   dependencies:
     "@types/chai": ^4.3.3
     "@types/chai-subset": ^1.3.3
@@ -8194,7 +8194,7 @@ __metadata:
       optional: true
   bin:
     vitest: vitest.mjs
-  checksum: c6783f897dfa1cf512ee75126e650b239c8761d7c080860414ca88e561e9cb8c9b1652ab1504a28b4141ef774bccf3568dadc35f0e6974e70e00515136026e7f
+  checksum: f3e6cbe53f41ccdcf9d4a6dc71f22678007197388b4f1094c04ce28f778b99fce6cd7b2f35049aeffa8cd80cb25c0683f14dd008fdf0a54c6bc39fa3f2cb38a0
   languageName: node
   linkType: hard
 
