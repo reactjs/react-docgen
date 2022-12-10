@@ -1,5 +1,6 @@
-dist
-node_modules/
+dist/
+**/node_modules/*
+!**/__fixtures__/**/node_modules/*
 .idea/
 coverage/
 yarn-error.log

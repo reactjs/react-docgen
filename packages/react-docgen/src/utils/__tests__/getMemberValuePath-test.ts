@@ -17,7 +17,7 @@ vi.mock('../getClassMemberValuePath.js');
 vi.mock('../getMemberExpressionValuePath.js');
 
 // https://github.com/vitest-dev/vitest/issues/2381
-describe.skip('getMemberValuePath', () => {
+describe('getMemberValuePath', () => {
   test('handles ObjectExpressions', () => {
     const path = parse.expression<ObjectExpression>('{}');
 

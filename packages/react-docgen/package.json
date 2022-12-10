@@ -17,8 +17,8 @@
   "main": "dist/main.js",
   "typings": "dist/main.d.ts",
   "scripts": {
-    "build": "rimraf dist/ && tsc",
-    "watch": "rimraf dist/ && tsc --watch"
+    "build": "rimraf dist/ && yarn g:tsc",
+    "watch": "rimraf dist/ && yarn g:tsc --watch"
   },
   "keywords": [
     "react",
