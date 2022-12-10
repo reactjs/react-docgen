@@ -5,15 +5,15 @@
     "yarn": ">=3.2.2"
   },
   "scripts": {
-    "build": "yarn --verbose workspaces foreach --exclude 'benchmark' --exclude 'website' run build",
-    "watch": "yarn --verbose workspaces foreach --exclude 'benchmark' --exclude 'website' -p run watch",
+    "build": "yarn --verbose workspaces foreach --exclude '@react-docgen-internal/*' run build",
+    "watch": "yarn --verbose workspaces foreach --exclude '@react-docgen-internal/*' -p run watch",
     "lint": "eslint . --ext .js,.ts --report-unused-disable-directives",
     "fix": "eslint . --ext .js,.ts --fix --report-unused-disable-directives",
     "test": "yarn build && vitest run",
     "test:dev": "vitest",
     "g:tsc": "cd $INIT_CWD && rimraf dist/ && tsc",
-    "website:build": "yarn workspace website run build",
-    "website:start": "yarn workspace website run start",
+    "website:build": "yarn workspace @react-docgen-internal/website run build",
+    "website:start": "yarn workspace @react-docgen-internal/website run start",
     "changesets-version": "changeset version && yarn install --mode update-lockfile",
     "release": "yarn build && changeset publish --tag=next"
   },
