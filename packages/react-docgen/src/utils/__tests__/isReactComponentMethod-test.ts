@@ -25,6 +25,20 @@ describe('isReactComponentMethod', () => {
     expect(isReactComponentMethod(method)).toBe(true);
   });
 
+  test('returns true if the method is a component `createClass` object property with arrow function', () => {
+    const def = parse.expression<ObjectExpression>('{ render: () => {}}');
+    const method = def.get('properties')[0];
+
+    expect(isReactComponentMethod(method)).toBe(true);
+  });
+
+  test('returns true if the method is a component `createClass` object property with function', () => {
+    const def = parse.expression<ObjectExpression>('{ render: function () {}}');
+    const method = def.get('properties')[0];
+
+    expect(isReactComponentMethod(method)).toBe(true);
+  });
+
   test('returns false if the method is not a component class method', () => {
     const def = parse.statement<ClassDeclaration>('class Foo { bar() {}}');
     const method = def.get('body').get('body')[0];

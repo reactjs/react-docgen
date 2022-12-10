@@ -44,15 +44,7 @@ exports[`main > React.createClass > parses with default resolver/handlers 1`] = 
   {
     "description": "Example component description",
     "displayName": "ABC",
-    "methods": [
-      {
-        "docblock": null,
-        "modifiers": [],
-        "name": "getDefaultProps",
-        "params": [],
-        "returns": null,
-      },
-    ],
+    "methods": [],
     "props": {
       "foo": {
         "defaultValue": {

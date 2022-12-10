@@ -27,7 +27,11 @@ const componentMethods = [
  * Returns if the method path is a Component method.
  */
 export default function (methodPath: NodePath): boolean {
-  if (!methodPath.isClassMethod() && !methodPath.isObjectMethod()) {
+  if (
+    !methodPath.isClassMethod() &&
+    !methodPath.isObjectMethod() &&
+    !methodPath.isObjectProperty()
+  ) {
     return false;
   }
 
