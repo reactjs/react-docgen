@@ -36,5 +36,5 @@ jobs:
           title: Packages ready to publish
           commit: Publish new versions
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.CHANGESETS_TOKEN }}
           NPM_TOKEN: ${{secrets.NPM_TOKEN}}
