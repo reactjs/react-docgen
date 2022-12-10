@@ -1,5 +1,13 @@
 # Changelog
 
+## 6.0.0-alpha.4
+
+### Major Changes
+
+- 3b28f6e: The CLI was removed from `react-docgen` into its own package `@react-docgen/cli`.
+
+  Check out https://react-docgen.dev/cli for the documentation.
+
 ## [6.0.0-alpha.3](https://github.com/reactjs/react-docgen/compare/v6.0.0-alpha.2...v6.0.0-alpha.3) (2022-06-13)
 
 ### Bug Fixes
