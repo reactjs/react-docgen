@@ -1619,7 +1619,7 @@ __metadata:
     commander: ^9.4.1
     debug: ^4.3.4
     fast-glob: ^3.2.12
-    react-docgen: 6.0.0-alpha.3
+    react-docgen: 6.0.0-alpha.4
     slash: ^5.0.0
   bin:
     react-docgen: bin/react-docgen.js
@@ -7139,7 +7139,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-docgen6pre@npm:react-docgen@6.0.0-alpha.3, react-docgen@6.0.0-alpha.3, react-docgen@workspace:packages/react-docgen":
+"react-docgen6pre@npm:react-docgen@6.0.0-alpha.3":
+  version: 6.0.0-alpha.3
+  resolution: "react-docgen@npm:6.0.0-alpha.3"
+  dependencies:
+    "@babel/core": ^7.7.5
+    "@babel/generator": ^7.12.11
+    ast-types: ^0.14.2
+    commander: ^2.19.0
+    doctrine: ^3.0.0
+    estree-to-babel: ^3.1.0
+    neo-async: ^2.6.1
+    node-dir: ^0.1.10
+    resolve: ^1.17.0
+    strip-indent: ^3.0.0
+  bin:
+    react-docgen: bin/react-docgen.js
+  checksum: db4c300910e2ef7b854ccf4f454bd701875b787d0bc0f444f89415223e7c288a5808d6cd0f7ef6346332c9de2d068d648bc801d16b6b07a1699c3e10670c4801
+  languageName: node
+  linkType: hard
+
+"react-docgen@6.0.0-alpha.4, react-docgen@workspace:packages/react-docgen":
   version: 0.0.0-use.local
   resolution: "react-docgen@workspace:packages/react-docgen"
   dependencies:
@@ -7367,7 +7387,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve@npm:^1.14.2, resolve@npm:^1.20.0, resolve@npm:^1.22.1":
+"resolve@npm:^1.14.2, resolve@npm:^1.17.0, resolve@npm:^1.20.0, resolve@npm:^1.22.1":
   version: 1.22.1
   resolution: "resolve@npm:1.22.1"
   dependencies:
@@ -7380,7 +7400,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve@patch:resolve@^1.14.2#~builtin<compat/resolve>, resolve@patch:resolve@^1.20.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.22.1#~builtin<compat/resolve>":
+"resolve@patch:resolve@^1.14.2#~builtin<compat/resolve>, resolve@patch:resolve@^1.17.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.20.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.22.1#~builtin<compat/resolve>":
   version: 1.22.1
   resolution: "resolve@patch:resolve@npm%3A1.22.1#~builtin<compat/resolve>::version=1.22.1&hash=c3c19d"
   dependencies:
