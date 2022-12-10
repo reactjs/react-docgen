@@ -13,7 +13,8 @@
     "test:dev": "vitest",
     "g:tsc": "cd $INIT_CWD && rimraf dist/ && tsc",
     "website:build": "yarn workspace website run build",
-    "website:start": "yarn workspace website run start"
+    "website:start": "yarn workspace website run start",
+    "release": "yarn build && changeset publish"
   },
   "license": "MIT",
   "workspaces": [
@@ -22,6 +23,7 @@
     "website"
   ],
   "devDependencies": {
+    "@changesets/cli": "2.25.2",
     "@types/cross-spawn": "6.0.2",
     "@types/node": "14.18.32",
     "@types/rimraf": "3.0.2",
