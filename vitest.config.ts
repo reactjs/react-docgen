@@ -9,6 +9,8 @@ export default defineConfig({
       interopDefault: false,
     },
     coverage: {
+      all: true,
+      include: ['packages/react-docgen/src/**'],
       provider: 'c8',
       reporter: ['text', 'lcov'],
     },
