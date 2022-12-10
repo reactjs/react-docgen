@@ -1,6 +1,6 @@
 import type { ObjectExpression } from '@babel/types';
 import fs from 'fs';
-import { directory as tempDirectory } from 'tempy';
+import { temporaryDirectory } from 'tempy';
 import { parse as testParse, noopImporter } from '../../tests/utils';
 import parse from '../parse.js';
 import { describe, expect, test, vi } from 'vitest';
@@ -56,7 +56,7 @@ describe('parse', () => {
   });
 
   test('uses local babelrc', () => {
-    const dir = tempDirectory();
+    const dir = temporaryDirectory();
 
     try {
       // Write and empty babelrc to override the parser defaults
