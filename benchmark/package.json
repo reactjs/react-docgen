@@ -1,5 +1,6 @@
 {
-  "name": "benchmark",
+  "name": "@react-docgen-internal/benchmark",
+  "version": "0.0.0",
   "private": true,
   "description": "Generate benchmarks for react-docgen",
   "scripts": {

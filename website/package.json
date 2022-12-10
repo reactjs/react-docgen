@@ -1,5 +1,6 @@
 {
-  "name": "website",
+  "name": "@react-docgen-internal/website",
+  "version": "0.0.0",
   "private": true,
   "description": "Website of react-docgen",
   "repository": {

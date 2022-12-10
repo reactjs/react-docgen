@@ -14,7 +14,8 @@
     "g:tsc": "cd $INIT_CWD && rimraf dist/ && tsc",
     "website:build": "yarn workspace website run build",
     "website:start": "yarn workspace website run start",
-    "release": "yarn build && changeset publish"
+    "changesets-version": "changeset version && yarn install --mode update-lockfile",
+    "release": "yarn build && changeset publish --tag=next"
   },
   "license": "MIT",
   "workspaces": [

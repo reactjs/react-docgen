@@ -32,6 +32,7 @@ jobs:
         uses: changesets/action@v1
         with:
           publish: yarn release
+          version: yarn changesets-version
           title: Packages ready to publish
           commit: Publish new versions
         env:
