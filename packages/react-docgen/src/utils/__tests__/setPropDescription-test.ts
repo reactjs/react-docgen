@@ -3,7 +3,7 @@ import setPropDescription from '../setPropDescription.js';
 import Documentation from '../../Documentation';
 import type { default as DocumentationMock } from '../../__mocks__/Documentation';
 import type { ExpressionStatement } from '@babel/types';
-import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 vi.mock('../../Documentation.js');
 

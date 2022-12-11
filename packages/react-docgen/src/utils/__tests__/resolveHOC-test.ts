@@ -1,4 +1,3 @@
-import { identifier, numericLiteral } from '@babel/types';
 import { makeMockImporter, parse } from '../../../tests/utils';
 import resolveHOC from '../resolveHOC.js';
 import { describe, expect, test } from 'vitest';

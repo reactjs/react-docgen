@@ -1,4 +1,4 @@
-import type { Node, TransformOptions } from '@babel/core';
+import type { TransformOptions } from '@babel/core';
 import type { NodePath } from '@babel/traverse';
 import type { Importer, ImportPath } from '../src/importer/index.js';
 import FileState from '../src/FileState.js';

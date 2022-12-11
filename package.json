@@ -7,8 +7,8 @@
   "scripts": {
     "build": "yarn --verbose workspaces foreach --exclude '@react-docgen-internal/*' run build",
     "watch": "yarn --verbose workspaces foreach --exclude '@react-docgen-internal/*' -p run watch",
-    "lint": "eslint . --ext .js,.ts --report-unused-disable-directives",
-    "fix": "eslint . --ext .js,.ts --fix --report-unused-disable-directives",
+    "lint": "eslint . --ext .js,.ts --report-unused-disable-directives --max-warnings=0",
+    "fix": "eslint . --ext .js,.ts --fix --report-unused-disable-directives --max-warnings=0",
     "test": "yarn build && vitest run",
     "test:dev": "vitest",
     "g:tsc": "cd $INIT_CWD && rimraf dist/ && tsc",
