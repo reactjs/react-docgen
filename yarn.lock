@@ -2199,10 +2199,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:14.18.32":
-  version: 14.18.32
-  resolution: "@types/node@npm:14.18.32"
-  checksum: 45463114bf85d06dc12925d876dd90b7fff43d9ee10a40e48fd16aece3d0201c76426c128e41230b2818d386422be06c5be33b3d94d90ee924b6fa4d54574035
+"@types/node@npm:14.18.34":
+  version: 14.18.34
+  resolution: "@types/node@npm:14.18.34"
+  checksum: 25ac3b456a0b7b82c76b37276ec86845849e8276fc81d1470a87227c105c619e299aa7165b6148aa11a4ea156b1452f6d3327935f3e7dc0067ff54dde0e3d4e0
   languageName: node
   linkType: hard
 
@@ -8551,7 +8551,7 @@ __metadata:
   dependencies:
     "@changesets/cli": 2.25.2
     "@types/cross-spawn": 6.0.2
-    "@types/node": 14.18.32
+    "@types/node": 14.18.34
     "@types/rimraf": 3.0.2
     "@typescript-eslint/eslint-plugin": 5.46.0
     "@typescript-eslint/parser": 5.46.0
