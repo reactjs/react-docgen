@@ -30,7 +30,7 @@
     "@types/rimraf": "3.0.2",
     "@typescript-eslint/eslint-plugin": "5.46.0",
     "@typescript-eslint/parser": "5.46.0",
-    "@vitest/coverage-c8": "0.25.6",
+    "@vitest/coverage-c8": "0.25.7",
     "cpy": "9.0.1",
     "eslint": "8.29.0",
     "eslint-config-prettier": "8.5.0",
@@ -41,7 +41,7 @@
     "tempy": "3.0.0",
     "typescript": "4.9.4",
     "vite": "3.2.5",
-    "vitest": "0.25.6"
+    "vitest": "0.25.7"
   },
   "packageManager": "yarn@3.3.0"
 }
