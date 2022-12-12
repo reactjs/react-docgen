@@ -7976,7 +7976,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.4.17, postcss@npm:^8.4.18, postcss@npm:^8.4.19":
+"postcss@npm:^8.4.17, postcss@npm:^8.4.18, postcss@npm:^8.4.20":
   version: 8.4.20
   resolution: "postcss@npm:8.4.20"
   dependencies:
@@ -8574,7 +8574,7 @@ __metadata:
     rimraf: 3.0.2
     tempy: 3.0.0
     typescript: 4.9.4
-    vite: 4.0.0
+    vite: 4.0.1
     vitest: 0.25.7
   languageName: unknown
   linkType: soft
@@ -9703,13 +9703,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:4.0.0, vite@npm:^3.0.0 || ^4.0.0":
-  version: 4.0.0
-  resolution: "vite@npm:4.0.0"
+"vite@npm:4.0.1, vite@npm:^3.0.0 || ^4.0.0":
+  version: 4.0.1
+  resolution: "vite@npm:4.0.1"
   dependencies:
     esbuild: ^0.16.3
     fsevents: ~2.3.2
-    postcss: ^8.4.19
+    postcss: ^8.4.20
     resolve: ^1.22.1
     rollup: ^3.7.0
   peerDependencies:
@@ -9737,7 +9737,7 @@ __metadata:
       optional: true
   bin:
     vite: bin/vite.js
-  checksum: 83099d5033fa5580714641df3cda16579ec104b9f3d447c2cf3208105ef2e6f8573267fbe3bdc93c0e51a70830d4d30bc166767c9f8805b1075a405625471930
+  checksum: c51bd7cb955973cce1c63e6d29ac25ea6f8920db6de2ca97f285c80cf9607649d87254d1fabd9aa5920149572a6220686b9e3bf6fd0851f7c86ec8522bba0098
   languageName: node
   linkType: hard
 
