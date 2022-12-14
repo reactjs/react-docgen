@@ -9,6 +9,7 @@ import loadOptions from './options/loadOptions.js';
 import outputError from './output/outputError.js';
 import { resolve } from 'path';
 import slash from 'slash';
+import type { Documentation } from 'react-docgen';
 
 const debug = debugFactory('react-docgen:cli');
 
@@ -128,7 +129,7 @@ program
         return slash(ignorePath);
       }),
     });
-    const result = {};
+    const result: Record<string, Documentation[]> = {};
     let errorEncountered = false;
 
     await Promise.all(

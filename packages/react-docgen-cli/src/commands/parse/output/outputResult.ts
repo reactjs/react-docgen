@@ -2,7 +2,7 @@ import { writeFile } from 'fs/promises';
 import type { Documentation } from 'react-docgen';
 
 export default async function outputResult(
-  documentation: Record<string, Documentation>,
+  documentation: Record<string, Documentation[]>,
   { pretty = false, output }: { pretty: boolean; output: string | undefined },
 ) {
   const result = JSON.stringify(
