@@ -1,8 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "labels": ["dependencies"],
-  "extends": ["config:base"],
-  "baseBranches": ["main", "5.x"],
+  "extends": ["config:base", ":pinOnlyDevDependencies"],
   "enabled": true,
   "lockFileMaintenance": {
     "enabled": true,
@@ -15,6 +14,13 @@
   "automergeType": "branch",
   "packageRules": [
     {
+      "matchFiles": [
+        "packages/website/package.json",
+        "packages/react-docgen-cli/package.json"
+      ],
+      "extends": [":pinAllExceptPeerDependencies"]
+    },
+    {
       "depTypeList": ["devDependencies"],
       "semanticCommitType": "chore"
     },
@@ -29,11 +35,14 @@
       "automerge": true
     },
     {
-      "matchFiles": ["benchmark/package.json", "website/package.json"],
+      "matchFiles": [
+        "benchmark/package.json",
+        "playground/package.json",
+        "packages/website/package.json"
+      ],
       "semanticCommitType": "chore"
     },
     {
-      "matchFiles": ["benchmark/package.json"],
       "matchPackageNames": ["react-docgen"],
       "enabled": false
     }

@@ -27,12 +27,12 @@
   },
   "license": "MIT",
   "dependencies": {
-    "chalk": "^5.1.2",
-    "commander": "^9.4.1",
-    "debug": "^4.3.4",
-    "fast-glob": "^3.2.12",
+    "chalk": "5.2.0",
+    "commander": "9.4.1",
+    "debug": "4.3.4",
+    "fast-glob": "3.2.12",
     "react-docgen": "6.0.0-alpha.3",
-    "slash": "^5.0.0"
+    "slash": "5.0.0"
   },
   "devDependencies": {
     "@types/debug": "4.1.7"

@@ -72,8 +72,8 @@ jobs:
       - name: Lint
         run: yarn lint
 
-  website:
-    name: Test build website
+  playground:
+    name: Test build playground
     if: github.ref != 'refs/heads/main'
     runs-on: ubuntu-latest
 
@@ -93,11 +93,11 @@ jobs:
       - name: Build
         run: yarn build
 
-      - name: Build website
-        run: yarn website:build
+      - name: Build playground
+        run: yarn playground:build
 
   deploy:
-    name: Deploy website
+    name: Deploy playground
     permissions:
       contents: write
     needs: [tests, lint]
@@ -119,11 +119,11 @@ jobs:
       - name: Build
         run: yarn build
 
-      - name: Build website
-        run: yarn website:build
+      - name: Build playground
+        run: yarn playground:build
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
-          folder: website/dist
+          folder: playground/dist

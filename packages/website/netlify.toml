@@ -1,0 +1,5 @@
+[build]
+command = "yarn build"
+#ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- . ../react-docgen/"
+ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- ."
+publish = ".next"

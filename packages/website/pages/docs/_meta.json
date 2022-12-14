@@ -1,0 +1,9 @@
+{
+  "getting-started": "Getting started",
+  "extending": "Extending",
+  "reference": "Reference",
+  "playground": {
+    "title": "Playground",
+    "type": "page"
+  }
+}
