@@ -2695,17 +2695,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*":
-  version: 18.11.13
-  resolution: "@types/node@npm:18.11.13"
-  checksum: b0c1aa3bd2f5df8240e61096a49d6d4be600109b824d23408ec4ba1ec057dc0c60588e09f73b8a60455ad26d367e9c5562fad8403099f885cbc7b4cace83ec4c
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:14.18.34":
-  version: 14.18.34
-  resolution: "@types/node@npm:14.18.34"
-  checksum: 25ac3b456a0b7b82c76b37276ec86845849e8276fc81d1470a87227c105c619e299aa7165b6148aa11a4ea156b1452f6d3327935f3e7dc0067ff54dde0e3d4e0
+"@types/node@npm:*, @types/node@npm:18.11.15":
+  version: 18.11.15
+  resolution: "@types/node@npm:18.11.15"
+  checksum: cae8692a5cee0316f93ee0342237eb921f70c51afb37c661c711a925a4642654ae7e404c5a80899d481c0cfaff3a6891ef04bacd330a2e72734192bfc91dc2d8
   languageName: node
   linkType: hard
 
@@ -10407,7 +10400,7 @@ __metadata:
   dependencies:
     "@changesets/cli": 2.25.2
     "@types/cross-spawn": 6.0.2
-    "@types/node": 14.18.34
+    "@types/node": 18.11.15
     "@types/rimraf": 3.0.2
     "@typescript-eslint/eslint-plugin": 5.46.1
     "@typescript-eslint/parser": 5.46.1
