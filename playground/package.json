@@ -28,7 +28,7 @@
     "babel-loader": "9.1.0",
     "codemirror": "5.65.10",
     "css-loader": "6.7.3",
-    "css-minimizer-webpack-plugin": "^4.2.2",
+    "css-minimizer-webpack-plugin": "4.2.2",
     "html-loader": "4.2.0",
     "html-webpack-plugin": "5.5.0",
     "less": "4.1.3",
