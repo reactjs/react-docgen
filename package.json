@@ -12,8 +12,8 @@
     "test": "yarn build && vitest run",
     "test:dev": "vitest",
     "g:tsc": "cd $INIT_CWD && rimraf dist/ && tsc",
-    "website:build": "yarn workspace @react-docgen-internal/website run build",
-    "website:start": "yarn workspace @react-docgen-internal/website run start",
+    "playground:build": "yarn workspace @react-docgen-internal/playground run build",
+    "playground:start": "yarn workspace @react-docgen-internal/playground run start",
     "changesets-version": "changeset version && yarn install --mode update-lockfile",
     "release": "yarn build && changeset publish --tag=next"
   },
@@ -21,7 +21,7 @@
   "workspaces": [
     "benchmark",
     "packages/*",
-    "website"
+    "playground"
   ],
   "devDependencies": {
     "@changesets/cli": "2.25.2",

@@ -1,0 +1,16 @@
+{
+  "index": {
+    "title": "Home",
+    "type": "page"
+  },
+  "docs": {
+    "title": "Docs",
+    "type": "page"
+  },
+  "playground": {
+    "title": "Playground",
+    "type": "page",
+    "href": "https://reactcommunity.org/react-docgen/",
+    "newWindow": true
+  }
+}

@@ -1,0 +1,37 @@
+# FileState
+
+## Properties
+
+### ast
+
+Type: `File`
+
+### code
+
+Type: `string`
+
+### opts
+
+Type: `TransformOptions`
+
+### path
+
+Type: `NodePath<Program>`
+
+### scope
+
+Type: `Scope`
+
+## Methods
+
+### import
+
+`fileState.import(path: ImportPath, name: string): NodePath | null`
+
+### parse
+
+`parse(code: string, filename: string): FileState`
+
+### traverse
+
+`traverse<S>(visitors: Visitor<S>, state?: S): void`
