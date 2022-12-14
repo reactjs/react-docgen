@@ -1,7 +1,7 @@
 [build]
 command = "yarn build"
 #ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- . ../react-docgen/"
-ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- ."
+ignore = "if [ -z \"$CACHED_COMMIT_REF\" ] then git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- . ../../yarn.lock; fi"
 publish = ".next"
 
 [environment]
