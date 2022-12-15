@@ -1,17 +1,20 @@
-const fs = require('fs');
-const path = require('path');
-const Table = require('cli-table');
-const Benchmark = require('benchmark');
-const { parse } = require('../packages/react-docgen');
-const { parse: parse4 } = require('react-docgen4');
-const { parse: parse5 } = require('react-docgen5');
-const { parse: parse6old } = require('react-docgen6pre');
+import fs from 'fs';
+import path, { dirname } from 'path';
+import { fileURLToPath } from 'url';
+import Table from 'cli-table';
+import Benchmark from 'benchmark';
+import { parse } from '../packages/react-docgen/dist/main.js';
+import { parse as parse4 } from 'react-docgen4';
+import { parse as parse5 } from 'react-docgen5';
+import { parse as parse6old } from 'react-docgen6pre';
 
 console.log(`Node: ${process.version}`);
 
-const head = ['fixture', 'current', 'v6.0.0-alpha.3', 'v5.4.3', 'v4.1.1'];
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const files = ['./fixtures/CircularProgress.js'];
+const head = ['fixture', 'v4.1.1', 'v5.4.3', 'v6.0.0-alpha.3', 'current'];
+
+const files = ['./__fixtures__/CircularProgress.js'];
 
 const table = new Table({
   head,
@@ -30,7 +33,7 @@ if (!global.gc) {
 
 files.forEach(file => {
   const code = fs.readFileSync(path.join(__dirname, file), 'utf-8');
-  const suite = new Benchmark.Suite(file.replace(/\.\/fixtures\//, ''));
+  const suite = new Benchmark.Suite(file.replace(/\.\/__fixtures__\//, ''));
   const options = { filename: file, babelrc: false, configFile: false };
   const newOptions = { babelOptions: options };
 
@@ -40,17 +43,17 @@ files.forEach(file => {
   parse5(code, undefined, undefined, options);
   parse4(code, undefined, undefined, options);
   global.gc();
-  suite.add('current', () => {
-    parse(code, newOptions);
-  });
-  suite.add('v6.0.0-alpha.3', () => {
-    parse6old(code, undefined, undefined, options);
+  suite.add('v4.1.1', () => {
+    parse4(code, undefined, undefined, options);
   });
   suite.add('v5.4.3', () => {
     parse5(code, undefined, undefined, options);
   });
-  suite.add('v4.1.1', () => {
-    parse4(code, undefined, undefined, options);
+  suite.add('v6.0.0-alpha.3', () => {
+    parse6old(code, undefined, undefined, options);
+  });
+  suite.add('current', () => {
+    parse(code, newOptions);
   });
   const result = [suite.name];
 

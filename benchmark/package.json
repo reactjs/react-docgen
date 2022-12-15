@@ -4,8 +4,8 @@
   "private": true,
   "description": "Generate benchmarks for react-docgen",
   "scripts": {
-    "start": "node --expose-gc ./index.js",
-    "debug": "node --inspect-brk --expose-gc ./index.js"
+    "start": "node --expose-gc ./index.mjs",
+    "debug": "node --inspect-brk --expose-gc ./index.mjs"
   },
   "license": "MIT",
   "dependencies": {
@@ -14,6 +14,6 @@
     "microtime": "3.1.1",
     "react-docgen4": "npm:react-docgen@4.1.1",
     "react-docgen5": "npm:react-docgen@5.4.3",
-    "react-docgen6pre": "npm:react-docgen@6.0.0-alpha.3"
+    "react-docgen6pre": "npm:react-docgen@^6.0.0-alpha"
   }
 }

@@ -19,7 +19,6 @@
   },
   "license": "MIT",
   "workspaces": [
-    "benchmark",
     "packages/*",
     "playground"
   ],
