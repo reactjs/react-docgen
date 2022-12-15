@@ -14,6 +14,7 @@ guidelines in order to be analyzable (see below for more info).
 ## Documentation
 
 For version 5.x please checkout the [README.md on the 5.x branch](https://github.com/reactjs/react-docgen/blob/5.x/README.md)
+
 For version 6.x please checkout [react-docgen.dev](https://react-docgen.dev)
 
 ## License
