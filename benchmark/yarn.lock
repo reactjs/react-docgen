@@ -31,7 +31,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/core@npm:^7.0.0, @babel/core@npm:^7.7.5":
+"@babel/core@npm:^7.7.5":
   version: 7.20.5
   resolution: "@babel/core@npm:7.20.5"
   dependencies:
@@ -200,7 +200,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.0.0, @babel/runtime@npm:^7.7.6":
+"@babel/runtime@npm:^7.7.6":
   version: 7.20.6
   resolution: "@babel/runtime@npm:7.20.6"
   dependencies:
@@ -349,7 +349,7 @@ __metadata:
     benchmark: 2.1.4
     cli-table: 0.3.11
     microtime: 3.1.1
-    react-docgen4: "npm:react-docgen@4.1.1"
+    react-docgen4: "npm:react-docgen@5.4.3"
     react-docgen5: "npm:react-docgen@5.4.3"
     react-docgen6pre: "npm:react-docgen@^6.0.0-alpha"
   languageName: unknown
@@ -448,28 +448,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ast-types@npm:0.12.4":
-  version: 0.12.4
-  resolution: "ast-types@npm:0.12.4"
-  checksum: 600963596f380e75ad01273713ccee6a16ca6e85ad42d9f4eca2747ce88f8f3ac9375a7832d868649ad4fa0e6669a41a6278d57cee1088107a031c92ee932f38
-  languageName: node
-  linkType: hard
-
 "ast-types@npm:^0.14.2":
   version: 0.14.2
   resolution: "ast-types@npm:0.14.2"
   dependencies:
     tslib: ^2.0.1
   checksum: 8674a77307764979f0a0b2006b7223a4b789abffaa7acbf6a1132650a799252155170173a1ff6a7fb6897f59437fc955f2707bdfc391b0797750898876e6c9ed
-  languageName: node
-  linkType: hard
-
-"async@npm:^2.1.4":
-  version: 2.6.4
-  resolution: "async@npm:2.6.4"
-  dependencies:
-    lodash: ^4.17.14
-  checksum: a52083fb32e1ebe1d63e5c5624038bb30be68ff07a6c8d7dfe35e47c93fc144bd8652cbec869e0ac07d57dde387aa5f1386be3559cdee799cb1f789678d88e19
   languageName: node
   linkType: hard
 
@@ -793,16 +777,6 @@ __metadata:
   version: 1.0.5
   resolution: "escape-string-regexp@npm:1.0.5"
   checksum: 6092fda75c63b110c706b6a9bfde8a612ad595b628f0bd2147eea1d3406723020810e591effc7db1da91d80a71a737a313567c5abb3813e8d9c71f4aa595b410
-  languageName: node
-  linkType: hard
-
-"esprima@npm:~4.0.0":
-  version: 4.0.1
-  resolution: "esprima@npm:4.0.1"
-  bin:
-    esparse: ./bin/esparse.js
-    esvalidate: ./bin/esvalidate.js
-  checksum: b45bc805a613dbea2835278c306b91aff6173c8d034223fa81498c77dcbce3b2931bf6006db816f62eacd9fd4ea975dfd85a5b7f3c6402cfd050d4ca3c13a628
   languageName: node
   linkType: hard
 
@@ -1158,7 +1132,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.17.14, lodash@npm:^4.17.4":
+"lodash@npm:^4.17.4":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: eb835a2e51d381e561e508ce932ea50a8e5a68f4ebdd771ea240d3048244a8d13658acbd502cd4829768c56f2e16bdd4340b9ea141297d472517b83868e677f7
@@ -1523,13 +1497,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"private@npm:^0.1.8":
-  version: 0.1.8
-  resolution: "private@npm:0.1.8"
-  checksum: a00abd713d25389f6de7294f0e7879b8a5d09a9ec5fd81cc2f21b29d4f9a80ec53bc4222927d3a281d4aadd4cd373d9a28726fca3935921950dc75fd71d1fdbb
-  languageName: node
-  linkType: hard
-
 "promise-inflight@npm:^1.0.1":
   version: 1.0.1
   resolution: "promise-inflight@npm:1.0.1"
@@ -1547,24 +1514,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-docgen4@npm:react-docgen@4.1.1":
-  version: 4.1.1
-  resolution: "react-docgen@npm:4.1.1"
-  dependencies:
-    "@babel/core": ^7.0.0
-    "@babel/runtime": ^7.0.0
-    async: ^2.1.4
-    commander: ^2.19.0
-    doctrine: ^3.0.0
-    node-dir: ^0.1.10
-    recast: ^0.17.3
-  bin:
-    react-docgen: bin/react-docgen.js
-  checksum: d2189b0aa8385555e3bad71e39b11e68cbe3f274f68400fb15a19e5c9a106acda320967bc60dec2ba465b1bcca2aebed14cade8eaaec020e270149c772ac3d4b
-  languageName: node
-  linkType: hard
-
-"react-docgen5@npm:react-docgen@5.4.3":
+"react-docgen4@npm:react-docgen@5.4.3, react-docgen5@npm:react-docgen@5.4.3":
   version: 5.4.3
   resolution: "react-docgen@npm:5.4.3"
   dependencies:
@@ -1612,18 +1562,6 @@ __metadata:
     string_decoder: ^1.1.1
     util-deprecate: ^1.0.1
   checksum: d4ea81502d3799439bb955a3a5d1d808592cf3133350ed352aeaa499647858b27b1c4013984900238b0873ec8d0d8defce72469fb7a83e61d53f5ad61cb80dc8
-  languageName: node
-  linkType: hard
-
-"recast@npm:^0.17.3":
-  version: 0.17.6
-  resolution: "recast@npm:0.17.6"
-  dependencies:
-    ast-types: 0.12.4
-    esprima: ~4.0.0
-    private: ^0.1.8
-    source-map: ~0.6.1
-  checksum: 3a565f0825de91cb65d4eea21fa0c74c512f5d88672940920b6d34495066b4df131bb63f602c884017b0ffecd1eba8be1add299ccdf1a0213b66877fafc5cd38
   languageName: node
   linkType: hard
 
@@ -1774,13 +1712,6 @@ __metadata:
     ip: ^2.0.0
     smart-buffer: ^4.2.0
   checksum: 259d9e3e8e1c9809a7f5c32238c3d4d2a36b39b83851d0f573bfde5f21c4b1288417ce1af06af1452569cd1eb0841169afd4998f0e04ba04656f6b7f0e46d748
-  languageName: node
-  linkType: hard
-
-"source-map@npm:~0.6.1":
-  version: 0.6.1
-  resolution: "source-map@npm:0.6.1"
-  checksum: 59ce8640cf3f3124f64ac289012c2b8bd377c238e316fb323ea22fbfe83da07d81e000071d7242cad7a23cd91c7de98e4df8830ec3f133cb6133a5f6e9f67bc2
   languageName: node
   linkType: hard
 
