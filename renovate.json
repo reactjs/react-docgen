@@ -43,7 +43,7 @@
       "semanticCommitType": "chore"
     },
     {
-      "matchPackageNames": ["react-docgen"],
+      "matchPackagePatterns": ["^react-docgen"],
       "enabled": false
     }
   ]
