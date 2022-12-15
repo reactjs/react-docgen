@@ -3,7 +3,38 @@
   "tag": "alpha",
   "initialVersions": {
     "react-docgen": "6.0.0-alpha.3",
-    "@react-docgen/cli": "1.0.0-alpha.0"
+    "@react-docgen/cli": "1.0.0-alpha.0",
+    "@react-docgen-internal/website": "0.0.0",
+    "@react-docgen-internal/playground": "0.0.0"
   },
-  "changesets": []
+  "changesets": [
+    "bright-rivers-swim",
+    "clean-cooks-attend",
+    "giant-apricots-compete",
+    "great-rice-rush",
+    "grumpy-falcons-rhyme",
+    "grumpy-hotels-admire",
+    "honest-boxes-behave",
+    "honest-boxes-copy",
+    "late-cats-design",
+    "loud-spiders-divide",
+    "many-ligers-kneel",
+    "mean-glasses-chew",
+    "mighty-kids-report",
+    "mighty-shrimps-shout",
+    "nervous-humans-shave",
+    "nine-vans-bow",
+    "rare-taxis-divide",
+    "rotten-mugs-walk",
+    "selfish-ducks-mate",
+    "silent-swans-melt",
+    "silly-ears-search",
+    "smart-eagles-shop",
+    "smart-waves-refuse",
+    "strong-horses-build",
+    "strong-pillows-visit",
+    "tricky-shoes-check",
+    "twelve-trainers-tap",
+    "weak-numbers-bow"
+  ]
 }

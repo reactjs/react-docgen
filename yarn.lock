@@ -2362,7 +2362,7 @@ __metadata:
     commander: 9.4.1
     debug: 4.3.4
     fast-glob: 3.2.12
-    react-docgen: 6.0.0-alpha.3
+    react-docgen: 6.0.0-alpha.4
     slash: 5.0.0
   bin:
     react-docgen: dist/cli.js
@@ -9779,7 +9779,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-docgen@6.0.0-alpha.3, react-docgen@workspace:packages/react-docgen":
+"react-docgen@6.0.0-alpha.4, react-docgen@workspace:packages/react-docgen":
   version: 0.0.0-use.local
   resolution: "react-docgen@workspace:packages/react-docgen"
   dependencies:
