@@ -2365,7 +2365,7 @@ __metadata:
     react-docgen: 6.0.0-alpha.3
     slash: 5.0.0
   bin:
-    react-docgen: bin/react-docgen.js
+    react-docgen: dist/cli.js
   languageName: unknown
   linkType: soft
 
