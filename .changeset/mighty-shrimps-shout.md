@@ -14,4 +14,4 @@ Compared to the old CLI these are some of the major differences:
 - `--importer` added
 - `--failOnWarning` added
 
-Check out https://react-docgen.dev/cli for the documentation.
+Check out https://react-docgen.dev/docs/getting-started/cli for the documentation.
