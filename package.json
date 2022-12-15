@@ -15,7 +15,8 @@
     "playground:build": "yarn workspace @react-docgen-internal/playground run build",
     "playground:start": "yarn workspace @react-docgen-internal/playground run start",
     "changesets-version": "changeset version && yarn install --mode update-lockfile",
-    "release": "yarn build && changeset publish"
+    "copy:license": "cp ./LICENSE ./packages/react-docgen/ && cp ./LICENSE ./packages/react-docgen-cli/",
+    "release": "yarn build && yarn copy:license && changeset publish"
   },
   "license": "MIT",
   "workspaces": [
