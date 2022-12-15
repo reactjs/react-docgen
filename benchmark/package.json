@@ -4,6 +4,7 @@
   "private": true,
   "description": "Generate benchmarks for react-docgen",
   "scripts": {
+    "setup": "rm -rf ./suites/react-bootstrap/ && git clone --depth=1 --branch=v2.7.0 https://github.com/react-bootstrap/react-bootstrap.git ./suites/react-bootstrap/",
     "start": "node --expose-gc ./index.mjs",
     "debug": "node --inspect-brk --expose-gc ./index.mjs"
   },
@@ -11,8 +12,8 @@
   "dependencies": {
     "benchmark": "2.1.4",
     "cli-table": "0.3.11",
+    "fast-glob": "^3.2.12",
     "microtime": "3.1.1",
-    "react-docgen4": "npm:react-docgen@4.1.1",
     "react-docgen5": "npm:react-docgen@5.4.3",
     "react-docgen6pre": "npm:react-docgen@^6.0.0-alpha"
   }
