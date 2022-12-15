@@ -1,21 +1,20 @@
 {
   "name": "@react-docgen/cli",
   "version": "1.0.0-alpha.0",
-  "description": "A CLI and toolkit to extract information from React components for documentation generation.",
+  "description": "A CLI to extract information from React components for documentation generation.",
   "repository": "reactjs/react-docgen",
   "type": "module",
   "bin": {
-    "react-docgen": "bin/react-docgen.js"
+    "react-docgen": "dist/cli.js"
   },
   "files": [
-    "bin"
+    "dist"
   ],
   "engines": {
     "node": ">=14.17.0"
   },
   "scripts": {
-    "build": "yarn g:tsc",
-    "watch": "echo 'done'"
+    "build": "yarn g:tsc"
   },
   "keywords": [
     "react",
