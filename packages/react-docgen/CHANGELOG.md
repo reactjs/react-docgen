@@ -1,5 +1,82 @@
 # Changelog
 
+## 6.0.0-alpha.4
+
+### Major Changes
+
+- 96d6e9e: Rename `flowTypeHandler` to `codeTypeHandler` because it handles Flow and TypeScript
+- 96d6e9e: Simplify `resolveObjectValuesToArray` and remove type handling. None of the code that was handling types was actually used.
+- caae6bf: The return values of `resolveObjectValuesToArray` are now in the order they are defined in the source code.
+- 96d6e9e: Migrate react-docgen to ES modules. Please read [this](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c)
+- 3b28f6e: The CLI was removed from `react-docgen` into its own package `@react-docgen/cli`.
+
+  Check out https://react-docgen.dev/cli for the documentation.
+
+- 96d6e9e: Main `parse` API was changed
+
+  The main API changed and now includes only 2 arguments.
+
+  ```diff
+  -parse(src, resolver, handlers, importer, options)
+  +parse(src, { resolver, handlers, importer, ... })
+  ```
+
+- 96d6e9e: Renamed some of the main exports for clarity.
+
+  Renamed `handlers` to `builtinHandlers`
+  Renamed `resolver` to `builtinResolvers`
+  Renamed `importers` to `builtinImporters`
+
+- 96d6e9e: Migrated to babel toolchain
+
+  This is one of the big changes in this new version of react-docgen. It made the code a lot more robust
+  because there are now finally working TypeScript types for the ASTs.
+
+  Another benefit from this change that react-docgen is now a lot faster. 🚀 In some
+  tests an improvement of nearly 50% was seen in comparison to version 5.
+
+- d4c27d4: Improve performance of file system importer.
+
+  The file system importer now also caches resolving of files in addition to parsing files.
+  If the importer is used in an environment where files do change at runtime (like a watch
+  command) then the caches will need to be cleared on every file change.
+
+- 96d6e9e: Changed the minimum Node.js version to 14.17.0
+
+### Minor Changes
+
+- 96d6e9e: Add support for `.cts` and `.mts` extension when using typescript
+- 96d6e9e: Treat functions returning `React.Children.map` as components
+- 96d6e9e: Improve performance by creating all visitors only once
+- 96d6e9e: Support all possible kinds of functions in the `displayNameHandler`
+- 96d6e9e: Support all literal types in typescript
+- 96d6e9e: Support flow qualified type names
+- 96d6e9e: Support class and function declarations without identifier
+- 96d6e9e: Support resolving of destructurings in `resolveToValue`
+- 96d6e9e: Improve performance drastically by making changes to AST traversal
+
+  Visitors are now pre-exploded and are cached in the module scope instead of creating them on every call.
+  This change brought the benchmark from 170ops/s to 225ops/sec
+
+- 96d6e9e: Add codes to errors to be able to easily detect them
+
+  There is a new export `ERROR_CODES` that contains all possible error codes.
+  The two errors that have codes right now are:
+
+  - `MISSING_DEFINITION`: No component found in file
+  - `MULTIPLE_DEFINITIONS`: Multiple components found in one files
+
+- 96d6e9e: Support handling `useImperativeHandle` correctly
+
+### Patch Changes
+
+- 96d6e9e: Handle `React.forwardRef` calls without a function
+- 96d6e9e: Handle some edge cases in resolveToValue
+- 96d6e9e: Remove trailing commas and semicolons from raw values in the documentation
+- 96d6e9e: Parse jsdoc comments for TypeScript structs
+- 96d6e9e: Correctly handle ObjectProperties in `isReactComponentMethod`
+- 96d6e9e: Add support for TSAsExpressions when trying to stringify expressions
+
 ## [6.0.0-alpha.3](https://github.com/reactjs/react-docgen/compare/v6.0.0-alpha.2...v6.0.0-alpha.3) (2022-06-13)
 
 ### Bug Fixes
