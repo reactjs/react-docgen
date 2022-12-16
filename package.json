@@ -2,30 +2,23 @@
   "private": true,
   "engines": {
     "node": ">=14.17.0",
-    "yarn": ">=3.2.2"
+    "pnpm": ">=7.18.0"
   },
   "scripts": {
-    "build": "yarn --verbose workspaces foreach --exclude '@react-docgen-internal/*' run build",
-    "watch": "yarn --verbose workspaces foreach --exclude '@react-docgen-internal/*' -p run watch",
-    "lint": "eslint . --ext .js,.ts --report-unused-disable-directives --max-warnings=0",
-    "fix": "eslint . --ext .js,.ts --fix --report-unused-disable-directives --max-warnings=0",
-    "test": "yarn build && vitest run",
-    "test:dev": "vitest",
-    "g:tsc": "cd $INIT_CWD && rimraf dist/ && tsc",
-    "playground:build": "yarn workspace @react-docgen-internal/playground run build",
-    "playground:start": "yarn workspace @react-docgen-internal/playground run start",
-    "changesets-version": "changeset version && yarn install --mode update-lockfile",
-    "copy:license": "cp ./LICENSE ./packages/react-docgen/ && cp ./LICENSE ./packages/react-docgen-cli/",
-    "release": "yarn build && yarn copy:license && changeset publish"
+    "build": "pnpm --filter '!@react-docgen-internal/*' run build",
+    "watch": "pnpm --filter '!@react-docgen-internal/*' run watch",
+    "lint": "eslint . --ext .js,.cjs,.mjs,.ts,.tsx --report-unused-disable-directives --max-warnings=0",
+    "fix": "eslint . --ext .js,.cjs,.mjs,.ts,.tsx --fix --report-unused-disable-directives --max-warnings=0",
+    "test": "pnpm build && pnpm --filter '!@react-docgen-internal/*' exec vitest run",
+    "test:dev": "pnpm build && pnpm --filter '!@react-docgen-internal/*' exec vitest",
+    "playground:build": "pnpm --filter @react-docgen-internal/playground run build",
+    "playground:start": "pnpm --filter @react-docgen-internal/playground run start",
+    "changesets-release": "pnpm build && pnpm publish -r --tag alpha --access public",
+    "changesets-version": "changeset version && pnpm install --lockfile-only"
   },
   "license": "MIT",
-  "workspaces": [
-    "packages/*",
-    "playground"
-  ],
   "devDependencies": {
     "@changesets/cli": "2.25.2",
-    "@types/cross-spawn": "6.0.2",
     "@types/node": "14.18.34",
     "@types/rimraf": "3.0.2",
     "@typescript-eslint/eslint-plugin": "5.46.1",
@@ -33,6 +26,7 @@
     "@vitest/coverage-c8": "0.25.8",
     "cpy": "9.0.1",
     "eslint": "8.29.0",
+    "eslint-config-next": "13.0.7",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-prettier": "4.2.1",
     "execa": "6.1.0",
@@ -43,5 +37,5 @@
     "vite": "4.0.1",
     "vitest": "0.25.8"
   },
-  "packageManager": "yarn@3.3.0"
+  "packageManager": "pnpm@7.18.0"
 }

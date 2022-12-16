@@ -12,9 +12,10 @@
   "dependencies": {
     "benchmark": "2.1.4",
     "cli-table": "0.3.11",
-    "fast-glob": "^3.2.12",
+    "fast-glob": "3.2.12",
     "microtime": "3.1.1",
     "react-docgen5": "npm:react-docgen@5.4.3",
-    "react-docgen6pre": "npm:react-docgen@^6.0.0-alpha"
+    "react-docgen6latest": "npm:react-docgen@^6.0.0-alpha.4",
+    "react-docgen": "workspace:react-docgen@^6.0.0-alpha.4"
   }
 }

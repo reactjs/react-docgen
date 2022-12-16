@@ -14,7 +14,8 @@
     "node": ">=14.17.0"
   },
   "scripts": {
-    "build": "yarn g:tsc"
+    "build": "rimraf dist/ && tsc",
+    "watch": "rimraf dist/ && tsc --watch"
   },
   "keywords": [
     "react",
@@ -30,7 +31,7 @@
     "commander": "9.4.1",
     "debug": "4.3.4",
     "fast-glob": "3.2.12",
-    "react-docgen": "6.0.0-alpha.4",
+    "react-docgen": "workspace:6.0.0-alpha.4",
     "slash": "5.0.0"
   },
   "devDependencies": {

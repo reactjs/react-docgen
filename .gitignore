@@ -1,13 +1,6 @@
+benchmark/suites/
 dist/
 **/node_modules/*
 !**/__fixtures__/**/node_modules/*
 .idea/
 coverage/
-yarn-error.log
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions

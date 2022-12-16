@@ -1,5 +1,5 @@
 tasks:
-  - init: yarn install
+  - init: pnpm install
 vscode:
   extensions:
     - dbaeumer.vscode-eslint
