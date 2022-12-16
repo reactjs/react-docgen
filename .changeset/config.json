@@ -7,5 +7,9 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": []
+  "ignore": [
+    "@react-docgen-internal/benchmark",
+    "@react-docgen-internal/playground",
+    "@react-docgen-internal/website"
+  ]
 }
