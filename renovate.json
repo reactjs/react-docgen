@@ -26,7 +26,7 @@
       "semanticCommitType": "chore"
     },
     {
-      "depTypeList": ["devDependencies"],
+      "depTypeList": ["devDependencies", "packageManager"],
       "updateTypes": ["minor", "patch"],
       "automerge": true
     },
