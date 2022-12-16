@@ -8,15 +8,16 @@
     "semanticCommitType": "chore",
     "automerge": true
   },
-  "postUpdateOptions": ["yarnDedupeHighest"],
   "semanticCommits": "enabled",
   "semanticCommitType": "fix",
   "automergeType": "branch",
   "packageRules": [
     {
       "matchFiles": [
+        "benchmark/package.json",
         "packages/website/package.json",
-        "packages/react-docgen-cli/package.json"
+        "packages/react-docgen-cli/package.json",
+        "playground/package.json"
       ],
       "extends": [":pinAllExceptPeerDependencies"]
     },
@@ -37,8 +38,8 @@
     {
       "matchFiles": [
         "benchmark/package.json",
-        "playground/package.json",
-        "packages/website/package.json"
+        "packages/website/package.json",
+        "playground/package.json"
       ],
       "semanticCommitType": "chore"
     },

@@ -1,18 +1,18 @@
 import fs from 'fs';
-import path, { dirname, join } from 'path';
+import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import Table from 'cli-table';
 import glob from 'fast-glob';
 import Benchmark from 'benchmark';
 import { parse } from '../packages/react-docgen/dist/main.js';
 import { parse as parse5 } from 'react-docgen5';
-import { parse as parse6old } from 'react-docgen6pre';
+import { parse as parse6 } from 'react-docgen6latest';
 
 console.log(`Node: ${process.version}`);
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const head = ['fixture', 'v5.4.3', 'v6.0.0-alpha.3', 'current'];
+const head = ['fixture', 'v5.4.3', 'v6.0.0-alpha.4', 'current'];
 
 process.stdout.write(`Preparing suites ... `);
 
@@ -42,10 +42,10 @@ if (!global.gc) {
 }
 
 const preparedSuites = [];
-const suite = new Benchmark.Suite('bootstrap');
 
 suites.forEach(({ name, files }) => {
   const suite = new Benchmark.Suite(name);
+
   files.forEach(file => {
     const code = fs.readFileSync(path.join(__dirname, file), 'utf-8');
     const options = { filename: file, babelrc: false, configFile: false };
@@ -54,7 +54,7 @@ suites.forEach(({ name, files }) => {
     try {
       // warmup
       parse(code, newOptions);
-      parse6old(code, undefined, undefined, options);
+      parse6(code, newOptions);
       parse5(code, undefined, undefined, options);
       global.gc();
 
@@ -63,7 +63,9 @@ suites.forEach(({ name, files }) => {
         options,
         newOptions,
       });
-    } catch {}
+    } catch {
+      // ignore errors
+    }
   });
 
   suite.add('v5.4.3', () => {
@@ -71,9 +73,9 @@ suites.forEach(({ name, files }) => {
       parse5(code, undefined, undefined, options);
     }
   });
-  suite.add('v6.0.0-alpha.3', () => {
-    for (const { code, options } of preparedSuites) {
-      parse6old(code, undefined, undefined, options);
+  suite.add('v6.0.0-alpha.4', () => {
+    for (const { code, newOptions } of preparedSuites) {
+      parse6(code, newOptions);
     }
   });
   suite.add('current', () => {

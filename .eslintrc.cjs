@@ -4,7 +4,7 @@ module.exports = {
   root: true,
   extends: ['eslint:recommended', 'plugin:prettier/recommended'],
   parserOptions: {
-    ecmaVersion: 2020,
+    ecmaVersion: 2022,
     sourceType: 'module',
   },
   rules: {
@@ -35,7 +35,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['*.cjs'],
+      files: ['**/*.cjs'],
       parserOptions: {
         ecmaVersion: 2020,
         sourceType: 'script',
@@ -45,7 +45,7 @@ module.exports = {
       },
     },
     {
-      files: '**/*.ts',
+      files: ['**/*.ts', '**/*.tsx'],
       parser: '@typescript-eslint/parser',
       plugins: ['@typescript-eslint'],
       extends: ['plugin:@typescript-eslint/recommended'],
