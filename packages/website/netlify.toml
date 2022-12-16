@@ -1,7 +1,5 @@
 [build]
 command = "pnpm build"
-#ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- . ../react-docgen/"
-ignore = "if [ \"$CACHED_COMMIT_REF\" ]; then git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- . ../../pnpm-lock.yaml; else exit 1; fi"
 publish = ".next"
 
 [environment]
