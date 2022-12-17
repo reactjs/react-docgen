@@ -1,10 +1,11 @@
 import { Tab, Tabs } from 'nextra-theme-docs';
 
-# CLI
+# Getting started with the Command Line Interface (CLI)
 
 ## Setup
 
-The CLI can be used directly or be installed in any project as a dependency.
+The CLI can be used directly, installed globally, or installed in any project as
+a dependency.
 
 ### No installation
 
@@ -36,7 +37,7 @@ yarn dlx @react-docgen/cli --help
 
 ### Install
 
-Installing the CLI can be done with any of your favorite package manager:
+Installing the CLI can be done with any available package manager:
 
 <Tabs items={["npm", "pnpm", "yarn"]}>
   <Tab>
@@ -63,3 +64,37 @@ yarn add @react-docgen/cli
 </Tabs>
 
 ## Usage
+
+For basic usage, you need to provide a glob or path to a file that includes a
+react component. The result will be printed to the `stdout` and in case there
+are errors or warnings while analyzing the file, these will be printed to
+`stderr`.
+
+The result will be an array of [Documentation](../reference/documentation)
+objects, stringified to JSON.
+
+```shell filename="Terminal" copy
+react-docgen ./src/components/Button.tsx
+```
+
+Multiple files can be analyzed at once
+
+```shell filename="Terminal" copy
+react-docgen ./src/components/Button.tsx ./src/components/Label.tsx
+```
+
+Or a glob can be used to include multiple files
+
+```shell filename="Terminal" copy
+react-docgen ./src/components/**/*.tsx
+```
+
+The output can be written into a file instead of directly outputting it.
+Warnings and errors will still be written to `stderr`.
+
+```shell filename="Terminal" copy
+react-docgen -o output.json ./src/components/Button.tsx
+```
+
+The CLI supports a lot more advanced options and for a full reference about all
+options checkout the [reference page](../reference/cli)

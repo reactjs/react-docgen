@@ -1,19 +1,89 @@
-# CLI
+import Image from 'next/image';
+
+export const whoa = (
+  <Image
+    src="/mind-blown-shocked.gif"
+    alt="whoa"
+    width={30}
+    height={50}
+    style={{ display: 'inline-block' }}
+  />
+);
+
+# Command Line Interface (CLI) Reference
+
+This is the complete reference of all available options for the CLI. A basic
+getting started guide can be found on [this page](../getting-started/cli).
 
 ## Arguments
 
 ### globs
 
+**TODO**
+
 ## Options
 
-### Output
+### `--failOnWarning`
 
-`-o, --out <file>`
+**Default**: `false`
 
-### Ignore
+Normally the CLI will not fail the process when warnings occur in _react-docgen_
+and instead, print them to `stderr`. When this option is specified the CLI will
+exit with status code `2` on _react-docgen_ warnings. This currently includes
+the following warnings:
 
-`-i, --ignore <globs>`
+- `ERR_REACTDOCGEN_MISSING_DEFINITION`: No suitable component definition found.
+- `ERR_REACTDOCGEN_MULTIPLE_DEFINITIONS`: Multiple exported component
+  definitions found. (This can only happen when using the
+  `findExportedComponentDefinition` resolver)
 
-### No default ignore
+Any other errors will always make the process exit with status code `1`,
+independent of this option.
 
-`--no-default-ignore`
+### `--handlers <handlers>`
+
+**Default**: find the current default handlers
+[on GitHub ↗](https://github.com/reactjs/react-docgen/blob/main/packages/react-docgen/src/config.ts#L38-L50)
+
+**TODO**
+
+### `--help`
+
+Displays the help for the command with the current default values. <>{whoa}</>
+
+### `-i, --ignore <globs>`
+
+**Default**: `["**/node_modules/**", "**/__tests__/**", "**/__mocks__/**"]`
+
+**TODO**
+
+### `--importer <importer>`
+
+**TODO**
+
+### `--no-default-ignore`
+
+**Default**: `false`
+
+Enabling this option will disable any of the default ignores specified in the
+[`ignore` option](#-i---ignore-globs).
+
+### `-o, --out <file>`
+
+Store extracted information in the specified file instead of printing to
+`stdout`. If the file exists it will be overwritten.
+
+**Examples**
+
+**TODO**
+
+### `--pretty`
+
+**Default**: `false`
+
+This option will make the CLI print the output JSON with proper spacing and
+newlines.
+
+### `--resolver <resolver>`
+
+**TODO**
