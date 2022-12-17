@@ -2,8 +2,5 @@
 command = "pnpm build"
 publish = ".next"
 
-[environment]
-AWS_LAMBDA_JS_RUNTIME = "nodejs18.x"
-
 [[plugins]]
 package = "@netlify/plugin-nextjs"
