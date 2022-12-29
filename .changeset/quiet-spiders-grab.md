@@ -5,7 +5,7 @@
 Allow resolvers to be classes in addition to functions.
 
 ```ts
-import type { ResolverClass, ResolverFunction } from 'react-dcogen';
+import type { ResolverClass, ResolverFunction } from 'react-docgen';
 
 // This was the only option until now
 const functionResolver: ResolverFunction = (file: FileState) => {

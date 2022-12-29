@@ -2,7 +2,7 @@
 'react-docgen': minor
 ---
 
-Add new ChainResolver to allow multiple resolvers to be chained.
+Add the new ChainResolver which allows multiple resolvers to be chained.
 
 ```ts
 import { builtinResolvers } from 'react-docgen';

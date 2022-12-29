@@ -20,8 +20,8 @@ Renamed and migrated built-in resolvers to classes.
   +const resolver = new builtinResolvers.FindExportedDefinitionsResolver()
   ```
 
-- `findExportedComponentDefinition` was removed.
-  Use`FindExportedDefinitionsResolver` with the `limit` option instead.
+- `findExportedComponentDefinition` was removed. Use
+  `FindExportedDefinitionsResolver` with the `limit` option instead.
 
   > This is still the default resolver.
 
