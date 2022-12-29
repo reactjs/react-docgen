@@ -8,6 +8,7 @@ import type { ComponentNode } from './resolver/index.js';
 import FileState from './FileState.js';
 import type { InternalConfig } from './config.js';
 import { ERROR_CODES, ReactDocgenError } from './error.js';
+import runResolver from './resolver/utils/runResolver.js';
 
 function executeHandlers(
   handlers: Handler[],
@@ -54,7 +55,7 @@ export default function parse(
     importer,
   });
 
-  const componentDefinitions = resolver(fileState);
+  const componentDefinitions = runResolver(resolver, fileState);
 
   if (componentDefinitions.length === 0) {
     throw new ReactDocgenError(ERROR_CODES.MISSING_DEFINITION);

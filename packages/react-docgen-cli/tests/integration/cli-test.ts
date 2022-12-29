@@ -1,54 +1,11 @@
-// NOTE: This test spawns a subprocesses that load the files from dist/, not
-// src/. Before running this test run `build`.
-
-import { readFile, rm, stat } from 'fs/promises';
-import { dirname, join } from 'path';
-import type { ExecaError } from 'execa';
-import { execaNode } from 'execa';
-import copy from 'cpy';
-import { temporaryDirectory, temporaryFile } from 'tempy';
+import { readFile } from 'fs/promises';
+import { join } from 'path';
+import { temporaryFile } from 'tempy';
 import { describe, expect, test } from 'vitest';
-import { fileURLToPath } from 'url';
-import {
-  builtinHandlers,
-  builtinImporters,
-  builtinResolvers,
-} from 'react-docgen';
-
-const __dir = dirname(fileURLToPath(import.meta.url));
-
-const fixtureDir = join(__dir, '__fixtures__');
-const cliBinary = join(__dir, '../../dist/cli.js');
+import { builtinHandlers, builtinImporters } from 'react-docgen';
+import withFixture from './utils/withFixture';
 
 describe('cli', () => {
-  async function withFixture(
-    fixture: string,
-    callback: (api: {
-      dir: string;
-      run: (
-        args: readonly string[],
-      ) => Promise<{ stdout: string; stderr: string; exitCode: number }>;
-    }) => Promise<void>,
-  ): Promise<void> {
-    const tempDir = temporaryDirectory();
-
-    async function run(args: readonly string[]) {
-      try {
-        return await execaNode(cliBinary, args, {
-          cwd: tempDir,
-        });
-      } catch (error) {
-        return error as ExecaError;
-      }
-    }
-
-    await stat(join(fixtureDir, fixture));
-
-    await copy(join(fixtureDir, fixture, '**/*'), tempDir, {});
-    await callback({ dir: tempDir, run });
-    await rm(tempDir, { force: true, recursive: true });
-  }
-
   describe('glob', () => {
     test('reads files provided as command line arguments', async () => {
       await withFixture('basic', async ({ dir, run }) => {
@@ -215,104 +172,6 @@ describe('cli', () => {
     });
   });
 
-  describe('resolver', () => {
-    describe('accepts the names of builtin resolvers', () => {
-      test.each(Object.keys(builtinResolvers))('%s', async importer => {
-        await withFixture('basic', async ({ dir, run }) => {
-          const { stdout, stderr } = await run([
-            `--resolver=${importer}`,
-            `${dir}/Component.js`,
-          ]);
-
-          expect(stderr).toBe('');
-          expect(stdout).toContain('Component');
-          expect(() => JSON.parse(stdout)).not.toThrowError();
-        });
-      });
-    });
-
-    describe('custom resolver', () => {
-      test('accepts an absolute local CommonJS path', async () => {
-        await withFixture('custom-resolver-cjs', async ({ dir, run }) => {
-          const { stdout, stderr } = await run([
-            `--resolver=${join(dir, 'resolver.cjs')}`,
-            `${dir}/Component.js`,
-          ]);
-
-          expect(stderr).toBe('');
-          expect(stdout).toContain('Custom');
-          expect(() => JSON.parse(stdout)).not.toThrowError();
-        });
-      });
-
-      test('accepts a relative local CommonJS path', async () => {
-        await withFixture('custom-resolver-cjs', async ({ dir, run }) => {
-          const { stdout, stderr } = await run([
-            '--resolver',
-            './resolver.cjs',
-            `${dir}/Component.js`,
-          ]);
-
-          expect(stderr).toBe('');
-          expect(stdout).toContain('Custom');
-          expect(() => JSON.parse(stdout)).not.toThrowError();
-        });
-      });
-
-      test('accepts an absolute local ESM path', async () => {
-        await withFixture('custom-resolver-esm', async ({ dir, run }) => {
-          const { stdout, stderr } = await run([
-            `--resolver=${join(dir, 'resolver.mjs')}`,
-            `${dir}/Component.js`,
-          ]);
-
-          expect(stderr).toBe('');
-          expect(stdout).toContain('Custom');
-          expect(() => JSON.parse(stdout)).not.toThrowError();
-        });
-      });
-
-      test('accepts a relative local ESM path', async () => {
-        await withFixture('custom-resolver-esm', async ({ dir, run }) => {
-          const { stdout, stderr } = await run([
-            '--resolver',
-            './resolver.mjs',
-            `${dir}/Component.js`,
-          ]);
-
-          expect(stderr).toBe('');
-          expect(stdout).toContain('Custom');
-          expect(() => JSON.parse(stdout)).not.toThrowError();
-        });
-      });
-
-      test('accepts a npm package', async () => {
-        await withFixture('custom-resolver-npm', async ({ dir, run }) => {
-          const { stdout, stderr } = await run([
-            '--resolver=test-react-docgen-resolver',
-            `${dir}/Component.js`,
-          ]);
-
-          expect(stderr).toBe('');
-          expect(stdout).toContain('Custom');
-          expect(() => JSON.parse(stdout)).not.toThrowError();
-        });
-      });
-
-      test('throws error when not found', async () => {
-        await withFixture('basic', async ({ dir, run }) => {
-          const { stdout, stderr } = await run([
-            '--resolver=does-not-exist',
-            `${dir}/Component.js`,
-          ]);
-
-          expect(stderr).toContain('Unknown resolver: "does-not-exist"');
-          expect(stdout).toBe('');
-        });
-      });
-    });
-  });
-
   describe('importer', () => {
     describe('accepts the names of builtin importers', () => {
       test.each(Object.keys(builtinImporters))('%s', async importer => {
@@ -416,7 +275,7 @@ describe('cli', () => {
       test.each(Object.keys(builtinHandlers))('%s', async importer => {
         await withFixture('basic', async ({ dir, run }) => {
           const { stdout, stderr } = await run([
-            `--handlers=${importer}`,
+            `--handler=${importer}`,
             `${dir}/Component.js`,
           ]);
 
@@ -431,9 +290,9 @@ describe('cli', () => {
       test('multiple handlers arguments', async () => {
         await withFixture('basic', async ({ dir, run }) => {
           const { stdout, stderr } = await run([
-            `--handlers=displayNameHandler`,
-            `--handlers=componentDocblockHandler`,
-            `--handlers=componentMethodsHandler`,
+            `--handler=displayNameHandler`,
+            `--handler=componentDocblockHandler`,
+            `--handler=componentMethodsHandler`,
             `${dir}/Component.js`,
           ]);
 
@@ -448,7 +307,7 @@ describe('cli', () => {
       test('multiple handlers comma separated', async () => {
         await withFixture('basic', async ({ dir, run }) => {
           const { stdout, stderr } = await run([
-            `--handlers=displayNameHandler,componentDocblockHandler,componentMethodsHandler`,
+            `--handler=displayNameHandler,componentDocblockHandler,componentMethodsHandler`,
             `${dir}/Component.js`,
           ]);
 
@@ -465,7 +324,7 @@ describe('cli', () => {
       test('accepts an absolute local CommonJS path', async () => {
         await withFixture('custom-handler-cjs', async ({ dir, run }) => {
           const { stdout, stderr } = await run([
-            `--handlers=${join(dir, 'handler.cjs')}`,
+            `--handler=${join(dir, 'handler.cjs')}`,
             `${dir}/Component.js`,
           ]);
 
@@ -478,7 +337,7 @@ describe('cli', () => {
       test('accepts a relative local CommonJS path', async () => {
         await withFixture('custom-handler-cjs', async ({ dir, run }) => {
           const { stdout, stderr } = await run([
-            '--handlers',
+            '--handler',
             './handler.cjs',
             `${dir}/Component.js`,
           ]);
@@ -492,7 +351,7 @@ describe('cli', () => {
       test('accepts an absolute local ESM path', async () => {
         await withFixture('custom-handler-esm', async ({ dir, run }) => {
           const { stdout, stderr } = await run([
-            `--handlers=${join(dir, 'handler.mjs')}`,
+            `--handler=${join(dir, 'handler.mjs')}`,
             `${dir}/Component.js`,
           ]);
 
@@ -505,7 +364,7 @@ describe('cli', () => {
       test('accepts a relative local ESM path', async () => {
         await withFixture('custom-handler-esm', async ({ dir, run }) => {
           const { stdout, stderr } = await run([
-            '--handlers',
+            '--handler',
             './handler.mjs',
             `${dir}/Component.js`,
           ]);
@@ -519,7 +378,7 @@ describe('cli', () => {
       test('accepts a npm package', async () => {
         await withFixture('custom-handler-npm', async ({ dir, run }) => {
           const { stdout, stderr } = await run([
-            '--handlers=test-react-docgen-handler',
+            '--handler=test-react-docgen-handler',
             `${dir}/Component.js`,
           ]);
 
@@ -532,7 +391,7 @@ describe('cli', () => {
       test('throws error when not found', async () => {
         await withFixture('basic', async ({ dir, run }) => {
           const { stdout, stderr } = await run([
-            '--handlers=does-not-exist',
+            '--handler=does-not-exist',
             `${dir}/Component.js`,
           ]);
 

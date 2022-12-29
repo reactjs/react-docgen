@@ -15,6 +15,7 @@
   },
   "scripts": {
     "build": "rimraf dist/ && tsc",
+    "test": "vitest run",
     "watch": "rimraf dist/ && tsc --watch"
   },
   "keywords": [

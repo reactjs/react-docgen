@@ -40,7 +40,7 @@ the following warnings:
 Any other errors will always make the process exit with status code `1`,
 independent of this option.
 
-### `--handlers <handlers>`
+### `--handler <handlers>`
 
 **Default**: find the current default handlers
 [on GitHub ↗](https://github.com/reactjs/react-docgen/blob/main/packages/react-docgen/src/config.ts#L38-L50)
@@ -84,6 +84,8 @@ Store extracted information in the specified file instead of printing to
 This option will make the CLI print the output JSON with proper spacing and
 newlines.
 
-### `--resolver <resolver>`
+### `--resolver <resolvers>`
+
+**Default**: `["find-exported-component"]`
 
 **TODO**

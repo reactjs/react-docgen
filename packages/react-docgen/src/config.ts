@@ -16,7 +16,7 @@ import {
 import type { Importer } from './importer/index.js';
 import { fsImporter } from './importer/index.js';
 import type { Resolver } from './resolver/index.js';
-import { findExportedComponentDefinition } from './resolver/index.js';
+import { FindExportedDefinitionsResolver } from './resolver/index.js';
 
 export interface Config {
   handlers?: Handler[];
@@ -32,7 +32,9 @@ export interface Config {
 }
 export type InternalConfig = Omit<Required<Config>, 'filename'>;
 
-const defaultResolver: Resolver = findExportedComponentDefinition;
+const defaultResolver: Resolver = new FindExportedDefinitionsResolver({
+  limit: 1,
+});
 const defaultImporter: Importer = fsImporter;
 
 export const defaultHandlers: Handler[] = [
