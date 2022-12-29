@@ -10,6 +10,7 @@ import outputError from './output/outputError.js';
 import { resolve } from 'path';
 import slash from 'slash';
 import type { Documentation } from 'react-docgen';
+import { ResolverConfigs } from './options/loadResolvers.js';
 
 const debug = debugFactory('react-docgen:cli');
 
@@ -20,12 +21,14 @@ const defaultIgnoreGlobs = [
 ];
 
 const defaultHandlers = Object.keys(builtinHandlers);
+const defaultResolvers = ['find-exported-component'];
 
 function collect(value: string, previous: string[]) {
   if (
     !previous ||
     previous === defaultIgnoreGlobs ||
-    previous === defaultHandlers
+    previous === defaultHandlers ||
+    previous === defaultResolvers
   ) {
     previous = [];
   }
@@ -38,12 +41,12 @@ function collect(value: string, previous: string[]) {
 interface CLIOptions {
   defaultIgnores: boolean;
   failOnWarning: boolean;
-  handlers?: string[];
+  handler?: string[];
   ignore: string[];
   importer?: string;
   out?: string;
   pretty: boolean;
-  resolver?: string;
+  resolver?: string[];
 }
 
 program
@@ -73,18 +76,21 @@ program
     false,
   )
   .option(
-    '--resolver <resolver>',
-    'Built-in resolver name (findAllComponentDefinitions, findAllExportedComponentDefinitions, findExportedComponentDefinition) or path to a module that exports a resolver.',
-    'findExportedComponentDefinition',
+    '--resolver <resolvers>',
+    `Built-in resolver config (${Object.values(ResolverConfigs).join(
+      ', ',
+    )}), package name or path to a module that exports a resolver. Can also be used multiple times. When used, no default handlers will be added.`,
+    collect,
+    defaultResolvers,
   )
   .option(
     '--importer <importer>',
-    'Built-in importer name (fsImport, ignoreImporter) or path to a module that exports an importer.',
+    'Built-in importer name (fsImport, ignoreImporter), package name or path to a module that exports an importer.',
     'fsImporter',
   )
   .option(
-    '--handlers <handlers>',
-    'Comma separated list of handlers to use. Can also be used multiple times. When used no default handlers will be added.',
+    '--handler <handlers>',
+    'Comma separated list of handlers to use. Can also be used multiple times. When used, no default handlers will be added.',
     collect,
     defaultHandlers,
   )
@@ -93,7 +99,7 @@ program
     const {
       defaultIgnores,
       failOnWarning,
-      handlers,
+      handler,
       ignore,
       importer,
       out: output,
@@ -111,7 +117,7 @@ program
     }
 
     const options = await loadOptions({
-      handlers,
+      handler,
       importer,
       resolver,
     });

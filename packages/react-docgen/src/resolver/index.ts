@@ -1,6 +1,6 @@
-import findAllComponentDefinitions from './findAllComponentDefinitions.js';
-import findAllExportedComponentDefinitions from './findAllExportedComponentDefinitions.js';
-import findExportedComponentDefinition from './findExportedComponentDefinition.js';
+import ChainResolver from './ChainResolver.js';
+import FindAllDefinitionsResolver from './FindAllDefinitionsResolver.js';
+import FindExportedDefinitionsResolver from './FindExportedDefinitionsResolver.js';
 import type { NodePath } from '@babel/traverse';
 import type FileState from '../FileState.js';
 import type {
@@ -27,10 +27,18 @@ export type ComponentNode =
   | ObjectExpression
   | StatelessComponentNode;
 
-export type Resolver = (file: FileState) => Array<NodePath<ComponentNode>>;
+export type ComponentNodePath = NodePath<ComponentNode>;
+
+export type ResolverFunction = (file: FileState) => ComponentNodePath[];
+
+export interface ResolverClass {
+  resolve: ResolverFunction;
+}
+
+export type Resolver = ResolverClass | ResolverFunction;
 
 export {
-  findAllComponentDefinitions,
-  findAllExportedComponentDefinitions,
-  findExportedComponentDefinition,
+  FindAllDefinitionsResolver,
+  FindExportedDefinitionsResolver,
+  ChainResolver,
 };

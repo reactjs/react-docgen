@@ -7,7 +7,7 @@ import resolveToValue from '../utils/resolveToValue.js';
 import type { NodePath } from '@babel/traverse';
 import { visitors } from '@babel/traverse';
 import type FileState from '../FileState.js';
-import type { ComponentNode, Resolver } from './index.js';
+import type { ComponentNodePath, ResolverClass } from './index.js';
 import type {
   ArrowFunctionExpression,
   FunctionDeclaration,
@@ -16,7 +16,7 @@ import type {
 } from '@babel/types';
 
 interface TraverseState {
-  foundDefinitions: Set<NodePath<ComponentNode>>;
+  foundDefinitions: Set<ComponentNodePath>;
 }
 
 function classVisitor(path: NodePath, state: TraverseState) {
@@ -58,7 +58,7 @@ const explodedVisitors = visitors.explode<TraverseState>({
         // replace it with the parent node
         const inner = resolveToValue(
           path.get('arguments')[0],
-        ) as NodePath<ComponentNode>;
+        ) as ComponentNodePath;
 
         state.foundDefinitions.delete(inner);
         state.foundDefinitions.add(path);
@@ -83,16 +83,14 @@ const explodedVisitors = visitors.explode<TraverseState>({
  * Given an AST, this function tries to find all object expressions that are
  * passed to `React.createClass` calls, by resolving all references properly.
  */
-const findAllComponentDefinitions: Resolver = function (
-  file: FileState,
-): Array<NodePath<ComponentNode>> {
-  const state: TraverseState = {
-    foundDefinitions: new Set<NodePath<ComponentNode>>(),
-  };
+export default class FindAllDefinitionsResolver implements ResolverClass {
+  resolve(file: FileState): ComponentNodePath[] {
+    const state: TraverseState = {
+      foundDefinitions: new Set<ComponentNodePath>(),
+    };
 
-  file.traverse(explodedVisitors, state);
+    file.traverse(explodedVisitors, state);
 
-  return Array.from(state.foundDefinitions);
-};
-
-export default findAllComponentDefinitions;
+    return Array.from(state.foundDefinitions);
+  }
+}

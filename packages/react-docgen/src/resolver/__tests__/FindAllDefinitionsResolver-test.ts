@@ -1,14 +1,16 @@
 import { NodePath } from '@babel/traverse';
 import { parse, makeMockImporter, noopImporter } from '../../../tests/utils';
-import findAllComponentDefinitions from '../findAllComponentDefinitions.js';
+import FindAllDefinitionsResolver from '../FindAllDefinitionsResolver.js';
 import { describe, expect, test } from 'vitest';
 
-describe('findAllComponentDefinitions', () => {
+describe('FindAllDefinitionsResolver', () => {
+  const resolver = new FindAllDefinitionsResolver();
+
   function findComponentsInSource(
     source: string,
     importer = noopImporter,
   ): NodePath[] {
-    return findAllComponentDefinitions(parse(source, {}, importer, true));
+    return resolver.resolve(parse(source, {}, importer, true));
   }
 
   const mockImporter = makeMockImporter({

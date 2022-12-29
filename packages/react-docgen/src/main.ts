@@ -8,7 +8,11 @@ import {
 } from './importer/index.js';
 import * as utils from './utils/index.js';
 import type { DocumentationObject as Documentation } from './Documentation.js';
-import type { Resolver } from './resolver/index.js';
+import type {
+  Resolver,
+  ResolverClass,
+  ResolverFunction,
+} from './resolver/index.js';
 import type { Importer } from './importer/index.js';
 import type { Handler } from './handlers/index.js';
 import type FileState from './FileState.js';
@@ -67,4 +71,13 @@ export {
   ERROR_CODES,
 };
 
-export type { Importer, Handler, Resolver, FileState, Config, Documentation };
+export type {
+  Importer,
+  Handler,
+  Resolver,
+  ResolverClass,
+  ResolverFunction,
+  FileState,
+  Config,
+  Documentation,
+};

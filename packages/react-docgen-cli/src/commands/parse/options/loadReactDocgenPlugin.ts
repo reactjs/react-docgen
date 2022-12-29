@@ -4,19 +4,19 @@ import importFile from '../../../utils/importFile.js';
 export default async function loadReactDocgenPlugin<T>(
   input: string,
   name: string,
-  builtins: Record<string, T>,
+  builtins?: Record<string, T>,
 ): Promise<T> {
-  if (builtins[input]) {
+  if (builtins?.[input]) {
     return builtins[input];
   }
 
   const path = resolve(process.cwd(), input);
   // Maybe it is local path or a package
-  const importer: T | undefined =
+  const plugin: T | undefined =
     (await importFile(path)) ?? (await importFile(input));
 
-  if (importer) {
-    return importer;
+  if (plugin) {
+    return plugin;
   }
 
   throw new Error(
