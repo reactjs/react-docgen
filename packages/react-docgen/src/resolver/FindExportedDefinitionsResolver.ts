@@ -1,7 +1,6 @@
 import isExportsOrModuleAssignment from '../utils/isExportsOrModuleAssignment.js';
 import resolveExportDeclaration from '../utils/resolveExportDeclaration.js';
 import resolveToValue from '../utils/resolveToValue.js';
-import resolveHOC from '../utils/resolveHOC.js';
 import type { NodePath } from '@babel/traverse';
 import { visitors } from '@babel/traverse';
 import { shallowIgnoreVisitors } from '../utils/traverse.js';
@@ -12,9 +11,7 @@ import type {
 } from '@babel/types';
 import type FileState from '../FileState.js';
 import type { ComponentNodePath, ResolverClass } from './index.js';
-import resolveComponentDefinition, {
-  isComponentDefinition,
-} from '../utils/resolveComponentDefinition.js';
+import findComponentDefinition from '../utils/findComponentDefinition.js';
 import { ERROR_CODES, ReactDocgenError } from '../error.js';
 
 interface TraverseState {
@@ -26,24 +23,16 @@ function exportDeclaration(
   path: NodePath<ExportDefaultDeclaration | ExportNamedDeclaration>,
   state: TraverseState,
 ): void {
-  resolveExportDeclaration(path).forEach(definition => {
-    if (!isComponentDefinition(definition)) {
-      definition = resolveToValue(resolveHOC(definition));
+  resolveExportDeclaration(path).forEach(exportedPath => {
+    const definition = findComponentDefinition(exportedPath);
 
-      if (!isComponentDefinition(definition)) {
-        return;
+    if (definition) {
+      if (state.limit > 0 && state.foundDefinitions.size > 0) {
+        // If a file exports multiple components, ... complain!
+        throw new ReactDocgenError(ERROR_CODES.MULTIPLE_DEFINITIONS);
       }
-    }
 
-    if (state.limit > 0 && state.foundDefinitions.size > 0) {
-      // If a file exports multiple components, ... complain!
-      throw new ReactDocgenError(ERROR_CODES.MULTIPLE_DEFINITIONS);
-    }
-
-    const resolved = resolveComponentDefinition(definition);
-
-    if (resolved) {
-      state.foundDefinitions.add(resolved);
+      state.foundDefinitions.add(definition);
     }
   });
 
@@ -61,22 +50,15 @@ function assignmentExpressionVisitor(
   }
   // Resolve the value of the right hand side. It should resolve to a call
   // expression, something like React.createClass
-  let resolvedPath = resolveToValue(path.get('right'));
-
-  if (!isComponentDefinition(resolvedPath)) {
-    resolvedPath = resolveToValue(resolveHOC(resolvedPath));
-    if (!isComponentDefinition(resolvedPath)) {
-      return path.skip();
-    }
-  }
-  if (state.limit > 0 && state.foundDefinitions.size > 0) {
-    // If a file exports multiple components, ... complain!
-    throw new ReactDocgenError(ERROR_CODES.MULTIPLE_DEFINITIONS);
-  }
-
-  const definition = resolveComponentDefinition(resolvedPath);
+  const resolvedPath = resolveToValue(path.get('right'));
+  const definition = findComponentDefinition(resolvedPath);
 
   if (definition) {
+    if (state.limit > 0 && state.foundDefinitions.size > 0) {
+      // If a file exports multiple components, ... complain!
+      throw new ReactDocgenError(ERROR_CODES.MULTIPLE_DEFINITIONS);
+    }
+
     state.foundDefinitions.add(definition);
   }
 
