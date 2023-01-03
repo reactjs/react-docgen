@@ -5,9 +5,10 @@ import isReactCreateClassCall from './isReactCreateClassCall.js';
 import isReactForwardRefCall from './isReactForwardRefCall.js';
 import isStatelessComponent from './isStatelessComponent.js';
 import normalizeClassDefinition from './normalizeClassDefinition.js';
+import resolveHOC from './resolveHOC.js';
 import resolveToValue from './resolveToValue.js';
 
-export function isComponentDefinition(
+function isComponentDefinition(
   path: NodePath,
 ): path is NodePath<ComponentNode> {
   return (
@@ -18,7 +19,7 @@ export function isComponentDefinition(
   );
 }
 
-export default function resolveComponentDefinition(
+function resolveComponentDefinition(
   definition: NodePath<ComponentNode>,
 ): NodePath<ComponentNode> | null {
   if (isReactCreateClassCall(definition)) {
@@ -40,4 +41,19 @@ export default function resolveComponentDefinition(
   }
 
   return null;
+}
+
+export default function findComponentDefinition(
+  path: NodePath,
+): NodePath<ComponentNode> | null {
+  let resolvedPath = path;
+
+  if (!isComponentDefinition(resolvedPath)) {
+    resolvedPath = resolveToValue(resolveHOC(resolvedPath));
+    if (!isComponentDefinition(resolvedPath)) {
+      return null;
+    }
+  }
+
+  return resolveComponentDefinition(resolvedPath);
 }
