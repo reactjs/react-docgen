@@ -105,13 +105,13 @@ importers:
     specifiers:
       '@types/react': 18.0.26
       next: 13.1.1
-      nextra: 2.0.2
+      nextra: 2.0.3
       nextra-theme-docs: 2.0.2
       react: 18.2.0
       react-dom: 18.2.0
     dependencies:
       next: 13.1.1_biqbaboplfbrettd7655fr4n2y
-      nextra: 2.0.2_q76c2b4vyoegvsbrcwkfvimnai
+      nextra: 2.0.3_q76c2b4vyoegvsbrcwkfvimnai
       nextra-theme-docs: 2.0.2_q76c2b4vyoegvsbrcwkfvimnai
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
@@ -213,7 +213,6 @@ packages:
       semver: 6.3.0
     transitivePeerDependencies:
       - supports-color
-    dev: true
 
   /@babel/core/7.20.5:
     resolution: {integrity: sha512-UdOWmk4pNWTm/4DlPUl/Pt4Gz4rcEMb7CY0Y3eJl5Yz1vI8ZJGmHWaVE55LoxRjdpx0z259GE9U5STA9atUinQ==}
@@ -229,29 +228,6 @@ packages:
       '@babel/template': 7.18.10
       '@babel/traverse': 7.20.5
       '@babel/types': 7.20.5
-      convert-source-map: 1.9.0
-      debug: 4.3.4
-      gensync: 1.0.0-beta.2
-      json5: 2.2.2
-      semver: 6.3.0
-    transitivePeerDependencies:
-      - supports-color
-    dev: false
-
-  /@babel/core/7.20.7:
-    resolution: {integrity: sha512-t1ZjCluspe5DW24bn2Rr1CDb2v9rn/hROtg9a2tmd0+QYf4bsloYfLQzjG4qHPNMhWtKdGC33R5AxGR2Af2cBw==}
-    engines: {node: '>=6.9.0'}
-    dependencies:
-      '@ampproject/remapping': 2.2.0
-      '@babel/code-frame': 7.18.6
-      '@babel/generator': 7.20.7
-      '@babel/helper-compilation-targets': 7.20.7_@babel+core@7.20.7
-      '@babel/helper-module-transforms': 7.20.11
-      '@babel/helpers': 7.20.7
-      '@babel/parser': 7.20.7
-      '@babel/template': 7.20.7
-      '@babel/traverse': 7.20.12
-      '@babel/types': 7.20.7
       convert-source-map: 1.9.0
       debug: 4.3.4
       gensync: 1.0.0-beta.2
@@ -344,21 +320,6 @@ packages:
       browserslist: 4.21.4
       lru-cache: 5.1.1
       semver: 6.3.0
-    dev: true
-
-  /@babel/helper-compilation-targets/7.20.7_@babel+core@7.20.7:
-    resolution: {integrity: sha512-4tGORmfQcrc+bvrjb5y3dG9Mx1IOZjsHqQVUz7XCNHO+iTmqxWnVg3KRygjGmpRLJGdQSKuvFinbIb0CnZwHAQ==}
-    engines: {node: '>=6.9.0'}
-    peerDependencies:
-      '@babel/core': ^7.0.0
-    dependencies:
-      '@babel/compat-data': 7.20.5
-      '@babel/core': 7.20.7
-      '@babel/helper-validator-option': 7.18.6
-      browserslist: 4.21.4
-      lru-cache: 5.1.1
-      semver: 6.3.0
-    dev: false
 
   /@babel/helper-create-class-features-plugin/7.20.5_@babel+core@7.20.12:
     resolution: {integrity: sha512-3RCdA/EmEaikrhayahwToF0fpweU/8o2p8vhc1c/1kftHOdTKuC65kik/TLc+qfbS8JKw4qqJbne4ovICDhmww==}
@@ -1593,6 +1554,7 @@ packages:
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
+    dev: true
 
   /@babel/types/7.20.5:
     resolution: {integrity: sha512-c9fst/h2/dcF7H+MJKZ2T0KjEQ8hY/BNnDk/H3XY8C4Aw/eWQXWn/lWntHF9ooUBnGmEvbfGrTgLWc+um0YDUg==}
@@ -7179,8 +7141,8 @@ packages:
       scroll-into-view-if-needed: 3.0.3
     dev: false
 
-  /nextra/2.0.2_q76c2b4vyoegvsbrcwkfvimnai:
-    resolution: {integrity: sha512-SryuJVTw/FDMIZBEbXJm9Jo5OX+/HajjccHj8QVcGCEtmWFqbEJklGHHMDKOhC9pBr6sxRhtFFzOGu//F9J1Hw==}
+  /nextra/2.0.3_q76c2b4vyoegvsbrcwkfvimnai:
+    resolution: {integrity: sha512-GttZMwfHiVcrnVMnN2PKq2mS6YoQ0zrbzRYS838WYfzUpjIPCR6L8rJbAEd00kcrJNM1MvSCxONOTqGDDjW7YA==}
     peerDependencies:
       next: '>=9.5.3'
       react: '>=16.13.1'
@@ -8147,7 +8109,7 @@ packages:
     engines: {node: '>=8.10.0'}
     hasBin: true
     dependencies:
-      '@babel/core': 7.20.7
+      '@babel/core': 7.20.12
       '@babel/generator': 7.20.7
       '@babel/runtime': 7.20.6
       ast-types: 0.14.2
@@ -8165,8 +8127,8 @@ packages:
     resolution: {integrity: sha512-g8yrAq64R9zAwRmn2jqGOkBAUcZifCIGgrVaicpDieVAOz2Z/Nj2dbgv71FOBr4DsucrSlWes7/lBAXJeQUn5Q==}
     engines: {node: '>=14.17.0'}
     dependencies:
-      '@babel/core': 7.20.7
-      '@babel/traverse': 7.20.7
+      '@babel/core': 7.20.12
+      '@babel/traverse': 7.20.12
       '@babel/types': 7.20.7
       '@types/babel__traverse': 7.18.3
       '@types/doctrine': 0.0.5
