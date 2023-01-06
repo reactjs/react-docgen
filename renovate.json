@@ -36,6 +36,11 @@
       "automerge": true
     },
     {
+      "matchPackageNames": ["@types/node"],
+      "updateTypes": ["major"],
+      "enabled": false
+    },
+    {
       "matchFiles": ["benchmark/package.json"],
       "updateTypes": ["minor", "patch"],
       "automerge": true
