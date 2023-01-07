@@ -86,14 +86,14 @@ importers:
     specifiers:
       '@types/debug': 4.1.7
       chalk: 5.2.0
-      commander: 9.4.1
+      commander: 9.5.0
       debug: 4.3.4
       fast-glob: 3.2.12
       react-docgen: workspace:6.0.0-alpha.4
       slash: 5.0.0
     dependencies:
       chalk: 5.2.0
-      commander: 9.4.1
+      commander: 9.5.0
       debug: 4.3.4
       fast-glob: 3.2.12
       react-docgen: link:../react-docgen
@@ -3584,8 +3584,8 @@ packages:
     resolution: {integrity: sha512-OkTL9umf+He2DZkUq8f8J9of7yL6RJKI24dVITBmNfZBmri9zYZQrKkuXiKhyfPSu8tUhnVBB1iKXevvnlR4Ww==}
     engines: {node: '>= 12'}
 
-  /commander/9.4.1:
-    resolution: {integrity: sha512-5EEkTNyHNGFPD2H+c/dXXfQZYa/scCKasxWcXJaWnNJ99pnQN9Vnmqow+p+PlFPE63Q6mThaZws1T+HxfpgtPw==}
+  /commander/9.5.0:
+    resolution: {integrity: sha512-KRs7WVDKg86PWiuAqhDrAQnTXZKraVcCc6vFdL14qrZ/DcWwuRo7VoiYXalXO7S5GKpqYiVEwCbgFDfxNHKJBQ==}
     engines: {node: ^12.20.0 || >=14}
 
   /commondir/1.0.1:
@@ -5342,7 +5342,7 @@ packages:
     dependencies:
       camel-case: 4.1.2
       clean-css: 5.2.0
-      commander: 9.4.1
+      commander: 9.5.0
       entities: 4.4.0
       param-case: 3.0.4
       relateurl: 0.2.7
@@ -9590,7 +9590,7 @@ packages:
       '@webpack-cli/info': 2.0.1_rjsyjcrmk25kqsjzwkvj3a2evq
       '@webpack-cli/serve': 2.0.1_ewykyfxtgmraekx43xa23ld4wa
       colorette: 2.0.19
-      commander: 9.4.1
+      commander: 9.5.0
       cross-spawn: 7.0.3
       envinfo: 7.8.1
       fastest-levenshtein: 1.0.16
