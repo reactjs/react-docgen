@@ -105,13 +105,13 @@ importers:
     specifiers:
       '@types/react': 18.0.26
       next: 13.1.1
-      nextra: 2.0.3
+      nextra: 2.1.0
       nextra-theme-docs: 2.0.3
       react: 18.2.0
       react-dom: 18.2.0
     dependencies:
       next: 13.1.1_biqbaboplfbrettd7655fr4n2y
-      nextra: 2.0.3_q76c2b4vyoegvsbrcwkfvimnai
+      nextra: 2.1.0_q76c2b4vyoegvsbrcwkfvimnai
       nextra-theme-docs: 2.0.3_q76c2b4vyoegvsbrcwkfvimnai
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
@@ -2352,13 +2352,13 @@ packages:
     resolution: {integrity: sha512-9K4zoImiZc3HlIp6AVUDE4CWYx22a+lhSZMYNpbjW04+YF0KWj4pJXnEMjdnFTiQibFFmElcsasJXDbdI/EPhA==}
     dependencies:
       '@types/eslint': 8.4.10
-      '@types/estree': 0.0.51
+      '@types/estree': 1.0.0
     dev: true
 
   /@types/eslint/8.4.10:
     resolution: {integrity: sha512-Sl/HOqN8NKPmhWo2VBEPm0nvHnu2LL3v9vKo8MEq0EtbJ4eVzGPl41VNPvn5E1i5poMk4/XD8UriLHpJvEP/Nw==}
     dependencies:
-      '@types/estree': 0.0.51
+      '@types/estree': 1.0.0
       '@types/json-schema': 7.0.11
     dev: true
 
@@ -2374,7 +2374,6 @@ packages:
 
   /@types/estree/1.0.0:
     resolution: {integrity: sha512-WulqXMDUTYAXCjZnk6JtIHPigp55cVtDgDrO2gHRwhyJto21+1zbVCtOYB2L1F9w4qCQ0rOGWBnBe0FNTiEJIQ==}
-    dev: false
 
   /@types/express-serve-static-core/4.17.32:
     resolution: {integrity: sha512-aI5h/VOkxOF2Z1saPy0Zsxs5avets/iaiAJYznQFm5By/pamU31xWKL//epiF4OfUA2qTOc9PV6tCUjhO8wlZA==}
@@ -7042,8 +7041,8 @@ packages:
       scroll-into-view-if-needed: 3.0.3
     dev: false
 
-  /nextra/2.0.3_q76c2b4vyoegvsbrcwkfvimnai:
-    resolution: {integrity: sha512-GttZMwfHiVcrnVMnN2PKq2mS6YoQ0zrbzRYS838WYfzUpjIPCR6L8rJbAEd00kcrJNM1MvSCxONOTqGDDjW7YA==}
+  /nextra/2.1.0_q76c2b4vyoegvsbrcwkfvimnai:
+    resolution: {integrity: sha512-8bq/TW8wv8H8D6UAokb9WKhnYeoxKG7c8ikWF1n6k3kOO9m0PLG+guTwqkWre28jJyziljc3i/Fnr3k4HiB9Ow==}
     peerDependencies:
       next: '>=9.5.3'
       react: '>=16.13.1'
