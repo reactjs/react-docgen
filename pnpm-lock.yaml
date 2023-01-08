@@ -106,13 +106,13 @@ importers:
       '@types/react': 18.0.26
       next: 13.1.1
       nextra: 2.0.3
-      nextra-theme-docs: 2.0.3
+      nextra-theme-docs: 2.1.0
       react: 18.2.0
       react-dom: 18.2.0
     dependencies:
       next: 13.1.1_biqbaboplfbrettd7655fr4n2y
       nextra: 2.0.3_q76c2b4vyoegvsbrcwkfvimnai
-      nextra-theme-docs: 2.0.3_q76c2b4vyoegvsbrcwkfvimnai
+      nextra-theme-docs: 2.1.0_q76c2b4vyoegvsbrcwkfvimnai
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -7017,8 +7017,8 @@ packages:
       - babel-plugin-macros
     dev: false
 
-  /nextra-theme-docs/2.0.3_q76c2b4vyoegvsbrcwkfvimnai:
-    resolution: {integrity: sha512-BN0NOzYNMQNLU8PMRKVtgOitLC2jFubMA9O8b3gNhr+5/Uny6MTDwuSAVO7G7z830b6dNaRqrMA84iVRS+2LaQ==}
+  /nextra-theme-docs/2.1.0_q76c2b4vyoegvsbrcwkfvimnai:
+    resolution: {integrity: sha512-0Fn0EsGaKa9We2+CkN9LPtT6F21w4wbihuv0/Vg2YowpAdu5nslsDIhtg66CRET5U5007xE5GG8NLwWaCHQhhg==}
     peerDependencies:
       next: '>=9.5.3'
       react: '>=16.13.1'
@@ -7040,6 +7040,7 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       scroll-into-view-if-needed: 3.0.3
+      zod: 3.20.2
     dev: false
 
   /nextra/2.0.3_q76c2b4vyoegvsbrcwkfvimnai:
@@ -9906,6 +9907,10 @@ packages:
   /yocto-queue/0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
+
+  /zod/3.20.2:
+    resolution: {integrity: sha512-1MzNQdAvO+54H+EaK5YpyEy0T+Ejo/7YLHS93G3RnYWh5gaotGHwGeN/ZO687qEDU2y4CdStQYXVHIgrUl5UVQ==}
+    dev: false
 
   /zwitch/2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
