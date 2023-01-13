@@ -216,8 +216,8 @@ const simplePropTypes = [
 
 function isSimplePropType(
   name: string,
-): name is typeof simplePropTypes[number] {
-  return simplePropTypes.includes(name as typeof simplePropTypes[number]);
+): name is (typeof simplePropTypes)[number] {
+  return simplePropTypes.includes(name as (typeof simplePropTypes)[number]);
 }
 
 const propTypes = new Map<string, (path: NodePath) => PropTypeDescriptor>([
