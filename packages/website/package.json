@@ -11,7 +11,7 @@
   "author": "Daniel Tschinder (http://github.com/danez)",
   "license": "MIT",
   "dependencies": {
-    "next": "13.1.1",
+    "next": "13.1.2",
     "nextra": "2.0.3",
     "nextra-theme-docs": "2.0.3",
     "react": "18.2.0",
