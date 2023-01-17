@@ -105,14 +105,14 @@ importers:
     specifiers:
       '@types/react': 18.0.26
       next: 13.1.2
-      nextra: 2.2.3
-      nextra-theme-docs: 2.2.3
+      nextra: 2.2.4
+      nextra-theme-docs: 2.2.4
       react: 18.2.0
       react-dom: 18.2.0
     dependencies:
       next: 13.1.2_biqbaboplfbrettd7655fr4n2y
-      nextra: 2.2.3_7jnwqgtpcnwg4nzft4b6xlzlfi
-      nextra-theme-docs: 2.2.3_7jnwqgtpcnwg4nzft4b6xlzlfi
+      nextra: 2.2.4_7jnwqgtpcnwg4nzft4b6xlzlfi
+      nextra-theme-docs: 2.2.4_7jnwqgtpcnwg4nzft4b6xlzlfi
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -7040,8 +7040,8 @@ packages:
       - babel-plugin-macros
     dev: false
 
-  /nextra-theme-docs/2.2.3_7jnwqgtpcnwg4nzft4b6xlzlfi:
-    resolution: {integrity: sha512-KQEhUW89kUVnMMnLubBQKMlnw30gM8e9fVBzyfQ7aTO445EGjQWbm4UF/J7VBBlcPsAP+SiYXUzbQDpQy0jLng==}
+  /nextra-theme-docs/2.2.4_7jnwqgtpcnwg4nzft4b6xlzlfi:
+    resolution: {integrity: sha512-Q+erj04aN/MFT3qvq0+vYaNzFtnPRJUzJVmbIVRG7+VsnZwO/nC3MhZ6iSPBmCKKPumpTMf7bJVdGrO/HrYVRQ==}
     peerDependencies:
       next: '>=9.5.3'
       react: '>=16.13.1'
@@ -7053,7 +7053,6 @@ packages:
       flexsearch: 0.7.31
       focus-visible: 5.2.0
       git-url-parse: 13.1.0
-      github-slugger: 2.0.0
       intersection-observer: 0.12.2
       match-sorter: 6.3.1
       next: 13.1.2_biqbaboplfbrettd7655fr4n2y
@@ -7065,8 +7064,8 @@ packages:
       zod: 3.20.2
     dev: false
 
-  /nextra/2.2.3_7jnwqgtpcnwg4nzft4b6xlzlfi:
-    resolution: {integrity: sha512-tzI5EWZtrlIy/ErW0Mip0SV2a+6gFBPibnptc7A2HuLS3bezFcfcavUQx9BgQgRF45I49hYHk3a/5cIdgOyu4w==}
+  /nextra/2.2.4_7jnwqgtpcnwg4nzft4b6xlzlfi:
+    resolution: {integrity: sha512-aDTiFj2JGIYwiTdxf7TQQsdb9ZM1y6eWRcRBXAKpy8LrsZU/TSePPc+LPV0hA3rKhOq+2Q361Mwwff0uUyTCyg==}
     peerDependencies:
       next: '>=9.5.3'
       react: '>=16.13.1'
@@ -7085,7 +7084,7 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       rehype-katex: 6.0.2
-      rehype-pretty-code: 0.8.1_shiki@0.12.1
+      rehype-pretty-code: 0.9.2_shiki@0.12.1
       remark-gfm: 3.0.1
       remark-math: 5.1.1
       remark-reading-time: 2.0.1
@@ -8239,8 +8238,8 @@ packages:
       unified: 10.1.2
     dev: false
 
-  /rehype-pretty-code/0.8.1_shiki@0.12.1:
-    resolution: {integrity: sha512-sjjHeMAQEHutAKaTfc0gN99/msbFKZoZqMGG9FTkIUnX50mHRgRJsK0WIBKyx+1SxX89KshOWgv0+RZOeDhdEQ==}
+  /rehype-pretty-code/0.9.2_shiki@0.12.1:
+    resolution: {integrity: sha512-l369pvBK6ihBEuy2+VDpHU+zbbY8I+Z4LiyIOunHAt3xyw6selaOFKc/DnX94jI5OJb3+NgjbOxXx2yaAypjZw==}
     engines: {node: ^12.16.0 || >=13.2.0}
     peerDependencies:
       shiki: '*'
