@@ -105,14 +105,14 @@ importers:
     specifiers:
       '@types/react': 18.0.26
       next: 13.1.2
-      nextra: 2.2.4
-      nextra-theme-docs: 2.2.4
+      nextra: 2.2.5
+      nextra-theme-docs: 2.2.5
       react: 18.2.0
       react-dom: 18.2.0
     dependencies:
       next: 13.1.2_biqbaboplfbrettd7655fr4n2y
-      nextra: 2.2.4_7jnwqgtpcnwg4nzft4b6xlzlfi
-      nextra-theme-docs: 2.2.4_7jnwqgtpcnwg4nzft4b6xlzlfi
+      nextra: 2.2.5_7jnwqgtpcnwg4nzft4b6xlzlfi
+      nextra-theme-docs: 2.2.5_7jnwqgtpcnwg4nzft4b6xlzlfi
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -6111,6 +6111,10 @@ packages:
     resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
     dev: true
 
+  /lodash.get/4.4.2:
+    resolution: {integrity: sha512-z+Uw/vLuy6gQe8cfaFWD7p0wVv8fJl3mbzXh33RS+0oW2wvUqiRXiQ69gLWSLpgB5/6sU+r6BlQR0MBILadqTQ==}
+    dev: false
+
   /lodash.memoize/4.1.2:
     resolution: {integrity: sha512-t7j+NzmgnQzTAYXcsHYLgimltOV1MXHtlOWf6GjL9Kj8GK5FInw5JotxvbOs+IvV1/Dzo04/fCGfLVs7aXb4Ag==}
     dev: true
@@ -7040,8 +7044,8 @@ packages:
       - babel-plugin-macros
     dev: false
 
-  /nextra-theme-docs/2.2.4_7jnwqgtpcnwg4nzft4b6xlzlfi:
-    resolution: {integrity: sha512-Q+erj04aN/MFT3qvq0+vYaNzFtnPRJUzJVmbIVRG7+VsnZwO/nC3MhZ6iSPBmCKKPumpTMf7bJVdGrO/HrYVRQ==}
+  /nextra-theme-docs/2.2.5_7jnwqgtpcnwg4nzft4b6xlzlfi:
+    resolution: {integrity: sha512-dpfOr8O4w3+q2BpBvnOXsmuvDCrrVl9QPrETzN8xKc9z6+oJNt4PEZOHRHo2rADHyV4832sSnWxhERrVzvqfNA==}
     peerDependencies:
       next: '>=9.5.3'
       react: '>=16.13.1'
@@ -7064,8 +7068,8 @@ packages:
       zod: 3.20.2
     dev: false
 
-  /nextra/2.2.4_7jnwqgtpcnwg4nzft4b6xlzlfi:
-    resolution: {integrity: sha512-aDTiFj2JGIYwiTdxf7TQQsdb9ZM1y6eWRcRBXAKpy8LrsZU/TSePPc+LPV0hA3rKhOq+2Q361Mwwff0uUyTCyg==}
+  /nextra/2.2.5_7jnwqgtpcnwg4nzft4b6xlzlfi:
+    resolution: {integrity: sha512-sm8mtKxLhfGWNv0yGd9GRL+DPDdVJlyEGn+6zk7gOPQor4X6G1VLcNjGlGYFovS4ZHNrg8oKmhOZSkq79PBrtw==}
     peerDependencies:
       next: '>=9.5.3'
       react: '>=16.13.1'
@@ -7078,6 +7082,7 @@ packages:
       graceful-fs: 4.2.10
       gray-matter: 4.0.3
       katex: 0.16.4
+      lodash.get: 4.4.2
       next: 13.1.2_biqbaboplfbrettd7655fr4n2y
       next-mdx-remote: 4.2.1_biqbaboplfbrettd7655fr4n2y
       p-limit: 3.1.0
