@@ -105,14 +105,14 @@ importers:
     specifiers:
       '@types/react': 18.0.27
       next: 13.1.3
-      nextra: 2.2.7
-      nextra-theme-docs: 2.2.7
+      nextra: 2.2.9
+      nextra-theme-docs: 2.2.9
       react: 18.2.0
       react-dom: 18.2.0
     dependencies:
       next: 13.1.3_biqbaboplfbrettd7655fr4n2y
-      nextra: 2.2.7_xehvwk7kia3kss3yh76fk44sqm
-      nextra-theme-docs: 2.2.7_xehvwk7kia3kss3yh76fk44sqm
+      nextra: 2.2.9_xehvwk7kia3kss3yh76fk44sqm
+      nextra-theme-docs: 2.2.9_xehvwk7kia3kss3yh76fk44sqm
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -7044,8 +7044,8 @@ packages:
       - babel-plugin-macros
     dev: false
 
-  /nextra-theme-docs/2.2.7_xehvwk7kia3kss3yh76fk44sqm:
-    resolution: {integrity: sha512-McvGaNAEmEAzwcxFO1FHMu3xhICAO/fFQiFyMfHmKZqcWnmhukPldbunApHDGNdsAJ+CVMyiguM1YD9S8hxeMw==}
+  /nextra-theme-docs/2.2.9_xehvwk7kia3kss3yh76fk44sqm:
+    resolution: {integrity: sha512-/w3Ozie2VWosJb3Gwnp/tYuOHacMGw1TvzbgUTBr2MzRDpdT6KR5OKcvxZVWSfU/x1hU4HDm419IOFkYBDb01A==}
     peerDependencies:
       next: '>=9.5.3'
       react: '>=16.13.1'
@@ -7068,8 +7068,8 @@ packages:
       zod: 3.20.2
     dev: false
 
-  /nextra/2.2.7_xehvwk7kia3kss3yh76fk44sqm:
-    resolution: {integrity: sha512-dXtiucCHH71eye9fPdZViDN0//ClkZdVNuG9d0FxSwSfFD7UCuvAKQvDkZVHf/iw6mK4UJU6knRYM/HCLu5wBA==}
+  /nextra/2.2.9_xehvwk7kia3kss3yh76fk44sqm:
+    resolution: {integrity: sha512-6S9v0vlkocxrnQBdsZ/4A2BXyfJ9z/Bp8Ai7yY/N6tbIReoKbALTnmZLTdtNSr7GQrXrZnHTTOveW8vDSf+ohQ==}
     peerDependencies:
       next: '>=9.5.3'
       react: '>=16.13.1'
