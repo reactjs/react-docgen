@@ -105,14 +105,14 @@ importers:
     specifiers:
       '@types/react': 18.0.27
       next: 13.1.4
-      nextra: 2.2.9
-      nextra-theme-docs: 2.2.9
+      nextra: 2.2.10
+      nextra-theme-docs: 2.2.10
       react: 18.2.0
       react-dom: 18.2.0
     dependencies:
       next: 13.1.4_biqbaboplfbrettd7655fr4n2y
-      nextra: 2.2.9_gru2niblrprbai56sdagiiy5sa
-      nextra-theme-docs: 2.2.9_gru2niblrprbai56sdagiiy5sa
+      nextra: 2.2.10_gru2niblrprbai56sdagiiy5sa
+      nextra-theme-docs: 2.2.10_gru2niblrprbai56sdagiiy5sa
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -7044,8 +7044,8 @@ packages:
       - babel-plugin-macros
     dev: false
 
-  /nextra-theme-docs/2.2.9_gru2niblrprbai56sdagiiy5sa:
-    resolution: {integrity: sha512-/w3Ozie2VWosJb3Gwnp/tYuOHacMGw1TvzbgUTBr2MzRDpdT6KR5OKcvxZVWSfU/x1hU4HDm419IOFkYBDb01A==}
+  /nextra-theme-docs/2.2.10_gru2niblrprbai56sdagiiy5sa:
+    resolution: {integrity: sha512-ciTZlERSXsNLgirfhAfK6vs1URWAb9bD0ai1ckfxNn+gDDNoHvV/RtCMco49+comhbCN24ZSP0lyIzb5ErKngw==}
     peerDependencies:
       next: '>=9.5.3'
       react: '>=16.13.1'
@@ -7068,8 +7068,8 @@ packages:
       zod: 3.20.2
     dev: false
 
-  /nextra/2.2.9_gru2niblrprbai56sdagiiy5sa:
-    resolution: {integrity: sha512-6S9v0vlkocxrnQBdsZ/4A2BXyfJ9z/Bp8Ai7yY/N6tbIReoKbALTnmZLTdtNSr7GQrXrZnHTTOveW8vDSf+ohQ==}
+  /nextra/2.2.10_gru2niblrprbai56sdagiiy5sa:
+    resolution: {integrity: sha512-t9Eo/YPYMhhWWQIQw3vX3sYU4BlHne31G+jAl8V+wEyySRgLM7XcrZm/Kdl7cHV1sgUyT3kLZ+fLavZusCCMwg==}
     peerDependencies:
       next: '>=9.5.3'
       react: '>=16.13.1'
