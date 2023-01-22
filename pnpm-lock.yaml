@@ -105,14 +105,14 @@ importers:
     specifiers:
       '@types/react': 18.0.27
       next: 13.1.4
-      nextra: 2.2.10
-      nextra-theme-docs: 2.2.10
+      nextra: 2.2.12
+      nextra-theme-docs: 2.2.12
       react: 18.2.0
       react-dom: 18.2.0
     dependencies:
       next: 13.1.4_biqbaboplfbrettd7655fr4n2y
-      nextra: 2.2.10_gru2niblrprbai56sdagiiy5sa
-      nextra-theme-docs: 2.2.10_gru2niblrprbai56sdagiiy5sa
+      nextra: 2.2.12_gru2niblrprbai56sdagiiy5sa
+      nextra-theme-docs: 2.2.12_fofm3xmwygqnjv2u466xbri64e
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -7044,10 +7044,11 @@ packages:
       - babel-plugin-macros
     dev: false
 
-  /nextra-theme-docs/2.2.10_gru2niblrprbai56sdagiiy5sa:
-    resolution: {integrity: sha512-ciTZlERSXsNLgirfhAfK6vs1URWAb9bD0ai1ckfxNn+gDDNoHvV/RtCMco49+comhbCN24ZSP0lyIzb5ErKngw==}
+  /nextra-theme-docs/2.2.12_fofm3xmwygqnjv2u466xbri64e:
+    resolution: {integrity: sha512-CiBrDQmwWObJult9SxOL6JFLdGolkdcpUpdcdK+NfzK9lUdyZVuNHqW+SLiLdztf17lE5U9AKa15E0UzoqBXbA==}
     peerDependencies:
       next: '>=9.5.3'
+      nextra: 2.2.12
       react: '>=16.13.1'
       react-dom: '>=16.13.1'
     dependencies:
@@ -7062,14 +7063,15 @@ packages:
       next: 13.1.4_biqbaboplfbrettd7655fr4n2y
       next-seo: 5.15.0_gru2niblrprbai56sdagiiy5sa
       next-themes: 0.2.1_gru2niblrprbai56sdagiiy5sa
+      nextra: 2.2.12_gru2niblrprbai56sdagiiy5sa
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       scroll-into-view-if-needed: 3.0.4
       zod: 3.20.2
     dev: false
 
-  /nextra/2.2.10_gru2niblrprbai56sdagiiy5sa:
-    resolution: {integrity: sha512-t9Eo/YPYMhhWWQIQw3vX3sYU4BlHne31G+jAl8V+wEyySRgLM7XcrZm/Kdl7cHV1sgUyT3kLZ+fLavZusCCMwg==}
+  /nextra/2.2.12_gru2niblrprbai56sdagiiy5sa:
+    resolution: {integrity: sha512-p2yjiRr6NKFiwEkSYdxIga0JMv51J4lVyObhwfqIQgi665rgNgqeiNvBzEgAOhV9LyzbjCTSZaTCBsg3OgcDtA==}
     peerDependencies:
       next: '>=9.5.3'
       react: '>=16.13.1'
@@ -7096,6 +7098,7 @@ packages:
       shiki: 0.12.1
       slash: 3.0.0
       title: 3.5.3
+      unist-util-remove: 3.1.0
       unist-util-visit: 4.1.1
     transitivePeerDependencies:
       - supports-color
@@ -9324,6 +9327,14 @@ packages:
     dependencies:
       '@types/unist': 2.0.6
       unist-util-visit: 4.1.1
+    dev: false
+
+  /unist-util-remove/3.1.0:
+    resolution: {integrity: sha512-rO/sIghl13eN8irs5OBN2a4RC10MsJdiePCfwrvnzGtgIbHcDXr2REr0qi9F2r/CIb1r9FyyFmcMRIGs+EyUFw==}
+    dependencies:
+      '@types/unist': 2.0.6
+      unist-util-is: 5.1.1
+      unist-util-visit-parents: 5.1.1
     dev: false
 
   /unist-util-stringify-position/3.0.2:
