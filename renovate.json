@@ -41,7 +41,7 @@
       "enabled": false
     },
     {
-      "matchFiles": ["benchmark/package.json"],
+      "matchFiles": ["benchmark/package.json", "packages/website/package.json"],
       "updateTypes": ["minor", "patch"],
       "automerge": true
     },
