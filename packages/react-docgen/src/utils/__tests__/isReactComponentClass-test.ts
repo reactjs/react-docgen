@@ -52,21 +52,6 @@ describe('isReactComponentClass', () => {
     });
   });
 
-  describe('JSDoc @extends React.Component', () => {
-    test('accepts class declarations declaring `@extends React.Component` in JSDoc', () => {
-      const def = parse.statementLast(`
-        var React = require('react');
-        /**
-         * @class Foo
-         * @extends React.Component
-         */
-        class Foo extends Bar {}
-      `);
-
-      expect(isReactComponentClass(def)).toBe(true);
-    });
-  });
-
   describe('React.Component inheritance', () => {
     test('accepts class declarations extending React.Component', () => {
       const def = parse.statementLast(`

@@ -1,5 +1,6 @@
 import ChainResolver from './ChainResolver.js';
 import FindAllDefinitionsResolver from './FindAllDefinitionsResolver.js';
+import FindAnnotatedDefinitionsResolver from './FindAnnotatedDefinitionsResolver.js';
 import FindExportedDefinitionsResolver from './FindExportedDefinitionsResolver.js';
 import type { NodePath } from '@babel/traverse';
 import type FileState from '../FileState.js';
@@ -39,6 +40,7 @@ export type Resolver = ResolverClass | ResolverFunction;
 
 export {
   FindAllDefinitionsResolver,
+  FindAnnotatedDefinitionsResolver,
   FindExportedDefinitionsResolver,
   ChainResolver,
 };
