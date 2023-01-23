@@ -1,0 +1,257 @@
+// Vitest Snapshot v1
+
+exports[`FindAnnotatedDefinitionsResolver > class definitions > finds ClassDeclaration with block comment 1`] = `
+[
+  Node {
+    "body": Node {
+      "body": [],
+      "type": "ClassBody",
+    },
+    "id": Node {
+      "name": "Component",
+      "type": "Identifier",
+    },
+    "superClass": null,
+    "type": "ClassDeclaration",
+  },
+]
+`;
+
+exports[`FindAnnotatedDefinitionsResolver > class definitions > finds ClassDeclaration with block comment and empty line 1`] = `
+[
+  Node {
+    "body": Node {
+      "body": [],
+      "type": "ClassBody",
+    },
+    "id": Node {
+      "name": "Component",
+      "type": "Identifier",
+    },
+    "superClass": null,
+    "type": "ClassDeclaration",
+  },
+]
+`;
+
+exports[`FindAnnotatedDefinitionsResolver > class definitions > finds ClassDeclaration with line comment 1`] = `
+[
+  Node {
+    "body": Node {
+      "body": [],
+      "type": "ClassBody",
+    },
+    "id": Node {
+      "name": "Component",
+      "type": "Identifier",
+    },
+    "superClass": null,
+    "type": "ClassDeclaration",
+  },
+]
+`;
+
+exports[`FindAnnotatedDefinitionsResolver > class definitions > finds ClassDeclaration with line comment and empty line 1`] = `
+[
+  Node {
+    "body": Node {
+      "body": [],
+      "type": "ClassBody",
+    },
+    "id": Node {
+      "name": "Component",
+      "type": "Identifier",
+    },
+    "superClass": null,
+    "type": "ClassDeclaration",
+  },
+]
+`;
+
+exports[`FindAnnotatedDefinitionsResolver > class definitions > finds ClassExpression 1`] = `
+[
+  Node {
+    "body": Node {
+      "body": [],
+      "type": "ClassBody",
+    },
+    "id": null,
+    "superClass": null,
+    "type": "ClassExpression",
+  },
+]
+`;
+
+exports[`FindAnnotatedDefinitionsResolver > class definitions > finds ClassExpression with assignment 1`] = `
+[
+  Node {
+    "body": Node {
+      "body": [],
+      "type": "ClassBody",
+    },
+    "id": null,
+    "superClass": null,
+    "type": "ClassExpression",
+  },
+]
+`;
+
+exports[`FindAnnotatedDefinitionsResolver > finds component wrapped in HOC 1`] = `
+[
+  Node {
+    "async": false,
+    "body": Node {
+      "body": [],
+      "directives": [],
+      "type": "BlockStatement",
+    },
+    "generator": false,
+    "id": null,
+    "params": [],
+    "type": "ArrowFunctionExpression",
+  },
+]
+`;
+
+exports[`FindAnnotatedDefinitionsResolver > finds component wrapped in function 1`] = `
+[
+  Node {
+    "body": Node {
+      "body": [],
+      "type": "ClassBody",
+    },
+    "id": null,
+    "superClass": null,
+    "type": "ClassExpression",
+  },
+]
+`;
+
+exports[`FindAnnotatedDefinitionsResolver > finds component wrapped in two HOCs 1`] = `
+[
+  Node {
+    "async": false,
+    "body": Node {
+      "body": [],
+      "directives": [],
+      "type": "BlockStatement",
+    },
+    "generator": false,
+    "id": null,
+    "params": [],
+    "type": "ArrowFunctionExpression",
+  },
+]
+`;
+
+exports[`FindAnnotatedDefinitionsResolver > finds function parameter with annotation 1`] = `
+[
+  Node {
+    "async": false,
+    "body": Node {
+      "body": [],
+      "directives": [],
+      "type": "BlockStatement",
+    },
+    "generator": false,
+    "id": null,
+    "params": [],
+    "type": "ArrowFunctionExpression",
+  },
+]
+`;
+
+exports[`FindAnnotatedDefinitionsResolver > stateless components > finds ArrowFunctionExpression 1`] = `
+[
+  Node {
+    "async": false,
+    "body": Node {
+      "body": [],
+      "directives": [],
+      "type": "BlockStatement",
+    },
+    "generator": false,
+    "id": null,
+    "params": [],
+    "type": "ArrowFunctionExpression",
+  },
+]
+`;
+
+exports[`FindAnnotatedDefinitionsResolver > stateless components > finds FunctionDeclaration 1`] = `
+[
+  Node {
+    "async": false,
+    "body": Node {
+      "body": [],
+      "directives": [],
+      "type": "BlockStatement",
+    },
+    "generator": false,
+    "id": Node {
+      "name": "Component",
+      "type": "Identifier",
+    },
+    "params": [],
+    "type": "FunctionDeclaration",
+  },
+]
+`;
+
+exports[`FindAnnotatedDefinitionsResolver > stateless components > finds FunctionExpression 1`] = `
+[
+  Node {
+    "async": false,
+    "body": Node {
+      "body": [],
+      "directives": [],
+      "type": "BlockStatement",
+    },
+    "generator": false,
+    "id": null,
+    "params": [],
+    "type": "FunctionExpression",
+  },
+]
+`;
+
+exports[`FindAnnotatedDefinitionsResolver > stateless components > finds ObjectMethod 1`] = `
+[
+  Node {
+    "async": false,
+    "body": Node {
+      "body": [],
+      "directives": [],
+      "type": "BlockStatement",
+    },
+    "computed": false,
+    "generator": false,
+    "id": null,
+    "key": Node {
+      "name": "component",
+      "type": "Identifier",
+    },
+    "kind": "method",
+    "method": true,
+    "params": [],
+    "type": "ObjectMethod",
+  },
+]
+`;
+
+exports[`FindAnnotatedDefinitionsResolver > stateless components > finds ObjectProperty 1`] = `
+[
+  Node {
+    "async": false,
+    "body": Node {
+      "body": [],
+      "directives": [],
+      "type": "BlockStatement",
+    },
+    "generator": false,
+    "id": null,
+    "params": [],
+    "type": "FunctionExpression",
+  },
+]
+`;
