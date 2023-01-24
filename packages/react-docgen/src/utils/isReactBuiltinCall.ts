@@ -1,10 +1,9 @@
 import isReactModuleName from './isReactModuleName.js';
-import match from './match.js';
 import resolveToModule from './resolveToModule.js';
 import resolveToValue from './resolveToValue.js';
 import isDestructuringAssignment from './isDestructuringAssignment.js';
 import type { NodePath } from '@babel/traverse';
-import type { CallExpression, MemberExpression } from '@babel/types';
+import type { CallExpression } from '@babel/types';
 
 function isNamedMemberExpression(value: NodePath, name: string): boolean {
   if (!value.isMemberExpression()) {
@@ -33,8 +32,8 @@ function isNamedImportDeclaration(
     const local = specifier.get('local');
 
     return (
-      ((imported.isIdentifier() && imported.node.name === name) ||
-        (imported.isStringLiteral() && imported.node.value === name)) &&
+      (imported.isIdentifier({ name }) ||
+        imported.isStringLiteral({ value: name })) &&
       local.node.name === callee.node.name
     );
   });
@@ -53,17 +52,20 @@ export default function isReactBuiltinCall(
   }
 
   if (path.isCallExpression()) {
-    if (match(path.node, { callee: { property: { name } } })) {
-      const module = resolveToModule(
-        (path.get('callee') as NodePath<MemberExpression>).get('object'),
-      );
+    const callee = path.get('callee');
+
+    if (
+      callee.isMemberExpression() &&
+      callee.get('property').isIdentifier({ name })
+    ) {
+      const module = resolveToModule(callee.get('object'));
 
       return Boolean(module && isReactModuleName(module));
     }
 
-    const value = resolveToValue(path.get('callee'));
+    const value = resolveToValue(callee);
 
-    if (value === path.get('callee')) {
+    if (value === callee) {
       return false;
     }
 
@@ -73,7 +75,7 @@ export default function isReactBuiltinCall(
       // `require('react').createElement`
       isNamedMemberExpression(value, name) ||
       // `import { createElement } from 'react'`
-      isNamedImportDeclaration(value, path.get('callee'), name)
+      isNamedImportDeclaration(value, callee, name)
     ) {
       const module = resolveToModule(value);
 

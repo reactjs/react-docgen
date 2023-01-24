@@ -16,7 +16,7 @@ export default function resolveToModule(path: NodePath): string | null {
   } else if (path.isCallExpression()) {
     const callee = path.get('callee');
 
-    if (callee.isIdentifier() && callee.node.name === 'require') {
+    if (callee.isIdentifier({ name: 'require' })) {
       return (path.node.arguments[0] as StringLiteral).value;
     }
 

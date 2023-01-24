@@ -25,7 +25,7 @@ const explodedVisitors = visitors.explode<TraverseState>({
     if (left.isMemberExpression()) {
       const first = getMemberExpressionRoot(left);
 
-      if (first.isIdentifier() && first.node.name === state.variableName) {
+      if (first.isIdentifier({ name: state.variableName })) {
         const [member] = getMembers(left);
 
         if (

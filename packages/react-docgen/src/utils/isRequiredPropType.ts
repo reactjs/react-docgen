@@ -7,9 +7,7 @@ import getMembers from '../utils/getMembers.js';
 export default function isRequiredPropType(path: NodePath<Node>): boolean {
   return getMembers(path).some(
     ({ computed, path: memberPath }) =>
-      (!computed &&
-        memberPath.isIdentifier() &&
-        memberPath.node.name === 'isRequired') ||
-      (memberPath.isStringLiteral() && memberPath.node.value === 'isRequired'),
+      (!computed && memberPath.isIdentifier({ name: 'isRequired' })) ||
+      memberPath.isStringLiteral({ value: 'isRequired' }),
   );
 }

@@ -124,11 +124,7 @@ function handleGenericTypeAnnotation(
   const id = path.get('id');
   const typeParameters = path.get('typeParameters');
 
-  if (
-    id.isIdentifier() &&
-    id.node.name === '$Keys' &&
-    typeParameters.hasNode()
-  ) {
+  if (id.isIdentifier({ name: '$Keys' }) && typeParameters.hasNode()) {
     return handleKeysHelper(path);
   }
 
@@ -137,7 +133,7 @@ function handleGenericTypeAnnotation(
   if (id.isQualifiedTypeIdentifier()) {
     const qualification = id.get('qualification');
 
-    if (qualification.isIdentifier() && qualification.node.name === 'React') {
+    if (qualification.isIdentifier({ name: 'React' })) {
       type = {
         name: `${qualification.node.name}${id.node.id.name}`,
         raw: printValue(id),
@@ -391,7 +387,7 @@ function getFlowTypeWithResolvedTypes(
 
   const isTypeAlias = parent.isTypeAlias();
 
-  // When we see a typealias mark it as visited so that the next
+  // When we see a TypeAlias mark it as visited so that the next
   // call of this function does not run into an endless loop
   if (isTypeAlias) {
     if (visitedTypes[parent.node.id.name] === true) {

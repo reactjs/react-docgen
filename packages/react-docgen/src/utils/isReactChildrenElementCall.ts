@@ -1,32 +1,36 @@
 import type { NodePath } from '@babel/traverse';
-import type { MemberExpression } from '@babel/types';
 import isReactModuleName from './isReactModuleName.js';
-import match from './match.js';
 import resolveToModule from './resolveToModule.js';
-
-// TODO unit tests
 
 /**
  * Returns true if the expression is a function call of the form
- * `React.Children.only(...)`.
+ * `React.Children.only(...)` or `React.Children.map(...)`.
  */
 export default function isReactChildrenElementCall(path: NodePath): boolean {
   if (path.isExpressionStatement()) {
     path = path.get('expression');
   }
 
+  if (!path.isCallExpression()) {
+    return false;
+  }
+
+  const callee = path.get('callee');
+
   if (
-    !match(path.node, { callee: { property: { name: 'only' } } }) &&
-    !match(path.node, { callee: { property: { name: 'map' } } })
+    !callee.isMemberExpression() ||
+    (!callee.get('property').isIdentifier({ name: 'only' }) &&
+      !callee.get('property').isIdentifier({ name: 'map' }))
   ) {
     return false;
   }
 
-  const calleeObj = (path.get('callee') as NodePath<MemberExpression>).get(
-    'object',
-  );
+  const calleeObj = callee.get('object');
 
-  if (!match(calleeObj.node, { property: { name: 'Children' } })) {
+  if (
+    !calleeObj.isMemberExpression() ||
+    !calleeObj.get('property').isIdentifier({ name: 'Children' })
+  ) {
     return false;
   }
 

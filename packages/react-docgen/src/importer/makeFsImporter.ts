@@ -4,7 +4,7 @@ import { dirname, extname } from 'path';
 import fs from 'fs';
 import type { NodePath } from '@babel/traverse';
 import { visitors } from '@babel/traverse';
-import type { ExportSpecifier, Identifier, ObjectProperty } from '@babel/types';
+import type { ExportSpecifier, ObjectProperty } from '@babel/types';
 import type { Importer, ImportPath } from './index.js';
 import type FileState from '../FileState.js';
 import { resolveObjectPatternPropertyToValue } from '../utils/index.js';
@@ -164,7 +164,7 @@ export default function makeFsImporter(
             const id = declPath.get('id');
             const init = declPath.get('init');
 
-            if (id.isIdentifier() && id.node.name === name && init.hasNode()) {
+            if (id.isIdentifier({ name }) && init.hasNode()) {
               // export const/var a = <init>
 
               state.resultPath = init;
@@ -177,7 +177,7 @@ export default function makeFsImporter(
                 if (prop.isObjectProperty()) {
                   const value = prop.get('value');
 
-                  return value.isIdentifier() && value.node.name === name;
+                  return value.isIdentifier({ name });
                 }
                 // We don't handle RestElement here yet as complicated
 
@@ -197,8 +197,7 @@ export default function makeFsImporter(
         } else if (
           declaration.hasNode() &&
           declaration.has('id') &&
-          (declaration.get('id') as NodePath).isIdentifier() &&
-          (declaration.get('id') as NodePath<Identifier>).node.name === name
+          (declaration.get('id') as NodePath).isIdentifier({ name })
         ) {
           // export function/class/type/interface/enum ...
 
@@ -212,7 +211,7 @@ export default function makeFsImporter(
             }
             const exported = specifierPath.get('exported');
 
-            if (exported.isIdentifier() && exported.node.name === name) {
+            if (exported.isIdentifier({ name })) {
               // export ... from ''
               if (path.has('source')) {
                 const local = specifierPath.isExportSpecifier()
