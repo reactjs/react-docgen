@@ -21,10 +21,8 @@ function isObjectValuesCall(path: NodePath): path is NodePath<CallExpression> {
   const property = callee.get('property');
 
   return (
-    object.isIdentifier() &&
-    object.node.name === 'Object' &&
-    property.isIdentifier() &&
-    property.node.name === 'values'
+    object.isIdentifier({ name: 'Object' }) &&
+    property.isIdentifier({ name: 'values' })
   );
 }
 

@@ -48,7 +48,6 @@ export { default as isReactModuleName } from './isReactModuleName.js';
 export { default as isRequiredPropType } from './isRequiredPropType.js';
 export { default as isStatelessComponent } from './isStatelessComponent.js';
 export { default as isUnreachableFlowType } from './isUnreachableFlowType.js';
-export { default as match } from './match.js';
 export { default as normalizeClassDefinition } from './normalizeClassDefinition.js';
 export { default as parseJsDoc } from './parseJsDoc.js';
 export { default as postProcessDocumentation } from './postProcessDocumentation.js';

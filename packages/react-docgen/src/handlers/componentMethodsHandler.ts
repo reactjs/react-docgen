@@ -66,8 +66,7 @@ const explodedVisitors = visitors.explode<TraverseState>({
       if (
         binding &&
         left.isMemberExpression() &&
-        left.get('object').isIdentifier() &&
-        (left.node.object as Identifier).name === name &&
+        left.get('object').isIdentifier({ name }) &&
         binding.scope === scope &&
         resolveToValue(assignmentPath.get('right')).isFunction()
       ) {

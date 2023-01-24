@@ -14,9 +14,5 @@ export default function isDestructuringAssignment(
 
   const id = path.get('key');
 
-  return (
-    id.isIdentifier() &&
-    id.node.name === name &&
-    path.parentPath.isObjectPattern()
-  );
+  return id.isIdentifier({ name }) && path.parentPath.isObjectPattern();
 }

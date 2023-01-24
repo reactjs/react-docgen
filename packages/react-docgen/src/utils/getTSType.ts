@@ -90,11 +90,7 @@ function handleTSTypeReference(
     const left = typeName.get('left');
     const right = typeName.get('right');
 
-    if (
-      left.isIdentifier() &&
-      left.node.name === 'React' &&
-      right.isIdentifier()
-    ) {
+    if (left.isIdentifier({ name: 'React' }) && right.isIdentifier()) {
       type = {
         name: `${left.node.name}${right.node.name}`,
         raw: printValue(typeName),
