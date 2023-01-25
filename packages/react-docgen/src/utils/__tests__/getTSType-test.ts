@@ -651,4 +651,46 @@ describe('getTSType', () => {
 
     expect(getTSType(typePath)).toMatchSnapshot();
   });
+
+  test('handles mapped type', () => {
+    const typePath = typeAlias(`
+      let action: OptionsFlags<X>;
+      type OptionsFlags<Type> = {
+        [Property in keyof Type]: number;
+      };
+      interface X {
+        foo: string
+      }
+    `);
+
+    expect(getTSType(typePath)).toMatchSnapshot();
+  });
+
+  test('handles mapped type with implicit any', () => {
+    const typePath = typeAlias(`
+      let action: OptionsFlags<X>;
+      type OptionsFlags<Type> = {
+        [Property in keyof Type];
+      };
+      interface X {
+        foo: string
+      }
+    `);
+
+    expect(getTSType(typePath)).toMatchSnapshot();
+  });
+
+  test('handles mapped type without typeParam', () => {
+    const typePath = typeAlias(`
+      let action: OptionsFlags;
+      type OptionsFlags = {
+        [Property in keyof X]: string;
+      };
+      interface X {
+        foo: string
+      }
+    `);
+
+    expect(getTSType(typePath)).toMatchSnapshot();
+  });
 });

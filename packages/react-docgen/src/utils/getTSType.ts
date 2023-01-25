@@ -252,6 +252,7 @@ function handleTSIntersectionType(
   };
 }
 
+// type OptionsFlags<Type> = { [Property in keyof Type]; };
 function handleTSMappedType(
   path: NodePath<TSMappedType>,
   typeParams: TypeParameters | null,
@@ -269,12 +270,7 @@ function handleTSMappedType(
   if (typeAnnotation.hasNode()) {
     value = getTSTypeWithResolvedTypes(typeAnnotation, typeParams);
   } else {
-    value = { name: 'any' }; //TODO test
-    /**
-     type OptionsFlags<Type> = {
-  [Property in keyof Type];
-};
-     */
+    value = { name: 'any' };
   }
 
   return {
@@ -385,6 +381,7 @@ function handleTSTypeQuery(
 
 function handleTSTypeOperator(
   path: NodePath<TSTypeOperator>,
+  typeParams: TypeParameters | null,
 ): TypeDescriptor<TSFunctionSignatureType> | null {
   if (path.node.operator !== 'keyof') {
     return null;
@@ -396,14 +393,13 @@ function handleTSTypeOperator(
     value = value.get('exprName');
   } else if ('id' in value.node) {
     value = value.get('id') as NodePath;
+  } else if (value.isTSTypeReference()) {
+    return getTSTypeWithResolvedTypes(value, typeParams);
   }
 
   const resolvedPath = resolveToValue(value);
 
-  if (
-    resolvedPath &&
-    (resolvedPath.isObjectExpression() || resolvedPath.isTSTypeLiteral())
-  ) {
+  if (resolvedPath.isObjectExpression() || resolvedPath.isTSTypeLiteral()) {
     const keys = resolveObjectToNameArray(resolvedPath, true);
 
     if (keys) {
@@ -468,7 +464,7 @@ function getTSTypeWithResolvedTypes(
   }
 
   const node = path.node;
-  let type: TypeDescriptor;
+  let type: TypeDescriptor | null = null;
   let typeAliasName: string | null = null;
 
   if (path.parentPath.isTSTypeAliasDeclaration()) {
@@ -503,7 +499,9 @@ function getTSTypeWithResolvedTypes(
     };
   } else if (node.type in namedTypes) {
     type = namedTypes[node.type](path, typeParams);
-  } else {
+  }
+
+  if (!type) {
     type = { name: 'unknown' };
   }
 
