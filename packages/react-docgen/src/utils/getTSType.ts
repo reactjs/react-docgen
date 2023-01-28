@@ -35,6 +35,7 @@ import type {
   TSTypeParameterDeclaration,
   RestElement,
   TypeScript,
+  TSQualifiedName,
 } from '@babel/types';
 import { getDocblock } from './docblock.js';
 
@@ -68,6 +69,22 @@ const namedTypes = {
   TSIndexedAccessType: handleTSIndexedAccessType,
 };
 
+function handleTSQualifiedName(
+  path: NodePath<TSQualifiedName>,
+): TypeDescriptor<TSFunctionSignatureType> {
+  const left = path.get('left');
+  const right = path.get('right');
+
+  if (left.isIdentifier({ name: 'React' }) && right.isIdentifier()) {
+    return {
+      name: `${left.node.name}${right.node.name}`,
+      raw: printValue(path),
+    };
+  }
+
+  return { name: printValue(path).replace(/<.*>$/, '') };
+}
+
 function handleTSArrayType(
   path: NodePath<TSArrayType>,
   typeParams: TypeParameters | null,
@@ -87,17 +104,7 @@ function handleTSTypeReference(
   const typeName = path.get('typeName');
 
   if (typeName.isTSQualifiedName()) {
-    const left = typeName.get('left');
-    const right = typeName.get('right');
-
-    if (left.isIdentifier({ name: 'React' }) && right.isIdentifier()) {
-      type = {
-        name: `${left.node.name}${right.node.name}`,
-        raw: printValue(typeName),
-      };
-    } else {
-      type = { name: printValue(typeName).replace(/<.*>$/, '') };
-    }
+    type = handleTSQualifiedName(typeName);
   } else {
     type = { name: (typeName as NodePath<Identifier>).node.name };
   }
@@ -366,17 +373,25 @@ function handleTSTypeQuery(
   path: NodePath<TSTypeQuery>,
   typeParams: TypeParameters | null,
 ): TypeDescriptor<TSFunctionSignatureType> {
-  const resolvedPath = resolveToValue(path.get('exprName'));
+  const exprName = path.get('exprName');
 
-  if ('typeAnnotation' in resolvedPath.node) {
-    return getTSTypeWithResolvedTypes(
-      resolvedPath.get('typeAnnotation') as NodePath<TypeScript>,
-      typeParams,
-    );
+  if (exprName.isIdentifier()) {
+    const resolvedPath = resolveToValue(path.get('exprName'));
+
+    if (resolvedPath.has('typeAnnotation')) {
+      return getTSTypeWithResolvedTypes(
+        resolvedPath.get('typeAnnotation') as NodePath<TypeScript>,
+        typeParams,
+      );
+    }
+
+    return { name: exprName.node.name };
+  } else if (exprName.isTSQualifiedName()) {
+    return handleTSQualifiedName(exprName);
+  } else {
+    // TSImportType
+    return { name: printValue(exprName) };
   }
-
-  // @ts-ignore Do we need to handle TsQualifiedName here TODO
-  return { name: path.node.exprName.name };
 }
 
 function handleTSTypeOperator(

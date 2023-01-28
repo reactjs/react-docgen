@@ -37,7 +37,6 @@ function setPropDescriptor(
       return;
     }
 
-    // TODO what about other types here
     const id = argument.get('id') as NodePath;
 
     if (!id.hasNode() || !id.isIdentifier()) {
