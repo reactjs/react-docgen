@@ -71,6 +71,4 @@ describe('getMemberExpressionValuePath', () => {
       );
     });
   });
-
-  //TODO test arrow assigned to destructuring
 });

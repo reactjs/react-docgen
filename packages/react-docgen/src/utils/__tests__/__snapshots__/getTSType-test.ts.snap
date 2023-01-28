@@ -661,6 +661,75 @@ exports[`getTSType > handles long type cycles 1`] = `
 }
 `;
 
+exports[`getTSType > handles mapped type 1`] = `
+{
+  "name": "signature",
+  "raw": "{
+  [Property in keyof Type]: number;
+}",
+  "signature": {
+    "properties": [
+      {
+        "key": {
+          "name": "X",
+          "required": true,
+        },
+        "value": {
+          "name": "number",
+        },
+      },
+    ],
+  },
+  "type": "object",
+}
+`;
+
+exports[`getTSType > handles mapped type with implicit any 1`] = `
+{
+  "name": "signature",
+  "raw": "{
+  [Property in keyof Type];
+}",
+  "signature": {
+    "properties": [
+      {
+        "key": {
+          "name": "X",
+          "required": true,
+        },
+        "value": {
+          "name": "any",
+        },
+      },
+    ],
+  },
+  "type": "object",
+}
+`;
+
+exports[`getTSType > handles mapped type without typeParam 1`] = `
+{
+  "name": "signature",
+  "raw": "{
+  [Property in keyof X]: string;
+}",
+  "signature": {
+    "properties": [
+      {
+        "key": {
+          "name": "X",
+          "required": true,
+        },
+        "value": {
+          "name": "string",
+        },
+      },
+    ],
+  },
+  "type": "object",
+}
+`;
+
 exports[`getTSType > handles mapped types 1`] = `
 {
   "name": "signature",

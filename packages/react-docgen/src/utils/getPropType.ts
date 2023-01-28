@@ -22,8 +22,7 @@ function getEnumValuesFromArrayExpression(
   const values: Array<Record<string, unknown>> = [];
 
   path.get('elements').forEach(elementPath => {
-    // Array holes TODO test
-    if (elementPath.node == null) return;
+    if (!elementPath.hasNode()) return;
 
     if (elementPath.isSpreadElement()) {
       const value = resolveToValue(elementPath.get('argument'));
@@ -85,7 +84,6 @@ function getPropTypeOneOfType(argumentPath: NodePath): PropTypeDescriptor {
     type.value = printValue(argumentPath);
   } else {
     type.value = argumentPath.get('elements').map(elementPath => {
-      // Array holes TODO test
       if (!elementPath.hasNode()) return;
       const descriptor: PropTypeDescriptor = getPropType(elementPath);
       const docs = getDocblock(
