@@ -5,7 +5,7 @@ import withFixture from './utils/withFixture';
 
 describe('resolver', () => {
   describe('accepts the names of builtin resolver configs', () => {
-    test.each(Object.values(ResolverConfigs))('%s', async importer => {
+    test.each(Object.values(ResolverConfigs))('%s', async (importer) => {
       await withFixture('basic', async ({ dir, run }) => {
         const { stdout, stderr } = await run([
           `--resolver=${importer}`,

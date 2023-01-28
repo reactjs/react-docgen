@@ -27,38 +27,38 @@ describe('propTypeHandler', () => {
   });
 
   const mockImporter = makeMockImporter({
-    props: stmtLast =>
+    props: (stmtLast) =>
       stmtLast(`
       import { PropTypes } from 'react';
       export default {bar: PropTypes.bool};
     `).get('declaration'),
 
-    simpleProp: stmtLast =>
+    simpleProp: (stmtLast) =>
       stmtLast(`
       import { PropTypes } from 'react';
       export default PropTypes.array.isRequired;
     `).get('declaration'),
 
-    complexProp: stmtLast =>
+    complexProp: (stmtLast) =>
       stmtLast(`
       var prop = PropTypes.oneOfType([PropTypes.number, PropTypes.bool]).isRequired;
       import { PropTypes } from 'react';
       export default prop;
     `).get('declaration'),
 
-    foo: stmtLast =>
+    foo: (stmtLast) =>
       stmtLast(`
         import { PropTypes } from 'react';
         export default PropTypes.bool;
     `).get('declaration'),
 
-    bar: stmtLast =>
+    bar: (stmtLast) =>
       stmtLast(`
         import { PropTypes } from 'react';
         export default PropTypes.bool;
     `).get('declaration'),
 
-    baz: stmtLast =>
+    baz: (stmtLast) =>
       stmtLast(`
         import { PropTypes as OtherPropTypes } from 'react';
         export default OtherPropTypes.bool;
@@ -279,7 +279,7 @@ describe('propTypeHandler', () => {
 
   describe('React.createClass', () => {
     testPropTypes(
-      propTypesSrc => template(`({propTypes: ${propTypesSrc}})`),
+      (propTypesSrc) => template(`({propTypes: ${propTypesSrc}})`),
       (src, importer = noopImporter) =>
         parse
           .statement(src, importer)
@@ -290,7 +290,7 @@ describe('propTypeHandler', () => {
   describe('class definition', () => {
     describe('class property', () => {
       testPropTypes(
-        propTypesSrc =>
+        (propTypesSrc) =>
           template(`
           class Component {
             static propTypes = ${propTypesSrc};
@@ -302,7 +302,7 @@ describe('propTypeHandler', () => {
 
     describe('static getter', () => {
       testPropTypes(
-        propTypesSrc =>
+        (propTypesSrc) =>
           template(`
           class Component {
             static get propTypes() {
@@ -317,7 +317,7 @@ describe('propTypeHandler', () => {
 
   describe('stateless component', () => {
     testPropTypes(
-      propTypesSrc =>
+      (propTypesSrc) =>
         template(`
         var Component = (props) => <div />;
         Component.propTypes = ${propTypesSrc};

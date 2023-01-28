@@ -4,13 +4,13 @@ import { describe, expect, test } from 'vitest';
 
 describe('isReactCreateClassCall', () => {
   const mockImporter = makeMockImporter({
-    foo: stmtLast =>
+    foo: (stmtLast) =>
       stmtLast(`
       import React from 'react';
       export default React.createClass;
     `).get('declaration'),
 
-    bar: stmtLast =>
+    bar: (stmtLast) =>
       stmtLast(`
       import makeClass from "create-react-class";
       export default makeClass;

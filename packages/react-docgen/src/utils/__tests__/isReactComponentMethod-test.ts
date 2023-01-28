@@ -5,7 +5,7 @@ import { describe, expect, test } from 'vitest';
 
 describe('isReactComponentMethod', () => {
   const mockImporter = makeMockImporter({
-    foo: stmtLast =>
+    foo: (stmtLast) =>
       stmtLast(`
       export default 'render';
     `).get('declaration'),

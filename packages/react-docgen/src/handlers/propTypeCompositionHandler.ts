@@ -23,7 +23,7 @@ function processObjectExpression(
   documentation: Documentation,
   path: NodePath<ObjectExpression>,
 ): void {
-  path.get('properties').forEach(propertyPath => {
+  path.get('properties').forEach((propertyPath) => {
     if (propertyPath.isSpreadElement()) {
       amendComposes(
         documentation,

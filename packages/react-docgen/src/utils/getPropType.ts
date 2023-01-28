@@ -21,7 +21,7 @@ function getEnumValuesFromArrayExpression(
 ): Array<Record<string, unknown>> {
   const values: Array<Record<string, unknown>> = [];
 
-  path.get('elements').forEach(elementPath => {
+  path.get('elements').forEach((elementPath) => {
     if (!elementPath.hasNode()) return;
 
     if (elementPath.isSpreadElement()) {
@@ -60,7 +60,7 @@ function getPropTypeOneOf(argumentPath: NodePath): PropTypeDescriptor {
       resolveObjectKeysToArray(value) || resolveObjectValuesToArray(value);
 
     if (objectValues) {
-      type.value = objectValues.map(objectValue => ({
+      type.value = objectValues.map((objectValue) => ({
         value: objectValue,
         computed: false,
       }));
@@ -83,7 +83,7 @@ function getPropTypeOneOfType(argumentPath: NodePath): PropTypeDescriptor {
     type.computed = true;
     type.value = printValue(argumentPath);
   } else {
-    type.value = argumentPath.get('elements').map(elementPath => {
+    type.value = argumentPath.get('elements').map((elementPath) => {
       if (!elementPath.hasNode()) return;
       const descriptor: PropTypeDescriptor = getPropType(elementPath);
       const docs = getDocblock(
@@ -158,7 +158,7 @@ function getPropTypeShapish(name: 'exact' | 'shape', argumentPath: NodePath) {
   if (argumentPath.isObjectExpression()) {
     const value = {};
 
-    argumentPath.get('properties').forEach(propertyPath => {
+    argumentPath.get('properties').forEach((propertyPath) => {
       if (propertyPath.isSpreadElement() || propertyPath.isObjectMethod()) {
         // It is impossible to resolve a name for a spread element
         return;
@@ -239,7 +239,7 @@ const propTypes = new Map<string, (path: NodePath) => PropTypeDescriptor>([
 export default function getPropType(path: NodePath): PropTypeDescriptor {
   let descriptor: PropTypeDescriptor | null = null;
 
-  getMembers(path, true).some(member => {
+  getMembers(path, true).some((member) => {
     const memberPath = member.path;
     let name: string | null = null;
 

@@ -4,13 +4,13 @@ import { describe, expect, test } from 'vitest';
 
 describe('isReactComponentClass', () => {
   const mockImporter = makeMockImporter({
-    component: stmtLast =>
+    component: (stmtLast) =>
       stmtLast(`
       import React from 'react';
       export default React.Component;
     `).get('declaration'),
 
-    pureComponent: stmtLast =>
+    pureComponent: (stmtLast) =>
       stmtLast(`
       import React from 'react';
       export default React.PureComponent;

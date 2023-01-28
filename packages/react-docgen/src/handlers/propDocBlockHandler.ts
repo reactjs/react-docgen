@@ -15,7 +15,7 @@ function resolveDocumentation(
     return;
   }
 
-  path.get('properties').forEach(propertyPath => {
+  path.get('properties').forEach((propertyPath) => {
     if (propertyPath.isSpreadElement()) {
       const resolvedValuePath = resolveToValue(propertyPath.get('argument'));
 

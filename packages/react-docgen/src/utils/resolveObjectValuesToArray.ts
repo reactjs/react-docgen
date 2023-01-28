@@ -32,7 +32,7 @@ function resolveObjectToPropMap(object: NodePath): Map<string, string> | null {
     const values = new Map<string, string>();
     let error = false;
 
-    object.get('properties').forEach(propPath => {
+    object.get('properties').forEach((propPath) => {
       if (error || propPath.isObjectMethod()) return;
 
       if (propPath.isObjectProperty()) {

@@ -174,7 +174,7 @@ describe('cli', () => {
 
   describe('importer', () => {
     describe('accepts the names of builtin importers', () => {
-      test.each(Object.keys(builtinImporters))('%s', async importer => {
+      test.each(Object.keys(builtinImporters))('%s', async (importer) => {
         await withFixture('basic', async ({ dir, run }) => {
           const { stdout, stderr } = await run([
             `--importer=${importer}`,
@@ -272,7 +272,7 @@ describe('cli', () => {
 
   describe('handlers', () => {
     describe('accepts the names of builtin handlers', () => {
-      test.each(Object.keys(builtinHandlers))('%s', async importer => {
+      test.each(Object.keys(builtinHandlers))('%s', async (importer) => {
         await withFixture('basic', async ({ dir, run }) => {
           const { stdout, stderr } = await run([
             `--handler=${importer}`,

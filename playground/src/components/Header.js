@@ -8,7 +8,9 @@ export default class Header extends React.Component {
           react-docgen: <span className="subtitle">PLAYGROUND</span>{' '}
           <select
             className="flavor-select"
-            onChange={event => this.props.onLanguageChange(event.target.value)}
+            onChange={(event) =>
+              this.props.onLanguageChange(event.target.value)
+            }
           >
             <option value="js">JavaScript</option>
             <option value="ts">TypeScript</option>

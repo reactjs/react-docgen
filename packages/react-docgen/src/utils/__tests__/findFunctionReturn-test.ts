@@ -86,14 +86,14 @@ describe('findFunctionReturn', () => {
       `function () { return ${expr} }`,
   };
 
-  Object.keys(cases).forEach(name => {
+  Object.keys(cases).forEach((name) => {
     const [caseFactory, caseSelector] = cases[name];
 
     describe(name, () => {
       Object.entries(functionStyle).forEach(
         ([functionName, [functionFactory, functionSelector]]) => {
           describe(functionName, () => {
-            Object.keys(modifiers).forEach(modifierName => {
+            Object.keys(modifiers).forEach((modifierName) => {
               const modifierFactory = modifiers[modifierName];
 
               test(modifierName, () => {
@@ -106,7 +106,7 @@ describe('findFunctionReturn', () => {
               });
             });
 
-            Object.keys(negativeModifiers).forEach(modifierName => {
+            Object.keys(negativeModifiers).forEach((modifierName) => {
               const modifierFactory = negativeModifiers[modifierName];
 
               test(modifierName, () => {
@@ -139,7 +139,7 @@ describe('findFunctionReturn', () => {
     }
 
     const mockImporter = makeMockImporter({
-      bar: stmtLast => stmtLast(`export default "value";`).get('declaration'),
+      bar: (stmtLast) => stmtLast(`export default "value";`).get('declaration'),
     });
 
     test('handles recursive function calls', () => {

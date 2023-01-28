@@ -4,7 +4,7 @@ import { describe, expect, test } from 'vitest';
 
 describe('resolveObjectKeysToArray', () => {
   const mockImporter = makeMockImporter({
-    foo: stmtLast =>
+    foo: (stmtLast) =>
       stmtLast(`
       export default {
         bar: "bar",
@@ -16,7 +16,7 @@ describe('resolveObjectKeysToArray', () => {
       };
     `).get('declaration'),
 
-    bar: stmtLast =>
+    bar: (stmtLast) =>
       stmtLast(`
       export default {
         bar: 'bar',

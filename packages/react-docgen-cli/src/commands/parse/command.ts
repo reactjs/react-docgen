@@ -123,7 +123,7 @@ program
     });
     // we use slash to convert windows backslashes to unix format so fast-glob works
     const files = await glob(globs.map(slash), {
-      ignore: finalIgnores?.map(ignorePath => {
+      ignore: finalIgnores?.map((ignorePath) => {
         ignorePath = ignorePath.trim();
         // If the ignore glob starts with a dot we need to resolve the path to an
         // absolute path in order for it to work
@@ -139,7 +139,7 @@ program
     let errorEncountered = false;
 
     await Promise.all(
-      files.map(async path => {
+      files.map(async (path) => {
         debug(`Reading file ${path}`);
         const content = await readFile(path, 'utf-8');
 

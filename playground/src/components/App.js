@@ -85,7 +85,7 @@ export default class App extends React.Component {
     return JSON.stringify(parse(value, options), null, 2);
   }
 
-  handleChange = value => {
+  handleChange = (value) => {
     let result;
     let mode = 'text/plain';
 
@@ -124,7 +124,7 @@ export default class App extends React.Component {
     return options;
   }
 
-  handleLanguageChange = language => {
+  handleLanguageChange = (language) => {
     this.setState({ options: this.buildOptions(language) }, () =>
       this.handleChange(this.state.content),
     );

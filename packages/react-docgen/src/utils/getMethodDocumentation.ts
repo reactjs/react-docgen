@@ -76,7 +76,7 @@ function getMethodParamsDoc(methodPath: MethodNodePath): MethodParameter[] {
 
   if (functionExpression) {
     // Extract param types.
-    functionExpression.get('params').forEach(paramPath => {
+    functionExpression.get('params').forEach((paramPath) => {
       let type: TypeDescriptor | null = null;
       const typePath = getTypeAnnotation<FlowType | TSType>(paramPath);
 

@@ -173,7 +173,7 @@ export default function makeFsImporter(
             } else if (id.isObjectPattern()) {
               // export const/var { a } = <init>
 
-              state.resultPath = id.get('properties').find(prop => {
+              state.resultPath = id.get('properties').find((prop) => {
                 if (prop.isObjectProperty()) {
                   const value = prop.get('value');
 

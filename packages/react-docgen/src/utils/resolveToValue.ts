@@ -85,7 +85,7 @@ const explodedVisitors = visitors.explode<TraverseState>({
 
       if (
         candidatePath.node === node ||
-        state.idPath.findParent(parent => parent.node === candidatePath.node)
+        state.idPath.findParent((parent) => parent.node === candidatePath.node)
       ) {
         return assignmentPath.skip();
       }

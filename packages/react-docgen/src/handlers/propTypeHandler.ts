@@ -31,7 +31,7 @@ function amendPropTypes(
     return;
   }
 
-  path.get('properties').forEach(propertyPath => {
+  path.get('properties').forEach((propertyPath) => {
     if (propertyPath.isObjectProperty()) {
       const propName = getPropertyName(propertyPath);
 

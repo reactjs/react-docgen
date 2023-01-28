@@ -46,7 +46,7 @@ const preparedSuites = [];
 suites.forEach(({ name, files }) => {
   const suite = new Benchmark.Suite(name);
 
-  files.forEach(file => {
+  files.forEach((file) => {
     const code = fs.readFileSync(path.join(__dirname, file), 'utf-8');
     const options = { filename: file, babelrc: false, configFile: false };
     const newOptions = { babelOptions: options };

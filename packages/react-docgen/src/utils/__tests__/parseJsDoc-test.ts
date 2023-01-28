@@ -20,7 +20,7 @@ describe('parseJsDoc', () => {
       'extracts jsdoc typed array': '@param {[string, number]} bar',
     };
 
-    Object.keys(docBlocks).forEach(name => {
+    Object.keys(docBlocks).forEach((name) => {
       const docBlock = docBlocks[name];
 
       test(name, () => {
@@ -37,7 +37,7 @@ describe('parseJsDoc', () => {
       'extracts jsdoc typed array': '@param {[string, number]} bar',
     };
 
-    Object.keys(docBlocks).forEach(name => {
+    Object.keys(docBlocks).forEach((name) => {
       const docBlock = docBlocks[name];
 
       test(name, () => {

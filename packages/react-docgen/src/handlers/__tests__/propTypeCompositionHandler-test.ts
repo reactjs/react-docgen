@@ -19,7 +19,7 @@ describe('propTypeCompositionHandler', () => {
   });
 
   const mockImporter = makeMockImporter({
-    'Foo.react': stmtLast =>
+    'Foo.react': (stmtLast) =>
       stmtLast(`
       function Component() {}
       Component.propTypes = {
@@ -28,7 +28,7 @@ describe('propTypeCompositionHandler', () => {
       export default Component;
     `).get('declaration'),
 
-    SharedProps: stmtLast =>
+    SharedProps: (stmtLast) =>
       stmtLast(`
       export default {
         bar: 'baz'
@@ -119,7 +119,7 @@ describe('propTypeCompositionHandler', () => {
 
   describe('React.createClass', () => {
     testCompositionHandler(
-      propTypesSrc => `({propTypes: ${propTypesSrc}})`,
+      (propTypesSrc) => `({propTypes: ${propTypesSrc}})`,
       (src, importer = noopImporter) =>
         parse
           .statement(src, importer)
@@ -130,7 +130,7 @@ describe('propTypeCompositionHandler', () => {
   describe('class definition', () => {
     describe('class properties', () => {
       testCompositionHandler(
-        propTypesSrc => `
+        (propTypesSrc) => `
           class Component {
             static propTypes = ${propTypesSrc};
           }
@@ -141,7 +141,7 @@ describe('propTypeCompositionHandler', () => {
 
     describe('static getter', () => {
       testCompositionHandler(
-        propTypesSrc => `
+        (propTypesSrc) => `
           class Component {
             static get propTypes() {
               return ${propTypesSrc};

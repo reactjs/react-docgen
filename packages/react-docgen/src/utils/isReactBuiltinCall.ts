@@ -24,7 +24,7 @@ function isNamedImportDeclaration(
     return false;
   }
 
-  return value.get('specifiers').some(specifier => {
+  return value.get('specifiers').some((specifier) => {
     if (!specifier.isImportSpecifier()) {
       return false;
     }

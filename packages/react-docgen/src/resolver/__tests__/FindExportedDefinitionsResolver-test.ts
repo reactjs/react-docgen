@@ -15,37 +15,37 @@ describe('FindExportedDefinitionsResolver', () => {
     }
 
     const mockImporter = makeMockImporter({
-      createClass: stmtLast =>
+      createClass: (stmtLast) =>
         stmtLast(`
       import React from 'react'
       export default React.createClass({})
     `).get('declaration'),
 
-      classDec: stmtLast =>
+      classDec: (stmtLast) =>
         stmtLast(`
       import React from 'react'
       export default class Component extends React.Component {}
     `).get('declaration'),
 
-      classExpr: stmtLast =>
+      classExpr: (stmtLast) =>
         stmtLast(`
       import React from 'react'
       var Component = class extends React.Component {}
       export default Component
     `).get('declaration'),
 
-      statelessJsx: stmtLast =>
+      statelessJsx: (stmtLast) =>
         stmtLast(`
       export default () => <div />
     `).get('declaration'),
 
-      statelessCreateElement: stmtLast =>
+      statelessCreateElement: (stmtLast) =>
         stmtLast(`
       import React from 'react'
       export default () => React.createElement('div', {})
     `).get('declaration'),
 
-      forwardRef: stmtLast =>
+      forwardRef: (stmtLast) =>
         stmtLast(`
       import React from 'react'
       export default React.forwardRef((props, ref) => (
@@ -1250,35 +1250,35 @@ describe('FindExportedDefinitionsResolver', () => {
       return resolver.resolve(parse(source, {}, importer, true));
     }
     const mockImporter = makeMockImporter({
-      createClass: stmtLast =>
+      createClass: (stmtLast) =>
         stmtLast(`
       import React from 'react'
       export default React.createClass({})
     `).get('declaration'),
 
-      classDec: stmtLast =>
+      classDec: (stmtLast) =>
         stmtLast(`
       import React from 'react'
       export default class Component extends React.Component {}
     `).get('declaration'),
 
-      classExpr: stmtLast =>
+      classExpr: (stmtLast) =>
         stmtLast(`
       import React from 'react'
       var Component = class extends React.Component {}
       export default Component
     `).get('declaration'),
 
-      statelessJsx: stmtLast =>
+      statelessJsx: (stmtLast) =>
         stmtLast(`export default () => <div />`).get('declaration'),
 
-      statelessCreateElement: stmtLast =>
+      statelessCreateElement: (stmtLast) =>
         stmtLast(`
       import React from 'react'
       export default () => React.createElement('div', {})
     `).get('declaration'),
 
-      forwardRef: stmtLast =>
+      forwardRef: (stmtLast) =>
         stmtLast(`
       import React from 'react'
       export default React.forwardRef((props, ref) => (

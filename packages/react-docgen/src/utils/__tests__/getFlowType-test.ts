@@ -14,49 +14,49 @@ import { describe, expect, test } from 'vitest';
 
 describe('getFlowType', () => {
   const mockImporter = makeMockImporter({
-    abc: stmt =>
+    abc: (stmt) =>
       stmt<ExportNamedDeclaration>(`
       export type abc = number;
     `).get('declaration') as NodePath<TypeAlias>,
 
-    def: stmt =>
+    def: (stmt) =>
       stmt<ExportNamedDeclaration>(`
       export type def = boolean;
     `).get('declaration') as NodePath<TypeAlias>,
 
-    xyz: stmt =>
+    xyz: (stmt) =>
       stmt<ExportNamedDeclaration>(`
       export type xyz = string;
     `).get('declaration') as NodePath<TypeAlias>,
 
-    maybe: stmt =>
+    maybe: (stmt) =>
       stmt<ExportNamedDeclaration>(`
       export type maybe = ?string;
     `).get('declaration') as NodePath<TypeAlias>,
 
-    barbaz: stmt =>
+    barbaz: (stmt) =>
       stmt<ExportNamedDeclaration>(`
       export type barbaz = "bar" | "baz";
     `).get('declaration') as NodePath<TypeAlias>,
 
-    recTup: stmt =>
+    recTup: (stmt) =>
       stmt<ExportNamedDeclaration>(`
       import type { abc } from 'abc';
       import type { xyz } from 'xyz';
       export type recTup = [abc, xyz];
     `).get('declaration') as NodePath<TypeAlias>,
 
-    MyType: stmt =>
+    MyType: (stmt) =>
       stmt<ExportNamedDeclaration>(`
       export type MyType = { a: string, b: ?notImported };
     `).get('declaration') as NodePath<TypeAlias>,
 
-    MyGenericType: stmt =>
+    MyGenericType: (stmt) =>
       stmt<ExportNamedDeclaration>(`
       export type MyType<T> = { a: T, b: Array<T> };
     `).get('declaration') as NodePath<TypeAlias>,
 
-    fruits: stmt =>
+    fruits: (stmt) =>
       stmt(`
       export default {
         'apple': '🍎',
@@ -64,7 +64,7 @@ describe('getFlowType', () => {
       };
     `).get('declaration'),
 
-    otherFruits: stmt =>
+    otherFruits: (stmt) =>
       stmt<ExportNamedDeclaration>(`
       export type OtherFruits = { orange: string };
     `).get('declaration') as NodePath<TypeAlias>,
@@ -87,7 +87,7 @@ describe('getFlowType', () => {
       'Number',
     ];
 
-    simplePropTypes.forEach(type => {
+    simplePropTypes.forEach((type) => {
       const typePath = parse
         .expression<TypeCastExpression>('x: ' + type)
         .get('typeAnnotation')
@@ -100,7 +100,7 @@ describe('getFlowType', () => {
   test('detects literal types', () => {
     const literalTypes = ['"foo"', 1234, true];
 
-    literalTypes.forEach(value => {
+    literalTypes.forEach((value) => {
       const typePath = parse
         .expression<TypeCastExpression>(`x: ${value}`)
         .get('typeAnnotation')
@@ -1277,7 +1277,7 @@ describe('getFlowType', () => {
       },
     };
 
-    Object.keys(types).forEach(type => {
+    Object.keys(types).forEach((type) => {
       test(type, () => testReactType(type, types[type]));
     });
   });

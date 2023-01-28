@@ -10,7 +10,7 @@ describe('isReactModuleName', () => {
     'prop-types',
   ];
 
-  reactModules.forEach(module => {
+  reactModules.forEach((module) => {
     test(`returns true for ${module}`, () => {
       expect(isReactModuleName(module)).toBe(true);
     });

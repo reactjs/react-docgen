@@ -14,7 +14,7 @@ export default function getPropertyValuePath(
   const property = path
     .get('properties')
     .find(
-      propertyPath =>
+      (propertyPath) =>
         !propertyPath.isSpreadElement() &&
         getPropertyName(propertyPath) === propertyName,
     );

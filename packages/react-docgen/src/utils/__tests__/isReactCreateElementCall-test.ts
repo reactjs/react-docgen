@@ -4,7 +4,7 @@ import { describe, expect, test } from 'vitest';
 
 describe('isReactCreateElementCall', () => {
   const mockImporter = makeMockImporter({
-    foo: stmtLast =>
+    foo: (stmtLast) =>
       stmtLast(`
       import React from 'react';
       export default React.createElement;

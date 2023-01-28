@@ -138,7 +138,7 @@ describe('componentDocblockHandler', () => {
     const importDef = useDefault ? `${importName}` : `{ ${importName} }`;
 
     const mockImporter = makeMockImporter({
-      test1: stmtLast =>
+      test1: (stmtLast) =>
         stmtLast(
           `
         /**
@@ -150,7 +150,7 @@ describe('componentDocblockHandler', () => {
           0,
         ).get('declaration') as NodePath,
 
-      test2: stmtLast =>
+      test2: (stmtLast) =>
         stmtLast<ExportDefaultDeclaration>(`
         import ${importDef} from 'test1';
         export default ${importName};
@@ -189,7 +189,7 @@ describe('componentDocblockHandler', () => {
   describe('React.createClass', () => {
     testDockblockHandler(
       'var Component = React.createClass({})',
-      src =>
+      (src) =>
         parse
           .statementLast(src)
           .get('declarations.0.init.arguments.0') as NodePath<ObjectExpression>,
@@ -198,15 +198,17 @@ describe('componentDocblockHandler', () => {
   });
 
   describe('ClassDeclaration', () => {
-    testDockblockHandler('class Component {}', src => parse.statementLast(src));
-    testDecorators('class Component {}', src => parse.statementLast(src));
+    testDockblockHandler('class Component {}', (src) =>
+      parse.statementLast(src),
+    );
+    testDecorators('class Component {}', (src) => parse.statementLast(src));
     testImports('export class Component {}', 'Component');
   });
 
   describe('ClassExpression', () => {
     testDockblockHandler(
       'var Component = class {};',
-      src =>
+      (src) =>
         parse
           .statementLast<VariableDeclaration>(src)
           .get('declarations.0.init') as NodePath<ClassExpression>,
@@ -215,13 +217,13 @@ describe('componentDocblockHandler', () => {
   });
 
   describe('Stateless functions', () => {
-    testDockblockHandler('function Component() {}', src =>
+    testDockblockHandler('function Component() {}', (src) =>
       parse.statementLast(src),
     );
     testImports('export function Component() {}', 'Component');
     testDockblockHandler(
       'var Component = function () {};',
-      src =>
+      (src) =>
         parse
           .statementLast<VariableDeclaration>(src)
           .get('declarations.0.init') as NodePath<FunctionExpression>,
@@ -229,7 +231,7 @@ describe('componentDocblockHandler', () => {
     testImports('export var Component = function () {};', 'Component');
     testDockblockHandler(
       'var Component = () => {}',
-      src =>
+      (src) =>
         parse
           .statementLast<VariableDeclaration>(src)
           .get('declarations.0.init') as NodePath<ArrowFunctionExpression>,
@@ -241,7 +243,7 @@ describe('componentDocblockHandler', () => {
     describe('Default React.createClass export', () => {
       testDockblockHandler(
         'export default React.createClass({});',
-        src =>
+        (src) =>
           parse
             .statementLast(src)
             .get('declaration.arguments.0') as NodePath<ObjectExpression>,
@@ -251,14 +253,14 @@ describe('componentDocblockHandler', () => {
     describe('Default class declaration export', () => {
       testDockblockHandler(
         'export default class Component {}',
-        src =>
+        (src) =>
           parse
             .statementLast(src)
             .get('declaration') as NodePath<ClassDeclaration>,
       );
       testDecorators(
         'class Component {}',
-        src =>
+        (src) =>
           parse
             .statementLast(src)
             .get('declaration') as NodePath<ClassDeclaration>,
@@ -269,14 +271,14 @@ describe('componentDocblockHandler', () => {
     describe('Default class expression export', () => {
       testDockblockHandler(
         'export default class {}',
-        src =>
+        (src) =>
           parse
             .statementLast(src)
             .get('declaration') as NodePath<ClassExpression>,
       );
       testDecorators(
         'class {}',
-        src =>
+        (src) =>
           parse
             .statementLast(src)
             .get('declaration') as NodePath<ClassExpression>,
@@ -288,7 +290,7 @@ describe('componentDocblockHandler', () => {
       describe('named function', () => {
         testDockblockHandler(
           'export default function Component() {}',
-          src =>
+          (src) =>
             parse
               .statementLast(src)
               .get('declaration') as NodePath<FunctionDeclaration>,
@@ -298,7 +300,7 @@ describe('componentDocblockHandler', () => {
       describe('anonymous function', () => {
         testDockblockHandler(
           'export default function() {}',
-          src =>
+          (src) =>
             parse
               .statementLast(src)
               .get('declaration') as NodePath<FunctionDeclaration>,
@@ -308,7 +310,7 @@ describe('componentDocblockHandler', () => {
       describe('arrow function', () => {
         testDockblockHandler(
           'export default () => {}',
-          src =>
+          (src) =>
             parse
               .statementLast<ExportDefaultDeclaration>(src)
               .get('declaration') as NodePath<ArrowFunctionExpression>,
@@ -321,7 +323,7 @@ describe('componentDocblockHandler', () => {
     describe('Named React.createClass export', () => {
       testDockblockHandler(
         'export var Component = React.createClass({});',
-        src =>
+        (src) =>
           parse
             .statementLast(src)
             .get(
@@ -333,14 +335,14 @@ describe('componentDocblockHandler', () => {
     describe('Named class declaration export', () => {
       testDockblockHandler(
         'export class Component {}',
-        src =>
+        (src) =>
           parse
             .statementLast(src)
             .get('declaration') as NodePath<ClassDeclaration>,
       );
       testDecorators(
         'class Component {}',
-        src =>
+        (src) =>
           parse
             .statementLast(src)
             .get('declaration') as NodePath<ClassDeclaration>,
@@ -352,7 +354,7 @@ describe('componentDocblockHandler', () => {
       describe('named function', () => {
         testDockblockHandler(
           'export function Component() {}',
-          src =>
+          (src) =>
             parse
               .statementLast(src)
               .get('declaration') as NodePath<FunctionDeclaration>,
@@ -362,7 +364,7 @@ describe('componentDocblockHandler', () => {
       describe('anonymous function', () => {
         testDockblockHandler(
           'export var Component = function() {}',
-          src =>
+          (src) =>
             parse
               .statementLast(src)
               .get('declaration') as NodePath<FunctionExpression>,
@@ -372,7 +374,7 @@ describe('componentDocblockHandler', () => {
       describe('arrow function', () => {
         testDockblockHandler(
           'export var Component = () => {}',
-          src =>
+          (src) =>
             parse
               .statementLast(src)
               .get('declaration') as NodePath<ArrowFunctionExpression>,
@@ -389,7 +391,7 @@ describe('componentDocblockHandler', () => {
         `
         React.forwardRef((props, ref) => {});
         import React from "react";`,
-        src =>
+        (src) =>
           parse
             .statement(src, -2)
             .get('expression') as NodePath<CallExpression>,
@@ -409,7 +411,7 @@ describe('componentDocblockHandler', () => {
         React.memo(React.forwardRef((props, ref) => {}));
         import React from "react";
         `,
-        src =>
+        (src) =>
           parse
             .statement(src, -2)
             .get('expression') as NodePath<CallExpression>,
@@ -432,7 +434,7 @@ describe('componentDocblockHandler', () => {
         React.forwardRef(Component);
         import React from "react";
         `,
-        src =>
+        (src) =>
           parse
             .statement(src, -2)
             .get('expression') as NodePath<CallExpression>,

@@ -16,7 +16,7 @@ describe('setPropDescription', () => {
   });
 
   const mockImporter = makeMockImporter({
-    foo: stmtLast => stmtLast(`export default 'foo';`).get('declaration'),
+    foo: (stmtLast) => stmtLast(`export default 'foo';`).get('declaration'),
   });
 
   function getDescriptors(src: string, documentation = defaultDocumentation) {
