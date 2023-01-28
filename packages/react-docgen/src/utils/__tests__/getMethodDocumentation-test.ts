@@ -13,17 +13,17 @@ import { describe, expect, test } from 'vitest';
 
 describe('getMethodDocumentation', () => {
   const mockImporter = makeMockImporter({
-    hello: stmt =>
+    hello: (stmt) =>
       stmt(`
       export default () => {};
     `).get('declaration'),
 
-    bar: stmt =>
+    bar: (stmt) =>
       stmt(`
       export default (bar: number) => {};
     `).get('declaration'),
 
-    baz: stmt =>
+    baz: (stmt) =>
       stmt(`
       export default (): number => {};
     `).get('declaration'),

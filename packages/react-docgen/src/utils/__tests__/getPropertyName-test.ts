@@ -5,12 +5,12 @@ import { describe, expect, test } from 'vitest';
 
 describe('getPropertyName', () => {
   const mockImporter = makeMockImporter({
-    foo: stmtLast =>
+    foo: (stmtLast) =>
       stmtLast(`
       export default "name";
     `).get('declaration'),
 
-    bar: stmtLast =>
+    bar: (stmtLast) =>
       stmtLast(`
       export default { baz: "name" };
     `).get('declaration'),

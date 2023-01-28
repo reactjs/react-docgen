@@ -138,7 +138,7 @@ function handleTSTypeReference(
 
     type = {
       ...(type as SimpleType),
-      elements: params.map(param =>
+      elements: params.map((param) =>
         getTSTypeWithResolvedTypes(param, typeParams),
       ),
       raw: printValue(path),
@@ -171,7 +171,7 @@ function handleTSTypeLiteral(
     signature: { properties: [] },
   };
 
-  path.get('members').forEach(param => {
+  path.get('members').forEach((param) => {
     const typeAnnotation = param.get('typeAnnotation') as NodePath<
       TSTypeAnnotation | null | undefined
     >;
@@ -235,7 +235,7 @@ function handleTSUnionType(
     raw: printValue(path),
     elements: path
       .get('types')
-      .map(subType => getTSTypeWithResolvedTypes(subType, typeParams)),
+      .map((subType) => getTSTypeWithResolvedTypes(subType, typeParams)),
   };
 }
 
@@ -248,7 +248,7 @@ function handleTSIntersectionType(
     raw: printValue(path),
     elements: path
       .get('types')
-      .map(subType => getTSTypeWithResolvedTypes(subType, typeParams)),
+      .map((subType) => getTSTypeWithResolvedTypes(subType, typeParams)),
   };
 }
 
@@ -310,7 +310,7 @@ function handleTSFunctionType(
     },
   };
 
-  path.get('parameters').forEach(param => {
+  path.get('parameters').forEach((param) => {
     const typeAnnotation = getTypeAnnotation<TSType>(param);
 
     const arg: FunctionArgumentType<TSFunctionSignatureType> = {
@@ -355,7 +355,7 @@ function handleTSTupleType(
     elements: [],
   };
 
-  path.get('elementTypes').forEach(param => {
+  path.get('elementTypes').forEach((param) => {
     type.elements.push(getTSTypeWithResolvedTypes(param, typeParams));
   });
 
@@ -406,7 +406,7 @@ function handleTSTypeOperator(
       return {
         name: 'union',
         raw: printValue(path),
-        elements: keys.map(key => ({ name: 'literal', value: key })),
+        elements: keys.map((key) => ({ name: 'literal', value: key })),
       };
     }
   }
@@ -435,7 +435,7 @@ function handleTSIndexedAccessType(
       }]`,
       raw: printValue(path),
     };
-  const resolvedType = objectType.signature.properties.find(p => {
+  const resolvedType = objectType.signature.properties.find((p) => {
     // indexType.value = "'foo'"
     return indexType.value && p.key === indexType.value.replace(/['"]+/g, '');
   });

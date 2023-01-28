@@ -28,28 +28,28 @@ function typeAlias(
 }
 
 const mockImporter = makeMockImporter({
-  abc: stmtLast =>
+  abc: (stmtLast) =>
     stmtLast<ExportNamedDeclaration>(`export type abc = number;`, true).get(
       'declaration',
     ) as NodePath<Declaration>,
 
-  def: stmtLast =>
+  def: (stmtLast) =>
     stmtLast<ExportNamedDeclaration>(`export type def = boolean;`, true).get(
       'declaration',
     ) as NodePath<Declaration>,
 
-  xyz: stmtLast =>
+  xyz: (stmtLast) =>
     stmtLast<ExportNamedDeclaration>(`export type xyz = string;`, true).get(
       'declaration',
     ) as NodePath<Declaration>,
 
-  barbaz: stmtLast =>
+  barbaz: (stmtLast) =>
     stmtLast<ExportNamedDeclaration>(
       `export type barbaz = "bar" | "baz";`,
       true,
     ).get('declaration') as NodePath<Declaration>,
 
-  recTup: stmtLast =>
+  recTup: (stmtLast) =>
     stmtLast<ExportNamedDeclaration>(
       `import { abc } from 'abc';
        import { xyz } from 'xyz';
@@ -57,26 +57,26 @@ const mockImporter = makeMockImporter({
       true,
     ).get('declaration') as NodePath<Declaration>,
 
-  obj: stmtLast =>
+  obj: (stmtLast) =>
     stmtLast<ExportNamedDeclaration>(
       `export type A = { x: string };`,
       true,
     ).get('declaration') as NodePath<Declaration>,
 
-  MyType: stmtLast =>
+  MyType: (stmtLast) =>
     stmtLast<ExportNamedDeclaration>(
       `import { xyz } from 'xyz';
        export type MyType = { a: number, b: xyz };`,
       true,
     ).get('declaration') as NodePath<Declaration>,
 
-  MyGenericType: stmtLast =>
+  MyGenericType: (stmtLast) =>
     stmtLast<ExportNamedDeclaration>(
       `export type MyGenericType<T> = { a: T, b: Array<T> };`,
       true,
     ).get('declaration') as NodePath<Declaration>,
 
-  fruits: stmtLast =>
+  fruits: (stmtLast) =>
     stmtLast(
       `
     export default {
@@ -107,7 +107,7 @@ describe('getTSType', () => {
       'Number',
     ];
 
-    simplePropTypes.forEach(type => {
+    simplePropTypes.forEach((type) => {
       const typePath = typeAlias(`let x: ${type};`);
 
       expect(getTSType(typePath)).toMatchSnapshot();
@@ -117,7 +117,7 @@ describe('getTSType', () => {
   describe('literal types', () => {
     const literalTypes = ['"foo"', 1234, true, -1, '`foo`'];
 
-    literalTypes.forEach(value => {
+    literalTypes.forEach((value) => {
       test(`detects ${value}`, () => {
         const typePath = typeAlias(`let x: ${value};`);
 
@@ -559,7 +559,7 @@ describe('getTSType', () => {
       'React.StatelessFunctionalComponent<Props2>',
     ];
 
-    types.forEach(type => {
+    types.forEach((type) => {
       test(type, () => {
         const typePath = typeAlias(`
           var x: ${type} = 2;

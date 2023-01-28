@@ -19,21 +19,21 @@ describe('getPropType', () => {
       'elementType',
     ];
 
-    simplePropTypes.forEach(type =>
+    simplePropTypes.forEach((type) =>
       expect(getPropType(parse.expression('React.PropTypes.' + type))).toEqual({
         name: type,
       }),
     );
 
     // It doesn't actually matter what the MemberExpression is
-    simplePropTypes.forEach(type =>
+    simplePropTypes.forEach((type) =>
       expect(getPropType(parse.expression('Foo.' + type + '.bar'))).toEqual({
         name: type,
       }),
     );
 
     // Doesn't even have to be a MemberExpression
-    simplePropTypes.forEach(type =>
+    simplePropTypes.forEach((type) =>
       expect(getPropType(parse.expression(type))).toEqual({
         name: type,
       }),
@@ -159,43 +159,43 @@ describe('getPropType', () => {
 
   describe('resolve identifier to their values', () => {
     const mockImporter = makeMockImporter({
-      shape: stmt =>
+      shape: (stmt) =>
         stmt(`
         export default {bar: PropTypes.string};
       `).get('declaration'),
 
-      types: stmt =>
+      types: (stmt) =>
         stmt(`
         export default ["foo", "bar"];
       `).get('declaration'),
 
-      foo: stmt =>
+      foo: (stmt) =>
         stmt(`
         export default "foo";
       `).get('declaration'),
 
-      bar: stmt =>
+      bar: (stmt) =>
         stmt(`
         export default "bar";
       `).get('declaration'),
 
-      obj: stmt =>
+      obj: (stmt) =>
         stmt(`
         export default { FOO: "foo", BAR: "bar" };
       `).get('declaration'),
 
-      arr: stmt =>
+      arr: (stmt) =>
         stmt(`
         export default ["foo", "bar"];
       `).get('declaration'),
 
-      keys: stmt =>
+      keys: (stmt) =>
         stmt(`
         import obj from 'obj';
         export default Object.keys(obj);
       `).get('declaration'),
 
-      values: stmt =>
+      values: (stmt) =>
         stmt(`
         import obj from 'obj';
         export default Object.values(obj);

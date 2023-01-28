@@ -4,13 +4,13 @@ import { describe, expect, test } from 'vitest';
 
 describe('resolveToModule', () => {
   const mockImporter = makeMockImporter({
-    Foo: stmtLast =>
+    Foo: (stmtLast) =>
       stmtLast(`
         import bar from 'Bar';
         export default bar;
       `).get('declaration'),
 
-    Bar: stmtLast =>
+    Bar: (stmtLast) =>
       stmtLast(`
         import baz from 'Baz';
         export default baz;

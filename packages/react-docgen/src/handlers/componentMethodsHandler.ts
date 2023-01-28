@@ -120,7 +120,7 @@ const explodedImperativeHandleVisitors =
         }
 
         // We found the object body, now add all of the properties as methods.
-        definition?.get('properties').forEach(p => {
+        definition?.get('properties').forEach((p) => {
           if (isMethod(p)) {
             state.results.push(p);
           }
@@ -162,7 +162,7 @@ function findImperativeHandleMethods(
 
   body.traverse(explodedImperativeHandleVisitors, state);
 
-  return state.results.map(p => ({ path: p }));
+  return state.results.map((p) => ({ path: p }));
 }
 
 function findAssignedMethods(
@@ -189,7 +189,7 @@ function findAssignedMethods(
 
   path.traverse(explodedVisitors, state);
 
-  return state.methods.map(p => ({ path: p }));
+  return state.methods.map((p) => ({ path: p }));
 }
 
 /**
@@ -210,17 +210,17 @@ const componentMethodsHandler: Handler = function (
         .get('body')
         .get('body')
         .filter(isMethod) as MethodNodePath[]
-    ).map(p => ({ path: p }));
+    ).map((p) => ({ path: p }));
   } else if (componentDefinition.isObjectExpression()) {
     methodPaths = (
       componentDefinition.get('properties').filter(isMethod) as MethodNodePath[]
-    ).map(p => ({ path: p }));
+    ).map((p) => ({ path: p }));
 
     // Add the statics object properties.
     const statics = getMemberValuePath(componentDefinition, 'statics');
 
     if (statics && statics.isObjectExpression()) {
-      statics.get('properties').forEach(property => {
+      statics.get('properties').forEach((property) => {
         if (isMethod(property)) {
           methodPaths.push({
             path: property,

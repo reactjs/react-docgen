@@ -19,18 +19,18 @@ export default function resolveExportDeclaration(
       if (declaration.isVariableDeclaration()) {
         declaration
           .get('declarations')
-          .forEach(declarator => definitions.push(declarator));
+          .forEach((declarator) => definitions.push(declarator));
       } else if (declaration.isDeclaration()) {
         definitions.push(declaration);
       }
     } else if (path.has('specifiers')) {
       path
         .get('specifiers')
-        .forEach(specifier =>
+        .forEach((specifier) =>
           definitions.push(specifier.get('local') as NodePath),
         );
     }
   }
 
-  return definitions.map(definition => resolveToValue(definition));
+  return definitions.map((definition) => resolveToValue(definition));
 }

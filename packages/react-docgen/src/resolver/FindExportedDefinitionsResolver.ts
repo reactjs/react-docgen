@@ -23,7 +23,7 @@ function exportDeclaration(
   path: NodePath<ExportDefaultDeclaration | ExportNamedDeclaration>,
   state: TraverseState,
 ): void {
-  resolveExportDeclaration(path).forEach(exportedPath => {
+  resolveExportDeclaration(path).forEach((exportedPath) => {
     const definition = findComponentDefinition(exportedPath);
 
     if (definition) {

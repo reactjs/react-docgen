@@ -41,7 +41,7 @@ function getType(tagType: Type | null | undefined): JsDocType | null {
       return {
         name: 'union',
         elements: tagType.elements
-          .map(element => getType(element))
+          .map((element) => getType(element))
           .filter(Boolean as unknown as ExcludesNullish),
       };
     case 'AllLiteral':
@@ -52,7 +52,7 @@ function getType(tagType: Type | null | undefined): JsDocType | null {
       return {
         name: 'name' in tagType.expression ? tagType.expression.name : '',
         elements: tagType.applications
-          .map(element => getType(element))
+          .map((element) => getType(element))
           .filter(Boolean as unknown as ExcludesNullish),
       };
     case 'ArrayType':
@@ -60,7 +60,7 @@ function getType(tagType: Type | null | undefined): JsDocType | null {
       return {
         name: 'tuple',
         elements: tagType.elements
-          .map(element => getType(element))
+          .map((element) => getType(element))
           .filter(Boolean as unknown as ExcludesNullish),
       };
     default: {
@@ -89,7 +89,7 @@ function getOptional(tag: Tag): boolean {
 // Add jsdoc @return description.
 function getReturnsJsDoc(jsDoc: Annotation): JsDocProperty | null {
   const returnTag = jsDoc.tags.find(
-    tag => tag.title === 'return' || tag.title === 'returns',
+    (tag) => tag.title === 'return' || tag.title === 'returns',
   );
 
   if (returnTag) {
@@ -109,8 +109,8 @@ function getParamsJsDoc(jsDoc: Annotation): JsDocParam[] {
   }
 
   return jsDoc.tags
-    .filter(tag => tag.title === 'param')
-    .map(tag => {
+    .filter((tag) => tag.title === 'param')
+    .map((tag) => {
       return {
         name: tag.name || '',
         description: tag.description,

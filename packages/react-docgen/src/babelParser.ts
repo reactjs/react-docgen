@@ -57,7 +57,7 @@ function buildPluginList(
 
   // Ensure that the estree plugin is never active
   // TODO add test
-  return plugins.filter(plugin => plugin !== 'estree');
+  return plugins.filter((plugin) => plugin !== 'estree');
 }
 
 function buildParserOptions(options: TransformOptions): ParserOptions {

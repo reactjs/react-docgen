@@ -14,34 +14,35 @@ describe('FindAllDefinitionsResolver', () => {
   }
 
   const mockImporter = makeMockImporter({
-    obj: stmtLast => stmtLast(`export default {};`).get('declaration'),
+    obj: (stmtLast) => stmtLast(`export default {};`).get('declaration'),
 
-    reactComponent: stmtLast =>
+    reactComponent: (stmtLast) =>
       stmtLast(`
       import React from 'react';
       export default React.Component;
     `).get('declaration'),
 
-    reactPureComponent: stmtLast =>
+    reactPureComponent: (stmtLast) =>
       stmtLast(`
       import React from 'react';
       export default React.PureComponent;
     `).get('declaration'),
 
-    jsxDiv: stmtLast => stmtLast(`export default <div />;`).get('declaration'),
+    jsxDiv: (stmtLast) =>
+      stmtLast(`export default <div />;`).get('declaration'),
 
-    createElement: stmtLast =>
+    createElement: (stmtLast) =>
       stmtLast(`
       import React from 'react';
       export default React.createElement('div', null);
     `).get('declaration'),
 
-    arrowJsx: stmtLast =>
+    arrowJsx: (stmtLast) =>
       stmtLast(`export default (props) => <div>{props.children}</div>;`).get(
         'declaration',
       ),
 
-    coloredView: stmtLast =>
+    coloredView: (stmtLast) =>
       stmtLast(`export default function ColoredView(props, ref) {
         return <div ref={ref} style={{backgroundColor: props.color}} />
       };`).get('declaration'),

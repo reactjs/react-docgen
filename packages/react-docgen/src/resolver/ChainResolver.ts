@@ -40,7 +40,7 @@ export default class ChainResolver implements ResolverClass {
     for (const resolver of this.resolvers) {
       const components = runResolver(resolver, file);
 
-      components.forEach(component => {
+      components.forEach((component) => {
         allComponents.add(component);
       });
     }

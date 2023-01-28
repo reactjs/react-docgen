@@ -96,7 +96,7 @@ function handleKeysHelper(
       return {
         name: 'union',
         raw: printValue(path),
-        elements: keys.map(key => ({ name: 'literal', value: key })),
+        elements: keys.map((key) => ({ name: 'literal', value: key })),
       };
     }
   }
@@ -181,7 +181,7 @@ function handleGenericTypeAnnotation(
 
     type = {
       ...(type as SimpleType),
-      elements: params.map(param =>
+      elements: params.map((param) =>
         getFlowTypeWithResolvedTypes(param, typeParams),
       ),
       raw: printValue(path),
@@ -205,7 +205,7 @@ function handleObjectTypeAnnotation(
   const callProperties = path.get('callProperties');
 
   if (Array.isArray(callProperties)) {
-    callProperties.forEach(param => {
+    callProperties.forEach((param) => {
       type.signature.constructor = getFlowTypeWithResolvedTypes(
         param.get('value'),
         typeParams,
@@ -216,7 +216,7 @@ function handleObjectTypeAnnotation(
   const indexers = path.get('indexers');
 
   if (Array.isArray(indexers)) {
-    indexers.forEach(param => {
+    indexers.forEach((param) => {
       type.signature.properties.push({
         key: getFlowTypeWithResolvedTypes(param.get('key'), typeParams),
         value: getFlowTypeWithRequirements(param.get('value'), typeParams),
@@ -224,7 +224,7 @@ function handleObjectTypeAnnotation(
     });
   }
 
-  path.get('properties').forEach(param => {
+  path.get('properties').forEach((param) => {
     if (param.isObjectTypeProperty()) {
       type.signature.properties.push({
         // For ObjectTypeProperties `getPropertyName` always returns string
@@ -278,7 +278,7 @@ function handleUnionTypeAnnotation(
     raw: printValue(path),
     elements: path
       .get('types')
-      .map(subType => getFlowTypeWithResolvedTypes(subType, typeParams)),
+      .map((subType) => getFlowTypeWithResolvedTypes(subType, typeParams)),
   };
 }
 
@@ -291,7 +291,7 @@ function handleIntersectionTypeAnnotation(
     raw: printValue(path),
     elements: path
       .get('types')
-      .map(subType => getFlowTypeWithResolvedTypes(subType, typeParams)),
+      .map((subType) => getFlowTypeWithResolvedTypes(subType, typeParams)),
   };
 }
 
@@ -324,7 +324,7 @@ function handleFunctionTypeAnnotation(
     },
   };
 
-  path.get('params').forEach(param => {
+  path.get('params').forEach((param) => {
     const typeAnnotation = getTypeAnnotation(param);
 
     type.signature.arguments.push({
@@ -362,7 +362,7 @@ function handleTupleTypeAnnotation(
     elements: [],
   };
 
-  path.get('types').forEach(param => {
+  path.get('types').forEach((param) => {
     type.elements.push(getFlowTypeWithResolvedTypes(param, typeParams));
   });
 

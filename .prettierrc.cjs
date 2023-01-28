@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-  arrowParens: 'avoid',
+  arrowParens: 'always',
   trailingComma: 'all',
   useTabs: false,
   printWidth: 80,

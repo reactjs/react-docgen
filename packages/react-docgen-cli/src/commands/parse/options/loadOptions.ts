@@ -23,7 +23,7 @@ export default async function loadOptions(input: {
 
   const handlers = input.handler
     ? await Promise.all(
-        input.handler.map(async handler => {
+        input.handler.map(async (handler) => {
           return await loadReactDocgenPlugin<Handler>(
             handler,
             'handler',

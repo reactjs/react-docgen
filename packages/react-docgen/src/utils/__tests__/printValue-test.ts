@@ -27,7 +27,7 @@ describe('printValue', () => {
     ).toMatchSnapshot();
   });
 
-  [',', ';'].forEach(char => {
+  [',', ';'].forEach((char) => {
     test(`removes trailing ${char} for TsConstructSignatureDeclaration`, () => {
       const path = parseTypescript
         .statement<TSInterfaceDeclaration>(

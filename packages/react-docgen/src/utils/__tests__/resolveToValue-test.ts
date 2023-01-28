@@ -11,7 +11,7 @@ import { describe, expect, test } from 'vitest';
 
 describe('resolveToValue', () => {
   const mockImporter = makeMockImporter({
-    Foo: stmtLast =>
+    Foo: (stmtLast) =>
       stmtLast<ExportNamedDeclaration>(`
         const baz = 3;
         export { baz };

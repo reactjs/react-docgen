@@ -51,7 +51,7 @@ describe('docblock', () => {
       '\u000D\u000A', // \r\n
     ];
 
-    terminators.forEach(t => {
+    terminators.forEach((t) => {
       test('can handle ' + escape(t) + ' as line terminator', () => {
         const node = parse.statement(source.join(t));
 

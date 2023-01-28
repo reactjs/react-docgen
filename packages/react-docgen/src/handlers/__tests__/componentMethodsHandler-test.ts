@@ -25,19 +25,19 @@ describe('componentMethodsHandler', () => {
   });
 
   const mockImporter = makeMockImporter({
-    baz: stmtLast =>
+    baz: (stmtLast) =>
       stmtLast<ExportDefaultDeclaration>(`
       export default (foo: string): string => {};
     `).get('declaration'),
 
-    foo: stmtLast =>
+    foo: (stmtLast) =>
       stmtLast<ExportDefaultDeclaration>(`
       export default function(bar: number): number {
         return bar;
       }
     `).get('declaration'),
 
-    doFoo: stmtLast =>
+    doFoo: (stmtLast) =>
       stmtLast<ExportDefaultDeclaration>(`
       export default () => {};
     `).get('declaration'),

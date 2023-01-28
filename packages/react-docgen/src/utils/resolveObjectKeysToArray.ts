@@ -73,7 +73,7 @@ export function resolveObjectToNameArray(
       ? objectPath.get('members')
       : (objectPath.get('properties') as NodePath[]);
 
-    properties.forEach(propPath => {
+    properties.forEach((propPath) => {
       if (error) return;
 
       if (
@@ -149,7 +149,7 @@ export default function resolveObjectKeysToArray(
       const nodes = values
         //filter duplicates
         .filter((value, index, array) => array.indexOf(value) === index)
-        .map(value => `"${value}"`);
+        .map((value) => `"${value}"`);
 
       return nodes;
     }

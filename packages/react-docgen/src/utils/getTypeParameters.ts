@@ -27,7 +27,7 @@ export default function getTypeParameters(
 
   let i = 0;
 
-  declaration.get('params').forEach(paramPath => {
+  declaration.get('params').forEach((paramPath) => {
     const key = paramPath.node.name;
     const defaultTypePath = paramPath.node.default
       ? (paramPath.get('default') as NodePath<FlowType>)

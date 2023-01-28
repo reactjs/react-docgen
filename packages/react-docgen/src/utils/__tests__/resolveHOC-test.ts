@@ -4,12 +4,12 @@ import { describe, expect, test } from 'vitest';
 
 describe('resolveHOC', () => {
   const mockImporter = makeMockImporter({
-    component: stmtLast =>
+    component: (stmtLast) =>
       stmtLast(`
       export default Component;
     `).get('declaration'),
 
-    hoc: stmtLast =>
+    hoc: (stmtLast) =>
       stmtLast(`
       import foo from 'component';
       export default hoc1(foo);

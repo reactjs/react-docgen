@@ -24,12 +24,12 @@ export function getDocblock(path: NodePath, trailing = false): string | null {
 
   if (trailing && path.node.trailingComments) {
     comments = path.node.trailingComments.filter(
-      comment =>
+      (comment) =>
         comment.type === 'CommentBlock' && DOCBLOCK_HEADER.test(comment.value),
     );
   } else if (path.node.leadingComments) {
     comments = path.node.leadingComments.filter(
-      comment =>
+      (comment) =>
         comment.type === 'CommentBlock' && DOCBLOCK_HEADER.test(comment.value),
     );
   }

@@ -84,11 +84,11 @@ export function applyToTypeProperties(
   if (path.isObjectTypeAnnotation()) {
     path
       .get('properties')
-      .forEach(propertyPath => callback(propertyPath, typeParams));
+      .forEach((propertyPath) => callback(propertyPath, typeParams));
   } else if (path.isTSTypeLiteral()) {
     path
       .get('members')
-      .forEach(propertyPath => callback(propertyPath, typeParams));
+      .forEach((propertyPath) => callback(propertyPath, typeParams));
   } else if (path.isInterfaceDeclaration()) {
     if (path.node.extends) {
       applyExtends(documentation, path, callback, typeParams);
@@ -97,7 +97,7 @@ export function applyToTypeProperties(
     path
       .get('body')
       .get('properties')
-      .forEach(propertyPath => callback(propertyPath, typeParams));
+      .forEach((propertyPath) => callback(propertyPath, typeParams));
   } else if (path.isTSInterfaceDeclaration()) {
     if (path.node.extends) {
       applyExtends(documentation, path, callback, typeParams);
@@ -106,13 +106,13 @@ export function applyToTypeProperties(
     path
       .get('body')
       .get('body')
-      .forEach(propertyPath => callback(propertyPath, typeParams));
+      .forEach((propertyPath) => callback(propertyPath, typeParams));
   } else if (
     path.isIntersectionTypeAnnotation() ||
     path.isTSIntersectionType()
   ) {
     (path.get('types') as Array<NodePath<FlowType | TSType>>).forEach(
-      typesPath =>
+      (typesPath) =>
         applyToTypeProperties(documentation, typesPath, callback, typeParams),
     );
   } else if (!path.isUnionTypeAnnotation()) {
@@ -136,7 +136,7 @@ function applyExtends(
     path.get('extends') as Array<
       NodePath<InterfaceExtends | TSExpressionWithTypeArguments>
     >
-  ).forEach(extendsPath => {
+  ).forEach((extendsPath) => {
     const resolvedPath = resolveGenericTypeAnnotation(extendsPath);
 
     if (resolvedPath) {

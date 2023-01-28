@@ -24,17 +24,17 @@ describe('defaultPropsHandler', () => {
   });
 
   const mockImporter = makeMockImporter({
-    foobarbaz: stmt =>
+    foobarbaz: (stmt) =>
       stmt(`
       export default "FooBarBaz"
     `).get('declaration'),
 
-    foo: stmt =>
+    foo: (stmt) =>
       stmt(`
       export default {bar: 'baz'};
     `).get('declaration'),
 
-    bar: stmt =>
+    bar: (stmt) =>
       stmt(`
       export default {baz: 'foo'};
     `).get('declaration'),

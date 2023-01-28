@@ -27,7 +27,7 @@ describe('codeTypeHandler', () => {
   });
 
   const mockImporter = makeMockImporter({
-    something: stmtLast =>
+    something: (stmtLast) =>
       stmtLast<ExportNamedDeclaration>(`
       export type Props = {
         foo: string,
@@ -169,7 +169,7 @@ describe('codeTypeHandler', () => {
     });
 
     describe('special generic type annotations', () => {
-      ['$ReadOnly', '$Exact'].forEach(annotation => {
+      ['$ReadOnly', '$Exact'].forEach((annotation) => {
         test(`unwraps ${annotation}<...>`, () => {
           const flowTypesSrc = `
             ${annotation}<{
@@ -195,7 +195,7 @@ describe('codeTypeHandler', () => {
 
   describe('TypeAlias', () => {
     describe('class definition for flow <0.53', () => {
-      testCodeTypeHandler(propTypesSrc =>
+      testCodeTypeHandler((propTypesSrc) =>
         parse.statement(
           template(
             'class Foo extends Component<void, Props, void> {}',
@@ -206,7 +206,7 @@ describe('codeTypeHandler', () => {
     });
 
     describe('class definition for flow >=0.53 without State', () => {
-      testCodeTypeHandler(propTypesSrc =>
+      testCodeTypeHandler((propTypesSrc) =>
         parse.statement(
           template('class Foo extends Component<Props> {}', propTypesSrc),
         ),
@@ -214,7 +214,7 @@ describe('codeTypeHandler', () => {
     });
 
     describe('class definition for flow >=0.53 with State', () => {
-      testCodeTypeHandler(propTypesSrc =>
+      testCodeTypeHandler((propTypesSrc) =>
         parse.statement(
           template(
             'class Foo extends Component<Props, State> {}',
@@ -225,7 +225,7 @@ describe('codeTypeHandler', () => {
     });
 
     describe('class definition with inline props', () => {
-      testCodeTypeHandler(propTypesSrc =>
+      testCodeTypeHandler((propTypesSrc) =>
         parse.statement(
           template(
             'class Foo extends Component { props: Props; }',
@@ -237,7 +237,7 @@ describe('codeTypeHandler', () => {
 
     describe('stateless component', () => {
       testCodeTypeHandler(
-        propTypesSrc =>
+        (propTypesSrc) =>
           parse
             .statement(template('(props: Props) => <div />;', propTypesSrc))
             .get('expression') as NodePath<ArrowFunctionExpression>,

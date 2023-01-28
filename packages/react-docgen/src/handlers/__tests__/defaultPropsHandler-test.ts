@@ -23,7 +23,7 @@ describe('defaultPropsHandler', () => {
   });
 
   const mockImporter = makeMockImporter({
-    getDefaultProps: stmtLast =>
+    getDefaultProps: (stmtLast) =>
       stmtLast(`
       import baz from 'baz';
       export default function() {
@@ -36,17 +36,17 @@ describe('defaultPropsHandler', () => {
       }
     `).get('declaration'),
 
-    baz: stmtLast =>
+    baz: (stmtLast) =>
       stmtLast(`
       export default ["foo", "bar"];
     `).get('declaration'),
 
-    other: stmtLast =>
+    other: (stmtLast) =>
       stmtLast(`
       export default { bar: "foo" };
     `).get('declaration'),
 
-    defaultProps: stmtLast =>
+    defaultProps: (stmtLast) =>
       stmtLast(`
       export default {
         foo: "bar",

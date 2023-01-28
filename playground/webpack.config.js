@@ -12,7 +12,7 @@ const targetDirectory = path.resolve(__dirname, './dist');
 const isDev = process.env.NODE_ENV !== 'production';
 
 const plugins = [
-  new webpack.NormalModuleReplacementPlugin(/^node:/, resource => {
+  new webpack.NormalModuleReplacementPlugin(/^node:/, (resource) => {
     // Remove node: file protocol
     resource.request = resource.request.slice(5);
   }),

@@ -6,7 +6,7 @@ import { describe, expect, test } from 'vitest';
 
 describe('getPropertyValuePath', () => {
   const mockImporter = makeMockImporter({
-    bar: stmt => stmt(`export default 'bar';`).get('declaration'),
+    bar: (stmt) => stmt(`export default 'bar';`).get('declaration'),
   });
 
   test('returns the value path if the property exists', () => {

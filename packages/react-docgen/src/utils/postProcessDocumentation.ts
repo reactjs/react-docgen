@@ -7,7 +7,7 @@ export default function (
 
   if (props) {
     // props with default values should not be required
-    Object.keys(props).forEach(prop => {
+    Object.keys(props).forEach((prop) => {
       const propInfo = props[prop];
 
       if (propInfo.defaultValue) {

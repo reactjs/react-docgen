@@ -36,7 +36,7 @@ const componentMethodsJsDocHandler: Handler = function (
   }
 
   // @ts-ignore
-  methods = methods.map(method => {
+  methods = methods.map((method) => {
     if (!method.docblock) {
       return method;
     }
@@ -44,8 +44,8 @@ const componentMethodsJsDocHandler: Handler = function (
     const jsDoc = parseJsDoc(method.docblock);
 
     const returns = merge(jsDoc.returns, method.returns);
-    const params = method.params.map(param => {
-      const jsDocParam = jsDoc.params.find(p => p.name === param.name);
+    const params = method.params.map((param) => {
+      const jsDocParam = jsDoc.params.find((p) => p.name === param.name);
 
       return merge(jsDocParam, param);
     });

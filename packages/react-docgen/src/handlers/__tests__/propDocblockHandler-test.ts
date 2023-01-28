@@ -18,7 +18,7 @@ describe('propDocBlockHandler', () => {
   });
 
   const mockImporter = makeMockImporter({
-    props: stmtLast =>
+    props: (stmtLast) =>
       stmtLast(`
       export default {
         /**
@@ -224,7 +224,7 @@ describe('propDocBlockHandler', () => {
 
   describe('React.createClass', () => {
     testDocBlockHandler(
-      propTypesSrc => `({propTypes: ${propTypesSrc}})`,
+      (propTypesSrc) => `({propTypes: ${propTypesSrc}})`,
       (src, importer = noopImporter) =>
         parse
           .statement(src, importer)
@@ -235,7 +235,7 @@ describe('propDocBlockHandler', () => {
   describe('ClassDefinition', () => {
     describe('class property', () => {
       testDocBlockHandler(
-        propTypesSrc => `
+        (propTypesSrc) => `
           class Foo{
             static propTypes = ${propTypesSrc};
           }
@@ -246,7 +246,7 @@ describe('propDocBlockHandler', () => {
 
     describe('static getter', () => {
       testDocBlockHandler(
-        propTypesSrc => `
+        (propTypesSrc) => `
           class Foo{
             static get propTypes() {
               return ${propTypesSrc};

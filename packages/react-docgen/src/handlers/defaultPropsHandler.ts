@@ -110,7 +110,7 @@ function getDefaultValuesFromProps(
   documentation: Documentation,
   isStateless: boolean,
 ): void {
-  properties.forEach(propertyPath => {
+  properties.forEach((propertyPath) => {
     if (propertyPath.isObjectProperty()) {
       const propName = getPropertyName(propertyPath);
 

@@ -15,7 +15,7 @@ export default function getClassMemberValuePath(
   const classMember = classDefinition
     .get('body')
     .get('body')
-    .find(memberPath => {
+    .find((memberPath) => {
       if (
         (memberPath.isClassMethod() && memberPath.node.kind !== 'set') ||
         memberPath.isClassProperty()
