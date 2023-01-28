@@ -461,7 +461,7 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  test('handles typeof types', () => {
+  test('handles typeof type', () => {
     const typePath = typeAlias(`
       var x: typeof MyType = {};
 
@@ -471,12 +471,31 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
-  test('resolves typeof of imported types', () => {
+  test('handles typeof qualified type', () => {
+    const typePath = typeAlias(`
+      var x: typeof MyType.a = {};
+
+      type MyType = { a: string, b: xyz };
+    `);
+
+    expect(getTSType(typePath)).toMatchSnapshot();
+  });
+
+  test('resolves typeof of imported type', () => {
     const typePath = typeAlias(
       `
       var x: typeof MyType = {};
       import { MyType } from 'MyType';
     `,
+      mockImporter,
+    );
+
+    expect(getTSType(typePath)).toMatchSnapshot();
+  });
+
+  test('resolves typeof of import type', () => {
+    const typePath = typeAlias(
+      "var x: typeof import('MyType') = {};",
       mockImporter,
     );
 

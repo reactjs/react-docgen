@@ -27,8 +27,6 @@ const explodedVisitors = visitors.explode<TraverseState>({
   },
 });
 
-// TODO needs unit test
-
 export default function resolveFunctionDefinitionToReturnValue(
   path: NodePath<BabelFunction>,
 ): NodePath<Expression> | null {

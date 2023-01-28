@@ -1,0 +1,41 @@
+// Vitest Snapshot v1
+
+exports[`getTypeParameters > Flow > detects simple type 1`] = `
+{
+  "T": Node {
+    "id": Node {
+      "name": "T",
+      "type": "Identifier",
+    },
+    "type": "GenericTypeAnnotation",
+    "typeParameters": null,
+  },
+}
+`;
+
+exports[`getTypeParameters > TypeScript > detects default 1`] = `
+{
+  "R": Node {
+    "type": "TSStringKeyword",
+  },
+  "T": Node {
+    "type": "TSTypeReference",
+    "typeName": Node {
+      "name": "T",
+      "type": "Identifier",
+    },
+  },
+}
+`;
+
+exports[`getTypeParameters > TypeScript > detects simple type 1`] = `
+{
+  "T": Node {
+    "type": "TSTypeReference",
+    "typeName": Node {
+      "name": "T",
+      "type": "Identifier",
+    },
+  },
+}
+`;

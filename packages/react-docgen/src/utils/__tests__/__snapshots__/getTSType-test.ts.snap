@@ -835,7 +835,13 @@ exports[`getTSType > handles self-referencing type cycles 1`] = `
 }
 `;
 
-exports[`getTSType > handles typeof types 1`] = `
+exports[`getTSType > handles typeof qualified type 1`] = `
+{
+  "name": "MyType.a",
+}
+`;
+
+exports[`getTSType > handles typeof type 1`] = `
 {
   "name": "signature",
   "raw": "{ a: string, b: xyz }",
@@ -1385,7 +1391,13 @@ exports[`getTSType > resolves keyof with inline object to union 1`] = `
 }
 `;
 
-exports[`getTSType > resolves typeof of imported types 1`] = `
+exports[`getTSType > resolves typeof of import type 1`] = `
+{
+  "name": "import('MyType')",
+}
+`;
+
+exports[`getTSType > resolves typeof of imported type 1`] = `
 {
   "name": "signature",
   "raw": "{ a: number, b: xyz }",

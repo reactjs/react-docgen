@@ -21,7 +21,6 @@ function findScopePath(
       resolvedParentPath.isImportDefaultSpecifier() ||
       resolvedParentPath.isImportSpecifier()
     ) {
-      // TODO TESTME
       let exportName: string | undefined;
 
       if (resolvedParentPath.isImportDefaultSpecifier()) {
@@ -184,7 +183,7 @@ export default function resolveToValue(path: NodePath): NodePath {
       if (property.isIdentifier() || property.isStringLiteral()) {
         const memberPath = getMemberValuePath(
           resolved,
-          property.isIdentifier() ? property.node.name : property.node.value, // TODO TESTME
+          property.isIdentifier() ? property.node.name : property.node.value,
         );
 
         if (memberPath) {
