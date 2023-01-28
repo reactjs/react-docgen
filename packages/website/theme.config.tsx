@@ -11,6 +11,7 @@ const config: DocsThemeConfig = {
   footer: {
     text: '',
   },
+  useNextSeoProps: () => ({ titleTemplate: '%s \u2013 react-docgen' }),
 };
 
 export default config;
