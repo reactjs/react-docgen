@@ -12,7 +12,7 @@ For version 5.x please checkout the [README.md on the 5.x branch](https://github
 
 For version 6.x please checkout [react-docgen.dev](https://react-docgen.dev)
 
-Version 6 is currently only available as alpha version (latest being `6.0.0-alpha.4`)
+Version 6 is currently only available as alpha version (latest being `6.0.0-beta.5`)
 
 ## License
 
