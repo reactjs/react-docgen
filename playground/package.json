@@ -18,7 +18,7 @@
     "os-browserify": "0.3.0",
     "path-browserify": "1.0.1",
     "process": "0.11.10",
-    "react-docgen": "workspace:6.0.0-alpha.4"
+    "react-docgen": "workspace:6.0.0-beta.5"
   },
   "devDependencies": {
     "@babel/core": "7.20.12",

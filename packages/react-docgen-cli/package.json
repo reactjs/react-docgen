@@ -1,6 +1,6 @@
 {
   "name": "@react-docgen/cli",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-beta.2",
   "description": "A CLI to extract information from React components for documentation generation.",
   "repository": "reactjs/react-docgen",
   "type": "module",
@@ -32,7 +32,7 @@
     "commander": "10.0.0",
     "debug": "4.3.4",
     "fast-glob": "3.2.12",
-    "react-docgen": "workspace:6.0.0-alpha.4",
+    "react-docgen": "workspace:6.0.0-beta.5",
     "slash": "5.0.0"
   },
   "devDependencies": {
