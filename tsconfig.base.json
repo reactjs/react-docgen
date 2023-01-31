@@ -8,6 +8,7 @@
     "strict": true,
     "noImplicitAny": false,
     "noImplicitReturns": true,
+    "noUncheckedIndexedAccess": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "moduleResolution": "node16",

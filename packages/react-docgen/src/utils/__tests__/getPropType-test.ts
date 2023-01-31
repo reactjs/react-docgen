@@ -2,6 +2,7 @@ import type { ExpressionStatement } from '@babel/types';
 import { parse, makeMockImporter } from '../../../tests/utils';
 import getPropType from '../getPropType.js';
 import { describe, expect, test } from 'vitest';
+import type { NodePath } from '@babel/traverse';
 
 describe('getPropType', () => {
   test('detects simple prop types', () => {
@@ -529,6 +530,52 @@ describe('getPropType', () => {
       [() => {}]: string.isRequired,
       bar: bool
     })`),
+      ),
+    ).toMatchSnapshot();
+  });
+
+  test('works with cyclic references in shape', () => {
+    expect(
+      getPropType(
+        parse
+          .statementLast<ExpressionStatement>(
+            `const Component = () => {}
+             Component.propTypes = {
+               foo: shape(Component.propTypes)
+             }`,
+          )
+          .get('expression.right.properties.0.value') as NodePath,
+      ),
+    ).toMatchSnapshot();
+  });
+
+  test('works with cyclic references in shape and required', () => {
+    expect(
+      getPropType(
+        parse
+          .statementLast<ExpressionStatement>(
+            `const Component = () => {}
+             Component.propTypes = {
+               foo: shape(Component.propTypes).isRequired
+             }`,
+          )
+          .get('expression.right.properties.0.value') as NodePath,
+      ),
+    ).toMatchSnapshot();
+  });
+
+  test('works with missing argument', () => {
+    expect(
+      getPropType(
+        parse
+          .statementLast<ExpressionStatement>(
+            `const Component = () => {}
+             const MyShape = { foo: shape() }
+             Component.propTypes = {
+               foo: shape(MyShape)
+             }`,
+          )
+          .get('expression.right.properties.0.value') as NodePath,
       ),
     ).toMatchSnapshot();
   });
