@@ -13,7 +13,7 @@
     "test:dev": "pnpm build && pnpm --filter '!@react-docgen-internal/*' exec vitest",
     "playground:build": "pnpm --filter @react-docgen-internal/playground run build",
     "playground:start": "pnpm --filter @react-docgen-internal/playground run start",
-    "changesets-release": "pnpm build && pnpm publish -r --tag alpha --access public",
+    "changesets-release": "pnpm build && changeset publish",
     "changesets-version": "changeset version && pnpm install --lockfile-only"
   },
   "license": "MIT",
