@@ -54,5 +54,5 @@ export default async function loadResolvers(
     });
   }
 
-  return loadResolver(input[0]);
+  return loadResolver(input[0]!);
 }

@@ -207,15 +207,19 @@ function handleTSTypeLiteral(
     } else if (param.isTSCallSignatureDeclaration()) {
       type.signature.constructor = handleTSFunctionType(param, typeParams);
     } else if (param.isTSIndexSignature() && typeAnnotation.hasNode()) {
-      const idTypeAnnotation = param
-        .get('parameters')[0]
-        .get('typeAnnotation') as NodePath<TSTypeAnnotation | null | undefined>;
+      const parameters = param.get('parameters');
 
-      if (idTypeAnnotation.hasNode()) {
-        type.signature.properties.push({
-          key: getTSTypeWithResolvedTypes(idTypeAnnotation, typeParams),
-          value: getTSTypeWithRequirements(typeAnnotation, typeParams),
-        });
+      if (parameters[0]) {
+        const idTypeAnnotation = parameters[0].get(
+          'typeAnnotation',
+        ) as NodePath<TSTypeAnnotation | null | undefined>;
+
+        if (idTypeAnnotation.hasNode()) {
+          type.signature.properties.push({
+            key: getTSTypeWithResolvedTypes(idTypeAnnotation, typeParams),
+            value: getTSTypeWithRequirements(typeAnnotation, typeParams),
+          });
+        }
       }
     }
   });

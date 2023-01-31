@@ -12,9 +12,9 @@ import initialize from './ts-types/index.js';
 import getNameOrValue from './getNameOrValue.js';
 
 function findScopePath(
-  bindingIdentifiers: Array<NodePath<Identifier>>,
+  bindingIdentifiers: Array<NodePath<Identifier>> | undefined,
 ): NodePath | null {
-  if (bindingIdentifiers && bindingIdentifiers.length >= 1) {
+  if (bindingIdentifiers && bindingIdentifiers[0]) {
     const resolvedParentPath = bindingIdentifiers[0].parentPath;
 
     if (
@@ -136,9 +136,7 @@ export default function resolveToValue(path: NodePath): NodePath {
       // block where it is defined (i.e. we are not traversing into statements)
       resolvedPath = findLastAssignedValue(binding.scope.path, path);
       if (!resolvedPath) {
-        const bindingMap = binding.path.getOuterBindingIdentifierPaths(
-          true,
-        ) as Record<string, Array<NodePath<Identifier>>>;
+        const bindingMap = binding.path.getOuterBindingIdentifierPaths(true);
 
         resolvedPath = findScopePath(bindingMap[path.node.name]);
       }

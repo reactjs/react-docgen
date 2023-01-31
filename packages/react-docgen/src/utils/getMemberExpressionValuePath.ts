@@ -17,7 +17,8 @@ function resolveName(path: NodePath): string | undefined {
           ' declarations.',
       );
     }
-    const id = declarations[0].get('id');
+    // VariableDeclarator always has at least one declaration, hence the non-null-assertion
+    const id = declarations[0]!.get('id');
 
     if (id.isIdentifier()) {
       return id.node.name;

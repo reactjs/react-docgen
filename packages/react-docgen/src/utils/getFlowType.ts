@@ -159,7 +159,7 @@ function handleGenericTypeAnnotation(
   if (
     typeParams &&
     typeParams[type.name] &&
-    typeParams[type.name].isGenericTypeAnnotation()
+    typeParams[type.name]!.isGenericTypeAnnotation()
   ) {
     return type;
   }

@@ -32,7 +32,7 @@ declare module '@babel/traverse' {
   export interface Scope {
     typeBindings: Record<string, TypeBinding>;
     getTypeBinding(name: string): TypeBinding | undefined;
-    getOwnTypeBinding(name: string): TypeBinding;
+    getOwnTypeBinding(name: string): TypeBinding | undefined;
     registerTypeBinding(
       this: BaseScope,
       typeKind: TypeKind,
@@ -128,7 +128,10 @@ function getTypeBinding(
   return undefined;
 }
 
-function getOwnTypeBinding(this: BaseScope, name: string): TypeBinding {
+function getOwnTypeBinding(
+  this: BaseScope,
+  name: string,
+): TypeBinding | undefined {
   return this.typeBindings[name];
 }
 
