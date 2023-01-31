@@ -1,4 +1,3 @@
-/*eslint no-use-before-define: 0*/
 import type { NodePath } from '@babel/traverse';
 import { getDocblock } from '../utils/docblock.js';
 import getMembers from './getMembers.js';
@@ -8,13 +7,8 @@ import printValue from './printValue.js';
 import resolveToValue from './resolveToValue.js';
 import resolveObjectKeysToArray from './resolveObjectKeysToArray.js';
 import resolveObjectValuesToArray from './resolveObjectValuesToArray.js';
-import type { PropTypeDescriptor, PropDescriptor } from '../Documentation.js';
-import type {
-  ArrayExpression,
-  Expression,
-  ObjectProperty,
-  SpreadElement,
-} from '@babel/types';
+import type { PropTypeDescriptor } from '../Documentation.js';
+import type { ArrayExpression, Expression, SpreadElement } from '@babel/types';
 
 function getEnumValuesFromArrayExpression(
   path: NodePath<ArrayExpression>,
@@ -51,11 +45,15 @@ function getEnumValuesFromArrayExpression(
   return values;
 }
 
-function getPropTypeOneOf(argumentPath: NodePath): PropTypeDescriptor {
-  const type: PropTypeDescriptor = { name: 'enum' };
-  const value: NodePath = resolveToValue(argumentPath);
+function getPropTypeOneOf(
+  type: PropTypeDescriptor,
+  argumentPath: NodePath,
+): PropTypeDescriptor {
+  const value = resolveToValue(argumentPath);
 
-  if (!value.isArrayExpression()) {
+  if (value.isArrayExpression()) {
+    type.value = getEnumValuesFromArrayExpression(value);
+  } else {
     const objectValues =
       resolveObjectKeysToArray(value) || resolveObjectValuesToArray(value);
 
@@ -69,20 +67,16 @@ function getPropTypeOneOf(argumentPath: NodePath): PropTypeDescriptor {
       type.computed = true;
       type.value = printValue(argumentPath);
     }
-  } else {
-    type.value = getEnumValuesFromArrayExpression(value);
   }
 
   return type;
 }
 
-function getPropTypeOneOfType(argumentPath: NodePath): PropTypeDescriptor {
-  const type: PropTypeDescriptor = { name: 'union' };
-
-  if (!argumentPath.isArrayExpression()) {
-    type.computed = true;
-    type.value = printValue(argumentPath);
-  } else {
+function getPropTypeOneOfType(
+  type: PropTypeDescriptor,
+  argumentPath: NodePath,
+): PropTypeDescriptor {
+  if (argumentPath.isArrayExpression()) {
     type.value = argumentPath.get('elements').map((elementPath) => {
       if (!elementPath.hasNode()) return;
       const descriptor: PropTypeDescriptor = getPropType(elementPath);
@@ -101,9 +95,7 @@ function getPropTypeOneOfType(argumentPath: NodePath): PropTypeDescriptor {
   return type;
 }
 
-function getPropTypeArrayOf(argumentPath: NodePath) {
-  const type: PropTypeDescriptor = { name: 'arrayOf' };
-
+function getPropTypeArrayOf(type: PropTypeDescriptor, argumentPath: NodePath) {
   const docs = getDocblock(argumentPath);
 
   if (docs) {
@@ -113,19 +105,14 @@ function getPropTypeArrayOf(argumentPath: NodePath) {
   const subType = getPropType(argumentPath);
 
   // @ts-ignore
-  if (subType.name === 'unknown') {
-    type.value = printValue(argumentPath);
-    type.computed = true;
-  } else {
+  if (subType.name !== 'unknown') {
     type.value = subType;
   }
 
   return type;
 }
 
-function getPropTypeObjectOf(argumentPath: NodePath) {
-  const type: PropTypeDescriptor = { name: 'objectOf' };
-
+function getPropTypeObjectOf(type: PropTypeDescriptor, argumentPath: NodePath) {
   const docs = getDocblock(argumentPath);
 
   if (docs) {
@@ -135,63 +122,87 @@ function getPropTypeObjectOf(argumentPath: NodePath) {
   const subType = getPropType(argumentPath);
 
   // @ts-ignore
-  if (subType.name === 'unknown') {
-    type.value = printValue(argumentPath);
-    type.computed = true;
-  } else {
+  if (subType.name !== 'unknown') {
     type.value = subType;
   }
 
   return type;
+}
+
+function getFirstArgument(path: NodePath): NodePath | undefined {
+  let argument: NodePath | undefined;
+
+  if (path.isCallExpression()) {
+    argument = path.get('arguments')[0];
+  } else {
+    const members = getMembers(path, true);
+
+    if (members[0] && members[0].argumentPaths[0]) {
+      argument = members[0].argumentPaths[0];
+    }
+  }
+
+  return argument;
+}
+
+function isCyclicReference(
+  argument: NodePath,
+  argumentPath: NodePath,
+): boolean {
+  return Boolean(argument && resolveToValue(argument) === argumentPath);
 }
 
 /**
  * Handles shape and exact prop types
  */
-function getPropTypeShapish(name: 'exact' | 'shape', argumentPath: NodePath) {
-  const type: PropTypeDescriptor = { name };
-
+function getPropTypeShapish(type: PropTypeDescriptor, argumentPath: NodePath) {
   if (!argumentPath.isObjectExpression()) {
     argumentPath = resolveToValue(argumentPath);
   }
 
   if (argumentPath.isObjectExpression()) {
-    const value = {};
+    let value: Record<string, PropTypeDescriptor> | string = {};
 
     argumentPath.get('properties').forEach((propertyPath) => {
-      if (propertyPath.isSpreadElement() || propertyPath.isObjectMethod()) {
-        // It is impossible to resolve a name for a spread element
-        return;
+      // We only handle ObjectProperty as there is nothing to handle for
+      // SpreadElements and ObjectMethods
+      if (propertyPath.isObjectProperty()) {
+        const propertyName = getPropertyName(propertyPath);
+
+        if (!propertyName) return;
+
+        const valuePath = propertyPath.get('value');
+        const argument = getFirstArgument(valuePath);
+
+        // This indicates we have a cyclic reference in the shape
+        // In this case we simply print the argument to shape and bail
+        if (argument && isCyclicReference(argument, argumentPath)) {
+          value = printValue(argument);
+
+          return;
+        }
+
+        const descriptor = getPropType(valuePath);
+        const docs = getDocblock(propertyPath);
+
+        if (docs) {
+          descriptor.description = docs;
+        }
+        descriptor.required = isRequiredPropType(valuePath);
+        value[propertyName] = descriptor;
       }
-
-      const propertyName = getPropertyName(propertyPath);
-
-      if (!propertyName) return;
-
-      const valuePath = (propertyPath as NodePath<ObjectProperty>).get('value');
-
-      const descriptor: PropDescriptor | PropTypeDescriptor =
-        getPropType(valuePath);
-      const docs = getDocblock(propertyPath);
-
-      if (docs) {
-        descriptor.description = docs;
-      }
-      descriptor.required = isRequiredPropType(valuePath);
-      value[propertyName] = descriptor;
     });
-    type.value = value;
-  }
 
-  if (!type.value) {
-    type.value = printValue(argumentPath);
-    type.computed = true;
+    type.value = value;
   }
 
   return type;
 }
 
-function getPropTypeInstanceOf(argumentPath: NodePath): PropTypeDescriptor {
+function getPropTypeInstanceOf(
+  _type: PropTypeDescriptor,
+  argumentPath: NodePath,
+): PropTypeDescriptor {
   return {
     name: 'instanceOf',
     value: printValue(argumentPath),
@@ -218,15 +229,46 @@ function isSimplePropType(
   return simplePropTypes.includes(name as (typeof simplePropTypes)[number]);
 }
 
-const propTypes = new Map<string, (path: NodePath) => PropTypeDescriptor>([
-  ['oneOf', getPropTypeOneOf],
-  ['oneOfType', getPropTypeOneOfType],
-  ['instanceOf', getPropTypeInstanceOf],
-  ['arrayOf', getPropTypeArrayOf],
-  ['objectOf', getPropTypeObjectOf],
-  ['shape', getPropTypeShapish.bind(null, 'shape')],
-  ['exact', getPropTypeShapish.bind(null, 'exact')],
+type PropTypeHandler = (
+  type: PropTypeDescriptor,
+  argumentPath: NodePath,
+) => PropTypeDescriptor;
+
+const propTypes = new Map<
+  string,
+  (argumentPath: NodePath | undefined) => PropTypeDescriptor
+>([
+  ['oneOf', callPropTypeHandler.bind(null, 'enum', getPropTypeOneOf)],
+  ['oneOfType', callPropTypeHandler.bind(null, 'union', getPropTypeOneOfType)],
+  [
+    'instanceOf',
+    callPropTypeHandler.bind(null, 'instanceOf', getPropTypeInstanceOf),
+  ],
+  ['arrayOf', callPropTypeHandler.bind(null, 'arrayOf', getPropTypeArrayOf)],
+  ['objectOf', callPropTypeHandler.bind(null, 'objectOf', getPropTypeObjectOf)],
+  ['shape', callPropTypeHandler.bind(null, 'shape', getPropTypeShapish)],
+  ['exact', callPropTypeHandler.bind(null, 'exact', getPropTypeShapish)],
 ]);
+
+function callPropTypeHandler(
+  name: PropTypeDescriptor['name'],
+  handler: PropTypeHandler,
+  argumentPath: NodePath | undefined,
+) {
+  let type: PropTypeDescriptor = { name };
+
+  if (argumentPath) {
+    type = handler(type, argumentPath);
+  }
+
+  if (!type.value) {
+    // If there is no argument then leave the value an empty string
+    type.value = argumentPath ? printValue(argumentPath) : '';
+    type.computed = true;
+  }
+
+  return type;
+}
 
 /**
  * Tries to identify the prop type by inspecting the path for known
@@ -256,7 +298,7 @@ export default function getPropType(path: NodePath): PropTypeDescriptor {
       }
       const propTypeHandler = propTypes.get(name);
 
-      if (propTypeHandler && member.argumentPaths.length) {
+      if (propTypeHandler) {
         descriptor = propTypeHandler(member.argumentPaths[0]);
 
         return true;

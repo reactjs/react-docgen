@@ -369,3 +369,31 @@ exports[`getPropType > resolve identifier to their values > resolves variables t
   },
 }
 `;
+
+exports[`getPropType > works with cyclic references in shape 1`] = `
+{
+  "name": "shape",
+  "value": "Component.propTypes",
+}
+`;
+
+exports[`getPropType > works with cyclic references in shape and required 1`] = `
+{
+  "name": "shape",
+  "value": "Component.propTypes",
+}
+`;
+
+exports[`getPropType > works with missing argument 1`] = `
+{
+  "name": "shape",
+  "value": {
+    "foo": {
+      "computed": true,
+      "name": "shape",
+      "required": false,
+      "value": "",
+    },
+  },
+}
+`;
