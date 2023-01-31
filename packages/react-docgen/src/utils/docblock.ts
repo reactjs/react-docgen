@@ -35,7 +35,7 @@ export function getDocblock(path: NodePath, trailing = false): string | null {
   }
 
   if (comments.length > 0) {
-    return parseDocblock(comments[comments.length - 1].value);
+    return parseDocblock(comments[comments.length - 1]!.value);
   }
 
   return null;
@@ -50,7 +50,7 @@ export function getDoclets(str: string): Record<string, string> {
   let match: RegExpExecArray | null;
 
   while ((match = DOCLET_PATTERN.exec(str))) {
-    doclets[match[1]] = match[2] || true;
+    doclets[match[1]!] = match[2] || true;
   }
 
   return doclets;

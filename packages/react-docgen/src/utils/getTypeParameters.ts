@@ -56,7 +56,7 @@ export default function getTypeParameters(
           typeName.isIdentifier() &&
           inputParams[typeName.node.name]
         ) {
-          resolvedTypePath = inputParams[typeName.node.name];
+          resolvedTypePath = inputParams[typeName.node.name]!;
         }
 
         params[key] = resolvedTypePath;

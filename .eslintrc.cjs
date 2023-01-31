@@ -56,6 +56,7 @@ module.exports = {
         '@typescript-eslint/ban-ts-comment': 'off',
         '@typescript-eslint/consistent-type-imports': 'error',
         '@typescript-eslint/no-duplicate-imports': 'error',
+        '@typescript-eslint/no-non-null-assertion': 'off',
         '@typescript-eslint/sort-type-union-intersection-members': 'error',
       },
     },

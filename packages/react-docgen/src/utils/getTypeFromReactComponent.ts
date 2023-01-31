@@ -52,7 +52,9 @@ export default (path: NodePath): NodePath | null => {
     if (superTypes.hasNode()) {
       const params = superTypes.get('params');
 
-      typePath = params[params.length === 3 ? 1 : 0];
+      if (params.length >= 1) {
+        typePath = params[params.length === 3 ? 1 : 0]!;
+      }
     } else {
       const propsMemberPath = getMemberValuePath(path, 'props');
 

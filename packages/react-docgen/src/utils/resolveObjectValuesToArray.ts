@@ -99,7 +99,11 @@ export default function resolveObjectValuesToArray(
   path: NodePath,
 ): string[] | null {
   if (isObjectValuesCall(path)) {
-    const objectExpression = resolveToValue(path.get('arguments')[0]);
+    const argument = path.get('arguments')[0];
+    const objectExpression = resolveToValue(
+      // isObjectValuesCall already asserts that there is at least one argument, hence the non-null-assertion
+      argument!,
+    );
     const values = resolveObjectToPropMap(objectExpression);
 
     if (values) {

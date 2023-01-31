@@ -103,7 +103,7 @@ const explodedImperativeHandleVisitors =
         // useImperativeHandle(ref, () => ({ name: () => {}, ...}))
         const arg = path.get('arguments')[1];
 
-        if (arg && !arg.isFunction()) {
+        if (!arg || !arg.isFunction()) {
           return path.skip();
         }
 

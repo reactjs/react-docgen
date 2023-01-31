@@ -53,12 +53,16 @@ const explodedVisitors = visitors.explode<TraverseState>({
   ClassDeclaration: { enter: classVisitor },
   CallExpression: {
     enter: function (path, state): void {
+      const argument = path.get('arguments')[0];
+
+      if (!argument) {
+        return;
+      }
+
       if (isReactForwardRefCall(path)) {
         // If the the inner function was previously identified as a component
         // replace it with the parent node
-        const inner = resolveToValue(
-          path.get('arguments')[0],
-        ) as ComponentNodePath;
+        const inner = resolveToValue(argument) as ComponentNodePath;
 
         state.foundDefinitions.delete(inner);
         state.foundDefinitions.add(path);
@@ -66,7 +70,7 @@ const explodedVisitors = visitors.explode<TraverseState>({
         // Do not traverse into arguments
         return path.skip();
       } else if (isReactCreateClassCall(path)) {
-        const resolvedPath = resolveToValue(path.get('arguments')[0]);
+        const resolvedPath = resolveToValue(argument);
 
         if (resolvedPath.isObjectExpression()) {
           state.foundDefinitions.add(resolvedPath);
