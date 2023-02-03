@@ -29,3 +29,42 @@ yarn add react-docgen
 
   </Tab>
 </Tabs>
+
+## Usage
+
+Here is an easy example
+
+```ts filename="index.tsx" copy
+import { parse } from 'react-docgen';
+
+const code = `
+/** My first component */
+export default ({ name }: { name: string }) => <div>{{name}}</div>;
+`;
+
+const documentation = parse(code);
+
+console.log(documentation);
+```
+
+The documentation that this script is going to print will look like this. If you
+want to know more about the structure you can head over to the reference of the
+[Documentation](../reference/documentation)
+
+```json
+[
+  {
+    "description": "My first component",
+    "methods": [],
+    "props": {
+      "name": {
+        "required": true,
+        "tsType": {
+          "name": "string"
+        },
+        "description": ""
+      }
+    }
+  }
+]
+```
