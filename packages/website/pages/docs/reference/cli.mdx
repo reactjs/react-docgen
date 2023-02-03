@@ -86,6 +86,26 @@ newlines.
 
 ### `--resolver <resolvers>`
 
-**Default**: `["find-exported-component"]`
+**Default**: `["find-exported-component", "find-annotated-components"]`
 
-**TODO**
+Allows to specify the resolvers that find react components in the code.
+
+Possible values are:
+
+#### Built-in resolvers
+
+- `find-all-components`
+- `find-all-exported-components`
+- `find-all-annotated-components`
+- `find-exported-component`
+
+#### Path to resolver
+
+A path can be specified to your resolver. The path can be absolute (recommended)
+or relative and in the later case the path will be resolved from the current
+working directory.
+
+#### Module name of resolver
+
+An npm module name can be specified. The default export of this module needs to
+be an instance of the resolver.
