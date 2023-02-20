@@ -27,7 +27,7 @@
     "@babel/preset-react": "7.18.6",
     "@babel/preset-typescript": "7.18.6",
     "babel-loader": "9.1.2",
-    "codemirror": "5.65.11",
+    "codemirror": "5.65.12",
     "css-loader": "6.7.3",
     "css-minimizer-webpack-plugin": "4.2.2",
     "html-loader": "4.2.0",
