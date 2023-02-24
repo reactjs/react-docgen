@@ -105,14 +105,14 @@ importers:
     specifiers:
       '@types/react': 18.0.28
       next: 13.2.1
-      nextra: 2.2.15
-      nextra-theme-docs: 2.2.15
+      nextra: 2.2.16
+      nextra-theme-docs: 2.2.16
       react: 18.2.0
       react-dom: 18.2.0
     dependencies:
       next: 13.2.1_biqbaboplfbrettd7655fr4n2y
-      nextra: 2.2.15_qgtcjgzkkjtbiyvnx7d32fl5vu
-      nextra-theme-docs: 2.2.15_7lesyb4pt4exhuhbsaeda5totq
+      nextra: 2.2.16_qgtcjgzkkjtbiyvnx7d32fl5vu
+      nextra-theme-docs: 2.2.16_vew7vg7qzvsrfl7ub63f7u6dme
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -7288,11 +7288,11 @@ packages:
       - babel-plugin-macros
     dev: false
 
-  /nextra-theme-docs/2.2.15_7lesyb4pt4exhuhbsaeda5totq:
-    resolution: {integrity: sha512-SErAWgwrERgg2/rdfLi8BllDBhd0r2CZ3EYrqilzYzqcBED7H0rAB2xseLsrJMpRUjIuGb0hf64IfZ7h3ymp+Q==}
+  /nextra-theme-docs/2.2.16_vew7vg7qzvsrfl7ub63f7u6dme:
+    resolution: {integrity: sha512-yVGYZCB1nB9eRhFmXL/rSw6ks1nj8xDNNCyWA6YGAwNgJqlfbwSKrRvVLkzAvCjBv9180mEZwNurub9+RH+F1A==}
     peerDependencies:
       next: '>=9.5.3'
-      nextra: 2.2.15
+      nextra: 2.2.16
       react: '>=16.13.1'
       react-dom: '>=16.13.1'
     dependencies:
@@ -7307,15 +7307,15 @@ packages:
       next: 13.2.1_biqbaboplfbrettd7655fr4n2y
       next-seo: 5.15.0_qgtcjgzkkjtbiyvnx7d32fl5vu
       next-themes: 0.2.1_qgtcjgzkkjtbiyvnx7d32fl5vu
-      nextra: 2.2.15_qgtcjgzkkjtbiyvnx7d32fl5vu
+      nextra: 2.2.16_qgtcjgzkkjtbiyvnx7d32fl5vu
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       scroll-into-view-if-needed: 3.0.4
       zod: 3.20.2
     dev: false
 
-  /nextra/2.2.15_qgtcjgzkkjtbiyvnx7d32fl5vu:
-    resolution: {integrity: sha512-LuJz7Pd/f0Ghkj3Ifeh1H120YAIC/uED+ZkxOOI0K44iiJp7CYEat8I+SoJZbFBB5ajRTIvzErgqeC6GjeyFdw==}
+  /nextra/2.2.16_qgtcjgzkkjtbiyvnx7d32fl5vu:
+    resolution: {integrity: sha512-rGtCgurEDZ6afzb6gfug/9PZnEEfi981wK5e9XmKMT8sX2ECNJKb2rcg7FpUL4CC01507ibejn1r3WQ8x8M+zw==}
     peerDependencies:
       next: '>=9.5.3'
       react: '>=16.13.1'
