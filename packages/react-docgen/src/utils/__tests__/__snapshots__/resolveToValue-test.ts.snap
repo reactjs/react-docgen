@@ -1,4 +1,4 @@
-// Vitest Snapshot v1
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`resolveToValue > ImportDeclaration > does not crash when resolving MemberExpression with non Identifiers 1`] = `
 Node {
