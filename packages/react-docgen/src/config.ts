@@ -9,7 +9,7 @@ import {
   contextTypeHandler,
   defaultPropsHandler,
   displayNameHandler,
-  propDocBlockHandler,
+  propDocblockHandler,
   propTypeCompositionHandler,
   propTypeHandler,
 } from './handlers/index.js';
@@ -52,7 +52,7 @@ export const defaultHandlers: Handler[] = [
   contextTypeHandler,
   childContextTypeHandler,
   propTypeCompositionHandler,
-  propDocBlockHandler,
+  propDocblockHandler,
   codeTypeHandler,
   defaultPropsHandler,
   componentDocblockHandler,

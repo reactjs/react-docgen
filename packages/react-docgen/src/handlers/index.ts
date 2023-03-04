@@ -8,7 +8,7 @@ export { default as componentMethodsJsDocHandler } from './componentMethodsJsDoc
 export { default as defaultPropsHandler } from './defaultPropsHandler.js';
 export { default as displayNameHandler } from './displayNameHandler.js';
 export { default as codeTypeHandler } from './codeTypeHandler.js';
-export { default as propDocBlockHandler } from './propDocBlockHandler.js';
+export { default as propDocblockHandler } from './propDocblockHandler.js';
 export { default as propTypeCompositionHandler } from './propTypeCompositionHandler.js';
 export {
   propTypeHandler,
