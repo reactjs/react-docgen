@@ -1,15 +1,17 @@
 export interface DocumentationObject {
-  props?: Record<string, PropDescriptor>;
-  context?: Record<string, PropDescriptor>;
   childContext?: Record<string, PropDescriptor>;
   composes?: string[];
+  context?: Record<string, PropDescriptor>;
+  description?: string;
+  displayName?: string;
   methods?: MethodDescriptor[];
+  props?: Record<string, PropDescriptor>;
 }
 
 export interface MethodParameter {
   name: string;
-  type?: TypeDescriptor<FunctionSignatureType> | null;
   optional: boolean;
+  type?: TypeDescriptor<FunctionSignatureType> | null;
 }
 
 export interface MethodReturn {
@@ -162,6 +164,7 @@ export default class Documentation {
     this.#data.set(key, value);
   }
 
+  get<T>(key: string): T | null;
   get(key: string): unknown {
     return this.#data.get(key);
   }
