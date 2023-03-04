@@ -29,7 +29,7 @@ function resolveDocumentation(
   });
 }
 
-const propDocBlockHandler: Handler = function (
+const propDocblockHandler: Handler = function (
   documentation: Documentation,
   componentDefinition: NodePath<ComponentNode>,
 ): void {
@@ -49,4 +49,4 @@ const propDocBlockHandler: Handler = function (
   resolveDocumentation(documentation, propTypesPath);
 };
 
-export default propDocBlockHandler;
+export default propDocblockHandler;

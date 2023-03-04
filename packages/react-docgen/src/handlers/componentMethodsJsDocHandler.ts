@@ -29,7 +29,7 @@ function merge<T, U>(obj1: T, obj2: U): (T & U) | null {
 const componentMethodsJsDocHandler: Handler = function (
   documentation: Documentation,
 ): void {
-  let methods = documentation.get('methods') as MethodDescriptor[] | null;
+  let methods = documentation.get<MethodDescriptor[]>('methods');
 
   if (!methods) {
     return;
