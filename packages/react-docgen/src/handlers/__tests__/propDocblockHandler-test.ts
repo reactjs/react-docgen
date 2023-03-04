@@ -5,12 +5,12 @@ import Documentation from '../../Documentation';
 import type { Importer } from '../../importer';
 import type { ComponentNode } from '../../resolver';
 import type DocumentationMock from '../../__mocks__/Documentation';
-import propDocBlockHandler from '../propDocBlockHandler.js';
+import propDocblockHandler from '../propDocblockHandler.js';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 vi.mock('../../Documentation.js');
 
-describe('propDocBlockHandler', () => {
+describe('propDocblockHandler', () => {
   let documentation: Documentation & DocumentationMock;
 
   beforeEach(() => {
@@ -49,7 +49,7 @@ describe('propDocBlockHandler', () => {
         ),
       );
 
-      propDocBlockHandler(documentation, definition);
+      propDocblockHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
         foo: {
           description: 'Foo comment',
@@ -75,7 +75,7 @@ describe('propDocBlockHandler', () => {
         ),
       );
 
-      propDocBlockHandler(documentation, definition);
+      propDocblockHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
         foo: {
           description:
@@ -102,7 +102,7 @@ describe('propDocBlockHandler', () => {
         ),
       );
 
-      propDocBlockHandler(documentation, definition);
+      propDocblockHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
         foo: {
           description: 'Foo comment',
@@ -126,7 +126,7 @@ describe('propDocBlockHandler', () => {
         ),
       );
 
-      propDocBlockHandler(documentation, definition);
+      propDocblockHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
         foo: {
           description: 'Foo comment',
@@ -150,7 +150,7 @@ describe('propDocBlockHandler', () => {
         ),
       );
 
-      propDocBlockHandler(documentation, definition);
+      propDocblockHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
         foo: {
           description: 'Foo comment',
@@ -169,7 +169,7 @@ describe('propDocBlockHandler', () => {
         };
       `);
 
-      propDocBlockHandler(documentation, definition);
+      propDocblockHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
         foo: {
           description: 'Foo comment',
@@ -186,7 +186,7 @@ describe('propDocBlockHandler', () => {
         mockImporter,
       );
 
-      propDocBlockHandler(documentation, definition);
+      propDocblockHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
         foo: {
           description: 'A comment on imported props',
@@ -210,7 +210,7 @@ describe('propDocBlockHandler', () => {
         mockImporter,
       );
 
-      propDocBlockHandler(documentation, definition);
+      propDocblockHandler(documentation, definition);
       expect(documentation.descriptors).toEqual({
         foo: {
           description: 'A comment on imported props',
@@ -263,7 +263,7 @@ describe('propDocBlockHandler', () => {
       const definition = parse.expression<ObjectExpression>('{fooBar: 42}');
 
       expect(() =>
-        propDocBlockHandler(documentation, definition),
+        propDocblockHandler(documentation, definition),
       ).not.toThrow();
     });
 
@@ -271,7 +271,7 @@ describe('propDocBlockHandler', () => {
       const definition = parse.statement<ClassDeclaration>('class Foo {}');
 
       expect(() =>
-        propDocBlockHandler(documentation, definition),
+        propDocblockHandler(documentation, definition),
       ).not.toThrow();
     });
   });
