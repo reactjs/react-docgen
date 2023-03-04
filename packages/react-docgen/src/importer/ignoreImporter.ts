@@ -1,7 +1,5 @@
-import type { Importer } from './index.js';
+import makeIgnoreImporter from './makeIgnoreImporter.js';
 
-const ignoreImports: Importer = function (): null {
-  return null;
-};
+const ignoreImporter = makeIgnoreImporter();
 
-export default ignoreImports;
+export default ignoreImporter;

@@ -6,7 +6,9 @@
   "type": "module",
   "browser": {
     "./dist/importer/fsImporter.js": "./dist/importer/ignoreImporter.js",
-    "./src/importer/fsImporter.ts": "./src/importer/ignoreImporter.ts"
+    "./src/importer/fsImporter.ts": "./src/importer/ignoreImporter.ts",
+    "./dist/importer/makeFsImporter.js": "./dist/importer/makeIgnoreImporter.js",
+    "./src/importer/makeFsImporter.ts": "./src/importer/makeIgnoreImporter.ts"
   },
   "files": [
     "dist"
