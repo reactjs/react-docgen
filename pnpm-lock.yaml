@@ -135,7 +135,7 @@ importers:
       html-webpack-plugin: 5.5.0
       less: 4.1.3
       less-loader: 11.1.0
-      mini-css-extract-plugin: 2.7.2
+      mini-css-extract-plugin: 2.7.3
       os-browserify: 0.3.0
       path-browserify: 1.0.1
       process: 0.11.10
@@ -166,7 +166,7 @@ importers:
       html-webpack-plugin: 5.5.0_webpack@5.75.0
       less: 4.1.3
       less-loader: 11.1.0_less@4.1.3+webpack@5.75.0
-      mini-css-extract-plugin: 2.7.2_webpack@5.75.0
+      mini-css-extract-plugin: 2.7.3_webpack@5.75.0
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       webpack: 5.75.0_webpack-cli@5.0.1
@@ -7104,8 +7104,8 @@ packages:
     resolution: {integrity: sha512-I9jwMn07Sy/IwOj3zVkVik2JTvgpaykDZEigL6Rx6N9LbMywwUSMtxET+7lVoDLLd3O3IXwJwvuuns8UB/HeAg==}
     engines: {node: '>=4'}
 
-  /mini-css-extract-plugin/2.7.2_webpack@5.75.0:
-    resolution: {integrity: sha512-EdlUizq13o0Pd+uCp+WO/JpkLvHRVGt97RqfeGhXqAcorYo1ypJSpkV+WDT0vY/kmh/p7wRdJNJtuyK540PXDw==}
+  /mini-css-extract-plugin/2.7.3_webpack@5.75.0:
+    resolution: {integrity: sha512-CD9cXeKeXLcnMw8FZdtfrRrLaM7gwCl4nKuKn2YkY2Bw5wdlB8zU2cCzw+w2zS9RFvbrufTBkMCJACNPwqQA0w==}
     engines: {node: '>= 12.13.0'}
     peerDependencies:
       webpack: ^5.0.0
