@@ -17,7 +17,7 @@ importers:
       eslint-plugin-prettier: 4.2.1
       execa: 6.1.0
       prettier: 2.8.4
-      rimraf: 4.3.0
+      rimraf: 4.3.1
       tempy: 3.0.0
       typescript: 4.9.5
       vite: 4.1.4
@@ -36,7 +36,7 @@ importers:
       eslint-plugin-prettier: 4.2.1_xprnzp4ul2bcpmfe73av4voica
       execa: 6.1.0
       prettier: 2.8.4
-      rimraf: 4.3.0
+      rimraf: 4.3.1
       tempy: 3.0.0
       typescript: 4.9.5
       vite: 4.1.4_@types+node@14.18.37
@@ -8692,8 +8692,8 @@ packages:
     dependencies:
       glob: 7.2.3
 
-  /rimraf/4.3.0:
-    resolution: {integrity: sha512-5qVDXPbByA1qSJEWMv1qAwKsoS22vVpsL2QyxCKBw4gf6XiFo1K3uRLY6uSOOBFDwnqAZtnbILqWKKlzh8bkGg==}
+  /rimraf/4.3.1:
+    resolution: {integrity: sha512-GfHJHBzFQra23IxDzIdBqhOWfbtdgS1/dCHrDy+yvhpoJY5TdwdT28oWaHWfRpKFDLd3GZnGTx6Mlt4+anbsxQ==}
     engines: {node: '>=14'}
     hasBin: true
     dependencies:
