@@ -105,14 +105,14 @@ importers:
     specifiers:
       '@types/react': 18.0.28
       next: 13.2.3
-      nextra: 2.2.17
-      nextra-theme-docs: 2.2.17
+      nextra: 2.2.18
+      nextra-theme-docs: 2.2.18
       react: 18.2.0
       react-dom: 18.2.0
     dependencies:
       next: 13.2.3_biqbaboplfbrettd7655fr4n2y
-      nextra: 2.2.17_nvzgbose6yf6w7ijjprgspqefi
-      nextra-theme-docs: 2.2.17_sk5zsfkxizvi3trle4mkuwucem
+      nextra: 2.2.18_nvzgbose6yf6w7ijjprgspqefi
+      nextra-theme-docs: 2.2.18_eabglq5mx25htemwufj5jyllhe
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -2073,8 +2073,8 @@ packages:
       read-yaml-file: 1.1.0
     dev: true
 
-  /@mdx-js/mdx/2.2.1:
-    resolution: {integrity: sha512-hZ3ex7exYLJn6FfReq8yTvA6TE53uW9UHJQM9IlSauOuS55J9y8RtA7W+dzp6Yrzr00/U1sd7q+Wf61q6SfiTQ==}
+  /@mdx-js/mdx/2.3.0:
+    resolution: {integrity: sha512-jLuwRlz8DQfQNiUCJR50Y09CGPq3fLtmtUQfVrj79E0JWu3dvsVcxVIcfhR5h0iXu+/z++zDrYeiJqifRynJkA==}
     dependencies:
       '@types/estree-jsx': 1.0.0
       '@types/mdx': 2.0.3
@@ -2097,8 +2097,8 @@ packages:
       - supports-color
     dev: false
 
-  /@mdx-js/react/2.2.1_react@18.2.0:
-    resolution: {integrity: sha512-YdXcMcEnqZhzql98RNrqYo9cEhTTesBiCclEtoiQUbJwx87q9453GTapYU6kJ8ZZ2ek1Vp25SiAXEFy5O/eAPw==}
+  /@mdx-js/react/2.3.0_react@18.2.0:
+    resolution: {integrity: sha512-zQH//gdOmuu7nt2oJR29vFhDv88oGPmVw6BggmrHeMI+xgEkp1B2dX9/bMBSYtK0dyLX/aOmesKS09g222K1/g==}
     peerDependencies:
       react: '>=16'
     dependencies:
@@ -7232,8 +7232,8 @@ packages:
       react: '>=16.x <=18.x'
       react-dom: '>=16.x <=18.x'
     dependencies:
-      '@mdx-js/mdx': 2.2.1
-      '@mdx-js/react': 2.2.1_react@18.2.0
+      '@mdx-js/mdx': 2.3.0
+      '@mdx-js/react': 2.3.0_react@18.2.0
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       vfile: 5.3.6
@@ -7313,11 +7313,11 @@ packages:
       - babel-plugin-macros
     dev: false
 
-  /nextra-theme-docs/2.2.17_sk5zsfkxizvi3trle4mkuwucem:
-    resolution: {integrity: sha512-GTTie4YtTjiBdh3PqSYX5xtOQaCcLWoHWrubR2ikmBMq0GYxM2AX26J6O3gZ/xzzJje+vWmZGOilop/bG2RCog==}
+  /nextra-theme-docs/2.2.18_eabglq5mx25htemwufj5jyllhe:
+    resolution: {integrity: sha512-gW9P2fOuV0w414vmHyJY9k1XSoPsFLOXIDWyW177v8xPJcNF3DrYCOIaVgZt7UwxlBNmZlBDg+glPPogXw1qHQ==}
     peerDependencies:
       next: '>=9.5.3'
-      nextra: 2.2.17
+      nextra: 2.2.18
       react: '>=16.13.1'
       react-dom: '>=16.13.1'
     dependencies:
@@ -7332,22 +7332,22 @@ packages:
       next: 13.2.3_biqbaboplfbrettd7655fr4n2y
       next-seo: 5.15.0_nvzgbose6yf6w7ijjprgspqefi
       next-themes: 0.2.1_nvzgbose6yf6w7ijjprgspqefi
-      nextra: 2.2.17_nvzgbose6yf6w7ijjprgspqefi
+      nextra: 2.2.18_nvzgbose6yf6w7ijjprgspqefi
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       scroll-into-view-if-needed: 3.0.4
       zod: 3.20.2
     dev: false
 
-  /nextra/2.2.17_nvzgbose6yf6w7ijjprgspqefi:
-    resolution: {integrity: sha512-IRfvDfUut6YgbivBVP8cG2DkxEBvODWQFiv7rqHD1tR9lBjiDKugyCi64zl1CiOlW5awc8xmbPDrzYak9l+A/w==}
+  /nextra/2.2.18_nvzgbose6yf6w7ijjprgspqefi:
+    resolution: {integrity: sha512-45fXVzSOOhjMs+bTcq/jsW4BT8bOeTZjceHEubDTFEdelqTv5rUtwVsHqt0iwzmj/braNdZWTITygY25rE65tA==}
     peerDependencies:
       next: '>=9.5.3'
       react: '>=16.13.1'
       react-dom: '>=16.13.1'
     dependencies:
-      '@mdx-js/mdx': 2.2.1
-      '@mdx-js/react': 2.2.1_react@18.2.0
+      '@mdx-js/mdx': 2.3.0
+      '@mdx-js/react': 2.3.0_react@18.2.0
       '@napi-rs/simple-git': 0.1.8
       github-slugger: 2.0.0
       graceful-fs: 4.2.10

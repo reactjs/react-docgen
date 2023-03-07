@@ -12,8 +12,8 @@
   "license": "MIT",
   "dependencies": {
     "next": "13.2.3",
-    "nextra": "2.2.17",
-    "nextra-theme-docs": "2.2.17",
+    "nextra": "2.2.18",
+    "nextra-theme-docs": "2.2.18",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
