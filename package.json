@@ -2,7 +2,7 @@
   "private": true,
   "engines": {
     "node": ">=14.17.0",
-    "pnpm": "7.29.3"
+    "pnpm": "7.30.0"
   },
   "scripts": {
     "build": "pnpm --filter '!@react-docgen-internal/*' run build",
@@ -39,5 +39,5 @@
     "vite": "4.2.0",
     "vitest": "0.29.3"
   },
-  "packageManager": "pnpm@7.29.3"
+  "packageManager": "pnpm@7.30.0"
 }
