@@ -36,7 +36,7 @@
     "rimraf": "4.4.0",
     "tempy": "3.0.0",
     "typescript": "5.0.2",
-    "vite": "4.2.0",
+    "vite": "4.2.1",
     "vitest": "0.29.3"
   },
   "packageManager": "pnpm@7.30.0"
