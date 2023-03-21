@@ -1,0 +1,10 @@
+{
+  "code-type-handler": "codeTypeHandler",
+  "component-docblock-handler": "componentDocblockHandler",
+  "component-methods-handler": "componentMethodsHandler",
+  "default-props-handler": "defaultPropsHandler",
+  "display-name-handler": "displayNameHandler",
+  "prop-docblock-handler": "propDocblockHandler",
+  "proptype-composition-handler": "propTypeCompositionHandler",
+  "proptype-handler": "propTypeHandler"
+}

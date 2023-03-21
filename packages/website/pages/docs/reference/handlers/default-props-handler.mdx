@@ -1,0 +1,64 @@
+# defaultPropsHandler
+
+Finds the default props from the react component.
+
+## Example
+
+The following components will all result in the following documentation
+
+```ts {2-4} filename="component.tsx"
+export default class MyComponent extends React.Component {
+  static defaultProps = {
+    a: '1',
+  };
+  render() {
+    return <div />;
+  }
+}
+```
+
+```ts {7-9} filename="component.tsx"
+class MyComponent extends React.Component {
+  render() {
+    return <div />;
+  }
+}
+
+MyComponent.defaultProps = {
+  a: '1',
+};
+
+export default MyComponent;
+```
+
+```ts {3-5} filename="component.tsx"
+const MyComponent = () => <div />;
+
+MyComponent.defaultProps = {
+  a: '1',
+};
+
+export default MyComponent;
+```
+
+```ts /{ a = '1' }/ filename="component.tsx"
+export default ({ a = '1' }) => <div />;
+```
+
+```json {7-11} filename="Result"
+[
+  {
+    "description": "",
+    "methods": [],
+    "props": {
+      "a": {
+        "defaultValue": {
+          "value": "'1'",
+          "computed": false
+        },
+        "required": false
+      }
+    }
+  }
+]
+```

@@ -2,5 +2,6 @@
   "config": "Config",
   "nodejs": "API",
   "documentation": "Documentation",
-  "filestate": "FileState"
+  "file-state": "FileState",
+  "handlers": "Handlers"
 }
