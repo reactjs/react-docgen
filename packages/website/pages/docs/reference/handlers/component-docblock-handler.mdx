@@ -1,0 +1,24 @@
+# componentDocblockHandler
+
+Reads the react components leading block comment and adds its content as
+description to the documentation.
+
+## Example
+
+The following component will result in the following documentation
+
+```ts {1-3} filename="component.tsx"
+/**
+ * This is my component and this is its description.
+ */
+export default () => <div />;
+```
+
+```json {3} filename="Result"
+[
+  {
+    "description": "This is my component and this is its description.",
+    "methods": []
+  }
+]
+```

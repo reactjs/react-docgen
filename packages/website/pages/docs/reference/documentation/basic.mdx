@@ -1,0 +1,56 @@
+import { Callout } from 'nextra-theme-docs';
+
+# Basic
+
+This describes the return value of react-docgen either from the `parse()` method
+or from the CLI output.
+
+For the current TypeScript types you can look at
+[github](https://github.com/reactjs/react-docgen/blob/main/packages/react-docgen/src/Documentation.ts)
+
+## Documentation
+
+```ts
+interface Documentation {
+  childContext?: Record<string, PropDescriptor>;
+  composes?: string[];
+  context?: Record<string, PropDescriptor>;
+  description?: string;
+  displayName?: string;
+  methods?: MethodDescriptor[];
+  props?: Record<string, PropDescriptor>;
+}
+```
+
+### childContext
+
+### composes
+
+**Type**: `string[] | undefined`
+
+If the props of the React component are composed of props which react-docgen was
+unable to resolve, the name of types will be listed here.
+
+<Callout type="warning" emoji="🚧">
+  Create examples
+</Callout>
+
+### context
+
+### description
+
+**Type**: `string | undefined`
+
+If the [`componentDocblockHandler`](../handlers/component-docblock-handler) is
+active this property will be set to the description of the React component.
+
+### displayName
+
+**Type**: `string | undefined`
+
+If the [`displayNameHandler`](../handlers/display-name-handler) is active this
+property will be set to the name of the React component.
+
+### methods
+
+### props
