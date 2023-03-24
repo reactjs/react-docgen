@@ -3,4 +3,12 @@ const withNextra = require('nextra')({
   themeConfig: './theme.config.tsx',
 });
 
-module.exports = withNextra();
+module.exports = withNextra({
+  webpack: (config) => {
+    if (!config.resolve.fallback) config.resolve.fallback = {};
+
+    config.resolve.fallback.fs = false;
+
+    return config;
+  },
+});
