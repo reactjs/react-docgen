@@ -105,14 +105,14 @@ importers:
     specifiers:
       '@types/react': 18.0.28
       next: 13.2.4
-      nextra: 2.2.19
-      nextra-theme-docs: 2.2.19
+      nextra: 2.2.20
+      nextra-theme-docs: 2.2.20
       react: 18.2.0
       react-dom: 18.2.0
     dependencies:
       next: 13.2.4_biqbaboplfbrettd7655fr4n2y
-      nextra: 2.2.19_ld2jel3hspngo3u5lti2kgl2sq
-      nextra-theme-docs: 2.2.19_i765vautotixoofbdi6dinfkwe
+      nextra: 2.2.20_ld2jel3hspngo3u5lti2kgl2sq
+      nextra-theme-docs: 2.2.20_mborlevrhep2dwd3wssrtcgtou
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     devDependencies:
@@ -7332,11 +7332,11 @@ packages:
       - babel-plugin-macros
     dev: false
 
-  /nextra-theme-docs/2.2.19_i765vautotixoofbdi6dinfkwe:
-    resolution: {integrity: sha512-+5PcNgHwxwSAmQZlbV2cbjbvxj7CPYnN44OtWNxHQ8L3dzlw6fUyIJtyCUcGbDHpFC3sHmwYgB3OCWH8m4P35Q==}
+  /nextra-theme-docs/2.2.20_mborlevrhep2dwd3wssrtcgtou:
+    resolution: {integrity: sha512-YbDbpwvLCUnDvq9afP57Zu/fDFbSrsvx5MEZIhKRcrn/eCfo4yIwoMMhdRF0yntB5uTDc4MZ8jqJgb25g2v7QA==}
     peerDependencies:
       next: '>=9.5.3'
-      nextra: 2.2.19
+      nextra: 2.2.20
       react: '>=16.13.1'
       react-dom: '>=16.13.1'
     dependencies:
@@ -7351,15 +7351,15 @@ packages:
       next: 13.2.4_biqbaboplfbrettd7655fr4n2y
       next-seo: 5.15.0_ld2jel3hspngo3u5lti2kgl2sq
       next-themes: 0.2.1_ld2jel3hspngo3u5lti2kgl2sq
-      nextra: 2.2.19_ld2jel3hspngo3u5lti2kgl2sq
+      nextra: 2.2.20_ld2jel3hspngo3u5lti2kgl2sq
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       scroll-into-view-if-needed: 3.0.4
       zod: 3.20.2
     dev: false
 
-  /nextra/2.2.19_ld2jel3hspngo3u5lti2kgl2sq:
-    resolution: {integrity: sha512-QmgbJvT1lfmFCM8n5gfGTA5p8efw20N/oZP9ojBhWhmatq/PwAp7VoSeTan6TT9Yspv6PmnrgpqKhYGzPSkFVw==}
+  /nextra/2.2.20_ld2jel3hspngo3u5lti2kgl2sq:
+    resolution: {integrity: sha512-V5P5UHvA7GvISziJSEMVV9jCDBm1aMlez3XqKPzvr/aIrugfnIPBhGrFh2YjpXp5FspldgTS8lbZVf36Alonhg==}
     peerDependencies:
       next: '>=9.5.3'
       react: '>=16.13.1'
@@ -7388,6 +7388,7 @@ packages:
       title: 3.5.3
       unist-util-remove: 3.1.1
       unist-util-visit: 4.1.2
+      zod: 3.20.2
     transitivePeerDependencies:
       - supports-color
     dev: false
