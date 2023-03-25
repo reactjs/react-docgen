@@ -11,8 +11,8 @@
     "test": "nx run-many --target=test --exclude='@react-docgen-internal/*' --output-style=stream",
     "playground:build": "pnpm --filter @react-docgen-internal/playground run build",
     "playground:start": "pnpm --filter @react-docgen-internal/playground run start",
-    "copy:changelog:react-docgen": "cp ./packages/react-docgen/CHANGELOG.md ./packages/website/pages/docs/release-notes/react-docgen.mdx",
-    "copy:changelog:cli": "cp ./packages/react-docgen-cli/CHANGELOG.md ./packages/website/pages/docs/release-notes/cli.mdx",
+    "copy:changelog:react-docgen": "cp ./packages/react-docgen/CHANGELOG.md ./packages/website/src/pages/docs/release-notes/react-docgen.mdx",
+    "copy:changelog:cli": "cp ./packages/react-docgen-cli/CHANGELOG.md ./packages/website/src/pages/docs/release-notes/cli.mdx",
     "changesets-release": "pnpm build && changeset publish",
     "changesets-version": "changeset version && pnpm install --lockfile-only && pnpm copy:changelog:react-docgen && pnpm copy:changelog:cli"
   },
