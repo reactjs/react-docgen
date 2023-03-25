@@ -2,8 +2,5 @@
 command = "pnpm build"
 publish = ".next"
 
-[build.environment]
-NODE_ENV = "production"
-
 [[plugins]]
 package = "@netlify/plugin-nextjs"

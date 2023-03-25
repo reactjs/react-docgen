@@ -5,7 +5,7 @@
   "description": "react-docgen website",
   "scripts": {
     "dev": "nx exec -- next dev",
-    "build": "nx exec -- next build",
+    "build": "NODE_ENV=production nx exec -- next build",
     "start": "nx exec -- next start"
   },
   "author": "Daniel Tschinder (http://github.com/danez)",
