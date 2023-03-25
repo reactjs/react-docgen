@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "description": "react-docgen website",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "dev": "nx exec -- next dev",
+    "build": "nx exec -- next build",
+    "start": "nx exec -- next start"
   },
   "author": "Daniel Tschinder (http://github.com/danez)",
   "license": "MIT",
@@ -28,5 +28,27 @@
   },
   "devDependencies": {
     "@types/react": "18.0.29"
+  },
+  "nx": {
+    "targets": {
+      "build": {
+        "dependsOn": [
+          "^build"
+        ],
+        "outputs": [
+          "{projectRoot}/.next"
+        ]
+      },
+      "dev": {
+        "dependsOn": [
+          "^build"
+        ]
+      },
+      "start": {
+        "dependsOn": [
+          "build"
+        ]
+      }
+    }
   }
 }

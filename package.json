@@ -5,12 +5,10 @@
     "pnpm": "7.30.3"
   },
   "scripts": {
-    "build": "pnpm --filter '!@react-docgen-internal/*' run build",
-    "watch": "pnpm --filter '!@react-docgen-internal/*' run watch",
+    "build": "nx run-many --target=build --exclude='@react-docgen-internal/*'",
     "lint": "eslint . --ext .js,.cjs,.mjs,.ts,.tsx --report-unused-disable-directives --max-warnings=0",
     "fix": "eslint . --ext .js,.cjs,.mjs,.ts,.tsx --fix --report-unused-disable-directives --max-warnings=0",
-    "test": "pnpm build && pnpm --filter '!@react-docgen-internal/*' exec vitest run",
-    "test:dev": "pnpm build && pnpm --filter '!@react-docgen-internal/*' exec vitest",
+    "test": "nx run-many --target=test --exclude='@react-docgen-internal/*' --output-style=stream",
     "playground:build": "pnpm --filter @react-docgen-internal/playground run build",
     "playground:start": "pnpm --filter @react-docgen-internal/playground run start",
     "copy:changelog:react-docgen": "cp ./packages/react-docgen/CHANGELOG.md ./packages/website/pages/docs/release-notes/react-docgen.mdx",
@@ -32,6 +30,7 @@
     "eslint-config-prettier": "8.8.0",
     "eslint-plugin-prettier": "4.2.1",
     "execa": "6.1.0",
+    "nx": "15.8.9",
     "prettier": "2.8.7",
     "rimraf": "4.4.1",
     "tempy": "3.0.0",
