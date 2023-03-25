@@ -118,7 +118,7 @@ export default class App extends Component<PlaygroundProps, PlaygroundState> {
     return (
       <>
         <div className="content flex h-[calc(100vh-var(--nextra-navbar-height))] flex-row flex-nowrap items-start justify-start overflow-hidden">
-          <div className="w-51 flex-none self-auto p-5">
+          <div className="w-48 flex-none self-auto p-5">
             <OptionPanel
               language={this.state.language}
               onLanguageChange={this.handleLanguageChange}
