@@ -22,13 +22,23 @@
     "next-themes": "0.2.1",
     "nextra": "2.2.20",
     "nextra-theme-docs": "2.2.20",
+    "postcss": "8.4.21",
+    "postcss-lightningcss": "0.6.0",
     "react": "18.2.0",
     "react-docgen": "workspace:6.0.0-beta.5",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "tailwindcss": "3.2.7"
   },
   "devDependencies": {
     "@types/react": "18.0.29"
   },
+  "browserslist": [
+    "chrome 64",
+    "edge 79",
+    "firefox 67",
+    "opera 51",
+    "safari 12"
+  ],
   "nx": {
     "targets": {
       "build": {

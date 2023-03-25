@@ -4,7 +4,6 @@ import Panel from './Panel';
 import OptionPanel, { Language } from './OptionPanel';
 import type { Config } from 'react-docgen';
 import { parse } from 'react-docgen';
-import styles from './Playground.module.css';
 
 const defaultPlugins = [
   'jsx',
@@ -118,21 +117,21 @@ export default class App extends Component<PlaygroundProps, PlaygroundState> {
   render() {
     return (
       <>
-        <div className={styles.panelContainer}>
-          <div className={styles.optionsPanel}>
+        <div className="content flex h-[calc(100vh-var(--nextra-navbar-height))] flex-row flex-nowrap items-start justify-start overflow-hidden">
+          <div className="w-51 flex-none self-auto p-5">
             <OptionPanel
               language={this.state.language}
               onLanguageChange={this.handleLanguageChange}
             />
           </div>
-          <div className={styles.editorPanel}>
+          <div className="h-full w-1/2 flex-auto self-auto overflow-hidden">
             <Panel
               value={this.state.content}
               codeSample={this.props.initialContent}
               onChange={this.handleChange}
             />
           </div>
-          <div className={styles.editorPanel}>
+          <div className="h-full w-1/2 flex-auto self-auto overflow-hidden">
             <Panel
               readOnly={true}
               ref={this._jsonRef}

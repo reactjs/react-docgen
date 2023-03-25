@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.cm-theme-light, .cm-theme-dark {
+    height: 100%;
+}
