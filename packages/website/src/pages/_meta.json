@@ -10,7 +10,8 @@
   "playground": {
     "title": "Playground",
     "type": "page",
-    "href": "https://reactcommunity.org/react-docgen/",
-    "newWindow": true
+    "theme": {
+      "layout": "raw"
+    }
   }
 }

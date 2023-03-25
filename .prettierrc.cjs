@@ -5,6 +5,7 @@ module.exports = {
   trailingComma: 'all',
   useTabs: false,
   printWidth: 80,
-  proseWrap: "always",
+  proseWrap: 'always',
   singleQuote: true,
+  plugins: [require('prettier-plugin-tailwindcss')],
 };
