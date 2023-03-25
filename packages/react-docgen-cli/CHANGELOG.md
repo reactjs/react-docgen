@@ -1,5 +1,24 @@
 # Release Notes
 
+## 1.0.0-beta.3
+
+### Minor Changes
+
+- 217a005: Add support for the `FindAnnotatedDefinitionsResolver`.
+
+  Can be used with
+
+  ```
+  react-docgen --resolver find-all-annotated-components
+  ```
+
+### Patch Changes
+
+- Updated dependencies [dfc2f85]
+- Updated dependencies [cc94da2]
+- Updated dependencies [98a1138]
+  - react-docgen@6.0.0-beta.6
+
 ## 1.0.0-beta.2
 
 ### Major Changes
