@@ -1,5 +1,16 @@
 # Release Notes
 
+## 6.0.0-beta.6
+
+### Major Changes
+
+- dfc2f85: Rename `propDocBlockHandler` to `propDocblockHandler` for consistency
+
+### Patch Changes
+
+- cc94da2: Fix using react-docgen in browsers
+- 98a1138: Add `displayName` and `description` to Documentation type
+
 ## 6.0.0-beta.5
 
 ### Major Changes
