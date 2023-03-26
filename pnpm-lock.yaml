@@ -113,7 +113,7 @@ importers:
       '@popperjs/core': 2.11.7
       '@types/react': 18.0.29
       '@types/react-dom': 18.0.11
-      '@uiw/react-codemirror': 4.19.9
+      '@uiw/react-codemirror': 4.19.10
       clsx: 1.2.1
       next: 13.2.4
       next-themes: 0.2.1
@@ -131,7 +131,7 @@ importers:
       '@headlessui/react': 1.7.13_biqbaboplfbrettd7655fr4n2y
       '@popperjs/core': 2.11.7
       '@types/react-dom': 18.0.11
-      '@uiw/react-codemirror': 4.19.9_fcfoxczgl3bih2inr776zkfwzu
+      '@uiw/react-codemirror': 4.19.10_fcfoxczgl3bih2inr776zkfwzu
       clsx: 1.2.1
       next: 13.2.4_biqbaboplfbrettd7655fr4n2y
       next-themes: 0.2.1_ld2jel3hspngo3u5lti2kgl2sq
@@ -2963,8 +2963,8 @@ packages:
       eslint-visitor-keys: 3.3.0
     dev: true
 
-  /@uiw/codemirror-extensions-basic-setup/4.19.9_@codemirror+view@6.9.3:
-    resolution: {integrity: sha512-O4yAgVpD3Pon4t4+lwZ2MTGg2TeU/Jv8YzKS9ap4fP/WMTVrKmpdq+DOafbhZSlhmU0XGfQPPJ4WX6rtZgx3Rw==}
+  /@uiw/codemirror-extensions-basic-setup/4.19.10_@codemirror+view@6.9.3:
+    resolution: {integrity: sha512-EiqY4hkhHk68w/JfSchzOPSlpwHfFgzDnUw9pLJ1xoxNRai/Goa1kKCOFGkGlF1ZHbkbqRUuFHMt9cA9Xe8/gw==}
     peerDependencies:
       '@codemirror/view': '>=6.0.0'
     dependencies:
@@ -2977,8 +2977,8 @@ packages:
       '@codemirror/view': 6.9.3
     dev: false
 
-  /@uiw/react-codemirror/4.19.9_fcfoxczgl3bih2inr776zkfwzu:
-    resolution: {integrity: sha512-U+A1fSfELMFFs5a+ZOPwCJKZMYaMy6QHOfNOOV7WhSveM7GYHT970GjTfs2dn1LlvhebwyK9ei0rCXZdsI9n9Q==}
+  /@uiw/react-codemirror/4.19.10_fcfoxczgl3bih2inr776zkfwzu:
+    resolution: {integrity: sha512-vMWciwKtCJC+ad16Qsyti+GKIu2OrKrVLLS1iEKSEwjM0YcbGM9/E5Hq4HSSeyayHL/PlH/M9h/3PUNbL6V7uA==}
     peerDependencies:
       '@codemirror/view': '>=6.0.0'
       react: '>=16.8.0'
@@ -2989,7 +2989,7 @@ packages:
       '@codemirror/state': 6.2.0
       '@codemirror/theme-one-dark': 6.1.1
       '@codemirror/view': 6.9.3
-      '@uiw/codemirror-extensions-basic-setup': 4.19.9_@codemirror+view@6.9.3
+      '@uiw/codemirror-extensions-basic-setup': 4.19.10_@codemirror+view@6.9.3
       codemirror: 6.0.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
