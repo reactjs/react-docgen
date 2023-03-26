@@ -37,7 +37,7 @@ function getEnumValuesFromArrayExpression(
     const value = resolveToValue(elementPath as NodePath<Expression>);
 
     return values.push({
-      value: printValue(value),
+      value: printValue(value.isImportDeclaration() ? elementPath : value),
       computed: !value.isLiteral(),
     });
   });

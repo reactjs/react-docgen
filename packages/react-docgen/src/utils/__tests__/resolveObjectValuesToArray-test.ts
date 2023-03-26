@@ -164,4 +164,33 @@ describe('resolveObjectValuesToArray', () => {
 
     expect(resolveObjectValuesToArray(path)).toMatchSnapshot();
   });
+
+  test('can handle unresolved imported objects passed to Object.values', () => {
+    const path = parse.expressionLast(
+      `import foo from 'foo';
+       Object.values(foo);`,
+    );
+
+    expect(resolveObjectValuesToArray(path)).toBe(null);
+  });
+
+  test('can handle unresolve spreads from imported objects', () => {
+    const path = parse.expressionLast(
+      `import bar from 'bar';
+       var abc = { foo: 'foo', baz: 'baz', ...bar };
+       Object.keys(abc);`,
+    );
+
+    expect(resolveObjectValuesToArray(path)).toBe(null);
+  });
+
+  test('can handle unresolve object value from imported objects', () => {
+    const path = parse.expressionLast(
+      `import bar from 'bar';
+       var abc = { foo: 'foo', baz: bar };
+       Object.keys(abc);`,
+    );
+
+    expect(resolveObjectValuesToArray(path)).toBe(null);
+  });
 });

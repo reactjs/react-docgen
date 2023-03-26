@@ -286,6 +286,34 @@ describe('getPropType', () => {
       expect(getPropType(identifierInsideArray)).toMatchSnapshot();
     });
 
+    test('handles unresolved imported identifier to their initialization value in array', () => {
+      const identifierInsideArray = parse
+        .statement<ExpressionStatement>(
+          `
+        PropTypes.oneOf([FOO, BAR]);
+        import FOO from 'foo';
+        import BAR from 'bar';
+      `,
+        )
+        .get('expression');
+
+      expect(getPropType(identifierInsideArray)).toMatchSnapshot();
+    });
+
+    test('handles unresolved named imported identifier to their initialization value in array', () => {
+      const identifierInsideArray = parse
+        .statement<ExpressionStatement>(
+          `
+        PropTypes.oneOf([FOO, BAR]);
+        import { FOO } from 'foo';
+        import { BAR } from 'bar';
+      `,
+        )
+        .get('expression');
+
+      expect(getPropType(identifierInsideArray)).toMatchSnapshot();
+    });
+
     test('resolves memberExpressions', () => {
       const propTypeExpression = parse
         .statement<ExpressionStatement>(
