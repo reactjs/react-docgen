@@ -18,6 +18,7 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@changesets/changelog-github": "^0.4.8",
     "@changesets/cli": "2.26.1",
     "@types/node": "14.18.41",
     "@types/rimraf": "3.0.2",
