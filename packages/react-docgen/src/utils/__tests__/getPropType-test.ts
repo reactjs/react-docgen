@@ -436,6 +436,41 @@ describe('getPropType', () => {
       expect(getPropType(propTypeExpression)).toMatchSnapshot();
     });
 
+    test('resolves value constants from imported objects', () => {
+      const propTypeExpression = parse
+        .statement<ExpressionStatement>(
+          `
+        const values = {
+          FOO: consts.FOO, BAR: consts.BAR
+        }
+        PropTypes.oneOf(Object.values(values));
+        import consts from 'obj';
+      `,
+          mockImporter,
+          1,
+        )
+        .get('expression');
+
+      expect(getPropType(propTypeExpression)).toMatchSnapshot();
+    });
+
+    test('handles unresolved value constants from imported objects', () => {
+      const propTypeExpression = parse
+        .statement<ExpressionStatement>(
+          `
+        const values = {
+          FOO: consts.FOO, BAR: consts.BAR
+        }
+        PropTypes.oneOf(Object.values(values));
+        import consts from 'obj';
+      `,
+          1,
+        )
+        .get('expression');
+
+      expect(getPropType(propTypeExpression)).toMatchSnapshot();
+    });
+
     test('does not resolve external values without proper importer', () => {
       const propTypeExpression = parse
         .statement<ExpressionStatement>(
