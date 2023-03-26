@@ -52,13 +52,13 @@ function resolveObjectToPropMap(object: NodePath): Map<string, string> | null {
           return;
         }
 
-        // Identifiers as values are not followed at all
-        const valuePath = propPath.get('value');
+        const valuePath = resolveToValue(propPath.get('value'));
         const value = valuePath.isStringLiteral()
           ? `"${valuePath.node.value}"`
           : valuePath.isNumericLiteral()
           ? `${valuePath.node.value}`
-          : 'null';
+          : // we return null here because there are a lot of cases and we don't know yet what we need to handle
+            'null';
 
         values.set(name, value);
       } else if (propPath.isSpreadElement()) {

@@ -250,6 +250,22 @@ exports[`getPropType > resolve identifier to their values > handles unresolved n
 }
 `;
 
+exports[`getPropType > resolve identifier to their values > handles unresolved value constants from imported objects 1`] = `
+{
+  "name": "enum",
+  "value": [
+    {
+      "computed": false,
+      "value": "null",
+    },
+    {
+      "computed": false,
+      "value": "null",
+    },
+  ],
+}
+`;
+
 exports[`getPropType > resolve identifier to their values > resolves imported identifier to their initialization value in array 1`] = `
 {
   "name": "enum",
@@ -343,6 +359,22 @@ exports[`getPropType > resolve identifier to their values > resolves simple iden
 `;
 
 exports[`getPropType > resolve identifier to their values > resolves simple identifier to their initialization value in array 1`] = `
+{
+  "name": "enum",
+  "value": [
+    {
+      "computed": false,
+      "value": "\\"foo\\"",
+    },
+    {
+      "computed": false,
+      "value": "\\"bar\\"",
+    },
+  ],
+}
+`;
+
+exports[`getPropType > resolve identifier to their values > resolves value constants from imported objects 1`] = `
 {
   "name": "enum",
   "value": [
