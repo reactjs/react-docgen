@@ -218,6 +218,38 @@ exports[`getPropType > resolve identifier to their values > does resolve object 
 }
 `;
 
+exports[`getPropType > resolve identifier to their values > handles unresolved imported identifier to their initialization value in array 1`] = `
+{
+  "name": "enum",
+  "value": [
+    {
+      "computed": true,
+      "value": "FOO",
+    },
+    {
+      "computed": true,
+      "value": "BAR",
+    },
+  ],
+}
+`;
+
+exports[`getPropType > resolve identifier to their values > handles unresolved named imported identifier to their initialization value in array 1`] = `
+{
+  "name": "enum",
+  "value": [
+    {
+      "computed": true,
+      "value": "FOO",
+    },
+    {
+      "computed": true,
+      "value": "BAR",
+    },
+  ],
+}
+`;
+
 exports[`getPropType > resolve identifier to their values > resolves imported identifier to their initialization value in array 1`] = `
 {
   "name": "enum",
