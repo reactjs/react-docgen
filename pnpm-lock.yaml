@@ -113,7 +113,7 @@ importers:
       '@codemirror/view': 6.9.3
       '@headlessui/react': 1.7.13
       '@popperjs/core': 2.11.7
-      '@types/react': 18.0.29
+      '@types/react': 18.0.30
       '@types/react-dom': 18.0.11
       '@uiw/react-codemirror': 4.19.10
       clsx: 1.2.1
@@ -146,7 +146,7 @@ importers:
       react-dom: 18.2.0_react@18.2.0
       tailwindcss: 3.2.7_postcss@8.4.21
     devDependencies:
-      '@types/react': 18.0.29
+      '@types/react': 18.0.30
 
   playground:
     specifiers:
@@ -2155,7 +2155,7 @@ packages:
       react: '>=16'
     dependencies:
       '@types/mdx': 2.0.3
-      '@types/react': 18.0.29
+      '@types/react': 18.0.30
       react: 18.2.0
     dev: false
 
@@ -2785,11 +2785,11 @@ packages:
   /@types/react-dom/18.0.11:
     resolution: {integrity: sha512-O38bPbI2CWtgw/OoQoY+BRelw7uysmXbWvw3nLWO21H1HSh+GOlqPuXshJfjmpNlKiiSDG9cc1JZAaMmVdcTlw==}
     dependencies:
-      '@types/react': 18.0.29
+      '@types/react': 18.0.30
     dev: false
 
-  /@types/react/18.0.29:
-    resolution: {integrity: sha512-wXHktgUABxplw1+UnljseDq4+uztQyp2tlWZRIxHlpchsCFqiYkvaDS8JR7eKOQm8wziTH/el5qL7D6gYNkYcw==}
+  /@types/react/18.0.30:
+    resolution: {integrity: sha512-AnME2cHDH11Pxt/yYX6r0w448BfTwQOLEhQEjCdwB7QskEI7EKtxhGUsExTQe/MsY3D9D5rMtu62WRocw9A8FA==}
     dependencies:
       '@types/prop-types': 15.7.5
       '@types/scheduler': 0.16.3
