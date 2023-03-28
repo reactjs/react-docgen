@@ -115,7 +115,7 @@ importers:
       '@popperjs/core': 2.11.7
       '@types/react': 18.0.30
       '@types/react-dom': 18.0.11
-      '@uiw/react-codemirror': 4.19.10
+      '@uiw/react-codemirror': 4.19.11
       clsx: 1.2.1
       next: 13.2.4
       next-themes: 0.2.1
@@ -133,7 +133,7 @@ importers:
       '@headlessui/react': 1.7.13_biqbaboplfbrettd7655fr4n2y
       '@popperjs/core': 2.11.7
       '@types/react-dom': 18.0.11
-      '@uiw/react-codemirror': 4.19.10_fcfoxczgl3bih2inr776zkfwzu
+      '@uiw/react-codemirror': 4.19.11_fcfoxczgl3bih2inr776zkfwzu
       clsx: 1.2.1
       next: 13.2.4_biqbaboplfbrettd7655fr4n2y
       next-themes: 0.2.1_ld2jel3hspngo3u5lti2kgl2sq
@@ -2990,8 +2990,8 @@ packages:
       eslint-visitor-keys: 3.3.0
     dev: true
 
-  /@uiw/codemirror-extensions-basic-setup/4.19.10_@codemirror+view@6.9.3:
-    resolution: {integrity: sha512-EiqY4hkhHk68w/JfSchzOPSlpwHfFgzDnUw9pLJ1xoxNRai/Goa1kKCOFGkGlF1ZHbkbqRUuFHMt9cA9Xe8/gw==}
+  /@uiw/codemirror-extensions-basic-setup/4.19.11_@codemirror+view@6.9.3:
+    resolution: {integrity: sha512-yT7DtFUZESyqyMm0kcMbT6dQ8TIK8tcA6XzMtkgLtsiB883rlc9kYVJScyDz8M9mCckycVbuFlhEdqN54PoiGw==}
     peerDependencies:
       '@codemirror/view': '>=6.0.0'
     dependencies:
@@ -3004,8 +3004,8 @@ packages:
       '@codemirror/view': 6.9.3
     dev: false
 
-  /@uiw/react-codemirror/4.19.10_fcfoxczgl3bih2inr776zkfwzu:
-    resolution: {integrity: sha512-vMWciwKtCJC+ad16Qsyti+GKIu2OrKrVLLS1iEKSEwjM0YcbGM9/E5Hq4HSSeyayHL/PlH/M9h/3PUNbL6V7uA==}
+  /@uiw/react-codemirror/4.19.11_fcfoxczgl3bih2inr776zkfwzu:
+    resolution: {integrity: sha512-KoTMg0krVi8EgIPotMYAfTTB+9U4CrJe1ZeSLVR92Wif0pPjYLN5TQF0kqiiH97gJNGHVte/mUftmDjK7Sv2ZA==}
     peerDependencies:
       '@codemirror/view': '>=6.0.0'
       react: '>=16.8.0'
@@ -3016,7 +3016,7 @@ packages:
       '@codemirror/state': 6.2.0
       '@codemirror/theme-one-dark': 6.1.1
       '@codemirror/view': 6.9.3
-      '@uiw/codemirror-extensions-basic-setup': 4.19.10_@codemirror+view@6.9.3
+      '@uiw/codemirror-extensions-basic-setup': 4.19.11_@codemirror+view@6.9.3
       codemirror: 6.0.1
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
