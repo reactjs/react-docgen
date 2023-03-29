@@ -78,7 +78,7 @@ export function Select({
                         ? 'bg-primary-50 text-primary-600 dark:bg-primary-500/10'
                         : 'text-gray-800 dark:text-gray-100',
                       'relative cursor-pointer whitespace-nowrap py-1.5',
-                      'transition-colors ltr:pl-3 ltr:pr-9 rtl:pr-3 rtl:pl-9',
+                      'transition-colors ltr:pl-3 ltr:pr-9 rtl:pl-9 rtl:pr-3',
                     )
                   }
                 >

@@ -2,7 +2,7 @@
   "private": true,
   "engines": {
     "node": ">=14.17.0",
-    "pnpm": "7.30.5"
+    "pnpm": ">=7.30.3"
   },
   "scripts": {
     "build": "nx run-many --target=build --exclude='@react-docgen-internal/*'",
