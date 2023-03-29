@@ -16,8 +16,7 @@
       "matchFiles": [
         "benchmark/package.json",
         "packages/website/package.json",
-        "packages/react-docgen-cli/package.json",
-        "playground/package.json"
+        "packages/react-docgen-cli/package.json"
       ],
       "extends": [":pinAllExceptPeerDependencies"]
     },
@@ -48,8 +47,7 @@
     {
       "matchFiles": [
         "benchmark/package.json",
-        "packages/website/package.json",
-        "playground/package.json"
+        "packages/website/package.json"
       ],
       "semanticCommitType": "chore"
     },

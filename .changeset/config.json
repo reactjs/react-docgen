@@ -12,7 +12,6 @@
   "updateInternalDependencies": "patch",
   "ignore": [
     "@react-docgen-internal/benchmark",
-    "@react-docgen-internal/playground",
     "@react-docgen-internal/website"
   ]
 }
