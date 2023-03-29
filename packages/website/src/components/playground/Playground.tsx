@@ -1,66 +1,66 @@
-import type { RefObject } from 'react';
-import { Component, createRef } from 'react';
+import { Component } from 'react';
 import Panel from './Panel';
 import OptionPanel, { Language } from './OptionPanel';
 import type { Config } from 'react-docgen';
-import { parse } from 'react-docgen';
+import { parse, builtinResolvers } from 'react-docgen';
 
 const defaultPlugins = [
   'jsx',
-  'asyncGenerators',
-  'bigInt',
-  'classProperties',
-  'classPrivateProperties',
-  'classPrivateMethods',
-  ['decorators', { decoratorsBeforeExport: false }],
+  'asyncDoExpressions',
+  'decimal',
+  'decorators',
+  'decoratorAutoAccessors',
+  'destructuringPrivate',
   'doExpressions',
-  'dynamicImport',
+  'explicitResourceManagement',
   'exportDefaultFrom',
-  'exportNamespaceFrom',
   'functionBind',
   'functionSent',
-  'importMeta',
-  'logicalAssignment',
-  'nullishCoalescingOperator',
-  'numericSeparator',
-  'objectRestSpread',
-  'optionalCatchBinding',
-  'optionalChaining',
+  'importAssertions',
+  'importReflection',
+  'moduleBlocks',
+  'partialApplication',
   ['pipelineOperator', { proposal: 'minimal' }],
+  'recordAndTuple',
+  'regexpUnicodeSets',
   'throwExpressions',
-  'topLevelAwait',
 ];
 
 interface PlaygroundProps {
   initialContent: string;
+  initialLanguage: Language;
 }
 
 export type EditorMode = 'application/json' | 'text/jsx' | 'text/plain';
 
 interface PlaygroundState {
   value: string;
-  mode: EditorMode;
   content: string;
   language: Language;
   options: Config;
 }
 
-export default class App extends Component<PlaygroundProps, PlaygroundState> {
-  private _jsonRef: RefObject<unknown>;
+const {
+  ChainResolver,
+  FindAllDefinitionsResolver,
+  FindAnnotatedDefinitionsResolver,
+} = builtinResolvers;
 
+const resolver = new ChainResolver(
+  [new FindAnnotatedDefinitionsResolver(), new FindAllDefinitionsResolver()],
+  { chainingLogic: ChainResolver.Logic.ALL },
+);
+
+export default class App extends Component<PlaygroundProps, PlaygroundState> {
   constructor(props: PlaygroundProps) {
     super(props);
-    this._jsonRef = createRef();
 
-    const initialLanguage = Language.TYPESCRIPT;
-
-    const options = this.buildOptions(initialLanguage);
+    const options = this.buildOptions(props.initialLanguage);
 
     this.state = {
       value: this.compile(props.initialContent, options),
-      mode: 'application/json',
       content: props.initialContent,
-      language: initialLanguage,
+      language: props.initialLanguage,
       options,
     };
   }
@@ -71,19 +71,18 @@ export default class App extends Component<PlaygroundProps, PlaygroundState> {
 
   handleChange = (value: string) => {
     let result;
-    let mode: EditorMode = 'text/plain';
 
     try {
       result = this.compile(value, this.state.options);
-      mode = 'application/json';
     } catch (err) {
       result = String(err);
     }
-    this.setState({ value: result, mode, content: value });
+    this.setState({ value: result, content: value });
   };
 
   buildOptions(language: Language): Config {
     const options: Config = {
+      resolver,
       babelOptions: {
         babelrc: false,
         babelrcRoots: false,
@@ -132,12 +131,7 @@ export default class App extends Component<PlaygroundProps, PlaygroundState> {
             />
           </div>
           <div className="h-full w-1/2 flex-auto self-auto overflow-hidden">
-            <Panel
-              readOnly={true}
-              ref={this._jsonRef}
-              value={this.state.value}
-              mode={this.state.mode}
-            />
+            <Panel readOnly={true} value={this.state.value} />
           </div>
         </div>
       </>

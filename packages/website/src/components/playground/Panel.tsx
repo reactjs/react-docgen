@@ -1,17 +1,13 @@
-import type { RefObject } from 'react';
 import { useCallback } from 'react';
 import { useTheme } from 'next-themes';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
-import type { EditorMode } from './Playground';
 import { EditorView } from '@codemirror/view';
 
 interface PanelProps {
   codeSample?: string;
-  mode?: EditorMode;
   onChange?: (value: string) => void;
   readOnly?: boolean;
-  ref?: RefObject<unknown>;
   value: string;
 }
 
