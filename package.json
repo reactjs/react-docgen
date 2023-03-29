@@ -26,7 +26,7 @@
     "@typescript-eslint/parser": "5.57.0",
     "@vitest/coverage-c8": "0.29.8",
     "cpy": "9.0.1",
-    "eslint": "8.36.0",
+    "eslint": "8.37.0",
     "eslint-config-next": "13.2.4",
     "eslint-config-prettier": "8.8.0",
     "eslint-plugin-prettier": "4.2.1",
