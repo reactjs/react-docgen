@@ -1,6 +1,7 @@
 [build]
 command = "pnpm build"
 publish = ".next"
+ignore = "git diff --quiet $COMMIT_REF $CACHED_COMMIT_REF . ../react-docgen ../../pnpm-lock.yaml"
 
 [[plugins]]
 package = "@netlify/plugin-nextjs"
