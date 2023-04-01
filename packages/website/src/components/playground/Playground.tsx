@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import Panel from './Panel';
+import Panel, { EditorMode } from './Panel';
 import OptionPanel, { Language } from './OptionPanel';
 import type { Config } from 'react-docgen';
 import { parse, builtinResolvers } from 'react-docgen';
@@ -124,14 +124,14 @@ export default class App extends Component<PlaygroundProps, PlaygroundState> {
             />
           </div>
           <div className="h-full w-1/2 flex-auto self-auto overflow-hidden">
-            <Panel
-              value={this.state.content}
-              codeSample={this.props.initialContent}
-              onChange={this.handleChange}
-            />
+            <Panel value={this.state.content} onChange={this.handleChange} />
           </div>
           <div className="h-full w-1/2 flex-auto self-auto overflow-hidden">
-            <Panel readOnly={true} value={this.state.value} />
+            <Panel
+              readOnly={true}
+              language={EditorMode.JSON}
+              value={this.state.value}
+            />
           </div>
         </div>
       </>

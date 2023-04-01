@@ -12,6 +12,7 @@
   "license": "MIT",
   "dependencies": {
     "@codemirror/lang-javascript": "6.1.4",
+    "@codemirror/lang-json": "6.0.1",
     "@codemirror/view": "6.9.3",
     "@headlessui/react": "1.7.13",
     "@popperjs/core": "2.11.7",

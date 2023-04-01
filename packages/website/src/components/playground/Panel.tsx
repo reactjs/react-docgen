@@ -2,16 +2,22 @@ import { useCallback } from 'react';
 import { useTheme } from 'next-themes';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
+import { json } from '@codemirror/lang-json';
 import { EditorView } from '@codemirror/view';
 
 interface PanelProps {
-  codeSample?: string;
+  language?: EditorMode;
   onChange?: (value: string) => void;
   readOnly?: boolean;
   value: string;
 }
 
 type Theme = 'dark' | 'light';
+
+export enum EditorMode {
+  JAVASCRIPT = 'javascript',
+  JSON = 'json',
+}
 
 function disableSpellcheck() {
   return EditorView.contentAttributes.of({
@@ -20,8 +26,17 @@ function disableSpellcheck() {
   });
 }
 
+function languageExtension(language: EditorMode) {
+  if (language === EditorMode.JSON) {
+    return json();
+  }
+
+  return javascript({ jsx: true, typescript: true });
+}
+
 export default function Panel({
   onChange,
+  language = EditorMode.JAVASCRIPT,
   readOnly = false,
   value,
 }: PanelProps) {
@@ -37,7 +52,7 @@ export default function Panel({
       value={value}
       height="100%"
       minHeight="100%"
-      extensions={[javascript({ jsx: true }), disableSpellcheck()]}
+      extensions={[languageExtension(language), disableSpellcheck()]}
       onChange={changeHandler}
       theme={(resolvedTheme as Theme) || 'light'}
       readOnly={readOnly}
