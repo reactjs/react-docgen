@@ -5,4 +5,5 @@
 Removed support for the `@extends React.Component` annotation on react class
 components.
 
-Instead you can use the new `@component` annotation.
+Instead you can use the new `@component` annotation or define you own annotation
+by creating a custom `FindAnnotatedDefinitionsResolver` instance

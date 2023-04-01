@@ -2,4 +2,4 @@
 'react-docgen': patch
 ---
 
-Handle some edge cases in resolveToValue
+Fixed the handling of some edge cases in resolveToValue
