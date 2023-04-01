@@ -31,8 +31,6 @@ interface PlaygroundProps {
   initialLanguage: Language;
 }
 
-export type EditorMode = 'application/json' | 'text/jsx' | 'text/plain';
-
 interface PlaygroundState {
   value: string;
   content: string;
