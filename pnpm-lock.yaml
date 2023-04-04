@@ -150,8 +150,8 @@ importers:
   packages/website:
     dependencies:
       '@codemirror/lang-javascript':
-        specifier: 6.1.4
-        version: 6.1.4
+        specifier: 6.1.5
+        version: 6.1.5
       '@codemirror/lang-json':
         specifier: 6.0.1
         version: 6.0.1
@@ -711,9 +711,10 @@ packages:
       prettier: 2.8.7
     dev: true
 
-  /@codemirror/autocomplete@6.4.2(@codemirror/view@6.9.3):
+  /@codemirror/autocomplete@6.4.2(@codemirror/state@6.2.0)(@codemirror/view@6.9.3):
     resolution: {integrity: sha512-8WE2xp+D0MpWEv5lZ6zPW1/tf4AGb358T5GWYiKEuCP8MvFfT3tH2mIF9Y2yr2e3KbHuSvsVhosiEyqCpiJhZQ==}
     peerDependencies:
+      '@codemirror/state': ^6.0.0
       '@codemirror/view': ^6.0.0
     dependencies:
       '@codemirror/language': 6.6.0
@@ -731,10 +732,10 @@ packages:
       '@lezer/common': 1.0.2
     dev: false
 
-  /@codemirror/lang-javascript@6.1.4:
-    resolution: {integrity: sha512-OxLf7OfOZBTMRMi6BO/F72MNGmgOd9B0vetOLvHsDACFXayBzW8fm8aWnDM0yuy68wTK03MBf4HbjSBNRG5q7A==}
+  /@codemirror/lang-javascript@6.1.5:
+    resolution: {integrity: sha512-BS2SmI1IXxWqMPhbJ0DC3eAHAK9V9XvdHMSqwvTBnmh5xFALt+cVDg7XE/A1dxdxzXYXyeqGddgqx1rQv7AYaw==}
     dependencies:
-      '@codemirror/autocomplete': 6.4.2(@codemirror/view@6.9.3)
+      '@codemirror/autocomplete': 6.4.2(@codemirror/state@6.2.0)(@codemirror/view@6.9.3)
       '@codemirror/language': 6.6.0
       '@codemirror/lint': 6.2.0
       '@codemirror/state': 6.2.0
@@ -1879,7 +1880,7 @@ packages:
     peerDependencies:
       '@codemirror/view': '>=6.0.0'
     dependencies:
-      '@codemirror/autocomplete': 6.4.2(@codemirror/view@6.9.3)
+      '@codemirror/autocomplete': 6.4.2(@codemirror/state@6.2.0)(@codemirror/view@6.9.3)
       '@codemirror/commands': 6.2.2
       '@codemirror/language': 6.6.0
       '@codemirror/lint': 6.2.0
@@ -2504,7 +2505,7 @@ packages:
   /codemirror@6.0.1:
     resolution: {integrity: sha512-J8j+nZ+CdWmIeFIGXEFbFPtpiYacFMDR8GlHK3IyHQJMCaVRfGx9NT+Hxivv1ckLWPvNdZqndbr/7lVhrf/Svg==}
     dependencies:
-      '@codemirror/autocomplete': 6.4.2(@codemirror/view@6.9.3)
+      '@codemirror/autocomplete': 6.4.2(@codemirror/state@6.2.0)(@codemirror/view@6.9.3)
       '@codemirror/commands': 6.2.2
       '@codemirror/language': 6.6.0
       '@codemirror/lint': 6.2.0
