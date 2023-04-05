@@ -50,8 +50,8 @@ importers:
         specifier: 2.8.7
         version: 2.8.7
       prettier-plugin-tailwindcss:
-        specifier: 0.2.6
-        version: 0.2.6(prettier@2.8.7)
+        specifier: 0.2.7
+        version: 0.2.7(prettier@2.8.7)
       rimraf:
         specifier: 4.4.1
         version: 4.4.1
@@ -6090,8 +6090,8 @@ packages:
       fast-diff: 1.2.0
     dev: true
 
-  /prettier-plugin-tailwindcss@0.2.6(prettier@2.8.7):
-    resolution: {integrity: sha512-F+7XCl9RLF/LPrGdUMHWpsT6TM31JraonAUyE6eBmpqymFvDwyl0ETHsKFHP1NG+sEfv8bmKqnTxEbWQbHPlBA==}
+  /prettier-plugin-tailwindcss@0.2.7(prettier@2.8.7):
+    resolution: {integrity: sha512-jQopIOgjLpX+y8HeD56XZw7onupRTC0cw7eKKUimI7vhjkPF5/1ltW5LyqaPtSyc8HvEpvNZsvvsGFa2qpa59w==}
     engines: {node: '>=12.17.0'}
     peerDependencies:
       '@ianvs/prettier-plugin-sort-imports': '*'
