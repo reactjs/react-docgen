@@ -19,7 +19,7 @@
     "@types/react-dom": "18.0.11",
     "@uiw/react-codemirror": "4.19.11",
     "clsx": "1.2.1",
-    "next": "13.2.4",
+    "next": "13.3.0",
     "next-themes": "0.2.1",
     "nextra": "2.3.0",
     "nextra-theme-docs": "2.3.0",
