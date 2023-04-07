@@ -23,7 +23,7 @@ const defaultIgnoreGlobs = [
 const defaultHandlers = Object.keys(builtinHandlers);
 const defaultResolvers = ['find-exported-component'];
 
-function collect(value: string, previous: string[]) {
+function collect(value: string, previous: string[]): string[] {
   if (
     !previous ||
     previous === defaultIgnoreGlobs ||

@@ -95,7 +95,10 @@ function getPropTypeOneOfType(
   return type;
 }
 
-function getPropTypeArrayOf(type: PropTypeDescriptor, argumentPath: NodePath) {
+function getPropTypeArrayOf(
+  type: PropTypeDescriptor,
+  argumentPath: NodePath,
+): PropTypeDescriptor {
   const docs = getDocblock(argumentPath);
 
   if (docs) {
@@ -112,7 +115,10 @@ function getPropTypeArrayOf(type: PropTypeDescriptor, argumentPath: NodePath) {
   return type;
 }
 
-function getPropTypeObjectOf(type: PropTypeDescriptor, argumentPath: NodePath) {
+function getPropTypeObjectOf(
+  type: PropTypeDescriptor,
+  argumentPath: NodePath,
+): PropTypeDescriptor {
   const docs = getDocblock(argumentPath);
 
   if (docs) {
@@ -155,7 +161,10 @@ function isCyclicReference(
 /**
  * Handles shape and exact prop types
  */
-function getPropTypeShapish(type: PropTypeDescriptor, argumentPath: NodePath) {
+function getPropTypeShapish(
+  type: PropTypeDescriptor,
+  argumentPath: NodePath,
+): PropTypeDescriptor {
   if (!argumentPath.isObjectExpression()) {
     argumentPath = resolveToValue(argumentPath);
   }
@@ -254,7 +263,7 @@ function callPropTypeHandler(
   name: PropTypeDescriptor['name'],
   handler: PropTypeHandler,
   argumentPath: NodePath | undefined,
-) {
+): PropTypeDescriptor {
   let type: PropTypeDescriptor = { name };
 
   if (argumentPath) {

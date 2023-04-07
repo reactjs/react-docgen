@@ -4,7 +4,7 @@ import type { Documentation } from 'react-docgen';
 export default async function outputResult(
   documentation: Record<string, Documentation[]>,
   { pretty = false, output }: { pretty: boolean; output: string | undefined },
-) {
+): Promise<void> {
   const result = JSON.stringify(
     documentation,
     undefined,

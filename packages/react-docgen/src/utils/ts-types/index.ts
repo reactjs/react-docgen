@@ -162,7 +162,7 @@ export default function initialize(scopeClass: typeof BaseScope): void {
   scopeClass.prototype.registerDeclaration = registerDeclaration;
 
   scopeClass.prototype._realCrawl = scopeClass.prototype.crawl;
-  scopeClass.prototype.crawl = function (this: BaseScope) {
+  scopeClass.prototype.crawl = function (this: BaseScope): void {
     this.typeBindings = Object.create(null);
     this._realCrawl();
   };

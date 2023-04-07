@@ -19,7 +19,7 @@ interface TraverseState {
   foundDefinitions: Set<ComponentNodePath>;
 }
 
-function classVisitor(path: NodePath, state: TraverseState) {
+function classVisitor(path: NodePath, state: TraverseState): void {
   if (isReactComponentClass(path)) {
     normalizeClassDefinition(path);
     state.foundDefinitions.add(path);
@@ -36,7 +36,7 @@ function statelessVisitor(
     | ObjectMethod
   >,
   state: TraverseState,
-) {
+): void {
   if (isStatelessComponent(path)) {
     state.foundDefinitions.add(path);
   }

@@ -1,8 +1,10 @@
 import { relative } from 'path';
 import chalk from 'chalk';
 
-function isReactDocgenError(error: NodeJS.ErrnoException) {
-  return error instanceof Error && error.code?.startsWith('ERR_REACTDOCGEN');
+function isReactDocgenError(error: NodeJS.ErrnoException): boolean {
+  return Boolean(
+    error instanceof Error && error.code?.startsWith('ERR_REACTDOCGEN'),
+  );
 }
 
 function outputReactDocgenError(
@@ -38,7 +40,7 @@ export default function outputError(
   error: Error,
   filePath: string,
   options: { failOnWarning: boolean },
-) {
+): boolean {
   if (isReactDocgenError(error)) {
     return outputReactDocgenError(error, filePath, options);
   } else {

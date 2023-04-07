@@ -27,7 +27,8 @@ type SupportedNodes =
 
 const postprocessPropTypes = (
   path: NodePath<ClassMethod | Expression | ObjectMethod>,
-) => (path.isFunction() ? resolveFunctionDefinitionToReturnValue(path) : path);
+): NodePath<ClassMethod | Expression | ObjectMethod> | null =>
+  path.isFunction() ? resolveFunctionDefinitionToReturnValue(path) : path;
 
 const POSTPROCESS_MEMBERS = new Map([['propTypes', postprocessPropTypes]]);
 

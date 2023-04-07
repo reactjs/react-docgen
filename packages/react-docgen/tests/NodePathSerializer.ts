@@ -2,12 +2,16 @@ import { NodePath } from '@babel/traverse';
 import { removePropertiesDeep } from '@babel/types';
 import type { expect } from 'vitest';
 
-function removeUndefinedProperties(node) {
+function removeUndefinedProperties(
+  node: Record<string, unknown>,
+): Record<string, unknown> {
   for (const key of Object.keys(node)) {
     if (node[key] === undefined) {
       delete node[key];
     } else if (node[key] === Object(node[key])) {
-      node[key] = removeUndefinedProperties(node[key]);
+      node[key] = removeUndefinedProperties(
+        node[key] as Record<string, unknown>,
+      );
     }
   }
 

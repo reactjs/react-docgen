@@ -92,18 +92,14 @@ export function applyToTypeProperties(
       .get('members')
       .forEach((propertyPath) => callback(propertyPath, typeParams));
   } else if (path.isInterfaceDeclaration()) {
-    if (path.node.extends) {
-      applyExtends(documentation, path, callback, typeParams);
-    }
+    applyExtends(documentation, path, callback, typeParams);
 
     path
       .get('body')
       .get('properties')
       .forEach((propertyPath) => callback(propertyPath, typeParams));
   } else if (path.isTSInterfaceDeclaration()) {
-    if (path.node.extends) {
-      applyExtends(documentation, path, callback, typeParams);
-    }
+    applyExtends(documentation, path, callback, typeParams);
 
     path
       .get('body')
@@ -133,36 +129,47 @@ function applyExtends(
   path: NodePath<InterfaceDeclaration | TSInterfaceDeclaration>,
   callback: (propertyPath: NodePath, params: TypeParameters | null) => void,
   typeParams: TypeParameters | null,
-) {
-  (
-    path.get('extends') as Array<
-      NodePath<InterfaceExtends | TSExpressionWithTypeArguments>
-    >
-  ).forEach((extendsPath) => {
-    const resolvedPath = resolveGenericTypeAnnotation(extendsPath);
+): void {
+  const classExtends = path.get('extends');
 
-    if (resolvedPath) {
-      if (
-        resolvedPath.has('typeParameters') &&
-        extendsPath.node.typeParameters
-      ) {
-        typeParams = getTypeParameters(
-          resolvedPath.get('typeParameters') as NodePath<
-            TSTypeParameterDeclaration | TypeParameterDeclaration
-          >,
-          extendsPath.get('typeParameters') as NodePath<
-            TSTypeParameterInstantiation | TypeParameterInstantiation
-          >,
+  if (!Array.isArray(classExtends)) {
+    return;
+  }
+
+  classExtends.forEach(
+    (
+      extendsPath: NodePath<InterfaceExtends | TSExpressionWithTypeArguments>,
+    ) => {
+      const resolvedPath = resolveGenericTypeAnnotation(extendsPath);
+
+      if (resolvedPath) {
+        if (
+          resolvedPath.has('typeParameters') &&
+          extendsPath.node.typeParameters
+        ) {
+          typeParams = getTypeParameters(
+            resolvedPath.get('typeParameters') as NodePath<
+              TSTypeParameterDeclaration | TypeParameterDeclaration
+            >,
+            extendsPath.get('typeParameters') as NodePath<
+              TSTypeParameterInstantiation | TypeParameterInstantiation
+            >,
+            typeParams,
+          );
+        }
+        applyToTypeProperties(
+          documentation,
+          resolvedPath,
+          callback,
           typeParams,
         );
-      }
-      applyToTypeProperties(documentation, resolvedPath, callback, typeParams);
-    } else {
-      const idPath = getTypeIdentifier(extendsPath);
+      } else {
+        const idPath = getTypeIdentifier(extendsPath);
 
-      if (idPath && idPath.isIdentifier()) {
-        documentation.addComposes(idPath.node.name);
+        if (idPath && idPath.isIdentifier()) {
+          documentation.addComposes(idPath.node.name);
+        }
       }
-    }
-  });
+    },
+  );
 }
