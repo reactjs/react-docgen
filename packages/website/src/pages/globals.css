@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-.cm-theme-light, .cm-theme-dark {
-    height: 100%;
+.cm-theme-light,
+.cm-theme-dark {
+  height: 100%;
+}
+
+@media (min-width: 768px) {
+  .nextra-sidebar-container {
+    width: 19rem;
+  }
 }

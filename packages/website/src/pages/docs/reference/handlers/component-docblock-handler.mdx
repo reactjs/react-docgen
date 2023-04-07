@@ -1,7 +1,7 @@
 # componentDocblockHandler
 
 Reads the react components leading block comment and adds its content as
-description to the documentation.
+description to the documentation. This works on all component types.
 
 ## Example
 
@@ -11,7 +11,7 @@ The following component will result in the following documentation
 /**
  * This is my component and this is its description.
  */
-export default () => <div />;
+() => <div />;
 ```
 
 ```json {3} filename="Result"

@@ -11,11 +11,11 @@ names and will use the first one found in order:
 
 ## Example
 
-When the `displayNameHandler` is active these components will all result in the
-following documentation
+When the `displayNameHandler` is active any of these components will result in
+the following documentation
 
 ```ts {2} filename="component.tsx"
-export default class extends React.Component {
+class extends React.Component {
   static displayName = 'DisplayName';
   render() {
     return <div />;
@@ -24,7 +24,7 @@ export default class extends React.Component {
 ```
 
 ```ts {7} filename="component.tsx"
-export default class MyComponent extends React.Component {
+class MyComponent extends React.Component {
   render() {
     return <div />;
   }
@@ -34,7 +34,7 @@ MyComponent.displayName = 'DisplayName';
 ```
 
 ```ts {5} filename="component.tsx"
-export default function MyComponent() {
+function MyComponent() {
   return <div />;
 }
 
@@ -42,7 +42,7 @@ MyComponent.displayName = 'DisplayName';
 ```
 
 ```ts {1} filename="component.tsx"
-export default class DisplayName extends React.Component {
+class DisplayName extends React.Component {
   render() {
     return <div />;
   }
@@ -50,15 +50,13 @@ export default class DisplayName extends React.Component {
 ```
 
 ```ts {1} filename="component.tsx"
-export default function DisplayName() {
+function DisplayName() {
   return <div />;
 }
 ```
 
 ```ts {1} filename="component.tsx"
 const DisplayName = () => <div />;
-
-export default DisplayName;
 ```
 
 ```json {3} filename="Result"

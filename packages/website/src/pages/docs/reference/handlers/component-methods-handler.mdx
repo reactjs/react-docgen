@@ -1,2 +1,91 @@
 # componentMethodsHandler
 
+Finds all imperative methods in React components and documents its name,
+arguments, and return types. These are the different possible cases which are
+detected:
+
+- Methods in Class components which are not React lifecycle methods or the
+  constructor
+- Assignment of methods to static properties on Class or Function components
+- Methods defined in the `useImperativeHandle()` hook in Function components
+
+## Example
+
+When the `componentMethodsHandler` is active any of these components will result
+in the following documentation
+
+```ts {2-3} filename="component.tsx"
+class MyComponent extends React.Component {
+  /** myMethod description */
+  static myMethod(argument: string): number {}
+
+  render() {
+    return <div />;
+  }
+}
+```
+
+```ts {7-8} filename="component.tsx"
+class MyComponent extends React.Component {
+  render() {
+    return <div />;
+  }
+}
+
+/** myMethod description */
+MyComponent.myMethod = (argument: string): number => {};
+```
+
+```ts {3-4} filename="component.tsx"
+const MyComponent = () => <div />;
+
+/** myMethod description */
+MyComponent.myMethod = (argument: string): number => {};
+```
+
+```ts {8-9} filename="component.tsx"
+import { forwardRef, useImperativeHandle } from 'react';
+
+forwardRef(function MyComponent(_, ref) {
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        /** myMethod description */
+        myMethod(argument: string): number {},
+      };
+    },
+    [],
+  );
+
+  return <div />;
+});
+```
+
+```json {3-23} filename="Result"
+[
+  {
+    "methods": [
+      {
+        "name": "myMethod",
+        "docblock": "myMethod description",
+        "modifiers": ["static"],
+        "params": [
+          {
+            "name": "argument",
+            "optional": false,
+            "type": {
+              "name": "string"
+            }
+          }
+        ],
+        "returns": {
+          "type": {
+            "name": "number"
+          }
+        }
+      }
+    ]
+  }
+]
+```

@@ -1,7 +1,7 @@
 # defaultPropsHandler
 
 Finds the default props from the react component and adds it to the
-documentation. Supported variants are
+documentation. Supported variants are:
 
 - The static property named `defaultProps` in Class components
 - Assignment of the static property `defaultProps` on Class or Function
@@ -10,11 +10,11 @@ documentation. Supported variants are
 
 ## Example
 
-When the `defaultPropsHandler` is active these components will all result in the
-following documentation
+When the `defaultPropsHandler` is active any of these components will result in
+the following documentation
 
 ```ts {2-4} filename="component.tsx"
-export default class MyComponent extends React.Component {
+class MyComponent extends React.Component {
   static defaultProps = {
     a: '1',
   };
@@ -25,7 +25,7 @@ export default class MyComponent extends React.Component {
 ```
 
 ```ts {7-9} filename="component.tsx"
-export default class MyComponent extends React.Component {
+class MyComponent extends React.Component {
   render() {
     return <div />;
   }
@@ -42,12 +42,10 @@ const MyComponent = () => <div />;
 MyComponent.defaultProps = {
   a: '1',
 };
-
-export default MyComponent;
 ```
 
 ```ts /{ a = '1' }/ filename="component.tsx"
-export default ({ a = '1' }) => <div />;
+({ a = '1' }) => <div />;
 ```
 
 ```json {5-9} filename="Result"
