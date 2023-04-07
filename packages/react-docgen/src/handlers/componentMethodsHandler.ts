@@ -86,7 +86,9 @@ interface TraverseImperativeHandleState {
   results: MethodNodePath[];
 }
 
-function isObjectExpression(path: NodePath): boolean {
+function isObjectExpression(
+  path: NodePath,
+): path is NodePath<ObjectExpression> {
   return path.isObjectExpression();
 }
 
@@ -114,9 +116,7 @@ const explodedImperativeHandleVisitors =
         if (body.isObjectExpression()) {
           definition = body;
         } else {
-          definition = findFunctionReturn(arg, isObjectExpression) as
-            | NodePath<ObjectExpression>
-            | undefined;
+          definition = findFunctionReturn(arg, isObjectExpression);
         }
 
         // We found the object body, now add all of the properties as methods.

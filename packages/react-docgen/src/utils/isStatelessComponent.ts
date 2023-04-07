@@ -4,6 +4,7 @@ import isReactChildrenElementCall from './isReactChildrenElementCall.js';
 import type { NodePath } from '@babel/traverse';
 import type { StatelessComponentNode } from '../resolver/index.js';
 import findFunctionReturn from './findFunctionReturn.js';
+import type { CallExpression, JSXElement, JSXFragment } from '@babel/types';
 
 const validPossibleStatelessComponentTypes = [
   'ArrowFunctionExpression',
@@ -12,7 +13,9 @@ const validPossibleStatelessComponentTypes = [
   'ObjectMethod',
 ];
 
-function isJSXElementOrReactCall(path: NodePath): boolean {
+function isJSXElementOrReactCall(
+  path: NodePath,
+): path is NodePath<CallExpression | JSXElement | JSXFragment> {
   return (
     path.isJSXElement() ||
     path.isJSXFragment() ||
