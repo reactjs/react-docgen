@@ -2,11 +2,12 @@ import type { NodePath } from '@babel/traverse';
 import { visitors } from '@babel/traverse';
 import resolveToValue from './resolveToValue.js';
 import { ignore } from './traverse.js';
+import type { Node } from '@babel/types';
 
-type Predicate = (p: NodePath) => boolean;
-interface TraverseState {
-  readonly predicate: Predicate;
-  resolvedReturnPath?: NodePath;
+type Predicate<T extends Node = Node> = (path: NodePath) => path is NodePath<T>;
+interface TraverseState<T extends Node = Node> {
+  readonly predicate: Predicate<T>;
+  resolvedReturnPath?: NodePath<T>;
   readonly seen: WeakSet<NodePath>;
 }
 
@@ -34,11 +35,11 @@ const explodedVisitors = visitors.explode<TraverseState>({
   },
 });
 
-function resolvesToFinalValue(
+function resolvesToFinalValue<T extends Node = Node>(
   path: NodePath,
-  predicate: Predicate,
+  predicate: Predicate<T>,
   seen: WeakSet<NodePath>,
-): NodePath | undefined {
+): NodePath<T> | undefined {
   // avoid returns with recursive function calls
   if (seen.has(path)) {
     return;
@@ -99,11 +100,11 @@ function resolvesToFinalValue(
  * 2. Find all occurrences of return values
  *    For this the predicate acts more like a collector and always needs to return false
  */
-function findFunctionReturnWithCache(
+function findFunctionReturnWithCache<T extends Node = Node>(
   path: NodePath,
-  predicate: Predicate,
+  predicate: Predicate<T>,
   seen: WeakSet<NodePath>,
-): NodePath | undefined {
+): NodePath<T> | undefined {
   let functionPath: NodePath = path;
 
   if (functionPath.isObjectProperty()) {
@@ -129,7 +130,7 @@ function findFunctionReturnWithCache(
     }
   }
 
-  const state: TraverseState = {
+  const state: TraverseState<T> = {
     predicate,
     seen,
   };
@@ -146,9 +147,9 @@ function findFunctionReturnWithCache(
  * 2. Find all occurrences of return values
  *    For this the predicate acts more like a collector and always needs to return false
  */
-export default function findFunctionReturn(
+export default function findFunctionReturn<T extends Node = Node>(
   path: NodePath,
-  predicate: Predicate,
-): NodePath | undefined {
+  predicate: Predicate<T>,
+): NodePath<T> | undefined {
   return findFunctionReturnWithCache(path, predicate, new WeakSet());
 }
