@@ -9,10 +9,10 @@ detected:
 - Assignment of methods to static properties on Class or Function components
 - Methods defined in the `useImperativeHandle()` hook in Function components
 
-## Example
+## Examples
 
 When the `componentMethodsHandler` is active any of these components will result
-in the following documentation
+in the output below
 
 ```ts {2-3} filename="component.tsx"
 class MyComponent extends React.Component {
@@ -62,7 +62,9 @@ forwardRef(function MyComponent(_, ref) {
 });
 ```
 
-```json {3-23} filename="Result"
+## Output
+
+```json {3-23} filename="JSON"
 [
   {
     "methods": [

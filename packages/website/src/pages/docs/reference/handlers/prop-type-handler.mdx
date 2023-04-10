@@ -1,0 +1,77 @@
+# propTypeHandler
+
+Tries to find the prop types on react components. It looks for:
+
+- A static property called `propTypes` on Class components
+- Assignment to a property called `propTypes` on Function or Class components
+
+The prop types that are used need to be imported either from the `react` or the
+[`prop-types`](https://www.npmjs.com/package/prop-types) NPM package.
+
+## Examples
+
+When the `propTypeHandler` is active any of these components will result in the
+output below
+
+```ts {1,4-7} filename="component.tsx"
+import PropTypes from 'prop-types';
+
+class MyComponent extends React.Component {
+  static propTypes = {
+    foo: PropTypes.string,
+    bar: PropTypes.number.isRequired,
+  };
+  render() {
+    return <div />;
+  }
+}
+```
+
+```ts {1,9-12} filename="component.tsx"
+import PropTypes from 'prop-types';
+
+class MyComponent extends React.Component {
+  render() {
+    return <div />;
+  }
+}
+
+MyComponent.propTypes = {
+  foo: PropTypes.string,
+  bar: PropTypes.number.isRequired,
+};
+```
+
+```ts {1,5-8} filename="component.tsx"
+import PropTypes from 'prop-types';
+
+const MyComponent = () => <div />;
+
+MyComponent.propTypes = {
+  foo: PropTypes.string,
+  bar: PropTypes.number.isRequired,
+};
+```
+
+## Output
+
+```json {5-8,11-14} filename="JSON"
+[
+  {
+    "props": {
+      "foo": {
+        "type": {
+          "name": "string"
+        },
+        "required": false
+      },
+      "bar": {
+        "type": {
+          "name": "number"
+        },
+        "required": true
+      }
+    }
+  }
+]
+```

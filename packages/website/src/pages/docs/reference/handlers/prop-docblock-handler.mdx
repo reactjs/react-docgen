@@ -1,1 +1,70 @@
 # propDocblockHandler
+
+Tries to find the prop types on react components and extracts their Docblock
+description. It uses the same logic as the
+[`propTypeHandler`](./prop-type-handler.mdx) to find the prop types.
+
+## Examples
+
+When the `propDocblockHandler` is active any of these components will result in
+the output below
+
+```ts {1,4-8} filename="component.tsx"
+import PropTypes from 'prop-types';
+
+class MyComponent extends React.Component {
+  static propTypes = {
+    /** Foo */
+    foo: PropTypes.string,
+    bar: PropTypes.number,
+  };
+  render() {
+    return <div />;
+  }
+}
+```
+
+```ts {1,9-13} filename="component.tsx"
+import PropTypes from 'prop-types';
+
+class MyComponent extends React.Component {
+  render() {
+    return <div />;
+  }
+}
+
+MyComponent.propTypes = {
+  /** Foo */
+  foo: PropTypes.string,
+  bar: PropTypes.number,
+};
+```
+
+```ts {1,5-9} filename="component.tsx"
+import PropTypes from 'prop-types';
+
+const MyComponent = () => <div />;
+
+MyComponent.propTypes = {
+  /** Foo */
+  foo: PropTypes.string,
+  bar: PropTypes.number,
+};
+```
+
+## Output
+
+```json {5,8} filename="JSON"
+[
+  {
+    "props": {
+      "foo": {
+        "description": "Foo"
+      },
+      "bar": {
+        "description": ""
+      }
+    }
+  }
+]
+```

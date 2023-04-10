@@ -9,13 +9,13 @@ names and will use the first one found in order:
 - The name of a Function or Class component
 - The variable name that an anonymous Function Component is assigned to
 
-## Example
+## Examples
 
 When the `displayNameHandler` is active any of these components will result in
-the following documentation
+the output below
 
 ```ts {2} filename="component.tsx"
-class extends React.Component {
+export default class extends React.Component {
   static displayName = 'DisplayName';
   render() {
     return <div />;
@@ -59,7 +59,9 @@ function DisplayName() {
 const DisplayName = () => <div />;
 ```
 
-```json {3} filename="Result"
+## Output
+
+```json {3} filename="JSON"
 [
   {
     "displayName": "DisplayName"
