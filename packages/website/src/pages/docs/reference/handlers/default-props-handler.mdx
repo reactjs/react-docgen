@@ -8,10 +8,10 @@ documentation. Supported variants are:
   components
 - Default values in destructuring the prop argument in Function components
 
-## Example
+## Examples
 
 When the `defaultPropsHandler` is active any of these components will result in
-the following documentation
+the output below
 
 ```ts {2-4} filename="component.tsx"
 class MyComponent extends React.Component {
@@ -48,7 +48,9 @@ MyComponent.defaultProps = {
 ({ a = '1' }) => <div />;
 ```
 
-```json {5-9} filename="Result"
+## Output
+
+```json {5-9} filename="JSON"
 [
   {
     "props": {
