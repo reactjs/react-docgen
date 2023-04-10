@@ -1,7 +1,7 @@
 {
   "private": true,
   "engines": {
-    "node": ">=14.17.0",
+    "node": ">=14.18.0",
     "pnpm": ">=7.30.3"
   },
   "scripts": {

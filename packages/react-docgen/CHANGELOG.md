@@ -162,7 +162,7 @@
   at runtime (like a watch command) then the caches will need to be cleared on
   every file change.
 
-- 96d6e9e: Changed the minimum Node.js version to 14.17.0
+- 96d6e9e: Changed the minimum Node.js version to 14.18.0
 
 ### Minor Changes
 
