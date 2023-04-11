@@ -165,8 +165,8 @@ importers:
         specifier: 18.0.11
         version: 18.0.11
       '@uiw/react-codemirror':
-        specifier: 4.19.15
-        version: 4.19.15(@codemirror/view@6.9.3)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 4.19.16
+        version: 4.19.16(@codemirror/view@6.9.3)(react-dom@18.2.0)(react@18.2.0)
       clsx:
         specifier: 1.2.1
         version: 1.2.1
@@ -1817,8 +1817,8 @@ packages:
       eslint-visitor-keys: 3.4.0
     dev: true
 
-  /@uiw/codemirror-extensions-basic-setup@4.19.15(@codemirror/view@6.9.3):
-    resolution: {integrity: sha512-HOMbIMm+rjiich/oZkqXHPTmtergPQvVn8TUsZmQTEHjhmMeYcksfUkyF87zAI6gyPIPz3/fJxCYo5/beI1bhw==}
+  /@uiw/codemirror-extensions-basic-setup@4.19.16(@codemirror/view@6.9.3):
+    resolution: {integrity: sha512-Xm0RDpyYVZ/8hWqaBs3+wZwi4uLwZUBwp/uCt89X80FeR6mr3BFuC+a+gcDO4dBu3l+WQE3jJdhjKjB2TCY/PQ==}
     peerDependencies:
       '@codemirror/view': '>=6.0.0'
     dependencies:
@@ -1831,8 +1831,8 @@ packages:
       '@codemirror/view': 6.9.3
     dev: false
 
-  /@uiw/react-codemirror@4.19.15(@codemirror/view@6.9.3)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-3sL+LwtDo6ev+YiDVoi0eebMLl6A1m6a46R9s02HHsPx5fitq6N17RGMJ37jVuM6+NVZE7KV/WwL3qHaQO2ygQ==}
+  /@uiw/react-codemirror@4.19.16(@codemirror/view@6.9.3)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-uElraR7Mvwz2oZKrmtF5hmIB8dAlIiU65nfg484e/V9k4PV6/5KtPUQL3JPO4clH2pcd+TQqRTQrFFkP/D25ew==}
     peerDependencies:
       '@codemirror/view': '>=6.0.0'
       react: '>=16.8.0'
@@ -1843,7 +1843,7 @@ packages:
       '@codemirror/state': 6.2.0
       '@codemirror/theme-one-dark': 6.1.1
       '@codemirror/view': 6.9.3
-      '@uiw/codemirror-extensions-basic-setup': 4.19.15(@codemirror/view@6.9.3)
+      '@uiw/codemirror-extensions-basic-setup': 4.19.16(@codemirror/view@6.9.3)
       codemirror: 6.0.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
