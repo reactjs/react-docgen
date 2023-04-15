@@ -28,7 +28,7 @@
   "license": "MIT",
   "dependencies": {
     "chalk": "5.2.0",
-    "commander": "10.0.0",
+    "commander": "10.0.1",
     "debug": "4.3.4",
     "fast-glob": "3.2.12",
     "react-docgen": "workspace:6.0.0-beta.6",
