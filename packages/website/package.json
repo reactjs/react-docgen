@@ -23,7 +23,7 @@
     "next-themes": "0.2.1",
     "nextra": "2.4.0",
     "nextra-theme-docs": "2.4.0",
-    "postcss": "8.4.21",
+    "postcss": "8.4.22",
     "postcss-lightningcss": "0.7.0",
     "react": "18.2.0",
     "react-docgen": "workspace:6.0.0-beta.6",
