@@ -202,8 +202,8 @@ importers:
         version: 3.3.1(postcss@8.4.23)
     devDependencies:
       '@types/react':
-        specifier: 18.0.37
-        version: 18.0.37
+        specifier: 18.0.38
+        version: 18.0.38
 
 packages:
 
@@ -1181,7 +1181,7 @@ packages:
       react: '>=16'
     dependencies:
       '@types/mdx': 2.0.4
-      '@types/react': 18.0.37
+      '@types/react': 18.0.38
       react: 18.2.0
     dev: false
 
@@ -1658,11 +1658,11 @@ packages:
   /@types/react-dom@18.0.11:
     resolution: {integrity: sha512-O38bPbI2CWtgw/OoQoY+BRelw7uysmXbWvw3nLWO21H1HSh+GOlqPuXshJfjmpNlKiiSDG9cc1JZAaMmVdcTlw==}
     dependencies:
-      '@types/react': 18.0.37
+      '@types/react': 18.0.38
     dev: false
 
-  /@types/react@18.0.37:
-    resolution: {integrity: sha512-4yaZZtkRN3ZIQD3KSEwkfcik8s0SWV+82dlJot1AbGYHCzJkWP3ENBY6wYeDRmKZ6HkrgoGAmR2HqdwYGp6OEw==}
+  /@types/react@18.0.38:
+    resolution: {integrity: sha512-ExsidLLSzYj4cvaQjGnQCk4HFfVT9+EZ9XZsQ8Hsrcn8QNgXtpZ3m9vSIC2MWtx7jHictK6wYhQgGh6ic58oOw==}
     dependencies:
       '@types/prop-types': 15.7.5
       '@types/scheduler': 0.16.3
