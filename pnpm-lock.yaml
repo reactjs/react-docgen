@@ -112,8 +112,8 @@ importers:
       '@codemirror/view': 6.10.0
       '@headlessui/react': 1.7.14
       '@popperjs/core': 2.11.7
-      '@types/react': 18.0.38
-      '@types/react-dom': 18.0.11
+      '@types/react': 18.2.0
+      '@types/react-dom': 18.2.1
       '@uiw/react-codemirror': 4.19.16
       clsx: 1.2.1
       next: 13.3.1
@@ -132,7 +132,7 @@ importers:
       '@codemirror/view': 6.10.0
       '@headlessui/react': 1.7.14_biqbaboplfbrettd7655fr4n2y
       '@popperjs/core': 2.11.7
-      '@types/react-dom': 18.0.11
+      '@types/react-dom': 18.2.1
       '@uiw/react-codemirror': 4.19.16_ftxrqzwi6rnbxudk7k3efogzrm
       clsx: 1.2.1
       next: 13.3.1_biqbaboplfbrettd7655fr4n2y
@@ -146,7 +146,7 @@ importers:
       react-dom: 18.2.0_react@18.2.0
       tailwindcss: 3.3.2
     devDependencies:
-      '@types/react': 18.0.38
+      '@types/react': 18.2.0
 
 packages:
 
@@ -1035,7 +1035,7 @@ packages:
       react: '>=16'
     dependencies:
       '@types/mdx': 2.0.4
-      '@types/react': 18.0.38
+      '@types/react': 18.2.0
       react: 18.2.0
     dev: false
 
@@ -1516,14 +1516,14 @@ packages:
   /@types/prop-types/15.7.5:
     resolution: {integrity: sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==}
 
-  /@types/react-dom/18.0.11:
-    resolution: {integrity: sha512-O38bPbI2CWtgw/OoQoY+BRelw7uysmXbWvw3nLWO21H1HSh+GOlqPuXshJfjmpNlKiiSDG9cc1JZAaMmVdcTlw==}
+  /@types/react-dom/18.2.1:
+    resolution: {integrity: sha512-8QZEV9+Kwy7tXFmjJrp3XUKQSs9LTnE0KnoUb0YCguWBiNW0Yfb2iBMYZ08WPg35IR6P3Z0s00B15SwZnO26+w==}
     dependencies:
-      '@types/react': 18.0.38
+      '@types/react': 18.2.0
     dev: false
 
-  /@types/react/18.0.38:
-    resolution: {integrity: sha512-ExsidLLSzYj4cvaQjGnQCk4HFfVT9+EZ9XZsQ8Hsrcn8QNgXtpZ3m9vSIC2MWtx7jHictK6wYhQgGh6ic58oOw==}
+  /@types/react/18.2.0:
+    resolution: {integrity: sha512-0FLj93y5USLHdnhIhABk83rm8XEGA7kH3cr+YUlvxoUGp1xNt/DINUMvqPxLyOQMzLmZe8i4RTHbvb8MC7NmrA==}
     dependencies:
       '@types/prop-types': 15.7.5
       '@types/scheduler': 0.16.3
