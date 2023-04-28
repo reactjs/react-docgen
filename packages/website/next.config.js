@@ -8,6 +8,7 @@ module.exports = withNextra({
     if (!config.resolve.fallback) config.resolve.fallback = {};
 
     config.resolve.fallback.fs = false;
+    config.resolve.aliasFields = ['browser'];
 
     return config;
   },
