@@ -61,6 +61,9 @@ function defaultParse(
   return parse(String(src), defaultConfig);
 }
 
+export type { NodePath } from '@babel/traverse';
+export type * as babelTypes from '@babel/types';
+
 export {
   builtinHandlers,
   builtinResolvers,
