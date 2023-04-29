@@ -1,10 +1,10 @@
-import type { Node, NodePath } from '@babel/traverse';
+import type { NodePath } from '@babel/traverse';
 import getMembers from '../utils/getMembers.js';
 
 /**
  * Returns true of the prop is required, according to its type definition
  */
-export default function isRequiredPropType(path: NodePath<Node>): boolean {
+export default function isRequiredPropType(path: NodePath): boolean {
   return getMembers(path).some(
     ({ computed, path: memberPath }) =>
       (!computed && memberPath.isIdentifier({ name: 'isRequired' })) ||

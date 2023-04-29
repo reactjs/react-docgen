@@ -2,7 +2,7 @@ import type Documentation from '../Documentation.js';
 import { getDocblock } from '../utils/docblock.js';
 import isReactForwardRefCall from '../utils/isReactForwardRefCall.js';
 import resolveToValue from '../utils/resolveToValue.js';
-import type { NodePath, Node } from '@babel/traverse';
+import type { NodePath } from '@babel/traverse';
 import type { ComponentNode } from '../resolver/index.js';
 import type { Handler } from './index.js';
 
@@ -21,7 +21,7 @@ function getDocblockFromComponent(path: NodePath): string | null {
   }
   if (description == null) {
     // Find parent statement (e.g. var Component = React.createClass(<path>);)
-    let searchPath: NodePath<Node> | null = path;
+    let searchPath: NodePath | null = path;
 
     while (searchPath && !searchPath.isStatement()) {
       searchPath = searchPath.parentPath;
