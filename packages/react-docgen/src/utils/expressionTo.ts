@@ -1,7 +1,8 @@
 /*eslint no-loop-func: 0, no-use-before-define: 0*/
 
 import resolveToValue from './resolveToValue.js';
-import type { Node, NodePath } from '@babel/traverse';
+import type { NodePath } from '@babel/traverse';
+import type { Node } from '@babel/types';
 
 /**
  * Splits a MemberExpression or CallExpression into parts.

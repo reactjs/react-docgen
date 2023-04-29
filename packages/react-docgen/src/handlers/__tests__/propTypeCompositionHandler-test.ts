@@ -1,6 +1,6 @@
 import { parse, makeMockImporter, noopImporter } from '../../../tests/utils';
 import propTypeCompositionHandler from '../propTypeCompositionHandler.js';
-import Documentation from '../../Documentation';
+import DocumentationBuilder from '../../Documentation';
 import type DocumentationMock from '../../__mocks__/Documentation';
 import type { NodePath } from '@babel/traverse';
 import type { Importer } from '../../importer';
@@ -12,10 +12,11 @@ vi.mock('../../Documentation.js');
 vi.mock('../../utils/getPropType.js', () => () => ({}));
 
 describe('propTypeCompositionHandler', () => {
-  let documentation: Documentation & DocumentationMock;
+  let documentation: DocumentationBuilder & DocumentationMock;
 
   beforeEach(() => {
-    documentation = new Documentation() as Documentation & DocumentationMock;
+    documentation = new DocumentationBuilder() as DocumentationBuilder &
+      DocumentationMock;
   });
 
   const mockImporter = makeMockImporter({
@@ -49,7 +50,8 @@ describe('propTypeCompositionHandler', () => {
       propTypeCompositionHandler(documentation, definition);
       expect(documentation.composes).toEqual(['Foo.react']);
 
-      documentation = new Documentation() as Documentation & DocumentationMock;
+      documentation = new DocumentationBuilder() as DocumentationBuilder &
+        DocumentationMock;
       definition = parseSrc(`
         ${getSrc('SharedProps')}
         var SharedProps = require("SharedProps");

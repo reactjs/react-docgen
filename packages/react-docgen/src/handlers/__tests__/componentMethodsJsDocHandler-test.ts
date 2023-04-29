@@ -1,15 +1,16 @@
 import type { NodePath } from '@babel/traverse';
-import Documentation from '../../Documentation';
+import DocumentationBuilder from '../../Documentation';
 import type { ComponentNode } from '../../resolver';
 import type DocumentationMock from '../../__mocks__/Documentation';
 import componentMethodsJsDocHandler from '../componentMethodsJsDocHandler.js';
 import { beforeEach, describe, expect, test } from 'vitest';
 
 describe('componentMethodsJsDocHandler', () => {
-  let documentation: Documentation & DocumentationMock;
+  let documentation: DocumentationBuilder & DocumentationMock;
 
   beforeEach(() => {
-    documentation = new Documentation() as Documentation & DocumentationMock;
+    documentation = new DocumentationBuilder() as DocumentationBuilder &
+      DocumentationMock;
   });
 
   test('stays the same when no docblock is present', () => {

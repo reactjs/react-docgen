@@ -1,6 +1,6 @@
 import { makeMockImporter, parse } from '../../../tests/utils';
 import componentDocblockHandler from '../componentDocblockHandler.js';
-import Documentation from '../../Documentation';
+import DocumentationBuilder from '../../Documentation';
 import type DocumentationMock from '../../__mocks__/Documentation';
 import type { NodePath } from '@babel/traverse';
 import type {
@@ -20,10 +20,11 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 vi.mock('../../Documentation.js');
 
 describe('componentDocblockHandler', () => {
-  let documentation: Documentation & DocumentationMock;
+  let documentation: DocumentationBuilder & DocumentationMock;
 
   beforeEach(() => {
-    documentation = new Documentation() as Documentation & DocumentationMock;
+    documentation = new DocumentationBuilder() as DocumentationBuilder &
+      DocumentationMock;
   });
 
   function testDockblockHandler(

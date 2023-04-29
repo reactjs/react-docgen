@@ -1,8 +1,6 @@
-import type { DocumentationObject } from '../Documentation.js';
+import type { Documentation } from '../Documentation.js';
 
-export default function (
-  documentation: DocumentationObject,
-): DocumentationObject {
+export default function (documentation: Documentation): Documentation {
   const props = documentation.props;
 
   if (props) {

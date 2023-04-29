@@ -1,7 +1,7 @@
 import type { NodePath } from '@babel/traverse';
 import type { ClassDeclaration, ObjectExpression } from '@babel/types';
 import { parse, makeMockImporter, noopImporter } from '../../../tests/utils';
-import Documentation from '../../Documentation';
+import DocumentationBuilder from '../../Documentation';
 import type { Importer } from '../../importer';
 import type { ComponentNode } from '../../resolver';
 import type DocumentationMock from '../../__mocks__/Documentation';
@@ -11,10 +11,11 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 vi.mock('../../Documentation.js');
 
 describe('propDocblockHandler', () => {
-  let documentation: Documentation & DocumentationMock;
+  let documentation: DocumentationBuilder & DocumentationMock;
 
   beforeEach(() => {
-    documentation = new Documentation() as Documentation & DocumentationMock;
+    documentation = new DocumentationBuilder() as DocumentationBuilder &
+      DocumentationMock;
   });
 
   const mockImporter = makeMockImporter({

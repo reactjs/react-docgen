@@ -1,5 +1,5 @@
 import { parse, makeMockImporter, noopImporter } from '../../../tests/utils';
-import Documentation from '../../Documentation';
+import DocumentationBuilder from '../../Documentation';
 import type DocumentationMock from '../../__mocks__/Documentation';
 import { propTypeHandler } from '../propTypeHandler.js';
 import getPropType from '../../utils/getPropType';
@@ -20,10 +20,11 @@ vi.mock('../../Documentation.js');
 vi.mock('../../utils/getPropType.js', () => ({ default: vi.fn(() => ({})) }));
 
 describe('propTypeHandler', () => {
-  let documentation: Documentation & DocumentationMock;
+  let documentation: DocumentationBuilder & DocumentationMock;
 
   beforeEach(() => {
-    documentation = new Documentation() as Documentation & DocumentationMock;
+    documentation = new DocumentationBuilder() as DocumentationBuilder &
+      DocumentationMock;
   });
 
   const mockImporter = makeMockImporter({

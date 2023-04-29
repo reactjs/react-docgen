@@ -9,7 +9,6 @@ import type Documentation from '../Documentation.js';
 import type { DefaultValueDescriptor } from '../Documentation.js';
 import type { NodePath } from '@babel/traverse';
 import type {
-  Node,
   ObjectMethod,
   ObjectProperty,
   RestElement,
@@ -70,7 +69,7 @@ function getStatelessPropsPath(
 function getDefaultPropsPath(
   componentDefinition: NodePath<ComponentNode>,
 ): NodePath | null {
-  let defaultPropsPath: NodePath<Node> | null = getMemberValuePath(
+  let defaultPropsPath: NodePath | null = getMemberValuePath(
     componentDefinition,
     'defaultProps',
   );

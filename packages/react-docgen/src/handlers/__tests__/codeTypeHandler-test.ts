@@ -1,5 +1,5 @@
 import { parse, makeMockImporter } from '../../../tests/utils';
-import Documentation from '../../Documentation';
+import DocumentationBuilder from '../../Documentation';
 import codeTypeHandler from '../codeTypeHandler.js';
 import type DocumentationMock from '../../__mocks__/Documentation';
 import type {
@@ -20,10 +20,11 @@ vi.mock('../../utils/getFlowType.js', () => ({
 }));
 
 describe('codeTypeHandler', () => {
-  let documentation: Documentation & DocumentationMock;
+  let documentation: DocumentationBuilder & DocumentationMock;
 
   beforeEach(() => {
-    documentation = new Documentation() as Documentation & DocumentationMock;
+    documentation = new DocumentationBuilder() as DocumentationBuilder &
+      DocumentationMock;
   });
 
   const mockImporter = makeMockImporter({

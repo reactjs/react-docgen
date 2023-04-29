@@ -7,7 +7,8 @@ import {
   makeFsImporter,
 } from './importer/index.js';
 import * as utils from './utils/index.js';
-import type { DocumentationObject as Documentation } from './Documentation.js';
+import type { Documentation } from './Documentation.js';
+import type DocumentationBuilder from './Documentation.js';
 import type {
   Resolver,
   ResolverClass,
@@ -60,6 +61,9 @@ function defaultParse(
   return parse(String(src), defaultConfig);
 }
 
+export type { NodePath } from '@babel/traverse';
+export type * as babelTypes from '@babel/types';
+
 export {
   builtinHandlers,
   builtinResolvers,
@@ -80,4 +84,5 @@ export type {
   FileState,
   Config,
   Documentation,
+  DocumentationBuilder,
 };

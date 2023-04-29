@@ -3,7 +3,7 @@ import resolveToModule from '../utils/resolveToModule.js';
 import resolveToValue from '../utils/resolveToValue.js';
 import type Documentation from '../Documentation.js';
 import type { NodePath } from '@babel/traverse';
-import type { ObjectExpression, Node } from '@babel/types';
+import type { ObjectExpression } from '@babel/types';
 import type { Handler } from './index.js';
 import type { ComponentNode } from '../resolver/index.js';
 
@@ -37,7 +37,7 @@ const propTypeCompositionHandler: Handler = function (
   documentation: Documentation,
   componentDefinition: NodePath<ComponentNode>,
 ): void {
-  let propTypesPath: NodePath<Node> | null = getMemberValuePath(
+  let propTypesPath: NodePath | null = getMemberValuePath(
     componentDefinition,
     'propTypes',
   );

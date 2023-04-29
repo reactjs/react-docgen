@@ -1,5 +1,4 @@
 import type { NodePath } from '@babel/traverse';
-import type { Node } from '@babel/types';
 import getMemberValuePath from '../utils/getMemberValuePath.js';
 import resolveToValue from '../utils/resolveToValue.js';
 import setPropDescription from '../utils/setPropDescription.js';
@@ -33,7 +32,7 @@ const propDocblockHandler: Handler = function (
   documentation: Documentation,
   componentDefinition: NodePath<ComponentNode>,
 ): void {
-  let propTypesPath: NodePath<Node> | null = getMemberValuePath(
+  let propTypesPath: NodePath | null = getMemberValuePath(
     componentDefinition,
     'propTypes',
   );
