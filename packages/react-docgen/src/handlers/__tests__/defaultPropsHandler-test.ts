@@ -8,7 +8,7 @@ import type {
   VariableDeclaration,
 } from '@babel/types';
 import { parse, makeMockImporter } from '../../../tests/utils';
-import Documentation from '../../Documentation';
+import DocumentationBuilder from '../../Documentation';
 import type DocumentationMock from '../../__mocks__/Documentation';
 import defaultPropsHandler from '../defaultPropsHandler.js';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
@@ -16,10 +16,11 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 vi.mock('../../Documentation.js');
 
 describe('defaultPropsHandler', () => {
-  let documentation: Documentation & DocumentationMock;
+  let documentation: DocumentationBuilder & DocumentationMock;
 
   beforeEach(() => {
-    documentation = new Documentation() as Documentation & DocumentationMock;
+    documentation = new DocumentationBuilder() as DocumentationBuilder &
+      DocumentationMock;
   });
 
   const mockImporter = makeMockImporter({

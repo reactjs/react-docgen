@@ -1,5 +1,5 @@
-import Documentation from './Documentation.js';
-import type { DocumentationObject } from './Documentation.js';
+import DocumentationBuilder from './Documentation.js';
+import type { Documentation } from './Documentation.js';
 import postProcessDocumentation from './utils/postProcessDocumentation.js';
 import babelParse from './babelParser.js';
 import type { NodePath } from '@babel/traverse';
@@ -13,18 +13,14 @@ import runResolver from './resolver/utils/runResolver.js';
 function executeHandlers(
   handlers: Handler[],
   componentDefinitions: Array<NodePath<ComponentNode>>,
-): DocumentationObject[] {
-  return componentDefinitions.map(
-    (componentDefinition): DocumentationObject => {
-      const documentation = new Documentation();
+): Documentation[] {
+  return componentDefinitions.map((componentDefinition): Documentation => {
+    const documentation = new DocumentationBuilder();
 
-      handlers.forEach((handler) =>
-        handler(documentation, componentDefinition),
-      );
+    handlers.forEach((handler) => handler(documentation, componentDefinition));
 
-      return postProcessDocumentation(documentation.toObject());
-    },
-  );
+    return postProcessDocumentation(documentation.build());
+  });
 }
 
 /**
@@ -47,7 +43,7 @@ function executeHandlers(
 export default function parse(
   code: string,
   config: InternalConfig,
-): DocumentationObject[] {
+): Documentation[] {
   const { babelOptions, handlers, importer, resolver } = config;
   const ast = babelParse(code, babelOptions);
 

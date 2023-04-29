@@ -1,6 +1,6 @@
 import { parse, makeMockImporter } from '../../../tests/utils';
 import componentMethodsHandler from '../componentMethodsHandler.js';
-import Documentation from '../../Documentation';
+import DocumentationBuilder from '../../Documentation';
 import type DocumentationMock from '../../__mocks__/Documentation';
 import type {
   ArrowFunctionExpression,
@@ -18,10 +18,11 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 vi.mock('../../Documentation.js');
 
 describe('componentMethodsHandler', () => {
-  let documentation: Documentation & DocumentationMock;
+  let documentation: DocumentationBuilder & DocumentationMock;
 
   beforeEach(() => {
-    documentation = new Documentation() as Documentation & DocumentationMock;
+    documentation = new DocumentationBuilder() as DocumentationBuilder &
+      DocumentationMock;
   });
 
   const mockImporter = makeMockImporter({

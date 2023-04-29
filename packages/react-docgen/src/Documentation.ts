@@ -1,4 +1,4 @@
-export interface DocumentationObject {
+export interface Documentation {
   childContext?: Record<string, PropDescriptor>;
   composes?: string[];
   context?: Record<string, PropDescriptor>;
@@ -141,7 +141,7 @@ export interface PropDescriptor {
   description?: string;
 }
 
-export default class Documentation {
+export default class DocumentationBuilder {
   #props: Map<string, PropDescriptor>;
   #context: Map<string, PropDescriptor>;
   #childContext: Map<string, PropDescriptor>;
@@ -199,8 +199,8 @@ export default class Documentation {
     return propDescriptor;
   }
 
-  toObject(): DocumentationObject {
-    const obj: DocumentationObject = {};
+  build(): Documentation {
+    const obj: Documentation = {};
 
     for (const [key, value] of this.#data) {
       obj[key] = value;

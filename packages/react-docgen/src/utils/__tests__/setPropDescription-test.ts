@@ -1,6 +1,6 @@
 import { parse, makeMockImporter } from '../../../tests/utils';
 import setPropDescription from '../setPropDescription.js';
-import Documentation from '../../Documentation';
+import DocumentationBuilder from '../../Documentation';
 import type { default as DocumentationMock } from '../../__mocks__/Documentation';
 import type { ExpressionStatement } from '@babel/types';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
@@ -8,10 +8,10 @@ import { beforeEach, describe, expect, test, vi } from 'vitest';
 vi.mock('../../Documentation.js');
 
 describe('setPropDescription', () => {
-  let defaultDocumentation: Documentation & DocumentationMock;
+  let defaultDocumentation: DocumentationBuilder & DocumentationMock;
 
   beforeEach(() => {
-    defaultDocumentation = new Documentation() as Documentation &
+    defaultDocumentation = new DocumentationBuilder() as DocumentationBuilder &
       DocumentationMock;
   });
 
