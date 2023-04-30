@@ -1,5 +1,14 @@
 # Release Notes
 
+## 6.0.0-rc.8
+
+### Patch Changes
+
+- [#787](https://github.com/reactjs/react-docgen/pull/787)
+  [`5a226ac`](https://github.com/reactjs/react-docgen/commit/5a226ac97882378790291cb67b1c0eee471f9def)
+  Thanks [@danez](https://github.com/danez)! - Fix @babel/traverse import to
+  work in non ESM environments
+
 ## 6.0.0-rc.7
 
 ### Major Changes

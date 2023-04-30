@@ -26,7 +26,7 @@
     "postcss": "8.4.23",
     "postcss-lightningcss": "0.7.0",
     "react": "18.2.0",
-    "react-docgen": "workspace:6.0.0-rc.7",
+    "react-docgen": "workspace:6.0.0-rc.8",
     "react-dom": "18.2.0",
     "tailwindcss": "3.3.2"
   },
