@@ -1,9 +1,12 @@
 import type { HubInterface, Scope, Visitor } from '@babel/traverse';
-import traverse, { NodePath } from '@babel/traverse';
+import babelTraverse, { NodePath } from '@babel/traverse';
 import type { File, Node, Program } from '@babel/types';
 import type { Importer, ImportPath } from './importer/index.js';
 import babelParse from './babelParser.js';
 import type { TransformOptions } from '@babel/core';
+
+// Workaround while babel is not a proper ES module
+const traverse = babelTraverse.default ?? babelTraverse;
 
 export default class FileState {
   opts: TransformOptions;
@@ -85,6 +88,6 @@ export default class FileState {
    * Traverse the current file
    */
   traverse(visitors: Visitor, state?: unknown): void {
-    traverse.default(this.ast, visitors, this.scope, state);
+    traverse(this.ast, visitors, this.scope, state);
   }
 }
