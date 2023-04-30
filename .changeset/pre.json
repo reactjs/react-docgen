@@ -1,6 +1,6 @@
 {
-  "mode": "exit",
-  "tag": "beta",
+  "mode": "pre",
+  "tag": "rc",
   "initialVersions": {
     "react-docgen": "6.0.0-alpha.3",
     "@react-docgen/cli": "1.0.0-alpha.0",
