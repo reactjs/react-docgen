@@ -1,5 +1,44 @@
 # Release Notes
 
+## 6.0.0-rc.7
+
+### Major Changes
+
+- [#786](https://github.com/reactjs/react-docgen/pull/786)
+  [`0a2481d`](https://github.com/reactjs/react-docgen/commit/0a2481df6328bdbe46a01fb25ee9a0966ec023ca)
+  Thanks [@danez](https://github.com/danez)! - Renamed the method `toObject` to
+  `build` in the DocumentationBuilder.
+
+  This method might be used by integrations.
+
+### Minor Changes
+
+- [#786](https://github.com/reactjs/react-docgen/pull/786)
+  [`0a2481d`](https://github.com/reactjs/react-docgen/commit/0a2481df6328bdbe46a01fb25ee9a0966ec023ca)
+  Thanks [@danez](https://github.com/danez)! - Export the type for the
+  DocumentationBuilder.
+
+- [#786](https://github.com/reactjs/react-docgen/pull/786)
+  [`0a2481d`](https://github.com/reactjs/react-docgen/commit/0a2481df6328bdbe46a01fb25ee9a0966ec023ca)
+  Thanks [@danez](https://github.com/danez)! - The types `NodePath` and
+  `babelTypes` are now exported.
+
+  These types are useful when building integrations in TypeScript.
+
+  `babelTypes` includes all types from `@babel/types`.
+
+### Patch Changes
+
+- [#767](https://github.com/reactjs/react-docgen/pull/767)
+  [`a684d82`](https://github.com/reactjs/react-docgen/commit/a684d8281044b3f8c8baecc9148cd4ef2b8fd409)
+  Thanks [@danez](https://github.com/danez)! - Fix handling of `PropTypes.oneOf`
+  to handle unresolved imported values correctly
+
+- [#769](https://github.com/reactjs/react-docgen/pull/769)
+  [`e08e08d`](https://github.com/reactjs/react-docgen/commit/e08e08d6cd56c833fd123019639dca9d819cd7ab)
+  Thanks [@danez](https://github.com/danez)! - Correctly resolve the values in
+  an `Object.values()` call
+
 ## 6.0.0-beta.6
 
 ### Major Changes

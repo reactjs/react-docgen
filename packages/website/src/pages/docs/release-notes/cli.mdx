@@ -1,5 +1,27 @@
 # Release Notes
 
+## 1.0.0-rc.4
+
+### Patch Changes
+
+- [#782](https://github.com/reactjs/react-docgen/pull/782)
+  [`72ac984`](https://github.com/reactjs/react-docgen/commit/72ac9841f02f1f6b925247621bc5aa56d3ba4267)
+  Thanks [@renovate](https://github.com/apps/renovate)! - Update dependency
+  commander to v10.0.1
+
+- [#783](https://github.com/reactjs/react-docgen/pull/783)
+  [`fc8a97c`](https://github.com/reactjs/react-docgen/commit/fc8a97c5fb552f5e4d2cbffced6c66f8729d23b6)
+  Thanks [@renovate](https://github.com/apps/renovate)! - update dependency
+  slash to v5.0.1
+
+- Updated dependencies
+  [[`0a2481d`](https://github.com/reactjs/react-docgen/commit/0a2481df6328bdbe46a01fb25ee9a0966ec023ca),
+  [`0a2481d`](https://github.com/reactjs/react-docgen/commit/0a2481df6328bdbe46a01fb25ee9a0966ec023ca),
+  [`a684d82`](https://github.com/reactjs/react-docgen/commit/a684d8281044b3f8c8baecc9148cd4ef2b8fd409),
+  [`0a2481d`](https://github.com/reactjs/react-docgen/commit/0a2481df6328bdbe46a01fb25ee9a0966ec023ca),
+  [`e08e08d`](https://github.com/reactjs/react-docgen/commit/e08e08d6cd56c833fd123019639dca9d819cd7ab)]:
+  - react-docgen@6.0.0-rc.7
+
 ## 1.0.0-beta.3
 
 ### Minor Changes
