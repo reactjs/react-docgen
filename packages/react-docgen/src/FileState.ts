@@ -6,7 +6,7 @@ import babelParse from './babelParser.js';
 import type { TransformOptions } from '@babel/core';
 
 // Workaround while babel is not a proper ES module
-const traverse = babelTraverse.default ?? babelTraverse;
+const traverse = babelTraverse.default ?? (babelTraverse as never);
 
 export default class FileState {
   opts: TransformOptions;

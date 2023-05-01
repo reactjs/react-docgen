@@ -22,6 +22,7 @@ import type {
   Identifier,
   InterfaceDeclaration,
   IntersectionTypeAnnotation,
+  Node,
   NullableTypeAnnotation,
   NumberLiteralTypeAnnotation,
   ObjectTypeAnnotation,
@@ -77,18 +78,32 @@ function getFlowTypeWithRequirements(
 function handleKeysHelper(
   path: NodePath<GenericTypeAnnotation>,
 ): ElementsType | null {
-  let value = path.get('typeParameters').get('params')[0];
+  const typeParams = path.get('typeParameters');
+
+  if (!typeParams.hasNode()) {
+    return null;
+  }
+
+  let value: NodePath<Node | null | undefined> | undefined =
+    typeParams.get('params')[0];
+
+  if (!value) {
+    return null;
+  }
 
   if (value.isTypeofTypeAnnotation()) {
-    value = value.get('argument').get('id');
+    value = value.get('argument').get('id') as NodePath<
+      Node | null | undefined
+    >;
   } else if (!value.isObjectTypeAnnotation()) {
-    value = value.get('id');
+    value = value.get('id') as NodePath<Node | null | undefined>;
   }
-  const resolvedPath = resolveToValue(value);
+
+  const resolvedPath = value.hasNode() ? resolveToValue(value) : value;
 
   if (
-    resolvedPath &&
-    (resolvedPath.isObjectExpression() || resolvedPath.isObjectTypeAnnotation())
+    resolvedPath.isObjectExpression() ||
+    resolvedPath.isObjectTypeAnnotation()
   ) {
     const keys = resolveObjectToNameArray(resolvedPath, true);
 
@@ -299,7 +314,7 @@ function handleNullableTypeAnnotation(
   path: NodePath<NullableTypeAnnotation>,
   typeParams: TypeParameters | null,
 ): TypeDescriptor | null {
-  const typeAnnotation = getTypeAnnotation(path);
+  const typeAnnotation = getTypeAnnotation<FlowType>(path);
 
   if (!typeAnnotation) return null;
 
@@ -325,7 +340,7 @@ function handleFunctionTypeAnnotation(
   };
 
   path.get('params').forEach((param) => {
-    const typeAnnotation = getTypeAnnotation(param);
+    const typeAnnotation = getTypeAnnotation<FlowType>(param);
 
     type.signature.arguments.push({
       name: param.node.name ? param.node.name.name : '',
@@ -338,7 +353,7 @@ function handleFunctionTypeAnnotation(
   const rest = path.get('rest');
 
   if (rest.hasNode()) {
-    const typeAnnotation = getTypeAnnotation(rest);
+    const typeAnnotation = getTypeAnnotation<FlowType>(rest);
 
     type.signature.arguments.push({
       name: rest.node.name ? rest.node.name.name : '',
