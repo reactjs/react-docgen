@@ -4,11 +4,9 @@ import type {
   ClassMethod,
   ClassPrivateMethod,
   ClassProperty,
-  FlowType,
   Function as FunctionType,
   ObjectMethod,
   ObjectProperty,
-  TSType,
 } from '@babel/types';
 import { getDocblock } from './docblock.js';
 import getFlowType from './getFlowType.js';
@@ -78,7 +76,7 @@ function getMethodParamsDoc(methodPath: MethodNodePath): MethodParameter[] {
     // Extract param types.
     functionExpression.get('params').forEach((paramPath) => {
       let type: TypeDescriptor | null = null;
-      const typePath = getTypeAnnotation<FlowType | TSType>(paramPath);
+      const typePath = getTypeAnnotation(paramPath);
 
       if (typePath) {
         if (typePath.isFlowType()) {
@@ -112,13 +110,15 @@ function getMethodReturnDoc(methodPath: MethodNodePath): MethodReturn | null {
   const functionExpression = getMethodFunctionExpression(methodPath);
 
   if (functionExpression && functionExpression.node.returnType) {
-    const returnType = getTypeAnnotation(
-      functionExpression.get('returnType') as NodePath,
-    );
+    const returnType = getTypeAnnotation(functionExpression.get('returnType'));
 
-    if (returnType && returnType.isFlowType()) {
+    if (!returnType) {
+      return null;
+    }
+
+    if (returnType.isFlowType()) {
       return { type: getFlowType(returnType, null) };
-    } else if (returnType) {
+    } else if (returnType.isTSType()) {
       return { type: getTSType(returnType, null) };
     }
   }

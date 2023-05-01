@@ -1,12 +1,12 @@
 import type { NodePath } from '@babel/traverse';
-import type { FlowType } from '@babel/types';
+import type { FlowType, Node, TSType } from '@babel/types';
 
 /**
  * Gets the most inner valuable TypeAnnotation from path. If no TypeAnnotation
  * can be found null is returned
  */
-export default function getTypeAnnotation<T = FlowType>(
-  path: NodePath,
+export default function getTypeAnnotation<T extends Node = FlowType | TSType>(
+  path: NodePath<Node | null | undefined>,
 ): NodePath<T> | null {
   if (!path.has('typeAnnotation')) return null;
 
@@ -20,6 +20,5 @@ export default function getTypeAnnotation<T = FlowType>(
     !resultPath.isTSType()
   );
 
-  // @ts-ignore
-  return resultPath;
+  return resultPath as NodePath<T>;
 }
