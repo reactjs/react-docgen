@@ -144,7 +144,41 @@ exports[`FindAnnotatedDefinitionsResolver > finds component wrapped in two HOCs 
 ]
 `;
 
+exports[`FindAnnotatedDefinitionsResolver > finds default exported component 1`] = `
+[
+  Node {
+    "async": false,
+    "body": Node {
+      "body": [],
+      "directives": [],
+      "type": "BlockStatement",
+    },
+    "generator": false,
+    "id": null,
+    "params": [],
+    "type": "ArrowFunctionExpression",
+  },
+]
+`;
+
 exports[`FindAnnotatedDefinitionsResolver > finds function parameter with annotation 1`] = `
+[
+  Node {
+    "async": false,
+    "body": Node {
+      "body": [],
+      "directives": [],
+      "type": "BlockStatement",
+    },
+    "generator": false,
+    "id": null,
+    "params": [],
+    "type": "ArrowFunctionExpression",
+  },
+]
+`;
+
+exports[`FindAnnotatedDefinitionsResolver > finds named exported component 1`] = `
 [
   Node {
     "async": false,

@@ -159,6 +159,24 @@ describe('FindAnnotatedDefinitionsResolver', () => {
     expect(findComponentsInSource(source)).toMatchSnapshot();
   });
 
+  test('finds named exported component', () => {
+    const source = `
+        // @component
+        export const Component = () => {};
+      `;
+
+    expect(findComponentsInSource(source)).toMatchSnapshot();
+  });
+
+  test('finds default exported component', () => {
+    const source = `
+        // @component
+        export default () => {};
+      `;
+
+    expect(findComponentsInSource(source)).toMatchSnapshot();
+  });
+
   test('finds component wrapped in two HOCs', () => {
     const source = `
         // @component
