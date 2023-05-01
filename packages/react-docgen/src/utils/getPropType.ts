@@ -170,7 +170,8 @@ function getPropTypeShapish(
   }
 
   if (argumentPath.isObjectExpression()) {
-    let value: Record<string, PropTypeDescriptor> | string = {};
+    const value: Record<string, PropTypeDescriptor> = {};
+    let rawValue: string | undefined;
 
     argumentPath.get('properties').forEach((propertyPath) => {
       // We only handle ObjectProperty as there is nothing to handle for
@@ -186,7 +187,7 @@ function getPropTypeShapish(
         // This indicates we have a cyclic reference in the shape
         // In this case we simply print the argument to shape and bail
         if (argument && isCyclicReference(argument, argumentPath)) {
-          value = printValue(argument);
+          rawValue = printValue(argument);
 
           return;
         }
@@ -202,7 +203,7 @@ function getPropTypeShapish(
       }
     });
 
-    type.value = value;
+    type.value = rawValue ?? value;
   }
 
   return type;

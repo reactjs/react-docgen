@@ -203,6 +203,7 @@ export default class DocumentationBuilder {
     const obj: Documentation = {};
 
     for (const [key, value] of this.#data) {
+      // @ts-expect-error The types for Documentation do not allow to be extended atm
       obj[key] = value;
     }
 
