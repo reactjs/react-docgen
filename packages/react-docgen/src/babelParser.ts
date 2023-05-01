@@ -3,19 +3,16 @@ import { loadPartialConfig, parseSync } from '@babel/core';
 import type { File } from '@babel/types';
 import { extname } from 'path';
 
-const TYPESCRIPT_EXTS = {
-  '.cts': true,
-  '.mts': true,
-  '.ts': true,
-  '.tsx': true,
-};
+const TYPESCRIPT_EXTS = new Set(['.cts', '.mts', '.ts', '.tsx']);
 
 function getDefaultPlugins(
   options: TransformOptions,
 ): NonNullable<ParserOptions['plugins']> {
+  const extension = extname(options.filename || '');
+
   return [
     'jsx',
-    TYPESCRIPT_EXTS[extname(options.filename || '')] ? 'typescript' : 'flow',
+    TYPESCRIPT_EXTS.has(extension) ? 'typescript' : 'flow',
     'asyncDoExpressions',
     'decimal',
     ['decorators', { decoratorsBeforeExport: false }],
