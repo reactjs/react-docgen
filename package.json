@@ -28,7 +28,7 @@
     "eslint-config-prettier": "8.8.0",
     "eslint-plugin-prettier": "4.2.1",
     "execa": "6.1.0",
-    "nx": "16.0.2",
+    "nx": "16.0.3",
     "prettier": "2.8.8",
     "prettier-plugin-tailwindcss": "0.2.8",
     "rimraf": "5.0.0",
