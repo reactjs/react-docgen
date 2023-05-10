@@ -1,10 +1,5 @@
 {
-  "implicitDependencies": {
-    "package.json": "*",
-    "package-lock.json": "*",
-    "nx.json": "*",
-    "tsconfig.base.json": "*"
-  },
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "tasksRunnerOptions": {
     "default": {
       "runner": "nx/tasks-runners/default",
@@ -21,5 +16,15 @@
     "test": {
       "dependsOn": ["build"]
     }
+  },
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "sharedGlobals": [
+      "{workspaceRoot}/nx.json",
+      "{workspaceRoot}/package.json",
+      "{workspaceRoot}/pnpm-lock.yaml",
+      "{workspaceRoot}/tsconfig.base.json"
+    ],
+    "production": ["default"]
   }
 }
