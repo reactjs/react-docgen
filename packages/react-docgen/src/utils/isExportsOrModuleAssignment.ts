@@ -6,9 +6,6 @@ import * as expressionTo from './expressionTo.js';
  * `modules.exports = ...;`.
  */
 export default function isExportsOrModuleAssignment(path: NodePath): boolean {
-  if (path.isExpressionStatement()) {
-    path = path.get('expression');
-  }
   if (
     !path.isAssignmentExpression() ||
     !path.get('left').isMemberExpression()

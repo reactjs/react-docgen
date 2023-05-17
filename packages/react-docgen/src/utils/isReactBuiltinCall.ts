@@ -46,11 +46,7 @@ function isNamedImportDeclaration(
 export default function isReactBuiltinCall(
   path: NodePath,
   name: string,
-): boolean {
-  if (path.isExpressionStatement()) {
-    path = path.get('expression');
-  }
-
+): path is NodePath<CallExpression & { __reactBuiltinTypeHint: true }> {
   if (path.isCallExpression()) {
     const callee = path.get('callee');
 

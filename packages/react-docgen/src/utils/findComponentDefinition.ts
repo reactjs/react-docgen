@@ -24,7 +24,7 @@ function resolveComponentDefinition(
 ): NodePath<ComponentNode> | null {
   if (isReactCreateClassCall(definition)) {
     // return argument
-    const resolvedPath = resolveToValue(definition.get('arguments')[0]);
+    const resolvedPath = resolveToValue(definition.get('arguments')[0]!);
 
     if (resolvedPath.isObjectExpression()) {
       return resolvedPath;
