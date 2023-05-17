@@ -391,7 +391,7 @@ function handleTypeofTypeAnnotation(
   return getFlowTypeWithResolvedTypes(path.get('argument'), typeParams);
 }
 
-let visitedTypes = {};
+let visitedTypes: Record<string, TypeDescriptor | boolean> = {};
 
 function getFlowTypeWithResolvedTypes(
   path: NodePath<FlowType>,
@@ -405,13 +405,15 @@ function getFlowTypeWithResolvedTypes(
   // When we see a TypeAlias mark it as visited so that the next
   // call of this function does not run into an endless loop
   if (isTypeAlias) {
-    if (visitedTypes[parent.node.id.name] === true) {
+    const visitedType = visitedTypes[parent.node.id.name];
+
+    if (visitedType === true) {
       // if we are currently visiting this node then just return the name
       // as we are starting to endless loop
       return { name: parent.node.id.name };
-    } else if (typeof visitedTypes[parent.node.id.name] === 'object') {
+    } else if (typeof visitedType === 'object') {
       // if we already resolved the type simple return it
-      return visitedTypes[parent.node.id.name];
+      return visitedType;
     }
     // mark the type as visited
     visitedTypes[parent.node.id.name] = true;
