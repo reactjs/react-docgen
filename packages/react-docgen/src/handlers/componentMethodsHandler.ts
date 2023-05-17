@@ -141,7 +141,7 @@ function findStatelessComponentBody(
       return body;
     }
   } else if (isReactForwardRefCall(componentDefinition)) {
-    const inner = resolveToValue(componentDefinition.get('arguments')[0]);
+    const inner = resolveToValue(componentDefinition.get('arguments')[0]!);
 
     return findStatelessComponentBody(inner);
   }

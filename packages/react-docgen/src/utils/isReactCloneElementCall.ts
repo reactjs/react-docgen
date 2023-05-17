@@ -1,5 +1,5 @@
 import type { NodePath } from '@babel/traverse';
-import type { Expression, ExpressionStatement } from '@babel/types';
+import type { CallExpression } from '@babel/types';
 import isReactBuiltinCall from './isReactBuiltinCall.js';
 
 /**
@@ -7,7 +7,7 @@ import isReactBuiltinCall from './isReactBuiltinCall.js';
  * `React.cloneElement(...)`.
  */
 export default function isReactCloneElementCall(
-  path: NodePath<Expression | ExpressionStatement>,
-): boolean {
+  path: NodePath,
+): path is NodePath<CallExpression & { __reactBuiltinTypeHint: true }> {
   return isReactBuiltinCall(path, 'cloneElement');
 }
