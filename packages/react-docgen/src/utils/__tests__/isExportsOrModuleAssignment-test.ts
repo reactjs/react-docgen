@@ -5,19 +5,19 @@ import { describe, expect, test } from 'vitest';
 describe('isExportsOrModuleAssignment', () => {
   test('detects "module.exports = ...;"', () => {
     expect(
-      isExportsOrModuleAssignment(parse.statement('module.exports = foo;')),
+      isExportsOrModuleAssignment(parse.expression('module.exports = foo')),
     ).toBe(true);
   });
 
   test('detects "exports.foo = ..."', () => {
     expect(
-      isExportsOrModuleAssignment(parse.statement('exports.foo = foo;')),
+      isExportsOrModuleAssignment(parse.expression('exports.foo = foo')),
     ).toBe(true);
   });
 
   test('does not accept "exports = foo;"', () => {
     // That doesn't actually export anything
-    expect(isExportsOrModuleAssignment(parse.statement('exports = foo;'))).toBe(
+    expect(isExportsOrModuleAssignment(parse.expression('exports = foo'))).toBe(
       false,
     );
   });

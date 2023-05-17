@@ -30,7 +30,7 @@ function getStatelessPropsPath(
   let value = resolveToValue(componentDefinition);
 
   if (isReactForwardRefCall(value)) {
-    value = resolveToValue(value.get('arguments')[0]);
+    value = resolveToValue(value.get('arguments')[0]!);
   }
 
   if (!value.isFunction()) return;

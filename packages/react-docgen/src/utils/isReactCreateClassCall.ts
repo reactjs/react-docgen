@@ -1,6 +1,7 @@
 import type { NodePath } from '@babel/traverse';
 import resolveToModule from './resolveToModule.js';
 import isReactBuiltinCall from './isReactBuiltinCall.js';
+import { CallExpression } from '@babel/types';
 
 /**
  * Returns true if the expression is a function call of the form
@@ -10,10 +11,6 @@ import isReactBuiltinCall from './isReactBuiltinCall.js';
  * ```
  */
 function isReactCreateClassCallModular(path: NodePath): boolean {
-  if (path.isExpressionStatement()) {
-    path = path.get('expression');
-  }
-
   if (!path.isCallExpression()) {
     return false;
   }
@@ -30,9 +27,12 @@ function isReactCreateClassCallModular(path: NodePath): boolean {
  * createReactClass(...);
  * ```
  */
-export default function isReactCreateClassCall(path: NodePath): boolean {
+export default function isReactCreateClassCall(
+  path: NodePath,
+): path is NodePath<CallExpression & { __reactBuiltinTypeHint: true }> {
   return (
-    isReactBuiltinCall(path, 'createClass') ||
+    (isReactBuiltinCall(path, 'createClass') &&
+      path.get('arguments').length === 1) ||
     isReactCreateClassCallModular(path)
   );
 }

@@ -39,7 +39,7 @@ function getDocblockFromComponent(path: NodePath): string | null {
   }
   if (!description) {
     const searchPath = isReactForwardRefCall(path)
-      ? path.get('arguments')[0]
+      ? path.get('arguments')[0]!
       : path;
     const inner = resolveToValue(searchPath);
 
