@@ -27,17 +27,16 @@ export function isSupportedUtilityType(
  *   $ReadOnly<T> => T
  */
 export function unwrapUtilityType(path: NodePath): NodePath {
-  while (isSupportedUtilityType(path)) {
-    const typeParameters = path.get('typeParameters');
-
+  let resultPath: NodePath = path;
+  while (isSupportedUtilityType(resultPath)) {
+    const typeParameters = resultPath.get('typeParameters');
     if (!typeParameters.hasNode()) break;
 
-    const param = typeParameters.get('params')[0];
+    const firstParam = typeParameters.get('params')[0];
+    if (!firstParam) break;
 
-    if (!param) break;
-
-    path = param;
+    resultPath = firstParam;
   }
 
-  return path;
+  return resultPath;
 }
