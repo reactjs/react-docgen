@@ -8,11 +8,11 @@ const TYPESCRIPT_EXTS = new Set(['.cts', '.mts', '.ts', '.tsx']);
 function getDefaultPlugins(
   options: TransformOptions,
 ): NonNullable<ParserOptions['plugins']> {
-  const extension = extname(options.filename || '');
-
   return [
     'jsx',
-    TYPESCRIPT_EXTS.has(extension) ? 'typescript' : 'flow',
+    options.filename && TYPESCRIPT_EXTS.has(extname(options.filename))
+      ? 'typescript'
+      : 'flow',
     'asyncDoExpressions',
     'decimal',
     ['decorators', { decoratorsBeforeExport: false }],
@@ -84,5 +84,5 @@ export default function babelParser(
     throw new Error('Unable to parse source code.');
   }
 
-  return ast;
+  return ast as File;
 }
