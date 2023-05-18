@@ -9,6 +9,7 @@ import type Documentation from '../Documentation.js';
 import type { DefaultValueDescriptor } from '../Documentation.js';
 import type { NodePath } from '@babel/traverse';
 import type {
+  CallExpression,
   ObjectMethod,
   ObjectProperty,
   RestElement,
@@ -16,6 +17,7 @@ import type {
 } from '@babel/types';
 import type { ComponentNode } from '../resolver/index.js';
 import type { Handler } from './index.js';
+import type { StatelessComponentNode } from '../resolver/index.js';
 
 function getDefaultValue(path: NodePath): DefaultValueDescriptor | null {
   let defaultValue: string | undefined;
@@ -55,12 +57,16 @@ function getDefaultValue(path: NodePath): DefaultValueDescriptor | null {
 }
 
 function getStatelessPropsPath(
-  componentDefinition: NodePath<ComponentNode>,
-): NodePath {
-  let value = resolveToValue(componentDefinition);
+  componentDefinition: NodePath<StatelessComponentNode | CallExpression>,
+): NodePath | undefined {
+  let value: NodePath = componentDefinition;
 
-  if (isReactForwardRefCall(value)) {
-    value = resolveToValue(value.get('arguments')[0]!);
+  if (isReactForwardRefCall(componentDefinition)) {
+    value = resolveToValue(componentDefinition.get('arguments')[0]!);
+  }
+
+  if (!value.isFunction()) {
+    return;
   }
 
   return value.get('params')[0];
@@ -151,14 +157,16 @@ const defaultPropsHandler: Handler = function (
   documentation: Documentation,
   componentDefinition: NodePath<ComponentNode>,
 ): void {
-  let statelessProps: NodePath | null = null;
+  let statelessProps: NodePath | undefined;
   const defaultPropsPath = getDefaultPropsPath(componentDefinition);
 
   /**
    * function, lazy, memo, forwardRef etc components can resolve default props as well
    */
   if (!isReactComponentClass(componentDefinition)) {
-    statelessProps = getStatelessPropsPath(componentDefinition);
+    statelessProps = getStatelessPropsPath(
+      componentDefinition as NodePath<StatelessComponentNode | CallExpression>,
+    );
   }
 
   // Do both statelessProps and defaultProps if both are available so defaultProps can override
