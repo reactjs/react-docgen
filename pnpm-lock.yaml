@@ -50,8 +50,8 @@ importers:
         specifier: 0.3.0
         version: 0.3.0(prettier@2.8.8)
       rimraf:
-        specifier: 5.0.0
-        version: 5.0.0
+        specifier: 5.0.1
+        version: 5.0.1
       tempy:
         specifier: 3.0.0
         version: 3.0.0
@@ -3682,8 +3682,8 @@ packages:
     dependencies:
       is-glob: 4.0.3
 
-  /glob@10.2.3:
-    resolution: {integrity: sha512-Kb4rfmBVE3eQTAimgmeqc2LwSnN0wIOkkUL6HmxEFxNJ4fHghYHVbFba/HcGcRjE6s9KoMNK3rSOwkL4PioZjg==}
+  /glob@10.2.5:
+    resolution: {integrity: sha512-Gj+dFYPZ5hc5dazjXzB0iHg2jKWJZYMjITXYPBRQ/xc2Buw7H0BINknRTwURJ6IC6MEFpYbLvtgVb3qD+DwyuA==}
     engines: {node: '>=16 || 14 >=14.17'}
     hasBin: true
     dependencies:
@@ -6542,12 +6542,12 @@ packages:
     dependencies:
       glob: 7.2.3
 
-  /rimraf@5.0.0:
-    resolution: {integrity: sha512-Jf9llaP+RvaEVS5nPShYFhtXIrb3LRKP281ib3So0KkeZKo2wIKyq0Re7TOSwanasA423PSr6CCIL4bP6T040g==}
+  /rimraf@5.0.1:
+    resolution: {integrity: sha512-OfFZdwtd3lZ+XZzYP/6gTACubwFcHdLRqS9UX3UwpU2dnGQYkPFISRwvM3w9IiB2w7bW5qGo/uAwE4SmXXSKvg==}
     engines: {node: '>=14'}
     hasBin: true
     dependencies:
-      glob: 10.2.3
+      glob: 10.2.5
     dev: true
 
   /rollup@3.21.7:
