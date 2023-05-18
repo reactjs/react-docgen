@@ -36,10 +36,11 @@ import type {
   RestElement,
   TypeScript,
   TSQualifiedName,
+  TSLiteralType,
 } from '@babel/types';
 import { getDocblock } from './docblock.js';
 
-const tsTypes = {
+const tsTypes: Record<string, string> = {
   TSAnyKeyword: 'any',
   TSBooleanKeyword: 'boolean',
   TSUnknownKeyword: 'unknown',
@@ -54,7 +55,13 @@ const tsTypes = {
   TSVoidKeyword: 'void',
 };
 
-const namedTypes = {
+const namedTypes: Record<
+  string,
+  (
+    path: NodePath<any>,
+    typeParams: TypeParameters | null,
+  ) => TypeDescriptor | null
+> = {
   TSArrayType: handleTSArrayType,
   TSTypeReference: handleTSTypeReference,
   TSTypeLiteral: handleTSTypeLiteral,
@@ -67,6 +74,7 @@ const namedTypes = {
   TSTypeQuery: handleTSTypeQuery,
   TSTypeOperator: handleTSTypeOperator,
   TSIndexedAccessType: handleTSIndexedAccessType,
+  TSLiteralType: handleTSLiteralType,
 };
 
 function handleTSQualifiedName(
@@ -85,6 +93,15 @@ function handleTSQualifiedName(
   return { name: printValue(path).replace(/<.*>$/, '') };
 }
 
+function handleTSLiteralType(path: NodePath<TSLiteralType>): LiteralType {
+  const literal = path.get('literal');
+
+  return {
+    name: 'literal',
+    value: printValue(literal),
+  };
+}
+
 function handleTSArrayType(
   path: NodePath<TSArrayType>,
   typeParams: TypeParameters | null,
@@ -98,7 +115,7 @@ function handleTSArrayType(
 
 function handleTSTypeReference(
   path: NodePath<TSTypeReference>,
-  typeParams: TypeParameters,
+  typeParams: TypeParameters | null,
 ): TypeDescriptor<TSFunctionSignatureType> | null {
   let type: TypeDescriptor<TSFunctionSignatureType>;
   const typeName = path.get('typeName');
@@ -508,16 +525,9 @@ function getTSTypeWithResolvedTypes(
   }
 
   if (node.type in tsTypes) {
-    type = { name: tsTypes[node.type] };
-  } else if (path.isTSLiteralType()) {
-    const literal = path.get('literal');
-
-    type = {
-      name: 'literal',
-      value: printValue(literal),
-    };
+    type = { name: tsTypes[node.type]! };
   } else if (node.type in namedTypes) {
-    type = namedTypes[node.type](path, typeParams);
+    type = namedTypes[node.type]!(path, typeParams);
   }
 
   if (!type) {
