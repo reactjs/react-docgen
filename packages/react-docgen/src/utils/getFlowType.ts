@@ -33,7 +33,7 @@ import type {
   UnionTypeAnnotation,
 } from '@babel/types';
 
-const flowTypes = {
+const flowTypes: Record<string, string> = {
   AnyTypeAnnotation: 'any',
   BooleanTypeAnnotation: 'boolean',
   MixedTypeAnnotation: 'mixed',
@@ -50,7 +50,13 @@ const flowLiteralTypes = {
   StringLiteralTypeAnnotation: 1,
 };
 
-const namedTypes = {
+const namedTypes: Record<
+  string,
+  (
+    path: NodePath<any>,
+    typeParams: TypeParameters | null,
+  ) => TypeDescriptor | null
+> = {
   ArrayTypeAnnotation: handleArrayTypeAnnotation,
   GenericTypeAnnotation: handleGenericTypeAnnotation,
   ObjectTypeAnnotation: handleObjectTypeAnnotation,
@@ -420,7 +426,7 @@ function getFlowTypeWithResolvedTypes(
   }
 
   if (path.node.type in flowTypes) {
-    type = { name: flowTypes[path.node.type] };
+    type = { name: flowTypes[path.node.type]! };
   } else if (path.node.type in flowLiteralTypes) {
     type = {
       name: 'literal',
@@ -437,7 +443,7 @@ function getFlowTypeWithResolvedTypes(
         }`,
     };
   } else if (path.node.type in namedTypes) {
-    type = namedTypes[path.node.type](path, typeParams);
+    type = namedTypes[path.node.type]!(path, typeParams);
   }
 
   if (!type) {
