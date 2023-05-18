@@ -137,8 +137,8 @@ importers:
         specifier: workspace:6.0.0-rc.8
         version: link:../react-docgen
       slash:
-        specifier: 5.0.1
-        version: 5.0.1
+        specifier: 5.1.0
+        version: 5.1.0
     devDependencies:
       '@types/debug':
         specifier: 4.1.7
@@ -6720,8 +6720,8 @@ packages:
     engines: {node: '>=12'}
     dev: true
 
-  /slash@5.0.1:
-    resolution: {integrity: sha512-ywNzUOiXwetmLvTUiCBZpLi+vxqN3i+zDqjs2HHfUSV3wN4UJxVVKWrS1JZDeiJIeBFNgB5pmioC2g0IUTL+rQ==}
+  /slash@5.1.0:
+    resolution: {integrity: sha512-ZA6oR3T/pEyuqwMgAKT0/hAv8oAXckzbkmR0UkUosQ+Mc4RxGoJkRmwHgHufaenlyAgE1Mxgpdcrf75y6XcnDg==}
     engines: {node: '>=14.16'}
     dev: false
 
