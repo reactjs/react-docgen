@@ -6,7 +6,7 @@
     "target": "es2020",
     "module": "es2020",
     "strict": true,
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "noImplicitReturns": true,
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
