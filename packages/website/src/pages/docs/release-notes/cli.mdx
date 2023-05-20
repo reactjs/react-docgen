@@ -1,5 +1,18 @@
 # Release Notes
 
+## 1.0.0-rc.6
+
+### Patch Changes
+
+- [#792](https://github.com/reactjs/react-docgen/pull/792)
+  [`e0999e1`](https://github.com/reactjs/react-docgen/commit/e0999e155fed3b4b2915a26599f475d0884196ca)
+  Thanks [@renovate](https://github.com/apps/renovate)! - update dependency
+  slash to v5.1.0
+
+- Updated dependencies
+  [[`7c99f15`](https://github.com/reactjs/react-docgen/commit/7c99f156b1cc49da8bc78ca9c7e3bb2da215c49d)]:
+  - react-docgen@6.0.0-rc.9
+
 ## 1.0.0-rc.5
 
 ### Patch Changes
