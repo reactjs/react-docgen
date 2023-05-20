@@ -16,12 +16,10 @@ exports[`componentMethodsJsDocHandler > adds descriptions 1`] = `
         "description": "The test",
         "name": "test",
         "optional": false,
-        "type": null,
       },
     ],
     "returns": {
       "description": "The number",
-      "type": null,
     },
   },
 ]
@@ -39,7 +37,6 @@ exports[`componentMethodsJsDocHandler > adds js doc types when no flow types 1`]
     "name": "foo",
     "params": [
       {
-        "description": null,
         "name": "test",
         "optional": false,
         "type": {
@@ -48,7 +45,6 @@ exports[`componentMethodsJsDocHandler > adds js doc types when no flow types 1`]
       },
     ],
     "returns": {
-      "description": null,
       "type": {
         "name": "string",
       },
@@ -69,7 +65,6 @@ exports[`componentMethodsJsDocHandler > keeps flow types over js doc types 1`] =
     "name": "foo",
     "params": [
       {
-        "description": null,
         "name": "test",
         "optional": false,
         "type": {
@@ -78,7 +73,6 @@ exports[`componentMethodsJsDocHandler > keeps flow types over js doc types 1`] =
       },
     ],
     "returns": {
-      "description": null,
       "type": {
         "name": "number",
       },

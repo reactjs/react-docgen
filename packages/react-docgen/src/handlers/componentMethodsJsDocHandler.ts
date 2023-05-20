@@ -5,20 +5,24 @@ import type {
 } from '../Documentation.js';
 import type { Handler } from './index.js';
 
+function removeEmpty<T extends Record<string, unknown>>(obj: T): T {
+  return Object.fromEntries(
+    Object.entries(obj).filter(([, v]) => v != null),
+  ) as T;
+}
+
 // Merges two objects ignoring null/undefined.
-function merge<T, U>(obj1: T, obj2: U): (T & U) | null {
+function merge<
+  T extends object | null | undefined,
+  U extends object | null | undefined,
+>(obj1: T, obj2: U): (T & U) | null {
   if (obj1 == null && obj2 == null) {
     return null;
   }
-  const merged: Record<string, unknown> = {
-    ...(obj1 as Record<string, unknown>),
+  const merged = {
+    ...removeEmpty(obj1 ?? {}),
+    ...removeEmpty(obj2 ?? {}),
   };
-
-  for (const prop in obj2 as Record<string, unknown>) {
-    if (obj2[prop] != null) {
-      merged[prop] = obj2[prop];
-    }
-  }
 
   return merged as T & U;
 }

@@ -10,11 +10,13 @@ export interface Documentation {
 
 export interface MethodParameter {
   name: string;
+  description?: string;
   optional: boolean;
   type?: TypeDescriptor<FunctionSignatureType> | null;
 }
 
 export interface MethodReturn {
+  description?: string;
   type: TypeDescriptor<FunctionSignatureType> | undefined;
 }
 
