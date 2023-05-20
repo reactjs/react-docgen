@@ -28,11 +28,14 @@ export function isSupportedUtilityType(
  */
 export function unwrapUtilityType(path: NodePath): NodePath {
   let resultPath: NodePath = path;
+
   while (isSupportedUtilityType(resultPath)) {
     const typeParameters = resultPath.get('typeParameters');
+
     if (!typeParameters.hasNode()) break;
 
     const firstParam = typeParameters.get('params')[0];
+
     if (!firstParam) break;
 
     resultPath = firstParam;

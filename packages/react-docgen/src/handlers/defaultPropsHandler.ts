@@ -15,9 +15,11 @@ import type {
   RestElement,
   SpreadElement,
 } from '@babel/types';
-import type { ComponentNode } from '../resolver/index.js';
+import type {
+  ComponentNode,
+  StatelessComponentNode,
+} from '../resolver/index.js';
 import type { Handler } from './index.js';
-import type { StatelessComponentNode } from '../resolver/index.js';
 
 function getDefaultValue(path: NodePath): DefaultValueDescriptor | null {
   let defaultValue: string | undefined;
@@ -57,7 +59,7 @@ function getDefaultValue(path: NodePath): DefaultValueDescriptor | null {
 }
 
 function getStatelessPropsPath(
-  componentDefinition: NodePath<StatelessComponentNode | CallExpression>,
+  componentDefinition: NodePath<CallExpression | StatelessComponentNode>,
 ): NodePath | undefined {
   let value: NodePath = componentDefinition;
 
@@ -165,7 +167,7 @@ const defaultPropsHandler: Handler = function (
    */
   if (!isReactComponentClass(componentDefinition)) {
     statelessProps = getStatelessPropsPath(
-      componentDefinition as NodePath<StatelessComponentNode | CallExpression>,
+      componentDefinition as NodePath<CallExpression | StatelessComponentNode>,
     );
   }
 
