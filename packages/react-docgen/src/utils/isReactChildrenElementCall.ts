@@ -1,7 +1,7 @@
 import type { NodePath } from '@babel/traverse';
 import isReactModuleName from './isReactModuleName.js';
 import resolveToModule from './resolveToModule.js';
-import { CallExpression } from '@babel/types';
+import type { CallExpression } from '@babel/types';
 
 /**
  * Returns true if the expression is a function call of the form

@@ -53,6 +53,7 @@ const flowLiteralTypes = {
 const namedTypes: Record<
   string,
   (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     path: NodePath<any>,
     typeParams: TypeParameters | null,
   ) => TypeDescriptor | null
