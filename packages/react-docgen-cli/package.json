@@ -32,7 +32,7 @@
     "debug": "4.3.4",
     "fast-glob": "3.2.12",
     "react-docgen": "workspace:6.0.0-rc.8",
-    "slash": "5.0.1"
+    "slash": "5.1.0"
   },
   "devDependencies": {
     "@types/debug": "4.1.7"
