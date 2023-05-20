@@ -4,7 +4,11 @@ import OptionPanel, { Language } from './OptionPanel';
 import type { Config } from 'react-docgen';
 import { parse, builtinResolvers } from 'react-docgen';
 
-const defaultPlugins = [
+type Plugins = NonNullable<
+  NonNullable<NonNullable<Config['babelOptions']>['parserOpts']>['plugins']
+>;
+
+const defaultPlugins: Plugins = [
   'jsx',
   'asyncDoExpressions',
   'decimal',
@@ -79,7 +83,7 @@ export default class App extends Component<PlaygroundProps, PlaygroundState> {
   };
 
   buildOptions(language: Language): Config {
-    const options: Config = {
+    const options = {
       resolver,
       babelOptions: {
         babelrc: false,
