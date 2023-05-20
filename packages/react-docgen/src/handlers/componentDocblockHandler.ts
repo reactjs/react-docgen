@@ -5,18 +5,21 @@ import resolveToValue from '../utils/resolveToValue.js';
 import type { NodePath } from '@babel/traverse';
 import type { ComponentNode } from '../resolver/index.js';
 import type { Handler } from './index.js';
+import type { Decorator } from '@babel/types';
 
 function getDocblockFromComponent(path: NodePath): string | null {
   let description: string | null = null;
 
   if (path.isClassDeclaration() || path.isClassExpression()) {
+    const decorators = path.get('decorators') as
+      | Array<NodePath<Decorator>>
+      | null
+      | undefined;
+
     // If we have a class declaration or expression, then the comment might be
     // attached to the last decorator instead as trailing comment.
-    if (path.node.decorators && path.node.decorators.length > 0) {
-      description = getDocblock(
-        path.get('decorators')[path.node.decorators.length - 1],
-        true,
-      );
+    if (decorators && decorators.length > 0) {
+      description = getDocblock(decorators[decorators.length - 1]!, true);
     }
   }
   if (description == null) {
