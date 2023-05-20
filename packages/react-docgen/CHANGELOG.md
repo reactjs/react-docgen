@@ -1,5 +1,14 @@
 # Release Notes
 
+## 6.0.0-rc.9
+
+### Patch Changes
+
+- [#789](https://github.com/reactjs/react-docgen/pull/789)
+  [`7c99f15`](https://github.com/reactjs/react-docgen/commit/7c99f156b1cc49da8bc78ca9c7e3bb2da215c49d)
+  Thanks [@danez](https://github.com/danez)! - Fix TypeScript types when strict
+  null checks are disabled
+
 ## 6.0.0-rc.8
 
 ### Patch Changes
