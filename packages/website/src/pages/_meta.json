@@ -13,5 +13,9 @@
     "theme": {
       "layout": "raw"
     }
+  },
+  "users": {
+    "title": "Users",
+    "type": "page"
   }
 }

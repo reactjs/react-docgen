@@ -1,0 +1,38 @@
+[
+  {
+    "name": "react-styleguidist",
+    "url": "https://react-styleguidist.js.org/",
+    "logo": "react-styleguidist.svg",
+    "category": "oss"
+  },
+  {
+    "name": "Storybook",
+    "url": "https://storybook.js.org/",
+    "logo": "storybook.svg",
+    "category": "oss"
+  },
+  {
+    "name": "docz",
+    "url": "https://www.docz.site/",
+    "logo": "docz.svg",
+    "category": "oss"
+  },
+  {
+    "name": "Gatsby",
+    "url": "https://www.gatsbyjs.com/",
+    "logo": "gatsby.svg",
+    "category": "oss"
+  },
+  {
+    "name": "Facebook",
+    "url": "https://www.facebook.com/",
+    "logo": "facebook.svg",
+    "category": "company"
+  },
+  {
+    "name": "ResearchGate",
+    "url": "https://www.researchgate.net/",
+    "logo": "researchgate.svg",
+    "category": "company"
+  }
+]
