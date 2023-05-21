@@ -187,7 +187,8 @@
 - 3b28f6e: The CLI was removed from `react-docgen` into its own package
   `@react-docgen/cli`.
 
-  Check out https://react-docgen.dev/cli for the documentation.
+  Check out https://react-docgen.dev/docs/getting-started/cli/ for the
+  documentation.
 
 - 96d6e9e: Main `parse` API was changed
 

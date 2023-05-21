@@ -112,7 +112,7 @@
   - `--importer` added
   - `--failOnWarning` added
 
-  Check out https://react-docgen.dev/docs/getting-started/cli for the
+  Check out https://react-docgen.dev/docs/getting-started/cli/ for the
   documentation.
 
 ### Patch Changes
