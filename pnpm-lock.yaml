@@ -11,8 +11,8 @@ importers:
         specifier: 2.26.1
         version: 2.26.1
       '@types/node':
-        specifier: 14.18.47
-        version: 14.18.47
+        specifier: 14.18.48
+        version: 14.18.48
       '@typescript-eslint/eslint-plugin':
         specifier: 5.59.7
         version: 5.59.7(@typescript-eslint/parser@5.59.7)(eslint@8.41.0)(typescript@5.0.4)
@@ -60,7 +60,7 @@ importers:
         version: 5.0.4
       vite:
         specifier: 4.3.8
-        version: 4.3.8(@types/node@14.18.47)
+        version: 4.3.8(@types/node@14.18.48)
       vitest:
         specifier: 0.31.1
         version: 0.31.1
@@ -169,7 +169,7 @@ importers:
         version: 18.2.4
       '@uiw/react-codemirror':
         specifier: 4.20.2
-        version: 4.20.2(@babel/runtime@7.21.5)(@codemirror/autocomplete@6.7.1)(@codemirror/language@6.6.0)(@codemirror/lint@6.2.1)(@codemirror/search@6.4.0)(@codemirror/state@6.2.0)(@codemirror/theme-one-dark@6.1.2)(@codemirror/view@6.12.0)(codemirror@6.0.1)(react-dom@18.2.0)(react@18.2.0)
+        version: 4.20.2(@codemirror/view@6.12.0)(react-dom@18.2.0)(react@18.2.0)
       clsx:
         specifier: 1.2.1
         version: 1.2.1
@@ -626,13 +626,10 @@ packages:
       prettier: 2.8.8
     dev: true
 
-  /@codemirror/autocomplete@6.7.1(@codemirror/language@6.6.0)(@codemirror/state@6.2.0)(@codemirror/view@6.12.0)(@lezer/common@1.0.2):
+  /@codemirror/autocomplete@6.7.1(@codemirror/view@6.12.0):
     resolution: {integrity: sha512-hSxf9S0uB+GV+gBsjY1FZNo53e1FFdzPceRfCfD1gWOnV6o21GfB5J5Wg9G/4h76XZMPrF0A6OCK/Rz5+V1egg==}
     peerDependencies:
-      '@codemirror/language': ^6.0.0
-      '@codemirror/state': ^6.0.0
       '@codemirror/view': ^6.0.0
-      '@lezer/common': ^1.0.0
     dependencies:
       '@codemirror/language': 6.6.0
       '@codemirror/state': 6.2.0
@@ -652,7 +649,7 @@ packages:
   /@codemirror/lang-javascript@6.1.8:
     resolution: {integrity: sha512-5cIA6IOkslTu1DtldcYnj7hsBm3p+cD37qSaKvW1kV16M6q9ysKvKrveCOWgbrj4+ilSWRL2JtSLudbeB158xg==}
     dependencies:
-      '@codemirror/autocomplete': 6.7.1(@codemirror/language@6.6.0)(@codemirror/state@6.2.0)(@codemirror/view@6.12.0)(@lezer/common@1.0.2)
+      '@codemirror/autocomplete': 6.7.1(@codemirror/view@6.12.0)
       '@codemirror/language': 6.6.0
       '@codemirror/lint': 6.2.1
       '@codemirror/state': 6.2.0
@@ -1590,8 +1587,8 @@ packages:
     resolution: {integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==}
     dev: true
 
-  /@types/node@14.18.47:
-    resolution: {integrity: sha512-OuJi8bIng4wYHHA3YpKauL58dZrPxro3d0tabPHyiNF8rKfGKuVfr83oFlPLmKri1cX+Z3cJP39GXmnqkP11Gw==}
+  /@types/node@14.18.48:
+    resolution: {integrity: sha512-iL0PIMwejpmuVHgfibHpfDwOdsbmB50wr21X71VnF5d7SsBF7WK+ZvP/SCcFm7Iwb9iiYSap9rlrdhToNAWdxg==}
     dev: true
 
   /@types/normalize-package-data@2.4.1:
@@ -1763,18 +1760,12 @@ packages:
       eslint-visitor-keys: 3.4.1
     dev: true
 
-  /@uiw/codemirror-extensions-basic-setup@4.20.2(@codemirror/autocomplete@6.7.1)(@codemirror/commands@6.2.4)(@codemirror/language@6.6.0)(@codemirror/lint@6.2.1)(@codemirror/search@6.4.0)(@codemirror/state@6.2.0)(@codemirror/view@6.12.0):
+  /@uiw/codemirror-extensions-basic-setup@4.20.2(@codemirror/view@6.12.0):
     resolution: {integrity: sha512-8oF7ICSEoJVjn9MNKLsY5BaxGsFS/Qh8AMHa/0hZP1fExeI+LKhaaSfHbdRk8RpYE5Ffjtx+tBQfh22YBiv5dQ==}
     peerDependencies:
-      '@codemirror/autocomplete': '>=6.0.0'
-      '@codemirror/commands': '>=6.0.0'
-      '@codemirror/language': '>=6.0.0'
-      '@codemirror/lint': '>=6.0.0'
-      '@codemirror/search': '>=6.0.0'
-      '@codemirror/state': '>=6.0.0'
       '@codemirror/view': '>=6.0.0'
     dependencies:
-      '@codemirror/autocomplete': 6.7.1(@codemirror/language@6.6.0)(@codemirror/state@6.2.0)(@codemirror/view@6.12.0)(@lezer/common@1.0.2)
+      '@codemirror/autocomplete': 6.7.1(@codemirror/view@6.12.0)
       '@codemirror/commands': 6.2.4
       '@codemirror/language': 6.6.0
       '@codemirror/lint': 6.2.1
@@ -1783,14 +1774,10 @@ packages:
       '@codemirror/view': 6.12.0
     dev: false
 
-  /@uiw/react-codemirror@4.20.2(@babel/runtime@7.21.5)(@codemirror/autocomplete@6.7.1)(@codemirror/language@6.6.0)(@codemirror/lint@6.2.1)(@codemirror/search@6.4.0)(@codemirror/state@6.2.0)(@codemirror/theme-one-dark@6.1.2)(@codemirror/view@6.12.0)(codemirror@6.0.1)(react-dom@18.2.0)(react@18.2.0):
+  /@uiw/react-codemirror@4.20.2(@codemirror/view@6.12.0)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-Rf6i9HgtNnYAVRBb1gfWlhiiOBrEPuIfHLn87cV9XPpjP+YtqZoP6VMMlMq4XFTbZ/E1GIxnSUgJMQToTth0iw==}
     peerDependencies:
-      '@babel/runtime': '>=7.11.0'
-      '@codemirror/state': '>=6.0.0'
-      '@codemirror/theme-one-dark': '>=6.0.0'
       '@codemirror/view': '>=6.0.0'
-      codemirror: '>=6.0.0'
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
     dependencies:
@@ -1799,15 +1786,10 @@ packages:
       '@codemirror/state': 6.2.0
       '@codemirror/theme-one-dark': 6.1.2
       '@codemirror/view': 6.12.0
-      '@uiw/codemirror-extensions-basic-setup': 4.20.2(@codemirror/autocomplete@6.7.1)(@codemirror/commands@6.2.4)(@codemirror/language@6.6.0)(@codemirror/lint@6.2.1)(@codemirror/search@6.4.0)(@codemirror/state@6.2.0)(@codemirror/view@6.12.0)
-      codemirror: 6.0.1(@lezer/common@1.0.2)
+      '@uiw/codemirror-extensions-basic-setup': 4.20.2(@codemirror/view@6.12.0)
+      codemirror: 6.0.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
-    transitivePeerDependencies:
-      - '@codemirror/autocomplete'
-      - '@codemirror/language'
-      - '@codemirror/lint'
-      - '@codemirror/search'
     dev: false
 
   /@vitest/coverage-c8@0.31.1(vitest@0.31.1):
@@ -2437,18 +2419,16 @@ packages:
     engines: {node: '>=6'}
     dev: false
 
-  /codemirror@6.0.1(@lezer/common@1.0.2):
+  /codemirror@6.0.1:
     resolution: {integrity: sha512-J8j+nZ+CdWmIeFIGXEFbFPtpiYacFMDR8GlHK3IyHQJMCaVRfGx9NT+Hxivv1ckLWPvNdZqndbr/7lVhrf/Svg==}
     dependencies:
-      '@codemirror/autocomplete': 6.7.1(@codemirror/language@6.6.0)(@codemirror/state@6.2.0)(@codemirror/view@6.12.0)(@lezer/common@1.0.2)
+      '@codemirror/autocomplete': 6.7.1(@codemirror/view@6.12.0)
       '@codemirror/commands': 6.2.4
       '@codemirror/language': 6.6.0
       '@codemirror/lint': 6.2.1
       '@codemirror/search': 6.4.0
       '@codemirror/state': 6.2.0
       '@codemirror/view': 6.12.0
-    transitivePeerDependencies:
-      - '@lezer/common'
     dev: false
 
   /color-convert@1.9.3:
@@ -7517,7 +7497,7 @@ packages:
       vfile-message: 3.1.4
     dev: false
 
-  /vite-node@0.31.1(@types/node@14.18.47):
+  /vite-node@0.31.1(@types/node@14.18.48):
     resolution: {integrity: sha512-BajE/IsNQ6JyizPzu9zRgHrBwczkAs0erQf/JRpgTIESpKvNj9/Gd0vxX905klLkb0I0SJVCKbdrl5c6FnqYKA==}
     engines: {node: '>=v14.18.0'}
     hasBin: true
@@ -7527,7 +7507,7 @@ packages:
       mlly: 1.2.1
       pathe: 1.1.0
       picocolors: 1.0.0
-      vite: 4.3.8(@types/node@14.18.47)
+      vite: 4.3.8(@types/node@14.18.48)
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -7538,7 +7518,7 @@ packages:
       - terser
     dev: true
 
-  /vite@4.3.8(@types/node@14.18.47):
+  /vite@4.3.8(@types/node@14.18.48):
     resolution: {integrity: sha512-uYB8PwN7hbMrf4j1xzGDk/lqjsZvCDbt/JC5dyfxc19Pg8kRm14LinK/uq+HSLNswZEoKmweGdtpbnxRtrAXiQ==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -7563,7 +7543,7 @@ packages:
       terser:
         optional: true
     dependencies:
-      '@types/node': 14.18.47
+      '@types/node': 14.18.48
       esbuild: 0.17.19
       postcss: 8.4.23
       rollup: 3.21.7
@@ -7604,7 +7584,7 @@ packages:
     dependencies:
       '@types/chai': 4.3.5
       '@types/chai-subset': 1.3.3
-      '@types/node': 14.18.47
+      '@types/node': 14.18.48
       '@vitest/expect': 0.31.1
       '@vitest/runner': 0.31.1
       '@vitest/snapshot': 0.31.1
@@ -7624,8 +7604,8 @@ packages:
       strip-literal: 1.0.1
       tinybench: 2.5.0
       tinypool: 0.5.0
-      vite: 4.3.8(@types/node@14.18.47)
-      vite-node: 0.31.1(@types/node@14.18.47)
+      vite: 4.3.8(@types/node@14.18.48)
+      vite-node: 0.31.1(@types/node@14.18.48)
       why-is-node-running: 2.2.2
     transitivePeerDependencies:
       - less
