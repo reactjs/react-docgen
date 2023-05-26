@@ -162,8 +162,8 @@ importers:
         specifier: 1.7.14
         version: 1.7.14(react-dom@18.2.0)(react@18.2.0)
       '@popperjs/core':
-        specifier: 2.11.7
-        version: 2.11.7
+        specifier: 2.11.8
+        version: 2.11.8
       '@types/react-dom':
         specifier: 18.2.4
         version: 18.2.4
@@ -1453,8 +1453,8 @@ packages:
       tslib: 2.5.1
     dev: true
 
-  /@popperjs/core@2.11.7:
-    resolution: {integrity: sha512-Cr4OjIkipTtcXKjAsm8agyleBuDHvxzeBoa1v543lbv1YaIwQjESsVcmjiWiPEbC1FIeHOG/Op9kdCmAmiS3Kw==}
+  /@popperjs/core@2.11.8:
+    resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
     dev: false
 
   /@rushstack/eslint-patch@1.2.0:
@@ -5502,7 +5502,7 @@ packages:
       react-dom: '>=16.13.1'
     dependencies:
       '@headlessui/react': 1.7.14(react-dom@18.2.0)(react@18.2.0)
-      '@popperjs/core': 2.11.7
+      '@popperjs/core': 2.11.8
       clsx: 1.2.1
       flexsearch: 0.7.31
       focus-visible: 5.2.0
