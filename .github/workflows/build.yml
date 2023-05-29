@@ -16,13 +16,13 @@ jobs:
   tests:
     strategy:
       matrix:
-        node: ['14.18.0', '16', '18']
+        node: ['16.14.0', '18', '20']
         os: ['ubuntu']
         include:
           - os: macos
-            node: '18'
+            node: '20'
           - os: windows
-            node: '18'
+            node: '20'
 
     name: Tests (Node.js v${{ matrix.node }}, ${{ matrix.os }})
     runs-on: ${{ matrix.os }}-latest
