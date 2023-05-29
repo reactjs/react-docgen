@@ -9,9 +9,6 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 permissions: {}
 
-env:
-  NODE_VERSION: 18
-
 jobs:
   release:
     name: Release
@@ -20,6 +17,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
+          # Do not persist credentials so changesets can use the provided token
           persist-credentials: false
 
       - name: Install pnpm
@@ -28,7 +26,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ env.NODE_VERSION }}
+          node-version: 'lts/*'
           cache: 'pnpm'
 
       - name: Install dependencies
