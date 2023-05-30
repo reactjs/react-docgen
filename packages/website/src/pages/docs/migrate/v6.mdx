@@ -1,0 +1,167 @@
+# Migrate from v5 to v6
+
+## Usage
+
+### ES modules
+
+`react-docgen` is now a pure ESM package. If you want to find out more about
+this check
+[this link](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c)
+
+### Node.js
+
+Only Node.js versions 14.18.0 or newer are supported.
+
+### changed `parse()` API
+
+The parse method has only two arguments now.
+
+- `src: string` the code to parse and analyze
+- `config: Config` the config on how to parse and analyze the code
+
+```diff
+-parse(src, resolver, handlers, importer, options: { filename, ...babelOptions})
++parse(src, { resolver, handlers, importer, filename, babelOptions: {} })
+```
+
+The return type of `parse()` is now always an array, even if only one component
+is found.
+
+### changed component annotation
+
+Removed support for the `@extends React.Component` annotation on react class
+components.
+
+Instead, you can use the new `@component` annotation to mark a component or
+define your own annotation by creating a custom
+`FindAnnotatedDefinitionsResolver` instance.
+
+### renames
+
+- The handler `flowTypeHandler` was renamed to `codeTypeHandler` because it
+  handles Flow and TypeScript
+- the handler `propDocBlockHandler` was renamed to `propDocblockHandler` (lower
+  case `b`) for consistency
+- The named export `handlers` was renamed to `builtinHandlers`
+- The named export `resolver` was renamed to `builtinResolvers`
+- The named export `importers` was renamed to `builtinImporters`
+- The resolver `findAllComponentDefinitions` was renamed to
+  `FindAllDefinitionsResolver` and is now a class.
+
+  ```diff
+  -const resolver = builtinResolvers.findAllComponentDefinitions
+  +const resolver = new builtinResolvers.FindAllDefinitionsResolver()
+  ```
+
+- The resolver `findAllExportedComponentDefinitions` was renamed to
+  `FindExportedDefinitionsResolver` and is now a class.
+
+  ```diff
+  -const resolver = builtinResolvers.findAllExportedComponentDefinitions
+  +const resolver = new builtinResolvers.FindExportedDefinitionsResolver()
+  ```
+
+- The resolver `findExportedComponentDefinition` was removed. Use
+  `FindExportedDefinitionsResolver` with the `limit` option instead.
+
+  > This is still the default resolver.
+
+  ```diff
+  -const resolver = builtinResolvers.findExportedComponentDefinition
+  +const resolver = new builtinResolvers.FindExportedDefinitionsResolver({ limit: 1 })
+  ```
+
+### CLI
+
+The CLI was moved into its own package named `@react-docgen/cli` and is a
+complete rewrite with different arguments and options. Compared to the old CLI
+these are some of the major differences:
+
+- Does not support input via stdin anymore
+- The path argument is now a glob
+- `-x, --extension` was removed in favor of globs
+- `-e, --exclude` was removed
+- `-i, --ignore` now accepts a glob
+- `--handler` added
+- `--importer` added
+- `--failOnWarning` added
+
+Checkout [this page](../reference/cli.mdx) to see all the options.
+
+### TypeScript
+
+`react-docgen` is now written in TypeScript and also provides type definitions
+in the published package. If you previously had your own typings for
+`react-docgen` you might want to remove or adapt them.
+
+## Integrations
+
+### renames
+
+- The utility `resolveComponentDefinition` was renamed to
+  `findComponentDefinition`
+- Renamed the method `toObject` to `build` in the DocumentationBuilder
+
+### removals
+
+- The utility `match` was removed. The utility can be replaced by babel helpers
+  and is not needed anymore. Also using explicit checks like
+  `path.isMemberExpression()` is better for type safety and catching potential
+  bugs.
+
+### changed AST
+
+`react-docgen` now uses only the babel toolchain internally and removed the
+usage of `ast-types`. This also means that the AST produced by `@babel/parser`
+is now not conforming to estree anymore but instead uses the slightly different
+babel AST. To see the differences check
+[the documentation of the babel parser](https://babeljs.io/docs/babel-parser#output).
+
+### removed `ast-types`
+
+The `ast-types` library was removed and is not used anymore. This mainly affects
+how an integration can check and work with the AST.
+
+Here are some examples how to migrate certain scenarios to use the babel
+toolchain instead of `ast-types`:
+
+```diff
+-import { namedTypes as types } from 'ast-types';
+
+-if (types.FunctionExpression.check(path.node)) {}
++if (path.isFunctionExpression()) {}
+
+-const leftPath = path.parent.get('left');
++const leftPath = path.parentPath.get('left');
+
+-functionExpression.get('params').each(paramPath => {})
++functionExpression.get('params').forEach(paramPath => {})
+
+
+-const first = functionExpression.get('params', 0)
++const first = functionExpression.get('params')[0]
+```
+
+### changed resolvers API
+
+TBD
+
+### changed handlers API
+
+The handlers API did not have any major changes. Just be aware that `ast-types`
+is not used anymore and will not work.
+
+Here is an example diff of a handler.
+
+```diff
+-import { namedTypes as types } from 'ast-types';
++import { Documentation, builtinResolvers } from 'react-docgen';
+
+-export default function(documentation: Documentation, path: NodePath): void {
++export default function(documentation: Documentation, path: builtinResolvers.ComponentNodePath): void {
+-  if (types.FunctionExpression.check(path.node)) {
++  if (path.isFunctionExpression()) {
+    return;
+  }
+}
+```
