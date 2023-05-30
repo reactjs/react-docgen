@@ -2,4 +2,4 @@
 'react-docgen': major
 ---
 
-Rename `propDocBlockHandler` to `propDocblockHandler` for consistency
+Renamed `propDocBlockHandler` to `propDocblockHandler` for consistency
