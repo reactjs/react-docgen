@@ -6,7 +6,8 @@
 
 `react-docgen` is now a pure ESM package. If you want to find out more about
 this check
-[this link](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c)
+[this guide ↗](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c)
+from sindresorhus
 
 ### Node.js
 
@@ -108,6 +109,10 @@ in the published package. If you previously had your own typings for
   and is not needed anymore. Also using explicit checks like
   `path.isMemberExpression()` is better for type safety and catching potential
   bugs.
+- The `importer` argument on a lot of utilities was removed and is now handled
+  through the new [`FileState` class](../reference/file-state.mdx). If you ever
+  need to access the `FileState` it can be done on every `NodePath` object by
+  using `path.hub`.
 
 ### changed AST
 
@@ -115,7 +120,7 @@ in the published package. If you previously had your own typings for
 usage of `ast-types`. This also means that the AST produced by `@babel/parser`
 is now not conforming to estree anymore but instead uses the slightly different
 babel AST. To see the differences check
-[the documentation of the babel parser](https://babeljs.io/docs/babel-parser#output).
+[the documentation of the babel parser ↗](https://babeljs.io/docs/babel-parser#output).
 
 ### removed `ast-types`
 
@@ -144,7 +149,48 @@ toolchain instead of `ast-types`:
 
 ### changed resolvers API
 
-TBD
+The resolvers API has changed completely and now receives only one argument
+which is the FileState. With this, you can easily parse other files, traverse
+the AST, access the options, or even import other files. You can find out more
+about the FileState API [on this page](../reference/file-state.mdx).
+
+Here is a migrated example:
+
+```diff
+-import { visit } from 'ast-types';
+-import { NodePath } from 'ast-types/lib/node-path';
++import type { FileState } from 'react-docgen';
+
+ export default function (
+-  ast: FileNodeWithOptions,
++  file: FileState,
+-  parser: Parser,
+-  importer: Importer,
+-): NodePath[] {}
++): builtinResolvers.ComponentNodePath[] {
+
+-  path = resolveToValue(path.get('right'), importer);
++  path = resolveToValue(path.get('right'));
+
+-  parser.parse('let x = 1');
++  file.parse('let x = 1', 'filename.tsx')
+
+-  visit(ast, {
++  file.traverse({
+-    visitFunctionDeclaration(path) {
++    FunctionDeclaration(path) {
+
+       // do not traverse into subpaths
+-      return false;
++      path.skip();
+     },
+   )
+ }
+```
+
+In
+[this commit ↗](https://github.com/reactjs/react-docgen/commit/d3f814542211652160cde02aeaefdbd994f2f6f5#diff-d22f67b8436f1a3a68b85e0b34dd06a2c5867c6fad7675b760432cf2947a398c)
+a built-in resolver is being converted.
 
 ### changed handlers API
 
@@ -155,13 +201,14 @@ Here is an example diff of a handler.
 
 ```diff
 -import { namedTypes as types } from 'ast-types';
+-import { NodePath } from 'ast-types/lib/node-path';
 +import { Documentation, builtinResolvers } from 'react-docgen';
 
 -export default function(documentation: Documentation, path: NodePath): void {
 +export default function(documentation: Documentation, path: builtinResolvers.ComponentNodePath): void {
 -  if (types.FunctionExpression.check(path.node)) {
 +  if (path.isFunctionExpression()) {
-    return;
-  }
-}
+     return;
+   }
+ }
 ```

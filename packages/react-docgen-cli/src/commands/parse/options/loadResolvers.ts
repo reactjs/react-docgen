@@ -7,7 +7,7 @@ const { ChainResolver } = builtinResolvers;
 export enum ResolverConfigs {
   FindAll = 'find-all-components',
   FindAllExported = 'find-all-exported-components',
-  FindAnnotatedComponents = 'find-all-annotated-components',
+  FindAllAnnotatedComponents = 'find-all-annotated-components',
   FindExported = 'find-exported-component',
 }
 
@@ -16,7 +16,7 @@ async function loadResolver(input: string): Promise<Resolver> {
     return new builtinResolvers.FindAllDefinitionsResolver();
   } else if (input === ResolverConfigs.FindAllExported) {
     return new builtinResolvers.FindExportedDefinitionsResolver();
-  } else if (input === ResolverConfigs.FindAnnotatedComponents) {
+  } else if (input === ResolverConfigs.FindAllAnnotatedComponents) {
     return new builtinResolvers.FindAnnotatedDefinitionsResolver();
   } else if (input === ResolverConfigs.FindExported) {
     return new builtinResolvers.FindExportedDefinitionsResolver({
