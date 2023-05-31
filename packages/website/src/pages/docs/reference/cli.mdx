@@ -10,10 +10,10 @@ getting started guide can be found on [this page](../getting-started/cli).
 Specify at least one glob pattern which will be used to search for files.
 
 ```shell filename="Examples"
-react-docgen path/to/file.tsx
+react-docgen ./src/components/Button.tsx
 
-# All .ts or .tsx files in src/ or any .jsx files in other/
-react-docgen "src/**/*.ts?(x) other/**/*.jsx"
+# All .ts or .tsx files in src/ or any .js files in components/
+react-docgen "src/**/*.ts?(x) components/**/*.js"
 ```
 
 If you want to know more about glob patterns, check the documentation of
