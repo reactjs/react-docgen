@@ -154,8 +154,8 @@ importers:
   packages/website:
     dependencies:
       '@codemirror/lang-javascript':
-        specifier: 6.1.8
-        version: 6.1.8
+        specifier: 6.1.9
+        version: 6.1.9
       '@codemirror/lang-json':
         specifier: 6.0.1
         version: 6.0.1
@@ -680,8 +680,8 @@ packages:
       '@lezer/common': 1.0.2
     dev: false
 
-  /@codemirror/lang-javascript@6.1.8:
-    resolution: {integrity: sha512-5cIA6IOkslTu1DtldcYnj7hsBm3p+cD37qSaKvW1kV16M6q9ysKvKrveCOWgbrj4+ilSWRL2JtSLudbeB158xg==}
+  /@codemirror/lang-javascript@6.1.9:
+    resolution: {integrity: sha512-z3jdkcqOEBT2txn2a87A0jSy6Te3679wg/U8QzMeftFt+4KA6QooMwfdFzJiuC3L6fXKfTXZcDocoaxMYfGz0w==}
     dependencies:
       '@codemirror/autocomplete': 6.7.1(@codemirror/language@6.7.0)(@codemirror/state@6.2.1)(@codemirror/view@6.12.0)(@lezer/common@1.0.2)
       '@codemirror/language': 6.7.0
