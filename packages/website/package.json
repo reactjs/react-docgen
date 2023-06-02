@@ -31,7 +31,7 @@
     "tailwindcss": "3.3.2"
   },
   "devDependencies": {
-    "@types/react": "18.2.7"
+    "@types/react": "18.2.8"
   },
   "browserslist": [
     "chrome 64",
