@@ -6,13 +6,13 @@ import glob from 'fast-glob';
 import Benchmark from 'benchmark';
 import { parse } from '../packages/react-docgen/dist/main.js';
 import { parse as parse5 } from 'react-docgen5';
-import { parse as parse6 } from 'react-docgen6latest';
+import { parse as parse6 } from 'react-docgen6';
 
 console.log(`Node: ${process.version}`);
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const head = ['fixture', 'v5.4.3', 'v6.0.0-alpha.4', 'current'];
+const head = ['fixture', 'v5.4.3', 'v6.0.0', 'main'];
 
 process.stdout.write(`Preparing suites ... `);
 
