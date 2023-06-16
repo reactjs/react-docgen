@@ -1,6 +1,6 @@
 {
   "name": "react-docgen",
-  "version": "6.0.0-rc.9",
+  "version": "6.0.0",
   "description": "A library to extract information from React components for documentation generation.",
   "repository": "reactjs/react-docgen",
   "type": "module",
