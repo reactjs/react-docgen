@@ -2,7 +2,11 @@
   "name": "@react-docgen/cli",
   "version": "1.0.0",
   "description": "A CLI to extract information from React components for documentation generation.",
-  "repository": "reactjs/react-docgen",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/reactjs/react-docgen.git",
+    "directory": "packages/react-docgen-cli"
+  },
   "type": "module",
   "bin": {
     "react-docgen": "dist/cli.js"
