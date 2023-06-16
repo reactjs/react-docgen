@@ -9,12 +9,12 @@ interface Props {
 }
 
 export default ({ user }: Props) => (
-  <div className="box-border w-1/3 px-4">
+  <div className="box-border w-full px-4 md:w-1/3">
     <a
       href={user.url}
       rel="noopener noreferrer"
       target="_blank"
-      className="relative my-3.5 block h-32 rounded-md bg-white px-2.5 hover:scale-110 hover:shadow-md"
+      className="relative my-3.5 block h-32 rounded-md bg-white px-2.5 hover:scale-105 hover:shadow-md md:hover:scale-110"
     >
       <Image
         src={require(`./logos/${user.logo}`)}
