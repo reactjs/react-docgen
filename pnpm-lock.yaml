@@ -138,7 +138,7 @@ importers:
         specifier: 3.2.12
         version: 3.2.12
       react-docgen:
-        specifier: workspace:6.0.0-rc.9
+        specifier: workspace:6.0.0
         version: link:../react-docgen
       slash:
         specifier: 5.1.0
@@ -196,7 +196,7 @@ importers:
         specifier: 18.2.0
         version: 18.2.0
       react-docgen:
-        specifier: workspace:6.0.0-rc.9
+        specifier: workspace:6.0.0
         version: link:../react-docgen
       react-dom:
         specifier: 18.2.0
@@ -1541,14 +1541,14 @@ packages:
   /@types/babel__generator@7.6.4:
     resolution: {integrity: sha512-tFkciB9j2K755yrTALxD44McOrk+gfpIpvC3sxHjRawj6PfnQxrse4Clq5y/Rq+G3mrBurMax/lG8Qn2t9mSsg==}
     dependencies:
-      '@babel/types': 7.18.9
+      '@babel/types': 7.22.5
     dev: false
 
   /@types/babel__template@7.4.1:
     resolution: {integrity: sha512-azBFKemX6kMg5Io+/rdGT0dkGreboUVR0Cdm3fz9QJWpaQGJRQXl7C+6hOTCZcMll7KFyEQpgbYI2lHdsS4U7g==}
     dependencies:
       '@babel/parser': 7.22.5
-      '@babel/types': 7.18.9
+      '@babel/types': 7.22.5
     dev: false
 
   /@types/babel__traverse@7.18.0:
