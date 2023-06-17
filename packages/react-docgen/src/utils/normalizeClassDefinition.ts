@@ -1,4 +1,4 @@
-import { classProperty } from '@babel/types';
+import { classProperty, inheritsComments } from '@babel/types';
 import getMemberExpressionRoot from '../utils/getMemberExpressionRoot.js';
 import getMembers from '../utils/getMembers.js';
 import type { NodePath } from '@babel/traverse';
@@ -41,6 +41,11 @@ const explodedVisitors = visitors.explode<TraverseState>({
             false,
             true,
           );
+
+          inheritsComments(property, path.node);
+          if (path.parentPath.isExpressionStatement()) {
+            inheritsComments(property, path.parentPath.node);
+          }
 
           state.classDefinition.get('body').unshiftContainer('body', property);
           path.skip();

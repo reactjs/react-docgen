@@ -109,4 +109,20 @@ describe('normalizeClassDefinition', () => {
 
     expect(classProperty).not.toBeDefined();
   });
+
+  test('copies comments to class property', () => {
+    const classDefinition = parse.statement<ClassDeclaration>(`
+      class Foo {}
+
+      // my comment
+      Foo.propTypes = 42;
+    `);
+
+    normalizeClassDefinition(classDefinition);
+    const classProperty = classDefinition.node.body.body[0] as ClassProperty;
+
+    expect(classProperty).toBeDefined();
+    expect(classProperty.leadingComments?.length).toBe(1);
+    expect(classProperty.leadingComments?.[0].value).toBe(' my comment');
+  });
 });

@@ -1,9 +1,11 @@
 import type { NodePath } from '@babel/traverse';
 import type {
+  AssignmentExpression,
   ClassDeclaration,
   ClassMethod,
   ClassPrivateMethod,
   ClassProperty,
+  ExpressionStatement,
   ObjectExpression,
   ObjectMethod,
 } from '@babel/types';
@@ -129,7 +131,7 @@ describe('getMethodDocumentation', () => {
       });
     });
 
-    test('extracts docblock on function assignment', () => {
+    test('extracts docblock on property assignment', () => {
       const def = parse.statement<ClassDeclaration>(`
         class Foo {
           /**
@@ -144,6 +146,27 @@ describe('getMethodDocumentation', () => {
         name: 'foo',
         docblock: "Don't use this!",
         modifiers: [],
+        returns: null,
+        params: [],
+      });
+    });
+
+    test('extracts docblock on function assignment', () => {
+      const method = parse
+        .statementLast<ExpressionStatement>(
+          `const Foo = () => {}
+           /**
+            * Don't use this!
+            */
+           Foo.foo = () => {}
+          `,
+        )
+        .get('expression') as NodePath<AssignmentExpression>;
+
+      expect(getMethodDocumentation(method)).toEqual({
+        name: 'foo',
+        docblock: "Don't use this!",
+        modifiers: ['static'],
         returns: null,
         params: [],
       });
