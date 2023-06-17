@@ -28,7 +28,7 @@ function merge<
 }
 /**
  * Extract info from the methods jsdoc blocks. Must be run after
- * flowComponentMethodsHandler.
+ * componentMethodsHandler.
  */
 const componentMethodsJsDocHandler: Handler = function (
   documentation: Documentation,
