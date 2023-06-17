@@ -1,12 +1,12 @@
 {
-  "child-context-type-handler": "childContextTypeHandler",
-  "code-type-handler": "codeTypeHandler",
-  "component-docblock-handler": "componentDocblockHandler",
-  "component-methods-handler": "componentMethodsHandler",
-  "context-type-handler": "contextTypeHandler",
-  "default-props-handler": "defaultPropsHandler",
-  "display-name-handler": "displayNameHandler",
-  "prop-docblock-handler": "propDocblockHandler",
-  "prop-type-composition-handler": "propTypeCompositionHandler",
-  "prop-type-handler": "propTypeHandler"
+  "child-context-type-handler": "childContextType",
+  "code-type-handler": "codeType",
+  "component-docblock-handler": "componentDocblock",
+  "component-methods-handler": "componentMethods",
+  "context-type-handler": "contextType",
+  "default-props-handler": "defaultProps",
+  "display-name-handler": "displayName",
+  "prop-docblock-handler": "propDocblock",
+  "prop-type-composition-handler": "propTypeComposition",
+  "prop-type-handler": "propType"
 }

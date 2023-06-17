@@ -1,5 +1,61 @@
-import ContentMissing from '@/components/ContentMissing';
-
 # propTypeCompositionHandler
 
-<ContentMissing />
+Adds the name of the module to the `composes` field when:
+
+- a variable is spread into `propTypes`
+- the import cannot be followed
+
+## Examples
+
+When the `propTypeCompositionHandler` is active any of these components will
+result in the output below
+
+```ts {1,6} filename="component.tsx"
+import otherPropTypes from './Link.js';
+import { Component } from 'react';
+
+class Button extends Component {
+  static propTypes = {
+    ...otherPropTypes,
+  };
+
+  render() {
+    return <div />;
+  }
+}
+```
+
+```ts {1,11} filename="component.tsx"
+import otherPropTypes from './Link.js';
+import { Component } from 'react';
+
+class Button extends Component {
+  render() {
+    return <div />;
+  }
+}
+
+Button.propTypes = {
+  ...otherPropTypes,
+};
+```
+
+```ts {1,6} filename="component.tsx"
+import otherPropTypes from './Link.js';
+
+const Button = () => <div />;
+
+Button.propTypes = {
+  ...otherPropTypes,
+};
+```
+
+## Output
+
+```json {3} filename="JSON"
+[
+  {
+    "composes": ["./Link.js"]
+  }
+]
+```
