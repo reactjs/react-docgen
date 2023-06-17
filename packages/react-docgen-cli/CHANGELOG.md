@@ -1,5 +1,13 @@
 # Release Notes
 
+## 1.0.1
+
+### Patch Changes
+
+- Updated dependencies
+  [[`c7e2bd5`](https://github.com/reactjs/react-docgen/commit/c7e2bd5911d660b42bc3bc8b368a7b7cdcf980fd)]:
+  - react-docgen@6.0.1
+
 ## 1.0.0
 
 ### Major Changes

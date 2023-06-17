@@ -1,5 +1,14 @@
 # Release Notes
 
+## 6.0.1
+
+### Patch Changes
+
+- [#806](https://github.com/reactjs/react-docgen/pull/806)
+  [`c7e2bd5`](https://github.com/reactjs/react-docgen/commit/c7e2bd5911d660b42bc3bc8b368a7b7cdcf980fd)
+  Thanks [@danez](https://github.com/danez)! - Make docblocks for assigned
+  methods be correctly detected.
+
 ## 6.0.0
 
 ### Major Changes
