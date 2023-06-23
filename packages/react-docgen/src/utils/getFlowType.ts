@@ -32,6 +32,7 @@ import type {
   TypeParameterDeclaration,
   UnionTypeAnnotation,
 } from '@babel/types';
+import { getDocblock } from './docblock.js';
 
 const flowTypes: Record<string, string> = {
   AnyTypeAnnotation: 'any',
@@ -239,20 +240,34 @@ function handleObjectTypeAnnotation(
 
   if (Array.isArray(indexers)) {
     indexers.forEach((param) => {
-      type.signature.properties.push({
+      const typeDescriptor: (typeof type.signature.properties)[number] = {
         key: getFlowTypeWithResolvedTypes(param.get('key'), typeParams),
         value: getFlowTypeWithRequirements(param.get('value'), typeParams),
-      });
+      };
+      const docblock = getDocblock(param);
+
+      if (docblock) {
+        typeDescriptor.description = docblock;
+      }
+
+      type.signature.properties.push(typeDescriptor);
     });
   }
 
   path.get('properties').forEach((param) => {
     if (param.isObjectTypeProperty()) {
-      type.signature.properties.push({
+      const typeDescriptor: (typeof type.signature.properties)[number] = {
         // For ObjectTypeProperties `getPropertyName` always returns string
         key: getPropertyName(param) as string,
         value: getFlowTypeWithRequirements(param.get('value'), typeParams),
-      });
+      };
+      const docblock = getDocblock(param);
+
+      if (docblock) {
+        typeDescriptor.description = docblock;
+      }
+
+      type.signature.properties.push(typeDescriptor);
     } else if (param.isObjectTypeSpreadProperty()) {
       let spreadObject = resolveToValue(param.get('argument'));
 

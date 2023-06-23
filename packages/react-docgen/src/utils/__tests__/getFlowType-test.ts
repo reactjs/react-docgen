@@ -433,23 +433,29 @@ describe('getFlowType', () => {
     });
   });
 
+  test('detects object types with descriptions', () => {
+    const typePath = parse
+      .expression<TypeCastExpression>(
+        `x: {
+           /** A */
+           a: string,
+           /** B */
+           b?: xyz
+         }`,
+      )
+      .get('typeAnnotation')
+      .get('typeAnnotation');
+
+    expect(getFlowType(typePath)).toMatchSnapshot();
+  });
+
   test('detects object types with maybe type', () => {
     const typePath = parse
       .expression<TypeCastExpression>('x: { a: string, b: ?xyz }')
       .get('typeAnnotation')
       .get('typeAnnotation');
 
-    expect(getFlowType(typePath)).toEqual({
-      name: 'signature',
-      type: 'object',
-      signature: {
-        properties: [
-          { key: 'a', value: { name: 'string', required: true } },
-          { key: 'b', value: { name: 'xyz', nullable: true, required: true } },
-        ],
-      },
-      raw: '{ a: string, b: ?xyz }',
-    });
+    expect(getFlowType(typePath)).toMatchSnapshot();
   });
 
   test('resolves imported types used for objects', () => {

@@ -1,5 +1,65 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`getFlowType > detects object types with descriptions 1`] = `
+{
+  "name": "signature",
+  "raw": "{
+  /** A */
+  a: string,
+  /** B */
+  b?: xyz
+}",
+  "signature": {
+    "properties": [
+      {
+        "description": "A",
+        "key": "a",
+        "value": {
+          "name": "string",
+          "required": true,
+        },
+      },
+      {
+        "description": "B",
+        "key": "b",
+        "value": {
+          "name": "xyz",
+          "required": false,
+        },
+      },
+    ],
+  },
+  "type": "object",
+}
+`;
+
+exports[`getFlowType > detects object types with maybe type 1`] = `
+{
+  "name": "signature",
+  "raw": "{ a: string, b: ?xyz }",
+  "signature": {
+    "properties": [
+      {
+        "key": "a",
+        "value": {
+          "name": "string",
+          "required": true,
+        },
+      },
+      {
+        "key": "b",
+        "value": {
+          "name": "xyz",
+          "nullable": true,
+          "required": true,
+        },
+      },
+    ],
+  },
+  "type": "object",
+}
+`;
+
 exports[`getFlowType > handles ObjectTypeSpreadProperty 1`] = `
 {
   "name": "signature",
