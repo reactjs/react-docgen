@@ -107,10 +107,7 @@ function getPropTypeArrayOf(
 
   const subType = getPropType(argumentPath);
 
-  // @ts-ignore
-  if (subType.name !== 'unknown') {
-    type.value = subType;
-  }
+  type.value = subType;
 
   return type;
 }
@@ -127,10 +124,7 @@ function getPropTypeObjectOf(
 
   const subType = getPropType(argumentPath);
 
-  // @ts-ignore
-  if (subType.name !== 'unknown') {
-    type.value = subType;
-  }
+  type.value = subType;
 
   return type;
 }

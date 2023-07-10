@@ -91,7 +91,7 @@ export default function makeFsImporter(
     path: ImportPath,
     name: string,
     file: FileState,
-    seen: Set<string> = new Set(),
+    seen = new Set<string>(),
   ): NodePath | null {
     // Bail if no filename was provided for the current source file.
     // Also never traverse into react itself.
