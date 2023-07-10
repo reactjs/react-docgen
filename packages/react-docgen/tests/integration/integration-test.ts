@@ -12,11 +12,11 @@ describe('integration', () => {
     );
     const fileNames = fs.readdirSync(fixturePath, { withFileTypes: true });
 
-    for (let i = 0; i < fileNames.length; i++) {
-      if (fileNames[i].isDirectory()) {
+    for (const entry of fileNames) {
+      if (entry.isDirectory()) {
         continue;
       }
-      const name = fileNames[i].name;
+      const name = entry.name;
 
       const filePath = join(fixturePath, name);
       const fileContent = fs.readFileSync(filePath, 'utf8');

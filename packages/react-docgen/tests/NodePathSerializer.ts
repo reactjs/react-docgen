@@ -7,6 +7,7 @@ function removeUndefinedProperties(
 ): Record<string, unknown> {
   for (const key of Object.keys(node)) {
     if (node[key] === undefined) {
+      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete node[key];
     } else if (node[key] === Object(node[key])) {
       node[key] = removeUndefinedProperties(

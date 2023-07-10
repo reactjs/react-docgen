@@ -14,6 +14,7 @@ import { afterEach } from 'vitest';
 
 interface ParseCall {
   (code: string, importer: Importer): NodePath<Program>;
+  // eslint-disable-next-line @typescript-eslint/unified-signatures
   (code: string, options: TransformOptions): NodePath<Program>;
   <B extends boolean = false>(
     code: string,
@@ -41,6 +42,7 @@ interface Parse extends ParseCall {
   ): NodePath<T>;
   statement<T = Statement>(
     src: string,
+    // eslint-disable-next-line @typescript-eslint/unified-signatures
     options: TransformOptions,
     index?: number,
   ): NodePath<T>;

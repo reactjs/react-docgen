@@ -12,10 +12,12 @@ function removeEmpty<T extends Record<string, unknown>>(obj: T): T {
 }
 
 // Merges two objects ignoring null/undefined.
-function merge<
-  T extends object | null | undefined,
-  U extends object | null | undefined,
->(obj1: T, obj2: U): (T & U) | null {
+function merge(obj1: null | undefined, obj2: null | undefined): null;
+function merge<T1, T2>(obj1: T1, obj2: T2): T1 & T2;
+function merge(
+  obj1: Record<string, unknown> | null | undefined,
+  obj2: Record<string, unknown> | null | undefined,
+): Record<string, unknown> | null {
   if (obj1 == null && obj2 == null) {
     return null;
   }
@@ -24,7 +26,7 @@ function merge<
     ...removeEmpty(obj2 ?? {}),
   };
 
-  return merged as T & U;
+  return merged;
 }
 /**
  * Extract info from the methods jsdoc blocks. Must be run after
@@ -39,7 +41,6 @@ const componentMethodsJsDocHandler: Handler = function (
     return;
   }
 
-  // @ts-ignore
   methods = methods.map((method) => {
     if (!method.docblock) {
       return method;

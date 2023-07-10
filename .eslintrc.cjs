@@ -48,16 +48,19 @@ module.exports = {
       files: ['**/*.ts', '**/*.tsx'],
       parser: '@typescript-eslint/parser',
       plugins: ['@typescript-eslint'],
-      extends: ['plugin:@typescript-eslint/recommended'],
+      extends: [
+        'plugin:@typescript-eslint/recommended',
+        'plugin:@typescript-eslint/strict',
+        'plugin:@typescript-eslint/stylistic',
+      ],
       rules: {
         'no-shadow': 'off',
         '@typescript-eslint/no-shadow': 'error',
         '@typescript-eslint/array-type': ['error', { default: 'array-simple' }],
-        '@typescript-eslint/ban-ts-comment': 'off',
         '@typescript-eslint/consistent-type-imports': 'error',
-        '@typescript-eslint/no-duplicate-imports': 'error',
+        //'@typescript-eslint/no-duplicate-imports': 'error', //import plugin
         '@typescript-eslint/no-non-null-assertion': 'off',
-        '@typescript-eslint/sort-type-union-intersection-members': 'error',
+        '@typescript-eslint/sort-type-constituents': 'error',
       },
     },
   ],
