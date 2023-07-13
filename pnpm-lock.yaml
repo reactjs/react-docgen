@@ -181,11 +181,11 @@ importers:
         specifier: 0.2.1
         version: 0.2.1(next@13.4.9)(react-dom@18.2.0)(react@18.2.0)
       nextra:
-        specifier: 2.9.0
-        version: 2.9.0(next@13.4.9)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 2.10.0
+        version: 2.10.0(next@13.4.9)(react-dom@18.2.0)(react@18.2.0)
       nextra-theme-docs:
-        specifier: 2.9.0
-        version: 2.9.0(next@13.4.9)(nextra@2.9.0)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 2.10.0
+        version: 2.10.0(next@13.4.9)(nextra@2.10.0)(react-dom@18.2.0)(react@18.2.0)
       postcss:
         specifier: 8.4.25
         version: 8.4.25
@@ -1496,16 +1496,23 @@ packages:
       tslib: 2.6.0
     dev: false
 
-  /@theguild/remark-mermaid@0.0.3(react@18.2.0):
-    resolution: {integrity: sha512-fccVR6o4UPUztrBjdUhM4ahwx+X7YHhoxsUoXv2vI07vz4dq+I03Ot0SjuZzDA/H7engxcb8ZxzCUEkZgGr/2g==}
+  /@theguild/remark-mermaid@0.0.4(react@18.2.0):
+    resolution: {integrity: sha512-C1gssw07eURtCwzXqZZdvyV/eawQ/cXfARaXIgBU9orffox+/YQ+exxmNu9v16NSGzAVsGF4qEVHvCOcCR/FpQ==}
     peerDependencies:
       react: ^18.2.0
     dependencies:
       mermaid: 10.2.4
       react: 18.2.0
-      unist-util-visit: 4.1.2
+      unist-util-visit: 5.0.0
     transitivePeerDependencies:
       - supports-color
+    dev: false
+
+  /@theguild/remark-npm2yarn@0.1.1:
+    resolution: {integrity: sha512-ZKwd/bjQ9V+pESLnu8+q8jqn15alXzJOuVckraebsXwqVBTw53Gmupiw9zCdLNHU829KTYNycJYea6m9HRLuOg==}
+    dependencies:
+      npm-to-yarn: 2.0.0
+      unist-util-visit: 5.0.0
     dev: false
 
   /@types/acorn@4.0.6:
@@ -1575,7 +1582,7 @@ packages:
   /@types/hast@2.3.4:
     resolution: {integrity: sha512-wLEm0QvaoawEDoTRwzTXp4b4jpwiJDvR5KMnFnVodm3scufTlBOWRD6N1OBf9TZMhjlNsSfcO5V+7AF4+Vy+9g==}
     dependencies:
-      '@types/unist': 2.0.6
+      '@types/unist': 3.0.0
     dev: false
 
   /@types/is-ci@3.0.0:
@@ -1610,7 +1617,7 @@ packages:
   /@types/mdast@3.0.11:
     resolution: {integrity: sha512-Y/uImid8aAwrEA24/1tcRZwpxX3pIFTSilcNDKSPn+Y2iDywSEachzRuvgAYYLR3wpGXAsMbv5lvKLDZLeYPAw==}
     dependencies:
-      '@types/unist': 2.0.6
+      '@types/unist': 3.0.0
     dev: false
 
   /@types/mdx@2.0.5:
@@ -5949,11 +5956,11 @@ packages:
       - babel-plugin-macros
     dev: false
 
-  /nextra-theme-docs@2.9.0(next@13.4.9)(nextra@2.9.0)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-Gbjx5atl63JKWOEV2hAefP4X0wmJoLtFX4NekvNu9Y9fAdvtFdW0O2p0f8ISMS1JJgAl1ZmXm411J7rHnRnhmg==}
+  /nextra-theme-docs@2.10.0(next@13.4.9)(nextra@2.10.0)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-uXoqRoewbu0JoqQ1m67aIztWe9/nEhcSeHMimhLxZghKZxkYN0kTR5y5jmrwOHRPuJUTLL2YFwy1rvWJIZS2lw==}
     peerDependencies:
       next: '>=9.5.3'
-      nextra: 2.9.0
+      nextra: 2.10.0
       react: '>=16.13.1'
       react-dom: '>=16.13.1'
     dependencies:
@@ -5968,15 +5975,15 @@ packages:
       next: 13.4.9(react-dom@18.2.0)(react@18.2.0)
       next-seo: 6.1.0(next@13.4.9)(react-dom@18.2.0)(react@18.2.0)
       next-themes: 0.2.1(next@13.4.9)(react-dom@18.2.0)(react@18.2.0)
-      nextra: 2.9.0(next@13.4.9)(react-dom@18.2.0)(react@18.2.0)
+      nextra: 2.10.0(next@13.4.9)(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       scroll-into-view-if-needed: 3.0.10
       zod: 3.21.4
     dev: false
 
-  /nextra@2.9.0(next@13.4.9)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-GwYFwuS0UzCXAUVvs9sVAFe4AQeZ0VACbqW8rzw2goxHvpTXAWbIdXShPGz+MEPB8aAckfHy1p39XbfcVU3cRA==}
+  /nextra@2.10.0(next@13.4.9)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-euv93UnWpdth8slMRJLqMrWvCCzR/VTVH6DPrn1JW7hZS03c2lzG2q+fsiYULGiy/kFyysmlxd4Nx5KGB1Txwg==}
     engines: {node: '>=16'}
     peerDependencies:
       next: '>=9.5.3'
@@ -5987,7 +5994,8 @@ packages:
       '@mdx-js/mdx': 2.3.0
       '@mdx-js/react': 2.3.0(react@18.2.0)
       '@napi-rs/simple-git': 0.1.8
-      '@theguild/remark-mermaid': 0.0.3(react@18.2.0)
+      '@theguild/remark-mermaid': 0.0.4(react@18.2.0)
+      '@theguild/remark-npm2yarn': 0.1.1
       clsx: 1.2.1
       github-slugger: 2.0.0
       graceful-fs: 4.2.11
@@ -6087,6 +6095,11 @@ packages:
     dependencies:
       path-key: 4.0.0
     dev: true
+
+  /npm-to-yarn@2.0.0:
+    resolution: {integrity: sha512-/IbjiJ7vqbxfxJxAZ+QI9CCRjnIbvGxn5KQcSY9xHh0lMKc/Sgqmm7yp7KPmd6TiTZX5/KiSBKlkGHo59ucZbg==}
+    engines: {node: '>=6.0.0'}
+    dev: false
 
   /nx@16.5.1:
     resolution: {integrity: sha512-I3hJRE4hG7JWAtncWwDEO3GVeGPpN0TtM8xH5ArZXyDuVeTth/i3TtJzdDzqXO1HHtIoAQN0xeq4n9cLuMil5g==}
