@@ -1,5 +1,23 @@
 # Release Notes
 
+## 1.0.2
+
+### Patch Changes
+
+- [#812](https://github.com/reactjs/react-docgen/pull/812)
+  [`0f97ece`](https://github.com/reactjs/react-docgen/commit/0f97ece8ea9cd722b495db67843295b8846bb071)
+  Thanks [@renovate](https://github.com/apps/renovate)! - fix(deps): update
+  dependency chalk to v5.3.0
+
+- [#813](https://github.com/reactjs/react-docgen/pull/813)
+  [`7aa1e8e`](https://github.com/reactjs/react-docgen/commit/7aa1e8e24d0eb0a0cf36192aa5d00a4944f9844b)
+  Thanks [@renovate](https://github.com/apps/renovate)! - fix(deps): update
+  dependency fast-glob to v3.3.0
+
+- Updated dependencies
+  [[`ddf4e20`](https://github.com/reactjs/react-docgen/commit/ddf4e20160c41685d81f7d5d8cf21eccb4b41529)]:
+  - react-docgen@6.0.2
+
 ## 1.0.1
 
 ### Patch Changes
