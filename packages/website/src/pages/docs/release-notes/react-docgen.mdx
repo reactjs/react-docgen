@@ -1,5 +1,14 @@
 # Release Notes
 
+## 6.0.2
+
+### Patch Changes
+
+- [#810](https://github.com/reactjs/react-docgen/pull/810)
+  [`ddf4e20`](https://github.com/reactjs/react-docgen/commit/ddf4e20160c41685d81f7d5d8cf21eccb4b41529)
+  Thanks [@danez](https://github.com/danez)! - Read docblock in nested flow
+  object types and use them as descriptions
+
 ## 6.0.1
 
 ### Patch Changes
