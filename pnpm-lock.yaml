@@ -112,7 +112,7 @@ importers:
       '@popperjs/core': 2.11.8
       '@types/react': 18.2.17
       '@types/react-dom': 18.2.7
-      '@uiw/react-codemirror': 4.21.8
+      '@uiw/react-codemirror': 4.21.9
       clsx: 2.0.0
       next: 13.4.12
       next-themes: 0.2.1
@@ -132,7 +132,7 @@ importers:
       '@popperjs/core': 2.11.8
       '@types/react': 18.2.17
       '@types/react-dom': 18.2.7
-      '@uiw/react-codemirror': 4.21.8_ubxys4gp5eevaxtgoqk4k7q4t4
+      '@uiw/react-codemirror': 4.21.9_ubxys4gp5eevaxtgoqk4k7q4t4
       clsx: 2.0.0
       next: 13.4.12_biqbaboplfbrettd7655fr4n2y
       next-themes: 0.2.1_54ux7fu2vrztxgcjbkegvwjefy
@@ -1827,8 +1827,8 @@ packages:
       eslint-visitor-keys: 3.4.1
     dev: true
 
-  /@uiw/codemirror-extensions-basic-setup/4.21.8_j4la4nrrcz3nsbzqzdo2zljiey:
-    resolution: {integrity: sha512-uOPRPxexapuvlZ+hkVun5oyhQ0AtXIapBqv56cgjkzwZ49EILUk9mTubHFBY0B5kPqme7d57hSXYRLW8EH80LA==}
+  /@uiw/codemirror-extensions-basic-setup/4.21.9_j4la4nrrcz3nsbzqzdo2zljiey:
+    resolution: {integrity: sha512-TQT6aF8brxZpFnk/K4fm/K/9k9eF3PMav/KKjHlYrGUT8BTNk/qL+ximLtIzvTUhmBFchjM1lrqSJdvpVom7/w==}
     peerDependencies:
       '@codemirror/autocomplete': '>=6.0.0'
       '@codemirror/commands': '>=6.0.0'
@@ -1847,8 +1847,8 @@ packages:
       '@codemirror/view': 6.15.3
     dev: false
 
-  /@uiw/react-codemirror/4.21.8_ubxys4gp5eevaxtgoqk4k7q4t4:
-    resolution: {integrity: sha512-IwnWdZcBkNIHrQie/AAsBoz2Q/XpWe/Up1nGIrpWxMXEE/+RxW3CIkqcYEwVcYDJlbfP3hcIRqN/Aoz6OeXc5Q==}
+  /@uiw/react-codemirror/4.21.9_ubxys4gp5eevaxtgoqk4k7q4t4:
+    resolution: {integrity: sha512-aeLegPz2iCvqJjhzXp2WUMqpMZDqxsTnF3rX9kGRlfY6vQLsrjoctj0cQ29uxEtFYJChOVjtCOtnQUlyIuNAHQ==}
     peerDependencies:
       '@babel/runtime': '>=7.11.0'
       '@codemirror/state': '>=6.0.0'
@@ -1863,7 +1863,7 @@ packages:
       '@codemirror/state': 6.2.1
       '@codemirror/theme-one-dark': 6.1.2
       '@codemirror/view': 6.15.3
-      '@uiw/codemirror-extensions-basic-setup': 4.21.8_j4la4nrrcz3nsbzqzdo2zljiey
+      '@uiw/codemirror-extensions-basic-setup': 4.21.9_j4la4nrrcz3nsbzqzdo2zljiey
       codemirror: 6.0.1_@lezer+common@1.0.3
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
@@ -4128,9 +4128,10 @@ packages:
       fs.realpath: 1.0.0
       inflight: 1.0.6
       inherits: 2.0.4
-      minimatch: 3.0.5
+      minimatch: 3.1.2
       once: 1.4.0
       path-is-absolute: 1.0.1
+    dev: true
 
   /glob/7.1.6:
     resolution: {integrity: sha512-LwaxwyZ72Lk7vZINtNNrywX0ZuLyStrdDtabefZKAY5ZGJhVtgdznluResxNmPitE0SAO+O26sWTHeKSI2wMBA==}
@@ -5789,6 +5790,7 @@ packages:
     resolution: {integrity: sha512-tUpxzX0VAzJHjLu0xUfFv1gwVp9ba3IOuRAVH2EGuRW8a5emA2FlACLqiT/lDVtS1W+TGNwqz3sWaNyLgDJWuw==}
     dependencies:
       brace-expansion: 1.1.11
+    dev: true
 
   /minimatch/3.1.2:
     resolution: {integrity: sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==}
@@ -7015,7 +7017,7 @@ packages:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
     hasBin: true
     dependencies:
-      glob: 7.1.4
+      glob: 7.2.3
 
   /rimraf/5.0.1:
     resolution: {integrity: sha512-OfFZdwtd3lZ+XZzYP/6gTACubwFcHdLRqS9UX3UwpU2dnGQYkPFISRwvM3w9IiB2w7bW5qGo/uAwE4SmXXSKvg==}
