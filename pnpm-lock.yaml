@@ -13,7 +13,7 @@ importers:
       cpy: 9.0.1
       eslint: 8.46.0
       eslint-config-next: 13.4.12
-      eslint-config-prettier: 8.10.0
+      eslint-config-prettier: 9.0.0
       eslint-plugin-prettier: 5.0.0
       execa: 7.2.0
       nx: 16.6.0
@@ -33,8 +33,8 @@ importers:
       cpy: 9.0.1
       eslint: 8.46.0
       eslint-config-next: 13.4.12_7haavtekmro7ptbnqmctjaodju
-      eslint-config-prettier: 8.10.0_eslint@8.46.0
-      eslint-plugin-prettier: 5.0.0_rf3kezplza5whgc2p4poou6lq4
+      eslint-config-prettier: 9.0.0_eslint@8.46.0
+      eslint-plugin-prettier: 5.0.0_v7ww2umqmngbt27l75aa33feo4
       execa: 7.2.0
       nx: 16.6.0
       prettier: 3.0.1
@@ -3401,8 +3401,8 @@ packages:
       - supports-color
     dev: true
 
-  /eslint-config-prettier/8.10.0_eslint@8.46.0:
-    resolution: {integrity: sha512-SM8AMJdeQqRYT9O9zguiruQZaN7+z+E4eAP9oiLNGKMtomwaB1E9dcgUD6ZAn/eQAb52USbvezbiljfZUhbJcg==}
+  /eslint-config-prettier/9.0.0_eslint@8.46.0:
+    resolution: {integrity: sha512-IcJsTkJae2S35pRsRAwoCE+925rJJStOdkKnLVgtE+tEpqU0EVVM7OqrwxqgptKdX29NUwC82I5pXsGFIgSevw==}
     hasBin: true
     peerDependencies:
       eslint: '>=7.0.0'
@@ -3564,7 +3564,7 @@ packages:
       semver: 6.3.1
     dev: true
 
-  /eslint-plugin-prettier/5.0.0_rf3kezplza5whgc2p4poou6lq4:
+  /eslint-plugin-prettier/5.0.0_v7ww2umqmngbt27l75aa33feo4:
     resolution: {integrity: sha512-AgaZCVuYDXHUGxj/ZGu1u8H8CYgDY3iG6w5kUFw4AzMVXzB7VvbKgYR4nATIN+OvUrghMbiDLeimVjVY5ilq3w==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
@@ -3579,7 +3579,7 @@ packages:
         optional: true
     dependencies:
       eslint: 8.46.0
-      eslint-config-prettier: 8.10.0_eslint@8.46.0
+      eslint-config-prettier: 9.0.0_eslint@8.46.0
       prettier: 3.0.1
       prettier-linter-helpers: 1.0.0
       synckit: 0.8.5
@@ -4143,9 +4143,10 @@ packages:
       fs.realpath: 1.0.0
       inflight: 1.0.6
       inherits: 2.0.4
-      minimatch: 3.0.5
+      minimatch: 3.1.2
       once: 1.4.0
       path-is-absolute: 1.0.1
+    dev: true
 
   /glob/7.1.6:
     resolution: {integrity: sha512-LwaxwyZ72Lk7vZINtNNrywX0ZuLyStrdDtabefZKAY5ZGJhVtgdznluResxNmPitE0SAO+O26sWTHeKSI2wMBA==}
@@ -5804,6 +5805,7 @@ packages:
     resolution: {integrity: sha512-tUpxzX0VAzJHjLu0xUfFv1gwVp9ba3IOuRAVH2EGuRW8a5emA2FlACLqiT/lDVtS1W+TGNwqz3sWaNyLgDJWuw==}
     dependencies:
       brace-expansion: 1.1.11
+    dev: true
 
   /minimatch/3.1.2:
     resolution: {integrity: sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==}
@@ -7044,7 +7046,7 @@ packages:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
     hasBin: true
     dependencies:
-      glob: 7.1.4
+      glob: 7.2.3
 
   /rimraf/5.0.1:
     resolution: {integrity: sha512-OfFZdwtd3lZ+XZzYP/6gTACubwFcHdLRqS9UX3UwpU2dnGQYkPFISRwvM3w9IiB2w7bW5qGo/uAwE4SmXXSKvg==}
