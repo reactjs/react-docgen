@@ -110,7 +110,7 @@ importers:
       '@codemirror/view': 6.16.0
       '@headlessui/react': 1.7.16
       '@popperjs/core': 2.11.8
-      '@types/react': 18.2.18
+      '@types/react': 18.2.19
       '@types/react-dom': 18.2.7
       '@uiw/react-codemirror': 4.21.9
       clsx: 2.0.0
@@ -130,7 +130,7 @@ importers:
       '@codemirror/view': 6.16.0
       '@headlessui/react': 1.7.16_biqbaboplfbrettd7655fr4n2y
       '@popperjs/core': 2.11.8
-      '@types/react': 18.2.18
+      '@types/react': 18.2.19
       '@types/react-dom': 18.2.7
       '@uiw/react-codemirror': 4.21.9_br77bc7n2l5hol6gaffumqnkbe
       clsx: 2.0.0
@@ -1058,7 +1058,7 @@ packages:
       react: '>=16'
     dependencies:
       '@types/mdx': 2.0.5
-      '@types/react': 18.2.18
+      '@types/react': 18.2.19
       react: 18.2.0
     dev: false
 
@@ -1603,11 +1603,11 @@ packages:
   /@types/react-dom/18.2.7:
     resolution: {integrity: sha512-GRaAEriuT4zp9N4p1i8BDBYmEyfo+xQ3yHjJU4eiK5NDa1RmUZG+unZABUTK4/Ox/M+GaHwb6Ow8rUITrtjszA==}
     dependencies:
-      '@types/react': 18.2.18
+      '@types/react': 18.2.19
     dev: false
 
-  /@types/react/18.2.18:
-    resolution: {integrity: sha512-da4NTSeBv/P34xoZPhtcLkmZuJ+oYaCxHmyHzwaDQo9RQPBeXV+06gEk2FpqEcsX9XrnNLvRpVh6bdavDSjtiQ==}
+  /@types/react/18.2.19:
+    resolution: {integrity: sha512-e2S8wmY1ePfM517PqCG80CcE48Xs5k0pwJzuDZsfE8IZRRBfOMCF+XqnFxu6mWtyivum1MQm4aco+WIt6Coimw==}
     dependencies:
       '@types/prop-types': 15.7.5
       '@types/scheduler': 0.16.3
