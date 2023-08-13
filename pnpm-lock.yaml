@@ -116,8 +116,8 @@ importers:
       clsx: 2.0.0
       next: 13.4.13
       next-themes: 0.2.1
-      nextra: 2.10.0
-      nextra-theme-docs: 2.10.0
+      nextra: 2.11.0
+      nextra-theme-docs: 2.11.0
       postcss: 8.4.27
       postcss-lightningcss: 0.9.0
       react: 18.2.0
@@ -136,8 +136,8 @@ importers:
       clsx: 2.0.0
       next: 13.4.13_biqbaboplfbrettd7655fr4n2y
       next-themes: 0.2.1_7bxrc77cqw5efxjm7xsv6oi4pi
-      nextra: 2.10.0_7bxrc77cqw5efxjm7xsv6oi4pi
-      nextra-theme-docs: 2.10.0_m44juqhstgkefwfchy7t3fqxma
+      nextra: 2.11.0_7bxrc77cqw5efxjm7xsv6oi4pi
+      nextra-theme-docs: 2.11.0_gvxsmvhvsdsdjap2z4434bhvny
       postcss: 8.4.27
       postcss-lightningcss: 0.9.0_postcss@8.4.27
       react: 18.2.0
@@ -2456,11 +2456,6 @@ packages:
     resolution: {integrity: sha512-JQHZ2QMW6l3aH/j6xCqQThY/9OH4D/9ls34cgkUBiEeocRTU04tHfKPBsUK1PqZCUQM7GiA0IIXJSuXHI64Kbg==}
     engines: {node: '>=0.8'}
     dev: true
-
-  /clsx/1.2.1:
-    resolution: {integrity: sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==}
-    engines: {node: '>=6'}
-    dev: false
 
   /clsx/2.0.0:
     resolution: {integrity: sha512-rQ1+kcj+ttHG0MKVGBUXwayCCF1oh39BF5COIpRzuCEv8Mwjv0XucrI2ExNTOn9IlLifGClWQcU9BrZORvtw6Q==}
@@ -5910,17 +5905,18 @@ packages:
       - babel-plugin-macros
     dev: false
 
-  /nextra-theme-docs/2.10.0_m44juqhstgkefwfchy7t3fqxma:
-    resolution: {integrity: sha512-uXoqRoewbu0JoqQ1m67aIztWe9/nEhcSeHMimhLxZghKZxkYN0kTR5y5jmrwOHRPuJUTLL2YFwy1rvWJIZS2lw==}
+  /nextra-theme-docs/2.11.0_gvxsmvhvsdsdjap2z4434bhvny:
+    resolution: {integrity: sha512-kNBVNB/NPW/3MI8Em7KFWjfX5Mtf5xY0UPhDveF5+aEvVUlrViS8Q0hfAdcbxq+0sUEc0hdr4KehU4H36cCkqg==}
     peerDependencies:
       next: '>=9.5.3'
-      nextra: 2.10.0
+      nextra: 2.11.0
       react: '>=16.13.1'
       react-dom: '>=16.13.1'
     dependencies:
       '@headlessui/react': 1.7.16_biqbaboplfbrettd7655fr4n2y
       '@popperjs/core': 2.11.8
-      clsx: 1.2.1
+      clsx: 2.0.0
+      escape-string-regexp: 5.0.0
       flexsearch: 0.7.31
       focus-visible: 5.2.0
       git-url-parse: 13.1.0
@@ -5929,15 +5925,15 @@ packages:
       next: 13.4.13_biqbaboplfbrettd7655fr4n2y
       next-seo: 6.1.0_7bxrc77cqw5efxjm7xsv6oi4pi
       next-themes: 0.2.1_7bxrc77cqw5efxjm7xsv6oi4pi
-      nextra: 2.10.0_7bxrc77cqw5efxjm7xsv6oi4pi
+      nextra: 2.11.0_7bxrc77cqw5efxjm7xsv6oi4pi
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       scroll-into-view-if-needed: 3.0.10
       zod: 3.21.4
     dev: false
 
-  /nextra/2.10.0_7bxrc77cqw5efxjm7xsv6oi4pi:
-    resolution: {integrity: sha512-euv93UnWpdth8slMRJLqMrWvCCzR/VTVH6DPrn1JW7hZS03c2lzG2q+fsiYULGiy/kFyysmlxd4Nx5KGB1Txwg==}
+  /nextra/2.11.0_7bxrc77cqw5efxjm7xsv6oi4pi:
+    resolution: {integrity: sha512-I9F+NYl5fMBG6HUdPAvD6SbH3lpAvBeOmkS2Hkk+Cn3r8Ouc/QgLmJfpBXmG3gVFFxqYs2eQ2w/ppIivLLdylg==}
     engines: {node: '>=16'}
     peerDependencies:
       next: '>=9.5.3'
@@ -5950,7 +5946,7 @@ packages:
       '@napi-rs/simple-git': 0.1.8
       '@theguild/remark-mermaid': 0.0.4_react@18.2.0
       '@theguild/remark-npm2yarn': 0.1.1
-      clsx: 1.2.1
+      clsx: 2.0.0
       github-slugger: 2.0.0
       graceful-fs: 4.2.11
       gray-matter: 4.0.3
