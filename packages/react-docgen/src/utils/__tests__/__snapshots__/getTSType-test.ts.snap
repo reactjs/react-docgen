@@ -283,6 +283,52 @@ exports[`getTSType > detects function signature type with \`this\` parameter 1`]
 }
 `;
 
+exports[`getTSType > detects function signature type with object and array pattern 1`] = `
+{
+  "name": "signature",
+  "raw": "({ x }: { x: number }, [ f,s ]: Array<string>) => boolean",
+  "signature": {
+    "arguments": [
+      {
+        "name": "",
+        "type": {
+          "name": "signature",
+          "raw": "{ x: number }",
+          "signature": {
+            "properties": [
+              {
+                "key": "x",
+                "value": {
+                  "name": "number",
+                  "required": true,
+                },
+              },
+            ],
+          },
+          "type": "object",
+        },
+      },
+      {
+        "name": "",
+        "type": {
+          "elements": [
+            {
+              "name": "string",
+            },
+          ],
+          "name": "Array",
+          "raw": "Array<string>",
+        },
+      },
+    ],
+    "return": {
+      "name": "boolean",
+    },
+  },
+  "type": "function",
+}
+`;
+
 exports[`getTSType > detects function type with subtype 1`] = `
 {
   "elements": [
