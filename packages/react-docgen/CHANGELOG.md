@@ -1,5 +1,14 @@
 # Release Notes
 
+## 6.0.3
+
+### Patch Changes
+
+- [#830](https://github.com/reactjs/react-docgen/pull/830)
+  [`c3c16e3`](https://github.com/reactjs/react-docgen/commit/c3c16e30ad4cffa7304543ff4bef9b4f13a05683)
+  Thanks [@danez](https://github.com/danez)! - Fixed error with object and array
+  patterns in function signatures.
+
 ## 6.0.2
 
 ### Patch Changes
