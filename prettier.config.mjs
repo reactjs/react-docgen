@@ -1,11 +1,9 @@
-'use strict';
-
-module.exports = {
+export default {
   arrowParens: 'always',
   trailingComma: 'all',
   useTabs: false,
   printWidth: 80,
   proseWrap: 'always',
   singleQuote: true,
-  plugins: [require('prettier-plugin-tailwindcss')],
+  plugins: ['prettier-plugin-tailwindcss'],
 };
