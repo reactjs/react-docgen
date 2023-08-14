@@ -33,7 +33,6 @@ import type {
   TSTypeOperator,
   Identifier,
   TSTypeParameterDeclaration,
-  RestElement,
   TypeScript,
   TSQualifiedName,
   TSLiteralType,
@@ -357,8 +356,8 @@ function handleTSFunctionType(
 
         return;
       }
-    } else {
-      const restArgument = (param as NodePath<RestElement>).get('argument');
+    } else if (param.isRestElement()) {
+      const restArgument = param.get('argument');
 
       if (restArgument.isIdentifier()) {
         arg.name = restArgument.node.name;

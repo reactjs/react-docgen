@@ -296,6 +296,14 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
+  test('detects function signature type with object and array pattern', () => {
+    const typePath = typeAlias(
+      'let x: ({ x }: { x: number }, [ f,s ]: Array<string>) => boolean;',
+    );
+
+    expect(getTSType(typePath)).toMatchSnapshot();
+  });
+
   test('detects callable signature type', () => {
     const typePath = typeAlias(
       'let x: { (str: string): string, token: string };',
