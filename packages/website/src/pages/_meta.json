@@ -16,6 +16,16 @@
   },
   "users": {
     "title": "Users",
-    "type": "page"
+    "type": "page",
+    "theme": {
+      "typesetting": "article"
+    }
+  },
+  "about": {
+    "title": "About",
+    "type": "page",
+    "theme": {
+      "typesetting": "article"
+    }
   }
 }
