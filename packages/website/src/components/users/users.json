@@ -24,6 +24,12 @@
     "category": "oss"
   },
   {
+    "name": "Instructure UI",
+    "url": "https://instructure.design/",
+    "logo": "instructure.svg",
+    "category": "oss"
+  },
+  {
     "name": "Facebook",
     "url": "https://www.facebook.com/",
     "logo": "facebook.svg",
