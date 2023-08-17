@@ -14,7 +14,7 @@
     "@codemirror/lang-javascript": "6.1.9",
     "@codemirror/lang-json": "6.0.1",
     "@codemirror/view": "6.16.0",
-    "@headlessui/react": "1.7.16",
+    "@headlessui/react": "1.7.17",
     "@popperjs/core": "2.11.8",
     "@types/react": "18.2.20",
     "@types/react-dom": "18.2.7",

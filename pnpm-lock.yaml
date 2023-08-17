@@ -108,7 +108,7 @@ importers:
       '@codemirror/lang-javascript': 6.1.9
       '@codemirror/lang-json': 6.0.1
       '@codemirror/view': 6.16.0
-      '@headlessui/react': 1.7.16
+      '@headlessui/react': 1.7.17
       '@popperjs/core': 2.11.8
       '@types/react': 18.2.20
       '@types/react-dom': 18.2.7
@@ -128,7 +128,7 @@ importers:
       '@codemirror/lang-javascript': 6.1.9
       '@codemirror/lang-json': 6.0.1
       '@codemirror/view': 6.16.0
-      '@headlessui/react': 1.7.16_biqbaboplfbrettd7655fr4n2y
+      '@headlessui/react': 1.7.17_biqbaboplfbrettd7655fr4n2y
       '@popperjs/core': 2.11.8
       '@types/react': 18.2.20
       '@types/react-dom': 18.2.7
@@ -893,8 +893,8 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
-  /@headlessui/react/1.7.16_biqbaboplfbrettd7655fr4n2y:
-    resolution: {integrity: sha512-2MphIAZdSUacZBT6EXk8AJkj+EuvaaJbtCyHTJrPsz8inhzCl7qeNPI1uk1AUvCgWylVtdN8cVVmnhUDPxPy3g==}
+  /@headlessui/react/1.7.17_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-4am+tzvkqDSSgiwrsEpGWqgGo9dz8qU5M3znCkC4PgkpY4HcCZzEDEvozltGGGHIKl9jbXbZPSH5TWn4sWJdow==}
     engines: {node: '>=10'}
     peerDependencies:
       react: ^16 || ^17 || ^18
@@ -5903,7 +5903,7 @@ packages:
       react: '>=16.13.1'
       react-dom: '>=16.13.1'
     dependencies:
-      '@headlessui/react': 1.7.16_biqbaboplfbrettd7655fr4n2y
+      '@headlessui/react': 1.7.17_biqbaboplfbrettd7655fr4n2y
       '@popperjs/core': 2.11.8
       clsx: 2.0.0
       escape-string-regexp: 5.0.0
@@ -5930,7 +5930,7 @@ packages:
       react: '>=16.13.1'
       react-dom: '>=16.13.1'
     dependencies:
-      '@headlessui/react': 1.7.16_biqbaboplfbrettd7655fr4n2y
+      '@headlessui/react': 1.7.17_biqbaboplfbrettd7655fr4n2y
       '@mdx-js/mdx': 2.3.0
       '@mdx-js/react': 2.3.0_react@18.2.0
       '@napi-rs/simple-git': 0.1.8
