@@ -116,8 +116,8 @@ importers:
       clsx: 2.0.0
       next: 13.4.19
       next-themes: 0.2.1
-      nextra: 2.11.0
-      nextra-theme-docs: 2.11.0
+      nextra: 2.11.1
+      nextra-theme-docs: 2.11.1
       postcss: 8.4.28
       postcss-lightningcss: 0.9.0
       react: 18.2.0
@@ -136,8 +136,8 @@ importers:
       clsx: 2.0.0
       next: 13.4.19_biqbaboplfbrettd7655fr4n2y
       next-themes: 0.2.1_m2l4knchnqa6bzxbbtfxlzoxdy
-      nextra: 2.11.0_m2l4knchnqa6bzxbbtfxlzoxdy
-      nextra-theme-docs: 2.11.0_5xmvealsfknljqu44cmioakvky
+      nextra: 2.11.1_m2l4knchnqa6bzxbbtfxlzoxdy
+      nextra-theme-docs: 2.11.1_h2wfrmqsozdvgp3kxwbquuugsm
       postcss: 8.4.28
       postcss-lightningcss: 0.9.0_postcss@8.4.28
       react: 18.2.0
@@ -5895,11 +5895,11 @@ packages:
       - babel-plugin-macros
     dev: false
 
-  /nextra-theme-docs/2.11.0_5xmvealsfknljqu44cmioakvky:
-    resolution: {integrity: sha512-kNBVNB/NPW/3MI8Em7KFWjfX5Mtf5xY0UPhDveF5+aEvVUlrViS8Q0hfAdcbxq+0sUEc0hdr4KehU4H36cCkqg==}
+  /nextra-theme-docs/2.11.1_h2wfrmqsozdvgp3kxwbquuugsm:
+    resolution: {integrity: sha512-tMgoD9mqLBgZqZiZTcnw5UgBtXfTWfKK0qa233sTxpZSR7CquK+BH1D4ADdJ/mXOndqCBowJ4r3tyfQovXIlzQ==}
     peerDependencies:
       next: '>=9.5.3'
-      nextra: 2.11.0
+      nextra: 2.11.1
       react: '>=16.13.1'
       react-dom: '>=16.13.1'
     dependencies:
@@ -5915,15 +5915,15 @@ packages:
       next: 13.4.19_biqbaboplfbrettd7655fr4n2y
       next-seo: 6.1.0_m2l4knchnqa6bzxbbtfxlzoxdy
       next-themes: 0.2.1_m2l4knchnqa6bzxbbtfxlzoxdy
-      nextra: 2.11.0_m2l4knchnqa6bzxbbtfxlzoxdy
+      nextra: 2.11.1_m2l4knchnqa6bzxbbtfxlzoxdy
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       scroll-into-view-if-needed: 3.0.10
       zod: 3.21.4
     dev: false
 
-  /nextra/2.11.0_m2l4knchnqa6bzxbbtfxlzoxdy:
-    resolution: {integrity: sha512-I9F+NYl5fMBG6HUdPAvD6SbH3lpAvBeOmkS2Hkk+Cn3r8Ouc/QgLmJfpBXmG3gVFFxqYs2eQ2w/ppIivLLdylg==}
+  /nextra/2.11.1_m2l4knchnqa6bzxbbtfxlzoxdy:
+    resolution: {integrity: sha512-m+Ykev+S9Fmx7NSvVxjYFbDuFtKNV6ypnoKz+KH6WCHZor7o81LaWNyIX3RXg24GssFbVpa4sz68JAr76GZ4Sw==}
     engines: {node: '>=16'}
     peerDependencies:
       next: '>=9.5.3'
