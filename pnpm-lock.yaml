@@ -67,7 +67,7 @@ importers:
       '@babel/types': ^7.18.9
       '@types/babel__core': ^7.18.0
       '@types/babel__traverse': ^7.18.0
-      '@types/doctrine': ^0.0.5
+      '@types/doctrine': ^0.0.6
       '@types/resolve': ^1.20.2
       doctrine: ^3.0.0
       resolve: ^1.22.1
@@ -78,7 +78,7 @@ importers:
       '@babel/types': 7.22.10
       '@types/babel__core': 7.20.1
       '@types/babel__traverse': 7.20.1
-      '@types/doctrine': 0.0.5
+      '@types/doctrine': 0.0.6
       '@types/resolve': 1.20.2
       doctrine: 3.0.0
       resolve: 1.22.4
@@ -1515,6 +1515,10 @@ packages:
 
   /@types/doctrine/0.0.5:
     resolution: {integrity: sha512-JJwEeFy8Sl9ctiugU4h4DGN9hCB47oyhUkM2H8g8xZr4tHTEXtmV4U6krKrU8Ng0S7RlG/J7fkta1rGu3pq+YQ==}
+    dev: false
+
+  /@types/doctrine/0.0.6:
+    resolution: {integrity: sha512-KlEqPtaNBHBJ2/fVA4yLdD0Tc8zw34pKU4K5SHBIEwtLJ8xxumIC1xeG+4S+/9qhVj2MqC7O3Ld8WvDG4HqlgA==}
     dev: false
 
   /@types/estree-jsx/1.0.0:
