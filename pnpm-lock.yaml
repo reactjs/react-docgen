@@ -105,7 +105,7 @@ importers:
 
   packages/website:
     specifiers:
-      '@codemirror/lang-javascript': 6.1.9
+      '@codemirror/lang-javascript': 6.2.0
       '@codemirror/lang-json': 6.0.1
       '@codemirror/view': 6.16.0
       '@headlessui/react': 1.7.17
@@ -125,7 +125,7 @@ importers:
       react-dom: 18.2.0
       tailwindcss: 3.3.3
     dependencies:
-      '@codemirror/lang-javascript': 6.1.9
+      '@codemirror/lang-javascript': 6.2.0
       '@codemirror/lang-json': 6.0.1
       '@codemirror/view': 6.16.0
       '@headlessui/react': 1.7.17_biqbaboplfbrettd7655fr4n2y
@@ -591,8 +591,8 @@ packages:
       '@lezer/common': 1.0.4
     dev: false
 
-  /@codemirror/lang-javascript/6.1.9:
-    resolution: {integrity: sha512-z3jdkcqOEBT2txn2a87A0jSy6Te3679wg/U8QzMeftFt+4KA6QooMwfdFzJiuC3L6fXKfTXZcDocoaxMYfGz0w==}
+  /@codemirror/lang-javascript/6.2.0:
+    resolution: {integrity: sha512-E01GVTFTDSiXyrnHq+NwGxr/BqvNoAFRp1Wz+C6v2nU8rzjF0lHy7WG8kLCGowNyuk6YgfcmfuXHNxlLXgqQqQ==}
     dependencies:
       '@codemirror/autocomplete': 6.9.0_5nj6yw3sgqekqxbezgibdtkguy
       '@codemirror/language': 6.9.0
