@@ -4,7 +4,7 @@
     "declaration": true,
     "lib": ["es2020"],
     "target": "es2020",
-    "module": "es2020",
+    "module": "node16",
     "strict": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
