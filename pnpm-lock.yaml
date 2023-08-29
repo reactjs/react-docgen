@@ -112,7 +112,7 @@ importers:
       '@popperjs/core': 2.11.8
       '@types/react': 18.2.21
       '@types/react-dom': 18.2.7
-      '@uiw/react-codemirror': 4.21.11
+      '@uiw/react-codemirror': 4.21.12
       clsx: 2.0.0
       next: 13.4.19
       next-themes: 0.2.1
@@ -132,7 +132,7 @@ importers:
       '@popperjs/core': 2.11.8
       '@types/react': 18.2.21
       '@types/react-dom': 18.2.7
-      '@uiw/react-codemirror': 4.21.11_cqwpd3lm43m2bgrhjd453tghkq
+      '@uiw/react-codemirror': 4.21.12_cqwpd3lm43m2bgrhjd453tghkq
       clsx: 2.0.0
       next: 13.4.19_biqbaboplfbrettd7655fr4n2y
       next-themes: 0.2.1_m2l4knchnqa6bzxbbtfxlzoxdy
@@ -1776,8 +1776,8 @@ packages:
       eslint-visitor-keys: 3.4.3
     dev: true
 
-  /@uiw/codemirror-extensions-basic-setup/4.21.11_xbqtnoyxk6oxzs3stlyobzpweq:
-    resolution: {integrity: sha512-Axamsi5wMmojElW/l5Nxe0Z70+DXzJ5BXnaa2qkJKmHK4Ab1Wxztu6aHIHZTQGvjjD8klNYi2oBitq1dT0SW8A==}
+  /@uiw/codemirror-extensions-basic-setup/4.21.12_xbqtnoyxk6oxzs3stlyobzpweq:
+    resolution: {integrity: sha512-LNAr5ZmKjo9KpnoVhnAiXkRsI+l9JrIrUPc3+GjpbTi8k9QjEcs8y3MFvhA2le7bbf6q1gHh2UbLmn6le0cGjQ==}
     peerDependencies:
       '@codemirror/autocomplete': '>=6.0.0'
       '@codemirror/commands': '>=6.0.0'
@@ -1796,8 +1796,8 @@ packages:
       '@codemirror/view': 6.17.0
     dev: false
 
-  /@uiw/react-codemirror/4.21.11_cqwpd3lm43m2bgrhjd453tghkq:
-    resolution: {integrity: sha512-eiD7gkIkIHNmisb/lB9dKuR+NEZ37ZDHtMIGgYTp7cUUB7MaJU9D7LFB9i5SBhaips74tW3jn1kRE2D7JsvWUA==}
+  /@uiw/react-codemirror/4.21.12_cqwpd3lm43m2bgrhjd453tghkq:
+    resolution: {integrity: sha512-dgPhw2QLcXMe004UU8b8P0Y6Zu+AKoGXbioLF2dY2/wLeMWSXCCbKo/BKJGj/skoO/lBJ4X+b+14OGuZ5Uyeaw==}
     peerDependencies:
       '@babel/runtime': '>=7.11.0'
       '@codemirror/state': '>=6.0.0'
@@ -1812,7 +1812,7 @@ packages:
       '@codemirror/state': 6.2.1
       '@codemirror/theme-one-dark': 6.1.2
       '@codemirror/view': 6.17.0
-      '@uiw/codemirror-extensions-basic-setup': 4.21.11_xbqtnoyxk6oxzs3stlyobzpweq
+      '@uiw/codemirror-extensions-basic-setup': 4.21.12_xbqtnoyxk6oxzs3stlyobzpweq
       codemirror: 6.0.1_@lezer+common@1.0.4
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
