@@ -134,6 +134,20 @@ exports[`getFlowType > handles ObjectTypeSpreadProperty from imported types 1`] 
 }
 `;
 
+exports[`getFlowType > handles indexed access on alias 1`] = `
+{
+  "name": "string",
+  "raw": "A[\\"x\\"]",
+}
+`;
+
+exports[`getFlowType > handles indexed access on interface 1`] = `
+{
+  "name": "A[\\"x\\"]",
+  "raw": "A[\\"x\\"]",
+}
+`;
+
 exports[`getFlowType > handles nested ObjectTypeSpreadProperty 1`] = `
 {
   "name": "signature",
