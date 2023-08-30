@@ -1,5 +1,14 @@
 # Release Notes
 
+## 6.0.4
+
+### Patch Changes
+
+- [#838](https://github.com/reactjs/react-docgen/pull/838)
+  [`8ba9ac7`](https://github.com/reactjs/react-docgen/commit/8ba9ac74279c74f06803773a1dc5acc50376b5f3)
+  Thanks [@danez](https://github.com/danez)! - Support index types correctly in
+  flow
+
 ## 6.0.3
 
 ### Patch Changes
