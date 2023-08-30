@@ -8,6 +8,7 @@ import getTypeParameters from '../utils/getTypeParameters.js';
 import type {
   ElementsType,
   FunctionSignatureType,
+  LiteralType,
   ObjectSignatureType,
   SimpleType,
   TypeDescriptor,
@@ -20,6 +21,7 @@ import type {
   FunctionTypeAnnotation,
   GenericTypeAnnotation,
   Identifier,
+  IndexedAccessType,
   InterfaceDeclaration,
   IntersectionTypeAnnotation,
   Node,
@@ -69,6 +71,7 @@ const namedTypes: Record<
   IntersectionTypeAnnotation: handleIntersectionTypeAnnotation,
   TupleTypeAnnotation: handleTupleTypeAnnotation,
   TypeofTypeAnnotation: handleTypeofTypeAnnotation,
+  IndexedAccessType: handleIndexedAccessType,
 };
 
 function getFlowTypeWithRequirements(
@@ -411,6 +414,44 @@ function handleTypeofTypeAnnotation(
   typeParams: TypeParameters | null,
 ): TypeDescriptor {
   return getFlowTypeWithResolvedTypes(path.get('argument'), typeParams);
+}
+
+function handleIndexedAccessType(
+  path: NodePath<IndexedAccessType>,
+  typeParams: TypeParameters | null,
+): SimpleType {
+  const objectType = getFlowTypeWithResolvedTypes(
+    path.get('objectType'),
+    typeParams,
+  ) as ObjectSignatureType<FunctionSignatureType>;
+  const indexType = getFlowTypeWithResolvedTypes(
+    path.get('indexType'),
+    typeParams,
+  ) as LiteralType;
+
+  // We only get the signature if the objectType is a type (vs interface)
+  if (!objectType.signature) {
+    return {
+      name: `${objectType.name}[${
+        indexType.value ? indexType.value.toString() : indexType.name
+      }]`,
+      raw: printValue(path),
+    };
+  }
+
+  const resolvedType = objectType.signature.properties.find((p) => {
+    // indexType.value = "'foo'"
+    return indexType.value && p.key === indexType.value.replace(/['"]+/g, '');
+  });
+
+  if (!resolvedType) {
+    return { name: 'unknown' };
+  }
+
+  return {
+    name: resolvedType.value.name,
+    raw: printValue(path),
+  };
 }
 
 let visitedTypes: Record<string, TypeDescriptor | boolean> = {};

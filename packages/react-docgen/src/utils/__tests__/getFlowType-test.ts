@@ -1686,4 +1686,40 @@ describe('getFlowType', () => {
 
     expect(getFlowType(typePath)).toMatchSnapshot();
   });
+
+  test('handles indexed access on interface', () => {
+    const typePath = (
+      parse
+        .statement<VariableDeclaration>(
+          `
+      var x: A["x"] = 2;
+      interface A { x: string };
+    `,
+        )
+        .get('declarations')[0]
+        .get('id') as NodePath<Identifier>
+    )
+      .get('typeAnnotation')
+      .get('typeAnnotation') as NodePath<FlowType>;
+
+    expect(getFlowType(typePath)).toMatchSnapshot();
+  });
+
+  test('handles indexed access on alias', () => {
+    const typePath = (
+      parse
+        .statement<VariableDeclaration>(
+          `
+      var x: A["x"] = 2;
+      type A = { x: string };
+    `,
+        )
+        .get('declarations')[0]
+        .get('id') as NodePath<Identifier>
+    )
+      .get('typeAnnotation')
+      .get('typeAnnotation') as NodePath<FlowType>;
+
+    expect(getFlowType(typePath)).toMatchSnapshot();
+  });
 });
