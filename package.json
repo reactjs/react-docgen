@@ -18,7 +18,7 @@
   "devDependencies": {
     "@changesets/changelog-github": "0.4.8",
     "@changesets/cli": "2.26.2",
-    "@types/node": "14.18.57",
+    "@types/node": "14.18.58",
     "@typescript-eslint/eslint-plugin": "6.5.0",
     "@typescript-eslint/parser": "6.5.0",
     "@vitest/coverage-v8": "0.34.3",
