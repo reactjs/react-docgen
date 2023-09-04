@@ -4109,7 +4109,7 @@ packages:
     hasBin: true
     dependencies:
       foreground-child: 3.1.1
-      jackspeak: 2.3.1
+      jackspeak: 2.3.3
       minimatch: 9.0.3
       minipass: 7.0.3
       path-scurry: 1.10.1
@@ -4884,8 +4884,8 @@ packages:
       reflect.getprototypeof: 1.0.4
     dev: true
 
-  /jackspeak/2.3.1:
-    resolution: {integrity: sha512-4iSY3Bh1Htv+kLhiiZunUhQ+OYXIn0ze3ulq8JeWrFKmhPAJSySV2+kdtRh2pGcCeF0s6oR8Oc+pYZynJj4t8A==}
+  /jackspeak/2.3.3:
+    resolution: {integrity: sha512-R2bUw+kVZFS/h1AZqBKrSgDmdmjApzgY0AlCPumopFiAlbUxE2gf+SCuBzQ0cP5hHmUmFYF5yw55T97Th5Kstg==}
     engines: {node: '>=14'}
     dependencies:
       '@isaacs/cliui': 8.0.2
