@@ -53,7 +53,7 @@ jobs:
 
       - name: Upload coverage to Codecov
         if: '${{ matrix.node == env.NODE_VERSION }}'
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
 
   lint:
     name: Lint
