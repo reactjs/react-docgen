@@ -1,0 +1,118 @@
+import type {
+  ArrowFunctionExpression,
+  ClassDeclaration,
+  VariableDeclaration,
+} from '@babel/types';
+import { parse, parseTypescript } from '../../../tests/utils';
+import getTypeFromReactComponent from '../getTypeFromReactComponent.js';
+import { describe, expect, test } from 'vitest';
+import type { NodePath } from '@babel/traverse';
+
+describe('getTypeFromReactComponent', () => {
+  test('handles no stateless props', () => {
+    const path = parseTypescript
+      .statementLast<VariableDeclaration>(`const x = () => {}`)
+      .get('declarations')[0]
+      .get('init') as NodePath<ArrowFunctionExpression>;
+
+    expect(getTypeFromReactComponent(path)).toMatchSnapshot();
+  });
+
+  test('handles no class props', () => {
+    const path = parseTypescript.statementLast<ClassDeclaration>(
+      `import React from 'react';
+       class X extends React.Component {
+         render() {}
+       }`,
+    );
+
+    expect(getTypeFromReactComponent(path)).toMatchSnapshot();
+  });
+
+  describe('TypeScript', () => {
+    describe('stateless', () => {
+      test('finds param type annotation', () => {
+        const path = parseTypescript
+          .statementLast<VariableDeclaration>(`const x = (props: Props) => {}`)
+          .get('declarations')[0]
+          .get('init') as NodePath<ArrowFunctionExpression>;
+
+        expect(getTypeFromReactComponent(path)).toMatchSnapshot();
+      });
+    });
+
+    describe('classes', () => {
+      test('finds props type in params', () => {
+        const path = parseTypescript.statementLast<ClassDeclaration>(
+          `import React from 'react';
+             class X extends React.Component<Props, State> {
+               render() {}
+             }`,
+        );
+
+        expect(getTypeFromReactComponent(path)).toMatchSnapshot();
+      });
+
+      test('finds props type in properties', () => {
+        const path = parseTypescript.statementLast<ClassDeclaration>(
+          `import React from 'react';
+           class X extends React.Component {
+             props: Props;
+             render() {}
+           }`,
+        );
+
+        expect(getTypeFromReactComponent(path)).toMatchSnapshot();
+      });
+    });
+  });
+
+  describe('Flow', () => {
+    describe('stateless', () => {
+      test('finds param type annotation', () => {
+        const path = parse
+          .statementLast<VariableDeclaration>(`const x = (props: Props) => {}`)
+          .get('declarations')[0]
+          .get('init') as NodePath<ArrowFunctionExpression>;
+
+        expect(getTypeFromReactComponent(path)).toMatchSnapshot();
+      });
+    });
+
+    describe('classes', () => {
+      test('finds props type in new params', () => {
+        const path = parse.statementLast<ClassDeclaration>(
+          `import React from 'react';
+             class X extends React.Component<Props, State> {
+               render() {}
+             }`,
+        );
+
+        expect(getTypeFromReactComponent(path)).toMatchSnapshot();
+      });
+
+      test('finds props type in old params', () => {
+        const path = parse.statementLast<ClassDeclaration>(
+          `import React from 'react';
+             class X extends React.Component<DefaultProps, Props, State> {
+               render() {}
+             }`,
+        );
+
+        expect(getTypeFromReactComponent(path)).toMatchSnapshot();
+      });
+
+      test('finds props type in properties', () => {
+        const path = parse.statementLast<ClassDeclaration>(
+          `import React from 'react';
+           class X extends React.Component {
+             props: Props;
+             render() {}
+           }`,
+        );
+
+        expect(getTypeFromReactComponent(path)).toMatchSnapshot();
+      });
+    });
+  });
+});
