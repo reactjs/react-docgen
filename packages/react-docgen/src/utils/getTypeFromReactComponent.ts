@@ -27,7 +27,7 @@ import getTypeIdentifier from './getTypeIdentifier.js';
 function getStatelessPropsPath(
   componentDefinition: NodePath,
 ): NodePath | undefined {
-  let value = resolveToValue(componentDefinition);
+  let value = componentDefinition;
 
   if (isReactForwardRefCall(value)) {
     value = resolveToValue(value.get('arguments')[0]!);
@@ -40,7 +40,7 @@ function getStatelessPropsPath(
 
 /**
  * Given an React component (stateless or class) tries to find the
- * flow type for the props. If not found or not one of the supported
+ * flow or TS type for the props. If not found or not one of the supported
  * component types returns null.
  */
 export default (path: NodePath): NodePath | null => {

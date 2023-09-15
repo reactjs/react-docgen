@@ -1,0 +1,79 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`getTypeFromReactComponent > Flow > classes > finds props type in new params 1`] = `
+Node {
+  "id": Node {
+    "name": "Props",
+    "type": "Identifier",
+  },
+  "type": "GenericTypeAnnotation",
+  "typeParameters": null,
+}
+`;
+
+exports[`getTypeFromReactComponent > Flow > classes > finds props type in old params 1`] = `
+Node {
+  "id": Node {
+    "name": "Props",
+    "type": "Identifier",
+  },
+  "type": "GenericTypeAnnotation",
+  "typeParameters": null,
+}
+`;
+
+exports[`getTypeFromReactComponent > Flow > classes > finds props type in properties 1`] = `
+Node {
+  "id": Node {
+    "name": "Props",
+    "type": "Identifier",
+  },
+  "type": "GenericTypeAnnotation",
+  "typeParameters": null,
+}
+`;
+
+exports[`getTypeFromReactComponent > Flow > stateless > finds param type annotation 1`] = `
+Node {
+  "id": Node {
+    "name": "Props",
+    "type": "Identifier",
+  },
+  "type": "GenericTypeAnnotation",
+  "typeParameters": null,
+}
+`;
+
+exports[`getTypeFromReactComponent > TypeScript > classes > finds props type in params 1`] = `
+Node {
+  "type": "TSTypeReference",
+  "typeName": Node {
+    "name": "Props",
+    "type": "Identifier",
+  },
+}
+`;
+
+exports[`getTypeFromReactComponent > TypeScript > classes > finds props type in properties 1`] = `
+Node {
+  "type": "TSTypeReference",
+  "typeName": Node {
+    "name": "Props",
+    "type": "Identifier",
+  },
+}
+`;
+
+exports[`getTypeFromReactComponent > TypeScript > stateless > finds param type annotation 1`] = `
+Node {
+  "type": "TSTypeReference",
+  "typeName": Node {
+    "name": "Props",
+    "type": "Identifier",
+  },
+}
+`;
+
+exports[`getTypeFromReactComponent > handles no class props 1`] = `null`;
+
+exports[`getTypeFromReactComponent > handles no stateless props 1`] = `null`;
