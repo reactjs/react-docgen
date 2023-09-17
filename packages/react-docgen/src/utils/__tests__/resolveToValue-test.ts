@@ -157,7 +157,7 @@ describe('resolveToValue', () => {
       );
       const value = resolveToValue(path);
 
-      expect(value.node.type).toBe('ImportDeclaration');
+      expect(value.node.type).toBe('ImportDefaultSpecifier');
     });
 
     test('resolves unresolvable named import references to the import declaration', () => {
@@ -166,7 +166,7 @@ describe('resolveToValue', () => {
       );
       const value = resolveToValue(path);
 
-      expect(value.node.type).toBe('ImportDeclaration');
+      expect(value.node.type).toBe('ImportSpecifier');
     });
 
     test('resolves unresolvable aliased import references to the import declaration', () => {
@@ -175,7 +175,7 @@ describe('resolveToValue', () => {
       );
       const value = resolveToValue(path);
 
-      expect(value.node.type).toBe('ImportDeclaration');
+      expect(value.node.type).toBe('ImportSpecifier');
     });
 
     test('resolves unresolvable namespace import references to the import declaration', () => {
@@ -184,7 +184,7 @@ describe('resolveToValue', () => {
       );
       const value = resolveToValue(path);
 
-      expect(value.node.type).toBe('ImportDeclaration');
+      expect(value.node.type).toBe('ImportNamespaceSpecifier');
     });
 
     test('resolves namespace import references to the import declaration', () => {
