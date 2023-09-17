@@ -8,6 +8,7 @@ import isReactModuleName from './isReactModuleName.js';
 import resolveToModule from './resolveToModule.js';
 import resolveToValue from './resolveToValue.js';
 import isDestructuringAssignment from './isDestructuringAssignment.js';
+import isImportSpecifier from './isImportSpecifier.js';
 
 function isRenderMethod(path: NodePath): boolean {
   if (
@@ -35,19 +36,24 @@ function classExtendsReactComponent(path: NodePath): boolean {
     const property = path.get('property');
 
     if (
-      !property.isIdentifier({ name: 'Component' }) &&
-      !property.isIdentifier({ name: 'PureComponent' })
+      property.isIdentifier({ name: 'Component' }) ||
+      property.isIdentifier({ name: 'PureComponent' })
     ) {
-      return false;
+      return true;
     }
   } else if (
-    !isDestructuringAssignment(path, 'Component') &&
-    !isDestructuringAssignment(path, 'PureComponent')
+    isImportSpecifier(path, 'Component') ||
+    isImportSpecifier(path, 'PureComponent')
   ) {
-    return false;
+    return true;
+  } else if (
+    isDestructuringAssignment(path, 'Component') ||
+    isDestructuringAssignment(path, 'PureComponent')
+  ) {
+    return true;
   }
 
-  return true;
+  return false;
 }
 
 /**
@@ -58,11 +64,6 @@ export default function isReactComponentClass(
   path: NodePath,
 ): path is NodePath<ClassDeclaration | ClassExpression> {
   if (!path.isClass()) {
-    return false;
-  }
-
-  // extends something
-  if (!path.node.superClass) {
     return false;
   }
 
@@ -79,6 +80,9 @@ export default function isReactComponentClass(
         return true;
       }
     }
+  } else {
+    // does not extend anything
+    return false;
   }
 
   // render method
