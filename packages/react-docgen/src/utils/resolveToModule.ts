@@ -32,8 +32,8 @@ export default function resolveToModule(path: NodePath): string | null {
     }
   } else if (path.isObjectProperty() || path.isObjectPattern()) {
     return resolveToModule(path.parentPath);
-  } else if (path.isImportDeclaration()) {
-    return path.node.source.value;
+  } else if (path.parentPath?.isImportDeclaration()) {
+    return path.parentPath.node.source.value;
   } else if (path.isMemberExpression()) {
     path = getMemberExpressionRoot(path);
 

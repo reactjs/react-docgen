@@ -188,11 +188,17 @@ export default function resolveToValue(path: NodePath): NodePath {
           return resolveToValue(memberPath);
         }
       }
-    } else if (resolved.isImportDeclaration() && resolved.node.specifiers) {
+    } else if (
+      resolved.isImportSpecifier() ||
+      resolved.isImportDefaultSpecifier() ||
+      resolved.isImportNamespaceSpecifier()
+    ) {
+      const declaration = resolved.parentPath as NodePath<ImportDeclaration>;
+
       // Handle references to namespace imports, e.g. import * as foo from 'bar'.
       // Try to find a specifier that matches the root of the member expression, and
       // find the export that matches the property name.
-      for (const specifier of resolved.get('specifiers')) {
+      for (const specifier of declaration.get('specifiers')) {
         const property = path.get('property');
         let propertyName: string | undefined;
 
@@ -206,7 +212,7 @@ export default function resolveToValue(path: NodePath): NodePath {
           propertyName &&
           specifier.node.local.name === root.node.name
         ) {
-          const resolvedPath = path.hub.import(resolved, propertyName);
+          const resolvedPath = path.hub.import(declaration, propertyName);
 
           if (resolvedPath) {
             return resolveToValue(resolvedPath);
@@ -214,13 +220,6 @@ export default function resolveToValue(path: NodePath): NodePath {
         }
       }
     }
-  } else if (
-    path.isImportDefaultSpecifier() ||
-    path.isImportNamespaceSpecifier() ||
-    path.isImportSpecifier()
-  ) {
-    // go up to the import declaration
-    return path.parentPath;
   } else if (
     path.isTypeCastExpression() ||
     path.isTSAsExpression() ||

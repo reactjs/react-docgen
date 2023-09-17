@@ -38,7 +38,7 @@ function getDefaultValue(path: NodePath): DefaultValueDescriptor | null {
     } else {
       resolvedPath = resolveToValue(path);
     }
-    if (resolvedPath.isImportDeclaration() && path.isIdentifier()) {
+    if (resolvedPath.parentPath?.isImportDeclaration() && path.isIdentifier()) {
       defaultValue = path.node.name;
     } else {
       valuePath = resolvedPath;
