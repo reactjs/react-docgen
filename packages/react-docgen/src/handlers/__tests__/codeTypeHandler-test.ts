@@ -1,8 +1,9 @@
-import { parse, makeMockImporter } from '../../../tests/utils';
+import { parse, makeMockImporter, parseTypescript } from '../../../tests/utils';
 import DocumentationBuilder from '../../Documentation';
 import codeTypeHandler from '../codeTypeHandler.js';
 import type DocumentationMock from '../../__mocks__/Documentation';
 import type {
+  VariableDeclaration,
   ArrowFunctionExpression,
   CallExpression,
   ClassDeclaration,
@@ -14,10 +15,6 @@ import type { ComponentNode } from '../../resolver';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
 vi.mock('../../Documentation.js');
-vi.mock('../../utils/getFlowType.js', () => ({
-  default: () => ({}),
-  __esModule: true,
-}));
 
 describe('codeTypeHandler', () => {
   let documentation: DocumentationBuilder & DocumentationMock;
@@ -67,23 +64,7 @@ describe('codeTypeHandler', () => {
 
       codeTypeHandler(documentation, definition);
 
-      expect(documentation.descriptors).toEqual({
-        foo: {
-          flowType: {},
-          required: true,
-          description: '',
-        },
-        bar: {
-          flowType: {},
-          required: true,
-          description: '',
-        },
-        hal: {
-          flowType: {},
-          required: true,
-          description: '',
-        },
-      });
+      expect(documentation.descriptors).toMatchSnapshot();
     });
 
     test('detects whether a prop is required', () => {
@@ -97,18 +78,7 @@ describe('codeTypeHandler', () => {
 
       codeTypeHandler(documentation, definition);
 
-      expect(documentation.descriptors).toEqual({
-        foo: {
-          flowType: {},
-          required: true,
-          description: '',
-        },
-        bar: {
-          flowType: {},
-          required: false,
-          description: '',
-        },
-      });
+      expect(documentation.descriptors).toMatchSnapshot();
     });
 
     test('ignores hash map entry', () => {
@@ -136,18 +106,7 @@ describe('codeTypeHandler', () => {
 
       codeTypeHandler(documentation, definition);
 
-      expect(documentation.descriptors).toEqual({
-        foo: {
-          flowType: {},
-          required: true,
-          description: '',
-        },
-        bar: {
-          flowType: {},
-          required: true,
-          description: '',
-        },
-      });
+      expect(documentation.descriptors).toMatchSnapshot();
     });
 
     test('detects intersection types', () => {
@@ -160,13 +119,7 @@ describe('codeTypeHandler', () => {
 
       codeTypeHandler(documentation, definition);
 
-      expect(documentation.descriptors).toEqual({
-        foo: {
-          flowType: {},
-          required: true,
-          description: '',
-        },
-      });
+      expect(documentation.descriptors).toMatchSnapshot();
     });
 
     describe('special generic type annotations', () => {
@@ -182,22 +135,19 @@ describe('codeTypeHandler', () => {
 
           codeTypeHandler(documentation, definition);
 
-          expect(documentation.descriptors).toEqual({
-            foo: {
-              flowType: {},
-              required: true,
-              description: '',
-            },
-          });
+          expect(documentation.descriptors).toMatchSnapshot();
         });
       });
     });
   }
 
-  describe('TypeAlias', () => {
-    describe('class definition for flow <0.53', () => {
+  describe.each([
+    ['flow', parse],
+    ['ts', parseTypescript],
+  ])('TypeAlias (%s)', (name, parseFunc) => {
+    describe.runIf(name === 'flow')('class definition for flow <0.53', () => {
       testCodeTypeHandler((propTypesSrc) =>
-        parse.statement(
+        parseFunc.statement(
           template(
             'class Foo extends Component<void, Props, void> {}',
             propTypesSrc,
@@ -206,17 +156,17 @@ describe('codeTypeHandler', () => {
       );
     });
 
-    describe('class definition for flow >=0.53 without State', () => {
+    describe('class definition without State', () => {
       testCodeTypeHandler((propTypesSrc) =>
-        parse.statement(
+        parseFunc.statement(
           template('class Foo extends Component<Props> {}', propTypesSrc),
         ),
       );
     });
 
-    describe('class definition for flow >=0.53 with State', () => {
+    describe('class definition with State', () => {
       testCodeTypeHandler((propTypesSrc) =>
-        parse.statement(
+        parseFunc.statement(
           template(
             'class Foo extends Component<Props, State> {}',
             propTypesSrc,
@@ -227,7 +177,7 @@ describe('codeTypeHandler', () => {
 
     describe('class definition with inline props', () => {
       testCodeTypeHandler((propTypesSrc) =>
-        parse.statement(
+        parseFunc.statement(
           template(
             'class Foo extends Component { props: Props; }',
             propTypesSrc,
@@ -239,14 +189,29 @@ describe('codeTypeHandler', () => {
     describe('stateless component', () => {
       testCodeTypeHandler(
         (propTypesSrc) =>
-          parse
-            .statement(template('(props: Props) => <div />;', propTypesSrc))
+          parseFunc
+            .statement(template('(props: Props) => null;', propTypesSrc))
             .get('expression') as NodePath<ArrowFunctionExpression>,
+      );
+    });
+
+    describe.runIf(name === 'ts')('stateless TS component with Type', () => {
+      testCodeTypeHandler(
+        (propTypesSrc) =>
+          parseFunc
+            .statement(
+              template(
+                'const MyComponent:React.FC<Props> = (props) => null;',
+                propTypesSrc,
+              ),
+            )
+            .get('declarations')[0]
+            .get('init') as NodePath<ArrowFunctionExpression>,
       );
     });
   });
 
-  describe('does not error if flowTypes cannot be found', () => {
+  test('does not error if flowTypes cannot be found', () => {
     test('ObjectExpression', () => {
       const definition = parse.expression<ObjectExpression>('{fooBar: 42}');
 
@@ -281,13 +246,7 @@ describe('codeTypeHandler', () => {
 
     codeTypeHandler(documentation, definition);
 
-    expect(documentation.descriptors).toEqual({
-      foo: {
-        flowType: {},
-        required: true,
-        description: '',
-      },
-    });
+    expect(documentation.descriptors).toMatchSnapshot();
   });
 
   test('does support utility types inline', () => {
@@ -416,13 +375,7 @@ describe('codeTypeHandler', () => {
       `;
 
       codeTypeHandler(documentation, parse.expressionLast<CallExpression>(src));
-      expect(documentation.descriptors).toEqual({
-        foo: {
-          flowType: {},
-          required: true,
-          description: '',
-        },
-      });
+      expect(documentation.descriptors).toMatchSnapshot();
     });
 
     test('resolves when the function is not inline', () => {
@@ -434,13 +387,7 @@ describe('codeTypeHandler', () => {
       `;
 
       codeTypeHandler(documentation, parse.expressionLast<CallExpression>(src));
-      expect(documentation.descriptors).toEqual({
-        foo: {
-          flowType: {},
-          required: true,
-          description: '',
-        },
-      });
+      expect(documentation.descriptors).toMatchSnapshot();
     });
 
     test('resolves when the function is rebound and not inline', () => {
@@ -455,13 +402,45 @@ describe('codeTypeHandler', () => {
         documentation,
         parse.expressionLast(src).get('right') as NodePath<CallExpression>,
       );
-      expect(documentation.descriptors).toEqual({
-        foo: {
-          flowType: {},
-          required: true,
-          description: '',
-        },
-      });
+      expect(documentation.descriptors).toMatchSnapshot();
     });
+  });
+
+  test('stateless TS component with 2 definitions', () => {
+    const definition = parseTypescript
+      .statement<VariableDeclaration>(
+        `
+      const MyComponent: React.FC<{ additional: boolean }> = (props: Props) => null;
+      var React = require('React');
+      var Component = React.Component;
+
+      type Props = { bar: number };
+    `,
+      )
+      .get('declarations')[0]
+      .get('init') as NodePath<ArrowFunctionExpression>;
+
+    codeTypeHandler(documentation, definition);
+
+    expect(documentation.descriptors).toMatchSnapshot();
+  });
+
+  test('stateless TS component and variable type takes precedence', () => {
+    const definition = parseTypescript
+      .statement<VariableDeclaration>(
+        `
+      const MyComponent: React.FC<{ foo: string }> = (props: Props) => null;
+      var React = require('React');
+      var Component = React.Component;
+
+      type Props = { foo: number };
+    `,
+      )
+      .get('declarations')[0]
+      .get('init') as NodePath<ArrowFunctionExpression>;
+
+    codeTypeHandler(documentation, definition);
+
+    expect(documentation.descriptors).toMatchSnapshot();
   });
 });

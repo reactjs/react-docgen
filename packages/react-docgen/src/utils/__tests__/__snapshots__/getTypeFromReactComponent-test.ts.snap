@@ -1,79 +1,263 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`getTypeFromReactComponent > Flow > classes > finds props type in new params 1`] = `
-Node {
-  "id": Node {
-    "name": "Props",
-    "type": "Identifier",
+[
+  Node {
+    "id": Node {
+      "name": "Props",
+      "type": "Identifier",
+    },
+    "type": "GenericTypeAnnotation",
+    "typeParameters": null,
   },
-  "type": "GenericTypeAnnotation",
-  "typeParameters": null,
-}
+]
 `;
 
 exports[`getTypeFromReactComponent > Flow > classes > finds props type in old params 1`] = `
-Node {
-  "id": Node {
-    "name": "Props",
-    "type": "Identifier",
+[
+  Node {
+    "id": Node {
+      "name": "Props",
+      "type": "Identifier",
+    },
+    "type": "GenericTypeAnnotation",
+    "typeParameters": null,
   },
-  "type": "GenericTypeAnnotation",
-  "typeParameters": null,
-}
+]
 `;
 
 exports[`getTypeFromReactComponent > Flow > classes > finds props type in properties 1`] = `
-Node {
-  "id": Node {
-    "name": "Props",
-    "type": "Identifier",
+[
+  Node {
+    "id": Node {
+      "name": "Props",
+      "type": "Identifier",
+    },
+    "type": "GenericTypeAnnotation",
+    "typeParameters": null,
   },
-  "type": "GenericTypeAnnotation",
-  "typeParameters": null,
-}
+]
+`;
+
+exports[`getTypeFromReactComponent > Flow > stateless > finds param inline type 1`] = `
+[
+  Node {
+    "callProperties": [],
+    "exact": false,
+    "indexers": [],
+    "inexact": false,
+    "internalSlots": [],
+    "properties": [
+      Node {
+        "key": Node {
+          "name": "prop",
+          "type": "Identifier",
+        },
+        "kind": "init",
+        "method": false,
+        "optional": false,
+        "proto": false,
+        "static": false,
+        "type": "ObjectTypeProperty",
+        "value": Node {
+          "type": "StringTypeAnnotation",
+        },
+        "variance": null,
+      },
+    ],
+    "type": "ObjectTypeAnnotation",
+  },
+]
 `;
 
 exports[`getTypeFromReactComponent > Flow > stateless > finds param type annotation 1`] = `
-Node {
-  "id": Node {
-    "name": "Props",
-    "type": "Identifier",
+[
+  Node {
+    "id": Node {
+      "name": "Props",
+      "type": "Identifier",
+    },
+    "type": "GenericTypeAnnotation",
+    "typeParameters": null,
   },
-  "type": "GenericTypeAnnotation",
-  "typeParameters": null,
-}
+]
 `;
 
 exports[`getTypeFromReactComponent > TypeScript > classes > finds props type in params 1`] = `
-Node {
-  "type": "TSTypeReference",
-  "typeName": Node {
-    "name": "Props",
-    "type": "Identifier",
+[
+  Node {
+    "type": "TSTypeReference",
+    "typeName": Node {
+      "name": "Props",
+      "type": "Identifier",
+    },
   },
-}
+]
 `;
 
 exports[`getTypeFromReactComponent > TypeScript > classes > finds props type in properties 1`] = `
-Node {
-  "type": "TSTypeReference",
-  "typeName": Node {
-    "name": "Props",
-    "type": "Identifier",
+[
+  Node {
+    "type": "TSTypeReference",
+    "typeName": Node {
+      "name": "Props",
+      "type": "Identifier",
+    },
   },
-}
+]
+`;
+
+exports[`getTypeFromReactComponent > TypeScript > stateless > finds multiple variable type annotation 1`] = `
+[
+  Node {
+    "type": "TSTypeReference",
+    "typeName": Node {
+      "name": "Props",
+      "type": "Identifier",
+    },
+  },
+  Node {
+    "type": "TSTypeReference",
+    "typeName": Node {
+      "name": "Props",
+      "type": "Identifier",
+    },
+  },
+]
+`;
+
+exports[`getTypeFromReactComponent > TypeScript > stateless > finds param inline type 1`] = `
+[
+  Node {
+    "members": [
+      Node {
+        "computed": false,
+        "key": Node {
+          "name": "prop",
+          "type": "Identifier",
+        },
+        "type": "TSPropertySignature",
+        "typeAnnotation": Node {
+          "type": "TSTypeAnnotation",
+          "typeAnnotation": Node {
+            "type": "TSStringKeyword",
+          },
+        },
+      },
+    ],
+    "type": "TSTypeLiteral",
+  },
+]
 `;
 
 exports[`getTypeFromReactComponent > TypeScript > stateless > finds param type annotation 1`] = `
-Node {
-  "type": "TSTypeReference",
-  "typeName": Node {
-    "name": "Props",
-    "type": "Identifier",
+[
+  Node {
+    "type": "TSTypeReference",
+    "typeName": Node {
+      "name": "Props",
+      "type": "Identifier",
+    },
   },
-}
+]
 `;
 
-exports[`getTypeFromReactComponent > handles no class props 1`] = `null`;
+exports[`getTypeFromReactComponent > TypeScript > stateless > finds variable type annotation (FC) > with MemberExpression 1`] = `
+[
+  Node {
+    "type": "TSTypeReference",
+    "typeName": Node {
+      "name": "Props",
+      "type": "Identifier",
+    },
+  },
+]
+`;
 
-exports[`getTypeFromReactComponent > handles no stateless props 1`] = `null`;
+exports[`getTypeFromReactComponent > TypeScript > stateless > finds variable type annotation (FC) > with named import 1`] = `
+[
+  Node {
+    "type": "TSTypeReference",
+    "typeName": Node {
+      "name": "Props",
+      "type": "Identifier",
+    },
+  },
+]
+`;
+
+exports[`getTypeFromReactComponent > TypeScript > stateless > finds variable type annotation (FunctionComponent) > with MemberExpression 1`] = `
+[
+  Node {
+    "type": "TSTypeReference",
+    "typeName": Node {
+      "name": "Props",
+      "type": "Identifier",
+    },
+  },
+]
+`;
+
+exports[`getTypeFromReactComponent > TypeScript > stateless > finds variable type annotation (FunctionComponent) > with named import 1`] = `
+[
+  Node {
+    "type": "TSTypeReference",
+    "typeName": Node {
+      "name": "Props",
+      "type": "Identifier",
+    },
+  },
+]
+`;
+
+exports[`getTypeFromReactComponent > TypeScript > stateless > finds variable type annotation (VFC) > with MemberExpression 1`] = `
+[
+  Node {
+    "type": "TSTypeReference",
+    "typeName": Node {
+      "name": "Props",
+      "type": "Identifier",
+    },
+  },
+]
+`;
+
+exports[`getTypeFromReactComponent > TypeScript > stateless > finds variable type annotation (VFC) > with named import 1`] = `
+[
+  Node {
+    "type": "TSTypeReference",
+    "typeName": Node {
+      "name": "Props",
+      "type": "Identifier",
+    },
+  },
+]
+`;
+
+exports[`getTypeFromReactComponent > TypeScript > stateless > finds variable type annotation (VoidFunctionComponent) > with MemberExpression 1`] = `
+[
+  Node {
+    "type": "TSTypeReference",
+    "typeName": Node {
+      "name": "Props",
+      "type": "Identifier",
+    },
+  },
+]
+`;
+
+exports[`getTypeFromReactComponent > TypeScript > stateless > finds variable type annotation (VoidFunctionComponent) > with named import 1`] = `
+[
+  Node {
+    "type": "TSTypeReference",
+    "typeName": Node {
+      "name": "Props",
+      "type": "Identifier",
+    },
+  },
+]
+`;
+
+exports[`getTypeFromReactComponent > handles no class props 1`] = `[]`;
+
+exports[`getTypeFromReactComponent > handles no stateless props 1`] = `[]`;
