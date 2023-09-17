@@ -39,6 +39,60 @@ describe('getTypeFromReactComponent', () => {
 
         expect(getTypeFromReactComponent(path)).toMatchSnapshot();
       });
+
+      test('finds param inline type', () => {
+        const path = parseTypescript
+          .statementLast<VariableDeclaration>(
+            `const x = (props: { prop: string }) => {}`,
+          )
+          .get('declarations')[0]
+          .get('init') as NodePath<ArrowFunctionExpression>;
+
+        expect(getTypeFromReactComponent(path)).toMatchSnapshot();
+      });
+
+      describe.each([
+        'FunctionComponent',
+        'FC',
+        'VoidFunctionComponent',
+        'VFC',
+      ])('finds variable type annotation (%s)', (name) => {
+        test('with MemberExpression', () => {
+          const path = parseTypescript
+            .statementLast<VariableDeclaration>(
+              `import React from 'react';
+               const x: React.${name}<Props> = (props) => {}`,
+            )
+            .get('declarations')[0]
+            .get('init') as NodePath<ArrowFunctionExpression>;
+
+          expect(getTypeFromReactComponent(path)).toMatchSnapshot();
+        });
+
+        test('with named import', () => {
+          const path = parseTypescript
+            .statementLast<VariableDeclaration>(
+              `import { ${name} } from 'react';
+               const x: ${name}<Props> = (props) => {}`,
+            )
+            .get('declarations')[0]
+            .get('init') as NodePath<ArrowFunctionExpression>;
+
+          expect(getTypeFromReactComponent(path)).toMatchSnapshot();
+        });
+      });
+
+      test('finds multiple variable type annotation', () => {
+        const path = parseTypescript
+          .statementLast<VariableDeclaration>(
+            `import React from 'react';
+             const x: React.FC<Props> = (props: Props) => {}`,
+          )
+          .get('declarations')[0]
+          .get('init') as NodePath<ArrowFunctionExpression>;
+
+        expect(getTypeFromReactComponent(path)).toMatchSnapshot();
+      });
     });
 
     describe('classes', () => {
@@ -72,6 +126,17 @@ describe('getTypeFromReactComponent', () => {
       test('finds param type annotation', () => {
         const path = parse
           .statementLast<VariableDeclaration>(`const x = (props: Props) => {}`)
+          .get('declarations')[0]
+          .get('init') as NodePath<ArrowFunctionExpression>;
+
+        expect(getTypeFromReactComponent(path)).toMatchSnapshot();
+      });
+
+      test('finds param inline type', () => {
+        const path = parse
+          .statementLast<VariableDeclaration>(
+            `const x = (props: { prop: string }) => {}`,
+          )
           .get('declarations')[0]
           .get('init') as NodePath<ArrowFunctionExpression>;
 

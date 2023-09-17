@@ -106,20 +106,22 @@ const codeTypeHandler: Handler = function (
   documentation: Documentation,
   componentDefinition: NodePath<ComponentNode>,
 ): void {
-  const typesPath = getTypeFromReactComponent(componentDefinition);
+  const typePaths = getTypeFromReactComponent(componentDefinition);
 
-  if (!typesPath) {
+  if (typePaths.length === 0) {
     return;
   }
 
-  applyToTypeProperties(
-    documentation,
-    typesPath,
-    (propertyPath, typeParams) => {
-      setPropDescriptor(documentation, propertyPath, typeParams);
-    },
-    null,
-  );
+  for (const typePath of typePaths) {
+    applyToTypeProperties(
+      documentation,
+      typePath,
+      (propertyPath, typeParams) => {
+        setPropDescriptor(documentation, propertyPath, typeParams);
+      },
+      null,
+    );
+  }
 };
 
 export default codeTypeHandler;
