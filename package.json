@@ -22,7 +22,7 @@
     "@typescript-eslint/eslint-plugin": "6.7.0",
     "@typescript-eslint/parser": "6.7.0",
     "@vitest/coverage-v8": "0.34.4",
-    "cpy": "9.0.1",
+    "cpy": "10.1.0",
     "eslint": "8.49.0",
     "eslint-config-next": "13.4.19",
     "eslint-config-prettier": "9.0.0",
