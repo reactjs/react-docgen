@@ -1,8 +1,8 @@
 {
   "private": true,
   "engines": {
-    "node": ">=14.18.0",
-    "pnpm": ">=7.33.1"
+    "node": ">=16.13.0",
+    "pnpm": ">=8.7.5"
   },
   "scripts": {
     "build": "nx run-many --target=build --exclude='@react-docgen-internal/*'",
@@ -36,5 +36,5 @@
     "typescript": "5.2.2",
     "vitest": "0.34.4"
   },
-  "packageManager": "pnpm@7.33.6"
+  "packageManager": "pnpm@8.7.5"
 }
