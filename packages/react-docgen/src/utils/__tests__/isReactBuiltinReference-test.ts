@@ -1,5 +1,4 @@
 import type {
-  GenericTypeAnnotation,
   Identifier,
   MemberExpression,
   QualifiedTypeIdentifier,
@@ -11,7 +10,7 @@ import type {
 import { parse, parseTypescript } from '../../../tests/utils';
 import isReactBuiltinReference from '../isReactBuiltinReference.js';
 import { describe, expect, test } from 'vitest';
-import { NodePath } from '@babel/traverse';
+import type { NodePath } from '@babel/traverse';
 
 describe('isReactBuiltinReference', () => {
   describe('Commonjs require', () => {
