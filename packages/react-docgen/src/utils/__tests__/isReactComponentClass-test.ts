@@ -31,23 +31,25 @@ describe('isReactComponentClass', () => {
     });
 
     test('ignores static render methods', () => {
-      const def = parse.statement('class Foo { static render() {}}');
+      const def = parse.statement('class Foo extends X { static render() {}}');
 
       expect(isReactComponentClass(def)).toBe(false);
     });
 
     test('ignores dynamic render methods', () => {
-      const def = parse.statement('class Foo { static [render]() {}}');
+      const def = parse.statement(
+        'class Foo extends X { static [render]() {}}',
+      );
 
       expect(isReactComponentClass(def)).toBe(false);
     });
 
     test('ignores getter or setter render methods', () => {
-      let def = parse.statement('class Foo { get render() {}}');
+      let def = parse.statement('class Foo extends X { get render() {}}');
 
       expect(isReactComponentClass(def)).toBe(false);
 
-      def = parse.statement('class Foo { set render(value) {}}');
+      def = parse.statement('class Foo extends X { set render(value) {}}');
       expect(isReactComponentClass(def)).toBe(false);
     });
   });
@@ -81,6 +83,33 @@ describe('isReactComponentClass', () => {
         var { Component } = require('react');
         var C = Component;
         class Foo extends C {}
+      `);
+
+      expect(isReactComponentClass(def)).toBe(true);
+    });
+
+    test('resolves the super class reference with named import', () => {
+      const def = parse.statementLast(`
+        import { Component } from 'react';
+        class Foo extends Component {}
+      `);
+
+      expect(isReactComponentClass(def)).toBe(true);
+    });
+
+    test('resolves the super class reference with default import', () => {
+      const def = parse.statementLast(`
+        import React from 'react';
+        class Foo extends React.Component {}
+      `);
+
+      expect(isReactComponentClass(def)).toBe(true);
+    });
+
+    test('resolves the super class reference with namespace import', () => {
+      const def = parse.statementLast(`
+        import * as React from 'react';
+        class Foo extends React.Component {}
       `);
 
       expect(isReactComponentClass(def)).toBe(true);
