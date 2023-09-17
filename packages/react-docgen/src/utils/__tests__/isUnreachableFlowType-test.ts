@@ -1,4 +1,4 @@
-import { ImportDeclaration } from '@babel/types';
+import type { ImportDeclaration } from '@babel/types';
 import { parse } from '../../../tests/utils';
 import isUnreachableFlowType from '../isUnreachableFlowType.js';
 import { describe, expect, test } from 'vitest';
