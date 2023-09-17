@@ -16,7 +16,7 @@ jobs:
   tests:
     strategy:
       matrix:
-        node: ['14.18.0', '16', '18', '20']
+        node: ['16.14.0', '18', '20']
         os: ['ubuntu']
         include:
           - os: macos

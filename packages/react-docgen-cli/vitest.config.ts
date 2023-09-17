@@ -12,7 +12,4 @@ export default defineConfig({
       include: ['no-coverage'],
     },
   },
-  esbuild: {
-    target: 'node14.18.0',
-  },
 });

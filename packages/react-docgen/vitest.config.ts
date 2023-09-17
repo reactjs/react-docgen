@@ -15,7 +15,4 @@ export default defineConfig({
       reporter: ['text', 'lcov'],
     },
   },
-  esbuild: {
-    target: 'node14.18.0',
-  },
 });
