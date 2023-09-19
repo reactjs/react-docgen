@@ -190,8 +190,8 @@ importers:
         specifier: 8.4.30
         version: 8.4.30
       postcss-lightningcss:
-        specifier: 0.9.0
-        version: 0.9.0(postcss@8.4.30)
+        specifier: 1.0.0
+        version: 1.0.0(postcss@8.4.30)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -6758,9 +6758,9 @@ packages:
       postcss: 8.4.30
     dev: false
 
-  /postcss-lightningcss@0.9.0(postcss@8.4.30):
-    resolution: {integrity: sha512-Qfmei+Pq31AJUkqcF53s08VWhMIbCYvgsuFyEk0urnm6O5kA4C1/utnSNEKPTAzXx4Fm/IwK/1zFDRUjDGn+KQ==}
-    engines: {node: ^14.13.0 || >=15.0.0, npm: '>=7.0.0'}
+  /postcss-lightningcss@1.0.0(postcss@8.4.30):
+    resolution: {integrity: sha512-sLNRVh+DINZHf5b31KUZnv3w4sf/CEdmvYP5JWzyyB8++E6WdaE7yxsrhfXiUFqISNBXcSrKfAF/MtTZrYAlbg==}
+    engines: {node: ^16.0.0 || ^18.0.0 || >= 20, npm: '>=7.0.0'}
     peerDependencies:
       postcss: ^8.0.0
     dependencies:
