@@ -39,6 +39,6 @@
     "slash": "5.1.0"
   },
   "devDependencies": {
-    "@types/debug": "4.1.8"
+    "@types/debug": "4.1.9"
   }
 }
