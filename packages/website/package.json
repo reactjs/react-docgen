@@ -17,7 +17,7 @@
     "@headlessui/react": "1.7.17",
     "@popperjs/core": "2.11.8",
     "@types/react": "18.2.25",
-    "@types/react-dom": "18.2.10",
+    "@types/react-dom": "18.2.11",
     "@uiw/react-codemirror": "4.21.19",
     "clsx": "2.0.0",
     "next": "13.5.4",
