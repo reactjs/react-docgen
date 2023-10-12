@@ -21,6 +21,42 @@ describe('isReactChildrenElementCall', () => {
 
       expect(isReactChildrenElementCall(def)).toBe(true);
     });
+
+    test('React.Children.only without React', () => {
+      const def = parse.expressionLast(`
+        var Children = require("React").Children;
+        Children.only(() => {});
+      `);
+
+      expect(isReactChildrenElementCall(def)).toBe(true);
+    });
+
+    test('React.Children.only with destructuring', () => {
+      const def = parse.expressionLast(`
+        var { Children } = require("React");
+        Children.only(() => {});
+      `);
+
+      expect(isReactChildrenElementCall(def)).toBe(true);
+    });
+
+    test('React.Children.only with import', () => {
+      const def = parse.expressionLast(`
+        import React from 'react';
+        React.Children.only(() => {});
+      `);
+
+      expect(isReactChildrenElementCall(def)).toBe(true);
+    });
+
+    test('React.Children.only with named import', () => {
+      const def = parse.expressionLast(`
+        import { Children } from 'react';
+        Children.only(() => {});
+      `);
+
+      expect(isReactChildrenElementCall(def)).toBe(true);
+    });
   });
   describe('false', () => {
     test('not call expression', () => {
