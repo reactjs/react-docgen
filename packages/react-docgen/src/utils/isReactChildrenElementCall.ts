@@ -1,7 +1,6 @@
 import type { NodePath } from '@babel/traverse';
-import isReactModuleName from './isReactModuleName.js';
-import resolveToModule from './resolveToModule.js';
 import type { CallExpression } from '@babel/types';
+import isReactBuiltinReference from './isReactBuiltinReference.js';
 
 /**
  * Returns true if the expression is a function call of the form
@@ -16,24 +15,16 @@ export default function isReactChildrenElementCall(
 
   const callee = path.get('callee');
 
-  if (
-    !callee.isMemberExpression() ||
-    (!callee.get('property').isIdentifier({ name: 'only' }) &&
-      !callee.get('property').isIdentifier({ name: 'map' }))
-  ) {
-    return false;
+  if (callee.isMemberExpression()) {
+    const calleeProperty = callee.get('property');
+
+    if (
+      calleeProperty.isIdentifier({ name: 'only' }) ||
+      calleeProperty.isIdentifier({ name: 'map' })
+    ) {
+      return isReactBuiltinReference(callee.get('object'), 'Children');
+    }
   }
 
-  const calleeObj = callee.get('object');
-
-  if (
-    !calleeObj.isMemberExpression() ||
-    !calleeObj.get('property').isIdentifier({ name: 'Children' })
-  ) {
-    return false;
-  }
-
-  const module = resolveToModule(calleeObj);
-
-  return Boolean(module && isReactModuleName(module));
+  return false;
 }
