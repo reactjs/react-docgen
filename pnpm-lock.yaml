@@ -166,8 +166,8 @@ importers:
         specifier: 18.2.29
         version: 18.2.29
       '@types/react-dom':
-        specifier: 18.2.13
-        version: 18.2.13
+        specifier: 18.2.14
+        version: 18.2.14
       '@uiw/react-codemirror':
         specifier: 4.21.20
         version: 4.21.20(@babel/runtime@7.23.2)(@codemirror/autocomplete@6.10.2)(@codemirror/language@6.9.1)(@codemirror/lint@6.4.2)(@codemirror/search@6.5.4)(@codemirror/state@6.3.0)(@codemirror/theme-one-dark@6.1.2)(@codemirror/view@6.21.3)(codemirror@6.0.1)(react-dom@18.2.0)(react@18.2.0)
@@ -1667,8 +1667,8 @@ packages:
     resolution: {integrity: sha512-kMpQpfZKSCBqltAJwskgePRaYRFukDkm1oItcAbC3gNELR20XIBcN9VRgg4+m8DKsTfkWeA4m4Imp4DDuWy7FQ==}
     dev: false
 
-  /@types/react-dom@18.2.13:
-    resolution: {integrity: sha512-eJIUv7rPP+EC45uNYp/ThhSpE16k22VJUknt5OLoH9tbXoi8bMhwLf5xRuWMywamNbWzhrSmU7IBJfPup1+3fw==}
+  /@types/react-dom@18.2.14:
+    resolution: {integrity: sha512-V835xgdSVmyQmI1KLV2BEIUgqEuinxp9O4G6g3FqO/SqLac049E53aysv0oEFD2kHfejeKU+ZqL2bcFWj9gLAQ==}
     dependencies:
       '@types/react': 18.2.29
     dev: false
