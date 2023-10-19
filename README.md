@@ -13,7 +13,8 @@ library allowing using `react-docgen` on the command line.
 For version 5.x please checkout the
 [README.md on the 5.x branch](https://github.com/reactjs/react-docgen/blob/5.x/README.md)
 
-For version 6.x please visit [react-docgen.dev](https://react-docgen.dev)
+For version 6.x and newer please visit
+[react-docgen.dev](https://react-docgen.dev)
 
 ## License
 
