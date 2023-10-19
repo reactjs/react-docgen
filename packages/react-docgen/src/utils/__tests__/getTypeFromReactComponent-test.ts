@@ -40,6 +40,18 @@ describe('getTypeFromReactComponent', () => {
         expect(getTypeFromReactComponent(path)).toMatchSnapshot();
       });
 
+      test('finds wrapped param type annotation', () => {
+        const path = parseTypescript
+          .statementLast<VariableDeclaration>(
+            `import React from 'react';
+             const x = (props: React.PropsWithChildren<Props>) => {}`,
+          )
+          .get('declarations')[0]
+          .get('init') as NodePath<ArrowFunctionExpression>;
+
+        expect(getTypeFromReactComponent(path)).toMatchSnapshot();
+      });
+
       test('finds param inline type', () => {
         const path = parseTypescript
           .statementLast<VariableDeclaration>(

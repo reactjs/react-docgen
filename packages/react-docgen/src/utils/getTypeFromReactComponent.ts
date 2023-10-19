@@ -23,6 +23,7 @@ import type {
 } from '@babel/types';
 import getTypeIdentifier from './getTypeIdentifier.js';
 import isReactBuiltinReference from './isReactBuiltinReference.js';
+import unwrapBuiltinTSPropTypes from './unwrapBuiltinTSPropTypes.js';
 
 // TODO TESTME
 
@@ -62,13 +63,11 @@ function findAssignedVariableType(
       isReactBuiltinReference(typeName, 'VoidFunctionComponent') ||
       isReactBuiltinReference(typeName, 'VFC')
     ) {
-      const typeParameters = typeAnnotation.get(
-        'typeParameters',
-      ) as NodePath<TSTypeParameterInstantiation>;
+      const typeParameters = typeAnnotation.get('typeParameters');
 
-      if (!typeParameters.hasNode()) return null;
-
-      return typeParameters.get('params')[0] ?? null;
+      if (typeParameters.hasNode()) {
+        return typeParameters.get('params')[0] ?? null;
+      }
     }
   }
 
@@ -106,27 +105,25 @@ export default (componentDefinition: NodePath): NodePath[] => {
         typePaths.push(typeAnnotation);
       }
     }
+  } else {
+    const propsParam = getStatelessPropsPath(componentDefinition);
 
-    return typePaths;
-  }
+    if (propsParam) {
+      const typeAnnotation = getTypeAnnotation(propsParam);
 
-  const propsParam = getStatelessPropsPath(componentDefinition);
+      if (typeAnnotation) {
+        typePaths.push(typeAnnotation);
+      }
+    }
 
-  if (propsParam) {
-    const typeAnnotation = getTypeAnnotation(propsParam);
+    const assignedVariableType = findAssignedVariableType(componentDefinition);
 
-    if (typeAnnotation) {
-      typePaths.push(typeAnnotation);
+    if (assignedVariableType) {
+      typePaths.push(assignedVariableType);
     }
   }
 
-  const assignedVariableType = findAssignedVariableType(componentDefinition);
-
-  if (assignedVariableType) {
-    typePaths.push(assignedVariableType);
-  }
-
-  return typePaths;
+  return typePaths.map((typePath) => unwrapBuiltinTSPropTypes(typePath));
 };
 
 export function applyToTypeProperties(
