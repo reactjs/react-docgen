@@ -258,6 +258,18 @@ exports[`getTypeFromReactComponent > TypeScript > stateless > finds variable typ
 ]
 `;
 
+exports[`getTypeFromReactComponent > TypeScript > stateless > finds wrapped param type annotation 1`] = `
+[
+  Node {
+    "type": "TSTypeReference",
+    "typeName": Node {
+      "name": "Props",
+      "type": "Identifier",
+    },
+  },
+]
+`;
+
 exports[`getTypeFromReactComponent > handles no class props 1`] = `[]`;
 
 exports[`getTypeFromReactComponent > handles no stateless props 1`] = `[]`;

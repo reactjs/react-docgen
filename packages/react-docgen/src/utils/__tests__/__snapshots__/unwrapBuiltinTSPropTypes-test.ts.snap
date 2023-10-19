@@ -1,0 +1,71 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`unwrapBuiltinTSPropTypes > React.PropsWithChildren 1`] = `
+Node {
+  "type": "TSTypeReference",
+  "typeName": Node {
+    "name": "Props",
+    "type": "Identifier",
+  },
+}
+`;
+
+exports[`unwrapBuiltinTSPropTypes > React.PropsWithRef 1`] = `
+Node {
+  "type": "TSTypeReference",
+  "typeName": Node {
+    "name": "Props",
+    "type": "Identifier",
+  },
+}
+`;
+
+exports[`unwrapBuiltinTSPropTypes > React.PropsWithoutRef 1`] = `
+Node {
+  "type": "TSTypeReference",
+  "typeName": Node {
+    "name": "Props",
+    "type": "Identifier",
+  },
+}
+`;
+
+exports[`unwrapBuiltinTSPropTypes > does not follow reassignment 1`] = `
+Node {
+  "type": "TSTypeReference",
+  "typeName": Node {
+    "name": "bar",
+    "type": "Identifier",
+  },
+}
+`;
+
+exports[`unwrapBuiltinTSPropTypes > multiple 1`] = `
+Node {
+  "type": "TSTypeReference",
+  "typeName": Node {
+    "name": "Props",
+    "type": "Identifier",
+  },
+}
+`;
+
+exports[`unwrapBuiltinTSPropTypes > with named import 1`] = `
+Node {
+  "type": "TSTypeReference",
+  "typeName": Node {
+    "name": "Props",
+    "type": "Identifier",
+  },
+}
+`;
+
+exports[`unwrapBuiltinTSPropTypes > with require 1`] = `
+Node {
+  "type": "TSTypeReference",
+  "typeName": Node {
+    "name": "Props",
+    "type": "Identifier",
+  },
+}
+`;
