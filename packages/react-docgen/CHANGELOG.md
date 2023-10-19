@@ -1,5 +1,104 @@
 # Release Notes
 
+## 7.0.0
+
+### Major Changes
+
+- [#846](https://github.com/reactjs/react-docgen/pull/846)
+  [`82154c3`](https://github.com/reactjs/react-docgen/commit/82154c3b59bf22acf3068165f87b089138fdf7ae)
+  Thanks [@danez](https://github.com/danez)! - `getTypeFromReactComponent` now
+  returns an array of paths to types instead of just one. This can appear when
+  multiple type definitions are found for a component, for example:
+
+  ```ts
+  const Component: React.FC<Props> = (props: { some: string }) => {};
+  ```
+
+  In this example both the `Props` definition as well as `{ some: string }` are
+  now found and used.
+
+  Here is a simple diff to illustrate the change when using
+  `getTypeFromReactComponent`:
+
+  ```diff
+
+  const type = getTypeFromReactComponent(path)
+
+  -if (type) {
+  +if (type.length > 0) {
+      // do smth
+  }
+
+  ```
+
+- [#848](https://github.com/reactjs/react-docgen/pull/848)
+  [`dda8915`](https://github.com/reactjs/react-docgen/commit/dda8915ce9f8d5065372570d590405f2c2403bd8)
+  Thanks [@danez](https://github.com/danez)! - Drop support for Node.js
+  version 14.
+
+  The minimum supported version is now 16.14.0
+
+- [#846](https://github.com/reactjs/react-docgen/pull/846)
+  [`62e692f`](https://github.com/reactjs/react-docgen/commit/62e692fcca6f3d17dcf81ce72f2db1a95b2d694b)
+  Thanks [@danez](https://github.com/danez)! - `resolveToValue` will not resolve
+  to `ImportDeclaration` anymore but instead to one of the possible specifiers
+  (`ImportSpecifier`, `ImportDefaultSpecifier` or `ImportNamespaceSpecifier`).
+  This gives better understanding to which specifier exactly `resolveToValue`
+  did resolve a NodePath to.
+
+  Here is a possible easy fix for this in a code snippet that uses
+  `resolveToValue`
+
+  ```diff
+  const resolved = resolveToValue(path);
+
+  -if (resolved.isImportDeclaration()) {
+  +if (resolved.parentPath?.isImportDeclaration()) {
+      // do smth
+  }
+  ```
+
+### Minor Changes
+
+- [#862](https://github.com/reactjs/react-docgen/pull/862)
+  [`40ebb00`](https://github.com/reactjs/react-docgen/commit/40ebb0010a7a380f89e0c79a4a937cf9a50a3245)
+  Thanks [@danez](https://github.com/danez)! - Support `PropsWithoutRef`,
+  `PropsWithRef` and `PropsWithChildren` in TypeScript.
+
+  Component props are now detected correctly when these builtin types are used,
+  but they do currently not add any props to the documentation.
+
+- [#846](https://github.com/reactjs/react-docgen/pull/846)
+  [`82154c3`](https://github.com/reactjs/react-docgen/commit/82154c3b59bf22acf3068165f87b089138fdf7ae)
+  Thanks [@danez](https://github.com/danez)! - Add support for `React.FC` in
+  TypeScript.
+
+### Patch Changes
+
+- [`6312f2f`](https://github.com/reactjs/react-docgen/commit/6312f2f47b9f679b5bf923a30855e813193ed4af)
+  Thanks [@renovate[bot]](https://github.com/renovate%5Bbot%5D)! - update
+  dependency @types/doctrine to ^0.0.7
+
+- [#846](https://github.com/reactjs/react-docgen/pull/846)
+  [`c01d1a0`](https://github.com/reactjs/react-docgen/commit/c01d1a00fdba76cea38eebc953fd3d2dd3f12fbd)
+  Thanks [@danez](https://github.com/danez)! - Fix detection of react class
+  components when super class is imported via named import.
+
+- [#861](https://github.com/reactjs/react-docgen/pull/861)
+  [`74b6680`](https://github.com/reactjs/react-docgen/commit/74b6680910037b1b4b64dd57769b652bf775675e)
+  Thanks [@renovate](https://github.com/apps/renovate)! - update dependency
+  @types/doctrine to ^0.0.8
+
+- [#846](https://github.com/reactjs/react-docgen/pull/846)
+  [`0641700`](https://github.com/reactjs/react-docgen/commit/0641700e4425390c0fe50e216a71e5e18322ab3b)
+  Thanks [@danez](https://github.com/danez)! - Remove unnecessary call to
+  `resolveToValue` when trying to find props type from react components.
+
+- [#858](https://github.com/reactjs/react-docgen/pull/858)
+  [`3be404e`](https://github.com/reactjs/react-docgen/commit/3be404eee6c8fc7bd867fea9d1987b7f438107d6)
+  Thanks [@danez](https://github.com/danez)! - Fix detection of React.Children
+  with ESM imports
+
 ## 6.0.4
 
 ### Patch Changes

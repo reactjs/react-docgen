@@ -1,5 +1,42 @@
 # Release Notes
 
+## 2.0.0
+
+### Major Changes
+
+- [#848](https://github.com/reactjs/react-docgen/pull/848)
+  [`dda8915`](https://github.com/reactjs/react-docgen/commit/dda8915ce9f8d5065372570d590405f2c2403bd8)
+  Thanks [@danez](https://github.com/danez)! - Drop support for Node.js
+  version 14.
+
+  The minimum supported version is now 16.14.0
+
+### Minor Changes
+
+- [`b0a46e7`](https://github.com/reactjs/react-docgen/commit/b0a46e7429f2a7449eebeff329753b25ac4226c9)
+  Thanks [@danez](https://github.com/danez)! - update dependency commander to
+  v11
+
+### Patch Changes
+
+- [#859](https://github.com/reactjs/react-docgen/pull/859)
+  [`7dd2264`](https://github.com/reactjs/react-docgen/commit/7dd22646877d9a454f7809de5cbbb72499758916)
+  Thanks [@renovate](https://github.com/apps/renovate)! - update dependency
+  commander to v11.1.0
+
+- Updated dependencies
+  [[`82154c3`](https://github.com/reactjs/react-docgen/commit/82154c3b59bf22acf3068165f87b089138fdf7ae),
+  [`6312f2f`](https://github.com/reactjs/react-docgen/commit/6312f2f47b9f679b5bf923a30855e813193ed4af),
+  [`c01d1a0`](https://github.com/reactjs/react-docgen/commit/c01d1a00fdba76cea38eebc953fd3d2dd3f12fbd),
+  [`dda8915`](https://github.com/reactjs/react-docgen/commit/dda8915ce9f8d5065372570d590405f2c2403bd8),
+  [`62e692f`](https://github.com/reactjs/react-docgen/commit/62e692fcca6f3d17dcf81ce72f2db1a95b2d694b),
+  [`74b6680`](https://github.com/reactjs/react-docgen/commit/74b6680910037b1b4b64dd57769b652bf775675e),
+  [`0641700`](https://github.com/reactjs/react-docgen/commit/0641700e4425390c0fe50e216a71e5e18322ab3b),
+  [`40ebb00`](https://github.com/reactjs/react-docgen/commit/40ebb0010a7a380f89e0c79a4a937cf9a50a3245),
+  [`82154c3`](https://github.com/reactjs/react-docgen/commit/82154c3b59bf22acf3068165f87b089138fdf7ae),
+  [`3be404e`](https://github.com/reactjs/react-docgen/commit/3be404eee6c8fc7bd867fea9d1987b7f438107d6)]:
+  - react-docgen@7.0.0
+
 ## 1.0.4
 
 ### Patch Changes
