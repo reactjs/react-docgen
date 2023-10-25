@@ -16,7 +16,7 @@
     "@codemirror/view": "6.21.4",
     "@headlessui/react": "1.7.17",
     "@popperjs/core": "2.11.8",
-    "@types/react": "18.2.31",
+    "@types/react": "18.2.32",
     "@types/react-dom": "18.2.14",
     "@uiw/react-codemirror": "4.21.20",
     "clsx": "2.0.0",
