@@ -27,8 +27,8 @@ importers:
         specifier: 0.34.6
         version: 0.34.6(vitest@0.34.6)
       cpy:
-        specifier: 10.1.0
-        version: 10.1.0
+        specifier: 11.0.0
+        version: 11.0.0
       eslint:
         specifier: 8.53.0
         version: 8.53.0
@@ -2154,11 +2154,6 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /arrify@3.0.0:
-    resolution: {integrity: sha512-tLkvA81vQG/XqE2mjDkGQHoOINtMHtysSnemrmoGe6PydDPMRbVugqyk4A6V/WDWEfm3l+0d8anA9r8cv/5Jaw==}
-    engines: {node: '>=12'}
-    dev: true
-
   /assertion-error@1.1.0:
     resolution: {integrity: sha512-jgsaNduz+ndvGyFt3uSuWqvy4lCnIJiovtouQN5JZHOKCS2QuhEdbcQHFhVksz2N2U9hXJo8odG7ETyWlEeuDw==}
     dev: true
@@ -2628,6 +2623,14 @@ packages:
   /convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
 
+  /copy-file@11.0.0:
+    resolution: {integrity: sha512-mFsNh/DIANLqFt5VHZoGirdg7bK5+oTWlhnGu6tgRhzBlnEKWaPX2xrFaLltii/6rmhqFMJqffUgknuRdpYlHw==}
+    engines: {node: '>=18'}
+    dependencies:
+      graceful-fs: 4.2.11
+      p-event: 6.0.0
+    dev: true
+
   /cose-base@1.0.3:
     resolution: {integrity: sha512-s9whTXInMSgAp/NVXVNuVxVKzGH2qck3aQlVHxDCdAEPgtMKwc4Wq6/QKhgdEdgbLSi9rBTAcPoRa6JpiG4ksg==}
     dependencies:
@@ -2640,25 +2643,14 @@ packages:
       layout-base: 2.0.1
     dev: false
 
-  /cp-file@10.0.0:
-    resolution: {integrity: sha512-vy2Vi1r2epK5WqxOLnskeKeZkdZvTKfFZQCplE3XWsP+SUJyd5XAUFC9lFgTjjXJF2GMne/UML14iEmkAaDfFg==}
-    engines: {node: '>=14.16'}
+  /cpy@11.0.0:
+    resolution: {integrity: sha512-vA71mFQyIxCrqvP/9JBLCj05UJV/+WpvAxZK2/EiK5ndD090cjuChfJ3ExVVuZXHoTJ/3HLedOPYDWyxnNHjrg==}
+    engines: {node: '>=18'}
     dependencies:
-      graceful-fs: 4.2.11
-      nested-error-stacks: 2.1.1
-      p-event: 5.0.1
-    dev: true
-
-  /cpy@10.1.0:
-    resolution: {integrity: sha512-VC2Gs20JcTyeQob6UViBLnyP0bYHkBh6EiKzot9vi2DmeGlFT9Wd7VG3NBrkNx/jYvFBeyDOMMHdHQhbtKLgHQ==}
-    engines: {node: '>=16'}
-    dependencies:
-      arrify: 3.0.0
-      cp-file: 10.0.0
+      copy-file: 11.0.0
       globby: 13.2.2
       junk: 4.0.1
       micromatch: 4.0.5
-      nested-error-stacks: 2.1.1
       p-filter: 3.0.0
       p-map: 6.0.0
     dev: true
@@ -6055,10 +6047,6 @@ packages:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
     dev: false
 
-  /nested-error-stacks@2.1.1:
-    resolution: {integrity: sha512-9iN1ka/9zmX1ZvLV9ewJYEk9h7RyRRtqdK0woXcqohu8EWIerfPUjYJPg0ULy0UqP7cslmdGc8xKDJcojlKiaw==}
-    dev: true
-
   /next-mdx-remote@4.4.1(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-1BvyXaIou6xy3XoNF4yaMZUCb6vD2GTAa5ciOa6WoO+gAUTYsb1K4rI/HSC2ogAWLrb/7VSV52skz07vOzmqIQ==}
     engines: {node: '>=14', npm: '>=7'}
@@ -6484,11 +6472,11 @@ packages:
     resolution: {integrity: sha512-/jHxFIzoMXdqPzTaCpFzAAWhpkSjZPF4Vsn6jAfNpmbH/ymsmd7Qc6VE9BGn0L6YMj6uwpQLxCECpus4ukKS9Q==}
     dev: true
 
-  /p-event@5.0.1:
-    resolution: {integrity: sha512-dd589iCQ7m1L0bmC5NLlVYfy3TbBEsMUfWx9PyAgPeIcFZ/E2yaTZ4Rz4MiBmmJShviiftHVXOqfnfzJ6kyMrQ==}
-    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+  /p-event@6.0.0:
+    resolution: {integrity: sha512-Xbfxd0CfZmHLGKXH32k1JKjQYX6Rkv0UtQdaFJ8OyNcf+c0oWCeXHc1C4CX/IESZLmcvfPa5aFIO/vCr5gqtag==}
+    engines: {node: '>=16.17'}
     dependencies:
-      p-timeout: 5.1.0
+      p-timeout: 6.1.2
     dev: true
 
   /p-filter@2.1.0:
@@ -6560,9 +6548,9 @@ packages:
     engines: {node: '>=16'}
     dev: true
 
-  /p-timeout@5.1.0:
-    resolution: {integrity: sha512-auFDyzzzGZZZdHz3BtET9VEz0SE/uMEAx7uWfGPucfzEwwe/xH0iVeZibQmANYE/hp9T2+UUZT5m+BKyrDp3Ew==}
-    engines: {node: '>=12'}
+  /p-timeout@6.1.2:
+    resolution: {integrity: sha512-UbD77BuZ9Bc9aABo74gfXhNvzC9Tx7SxtHSh1fxvx3jTLLYvmVhiQZZrJzqqU0jKbN32kb5VOKiLEQI/3bIjgQ==}
+    engines: {node: '>=14.16'}
     dev: true
 
   /p-try@2.2.0:
