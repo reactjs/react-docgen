@@ -105,8 +105,8 @@ importers:
         specifier: ^7.18.0
         version: 7.20.3
       '@types/doctrine':
-        specifier: ^0.0.8
-        version: 0.0.8
+        specifier: ^0.0.9
+        version: 0.0.9
       '@types/resolve':
         specifier: ^1.20.2
         version: 1.20.4
@@ -1577,8 +1577,8 @@ packages:
     resolution: {integrity: sha512-JJwEeFy8Sl9ctiugU4h4DGN9hCB47oyhUkM2H8g8xZr4tHTEXtmV4U6krKrU8Ng0S7RlG/J7fkta1rGu3pq+YQ==}
     dev: false
 
-  /@types/doctrine@0.0.8:
-    resolution: {integrity: sha512-mGinUwtyZsYnU2ana2wyteVHD0PFPukcZMOZWMtSRJBTFMirYy6RlV286CjttvPoNYYgW9jWf0MXKniV7f2oVw==}
+  /@types/doctrine@0.0.9:
+    resolution: {integrity: sha512-eOIHzCUSH7SMfonMG1LsC2f8vxBFtho6NGBznK41R84YzPuvSBzrhEps33IsQiOW9+VL6NQ9DbjQJznk/S4uRA==}
     dev: false
 
   /@types/estree-jsx@1.0.2:
