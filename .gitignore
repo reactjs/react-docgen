@@ -4,3 +4,4 @@ dist/
 !**/__fixtures__/**/node_modules/*
 .idea/
 coverage/
+.nx/cache
