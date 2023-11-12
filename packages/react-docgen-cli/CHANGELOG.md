@@ -1,5 +1,18 @@
 # Release Notes
 
+## 2.0.1
+
+### Patch Changes
+
+- [#869](https://github.com/reactjs/react-docgen/pull/869)
+  [`6b19e8a`](https://github.com/reactjs/react-docgen/commit/6b19e8a34744d4f3f5c93b96c1258796f440ede1)
+  Thanks [@renovate](https://github.com/apps/renovate)! - update dependency
+  fast-glob to v3.3.2
+
+- Updated dependencies
+  [[`2b51bbd`](https://github.com/reactjs/react-docgen/commit/2b51bbd47d14638ff98014a59f52c13a0c88abf9)]:
+  - react-docgen@7.0.1
+
 ## 2.0.0
 
 ### Major Changes

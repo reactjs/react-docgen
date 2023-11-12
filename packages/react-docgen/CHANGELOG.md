@@ -1,5 +1,14 @@
 # Release Notes
 
+## 7.0.1
+
+### Patch Changes
+
+- [#870](https://github.com/reactjs/react-docgen/pull/870)
+  [`2b51bbd`](https://github.com/reactjs/react-docgen/commit/2b51bbd47d14638ff98014a59f52c13a0c88abf9)
+  Thanks [@renovate](https://github.com/apps/renovate)! - update dependency
+  @types/doctrine to ^0.0.9
+
 ## 7.0.0
 
 ### Major Changes
