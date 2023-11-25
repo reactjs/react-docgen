@@ -68,10 +68,10 @@ function getType(tagType: Type | null | undefined): JsDocType | null {
         'name' in tagType && tagType.name
           ? tagType.name
           : 'expression' in tagType &&
-            tagType.expression &&
-            'name' in tagType.expression
-          ? tagType.expression.name
-          : null;
+              tagType.expression &&
+              'name' in tagType.expression
+            ? tagType.expression.name
+            : null;
 
       if (typeName) {
         return { name: typeName };

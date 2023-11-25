@@ -56,9 +56,9 @@ function resolveObjectToPropMap(object: NodePath): Map<string, string> | null {
         const value = valuePath.isStringLiteral()
           ? `"${valuePath.node.value}"`
           : valuePath.isNumericLiteral()
-          ? `${valuePath.node.value}`
-          : // we return null here because there are a lot of cases and we don't know yet what we need to handle
-            'null';
+            ? `${valuePath.node.value}`
+            : // we return null here because there are a lot of cases and we don't know yet what we need to handle
+              'null';
 
         values.set(name, value);
       } else if (propPath.isSpreadElement()) {
