@@ -90,8 +90,8 @@ export function resolveObjectToNameArray(
         const name: string = key.isIdentifier()
           ? key.node.name
           : raw
-          ? (key.node.extra?.raw as string)
-          : `${key.node.value}`;
+            ? (key.node.extra?.raw as string)
+            : `${key.node.value}`;
 
         values.push(name);
       } else if (
