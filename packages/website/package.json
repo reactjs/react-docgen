@@ -24,7 +24,7 @@
     "next-themes": "0.2.1",
     "nextra": "2.13.2",
     "nextra-theme-docs": "2.13.2",
-    "postcss": "8.4.31",
+    "postcss": "8.4.32",
     "postcss-lightningcss": "1.0.0",
     "react": "18.2.0",
     "react-docgen": "workspace:7.0.1",
