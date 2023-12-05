@@ -51,8 +51,8 @@ importers:
         specifier: 3.1.0
         version: 3.1.0
       prettier-plugin-tailwindcss:
-        specifier: 0.5.8
-        version: 0.5.8(prettier@3.1.0)
+        specifier: 0.5.9
+        version: 0.5.9(prettier@3.1.0)
       rimraf:
         specifier: 5.0.5
         version: 5.0.5
@@ -6897,8 +6897,8 @@ packages:
       fast-diff: 1.3.0
     dev: true
 
-  /prettier-plugin-tailwindcss@0.5.8(prettier@3.1.0):
-    resolution: {integrity: sha512-9XqjDi0zA/6IUYe3cC80+Eb+z0DU4vFF4yARVKddRZaW2ocBVawjpsFU7FtLn/xlBA8Fubp6Pd3HP3415Go4aw==}
+  /prettier-plugin-tailwindcss@0.5.9(prettier@3.1.0):
+    resolution: {integrity: sha512-9x3t1s2Cjbut2QiP+O0mDqV3gLXTe2CgRlQDgucopVkUdw26sQi53p/q4qvGxMLBDfk/dcTV57Aa/zYwz9l8Ew==}
     engines: {node: '>=14.21.3'}
     peerDependencies:
       '@ianvs/prettier-plugin-sort-imports': '*'
