@@ -29,7 +29,7 @@
     "eslint-plugin-prettier": "5.0.1",
     "execa": "7.2.0",
     "nx": "17.2.0",
-    "prettier": "3.1.0",
+    "prettier": "3.1.1",
     "prettier-plugin-tailwindcss": "0.5.9",
     "rimraf": "5.0.5",
     "tempy": "3.1.0",
