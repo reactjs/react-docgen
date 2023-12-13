@@ -28,6 +28,6 @@ jobs:
         id: ossar
 
       - name: Upload OSSAR results
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: ${{ steps.ossar.outputs.sarifFile }}
