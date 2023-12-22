@@ -36,6 +36,7 @@ import type {
   TypeScript,
   TSQualifiedName,
   TSLiteralType,
+  TSTypeAliasDeclaration,
 } from '@babel/types';
 import { getDocblock } from './docblock.js';
 
@@ -54,6 +55,8 @@ const tsTypes: Record<string, string> = {
   TSVoidKeyword: 'void',
 };
 
+const UNKNOWN_TYPE = Object.freeze({ name: 'unknown' }) as SimpleType;
+
 const namedTypes: Record<
   string,
   (
@@ -71,6 +74,7 @@ const namedTypes: Record<
   TSIntersectionType: handleTSIntersectionType,
   TSMappedType: handleTSMappedType,
   TSTupleType: handleTSTupleType,
+  TSTypeAliasDeclaration: handleTSTypeAliasDeclaration,
   TSTypeQuery: handleTSTypeQuery,
   TSTypeOperator: handleTSTypeOperator,
   TSIndexedAccessType: handleTSIndexedAccessType,
@@ -113,6 +117,15 @@ function handleTSArrayType(
   };
 }
 
+function handleTSTypeAliasDeclaration(
+  path: NodePath<TSTypeAliasDeclaration>,
+  typeParams: TypeParameters | null,
+): TypeDescriptor<TSFunctionSignatureType> {
+  const resolvedTypeAnnotation = path.get('typeAnnotation');
+
+  return getTSTypeWithResolvedTypes(resolvedTypeAnnotation, typeParams);
+}
+
 function handleTSTypeReference(
   path: NodePath<TSTypeReference>,
   typeParams: TypeParameters | null,
@@ -127,8 +140,7 @@ function handleTSTypeReference(
   }
 
   const resolvedPath =
-    (typeParams && typeParams[type.name]) ||
-    resolveToValue(path.get('typeName'));
+    (typeParams && typeParams[type.name]) || resolveToValue(typeName);
 
   const typeParameters = path.get('typeParameters');
   const resolvedTypeParameters = resolvedPath.get('typeParameters') as NodePath<
@@ -149,15 +161,18 @@ function handleTSTypeReference(
       resolvedPath as NodePath<TSType | TSTypeAnnotation>,
       null,
     );
+  } else if (resolvedPath !== typeName) {
+    const resolvedType = getTSTypeWithResolvedTypes(
+      resolvedPath as NodePath<TSType | TSTypeAnnotation>,
+      typeParams,
+    );
+
+    if (resolvedType !== UNKNOWN_TYPE) {
+      return resolvedType;
+    }
   }
 
-  const resolvedTypeAnnotation = resolvedPath.get('typeAnnotation') as NodePath<
-    TSType | TSTypeAnnotation | null | undefined
-  >;
-
-  if (resolvedTypeAnnotation.hasNode()) {
-    type = getTSTypeWithResolvedTypes(resolvedTypeAnnotation, typeParams);
-  } else if (typeParameters.hasNode()) {
+  if (typeParameters.hasNode()) {
     const params = typeParameters.get('params');
 
     type = {
@@ -479,7 +494,7 @@ function handleTSIndexedAccessType(
   });
 
   if (!resolvedType) {
-    return { name: 'unknown' };
+    return UNKNOWN_TYPE;
   }
 
   return {
@@ -533,7 +548,7 @@ function getTSTypeWithResolvedTypes(
   }
 
   if (!type) {
-    type = { name: 'unknown' };
+    type = UNKNOWN_TYPE;
   }
 
   if (typeAliasName) {
