@@ -1,5 +1,11 @@
 # Release Notes
 
+## 7.0.2
+
+### Patch Changes
+
+- [`64bf1aa`](https://github.com/reactjs/react-docgen/commit/64bf1aa078148b4d44f8634252e5b726e24b8ee5) Thanks [@danez](https://github.com/danez)! - Fix handling of template literals
+
 ## 7.0.1
 
 ### Patch Changes
@@ -329,7 +335,7 @@
   allows multiple resolvers to be chained.
 
   ```ts
-  import { builtinResolvers } from 'react-docgen';
+  import { builtinResolvers } from "react-docgen";
 
   const { ChainResolver } = builtinResolvers;
   const resolver = new ChainResolver([resolver1, resolver2], {
@@ -358,7 +364,7 @@
   addition to functions.
 
   ```ts
-  import type { ResolverClass, ResolverFunction } from 'react-docgen';
+  import type { ResolverClass, ResolverFunction } from "react-docgen";
 
   // This was the only option until now
   const functionResolver: ResolverFunction = (file: FileState) => {
@@ -613,7 +619,7 @@
   chained.
 
   ```ts
-  import { builtinResolvers } from 'react-docgen';
+  import { builtinResolvers } from "react-docgen";
 
   const { ChainResolver } = builtinResolvers;
   const resolver = new ChainResolver([resolver1, resolver2], {
@@ -624,7 +630,7 @@
 - 80e4c74: Allow resolvers to be classes in addition to functions.
 
   ```ts
-  import type { ResolverClass, ResolverFunction } from 'react-docgen';
+  import type { ResolverClass, ResolverFunction } from "react-docgen";
 
   // This was the only option until now
   const functionResolver: ResolverFunction = (file: FileState) => {
