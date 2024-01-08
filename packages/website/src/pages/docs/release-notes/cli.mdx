@@ -1,5 +1,12 @@
 # Release Notes
 
+## 2.0.2
+
+### Patch Changes
+
+- Updated dependencies [[`64bf1aa`](https://github.com/reactjs/react-docgen/commit/64bf1aa078148b4d44f8634252e5b726e24b8ee5)]:
+  - react-docgen@7.0.2
+
 ## 2.0.1
 
 ### Patch Changes
