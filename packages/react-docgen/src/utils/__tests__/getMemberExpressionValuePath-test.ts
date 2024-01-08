@@ -38,6 +38,15 @@ describe('getMemberExpressionValuePath', () => {
       );
     });
 
+    test('handles template literals', () => {
+      const def = parse.statement(`
+        var Foo = function Bar() {};
+        Foo[\`some\${template}\`] = () => {};
+      `);
+
+      expect(getMemberExpressionValuePath(def, 'something')).toBeNull();
+    });
+
     test('ignores computed property definitions with expression', () => {
       const def = parse.statement(`
         var Foo = function Bar() {};
