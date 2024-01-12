@@ -2120,6 +2120,24 @@ exports[`integration > fixtures > processes component "flow-spread-import-type.j
 ]
 `;
 
+exports[`integration > fixtures > processes component "namespace-export.tsx" without errors 1`] = `
+[
+  {
+    "description": "",
+    "methods": [],
+    "props": {
+      "value": {
+        "description": "",
+        "required": true,
+        "tsType": {
+          "name": "string",
+        },
+      },
+    },
+  },
+]
+`;
+
 exports[`integration > fixtures > processes component "test-all-imports.tsx" without errors 1`] = `
 [
   {
