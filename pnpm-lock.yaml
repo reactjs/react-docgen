@@ -135,7 +135,7 @@ importers:
         specifier: 3.3.2
         version: 3.3.2
       react-docgen:
-        specifier: workspace:7.0.2
+        specifier: workspace:7.0.3
         version: link:../react-docgen
       slash:
         specifier: 5.1.0
@@ -196,7 +196,7 @@ importers:
         specifier: 18.2.0
         version: 18.2.0
       react-docgen:
-        specifier: workspace:7.0.2
+        specifier: workspace:7.0.3
         version: link:../react-docgen
       react-dom:
         specifier: 18.2.0

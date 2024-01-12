@@ -1,5 +1,11 @@
 # Release Notes
 
+## 7.0.3
+
+### Patch Changes
+
+- [#890](https://github.com/reactjs/react-docgen/pull/890) [`afe8d02`](https://github.com/reactjs/react-docgen/commit/afe8d022d058a5d49c6fc144fb165c02f4a764d9) Thanks [@danez](https://github.com/danez)! - Do not throw error when using namespace specifiers in export statements
+
 ## 7.0.2
 
 ### Patch Changes
