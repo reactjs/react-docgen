@@ -24,11 +24,11 @@ export default function resolveExportDeclaration(
         definitions.push(declaration);
       }
     } else if (path.has('specifiers')) {
-      path
-        .get('specifiers')
-        .forEach((specifier) =>
-          definitions.push(specifier.get('local') as NodePath),
-        );
+      path.get('specifiers').forEach((specifier) => {
+        if (specifier.isExportSpecifier()) {
+          definitions.push(specifier.get('local'));
+        }
+      });
     }
   }
 

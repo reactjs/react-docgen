@@ -73,4 +73,13 @@ describe('resolveExportDeclaration', () => {
       specifiers[2].get('local'),
     ]);
   });
+
+  test('resolves named exports from with namespace', () => {
+    const exp = parse.statement<ExportNamedDeclaration>(
+      'export * as foo from "";',
+    );
+    const resolved = resolveExportDeclaration(exp);
+
+    expect(resolved).toEqual([]);
+  });
 });
