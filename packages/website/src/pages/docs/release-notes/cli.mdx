@@ -1,5 +1,12 @@
 # Release Notes
 
+## 2.0.3
+
+### Patch Changes
+
+- Updated dependencies [[`afe8d02`](https://github.com/reactjs/react-docgen/commit/afe8d022d058a5d49c6fc144fb165c02f4a764d9)]:
+  - react-docgen@7.0.3
+
 ## 2.0.2
 
 ### Patch Changes
