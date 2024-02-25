@@ -18,7 +18,7 @@
     "@popperjs/core": "2.11.8",
     "@types/react": "18.2.58",
     "@types/react-dom": "18.2.19",
-    "@uiw/react-codemirror": "4.21.23",
+    "@uiw/react-codemirror": "4.21.24",
     "clsx": "2.1.0",
     "next": "14.1.0",
     "next-themes": "0.2.1",
