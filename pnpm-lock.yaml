@@ -181,11 +181,11 @@ importers:
         specifier: 0.2.1
         version: 0.2.1(next@14.1.1)(react-dom@18.2.0)(react@18.2.0)
       nextra:
-        specifier: 2.13.3
-        version: 2.13.3(next@14.1.1)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 2.13.4
+        version: 2.13.4(next@14.1.1)(react-dom@18.2.0)(react@18.2.0)
       nextra-theme-docs:
-        specifier: 2.13.3
-        version: 2.13.3(next@14.1.1)(nextra@2.13.3)(react-dom@18.2.0)(react@18.2.0)
+        specifier: 2.13.4
+        version: 2.13.4(next@14.1.1)(nextra@2.13.4)(react-dom@18.2.0)(react@18.2.0)
       postcss:
         specifier: 8.4.35
         version: 8.4.35
@@ -6150,11 +6150,11 @@ packages:
       - babel-plugin-macros
     dev: false
 
-  /nextra-theme-docs@2.13.3(next@14.1.1)(nextra@2.13.3)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-B6xrnR86Gg4GzV56AomSwtmvSyAvnJz1xKOGGav1XKxkwvC8QeI17jdt/CqiKyIObJ+5bLqSFiKhaAZ5DYQP3g==}
+  /nextra-theme-docs@2.13.4(next@14.1.1)(nextra@2.13.4)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-2XOoMfwBCTYBt8ds4ZHftt9Wyf2XsykiNo02eir/XEYB+sGeUoE77kzqfidjEOKCSzOHYbK9BDMcg2+B/2vYRw==}
     peerDependencies:
       next: '>=9.5.3'
-      nextra: 2.13.3
+      nextra: 2.13.4
       react: '>=16.13.1'
       react-dom: '>=16.13.1'
     dependencies:
@@ -6170,15 +6170,15 @@ packages:
       next: 14.1.1(react-dom@18.2.0)(react@18.2.0)
       next-seo: 6.5.0(next@14.1.1)(react-dom@18.2.0)(react@18.2.0)
       next-themes: 0.2.1(next@14.1.1)(react-dom@18.2.0)(react@18.2.0)
-      nextra: 2.13.3(next@14.1.1)(react-dom@18.2.0)(react@18.2.0)
+      nextra: 2.13.4(next@14.1.1)(react-dom@18.2.0)(react@18.2.0)
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       scroll-into-view-if-needed: 3.1.0
       zod: 3.22.4
     dev: false
 
-  /nextra@2.13.3(next@14.1.1)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-OBVuyQKh+oqrbVt0AosgNYnuReWuNrtJVEN7q18b/oEg2wEpuiq3UJfmIvGgOdNYc3zv3OYrzbcq7IhwtdHHEw==}
+  /nextra@2.13.4(next@14.1.1)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-7of2rSBxuUa3+lbMmZwG9cqgftcoNOVQLTT6Rxf3EhBR9t1EI7b43dted8YoqSNaigdE3j1CoyNkX8N/ZzlEpw==}
     engines: {node: '>=16'}
     peerDependencies:
       next: '>=9.5.3'
