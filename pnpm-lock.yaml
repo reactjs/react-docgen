@@ -163,8 +163,8 @@ importers:
         specifier: 2.11.8
         version: 2.11.8
       '@types/react':
-        specifier: 18.2.61
-        version: 18.2.61
+        specifier: 18.2.62
+        version: 18.2.62
       '@types/react-dom':
         specifier: 18.2.19
         version: 18.2.19
@@ -1123,7 +1123,7 @@ packages:
       react: '>=16'
     dependencies:
       '@types/mdx': 2.0.11
-      '@types/react': 18.2.61
+      '@types/react': 18.2.62
       react: 18.2.0
     dev: false
 
@@ -1369,6 +1369,7 @@ packages:
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [darwin]
+    deprecated: This was an unintentional release and has been deprecated
     requiresBuild: true
     dev: true
     optional: true
@@ -1378,6 +1379,7 @@ packages:
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [darwin]
+    deprecated: This was an unintentional release and has been deprecated
     requiresBuild: true
     dev: true
     optional: true
@@ -1387,6 +1389,7 @@ packages:
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [freebsd]
+    deprecated: This was an unintentional release and has been deprecated
     requiresBuild: true
     dev: true
     optional: true
@@ -1396,6 +1399,7 @@ packages:
     engines: {node: '>= 10'}
     cpu: [arm]
     os: [linux]
+    deprecated: This was an unintentional release and has been deprecated
     requiresBuild: true
     dev: true
     optional: true
@@ -1405,6 +1409,7 @@ packages:
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
+    deprecated: This was an unintentional release and has been deprecated
     requiresBuild: true
     dev: true
     optional: true
@@ -1414,6 +1419,7 @@ packages:
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
+    deprecated: This was an unintentional release and has been deprecated
     requiresBuild: true
     dev: true
     optional: true
@@ -1423,6 +1429,7 @@ packages:
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
+    deprecated: This was an unintentional release and has been deprecated
     requiresBuild: true
     dev: true
     optional: true
@@ -1432,6 +1439,7 @@ packages:
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
+    deprecated: This was an unintentional release and has been deprecated
     requiresBuild: true
     dev: true
     optional: true
@@ -1441,6 +1449,7 @@ packages:
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [win32]
+    deprecated: This was an unintentional release and has been deprecated
     requiresBuild: true
     dev: true
     optional: true
@@ -1450,6 +1459,7 @@ packages:
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [win32]
+    deprecated: This was an unintentional release and has been deprecated
     requiresBuild: true
     dev: true
     optional: true
@@ -1775,11 +1785,11 @@ packages:
   /@types/react-dom@18.2.19:
     resolution: {integrity: sha512-aZvQL6uUbIJpjZk4U8JZGbau9KDeAwMfmhyWorxgBkqDIEf6ROjRozcmPIicqsUwPUjbkDfHKgGee1Lq65APcA==}
     dependencies:
-      '@types/react': 18.2.61
+      '@types/react': 18.2.62
     dev: false
 
-  /@types/react@18.2.61:
-    resolution: {integrity: sha512-NURTN0qNnJa7O/k4XUkEW2yfygA+NxS0V5h1+kp9jPwhzZy95q3ADoGMP0+JypMhrZBTTgjKAUlTctde1zzeQA==}
+  /@types/react@18.2.62:
+    resolution: {integrity: sha512-l3f57BbaEKP0xcFzf+5qRG8/PXykZiuVM6eEoPtqBPCp6dxO3HhDkLIgIyXPhPKNAeXn3KO2pEaNgzaEo/asaw==}
     dependencies:
       '@types/prop-types': 15.7.11
       '@types/scheduler': 0.16.8
