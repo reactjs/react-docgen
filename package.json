@@ -30,7 +30,7 @@
     "execa": "7.2.0",
     "nx": "18.1.0",
     "prettier": "3.2.5",
-    "prettier-plugin-tailwindcss": "0.5.11",
+    "prettier-plugin-tailwindcss": "0.5.12",
     "rimraf": "5.0.5",
     "tempy": "3.1.0",
     "typescript": "5.3.3",
