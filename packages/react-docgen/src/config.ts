@@ -22,6 +22,10 @@ import {
   FindExportedDefinitionsResolver,
 } from './resolver/index.js';
 
+interface Features {
+  resolveEnums?: boolean;
+}
+
 export interface Config {
   handlers?: Handler[];
   importer?: Importer;
@@ -33,6 +37,7 @@ export interface Config {
    */
   filename?: string;
   babelOptions?: TransformOptions;
+  experimentalFeatures?: Features;
 }
 export type InternalConfig = Omit<Required<Config>, 'filename'>;
 
@@ -61,14 +66,26 @@ export const defaultHandlers: Handler[] = [
   componentMethodsJsDocHandler,
 ];
 
+const defaultFeatures: Required<Features> = {
+  resolveEnums: false,
+};
+
 export function createConfig(inputConfig: Config): InternalConfig {
-  const { babelOptions, filename, handlers, importer, resolver } = inputConfig;
+  const {
+    babelOptions,
+    filename,
+    experimentalFeatures,
+    handlers,
+    importer,
+    resolver,
+  } = inputConfig;
 
   const config = {
     babelOptions: { ...babelOptions },
     handlers: handlers ?? defaultHandlers,
     importer: importer ?? defaultImporter,
     resolver: resolver ?? defaultResolver,
+    experimentalFeatures: { ...defaultFeatures, ...experimentalFeatures },
   };
 
   if (filename) {
