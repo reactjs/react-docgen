@@ -45,8 +45,8 @@ importers:
         specifier: 7.2.0
         version: 7.2.0
       nx:
-        specifier: 18.1.0
-        version: 18.1.0
+        specifier: 18.1.1
+        version: 18.1.1
       prettier:
         specifier: 3.2.5
         version: 3.2.5
@@ -1352,12 +1352,11 @@ packages:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
 
-  /@nrwl/tao@18.1.0:
-    resolution: {integrity: sha512-YPI6UAoyVhT7iqffjXO96/ovg6c97Iu0sS32lqPOkRSzoQM+M9h7f77yUA5FoXHHoHxq/kKwfw6FT7yR1SrFEw==}
-    deprecated: This was an unintentional release and has been deprecated
+  /@nrwl/tao@18.1.1:
+    resolution: {integrity: sha512-6xkDBmXu2tF2ZdUvDtzvDIRS3xYsgzH4X96W0okEzT7vtWCu3mkpn4uybM/Ttsd5bOUfjNkDzTRU2mK7sGEjjA==}
     hasBin: true
     dependencies:
-      nx: 18.1.0
+      nx: 18.1.1
       tslib: 2.6.2
     transitivePeerDependencies:
       - '@swc-node/register'
@@ -1365,102 +1364,92 @@ packages:
       - debug
     dev: true
 
-  /@nx/nx-darwin-arm64@18.1.0:
-    resolution: {integrity: sha512-5vNFl/9V0rmh5+l+c3nAboOrCqHgfpsWjTlij4wVi8KqRKfzAyLQd610g90wxH5zx9zbDnXzbVrRQBswGlXk0Q==}
+  /@nx/nx-darwin-arm64@18.1.1:
+    resolution: {integrity: sha512-66NzEuGekWk+pHfBh7otEQNYkQtkeulwZSi/A+CE+YmxBe7tkUwWldR1fpwblHj9pa9zP5cSA1BBXJYSgm1kug==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [darwin]
-    deprecated: This was an unintentional release and has been deprecated
     requiresBuild: true
     dev: true
     optional: true
 
-  /@nx/nx-darwin-x64@18.1.0:
-    resolution: {integrity: sha512-eoaN1zJaAQEYF/5Fe/W1HuQ4SW2imw4TXSjXoYqWz7fRf8tPwy06P1q3IS6PDXYspKSULJyicz/ll8+mpnWx/Q==}
+  /@nx/nx-darwin-x64@18.1.1:
+    resolution: {integrity: sha512-Er+NWYPTPBZTfLYKse9SVj028iR/OJ8dUNLYAToft89ZlsO5AwKy0qSFVNQguhtuxex+f0yomUTH/GApHzklGw==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [darwin]
-    deprecated: This was an unintentional release and has been deprecated
     requiresBuild: true
     dev: true
     optional: true
 
-  /@nx/nx-freebsd-x64@18.1.0:
-    resolution: {integrity: sha512-rNX61CrAkPGTxGWA+bakMd5Y89/nheTV2Uy/KJXf9I5jqLPHEM+/69TiJTqO/wwV53ShgZfICIaOo+gK9Vw9vQ==}
+  /@nx/nx-freebsd-x64@18.1.1:
+    resolution: {integrity: sha512-sRvlLTSO2LTQXFarvytjLzv1O3L7YvADfjYmQr1io5YqWpYL5s1ujUFaLnfGPae45uc9qu9YMagsEYsiCOH04Q==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [freebsd]
-    deprecated: This was an unintentional release and has been deprecated
     requiresBuild: true
     dev: true
     optional: true
 
-  /@nx/nx-linux-arm-gnueabihf@18.1.0:
-    resolution: {integrity: sha512-HrNNr5fnEKG3cZwT5qLnDm0CuimywqoDDkWfdMdA5/eVPwZsXF4vtXqgOmQ2xwb1k+HZvOK+uCnDKdBK3f34Ow==}
+  /@nx/nx-linux-arm-gnueabihf@18.1.1:
+    resolution: {integrity: sha512-yzWYaHJj0Yvztd+gUEfqdBwgZPpayrc1OAxfCxqdajuF7kAmjck4Ufz0xn0rcE8nyLdCZMc2Nz1M92cqhw1u/g==}
     engines: {node: '>= 10'}
     cpu: [arm]
     os: [linux]
-    deprecated: This was an unintentional release and has been deprecated
     requiresBuild: true
     dev: true
     optional: true
 
-  /@nx/nx-linux-arm64-gnu@18.1.0:
-    resolution: {integrity: sha512-avw5NeqG6j5Y8HX3LsfFa9YLIu3Rk5d08oNDr0MH8etEih/VuFH4RSdOauZiAfHaUfYDBo8V33U93YgP1bIfXg==}
+  /@nx/nx-linux-arm64-gnu@18.1.1:
+    resolution: {integrity: sha512-RPiO2nTwbWtJyG44Ot1H1kmVbAXn7AIzs5itcS/I+/tvkiyh8SGx4BkjctxYyc8DUAhkjVv6GzZdiT5O0OCshw==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
-    deprecated: This was an unintentional release and has been deprecated
     requiresBuild: true
     dev: true
     optional: true
 
-  /@nx/nx-linux-arm64-musl@18.1.0:
-    resolution: {integrity: sha512-76Wj2UPS69aIC2YbxghuT7ES6JXhI6e5C/TVJ5XR7SxHN+EVWmJJLWPs0ePAvtjZLXaH24IkRMxV4FuI7j+u1Q==}
+  /@nx/nx-linux-arm64-musl@18.1.1:
+    resolution: {integrity: sha512-4t0aTVEIlbMeqpJWi08qrieeo0apxPHevqvpCnuM8BfMNHOvMvKgQNBy7Cd2WOlfdCtgf4RfUlqFHfRUAA7NZA==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
-    deprecated: This was an unintentional release and has been deprecated
     requiresBuild: true
     dev: true
     optional: true
 
-  /@nx/nx-linux-x64-gnu@18.1.0:
-    resolution: {integrity: sha512-aMQVz+3Il+lf8CQJvpQzZrajjGmXuJU4CoVOvA7ZC0iB+MMRk5DgkIQaRXDENfnmrYW0j2Xifb2wwCZifXNlVg==}
+  /@nx/nx-linux-x64-gnu@18.1.1:
+    resolution: {integrity: sha512-0zeU1qyQfFKnvnga0/KhOjZnNOUr4iADbMGsrlRL+BmS5jpN+/HXJ43TOucw7N1pittYoGqwhenisAaQ8YQi/Q==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
-    deprecated: This was an unintentional release and has been deprecated
     requiresBuild: true
     dev: true
     optional: true
 
-  /@nx/nx-linux-x64-musl@18.1.0:
-    resolution: {integrity: sha512-Gw+xCiVaiR4n6deFhqoB/7MyYkX+U/jhI9lP6zBcKp15QWMAYMxmj/Rkb81M5qGwvHvIfxiFNRCmERwB9G2I7Q==}
+  /@nx/nx-linux-x64-musl@18.1.1:
+    resolution: {integrity: sha512-bXqHRjCbZz7SDKFQSYU/2GQhFJzaKsh2+CWEeKjc1nBXVSX+UCrRdfinEqs6Fr6rHRC7q8OBcRtYvI2eAijxzw==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
-    deprecated: This was an unintentional release and has been deprecated
     requiresBuild: true
     dev: true
     optional: true
 
-  /@nx/nx-win32-arm64-msvc@18.1.0:
-    resolution: {integrity: sha512-PFi6tC/4dkkP9CHA2SyM0p713L+Eg+RI6q9OqhPi7HF8aJQivB0bLYloCMwgGeR/dz2Ey6hvNGONDrdpbQoIcQ==}
+  /@nx/nx-win32-arm64-msvc@18.1.1:
+    resolution: {integrity: sha512-xMR2OF99W4OFDXb4yHjoAhN5Pexw6qjMHCG0wEMVN+WYI+NVLNTTFzectXSjYtpjN2n6oPt6RbcOLRSCotqCFg==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [win32]
-    deprecated: This was an unintentional release and has been deprecated
     requiresBuild: true
     dev: true
     optional: true
 
-  /@nx/nx-win32-x64-msvc@18.1.0:
-    resolution: {integrity: sha512-vI43+pFtFd+RlfIABe5nHv9R8BB8VPkBMADoZCm2CkK391fTgrIRuLKmJhYjD+qWSwdx9j9t2Au/q78MFVJE2A==}
+  /@nx/nx-win32-x64-msvc@18.1.1:
+    resolution: {integrity: sha512-MD6iUpe03eYl7NUwI5yHVqah3HjcTkb/NRfA/cHzkA0ZORpWjyZvUabV0pEyNN2/euGIvZTq1Zg1eyN0ac+dfg==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [win32]
-    deprecated: This was an unintentional release and has been deprecated
     requiresBuild: true
     dev: true
     optional: true
@@ -6346,9 +6335,8 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: false
 
-  /nx@18.1.0:
-    resolution: {integrity: sha512-lKWQvv9nFjbvSBw6N5EAphH5BVahx44J83FlghmTAw7vXjO9fVhdqKeJoRKO6hkzoFB+ke3b/mmH2Ted5oft7A==}
-    deprecated: This was an unintentional release and has been deprecated
+  /nx@18.1.1:
+    resolution: {integrity: sha512-rzvzEwe4bwi8cAm0uYOpMwj6PcIqD2anoOWg81rpb/3nQY+r1Qo2tL2/BWxGFh+WK+Jt7TzBZKcdQFEw5Nm84w==}
     hasBin: true
     requiresBuild: true
     peerDependencies:
@@ -6360,7 +6348,7 @@ packages:
       '@swc/core':
         optional: true
     dependencies:
-      '@nrwl/tao': 18.1.0
+      '@nrwl/tao': 18.1.1
       '@yarnpkg/lockfile': 1.1.0
       '@yarnpkg/parsers': 3.0.0-rc.46
       '@zkochan/js-yaml': 0.0.6
@@ -6395,16 +6383,16 @@ packages:
       yargs: 17.7.2
       yargs-parser: 21.1.1
     optionalDependencies:
-      '@nx/nx-darwin-arm64': 18.1.0
-      '@nx/nx-darwin-x64': 18.1.0
-      '@nx/nx-freebsd-x64': 18.1.0
-      '@nx/nx-linux-arm-gnueabihf': 18.1.0
-      '@nx/nx-linux-arm64-gnu': 18.1.0
-      '@nx/nx-linux-arm64-musl': 18.1.0
-      '@nx/nx-linux-x64-gnu': 18.1.0
-      '@nx/nx-linux-x64-musl': 18.1.0
-      '@nx/nx-win32-arm64-msvc': 18.1.0
-      '@nx/nx-win32-x64-msvc': 18.1.0
+      '@nx/nx-darwin-arm64': 18.1.1
+      '@nx/nx-darwin-x64': 18.1.1
+      '@nx/nx-freebsd-x64': 18.1.1
+      '@nx/nx-linux-arm-gnueabihf': 18.1.1
+      '@nx/nx-linux-arm64-gnu': 18.1.1
+      '@nx/nx-linux-arm64-musl': 18.1.1
+      '@nx/nx-linux-x64-gnu': 18.1.1
+      '@nx/nx-linux-x64-musl': 18.1.1
+      '@nx/nx-win32-arm64-msvc': 18.1.1
+      '@nx/nx-win32-x64-msvc': 18.1.1
     transitivePeerDependencies:
       - debug
     dev: true
