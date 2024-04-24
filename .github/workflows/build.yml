@@ -10,13 +10,13 @@ on:
 permissions: {}
 
 env:
-  NODE_VERSION: 18
+  NODE_VERSION: 20
 
 jobs:
   tests:
     strategy:
       matrix:
-        node: ['16.14.0', '18', '20']
+        node: ['16.14.0', '18', '20', '21']
         os: ['ubuntu']
         include:
           - os: macos
