@@ -36,6 +36,7 @@ import type {
   TypeScript,
   TSQualifiedName,
   TSLiteralType,
+  TSParenthesizedType,
 } from '@babel/types';
 import { getDocblock } from './docblock.js';
 
@@ -69,6 +70,7 @@ const namedTypes: Record<
   TSUnionType: handleTSUnionType,
   TSFunctionType: handleTSFunctionType,
   TSIntersectionType: handleTSIntersectionType,
+  TSParenthesizedType: handleTSParenthesizedType,
   TSMappedType: handleTSMappedType,
   TSTupleType: handleTSTupleType,
   TSTypeQuery: handleTSTypeQuery,
@@ -127,8 +129,7 @@ function handleTSTypeReference(
   }
 
   const resolvedPath =
-    (typeParams && typeParams[type.name]) ||
-    resolveToValue(path.get('typeName'));
+    (typeParams && typeParams[type.name]) || resolveToValue(typeName);
 
   const typeParameters = path.get('typeParameters');
   const resolvedTypeParameters = resolvedPath.get('typeParameters') as NodePath<
@@ -267,17 +268,116 @@ function handleTSUnionType(
   };
 }
 
+function handleTSParenthesizedType(
+  path: NodePath<TSParenthesizedType>,
+  typeParams: TypeParameters | null,
+): ElementsType<TSFunctionSignatureType> {
+  const innerTypePath = path.get('typeAnnotation');
+
+  // Resolve the type inside the parentheses using your existing function
+  const resolvedType = getTSTypeWithResolvedTypes(innerTypePath, typeParams);
+
+  return {
+    name: 'parenthesized',
+    raw: printValue(path),
+    elements: Array.isArray(resolvedType) ? resolvedType : [resolvedType],
+  };
+}
+
+interface PropertyWithKey {
+  key: TypeDescriptor<TSFunctionSignatureType> | string;
+  value: TypeDescriptor<TSFunctionSignatureType>;
+  description?: string | undefined;
+}
+
 function handleTSIntersectionType(
   path: NodePath<TSIntersectionType>,
   typeParams: TypeParameters | null,
 ): ElementsType<TSFunctionSignatureType> {
+  const resolvedTypes = path
+    .get('types')
+    .map((subTypePath) => getTSTypeWithResolvedTypes(subTypePath, typeParams));
+
+  let elements: Array<TypeDescriptor<TSFunctionSignatureType>> = [];
+
+  resolvedTypes.forEach((resolvedType) => {
+    switch (resolvedType.name) {
+      default:
+      case 'signature':
+        elements.push(resolvedType);
+        break;
+      case 'parenthesized': {
+        if ('elements' in resolvedType && resolvedType.elements[0]) {
+          const firstElement = resolvedType.elements[0];
+
+          if (firstElement && 'elements' in firstElement) {
+            elements = [...elements, ...firstElement.elements];
+          }
+        }
+        break;
+      }
+    }
+  });
+
+  const elementsDedup: PropertyWithKey[] = [];
+  const forbiddenTypes = ['unknown', 'never'];
+
+  // dedup elements
+  elements.forEach((element) => {
+    if (hasSignature(element)) {
+      const { signature } = element;
+
+      if (hasProperties(signature)) {
+        signature.properties.forEach((property) => {
+          const existingIndex = elementsDedup.findIndex(
+            (e) => e.key === property.key,
+          );
+
+          if (existingIndex === -1) {
+            elementsDedup.push(property);
+          } else {
+            // If the element is already in the array, we need to merge the properties
+            const existingProperty = elementsDedup[existingIndex];
+
+            if (existingProperty) {
+              elementsDedup[existingIndex] = {
+                key: property.key,
+                value: {
+                  name: forbiddenTypes.includes(property.value.name)
+                    ? existingProperty.value.name
+                    : property.value.name,
+                  required:
+                    property.value.required === false
+                      ? false
+                      : existingProperty.value.required,
+                },
+              };
+            }
+          }
+        });
+      }
+    } else {
+      elementsDedup.push(element as unknown as PropertyWithKey);
+    }
+  });
+
   return {
     name: 'intersection',
     raw: printValue(path),
-    elements: path
-      .get('types')
-      .map((subType) => getTSTypeWithResolvedTypes(subType, typeParams)),
+    elements: elementsDedup as unknown as Array<
+      TypeDescriptor<TSFunctionSignatureType>
+    >,
   };
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function hasSignature(element: any): element is { signature: unknown } {
+  return 'signature' in element;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function hasProperties(element: any): element is { properties: unknown } {
+  return 'properties' in element;
 }
 
 // type OptionsFlags<Type> = { [Property in keyof Type]; };

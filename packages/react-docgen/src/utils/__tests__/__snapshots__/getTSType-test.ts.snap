@@ -125,6 +125,36 @@ exports[`getTSType > can resolve indexed access to imported type 1`] = `
 }
 `;
 
+exports[`getTSType > deep resolve intersection types 1`] = `
+{
+  "elements": [
+    {
+      "key": "name",
+      "value": {
+        "name": "string",
+        "required": true,
+      },
+    },
+    {
+      "key": "a",
+      "value": {
+        "name": "number",
+        "required": true,
+      },
+    },
+    {
+      "key": "b",
+      "value": {
+        "name": "string",
+        "required": false,
+      },
+    },
+  ],
+  "name": "intersection",
+  "raw": "{ name: string } & (MyType | MySecondType)",
+}
+`;
+
 exports[`getTSType > detects array type 1`] = `
 {
   "elements": [
