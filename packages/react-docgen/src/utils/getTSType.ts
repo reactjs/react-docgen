@@ -273,8 +273,6 @@ function handleTSParenthesizedType(
   typeParams: TypeParameters | null,
 ): ElementsType<TSFunctionSignatureType> {
   const innerTypePath = path.get('typeAnnotation');
-
-  // Resolve the type inside the parentheses using your existing function
   const resolvedType = getTSTypeWithResolvedTypes(innerTypePath, typeParams);
 
   return {
