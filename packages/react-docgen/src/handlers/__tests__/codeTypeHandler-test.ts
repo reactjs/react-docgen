@@ -262,7 +262,7 @@ describe('codeTypeHandler', () => {
     expect(documentation.descriptors).toMatchSnapshot();
   });
 
-  test('does not support union proptypes', () => {
+  test('does support union proptypes', () => {
     const definition = parse
       .statement(
         `(props: Props) => <div />;
@@ -274,7 +274,24 @@ describe('codeTypeHandler', () => {
       .get('expression') as NodePath<ArrowFunctionExpression>;
 
     expect(() => codeTypeHandler(documentation, definition)).not.toThrow();
-    expect(documentation.descriptors).toEqual({});
+    expect(documentation.descriptors).toEqual({
+      bar: {
+        required: true,
+        flowType: {
+          name: 'literal',
+          value: "'barValue'",
+        },
+        description: '',
+      },
+      foo: {
+        required: true,
+        flowType: {
+          name: 'literal',
+          value: "'fooValue'",
+        },
+        description: '',
+      },
+    });
   });
 
   describe('imported prop types', () => {
