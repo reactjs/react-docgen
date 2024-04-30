@@ -13,6 +13,7 @@ import type { NodePath } from '@babel/traverse';
 import type { FlowType } from '@babel/types';
 import type { ComponentNode } from '../resolver/index.js';
 import type { Handler } from './index.js';
+import mergeTSIntersectionTypes from '../utils/mergeTSIntersectionTypes.js';
 
 function setPropDescriptor(
   documentation: Documentation,
@@ -87,8 +88,24 @@ function setPropDescriptor(
 
     const propDescriptor = documentation.getPropDescriptor(propName);
 
-    propDescriptor.required = !path.node.optional;
-    propDescriptor.tsType = type;
+    if (propDescriptor.tsType) {
+      const mergedType = mergeTSIntersectionTypes(
+        {
+          name: type.name,
+          required: !path.node.optional,
+        },
+        {
+          name: propDescriptor.tsType.name,
+          required: propDescriptor.required,
+        },
+      );
+
+      propDescriptor.tsType.name = mergedType.name;
+      propDescriptor.required = mergedType.required;
+    } else {
+      propDescriptor.tsType = type;
+      propDescriptor.required = !path.node.optional;
+    }
 
     // We are doing this here instead of in a different handler
     // to not need to duplicate the logic for checking for

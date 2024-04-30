@@ -39,6 +39,7 @@ import type {
   TSParenthesizedType,
 } from '@babel/types';
 import { getDocblock } from './docblock.js';
+import mergeTSIntersectionTypes from './mergeTSIntersectionTypes.js';
 
 const tsTypes: Record<string, string> = {
   TSAnyKeyword: 'any',
@@ -318,7 +319,6 @@ function handleTSIntersectionType(
   });
 
   const elementsDedup: PropertyWithKey[] = [];
-  const forbiddenTypes = ['unknown', 'never'];
 
   // dedup elements
   elements.forEach((element) => {
@@ -328,27 +328,21 @@ function handleTSIntersectionType(
       if (hasProperties(signature)) {
         signature.properties.forEach((property) => {
           const existingIndex = elementsDedup.findIndex(
-            (e) => e.key === property.key,
+            ({ key }) => key === property.key,
           );
 
           if (existingIndex === -1) {
             elementsDedup.push(property);
           } else {
-            // If the element is already in the array, we need to merge the properties
             const existingProperty = elementsDedup[existingIndex];
 
             if (existingProperty) {
               elementsDedup[existingIndex] = {
                 key: property.key,
-                value: {
-                  name: forbiddenTypes.includes(property.value.name)
-                    ? existingProperty.value.name
-                    : property.value.name,
-                  required:
-                    property.value.required === false
-                      ? false
-                      : existingProperty.value.required,
-                },
+                value: mergeTSIntersectionTypes(
+                  property.value,
+                  existingProperty.value,
+                ),
               };
             }
           }
