@@ -31,7 +31,7 @@
     "nx": "18.3.4",
     "prettier": "3.2.5",
     "prettier-plugin-tailwindcss": "0.5.14",
-    "rimraf": "5.0.6",
+    "rimraf": "5.0.7",
     "tempy": "3.1.0",
     "typescript": "5.4.5",
     "vitest": "0.34.6"
