@@ -31,35 +31,30 @@ import type {
  * };
  */
 export default (
-  newType: TypeDescriptor<TSFunctionSignatureType>,
   existingType: TypeDescriptor<TSFunctionSignatureType>,
+  newType: TypeDescriptor<TSFunctionSignatureType>,
 ): TypeDescriptor<TSFunctionSignatureType> => {
-  const newTypeIsForbiddenToUse = ['never'].includes(newType.name);
+  const required =
+    newType.required === false || existingType.required === false
+      ? false
+      : existingType.required;
 
-  if (newTypeIsForbiddenToUse) {
-    let mergedType = {
-      ...existingType,
-      required:
-        newType.required === false || existingType.required === false
-          ? false
-          : existingType.required,
+  const existingTypesArray = existingType.name.split('|').map((t) => t.trim());
+  const existingTypes = new Set(existingTypesArray);
+
+  if (!['never'].includes(newType.name)) {
+    existingTypes.add(newType.name);
+  }
+
+  if (existingType.name === 'unknown' || newType.name === 'unknown') {
+    return {
+      name: 'unknown',
+      required,
     };
-
-    if ('nullable' in existingType) {
-      mergedType = {
-        ...mergedType,
-        nullable: newType.nullable === true ? true : existingType.nullable,
-      };
-    }
-
-    return mergedType;
   }
 
   return {
-    ...newType,
-    required:
-      newType.required === false || existingType.required === false
-        ? false
-        : existingType.required,
+    name: Array.from(existingTypes).join(' | '),
+    required,
   };
 };

@@ -340,8 +340,8 @@ function handleTSIntersectionType(
               elementsDedup[existingIndex] = {
                 key: property.key,
                 value: mergeTSIntersectionTypes(
-                  property.value,
                   existingProperty.value,
+                  property.value,
                 ),
               };
             }

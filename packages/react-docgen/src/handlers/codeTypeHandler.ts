@@ -81,7 +81,6 @@ function setPropDescriptor(
       return;
     }
     const type = getTSType(typeAnnotation, typeParams);
-
     const propName = getPropertyName(path);
 
     if (!propName) return;
@@ -91,12 +90,12 @@ function setPropDescriptor(
     if (propDescriptor.tsType) {
       const mergedType = mergeTSIntersectionTypes(
         {
-          name: type.name,
-          required: !path.node.optional,
-        },
-        {
           name: propDescriptor.tsType.name,
           required: propDescriptor.required,
+        },
+        {
+          name: type.name,
+          required: !path.node.optional,
         },
       );
 
