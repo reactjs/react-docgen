@@ -94,7 +94,7 @@ function resolvesToFinalValue<T extends NodePath>(
     }
   }
 
-  return;
+  return resolvedPath as T;
 }
 
 /**
