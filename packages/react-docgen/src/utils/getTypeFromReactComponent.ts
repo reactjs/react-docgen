@@ -12,6 +12,7 @@ import type {
   FlowType,
   InterfaceDeclaration,
   InterfaceExtends,
+  Node,
   TSExpressionWithTypeArguments,
   TSInterfaceDeclaration,
   TSType,
@@ -39,6 +40,20 @@ function getStatelessPropsPath(
   if (!value.isFunction()) return;
 
   return value.get('params')[0];
+}
+
+function getForwardRefGenericsType(componentDefinition: NodePath) {
+  const typeParameters = componentDefinition.get(
+    'typeParameters',
+  ) as NodePath<Node>;
+
+  if (typeParameters && typeParameters.hasNode()) {
+    const params = typeParameters.get('params') as Array<NodePath<Node>>;
+
+    return params[1] ?? null;
+  }
+
+  return null;
 }
 
 function findAssignedVariableType(
@@ -106,6 +121,13 @@ export default (componentDefinition: NodePath): NodePath[] => {
       }
     }
   } else {
+    const genericTypeAnnotation =
+      getForwardRefGenericsType(componentDefinition);
+
+    if (genericTypeAnnotation) {
+      typePaths.push(genericTypeAnnotation);
+    }
+
     const propsParam = getStatelessPropsPath(componentDefinition);
 
     if (propsParam) {
@@ -162,9 +184,28 @@ export function applyToTypeProperties(
       (typesPath) =>
         applyToTypeProperties(documentation, typesPath, callback, typeParams),
     );
-  } else if (!path.isUnionTypeAnnotation()) {
-    // The react-docgen output format does not currently allow
-    // for the expression of union types
+  } else if (path.isParenthesizedExpression() || path.isTSParenthesizedType()) {
+    const typeAnnotation = path.get('typeAnnotation');
+    const typeAnnotationPath = Array.isArray(typeAnnotation)
+      ? typeAnnotation[0]
+      : typeAnnotation;
+
+    if (typeAnnotationPath) {
+      applyToTypeProperties(
+        documentation,
+        typeAnnotationPath,
+        callback,
+        typeParams,
+      );
+    }
+  } else if (path.isUnionTypeAnnotation() || path.isTSUnionType()) {
+    const typeNodes = path.get('types');
+    const types = Array.isArray(typeNodes) ? typeNodes : [typeNodes];
+
+    types.forEach((typesPath) =>
+      applyToTypeProperties(documentation, typesPath, callback, typeParams),
+    );
+  } else {
     const typePath = resolveGenericTypeAnnotation(path);
 
     if (typePath) {
