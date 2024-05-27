@@ -12,6 +12,7 @@ import type {
   FlowType,
   InterfaceDeclaration,
   InterfaceExtends,
+  Node,
   TSExpressionWithTypeArguments,
   TSInterfaceDeclaration,
   TSType,
@@ -39,6 +40,17 @@ function getStatelessPropsPath(
   if (!value.isFunction()) return;
 
   return value.get('params')[0];
+}
+
+function getForwardRefGenericsType(componentDefinition: NodePath) {
+  const typeParameters = componentDefinition.get(
+    'typeParameters',
+  ) as NodePath<Node>;
+  if (typeParameters && typeParameters.hasNode()) {
+    const params = typeParameters.get('params') as NodePath<Node>[];
+    return params[1] ?? null;
+  }
+  return null;
 }
 
 function findAssignedVariableType(
@@ -106,6 +118,11 @@ export default (componentDefinition: NodePath): NodePath[] => {
       }
     }
   } else {
+    const typeAnnotation = getForwardRefGenericsType(componentDefinition);
+    if (typeAnnotation) {
+      typePaths.push(typeAnnotation);
+    }
+
     const propsParam = getStatelessPropsPath(componentDefinition);
 
     if (propsParam) {
