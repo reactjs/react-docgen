@@ -19,7 +19,11 @@ const explodedVisitors = visitors.explode<TraverseState>({
     enter: function (path, state) {
       const argument = path.get('argument');
 
-      if (argument.hasNode()) {
+      if (argument.node?.type === 'NullLiteral') {
+        // Handle null return value
+        state.resolvedReturnPath = path;
+        path.stop();
+      } else if (argument.hasNode()) {
         const resolvedPath = resolvesToFinalValue(
           argument,
           state.predicate,
