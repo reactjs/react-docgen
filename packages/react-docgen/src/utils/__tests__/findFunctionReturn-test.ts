@@ -152,6 +152,27 @@ describe('findFunctionReturn', () => {
       expect(findFunctionReturn(def, predicate)).toBeUndefined();
     });
 
+    test('handles direct prop return', () => {
+      const def = parse.statement(`
+        function Foo ({ children }) {
+          return children;
+        }
+      `);
+
+      expect(findFunctionReturn(def, predicate)).toBeDefined();
+    });
+
+    test('handles null return', () => {
+      const def = parse.statement(`
+        function Foo (props) {
+          return null;
+        }
+      `);
+
+      const received = findFunctionReturn(def, predicate);
+      expect(received).toBeDefined();
+    });
+
     testReturnValues(
       'does not see ifs as separate block',
       `

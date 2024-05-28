@@ -94,7 +94,11 @@ function resolvesToFinalValue<T extends NodePath>(
     }
   }
 
-  return resolvedPath as T;
+  if (resolvedPath.isObjectProperty()) {
+    return resolvedPath as T;
+  }
+
+  return;
 }
 
 /**
