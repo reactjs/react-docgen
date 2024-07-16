@@ -29,7 +29,7 @@
     "react": "18.3.1",
     "react-docgen": "workspace:7.0.3",
     "react-dom": "18.3.1",
-    "tailwindcss": "3.4.5"
+    "tailwindcss": "3.4.6"
   },
   "browserslist": [
     "chrome 64",
