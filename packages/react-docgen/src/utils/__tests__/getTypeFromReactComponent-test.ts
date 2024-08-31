@@ -52,6 +52,30 @@ describe('getTypeFromReactComponent', () => {
         expect(getTypeFromReactComponent(path)).toMatchSnapshot();
       });
 
+      test('finds generic forwardRef type annotation', () => {
+        const path = parseTypescript
+          .statementLast<VariableDeclaration>(
+            `import React from 'react';
+             const x = React.forwardRef<HTMLDivElement, React.PropsWithChildren<Props>>((props, ref) => {})`,
+          )
+          .get('declarations')[0]
+          .get('init') as NodePath<ArrowFunctionExpression>;
+
+        expect(getTypeFromReactComponent(path)).toMatchSnapshot();
+      });
+
+      test('does not find generic forwardRef type annotation on typo', () => {
+        const path = parseTypescript
+          .statementLast<VariableDeclaration>(
+            `import React from 'react';
+             const x = React.backwardRef<HTMLDivElement, React.PropsWithChildren<Props>>((props, ref) => {})`,
+          )
+          .get('declarations')[0]
+          .get('init') as NodePath<ArrowFunctionExpression>;
+
+        expect(getTypeFromReactComponent(path)).toMatchSnapshot();
+      });
+
       test('finds param inline type', () => {
         const path = parseTypescript
           .statementLast<VariableDeclaration>(
