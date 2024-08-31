@@ -18,7 +18,7 @@
     "dist"
   ],
   "engines": {
-    "node": ">=16.14.0"
+    "node": "^20.9.0 || >=22"
   },
   "main": "dist/main.js",
   "typings": "dist/main.d.ts",
