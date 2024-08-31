@@ -107,6 +107,8 @@ exports[`getTypeFromReactComponent > TypeScript > classes > finds props type in 
 ]
 `;
 
+exports[`getTypeFromReactComponent > TypeScript > stateless > does not find generic forwardRef type annotation on typo 1`] = `[]`;
+
 exports[`getTypeFromReactComponent > TypeScript > stateless > finds generic forwardRef type annotation 1`] = `
 [
   Node {
