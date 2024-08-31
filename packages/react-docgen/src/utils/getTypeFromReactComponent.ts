@@ -12,7 +12,6 @@ import type {
   FlowType,
   InterfaceDeclaration,
   InterfaceExtends,
-  Node,
   TSExpressionWithTypeArguments,
   TSInterfaceDeclaration,
   TSType,
@@ -26,29 +25,23 @@ import getTypeIdentifier from './getTypeIdentifier.js';
 import isReactBuiltinReference from './isReactBuiltinReference.js';
 import unwrapBuiltinTSPropTypes from './unwrapBuiltinTSPropTypes.js';
 
-// TODO TESTME
-
 function getStatelessPropsPath(
   componentDefinition: NodePath,
 ): NodePath | undefined {
-  let value = componentDefinition;
+  if (!componentDefinition.isFunction()) return;
 
-  if (isReactForwardRefCall(value)) {
-    value = resolveToValue(value.get('arguments')[0]!);
-  }
-
-  if (!value.isFunction()) return;
-
-  return value.get('params')[0];
+  return componentDefinition.get('params')[0];
 }
 
-function getForwardRefGenericsType(componentDefinition: NodePath) {
-  const typeParameters = componentDefinition.get(
-    'typeParameters',
-  ) as NodePath<Node>;
+function getForwardRefGenericsType(
+  componentDefinition: NodePath,
+): NodePath<TSType> | null {
+  const typeParameters = componentDefinition.get('typeParameters') as NodePath<
+    TSTypeParameterInstantiation | null | undefined
+  >;
 
   if (typeParameters && typeParameters.hasNode()) {
-    const params = typeParameters.get('params') as Array<NodePath<Node>>;
+    const params = typeParameters.get('params');
 
     return params[1] ?? null;
   }
@@ -121,11 +114,17 @@ export default (componentDefinition: NodePath): NodePath[] => {
       }
     }
   } else {
-    const genericTypeAnnotation =
-      getForwardRefGenericsType(componentDefinition);
+    if (isReactForwardRefCall(componentDefinition)) {
+      const genericTypeAnnotation =
+        getForwardRefGenericsType(componentDefinition);
 
-    if (genericTypeAnnotation) {
-      typePaths.push(genericTypeAnnotation);
+      if (genericTypeAnnotation) {
+        typePaths.push(genericTypeAnnotation);
+      }
+
+      componentDefinition = resolveToValue(
+        componentDefinition.get('arguments')[0]!,
+      );
     }
 
     const propsParam = getStatelessPropsPath(componentDefinition);
