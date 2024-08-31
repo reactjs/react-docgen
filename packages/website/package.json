@@ -13,7 +13,7 @@
   "dependencies": {
     "@codemirror/lang-javascript": "6.2.2",
     "@codemirror/lang-json": "6.0.1",
-    "@codemirror/view": "6.29.1",
+    "@codemirror/view": "6.33.0",
     "@headlessui/react": "1.7.19",
     "@popperjs/core": "2.11.8",
     "@types/react": "18.3.5",
