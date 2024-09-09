@@ -33,7 +33,7 @@
     "prettier-plugin-tailwindcss": "0.6.6",
     "rimraf": "5.0.10",
     "tempy": "3.1.0",
-    "typescript": "5.5.4",
+    "typescript": "5.6.2",
     "vitest": "0.34.6"
   },
   "packageManager": "pnpm@8.15.9"
