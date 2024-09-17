@@ -27,7 +27,7 @@
     "eslint-config-next": "14.2.11",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-prettier": "5.2.1",
-    "execa": "7.2.0",
+    "execa": "9.4.0",
     "nx": "18.3.5",
     "prettier": "3.3.3",
     "prettier-plugin-tailwindcss": "0.6.6",
