@@ -163,8 +163,8 @@ importers:
         specifier: 2.11.8
         version: 2.11.8
       '@types/react':
-        specifier: 18.3.10
-        version: 18.3.10
+        specifier: 18.3.11
+        version: 18.3.11
       '@types/react-dom':
         specifier: 18.3.0
         version: 18.3.0
@@ -1096,7 +1096,7 @@ packages:
       react: '>=16'
     dependencies:
       '@types/mdx': 2.0.13
-      '@types/react': 18.3.10
+      '@types/react': 18.3.11
       react: 18.3.1
     dev: false
 
@@ -1804,11 +1804,11 @@ packages:
   /@types/react-dom@18.3.0:
     resolution: {integrity: sha512-EhwApuTmMBmXuFOikhQLIBUn6uFg81SwLMOAUgodJF14SOBOCMdU04gDoYi0WOJJHD144TL32z4yDqCW3dnkQg==}
     dependencies:
-      '@types/react': 18.3.10
+      '@types/react': 18.3.11
     dev: false
 
-  /@types/react@18.3.10:
-    resolution: {integrity: sha512-02sAAlBnP39JgXwkAq3PeU9DVaaGpZyF3MGcC0MKgQVkZor5IiiDAipVaxQHtDJAmO4GIy/rVBy/LzVj76Cyqg==}
+  /@types/react@18.3.11:
+    resolution: {integrity: sha512-r6QZ069rFTjrEYgFdOck1gK7FLVsgJE7tTz0pQBczlBNUhBNk0MQH4UbnFSwjpQLMkLzgqvBBa+qGpLje16eTQ==}
     dependencies:
       '@types/prop-types': 15.7.13
       csstype: 3.1.3
