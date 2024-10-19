@@ -1,16 +1,39 @@
 # Release Notes
 
+## 7.1.0
+
+### Minor Changes
+
+- [#923](https://github.com/reactjs/react-docgen/pull/923)
+  [`3033ca0`](https://github.com/reactjs/react-docgen/commit/3033ca0908eb53f6ae2ee8a40eb4ef96840ff7ad)
+  Thanks [@rvetere](https://github.com/rvetere)! - Support generic types on
+  `React.forwardRef` calls.
+
+  Example:
+
+  `react-docgen` will now find `IButtonProps`.
+
+  ```ts
+  export const FullWidthButton = forwardRef<HTMLButtonElement, IButtonProps>(
+    () => {},
+  );
+  ```
+
 ## 7.0.3
 
 ### Patch Changes
 
-- [#890](https://github.com/reactjs/react-docgen/pull/890) [`afe8d02`](https://github.com/reactjs/react-docgen/commit/afe8d022d058a5d49c6fc144fb165c02f4a764d9) Thanks [@danez](https://github.com/danez)! - Do not throw error when using namespace specifiers in export statements
+- [#890](https://github.com/reactjs/react-docgen/pull/890)
+  [`afe8d02`](https://github.com/reactjs/react-docgen/commit/afe8d022d058a5d49c6fc144fb165c02f4a764d9)
+  Thanks [@danez](https://github.com/danez)! - Do not throw error when using
+  namespace specifiers in export statements
 
 ## 7.0.2
 
 ### Patch Changes
 
-- [`64bf1aa`](https://github.com/reactjs/react-docgen/commit/64bf1aa078148b4d44f8634252e5b726e24b8ee5) Thanks [@danez](https://github.com/danez)! - Fix handling of template literals
+- [`64bf1aa`](https://github.com/reactjs/react-docgen/commit/64bf1aa078148b4d44f8634252e5b726e24b8ee5)
+  Thanks [@danez](https://github.com/danez)! - Fix handling of template literals
 
 ## 7.0.1
 
@@ -341,7 +364,7 @@
   allows multiple resolvers to be chained.
 
   ```ts
-  import { builtinResolvers } from "react-docgen";
+  import { builtinResolvers } from 'react-docgen';
 
   const { ChainResolver } = builtinResolvers;
   const resolver = new ChainResolver([resolver1, resolver2], {
@@ -370,7 +393,7 @@
   addition to functions.
 
   ```ts
-  import type { ResolverClass, ResolverFunction } from "react-docgen";
+  import type { ResolverClass, ResolverFunction } from 'react-docgen';
 
   // This was the only option until now
   const functionResolver: ResolverFunction = (file: FileState) => {
@@ -625,7 +648,7 @@
   chained.
 
   ```ts
-  import { builtinResolvers } from "react-docgen";
+  import { builtinResolvers } from 'react-docgen';
 
   const { ChainResolver } = builtinResolvers;
   const resolver = new ChainResolver([resolver1, resolver2], {
@@ -636,7 +659,7 @@
 - 80e4c74: Allow resolvers to be classes in addition to functions.
 
   ```ts
-  import type { ResolverClass, ResolverFunction } from "react-docgen";
+  import type { ResolverClass, ResolverFunction } from 'react-docgen';
 
   // This was the only option until now
   const functionResolver: ResolverFunction = (file: FileState) => {
