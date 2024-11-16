@@ -157,11 +157,8 @@ importers:
         specifier: 6.34.1
         version: 6.34.1
       '@headlessui/react':
-        specifier: 1.7.19
-        version: 1.7.19(react-dom@18.3.1)(react@18.3.1)
-      '@popperjs/core':
-        specifier: 2.11.8
-        version: 2.11.8
+        specifier: 2.2.0
+        version: 2.2.0(react-dom@18.3.1)(react@18.3.1)
       '@types/react':
         specifier: 18.3.11
         version: 18.3.11
@@ -178,8 +175,8 @@ importers:
         specifier: 14.2.16
         version: 14.2.16(react-dom@18.3.1)(react@18.3.1)
       next-themes:
-        specifier: 0.3.0
-        version: 0.3.0(react-dom@18.3.1)(react@18.3.1)
+        specifier: 0.4.3
+        version: 0.4.3(react-dom@18.3.1)(react@18.3.1)
       nextra:
         specifier: 3.2.3
         version: 3.2.3(@types/react@18.3.11)(acorn@8.13.0)(next@14.2.16)(react-dom@18.3.1)(react@18.3.1)(typescript@5.6.3)
@@ -1015,19 +1012,6 @@ packages:
       tslib: 2.8.0
     dev: false
 
-  /@headlessui/react@1.7.19(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-Ll+8q3OlMJfJbAKM/+/Y2q6PPYbryqNTXDbryx7SXLIDamkF6iQFbriYHga0dY44PvDhvvBWCx1Xj4U5+G4hOw==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      react: ^16 || ^17 || ^18
-      react-dom: ^16 || ^17 || ^18
-    dependencies:
-      '@tanstack/react-virtual': 3.10.8(react-dom@18.3.1)(react@18.3.1)
-      client-only: 0.0.1
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-    dev: false
-
   /@headlessui/react@2.2.0(react-dom@18.3.1)(react@18.3.1):
     resolution: {integrity: sha512-RzCEg+LXsuI7mHiSomsu/gBJSjpupm6A1qIZ5sWjd7JhARNlMiSA4kKfJpCKwU9tE+zMRterhhrP74PvfJrpXQ==}
     engines: {node: '>=10'}
@@ -1603,10 +1587,6 @@ packages:
     resolution: {integrity: sha512-cq8o4cWH0ibXh9VGi5P20Tu9XF/0fFXl9EUinr9QfTM7a7p0oTA4iJRCQWppXR1Pg8dSM0UCItCkPwsk9qWWYA==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
     dev: true
-
-  /@popperjs/core@2.11.8:
-    resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
-    dev: false
 
   /@react-aria/focus@3.18.4(react@18.3.1):
     resolution: {integrity: sha512-91J35077w9UNaMK1cpMUEFRkNNz0uZjnSwiyBCFuRdaVuivO53wNC9XtWSDNDdcO5cGy87vfJRVAiyoCn/mjqA==}
@@ -6627,16 +6607,6 @@ packages:
   /nested-error-stacks@2.1.1:
     resolution: {integrity: sha512-9iN1ka/9zmX1ZvLV9ewJYEk9h7RyRRtqdK0woXcqohu8EWIerfPUjYJPg0ULy0UqP7cslmdGc8xKDJcojlKiaw==}
     dev: true
-
-  /next-themes@0.3.0(react-dom@18.3.1)(react@18.3.1):
-    resolution: {integrity: sha512-/QHIrsYpd6Kfk7xakK4svpDI5mmXP0gfvCoJdGpZQ2TOrQZmsW0QxjaiLn8wbIKjtm4BTSqLoix4lxYYOnLJ/w==}
-    peerDependencies:
-      react: ^16.8 || ^17 || ^18
-      react-dom: ^16.8 || ^17 || ^18
-    dependencies:
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
-    dev: false
 
   /next-themes@0.4.3(react-dom@18.3.1)(react@18.3.1):
     resolution: {integrity: sha512-nG84VPkTdUHR2YeD89YchvV4I9RbiMAql3GiLEQlPvq1ioaqPaIReK+yMRdg/zgiXws620qS1rU30TiWmmG9lA==}
