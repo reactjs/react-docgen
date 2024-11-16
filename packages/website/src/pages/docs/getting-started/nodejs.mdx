@@ -1,4 +1,4 @@
-import { Tab, Tabs } from 'nextra-theme-docs';
+import { Tabs } from 'nextra/components';
 
 # Node.js
 
@@ -7,27 +7,27 @@ import { Tab, Tabs } from 'nextra-theme-docs';
 Install the module with your favorite package manager:
 
 <Tabs items={["npm", "pnpm", "yarn"]}>
-  <Tab>
+  <Tabs.Tab>
 
 ```shell filename="Terminal" copy
 npm install --save react-docgen
 ```
 
-  </Tab>
-  <Tab>
+  </Tabs.Tab>
+  <Tabs.Tab>
 
 ```shell filename="Terminal" copy
 pnpm add react-docgen
 ```
 
-  </Tab>
-  <Tab>
+  </Tabs.Tab>
+  <Tabs.Tab>
 
 ```shell filename="Terminal" copy
 yarn add react-docgen
 ```
 
-  </Tab>
+  </Tabs.Tab>
 </Tabs>
 
 ## Usage

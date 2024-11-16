@@ -1,4 +1,4 @@
-import { Tab, Tabs } from 'nextra-theme-docs';
+import { Tabs } from 'nextra/components';
 
 # Getting started with the Command Line Interface (CLI)
 
@@ -12,27 +12,27 @@ a dependency.
 In order to use it directly any of these commands will work:
 
 <Tabs items={["npx", "pnpm", "yarn"]}>
-  <Tab>
+  <Tabs.Tab>
 
 ```shell filename="Terminal" copy
 npx @react-docgen/cli --help
 ```
 
-  </Tab>
-  <Tab>
+  </Tabs.Tab>
+  <Tabs.Tab>
 
 ```shell filename="Terminal" copy
 pnpm dlx @react-docgen/cli --help
 ```
 
-  </Tab>
-  <Tab>
+  </Tabs.Tab>
+  <Tabs.Tab>
 
 ```shell filename="Terminal" copy
 yarn dlx @react-docgen/cli --help
 ```
 
-  </Tab>
+  </Tabs.Tab>
 </Tabs>
 
 ### Install
@@ -40,27 +40,27 @@ yarn dlx @react-docgen/cli --help
 Installing the CLI can be done with any available package manager:
 
 <Tabs items={["npm", "pnpm", "yarn"]}>
-  <Tab>
+  <Tabs.Tab>
 
 ```shell filename="Terminal" copy
 npm install --save @react-docgen/cli
 ```
 
-  </Tab>
-  <Tab>
+  </Tabs.Tab>
+  <Tabs.Tab>
 
 ```shell filename="Terminal" copy
 pnpm add @react-docgen/cli
 ```
 
-  </Tab>
-  <Tab>
+  </Tabs.Tab>
+  <Tabs.Tab>
 
 ```shell filename="Terminal" copy
 yarn add @react-docgen/cli
 ```
 
-  </Tab>
+  </Tabs.Tab>
 </Tabs>
 
 ## Usage
