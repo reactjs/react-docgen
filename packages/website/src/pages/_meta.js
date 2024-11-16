@@ -1,31 +1,31 @@
 export default {
-  "index": {
-    "title": "Home",
-    "type": "page"
+  index: {
+    title: 'Home',
+    type: 'page',
   },
-  "docs": {
-    "title": "Docs",
-    "type": "page"
+  docs: {
+    title: 'Docs',
+    type: 'page',
   },
-  "playground": {
-    "title": "Playground",
-    "type": "page",
-    "theme": {
-      "layout": "raw"
-    }
+  playground: {
+    title: 'Playground',
+    type: 'page',
+    theme: {
+      layout: 'raw',
+    },
   },
-  "users": {
-    "title": "Users",
-    "type": "page",
-    "theme": {
-      "typesetting": "article"
-    }
+  users: {
+    title: 'Users',
+    type: 'page',
+    theme: {
+      typesetting: 'article',
+    },
   },
-  "about": {
-    "title": "About",
-    "type": "page",
-    "theme": {
-      "typesetting": "article"
-    }
-  }
-}
+  about: {
+    title: 'About',
+    type: 'page',
+    theme: {
+      typesetting: 'article',
+    },
+  },
+};
