@@ -15,7 +15,7 @@
     "@codemirror/lang-json": "6.0.1",
     "@codemirror/view": "6.34.3",
     "@headlessui/react": "2.2.0",
-    "@types/react": "18.3.11",
+    "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
     "@uiw/react-codemirror": "4.23.5",
     "clsx": "2.1.1",
