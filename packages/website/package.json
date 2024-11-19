@@ -16,7 +16,7 @@
     "@codemirror/view": "6.34.3",
     "@headlessui/react": "2.2.0",
     "@types/react": "npm:types-react@19.0.0-rc.1",
-    "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1",
+    "@types/react-dom": "npm:types-react-dom@19.0.0",
     "@uiw/react-codemirror": "4.23.6",
     "clsx": "2.1.1",
     "next": "15.0.3",
@@ -62,7 +62,7 @@
   "pnpm": {
     "overrides": {
       "@types/react": "npm:types-react@19.0.0-rc.1",
-      "@types/react-dom": "npm:types-react-dom@19.0.0-rc.1"
+      "@types/react-dom": "npm:types-react-dom@19.0.0"
     }
   }
 }
