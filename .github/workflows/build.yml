@@ -51,9 +51,10 @@ jobs:
         if: '${{ matrix.node != env.NODE_VERSION }}'
         run: pnpm test
 
-      - name: Upload coverage to Codecov
+      - name: Upload coverage
         if: '${{ matrix.node == env.NODE_VERSION }}'
-        uses: codecov/codecov-action@v5
+        #uses: codecov/codecov-action@v5
+        uses: coverallsapp/github-action@v2
 
   lint:
     name: Lint
