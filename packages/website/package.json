@@ -13,7 +13,7 @@
   "dependencies": {
     "@codemirror/lang-javascript": "6.2.2",
     "@codemirror/lang-json": "6.0.1",
-    "@codemirror/view": "6.34.3",
+    "@codemirror/view": "6.35.0",
     "@headlessui/react": "2.2.0",
     "@types/react": "npm:types-react@19.0.0-rc.1",
     "@types/react-dom": "npm:types-react-dom@19.0.0",
