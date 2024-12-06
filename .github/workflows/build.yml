@@ -53,8 +53,20 @@ jobs:
 
       - name: Upload coverage
         if: '${{ matrix.node == env.NODE_VERSION }}'
-        #uses: codecov/codecov-action@v5
         uses: coverallsapp/github-action@v2
+        with:
+          parallel: true
+          flag-name: test-${{ matrix.os }}
+
+  finish:
+    needs: tests
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close parallel build
+        uses: coverallsapp/github-action@v2
+        with:
+          parallel-finished: true
 
   lint:
     name: Lint
