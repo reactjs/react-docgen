@@ -178,11 +178,11 @@ importers:
         specifier: 0.4.4
         version: 0.4.4(react-dom@19.0.0)(react@19.0.0)
       nextra:
-        specifier: 3.2.4
-        version: 3.2.4(@types/react@19.0.1)(acorn@8.14.0)(next@15.0.4)(react-dom@19.0.0)(react@19.0.0)(typescript@5.7.2)
+        specifier: 3.2.5
+        version: 3.2.5(@types/react@19.0.1)(acorn@8.14.0)(next@15.0.4)(react-dom@19.0.0)(react@19.0.0)(typescript@5.7.2)
       nextra-theme-docs:
-        specifier: 3.2.4
-        version: 3.2.4(next@15.0.4)(nextra@3.2.4)(react-dom@19.0.0)(react@19.0.0)
+        specifier: 3.2.5
+        version: 3.2.5(next@15.0.4)(nextra@3.2.5)(react-dom@19.0.0)(react@19.0.0)
       postcss:
         specifier: 8.4.49
         version: 8.4.49
@@ -6806,11 +6806,11 @@ packages:
       - babel-plugin-macros
     dev: false
 
-  /nextra-theme-docs@3.2.4(next@15.0.4)(nextra@3.2.4)(react-dom@19.0.0)(react@19.0.0):
-    resolution: {integrity: sha512-3fg7zMHInuvSDURRJjh6UrbdqkK8uLs8RNriY38kVukWLvaVP2f6mmVJKIYqxVv6qAKWEzDLTr4dlJCY81eXuQ==}
+  /nextra-theme-docs@3.2.5(next@15.0.4)(nextra@3.2.5)(react-dom@19.0.0)(react@19.0.0):
+    resolution: {integrity: sha512-eF0j1VNNS1rFjZOfYqlrXISaCU3+MhZ9hhXY+TUydRlfELrFWpGzrpW6MiL7hq4JvUR7OBtHHs8+A+8AYcETBQ==}
     peerDependencies:
       next: '>=13'
-      nextra: 3.2.4
+      nextra: 3.2.5
       react: '>=18'
       react-dom: '>=18'
     dependencies:
@@ -6820,15 +6820,15 @@ packages:
       flexsearch: 0.7.43
       next: 15.0.4(react-dom@19.0.0)(react@19.0.0)
       next-themes: 0.4.4(react-dom@19.0.0)(react@19.0.0)
-      nextra: 3.2.4(@types/react@19.0.1)(acorn@8.14.0)(next@15.0.4)(react-dom@19.0.0)(react@19.0.0)(typescript@5.7.2)
+      nextra: 3.2.5(@types/react@19.0.1)(acorn@8.14.0)(next@15.0.4)(react-dom@19.0.0)(react@19.0.0)(typescript@5.7.2)
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
       scroll-into-view-if-needed: 3.1.0
       zod: 3.23.8
     dev: false
 
-  /nextra@3.2.4(@types/react@19.0.1)(acorn@8.14.0)(next@15.0.4)(react-dom@19.0.0)(react@19.0.0)(typescript@5.7.2):
-    resolution: {integrity: sha512-xvQuPVtRoJTz4ynIbEkxYkEtviIX699lt4coij2IMmafYrBNaD0Ofj93jIz7VngYxyT9f4gWSiwqNgoIlnbsjQ==}
+  /nextra@3.2.5(@types/react@19.0.1)(acorn@8.14.0)(next@15.0.4)(react-dom@19.0.0)(react@19.0.0)(typescript@5.7.2):
+    resolution: {integrity: sha512-n665DRpI/brjHXM83G5LdlbYA2nOtjaLcWJs7mZS3gkuRDmEXpJj4XJ860xrhkYZW2iYoUMu32zzhPuFByU7VA==}
     engines: {node: '>=18'}
     peerDependencies:
       next: '>=13'
