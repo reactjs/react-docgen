@@ -1,5 +1,14 @@
 # Release Notes
 
+## 2.0.5
+
+### Patch Changes
+
+- [#954](https://github.com/reactjs/react-docgen/pull/954)
+  [`3c0cbb0`](https://github.com/reactjs/react-docgen/commit/3c0cbb0c2869488ac96291f1d491a93c8c1b5b06)
+  Thanks [@renovate](https://github.com/apps/renovate)! - update dependency
+  debug to v4.4.0
+
 ## 2.0.4
 
 ### Patch Changes
