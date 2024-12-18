@@ -123,8 +123,8 @@ importers:
   packages/react-docgen-cli:
     dependencies:
       chalk:
-        specifier: 5.3.0
-        version: 5.3.0
+        specifier: 5.4.0
+        version: 5.4.0
       commander:
         specifier: 11.1.0
         version: 11.1.0
@@ -3087,8 +3087,8 @@ packages:
       supports-color: 7.2.0
     dev: true
 
-  /chalk@5.3.0:
-    resolution: {integrity: sha512-dLitG79d+GV1Nb/VYcCDFivJeK1hiukt9QjRNVOsUtTy1rR1YJsmpGGTZ3qJos+uw7WmWF4wUwBd9jxjocFC2w==}
+  /chalk@5.4.0:
+    resolution: {integrity: sha512-ZkD35Mx92acjB2yNJgziGqT9oKHEOxjTBTDRpOsRWtdecL/0jM3z5kM/CTzHWvHIen1GvkM85p6TuFfDGfc8/Q==}
     engines: {node: ^12.17.0 || ^14.13 || >=16.0.0}
     dev: false
 
@@ -8615,7 +8615,7 @@ packages:
     hasBin: true
     dependencies:
       arg: 5.0.2
-      chalk: 5.3.0
+      chalk: 5.4.0
       clipboardy: 4.0.0
     dev: false
 
