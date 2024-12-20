@@ -178,11 +178,11 @@ importers:
         specifier: 0.4.4
         version: 0.4.4(react-dom@19.0.0)(react@19.0.0)
       nextra:
-        specifier: 3.2.5
-        version: 3.2.5(@types/react@19.0.2)(acorn@8.14.0)(next@15.1.2)(react-dom@19.0.0)(react@19.0.0)(typescript@5.7.2)
+        specifier: 3.3.0
+        version: 3.3.0(@types/react@19.0.2)(acorn@8.14.0)(next@15.1.2)(react-dom@19.0.0)(react@19.0.0)(typescript@5.7.2)
       nextra-theme-docs:
-        specifier: 3.2.5
-        version: 3.2.5(next@15.1.2)(nextra@3.2.5)(react-dom@19.0.0)(react@19.0.0)
+        specifier: 3.3.0
+        version: 3.3.0(next@15.1.2)(nextra@3.3.0)(react-dom@19.0.0)(react@19.0.0)
       postcss:
         specifier: 8.4.49
         version: 8.4.49
@@ -6812,11 +6812,11 @@ packages:
       - babel-plugin-macros
     dev: false
 
-  /nextra-theme-docs@3.2.5(next@15.1.2)(nextra@3.2.5)(react-dom@19.0.0)(react@19.0.0):
-    resolution: {integrity: sha512-eF0j1VNNS1rFjZOfYqlrXISaCU3+MhZ9hhXY+TUydRlfELrFWpGzrpW6MiL7hq4JvUR7OBtHHs8+A+8AYcETBQ==}
+  /nextra-theme-docs@3.3.0(next@15.1.2)(nextra@3.3.0)(react-dom@19.0.0)(react@19.0.0):
+    resolution: {integrity: sha512-4JSbDmsbtaYa2eKHsNymWy6So4/fAAXuNPSkjgQ3S+aLRiC730mR9djdkTd1iRca4+czetzBWaqxu+HwTVSSCA==}
     peerDependencies:
       next: '>=13'
-      nextra: 3.2.5
+      nextra: 3.3.0
       react: '>=18'
       react-dom: '>=18'
     dependencies:
@@ -6826,15 +6826,15 @@ packages:
       flexsearch: 0.7.43
       next: 15.1.2(react-dom@19.0.0)(react@19.0.0)
       next-themes: 0.4.4(react-dom@19.0.0)(react@19.0.0)
-      nextra: 3.2.5(@types/react@19.0.2)(acorn@8.14.0)(next@15.1.2)(react-dom@19.0.0)(react@19.0.0)(typescript@5.7.2)
+      nextra: 3.3.0(@types/react@19.0.2)(acorn@8.14.0)(next@15.1.2)(react-dom@19.0.0)(react@19.0.0)(typescript@5.7.2)
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
       scroll-into-view-if-needed: 3.1.0
       zod: 3.23.8
     dev: false
 
-  /nextra@3.2.5(@types/react@19.0.2)(acorn@8.14.0)(next@15.1.2)(react-dom@19.0.0)(react@19.0.0)(typescript@5.7.2):
-    resolution: {integrity: sha512-n665DRpI/brjHXM83G5LdlbYA2nOtjaLcWJs7mZS3gkuRDmEXpJj4XJ860xrhkYZW2iYoUMu32zzhPuFByU7VA==}
+  /nextra@3.3.0(@types/react@19.0.2)(acorn@8.14.0)(next@15.1.2)(react-dom@19.0.0)(react@19.0.0)(typescript@5.7.2):
+    resolution: {integrity: sha512-//+bQW3oKrpLrrIFD5HJow310+YcNYhGIgdM4y+EjYuIXScJcgp6Q4Upsq8c2s2fQKEJjeuf+hXKusx9fvH/2w==}
     engines: {node: '>=18'}
     peerDependencies:
       next: '>=13'
@@ -6866,6 +6866,7 @@ packages:
       p-limit: 6.1.0
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
+      react-medium-image-zoom: 5.2.12(react-dom@19.0.0)(react@19.0.0)
       rehype-katex: 7.0.1
       rehype-pretty-code: 0.14.0(shiki@1.24.0)
       rehype-raw: 7.0.0
@@ -7635,6 +7636,16 @@ packages:
   /react-is@18.3.1:
     resolution: {integrity: sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==}
     dev: true
+
+  /react-medium-image-zoom@5.2.12(react-dom@19.0.0)(react@19.0.0):
+    resolution: {integrity: sha512-BbQ9jLBFxu6z+viH5tzQzAGqHOJQoYUM7iT1KUkamWKOO6vR1pC33os7LGLrHvOcyySMw74rUdoUCXFdeglwCQ==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    dependencies:
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
+    dev: false
 
   /react@19.0.0:
     resolution: {integrity: sha512-V8AVnmPIICiWpGfm6GLzCR/W5FXLchHop40W4nXBmdlEceh16rCN8O8LNWm5bh5XUX91fh7KpA+W0TgMKmgTpQ==}
