@@ -32,7 +32,7 @@
   "license": "MIT",
   "dependencies": {
     "chalk": "5.4.0",
-    "commander": "11.1.0",
+    "commander": "13.0.0",
     "debug": "4.4.0",
     "fast-glob": "3.3.2",
     "react-docgen": "workspace:7.1.0",
