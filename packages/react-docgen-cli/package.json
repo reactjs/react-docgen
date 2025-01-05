@@ -34,7 +34,7 @@
     "chalk": "5.4.0",
     "commander": "11.1.0",
     "debug": "4.4.0",
-    "fast-glob": "3.3.2",
+    "fast-glob": "3.3.3",
     "react-docgen": "workspace:7.1.0",
     "slash": "5.1.0"
   },
