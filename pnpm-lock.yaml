@@ -39,8 +39,8 @@ importers:
         specifier: 9.1.0
         version: 9.1.0(eslint@8.57.1)
       eslint-plugin-prettier:
-        specifier: 5.2.2
-        version: 5.2.2(eslint-config-prettier@9.1.0)(eslint@8.57.1)(prettier@3.4.2)
+        specifier: 5.2.3
+        version: 5.2.3(eslint-config-prettier@9.1.0)(eslint@8.57.1)(prettier@3.4.2)
       execa:
         specifier: 7.2.0
         version: 7.2.0
@@ -4306,8 +4306,8 @@ packages:
       string.prototype.includes: 2.0.1
     dev: true
 
-  /eslint-plugin-prettier@5.2.2(eslint-config-prettier@9.1.0)(eslint@8.57.1)(prettier@3.4.2):
-    resolution: {integrity: sha512-1yI3/hf35wmlq66C8yOyrujQnel+v5l1Vop5Cl2I6ylyNTT1JbuUUnV3/41PzwTzcyDp/oF0jWE3HXvcH5AQOQ==}
+  /eslint-plugin-prettier@5.2.3(eslint-config-prettier@9.1.0)(eslint@8.57.1)(prettier@3.4.2):
+    resolution: {integrity: sha512-qJ+y0FfCp/mQYQ/vWQ3s7eUlFEL4PyKfAJxsnYTJ4YT73nsJBWqmEpFryxV9OeUiqmsTsYJ5Y+KDNaeP31wrRw==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
       '@types/eslint': '>=8.0.0'
