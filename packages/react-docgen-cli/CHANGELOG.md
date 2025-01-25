@@ -1,5 +1,13 @@
 # Release Notes
 
+## 2.0.6
+
+### Patch Changes
+
+- Updated dependencies
+  [[`639bf37`](https://github.com/reactjs/react-docgen/commit/639bf3799bd74c46c2163841fefd9f3cc847dce9)]:
+  - react-docgen@7.1.1
+
 ## 2.0.5
 
 ### Patch Changes
