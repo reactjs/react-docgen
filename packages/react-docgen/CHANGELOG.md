@@ -1,5 +1,14 @@
 # Release Notes
 
+## 7.1.1
+
+### Patch Changes
+
+- [#969](https://github.com/reactjs/react-docgen/pull/969)
+  [`639bf37`](https://github.com/reactjs/react-docgen/commit/639bf3799bd74c46c2163841fefd9f3cc847dce9)
+  Thanks [@christon88](https://github.com/christon88)! - Expose more TypeScript
+  types
+
 ## 7.1.0
 
 ### Minor Changes
