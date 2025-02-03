@@ -21,7 +21,7 @@
     "@types/node": "14.18.63",
     "@typescript-eslint/eslint-plugin": "7.18.0",
     "@typescript-eslint/parser": "7.18.0",
-    "@vitest/coverage-v8": "0.34.6",
+    "@vitest/coverage-v8": "3.0.5",
     "cpy": "10.1.0",
     "eslint": "8.57.1",
     "eslint-config-next": "15.1.6",
@@ -34,7 +34,7 @@
     "rimraf": "5.0.10",
     "tempy": "3.1.0",
     "typescript": "5.7.3",
-    "vitest": "0.34.6"
+    "vitest": "3.0.5"
   },
   "packageManager": "pnpm@8.15.9"
 }
