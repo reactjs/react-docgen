@@ -13,7 +13,7 @@ export default async function importFile<T>(
       pathToFileURL(require.resolve(importSpecifier, resolveOptions)).href
     );
 
-    return importedFile.default ? importedFile.default : importFile;
+    return importedFile.default ? importedFile.default : importedFile;
   } catch (error) {
     if (
       error instanceof Error &&
