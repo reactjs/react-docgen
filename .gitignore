@@ -5,3 +5,4 @@ dist/
 .idea/
 coverage/
 .nx/cache
+.nx/workspace-data

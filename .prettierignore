@@ -3,3 +3,4 @@ benchmark/suites/
 **/dist/
 **/node_modules
 /.nx/cache
+/.nx/workspace-data
