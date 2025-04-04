@@ -14,7 +14,7 @@
     "@codemirror/lang-javascript": "6.2.3",
     "@codemirror/lang-json": "6.0.1",
     "@codemirror/view": "6.36.5",
-    "@headlessui/react": "2.2.0",
+    "@headlessui/react": "2.2.1",
     "@types/react": "19.1.0",
     "@types/react-dom": "19.1.1",
     "@uiw/react-codemirror": "4.23.7",
