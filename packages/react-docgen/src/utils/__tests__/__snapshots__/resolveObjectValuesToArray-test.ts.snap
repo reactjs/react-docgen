@@ -2,22 +2,22 @@
 
 exports[`resolveObjectValuesToArray > can resolve imported objects passed to Object.values 1`] = `
 [
-  "\\"bar\\"",
-  "\\"foo\\"",
+  ""bar"",
+  ""foo"",
   "0",
   "5",
   "null",
   "null",
   "7",
-  "\\"foo\\"",
+  ""foo"",
 ]
 `;
 
 exports[`resolveObjectValuesToArray > can resolve spreads from imported objects 1`] = `
 [
-  "\\"foo\\"",
-  "\\"baz\\"",
-  "\\"bar\\"",
+  ""foo"",
+  ""baz"",
+  ""bar"",
 ]
 `;
 
@@ -76,8 +76,8 @@ exports[`resolveObjectValuesToArray > resolves Object.values with numbers 1`] = 
 
 exports[`resolveObjectValuesToArray > resolves Object.values with strings 1`] = `
 [
-  "\\"bar\\"",
-  "\\"foo\\"",
+  ""bar"",
+  ""foo"",
 ]
 `;
 

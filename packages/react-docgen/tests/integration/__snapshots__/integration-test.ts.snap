@@ -59,7 +59,7 @@ exports[`integration > fixtures > processes component "component_2.js" without e
       "type": {
         "defaultValue": {
           "computed": false,
-          "value": "\\"primary\\"",
+          "value": ""primary"",
         },
         "required": false,
       },
@@ -321,7 +321,7 @@ exports[`integration > fixtures > processes component "component_10.js" without 
 @returns {Object} currentTime
    @returns {int} currentTime.hour
    @returns {int} currentTime.minutes
-   @returns {string} currentTime.ampm \\"am\\" or \\"pm\\"
+   @returns {string} currentTime.ampm "am" or "pm"
    @returns {string} currentTime.dayOfWeek
    @returns {string} currentTime.month
    @returns {int} currentTime.date",
@@ -347,8 +347,8 @@ exports[`integration > fixtures > processes component "component_10.js" without 
     "props": {
       "title": {
         "description": "A text display current's user identity,
- \\"Nobody\\" if no one is detected in the background,
- \\"Hi, ..name\\" if an user is detected",
+ "Nobody" if no one is detected in the background,
+ "Hi, ..name" if an user is detected",
         "required": false,
         "type": {
           "name": "string",
@@ -617,23 +617,23 @@ exports[`integration > fixtures > processes component "component_13.js" without 
           "elements": [
             {
               "name": "literal",
-              "value": "\\"left\\"",
+              "value": ""left"",
             },
             {
               "name": "literal",
-              "value": "\\"center\\"",
+              "value": ""center"",
             },
             {
               "name": "literal",
-              "value": "\\"right\\"",
+              "value": ""right"",
             },
             {
               "name": "literal",
-              "value": "\\"justify\\"",
+              "value": ""justify"",
             },
           ],
           "name": "union",
-          "raw": "\\"left\\" | \\"center\\" | \\"right\\" | \\"justify\\"",
+          "raw": ""left" | "center" | "right" | "justify"",
         },
         "required": false,
       },
@@ -686,23 +686,23 @@ exports[`integration > fixtures > processes component "component_13.js" without 
           "elements": [
             {
               "name": "literal",
-              "value": "\\"none\\"",
+              "value": ""none"",
             },
             {
               "name": "literal",
-              "value": "\\"tight\\"",
+              "value": ""tight"",
             },
             {
               "name": "literal",
-              "value": "\\"normal\\"",
+              "value": ""normal"",
             },
             {
               "name": "literal",
-              "value": "\\"loose\\"",
+              "value": ""loose"",
             },
           ],
           "name": "union",
-          "raw": "\\"none\\" | \\"tight\\" | \\"normal\\" | \\"loose\\"",
+          "raw": ""none" | "tight" | "normal" | "loose"",
         },
         "required": false,
       },
@@ -775,19 +775,19 @@ exports[`integration > fixtures > processes component "component_13.js" without 
           "elements": [
             {
               "name": "literal",
-              "value": "\\"tight\\"",
+              "value": ""tight"",
             },
             {
               "name": "literal",
-              "value": "\\"normal\\"",
+              "value": ""normal"",
             },
             {
               "name": "literal",
-              "value": "\\"wide\\"",
+              "value": ""wide"",
             },
           ],
           "name": "union",
-          "raw": "\\"tight\\" | \\"normal\\" | \\"wide\\"",
+          "raw": ""tight" | "normal" | "wide"",
         },
         "required": false,
       },
@@ -818,19 +818,19 @@ exports[`integration > fixtures > processes component "component_13.js" without 
           "elements": [
             {
               "name": "literal",
-              "value": "\\"lowercase\\"",
+              "value": ""lowercase"",
             },
             {
               "name": "literal",
-              "value": "\\"uppercase\\"",
+              "value": ""uppercase"",
             },
             {
               "name": "literal",
-              "value": "\\"capitalize\\"",
+              "value": ""capitalize"",
             },
           ],
           "name": "union",
-          "raw": "\\"lowercase\\" | \\"uppercase\\" | \\"capitalize\\"",
+          "raw": ""lowercase" | "uppercase" | "capitalize"",
         },
         "required": false,
       },
@@ -1095,7 +1095,7 @@ exports[`integration > fixtures > processes component "component_20.js" without 
       "@computed#children": {
         "defaultValue": {
           "computed": false,
-          "value": "\\"default\\"",
+          "value": ""default"",
         },
         "description": "This is a test",
         "required": false,
@@ -1188,23 +1188,23 @@ exports[`integration > fixtures > processes component "component_22.tsx" without
           "elements": [
             {
               "name": "literal",
-              "value": "\\"left\\"",
+              "value": ""left"",
             },
             {
               "name": "literal",
-              "value": "\\"center\\"",
+              "value": ""center"",
             },
             {
               "name": "literal",
-              "value": "\\"right\\"",
+              "value": ""right"",
             },
             {
               "name": "literal",
-              "value": "\\"justify\\"",
+              "value": ""justify"",
             },
           ],
           "name": "union",
-          "raw": "\\"left\\" | \\"center\\" | \\"right\\" | \\"justify\\"",
+          "raw": ""left" | "center" | "right" | "justify"",
         },
       },
       "center": {
@@ -2148,7 +2148,7 @@ exports[`integration > fixtures > processes component "test-all-imports.tsx" wit
       "x": {
         "defaultValue": {
           "computed": false,
-          "value": "\\"string\\"",
+          "value": ""string"",
         },
         "required": false,
       },

@@ -5,7 +5,7 @@ exports[`defaultPropsHandler > ClassDeclaration with static defaultProps > can r
   "baz": {
     "defaultValue": {
       "computed": false,
-      "value": "[\\"foo\\", \\"bar\\"]",
+      "value": "["foo", "bar"]",
     },
   },
 }
@@ -16,13 +16,13 @@ exports[`defaultPropsHandler > ClassDeclaration with static defaultProps > resol
   "bar": {
     "defaultValue": {
       "computed": false,
-      "value": "\\"foo\\"",
+      "value": ""foo"",
     },
   },
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": ""bar"",
     },
   },
 }
@@ -45,13 +45,13 @@ exports[`defaultPropsHandler > ClassDeclaration with static defaultProps > resol
   "baz": {
     "defaultValue": {
       "computed": false,
-      "value": "[\\"foo\\", \\"bar\\"]",
+      "value": "["foo", "bar"]",
     },
   },
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": ""bar"",
     },
   },
 }
@@ -85,13 +85,13 @@ exports[`defaultPropsHandler > ClassDeclaration with static defaultProps > shoul
   "baz": {
     "defaultValue": {
       "computed": false,
-      "value": "[\\"foo\\", \\"bar\\"]",
+      "value": "["foo", "bar"]",
     },
   },
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": ""bar"",
     },
   },
 }
@@ -102,7 +102,7 @@ exports[`defaultPropsHandler > ClassDeclaration with static defaultProps > shoul
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": ""bar"",
     },
   },
 }
@@ -113,13 +113,13 @@ exports[`defaultPropsHandler > ClassDeclaration with static defaultProps > shoul
   "bar": {
     "defaultValue": {
       "computed": false,
-      "value": "\\"foo\\"",
+      "value": ""foo"",
     },
   },
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": ""bar"",
     },
   },
 }
@@ -142,13 +142,13 @@ exports[`defaultPropsHandler > ClassExpression with static defaultProps > resolv
   "baz": {
     "defaultValue": {
       "computed": false,
-      "value": "[\\"foo\\", \\"bar\\"]",
+      "value": "["foo", "bar"]",
     },
   },
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": ""bar"",
     },
   },
 }
@@ -171,13 +171,13 @@ exports[`defaultPropsHandler > ClassExpression with static defaultProps > should
   "baz": {
     "defaultValue": {
       "computed": false,
-      "value": "[\\"foo\\", \\"bar\\"]",
+      "value": "["foo", "bar"]",
     },
   },
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": ""bar"",
     },
   },
 }
@@ -188,7 +188,7 @@ exports[`defaultPropsHandler > Functional components with default params > allow
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": "[\\"foo\\", \\"bar\\"]",
+      "value": "["foo", "bar"]",
     },
   },
 }
@@ -199,7 +199,7 @@ exports[`defaultPropsHandler > Functional components with default params > can u
   "bar": {
     "defaultValue": {
       "computed": false,
-      "value": "[\\"foo\\", \\"bar\\"]",
+      "value": "["foo", "bar"]",
     },
   },
 }
@@ -210,7 +210,7 @@ exports[`defaultPropsHandler > Functional components with default params > overr
   "bar": {
     "defaultValue": {
       "computed": false,
-      "value": "\\"foo\\"",
+      "value": ""foo"",
     },
   },
 }
@@ -221,13 +221,13 @@ exports[`defaultPropsHandler > Functional components with default params > resol
   "bar": {
     "defaultValue": {
       "computed": false,
-      "value": "\\"foo\\"",
+      "value": ""foo"",
     },
   },
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": ""bar"",
     },
   },
 }
@@ -238,13 +238,13 @@ exports[`defaultPropsHandler > Functional components with default params > resol
   "bar": {
     "defaultValue": {
       "computed": false,
-      "value": "\\"foo\\"",
+      "value": ""foo"",
     },
   },
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": ""bar"",
     },
   },
 }
@@ -267,13 +267,13 @@ exports[`defaultPropsHandler > Functional components with default params > shoul
   "baz": {
     "defaultValue": {
       "computed": false,
-      "value": "[\\"foo\\", \\"bar\\"]",
+      "value": "["foo", "bar"]",
     },
   },
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": ""bar"",
     },
   },
 }
@@ -307,13 +307,13 @@ exports[`defaultPropsHandler > Functional components with default params > shoul
   "baz": {
     "defaultValue": {
       "computed": false,
-      "value": "[\\"foo\\", \\"bar\\"]",
+      "value": "["foo", "bar"]",
     },
   },
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": ""bar"",
     },
   },
 }
@@ -336,13 +336,13 @@ exports[`defaultPropsHandler > Functional components with default params > shoul
   "baz": {
     "defaultValue": {
       "computed": false,
-      "value": "[\\"foo\\", \\"bar\\"]",
+      "value": "["foo", "bar"]",
     },
   },
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": ""bar"",
     },
   },
 }
@@ -367,13 +367,13 @@ exports[`defaultPropsHandler > ObjectExpression > can resolve declared functions
   "baz": {
     "defaultValue": {
       "computed": false,
-      "value": "[\\"foo\\", \\"bar\\"]",
+      "value": "["foo", "bar"]",
     },
   },
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": ""bar"",
     },
   },
 }
@@ -384,7 +384,7 @@ exports[`defaultPropsHandler > ObjectExpression > can resolve object methods 1`]
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": ""bar"",
     },
   },
 }
@@ -401,7 +401,7 @@ exports[`defaultPropsHandler > ObjectExpression > handles computed properties 1`
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": ""bar"",
     },
   },
 }
@@ -412,13 +412,13 @@ exports[`defaultPropsHandler > ObjectExpression > handles imported values assign
   "@computed#bar": {
     "defaultValue": {
       "computed": false,
-      "value": "[\\"foo\\", \\"bar\\"]",
+      "value": "["foo", "bar"]",
     },
   },
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": ""bar"",
     },
   },
 }
@@ -429,7 +429,7 @@ exports[`defaultPropsHandler > ObjectExpression > ignores complex computed prope
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": ""bar"",
     },
   },
 }
@@ -440,7 +440,7 @@ exports[`defaultPropsHandler > ObjectExpression > ignores imported values assign
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": ""bar"",
     },
   },
 }
@@ -451,13 +451,13 @@ exports[`defaultPropsHandler > ObjectExpression > resolves imported spreads 1`] 
   "bar": {
     "defaultValue": {
       "computed": false,
-      "value": "\\"foo\\"",
+      "value": ""foo"",
     },
   },
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": ""bar"",
     },
   },
 }
@@ -468,13 +468,13 @@ exports[`defaultPropsHandler > ObjectExpression > resolves local spreads 1`] = `
   "bar": {
     "defaultValue": {
       "computed": false,
-      "value": "\\"foo\\"",
+      "value": ""foo"",
     },
   },
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": ""bar"",
     },
   },
 }
@@ -497,7 +497,7 @@ exports[`defaultPropsHandler > ObjectExpression > should find prop default value
   "baz": {
     "defaultValue": {
       "computed": false,
-      "value": "[\\"foo\\", \\"bar\\"]",
+      "value": "["foo", "bar"]",
     },
   },
   "bigint": {
@@ -515,7 +515,7 @@ exports[`defaultPropsHandler > ObjectExpression > should find prop default value
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": ""bar"",
     },
   },
   "nullliteral": {
@@ -556,13 +556,13 @@ exports[`defaultPropsHandler > ObjectExpression > should find prop default value
   "baz": {
     "defaultValue": {
       "computed": false,
-      "value": "[\\"foo\\", \\"bar\\"]",
+      "value": "["foo", "bar"]",
     },
   },
   "foo": {
     "defaultValue": {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": ""bar"",
     },
   },
 }
@@ -596,7 +596,7 @@ exports[`defaultPropsHandler > forwardRef > also resolves imports when the funct
   "bar": {
     "defaultValue": {
       "computed": false,
-      "value": "[\\"foo\\", \\"bar\\"]",
+      "value": "["foo", "bar"]",
     },
   },
 }
@@ -629,7 +629,7 @@ exports[`defaultPropsHandler > forwardRef > resolves imported default props in t
   "bar": {
     "defaultValue": {
       "computed": false,
-      "value": "[\\"foo\\", \\"bar\\"]",
+      "value": "["foo", "bar"]",
     },
   },
 }
@@ -640,7 +640,7 @@ exports[`defaultPropsHandler > forwardRef > resolves imported defaultProps 1`] =
   "bar": {
     "defaultValue": {
       "computed": false,
-      "value": "\\"foo\\"",
+      "value": ""foo"",
     },
   },
 }

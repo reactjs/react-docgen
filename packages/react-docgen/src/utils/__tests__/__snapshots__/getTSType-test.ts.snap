@@ -121,7 +121,7 @@ exports[`getTSType > React types > React.StatelessFunctionalComponent<Props2> 1`
 exports[`getTSType > can resolve indexed access to imported type 1`] = `
 {
   "name": "string",
-  "raw": "A[\\"x\\"]",
+  "raw": "A["x"]",
 }
 `;
 
@@ -343,8 +343,8 @@ exports[`getTSType > detects function type with subtype 1`] = `
 
 exports[`getTSType > detects indexed access 1`] = `
 {
-  "name": "A[\\"x\\"]",
-  "raw": "A[\\"x\\"]",
+  "name": "A["x"]",
+  "raw": "A["x"]",
 }
 `;
 
@@ -359,21 +359,21 @@ exports[`getTSType > detects intersection type 1`] = `
     },
     {
       "name": "literal",
-      "value": "\\"foo\\"",
+      "value": ""foo"",
     },
     {
       "name": "void",
     },
   ],
   "name": "intersection",
-  "raw": "string & xyz & \\"foo\\" & void",
+  "raw": "string & xyz & "foo" & void",
 }
 `;
 
 exports[`getTSType > detects map signature 1`] = `
 {
   "name": "signature",
-  "raw": "{ [key: string]: number, [key: \\"xl\\"]: string, token: \\"a\\" | \\"b\\" }",
+  "raw": "{ [key: string]: number, [key: "xl"]: string, token: "a" | "b" }",
   "signature": {
     "properties": [
       {
@@ -388,7 +388,7 @@ exports[`getTSType > detects map signature 1`] = `
       {
         "key": {
           "name": "literal",
-          "value": "\\"xl\\"",
+          "value": ""xl"",
         },
         "value": {
           "name": "string",
@@ -401,15 +401,15 @@ exports[`getTSType > detects map signature 1`] = `
           "elements": [
             {
               "name": "literal",
-              "value": "\\"a\\"",
+              "value": ""a"",
             },
             {
               "name": "literal",
-              "value": "\\"b\\"",
+              "value": ""b"",
             },
           ],
           "name": "union",
-          "raw": "\\"a\\" | \\"b\\"",
+          "raw": ""a" | "b"",
           "required": true,
         },
       },
@@ -594,14 +594,14 @@ exports[`getTSType > detects union type 1`] = `
     },
     {
       "name": "literal",
-      "value": "\\"foo\\"",
+      "value": ""foo"",
     },
     {
       "name": "void",
     },
   ],
   "name": "union",
-  "raw": "string | xyz | \\"foo\\" | void",
+  "raw": "string | xyz | "foo" | void",
 }
 `;
 
@@ -916,7 +916,7 @@ exports[`getTSType > handles typeof type 1`] = `
 exports[`getTSType > literal types > detects "foo" 1`] = `
 {
   "name": "literal",
-  "value": "\\"foo\\"",
+  "value": ""foo"",
 }
 `;
 
@@ -1090,15 +1090,15 @@ exports[`getTSType > resolves imported types applied to mapped types 1`] = `
           "elements": [
             {
               "name": "literal",
-              "value": "\\"bar\\"",
+              "value": ""bar"",
             },
             {
               "name": "literal",
-              "value": "\\"baz\\"",
+              "value": ""baz"",
             },
           ],
           "name": "union",
-          "raw": "\\"bar\\" | \\"baz\\"",
+          "raw": ""bar" | "baz"",
           "required": true,
         },
         "value": {
@@ -1140,7 +1140,7 @@ exports[`getTSType > resolves imported types for object property types 1`] = `
 exports[`getTSType > resolves imported types in map signature 1`] = `
 {
   "name": "signature",
-  "raw": "{ [key: xyz]: abc, [key: \\"xl\\"]: xyz, token: barbaz }",
+  "raw": "{ [key: xyz]: abc, [key: "xl"]: xyz, token: barbaz }",
   "signature": {
     "properties": [
       {
@@ -1156,7 +1156,7 @@ exports[`getTSType > resolves imported types in map signature 1`] = `
       {
         "key": {
           "name": "literal",
-          "value": "\\"xl\\"",
+          "value": ""xl"",
         },
         "value": {
           "name": "string",
@@ -1169,15 +1169,15 @@ exports[`getTSType > resolves imported types in map signature 1`] = `
           "elements": [
             {
               "name": "literal",
-              "value": "\\"bar\\"",
+              "value": ""bar"",
             },
             {
               "name": "literal",
-              "value": "\\"baz\\"",
+              "value": ""baz"",
             },
           ],
           "name": "union",
-          "raw": "\\"bar\\" | \\"baz\\"",
+          "raw": ""bar" | "baz"",
           "required": true,
         },
       },
@@ -1316,26 +1316,26 @@ exports[`getTSType > resolves imported types within intersection type 1`] = `
       "elements": [
         {
           "name": "literal",
-          "value": "\\"bar\\"",
+          "value": ""bar"",
         },
         {
           "name": "literal",
-          "value": "\\"baz\\"",
+          "value": ""baz"",
         },
       ],
       "name": "union",
-      "raw": "\\"bar\\" | \\"baz\\"",
+      "raw": ""bar" | "baz"",
     },
     {
       "name": "literal",
-      "value": "\\"foo\\"",
+      "value": ""foo"",
     },
     {
       "name": "void",
     },
   ],
   "name": "intersection",
-  "raw": "string & barbaz & \\"foo\\" & void",
+  "raw": "string & barbaz & "foo" & void",
 }
 `;
 
@@ -1349,33 +1349,33 @@ exports[`getTSType > resolves imported types within union type 1`] = `
       "elements": [
         {
           "name": "literal",
-          "value": "\\"bar\\"",
+          "value": ""bar"",
         },
         {
           "name": "literal",
-          "value": "\\"baz\\"",
+          "value": ""baz"",
         },
       ],
       "name": "union",
-      "raw": "\\"bar\\" | \\"baz\\"",
+      "raw": ""bar" | "baz"",
     },
     {
       "name": "literal",
-      "value": "\\"foo\\"",
+      "value": ""foo"",
     },
     {
       "name": "void",
     },
   ],
   "name": "union",
-  "raw": "string | barbaz | \\"foo\\" | void",
+  "raw": "string | barbaz | "foo" | void",
 }
 `;
 
 exports[`getTSType > resolves indexed access 1`] = `
 {
   "name": "string",
-  "raw": "A[\\"x\\"]",
+  "raw": "A["x"]",
 }
 `;
 

@@ -211,7 +211,7 @@ describe('codeTypeHandler', () => {
     });
   });
 
-  test('does not error if flowTypes cannot be found', () => {
+  describe('does not error if flowTypes cannot be found', () => {
     test('ObjectExpression', () => {
       const definition = parse.expression<ObjectExpression>('{fooBar: 42}');
 

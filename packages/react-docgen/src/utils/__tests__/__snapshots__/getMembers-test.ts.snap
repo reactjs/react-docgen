@@ -36,7 +36,7 @@ exports[`getMembers > does work with custom expressions in arguments 1`] = `
     "computed": true,
     "path": Node {
       "extra": {
-        "raw": "\\"baz\\"",
+        "raw": ""baz"",
         "rawValue": "baz",
       },
       "type": "StringLiteral",
@@ -71,7 +71,7 @@ exports[`getMembers > does work with custom expressions in chain 1`] = `
     "path": Node {
       "left": Node {
         "extra": {
-          "raw": "\\"\\"",
+          "raw": """",
           "rawValue": "",
         },
         "type": "StringLiteral",
@@ -80,7 +80,7 @@ exports[`getMembers > does work with custom expressions in chain 1`] = `
       "operator": "+",
       "right": Node {
         "extra": {
-          "raw": "\\"\\"",
+          "raw": """",
           "rawValue": "",
         },
         "type": "StringLiteral",

@@ -136,11 +136,11 @@ exports[`getPropType > resolve identifier to their values > correctly resolves S
   "value": [
     {
       "computed": false,
-      "value": "\\"foo\\"",
+      "value": ""foo"",
     },
     {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": ""bar"",
     },
   ],
 }
@@ -152,11 +152,11 @@ exports[`getPropType > resolve identifier to their values > correctly resolves S
   "value": [
     {
       "computed": false,
-      "value": "\\"foo\\"",
+      "value": ""foo"",
     },
     {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": ""bar"",
     },
   ],
 }
@@ -168,11 +168,11 @@ exports[`getPropType > resolve identifier to their values > correctly resolves n
   "value": [
     {
       "computed": false,
-      "value": "\\"foo\\"",
+      "value": ""foo"",
     },
     {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": ""bar"",
     },
   ],
 }
@@ -192,11 +192,11 @@ exports[`getPropType > resolve identifier to their values > does resolve object 
   "value": [
     {
       "computed": false,
-      "value": "\\"FOO\\"",
+      "value": ""FOO"",
     },
     {
       "computed": false,
-      "value": "\\"BAR\\"",
+      "value": ""BAR"",
     },
   ],
 }
@@ -208,11 +208,11 @@ exports[`getPropType > resolve identifier to their values > does resolve object 
   "value": [
     {
       "computed": false,
-      "value": "\\"foo\\"",
+      "value": ""foo"",
     },
     {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": ""bar"",
     },
   ],
 }
@@ -272,11 +272,11 @@ exports[`getPropType > resolve identifier to their values > resolves imported id
   "value": [
     {
       "computed": false,
-      "value": "\\"foo\\"",
+      "value": ""foo"",
     },
     {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": ""bar"",
     },
   ],
 }
@@ -300,11 +300,11 @@ exports[`getPropType > resolve identifier to their values > resolves importer id
   "value": [
     {
       "computed": false,
-      "value": "\\"foo\\"",
+      "value": ""foo"",
     },
     {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": ""bar"",
     },
   ],
 }
@@ -316,11 +316,11 @@ exports[`getPropType > resolve identifier to their values > resolves memberExpre
   "value": [
     {
       "computed": false,
-      "value": "\\"foo\\"",
+      "value": ""foo"",
     },
     {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": ""bar"",
     },
   ],
 }
@@ -332,11 +332,11 @@ exports[`getPropType > resolve identifier to their values > resolves memberExpre
   "value": [
     {
       "computed": false,
-      "value": "\\"foo\\"",
+      "value": ""foo"",
     },
     {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": ""bar"",
     },
   ],
 }
@@ -348,11 +348,11 @@ exports[`getPropType > resolve identifier to their values > resolves simple iden
   "value": [
     {
       "computed": false,
-      "value": "\\"foo\\"",
+      "value": ""foo"",
     },
     {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": ""bar"",
     },
   ],
 }
@@ -364,11 +364,11 @@ exports[`getPropType > resolve identifier to their values > resolves simple iden
   "value": [
     {
       "computed": false,
-      "value": "\\"foo\\"",
+      "value": ""foo"",
     },
     {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": ""bar"",
     },
   ],
 }
@@ -380,11 +380,11 @@ exports[`getPropType > resolve identifier to their values > resolves value const
   "value": [
     {
       "computed": false,
-      "value": "\\"foo\\"",
+      "value": ""foo"",
     },
     {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": ""bar"",
     },
   ],
 }
@@ -396,11 +396,11 @@ exports[`getPropType > resolve identifier to their values > resolves values from
   "value": [
     {
       "computed": false,
-      "value": "\\"FOO\\"",
+      "value": ""FOO"",
     },
     {
       "computed": false,
-      "value": "\\"BAR\\"",
+      "value": ""BAR"",
     },
   ],
 }
@@ -412,11 +412,11 @@ exports[`getPropType > resolve identifier to their values > resolves values from
   "value": [
     {
       "computed": false,
-      "value": "\\"foo\\"",
+      "value": ""foo"",
     },
     {
       "computed": false,
-      "value": "\\"bar\\"",
+      "value": ""bar"",
     },
   ],
 }

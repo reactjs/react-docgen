@@ -55,7 +55,7 @@ exports[`codeTypeHandler > TypeAlias (flow) > class definition for flow <0.53 > 
       "elements": [
         {
           "name": "literal",
-          "value": "\\"test\\"",
+          "value": ""test"",
         },
         {
           "name": "literal",
@@ -67,7 +67,7 @@ exports[`codeTypeHandler > TypeAlias (flow) > class definition for flow <0.53 > 
         },
       ],
       "name": "union",
-      "raw": "\\"test\\" | 1 | true",
+      "raw": ""test" | 1 | true",
     },
     "required": true,
   },
@@ -218,7 +218,7 @@ exports[`codeTypeHandler > TypeAlias (flow) > class definition with State > dete
       "elements": [
         {
           "name": "literal",
-          "value": "\\"test\\"",
+          "value": ""test"",
         },
         {
           "name": "literal",
@@ -230,7 +230,7 @@ exports[`codeTypeHandler > TypeAlias (flow) > class definition with State > dete
         },
       ],
       "name": "union",
-      "raw": "\\"test\\" | 1 | true",
+      "raw": ""test" | 1 | true",
     },
     "required": true,
   },
@@ -381,7 +381,7 @@ exports[`codeTypeHandler > TypeAlias (flow) > class definition with inline props
       "elements": [
         {
           "name": "literal",
-          "value": "\\"test\\"",
+          "value": ""test"",
         },
         {
           "name": "literal",
@@ -393,7 +393,7 @@ exports[`codeTypeHandler > TypeAlias (flow) > class definition with inline props
         },
       ],
       "name": "union",
-      "raw": "\\"test\\" | 1 | true",
+      "raw": ""test" | 1 | true",
     },
     "required": true,
   },
@@ -544,7 +544,7 @@ exports[`codeTypeHandler > TypeAlias (flow) > class definition without State > d
       "elements": [
         {
           "name": "literal",
-          "value": "\\"test\\"",
+          "value": ""test"",
         },
         {
           "name": "literal",
@@ -556,7 +556,7 @@ exports[`codeTypeHandler > TypeAlias (flow) > class definition without State > d
         },
       ],
       "name": "union",
-      "raw": "\\"test\\" | 1 | true",
+      "raw": ""test" | 1 | true",
     },
     "required": true,
   },
@@ -707,7 +707,7 @@ exports[`codeTypeHandler > TypeAlias (flow) > stateless component > detects unio
       "elements": [
         {
           "name": "literal",
-          "value": "\\"test\\"",
+          "value": ""test"",
         },
         {
           "name": "literal",
@@ -719,7 +719,7 @@ exports[`codeTypeHandler > TypeAlias (flow) > stateless component > detects unio
         },
       ],
       "name": "union",
-      "raw": "\\"test\\" | 1 | true",
+      "raw": ""test" | 1 | true",
     },
     "required": true,
   },
@@ -871,7 +871,7 @@ exports[`codeTypeHandler > TypeAlias (ts) > class definition with State > detect
       "elements": [
         {
           "name": "literal",
-          "value": "\\"test\\"",
+          "value": ""test"",
         },
         {
           "name": "literal",
@@ -883,7 +883,7 @@ exports[`codeTypeHandler > TypeAlias (ts) > class definition with State > detect
         },
       ],
       "name": "union",
-      "raw": "\\"test\\" | 1 | true",
+      "raw": ""test" | 1 | true",
     },
   },
   "foo": {
@@ -996,7 +996,7 @@ exports[`codeTypeHandler > TypeAlias (ts) > class definition with inline props >
       "elements": [
         {
           "name": "literal",
-          "value": "\\"test\\"",
+          "value": ""test"",
         },
         {
           "name": "literal",
@@ -1008,7 +1008,7 @@ exports[`codeTypeHandler > TypeAlias (ts) > class definition with inline props >
         },
       ],
       "name": "union",
-      "raw": "\\"test\\" | 1 | true",
+      "raw": ""test" | 1 | true",
     },
   },
   "foo": {
@@ -1121,7 +1121,7 @@ exports[`codeTypeHandler > TypeAlias (ts) > class definition without State > det
       "elements": [
         {
           "name": "literal",
-          "value": "\\"test\\"",
+          "value": ""test"",
         },
         {
           "name": "literal",
@@ -1133,7 +1133,7 @@ exports[`codeTypeHandler > TypeAlias (ts) > class definition without State > det
         },
       ],
       "name": "union",
-      "raw": "\\"test\\" | 1 | true",
+      "raw": ""test" | 1 | true",
     },
   },
   "foo": {
@@ -1246,7 +1246,7 @@ exports[`codeTypeHandler > TypeAlias (ts) > stateless TS component with Type > d
       "elements": [
         {
           "name": "literal",
-          "value": "\\"test\\"",
+          "value": ""test"",
         },
         {
           "name": "literal",
@@ -1258,7 +1258,7 @@ exports[`codeTypeHandler > TypeAlias (ts) > stateless TS component with Type > d
         },
       ],
       "name": "union",
-      "raw": "\\"test\\" | 1 | true",
+      "raw": ""test" | 1 | true",
     },
   },
   "foo": {
@@ -1371,7 +1371,7 @@ exports[`codeTypeHandler > TypeAlias (ts) > stateless component > detects union 
       "elements": [
         {
           "name": "literal",
-          "value": "\\"test\\"",
+          "value": ""test"",
         },
         {
           "name": "literal",
@@ -1383,7 +1383,7 @@ exports[`codeTypeHandler > TypeAlias (ts) > stateless component > detects union 
         },
       ],
       "name": "union",
-      "raw": "\\"test\\" | 1 | true",
+      "raw": ""test" | 1 | true",
     },
   },
   "foo": {
@@ -1520,7 +1520,7 @@ exports[`codeTypeHandler > imported prop types > imported 1`] = `
       "elements": [
         {
           "name": "literal",
-          "value": "\\"test\\"",
+          "value": ""test"",
         },
         {
           "name": "literal",
@@ -1532,7 +1532,7 @@ exports[`codeTypeHandler > imported prop types > imported 1`] = `
         },
       ],
       "name": "union",
-      "raw": "\\"test\\" | 1 | true",
+      "raw": ""test" | 1 | true",
     },
     "required": true,
   },
@@ -1600,7 +1600,7 @@ exports[`codeTypeHandler > imported prop types > type imported 1`] = `
       "elements": [
         {
           "name": "literal",
-          "value": "\\"test\\"",
+          "value": ""test"",
         },
         {
           "name": "literal",
@@ -1612,7 +1612,7 @@ exports[`codeTypeHandler > imported prop types > type imported 1`] = `
         },
       ],
       "name": "union",
-      "raw": "\\"test\\" | 1 | true",
+      "raw": ""test" | 1 | true",
     },
     "required": true,
   },
