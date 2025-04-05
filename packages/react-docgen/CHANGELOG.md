@@ -1,5 +1,19 @@
 # Release Notes
 
+## 8.0.0
+
+### Major Changes
+
+- [#942](https://github.com/reactjs/react-docgen/pull/942)
+  [`c3dfead`](https://github.com/reactjs/react-docgen/commit/c3dfead6b1cfdd57e34d1689c2b1d1334e9ef328)
+  Thanks [@danez](https://github.com/danez)! - Drop support for Node.js 16, 17,
+  18, 19 and 21.
+
+  With this `react-docgen` version Node.js support is:
+
+  - Node.js 20.9.0 or newer 20.x versions
+  - Node.js 22.0.0 or any newer version
+
 ## 7.1.1
 
 ### Patch Changes
