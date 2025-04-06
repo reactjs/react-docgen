@@ -238,7 +238,7 @@ export default function makeFsImporter(
           }
         }
 
-        state.resultPath ? path.stop() : path.skip();
+        return state.resultPath ? path.stop() : path.skip();
       },
     },
     ExportDefaultDeclaration: {

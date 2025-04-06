@@ -14,7 +14,9 @@ const config: DocsThemeConfig = {
     content: '',
   },
   head() {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const { frontMatter, title } = useConfig();
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const { route } = useRouter();
 
     const description =
