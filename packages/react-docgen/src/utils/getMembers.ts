@@ -27,7 +27,6 @@ export default function getMembers(
   let argumentPaths: NodePath[] = [];
   let resultPath: MemberDescriptor['path'] = path as NodePath<Expression>;
 
-  // eslint-disable-next-line no-constant-condition
   while (true) {
     if (resultPath.isMemberExpression()) {
       const property = resultPath.get('property');

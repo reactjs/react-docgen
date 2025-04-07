@@ -44,6 +44,7 @@ export default function Panel({
   let changeHandler;
 
   if (onChange) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     changeHandler = useCallback(onChange, []);
   }
 
