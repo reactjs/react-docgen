@@ -1,5 +1,26 @@
 # Release Notes
 
+## 8.0.0
+
+### Major Changes
+
+- [#942](https://github.com/reactjs/react-docgen/pull/942)
+  [`c3dfead`](https://github.com/reactjs/react-docgen/commit/c3dfead6b1cfdd57e34d1689c2b1d1334e9ef328)
+  Thanks [@danez](https://github.com/danez)! - Drop support for Node.js 16, 17,
+  18, 19 and 21.
+
+  With this `react-docgen` version Node.js support is:
+
+  - Node.js 20.9.0 or newer 20.x versions
+  - Node.js 22.0.0 or any newer version
+
+### Patch Changes
+
+- [#993](https://github.com/reactjs/react-docgen/pull/993)
+  [`06c2fae`](https://github.com/reactjs/react-docgen/commit/06c2fae6f0d7f1aea3f23c2bf0dbfdc7b801ccb8)
+  Thanks [@danez](https://github.com/danez)! - Fixed crash when classes with
+  private fields are used
+
 ## 7.1.1
 
 ### Patch Changes

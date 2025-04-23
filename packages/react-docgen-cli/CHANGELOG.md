@@ -1,5 +1,36 @@
 # Release Notes
 
+## 3.0.0
+
+### Major Changes
+
+- [#942](https://github.com/reactjs/react-docgen/pull/942)
+  [`c3dfead`](https://github.com/reactjs/react-docgen/commit/c3dfead6b1cfdd57e34d1689c2b1d1334e9ef328)
+  Thanks [@danez](https://github.com/danez)! - Drop support for Node.js 16, 17,
+  18, 19 and 21.
+
+  With this `react-docgen` version Node.js support is:
+
+  - Node.js 20.9.0 or newer 20.x versions
+  - Node.js 22.0.0 or any newer version
+
+### Patch Changes
+
+- [#961](https://github.com/reactjs/react-docgen/pull/961)
+  [`5e2a332`](https://github.com/reactjs/react-docgen/commit/5e2a33202e101e55fc6b0640c1ff6686f8f92189)
+  Thanks [@renovate](https://github.com/apps/renovate)! - update dependency
+  commander to v13
+
+- [#979](https://github.com/reactjs/react-docgen/pull/979)
+  [`3486af5`](https://github.com/reactjs/react-docgen/commit/3486af5db316864824fa5f0d86d3a92335b0912f)
+  Thanks [@renovate](https://github.com/apps/renovate)! - Fix bug with loading
+  CommonJS files
+
+- Updated dependencies
+  [[`06c2fae`](https://github.com/reactjs/react-docgen/commit/06c2fae6f0d7f1aea3f23c2bf0dbfdc7b801ccb8),
+  [`c3dfead`](https://github.com/reactjs/react-docgen/commit/c3dfead6b1cfdd57e34d1689c2b1d1334e9ef328)]:
+  - react-docgen@8.0.0
+
 ## 2.0.6
 
 ### Patch Changes
