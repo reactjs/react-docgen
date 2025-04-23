@@ -15,6 +15,27 @@ describe('getMemberExpressionValuePath', () => {
       );
     });
 
+    test('ignores unrelated private field', () => {
+      const def = parse.statement(
+        `
+        class Foo {
+          #isprivate = {};
+
+          classMethod() {
+            this.#isprivate = {};
+          }
+        }
+        const Boo = () => {};
+        Boo.propTypes = {};
+      `,
+        1,
+      );
+
+      expect(getMemberExpressionValuePath(def, 'propTypes')).toBe(
+        def.parentPath.get('body')[2].get('expression').get('right'),
+      );
+    });
+
     test('takes the correct property definitions', () => {
       const def = parse.statement(`
         var Foo = () => {};

@@ -87,7 +87,7 @@ const explodedVisitors = visitors.explode<TraverseState>({
       const property = memberPath.get('property');
 
       if (
-        (!memberPath.node.computed ||
+        ((!memberPath.node.computed && property.isIdentifier()) ||
           property.isStringLiteral() ||
           property.isNumericLiteral()) &&
         getNameOrValue(property) === state.memberName &&
