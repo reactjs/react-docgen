@@ -33,7 +33,7 @@
   "dependencies": {
     "chalk": "5.4.1",
     "commander": "13.1.0",
-    "debug": "4.4.0",
+    "debug": "4.4.1",
     "fast-glob": "3.3.3",
     "react-docgen": "workspace:8.0.0",
     "slash": "5.1.0"
