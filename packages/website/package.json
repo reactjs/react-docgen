@@ -11,7 +11,7 @@
   "author": "Daniel Tschinder (http://github.com/danez)",
   "license": "MIT",
   "dependencies": {
-    "@codemirror/lang-javascript": "6.2.3",
+    "@codemirror/lang-javascript": "6.2.4",
     "@codemirror/lang-json": "6.0.1",
     "@codemirror/view": "6.36.8",
     "@headlessui/react": "2.2.3",
