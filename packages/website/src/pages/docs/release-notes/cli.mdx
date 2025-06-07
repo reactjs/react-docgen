@@ -1,5 +1,14 @@
 # Release Notes
 
+## 3.0.1
+
+### Patch Changes
+
+- [#996](https://github.com/reactjs/react-docgen/pull/996)
+  [`a9b5ca3`](https://github.com/reactjs/react-docgen/commit/a9b5ca3f5411e876264db716fc4640ad9d4fb928)
+  Thanks [@renovate](https://github.com/apps/renovate)! - update dependency
+  debug to v4.4.1
+
 ## 3.0.0
 
 ### Major Changes
