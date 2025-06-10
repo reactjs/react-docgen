@@ -172,8 +172,8 @@ importers:
         specifier: 19.1.6
         version: 19.1.6(@types/react@19.1.7)
       '@uiw/react-codemirror':
-        specifier: 4.23.12
-        version: 4.23.12(@babel/runtime@7.27.6)(@codemirror/autocomplete@6.18.6)(@codemirror/language@6.11.1)(@codemirror/lint@6.8.5)(@codemirror/search@6.5.11)(@codemirror/state@6.5.2)(@codemirror/theme-one-dark@6.1.2)(@codemirror/view@6.37.1)(codemirror@6.0.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        specifier: 4.23.13
+        version: 4.23.13(@babel/runtime@7.27.6)(@codemirror/autocomplete@6.18.6)(@codemirror/language@6.11.1)(@codemirror/lint@6.8.5)(@codemirror/search@6.5.11)(@codemirror/state@6.5.2)(@codemirror/theme-one-dark@6.1.2)(@codemirror/view@6.37.1)(codemirror@6.0.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       clsx:
         specifier: 2.1.1
         version: 2.1.1
@@ -1593,8 +1593,8 @@ packages:
     peerDependencies:
       typescript: '*'
 
-  '@uiw/codemirror-extensions-basic-setup@4.23.12':
-    resolution: {integrity: sha512-l9vuiXOTFDBetYrRLDmz3jDxQHDsrVAZ2Y6dVfmrqi2AsulsDu+y7csW0JsvaMqo79rYkaIZg8yeqmDgMb7VyQ==}
+  '@uiw/codemirror-extensions-basic-setup@4.23.13':
+    resolution: {integrity: sha512-U1CnDFpq6ydNqrRDS5Bdnvgso8ezwwbrmKvmAD3hmoVyRDsDU6HTtmcV+w0rZ3kElUCkKI5lY0DMvTTQ4+L3RQ==}
     peerDependencies:
       '@codemirror/autocomplete': '>=6.0.0'
       '@codemirror/commands': '>=6.0.0'
@@ -1604,8 +1604,8 @@ packages:
       '@codemirror/state': '>=6.0.0'
       '@codemirror/view': '>=6.0.0'
 
-  '@uiw/react-codemirror@4.23.12':
-    resolution: {integrity: sha512-yseqWdzoAAGAW7i/NiU8YrfSLVOEBjQvSx1KpDTFVV/nn0AlAZoDVTIPEBgdXrPlVUQoCrwgpEaj3uZCklk9QA==}
+  '@uiw/react-codemirror@4.23.13':
+    resolution: {integrity: sha512-y65ULzxOAfpxrA/8epoAOeCfmJXu9z0P62BbGOkITJTtU7WI59KfPbbwj35npSsMAkAmDE841qZo2I8jst/THg==}
     peerDependencies:
       '@babel/runtime': '>=7.11.0'
       '@codemirror/state': '>=6.0.0'
@@ -6774,7 +6774,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@uiw/codemirror-extensions-basic-setup@4.23.12(@codemirror/autocomplete@6.18.6)(@codemirror/commands@6.8.1)(@codemirror/language@6.11.1)(@codemirror/lint@6.8.5)(@codemirror/search@6.5.11)(@codemirror/state@6.5.2)(@codemirror/view@6.37.1)':
+  '@uiw/codemirror-extensions-basic-setup@4.23.13(@codemirror/autocomplete@6.18.6)(@codemirror/commands@6.8.1)(@codemirror/language@6.11.1)(@codemirror/lint@6.8.5)(@codemirror/search@6.5.11)(@codemirror/state@6.5.2)(@codemirror/view@6.37.1)':
     dependencies:
       '@codemirror/autocomplete': 6.18.6
       '@codemirror/commands': 6.8.1
@@ -6784,14 +6784,14 @@ snapshots:
       '@codemirror/state': 6.5.2
       '@codemirror/view': 6.37.1
 
-  '@uiw/react-codemirror@4.23.12(@babel/runtime@7.27.6)(@codemirror/autocomplete@6.18.6)(@codemirror/language@6.11.1)(@codemirror/lint@6.8.5)(@codemirror/search@6.5.11)(@codemirror/state@6.5.2)(@codemirror/theme-one-dark@6.1.2)(@codemirror/view@6.37.1)(codemirror@6.0.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+  '@uiw/react-codemirror@4.23.13(@babel/runtime@7.27.6)(@codemirror/autocomplete@6.18.6)(@codemirror/language@6.11.1)(@codemirror/lint@6.8.5)(@codemirror/search@6.5.11)(@codemirror/state@6.5.2)(@codemirror/theme-one-dark@6.1.2)(@codemirror/view@6.37.1)(codemirror@6.0.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
       '@babel/runtime': 7.27.6
       '@codemirror/commands': 6.8.1
       '@codemirror/state': 6.5.2
       '@codemirror/theme-one-dark': 6.1.2
       '@codemirror/view': 6.37.1
-      '@uiw/codemirror-extensions-basic-setup': 4.23.12(@codemirror/autocomplete@6.18.6)(@codemirror/commands@6.8.1)(@codemirror/language@6.11.1)(@codemirror/lint@6.8.5)(@codemirror/search@6.5.11)(@codemirror/state@6.5.2)(@codemirror/view@6.37.1)
+      '@uiw/codemirror-extensions-basic-setup': 4.23.13(@codemirror/autocomplete@6.18.6)(@codemirror/commands@6.8.1)(@codemirror/language@6.11.1)(@codemirror/lint@6.8.5)(@codemirror/search@6.5.11)(@codemirror/state@6.5.2)(@codemirror/view@6.37.1)
       codemirror: 6.0.1
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
