@@ -1,5 +1,19 @@
 # Release Notes
 
+## 3.0.1
+
+### Patch Changes
+
+- [#996](https://github.com/reactjs/react-docgen/pull/996)
+  [`a9b5ca3`](https://github.com/reactjs/react-docgen/commit/a9b5ca3f5411e876264db716fc4640ad9d4fb928)
+  Thanks [@renovate](https://github.com/apps/renovate)! - update dependency
+  debug to v4.4.1
+
+- [#1000](https://github.com/reactjs/react-docgen/pull/1000)
+  [`5cedd84`](https://github.com/reactjs/react-docgen/commit/5cedd84aaf38ec45a08fb673034e0d9ac03df81b)
+  Thanks [@renovate](https://github.com/apps/renovate)! - update dependency
+  commander to v14
+
 ## 3.0.0
 
 ### Major Changes
@@ -10,7 +24,6 @@
   18, 19 and 21.
 
   With this `react-docgen` version Node.js support is:
-
   - Node.js 20.9.0 or newer 20.x versions
   - Node.js 22.0.0 or any newer version
 
@@ -202,7 +215,6 @@
   Thanks [@danez](https://github.com/danez)! - Introducing the new CLI package
   `@react-docgen/cli` which was extracted from `react-docgen` and is a complete
   rewrite. Compared to the old CLI these are some of the major differences:
-
   - Does not support input via stdin anymore
   - The path argument is now a glob
   - `-x, --extension` was removed in favor of globs
@@ -425,7 +437,6 @@
 - 3b28f6e: Introducing the new CLI package `@react-docgen/cli` which was
   extracted from `react-docgen` and is a complete rewrite. Compared to the old
   CLI these are some of the major differences:
-
   - Does not support input via stdin anymore
   - The path argument is now a glob
   - `-x, --extension` was removed in favor of globs
