@@ -8,6 +8,10 @@ documentations can be generated.
 [`@react-docgen/cli`](./packages/react-docgen-cli/) is a cli wrapper around the
 library allowing using `react-docgen` on the command line.
 
+## Typescript
+
+See [this issue](https://github.com/reactjs/react-docgen/issues/1005) about the status of TypeScript.
+
 ## Documentation
 
 For version 5.x please checkout the
