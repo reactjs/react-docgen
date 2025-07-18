@@ -25,7 +25,7 @@
     "cpy": "11.1.0",
     "eslint": "9.31.0",
     "eslint-config-next": "15.4.1",
-    "eslint-config-prettier": "10.1.5",
+    "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.1",
     "execa": "9.6.0",
     "globals": "16.3.0",
