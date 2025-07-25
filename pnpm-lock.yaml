@@ -48,8 +48,8 @@ importers:
         specifier: 16.3.0
         version: 16.3.0
       nx:
-        specifier: 21.3.5
-        version: 21.3.5
+        specifier: 21.3.7
+        version: 21.3.7
       prettier:
         specifier: 3.6.2
         version: 3.6.2
@@ -1024,53 +1024,53 @@ packages:
     resolution: {integrity: sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA==}
     engines: {node: '>=12.4.0'}
 
-  '@nx/nx-darwin-arm64@21.3.5':
-    resolution: {integrity: sha512-QKWtKjIdYS2foDo/4ojvVr5NjrtY8IcHPyFFATAk7v5BWe2tEGh6pPDj8GRqvSqZPWSBZNDcJ6efovJyka6yzw==}
+  '@nx/nx-darwin-arm64@21.3.7':
+    resolution: {integrity: sha512-/I8tpxDNZ3Xq9DnC5Y0q7II0e+1dV+vWwGTj/hxTM6oVo9wv9hBVkzA5F+UL2AJ20BrlPe34EKtIxaRfkd7SHQ==}
     cpu: [arm64]
     os: [darwin]
 
-  '@nx/nx-darwin-x64@21.3.5':
-    resolution: {integrity: sha512-X06eb6lzuln9ZHh7L8430s4Cc7pi5mihU3IlJsN0rbgdCp2PMlOsJ/8P/zw/DBwq6qmTuVwZ8Xk01VOVtWZT0w==}
+  '@nx/nx-darwin-x64@21.3.7':
+    resolution: {integrity: sha512-l5P6wmrnFz3zY+AnDCf2PqqlrDnDMULl5E58KC3ax49kqkWc/1umauJJeP/tzWRYGd4yHL4/SbtKU0HRT91l7Q==}
     cpu: [x64]
     os: [darwin]
 
-  '@nx/nx-freebsd-x64@21.3.5':
-    resolution: {integrity: sha512-+ZWvAn/1UD4Wwduv5nhcXWIUcev1JDEEsNBesGvFWS4c19dBk8vaUpUv3YQspwRUgAGdfYw1CWqDDOYvGFrZ3w==}
+  '@nx/nx-freebsd-x64@21.3.7':
+    resolution: {integrity: sha512-JJq4t8mcR1t5WyX8RvAthGlkun+Uyx3c4WA8hemLbqNCHnR/oQ5tIapRldp1FPBYJEzRzTgtk8Ov+rAjLuXqqQ==}
     cpu: [x64]
     os: [freebsd]
 
-  '@nx/nx-linux-arm-gnueabihf@21.3.5':
-    resolution: {integrity: sha512-JeSw0/WdVo4AxCKWRrH686rxu9jHzKnl/IY1m+/jiIPq2yUPUUxqSj9+Xesvp9K3plAmZFlSulbfd8BX15/cEw==}
+  '@nx/nx-linux-arm-gnueabihf@21.3.7':
+    resolution: {integrity: sha512-9F5YVjJH/N8bqfVySTL8UY8PwdEGv4tjax6LSz5wByM6ThQtGqZreDqBectmgz4Uj1q1P+7zu5ra9hrBAr3Mww==}
     cpu: [arm]
     os: [linux]
 
-  '@nx/nx-linux-arm64-gnu@21.3.5':
-    resolution: {integrity: sha512-TlMhwwj75cP67m/qYuSAmvdMMW6oASELo3uxRJ9PbpyTRiCmQZoqjZqALL/48rAEk1Ig69o83RI4pIMRkGMQUw==}
+  '@nx/nx-linux-arm64-gnu@21.3.7':
+    resolution: {integrity: sha512-+YnuF9lwffzCsLrP0sCuDZKhbb5nFSV6hSwd8rCCZmzU35mqs0X4Mo8vjwHDZTCzIuDxzLK7Nl7ZeWQuAMxcJQ==}
     cpu: [arm64]
     os: [linux]
 
-  '@nx/nx-linux-arm64-musl@21.3.5':
-    resolution: {integrity: sha512-GZBMLTJFP9H9/o26jSfqxwlBoZ4c0FNBl8rJ3tOC9jCNHn7wcMJKaVbp0dUKDgUtyzATa5poJsdClG84zMnHdA==}
+  '@nx/nx-linux-arm64-musl@21.3.7':
+    resolution: {integrity: sha512-g1SmaC4uHkaLS58FMYnxLKkecASdM+B/G3GH3vPS9LDYdHuFukqwLBvVlvueno6CuIAHc+7bW+TH3xVadnUOvw==}
     cpu: [arm64]
     os: [linux]
 
-  '@nx/nx-linux-x64-gnu@21.3.5':
-    resolution: {integrity: sha512-rNZ2X+h3AbF+vM3zKcpv122Eu5fyYS0079iNiYAHNknwLPJUlvDEQU3nu6ts8Hw1zSjxzibHbWZghSfZRAIHZA==}
+  '@nx/nx-linux-x64-gnu@21.3.7':
+    resolution: {integrity: sha512-zupCkCiH2KKqdy/XcFwwQdyck2foX8H6W1mXfTPV94LqEOjfz8j0nfVuTT4WlZAaWcfwzszzdgKy6Rls65i9HA==}
     cpu: [x64]
     os: [linux]
 
-  '@nx/nx-linux-x64-musl@21.3.5':
-    resolution: {integrity: sha512-LtsDUhrH0sVl7gBSsJ+cy/cKH71PorysOhJqTrE7Z5UVpnWu+1djiOsbEDRAheyUf80QfFA8xC239Pi+QG3T/w==}
+  '@nx/nx-linux-x64-musl@21.3.7':
+    resolution: {integrity: sha512-Lhk/q/qb4HFaESR5KLCDPfGWh3Vp0x4bYTILIQ1mBTyqe3zJl1CMtAZp2L43gT7Zt41mz4ZiohavdDyFhIaUgA==}
     cpu: [x64]
     os: [linux]
 
-  '@nx/nx-win32-arm64-msvc@21.3.5':
-    resolution: {integrity: sha512-lmhzLTVXzQNa0em6v0gBCfswpD5vdgtcjUxr5flR6ylWYo0hVYD4w/EqoymqXq0rU94lx28lksmKX0vhNH5aiw==}
+  '@nx/nx-win32-arm64-msvc@21.3.7':
+    resolution: {integrity: sha512-fk1edw6PNfUiKHDCHqe0WHVJgWiDUU1DoWDhJji5ZY0w8nT89AfTDDxt4YZptcFwAuuwPA/98K0fjQYcenlgTg==}
     cpu: [arm64]
     os: [win32]
 
-  '@nx/nx-win32-x64-msvc@21.3.5':
-    resolution: {integrity: sha512-8ljAlmV96WUK7NbXCL96HDxP7Qm6MDKgz/8mD4XtMJIWvZ098VDv4+1Ce2lK366grQRmNQfYVUuhwPppnJfqug==}
+  '@nx/nx-win32-x64-msvc@21.3.7':
+    resolution: {integrity: sha512-riVFPTcYseYpzONDvlO/RbdYp/q8R0NGD9J2f/N8/ucqmZcoa3ABx6BvGIStMgmUVxNnIkHNPNnm8Hor+BHFYA==}
     cpu: [x64]
     os: [win32]
 
@@ -3881,8 +3881,8 @@ packages:
     resolution: {integrity: sha512-tt6PvKu4WyzPwWUzy/hvPFqn+uwXO0K1ZHka8az3NnrhWJDmSqI8ncWq0fkL0k/lmmi5tAC11FXwXuh0rFbt1A==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
 
-  nx@21.3.5:
-    resolution: {integrity: sha512-iRAO7D7SkjhIM6y5xH8GO+ojTJB2QSIzG2xNBgbRwuTV6AxLBkq6sU5hFA0wNzD/LncUeEoJmRtHfbGXfQQORQ==}
+  nx@21.3.7:
+    resolution: {integrity: sha512-/PwRGg6wH10V8pJHe3RJnizbxjNL0owLARCegup39sk0+m/G/qOfot5KqReWQR4YrtDpreSE7+tRWGCCovyE1A==}
     hasBin: true
     peerDependencies:
       '@swc-node/register': ^1.8.0
@@ -6101,34 +6101,34 @@ snapshots:
 
   '@nolyfill/is-core-module@1.0.39': {}
 
-  '@nx/nx-darwin-arm64@21.3.5':
+  '@nx/nx-darwin-arm64@21.3.7':
     optional: true
 
-  '@nx/nx-darwin-x64@21.3.5':
+  '@nx/nx-darwin-x64@21.3.7':
     optional: true
 
-  '@nx/nx-freebsd-x64@21.3.5':
+  '@nx/nx-freebsd-x64@21.3.7':
     optional: true
 
-  '@nx/nx-linux-arm-gnueabihf@21.3.5':
+  '@nx/nx-linux-arm-gnueabihf@21.3.7':
     optional: true
 
-  '@nx/nx-linux-arm64-gnu@21.3.5':
+  '@nx/nx-linux-arm64-gnu@21.3.7':
     optional: true
 
-  '@nx/nx-linux-arm64-musl@21.3.5':
+  '@nx/nx-linux-arm64-musl@21.3.7':
     optional: true
 
-  '@nx/nx-linux-x64-gnu@21.3.5':
+  '@nx/nx-linux-x64-gnu@21.3.7':
     optional: true
 
-  '@nx/nx-linux-x64-musl@21.3.5':
+  '@nx/nx-linux-x64-musl@21.3.7':
     optional: true
 
-  '@nx/nx-win32-arm64-msvc@21.3.5':
+  '@nx/nx-win32-arm64-msvc@21.3.7':
     optional: true
 
-  '@nx/nx-win32-x64-msvc@21.3.5':
+  '@nx/nx-win32-x64-msvc@21.3.7':
     optional: true
 
   '@pkgjs/parseargs@0.11.0':
@@ -9610,7 +9610,7 @@ snapshots:
 
   npm-to-yarn@3.0.1: {}
 
-  nx@21.3.5:
+  nx@21.3.7:
     dependencies:
       '@napi-rs/wasm-runtime': 0.2.4
       '@yarnpkg/lockfile': 1.1.0
@@ -9648,16 +9648,16 @@ snapshots:
       yargs: 17.7.2
       yargs-parser: 21.1.1
     optionalDependencies:
-      '@nx/nx-darwin-arm64': 21.3.5
-      '@nx/nx-darwin-x64': 21.3.5
-      '@nx/nx-freebsd-x64': 21.3.5
-      '@nx/nx-linux-arm-gnueabihf': 21.3.5
-      '@nx/nx-linux-arm64-gnu': 21.3.5
-      '@nx/nx-linux-arm64-musl': 21.3.5
-      '@nx/nx-linux-x64-gnu': 21.3.5
-      '@nx/nx-linux-x64-musl': 21.3.5
-      '@nx/nx-win32-arm64-msvc': 21.3.5
-      '@nx/nx-win32-x64-msvc': 21.3.5
+      '@nx/nx-darwin-arm64': 21.3.7
+      '@nx/nx-darwin-x64': 21.3.7
+      '@nx/nx-freebsd-x64': 21.3.7
+      '@nx/nx-linux-arm-gnueabihf': 21.3.7
+      '@nx/nx-linux-arm64-gnu': 21.3.7
+      '@nx/nx-linux-arm64-musl': 21.3.7
+      '@nx/nx-linux-x64-gnu': 21.3.7
+      '@nx/nx-linux-x64-musl': 21.3.7
+      '@nx/nx-win32-arm64-msvc': 21.3.7
+      '@nx/nx-win32-x64-msvc': 21.3.7
     transitivePeerDependencies:
       - debug
 
