@@ -1,22 +1,8 @@
 import type { NodePath } from '@babel/traverse';
-import type {
-  ArrayPattern,
-  AssignmentPattern,
-  Identifier,
-  ObjectPattern,
-  RestElement,
-  TSParameterProperty,
-} from '@babel/types';
+import type { FunctionParameter, TSParameterProperty } from '@babel/types';
 import printValue from './printValue.js';
 
-type ParameterNodePath = NodePath<
-  | ArrayPattern
-  | AssignmentPattern
-  | Identifier
-  | ObjectPattern
-  | RestElement
-  | TSParameterProperty
->;
+type ParameterNodePath = NodePath<FunctionParameter | TSParameterProperty>;
 
 export default function getParameterName(
   parameterPath: ParameterNodePath,
@@ -36,10 +22,13 @@ export default function getParameterName(
     )}`;
   } else if (parameterPath.isTSParameterProperty()) {
     return getParameterName(parameterPath.get('parameter'));
+    // @ts-expect-error isVoidPattern is not yet in types
+  } else if (parameterPath.isVoidPattern()) {
+    return 'void';
   }
 
   throw new TypeError(
     'Parameter name must be one of Identifier, AssignmentPattern, ArrayPattern, ' +
-      `ObjectPattern or RestElement, instead got ${parameterPath.node.type}`,
+      `ObjectPattern, RestElement, or VoidPattern instead got ${parameterPath.node.type}`,
   );
 }
