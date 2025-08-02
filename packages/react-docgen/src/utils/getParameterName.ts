@@ -22,7 +22,6 @@ export default function getParameterName(
     )}`;
   } else if (parameterPath.isTSParameterProperty()) {
     return getParameterName(parameterPath.get('parameter'));
-    // @ts-expect-error isVoidPattern is not yet in types
   } else if (parameterPath.isVoidPattern()) {
     return 'void';
   }
