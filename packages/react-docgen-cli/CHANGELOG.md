@@ -1,5 +1,13 @@
 # Release Notes
 
+## 3.0.2
+
+### Patch Changes
+
+- Updated dependencies
+  [[`4c7dd9d`](https://github.com/reactjs/react-docgen/commit/4c7dd9d12ffdb3ac1d6f9663124cc43ec7fabb08)]:
+  - react-docgen@8.0.1
+
 ## 3.0.1
 
 ### Patch Changes
