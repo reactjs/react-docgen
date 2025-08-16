@@ -1,5 +1,14 @@
 # Release Notes
 
+## 8.0.1
+
+### Patch Changes
+
+- [#1009](https://github.com/reactjs/react-docgen/pull/1009)
+  [`4c7dd9d`](https://github.com/reactjs/react-docgen/commit/4c7dd9d12ffdb3ac1d6f9663124cc43ec7fabb08)
+  Thanks [@danez](https://github.com/danez)! - Do not fail on new VoidPattern
+  type
+
 ## 8.0.0
 
 ### Major Changes
@@ -10,7 +19,6 @@
   18, 19 and 21.
 
   With this `react-docgen` version Node.js support is:
-
   - Node.js 20.9.0 or newer 20.x versions
   - Node.js 22.0.0 or any newer version
 
@@ -221,7 +229,6 @@
   [`d7a39af`](https://github.com/reactjs/react-docgen/commit/d7a39af7162c312daba2be428613cb378cce0727)
   Thanks [@danez](https://github.com/danez)! - Refactored
   `resolveComponentDefinition` utility.
-
   - Renamed to `findComponentDefinition`
   - Removed named export `isComponentDefinition`
   - The utility now does a lot more than previously, check out the commit to see
@@ -266,7 +273,6 @@
 - [`96d6e9e`](https://github.com/reactjs/react-docgen/commit/96d6e9e6003b92604781553f6910812c74c18dad)
   Thanks [@danez](https://github.com/danez)! - The main `parse` API had some
   breaking changes.
-
   - The arguments were changed from previously 5 to just 2. The following diff
     illustrates how to migrate:
 
@@ -304,7 +310,6 @@
   [`80e4c74`](https://github.com/reactjs/react-docgen/commit/80e4c747c19d80081c162118f9c7110916fc27a0)
   Thanks [@danez](https://github.com/danez)! - Renamed and migrated built-in
   resolvers to classes.
-
   - `findAllComponentDefinitions` was renamed to `FindAllDefinitionsResolver`
     and is now a class.
 
@@ -454,7 +459,6 @@
 
   There is a new export `ERROR_CODES` that contains all possible error codes.
   The two errors that have codes right now are:
-
   - `MISSING_DEFINITION`: No component found in a file
   - `MULTIPLE_DEFINITIONS`: Multiple components found in one file
 
@@ -627,7 +631,6 @@
 ### Major Changes
 
 - d7a39af: Refactored `resolveComponentDefinition` utility.
-
   - Renamed to `findComponentDefinition`
   - Removed named export `isComponentDefinition`
   - The utility now does a lot more than previously, check out the commit to see
@@ -645,7 +648,6 @@
   Instead you can use the new `@component` annotation.
 
 - 80e4c74: Renamed and migrated built-in resolvers to classes.
-
   - `findAllComponentDefinitions` was renamed to `FindAllDefinitionsResolver`
     and is now a class.
 
@@ -796,7 +798,6 @@
 
   There is a new export `ERROR_CODES` that contains all possible error codes.
   The two errors that have codes right now are:
-
   - `MISSING_DEFINITION`: No component found in file
   - `MULTIPLE_DEFINITIONS`: Multiple components found in one files
 
