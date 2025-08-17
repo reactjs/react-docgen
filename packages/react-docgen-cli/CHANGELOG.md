@@ -1,5 +1,18 @@
 # Release Notes
 
+## 3.0.2
+
+### Patch Changes
+
+- [#1017](https://github.com/reactjs/react-docgen/pull/1017)
+  [`a818275`](https://github.com/reactjs/react-docgen/commit/a818275de1ba7e616d2ba45d0d2cde4f703b961f)
+  Thanks [@renovate](https://github.com/apps/renovate)! - fix(deps): update
+  dependency chalk to v5.6.0
+
+- Updated dependencies
+  [[`4c7dd9d`](https://github.com/reactjs/react-docgen/commit/4c7dd9d12ffdb3ac1d6f9663124cc43ec7fabb08)]:
+  - react-docgen@8.0.1
+
 ## 3.0.1
 
 ### Patch Changes
