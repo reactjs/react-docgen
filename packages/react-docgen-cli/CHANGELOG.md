@@ -1,5 +1,19 @@
 # Release Notes
 
+## 3.0.3
+
+### Patch Changes
+
+- [`bdfdbac`](https://github.com/reactjs/react-docgen/commit/bdfdbaca3e798be18bab3b499e9b49003b7798d6)
+  Thanks [@danez](https://github.com/danez)! - update dependency commander to
+  v14.0.1
+
+- [`bdfdbac`](https://github.com/reactjs/react-docgen/commit/bdfdbaca3e798be18bab3b499e9b49003b7798d6)
+  Thanks [@danez](https://github.com/danez)! - update dependency debug to v4.4.3
+
+- [`bdfdbac`](https://github.com/reactjs/react-docgen/commit/bdfdbaca3e798be18bab3b499e9b49003b7798d6)
+  Thanks [@danez](https://github.com/danez)! - update dependency chalk to v5.6.2
+
 ## 3.0.2
 
 ### Patch Changes
