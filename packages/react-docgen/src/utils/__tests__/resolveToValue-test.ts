@@ -269,4 +269,30 @@ describe('resolveToValue', () => {
       expect(resolveToValue(path)).toBe(path);
     });
   });
+
+  describe('ObjectMethod', () => {
+    test('does not throw', () => {
+      const def = parse.statement(
+        `const slice = createSlice({
+          example(state, action) {
+            state.images[action.payload.id] = action.payload.content;
+          },
+        });`,
+      );
+
+      // path to `action.payload.id`
+      const path = def
+        .get('declarations')[0]
+        .get('init')
+        .get('arguments')[0]
+        .get('properties')[0]
+        .get('body')
+        .get('body')[0]
+        .get('expression')
+        .get('left')
+        .get('property');
+
+      expect(() => resolveToValue(path)).not.toThrow();
+    });
+  });
 });

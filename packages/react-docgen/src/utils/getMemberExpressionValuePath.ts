@@ -42,6 +42,7 @@ function resolveName(path: NodePath): string | undefined {
     path.isArrowFunctionExpression() ||
     path.isTaggedTemplateExpression() ||
     path.isCallExpression() ||
+    path.isObjectMethod() ||
     isReactForwardRefCall(path)
   ) {
     let currentPath: NodePath = path;
