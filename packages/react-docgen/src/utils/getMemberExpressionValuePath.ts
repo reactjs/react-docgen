@@ -42,7 +42,6 @@ function resolveName(path: NodePath): string | undefined {
     path.isArrowFunctionExpression() ||
     path.isTaggedTemplateExpression() ||
     path.isCallExpression() ||
-    path.isObjectMethod() ||
     isReactForwardRefCall(path)
   ) {
     let currentPath: NodePath = path;
@@ -59,6 +58,16 @@ function resolveName(path: NodePath): string | undefined {
       }
 
       currentPath = currentPath.parentPath;
+    }
+
+    return;
+  }
+
+  if (path.isObjectMethod()) {
+    const key = path.get('key');
+
+    if (key.isIdentifier()) {
+      return key.node.name;
     }
 
     return;
