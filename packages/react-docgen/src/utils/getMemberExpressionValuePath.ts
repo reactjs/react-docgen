@@ -37,6 +37,12 @@ function resolveName(path: NodePath): string | undefined {
     return;
   }
 
+  // When we check ObjectMethod we simply ignore it as assigning
+  // to it is technicaly possible but rare
+  if (path.isObjectMethod()) {
+    return;
+  }
+
   if (
     path.isFunctionExpression() ||
     path.isArrowFunctionExpression() ||

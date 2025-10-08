@@ -1,6 +1,8 @@
+import type { ObjectMethod, VariableDeclaration } from '@babel/types';
 import { parse } from '../../../tests/utils';
 import getMemberExpressionValuePath from '../getMemberExpressionValuePath.js';
 import { describe, expect, test } from 'vitest';
+import type { NodePath } from '@babel/traverse';
 
 describe('getMemberExpressionValuePath', () => {
   describe('MethodExpression', () => {
@@ -99,6 +101,25 @@ describe('getMemberExpressionValuePath', () => {
       expect(getMemberExpressionValuePath(def, 'propTypes')).toBe(
         def.parentPath.get('body')[1].get('expression').get('right'),
       );
+    });
+  });
+  describe('ObjectMethod', () => {
+    test('ignores ObjectMethod', () => {
+      const def = parse.statement<VariableDeclaration>(`
+        const slice = createSlice({
+          example(state, action) {
+          },
+        });
+      `);
+
+      // path to `action.payload.id`
+      const path = def
+        .get('declarations')[0]
+        .get('init')
+        .get('arguments')[0]
+        .get('properties')[0] as NodePath<ObjectMethod>;
+
+      expect(getMemberExpressionValuePath(path, 'images')).toBe(null);
     });
   });
 });
