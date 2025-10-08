@@ -1,5 +1,14 @@
 # Release Notes
 
+## 8.0.2
+
+### Patch Changes
+
+- [#1036](https://github.com/reactjs/react-docgen/pull/1036)
+  [`a122bff`](https://github.com/reactjs/react-docgen/commit/a122bffae060ada1c486b17cc667262be7360234)
+  Thanks [@DiogoDoreto](https://github.com/DiogoDoreto)! - Do not fail when
+  resolving inside ObjectMethod nodes
+
 ## 8.0.1
 
 ### Patch Changes
