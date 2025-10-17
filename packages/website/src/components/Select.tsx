@@ -36,9 +36,9 @@ export function Select({
           cn(
             'h-7 rounded-md px-2 text-xs font-medium transition-colors',
             open
-              ? 'dark:bg-primary-100/10 bg-gray-200 text-gray-900 dark:text-gray-50'
+              ? 'bg-gray-200 text-gray-900 dark:bg-primary-100/10 dark:text-gray-50'
               : hover
-                ? 'dark:bg-primary-100/5 bg-gray-100 text-gray-900 dark:text-gray-50'
+                ? 'bg-gray-100 text-gray-900 dark:bg-primary-100/5 dark:text-gray-50'
                 : 'text-gray-600 dark:text-gray-400',
             focus && 'nextra-focusable',
             className,
