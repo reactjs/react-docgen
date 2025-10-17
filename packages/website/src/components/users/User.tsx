@@ -18,7 +18,7 @@ export default function User({ user }: Props) {
         href={user.url}
         rel="noopener noreferrer"
         target="_blank"
-        className="relative my-3.5 block h-32 rounded-md bg-white px-2.5 hover:scale-105 hover:shadow-md md:hover:scale-110 dark:bg-gray-50/10"
+        className="relative my-3.5 block h-32 rounded-md bg-white px-2.5 hover:scale-105 hover:shadow-md dark:bg-gray-50/10 md:hover:scale-110"
       >
         <Image
           src={logo}
