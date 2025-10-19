@@ -27,8 +27,8 @@ importers:
         specifier: 3.2.4
         version: 3.2.4(vitest@3.2.4(@types/debug@4.1.12)(@types/node@20.19.22)(jiti@1.21.7)(lightningcss@1.30.2)(yaml@2.8.1))
       cpy:
-        specifier: 12.0.1
-        version: 12.0.1
+        specifier: 12.0.2
+        version: 12.0.2
       eslint:
         specifier: 9.38.0
         version: 9.38.0(jiti@1.21.7)
@@ -2123,8 +2123,8 @@ packages:
   cose-base@2.2.0:
     resolution: {integrity: sha512-AzlgcsCbUMymkADOJtQm3wO9S3ltPfYOFD5033keQn9NJzIbtnZj+UdBJe7DYml/8TdbtHJW3j58SOnKhWY/5g==}
 
-  cpy@12.0.1:
-    resolution: {integrity: sha512-hCnNla4AB27lUncMuO7KFjge0u0C5R74iKMBOajKOMB9ONGXcIek314ZTpxg16BuNYRTjPz7UW3tPXgJVLxUww==}
+  cpy@12.0.2:
+    resolution: {integrity: sha512-DBEV/xw8u0rEHFcYq0YDs/7WH8ibdJetmEXrI1wi2a0GdisSP6LaS6A0Quef0+F7p7mNKEhdUC0SImQzZ8W1kg==}
     engines: {node: '>=20'}
 
   crelt@1.0.6:
@@ -7269,7 +7269,7 @@ snapshots:
     dependencies:
       layout-base: 2.0.1
 
-  cpy@12.0.1:
+  cpy@12.0.2:
     dependencies:
       copy-file: 11.1.0
       globby: 14.1.0
