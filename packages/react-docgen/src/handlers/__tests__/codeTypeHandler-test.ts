@@ -141,21 +141,36 @@ describe('codeTypeHandler', () => {
     });
   }
 
+  describe('class definition for flow <0.53', () => {
+    testCodeTypeHandler((propTypesSrc) =>
+      parse.statement(
+        template(
+          'class Foo extends Component<void, Props, void> {}',
+          propTypesSrc,
+        ),
+      ),
+    );
+  });
+
+  describe('stateless TS component with Type', () => {
+    testCodeTypeHandler(
+      (propTypesSrc) =>
+        parseTypescript
+          .statement(
+            template(
+              'const MyComponent:React.FC<Props> = (props) => null;',
+              propTypesSrc,
+            ),
+          )
+          .get('declarations')[0]
+          .get('init') as NodePath<ArrowFunctionExpression>,
+    );
+  });
+
   describe.each([
     ['flow', parse],
     ['ts', parseTypescript],
   ])('TypeAlias (%s)', (name, parseFunc) => {
-    describe.runIf(name === 'flow')('class definition for flow <0.53', () => {
-      testCodeTypeHandler((propTypesSrc) =>
-        parseFunc.statement(
-          template(
-            'class Foo extends Component<void, Props, void> {}',
-            propTypesSrc,
-          ),
-        ),
-      );
-    });
-
     describe('class definition without State', () => {
       testCodeTypeHandler((propTypesSrc) =>
         parseFunc.statement(
@@ -192,21 +207,6 @@ describe('codeTypeHandler', () => {
           parseFunc
             .statement(template('(props: Props) => null;', propTypesSrc))
             .get('expression') as NodePath<ArrowFunctionExpression>,
-      );
-    });
-
-    describe.runIf(name === 'ts')('stateless TS component with Type', () => {
-      testCodeTypeHandler(
-        (propTypesSrc) =>
-          parseFunc
-            .statement(
-              template(
-                'const MyComponent:React.FC<Props> = (props) => null;',
-                propTypesSrc,
-              ),
-            )
-            .get('declarations')[0]
-            .get('init') as NodePath<ArrowFunctionExpression>,
       );
     });
   });

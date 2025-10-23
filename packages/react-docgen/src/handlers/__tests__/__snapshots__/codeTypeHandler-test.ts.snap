@@ -1,168 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`codeTypeHandler > TypeAlias (flow) > class definition for flow <0.53 > detects intersection types 1`] = `
-{
-  "foo": {
-    "description": "",
-    "flowType": {
-      "elements": [
-        {
-          "name": "Foo",
-        },
-        {
-          "name": "Bar",
-        },
-      ],
-      "name": "intersection",
-      "raw": "Foo & Bar",
-    },
-    "required": true,
-  },
-}
-`;
-
-exports[`codeTypeHandler > TypeAlias (flow) > class definition for flow <0.53 > detects types correctly 1`] = `
-{
-  "bar": {
-    "description": "",
-    "flowType": {
-      "name": "number",
-    },
-    "required": true,
-  },
-  "foo": {
-    "description": "",
-    "flowType": {
-      "name": "string",
-    },
-    "required": true,
-  },
-  "hal": {
-    "description": "",
-    "flowType": {
-      "name": "boolean",
-    },
-    "required": true,
-  },
-}
-`;
-
-exports[`codeTypeHandler > TypeAlias (flow) > class definition for flow <0.53 > detects union types 1`] = `
-{
-  "bar": {
-    "description": "",
-    "flowType": {
-      "elements": [
-        {
-          "name": "literal",
-          "value": ""test"",
-        },
-        {
-          "name": "literal",
-          "value": "1",
-        },
-        {
-          "name": "literal",
-          "value": "true",
-        },
-      ],
-      "name": "union",
-      "raw": ""test" | 1 | true",
-    },
-    "required": true,
-  },
-  "foo": {
-    "description": "",
-    "flowType": {
-      "elements": [
-        {
-          "name": "string",
-        },
-        {
-          "name": "number",
-        },
-      ],
-      "name": "union",
-      "raw": "string | number",
-    },
-    "required": true,
-  },
-}
-`;
-
-exports[`codeTypeHandler > TypeAlias (flow) > class definition for flow <0.53 > detects whether a prop is required 1`] = `
-{
-  "bar": {
-    "description": "",
-    "flowType": {
-      "name": "number",
-    },
-    "required": false,
-  },
-  "foo": {
-    "description": "",
-    "flowType": {
-      "name": "string",
-    },
-    "required": true,
-  },
-}
-`;
-
-exports[`codeTypeHandler > TypeAlias (flow) > class definition for flow <0.53 > ignores hash map entry 1`] = `
-{
-  "bar": {
-    "description": "",
-    "flowType": {
-      "name": "number",
-    },
-    "required": false,
-  },
-}
-`;
-
-exports[`codeTypeHandler > TypeAlias (flow) > class definition for flow <0.53 > special generic type annotations > unwraps $Exact<...> 1`] = `
-{
-  "foo": {
-    "description": "",
-    "flowType": {
-      "elements": [
-        {
-          "name": "string",
-        },
-        {
-          "name": "number",
-        },
-      ],
-      "name": "union",
-      "raw": "string | number",
-    },
-    "required": true,
-  },
-}
-`;
-
-exports[`codeTypeHandler > TypeAlias (flow) > class definition for flow <0.53 > special generic type annotations > unwraps $ReadOnly<...> 1`] = `
-{
-  "foo": {
-    "description": "",
-    "flowType": {
-      "elements": [
-        {
-          "name": "string",
-        },
-        {
-          "name": "number",
-        },
-      ],
-      "name": "union",
-      "raw": "string | number",
-    },
-    "required": true,
-  },
-}
-`;
-
 exports[`codeTypeHandler > TypeAlias (flow) > class definition with State > detects intersection types 1`] = `
 {
   "foo": {
@@ -1190,131 +1027,6 @@ exports[`codeTypeHandler > TypeAlias (ts) > class definition without State > spe
 
 exports[`codeTypeHandler > TypeAlias (ts) > class definition without State > special generic type annotations > unwraps $ReadOnly<...> 1`] = `{}`;
 
-exports[`codeTypeHandler > TypeAlias (ts) > stateless TS component with Type > detects intersection types 1`] = `
-{
-  "foo": {
-    "description": "",
-    "required": true,
-    "tsType": {
-      "elements": [
-        {
-          "name": "Foo",
-        },
-        {
-          "name": "Bar",
-        },
-      ],
-      "name": "intersection",
-      "raw": "Foo & Bar",
-    },
-  },
-}
-`;
-
-exports[`codeTypeHandler > TypeAlias (ts) > stateless TS component with Type > detects types correctly 1`] = `
-{
-  "bar": {
-    "description": "",
-    "required": true,
-    "tsType": {
-      "name": "number",
-    },
-  },
-  "foo": {
-    "description": "",
-    "required": true,
-    "tsType": {
-      "name": "string",
-    },
-  },
-  "hal": {
-    "description": "",
-    "required": true,
-    "tsType": {
-      "name": "boolean",
-    },
-  },
-}
-`;
-
-exports[`codeTypeHandler > TypeAlias (ts) > stateless TS component with Type > detects union types 1`] = `
-{
-  "bar": {
-    "description": "",
-    "required": true,
-    "tsType": {
-      "elements": [
-        {
-          "name": "literal",
-          "value": ""test"",
-        },
-        {
-          "name": "literal",
-          "value": "1",
-        },
-        {
-          "name": "literal",
-          "value": "true",
-        },
-      ],
-      "name": "union",
-      "raw": ""test" | 1 | true",
-    },
-  },
-  "foo": {
-    "description": "",
-    "required": true,
-    "tsType": {
-      "elements": [
-        {
-          "name": "string",
-        },
-        {
-          "name": "number",
-        },
-      ],
-      "name": "union",
-      "raw": "string | number",
-    },
-  },
-}
-`;
-
-exports[`codeTypeHandler > TypeAlias (ts) > stateless TS component with Type > detects whether a prop is required 1`] = `
-{
-  "bar": {
-    "description": "",
-    "required": false,
-    "tsType": {
-      "name": "number",
-    },
-  },
-  "foo": {
-    "description": "",
-    "required": true,
-    "tsType": {
-      "name": "string",
-    },
-  },
-}
-`;
-
-exports[`codeTypeHandler > TypeAlias (ts) > stateless TS component with Type > ignores hash map entry 1`] = `
-{
-  "bar": {
-    "description": "",
-    "required": false,
-    "tsType": {
-      "name": "number",
-    },
-  },
-}
-`;
-
-exports[`codeTypeHandler > TypeAlias (ts) > stateless TS component with Type > special generic type annotations > unwraps $Exact<...> 1`] = `{}`;
-
-exports[`codeTypeHandler > TypeAlias (ts) > stateless TS component with Type > special generic type annotations > unwraps $ReadOnly<...> 1`] = `{}`;
-
 exports[`codeTypeHandler > TypeAlias (ts) > stateless component > detects intersection types 1`] = `
 {
   "foo": {
@@ -1439,6 +1151,169 @@ exports[`codeTypeHandler > TypeAlias (ts) > stateless component > ignores hash m
 exports[`codeTypeHandler > TypeAlias (ts) > stateless component > special generic type annotations > unwraps $Exact<...> 1`] = `{}`;
 
 exports[`codeTypeHandler > TypeAlias (ts) > stateless component > special generic type annotations > unwraps $ReadOnly<...> 1`] = `{}`;
+
+exports[`codeTypeHandler > class definition for flow <0.53 > detects intersection types 1`] = `
+{
+  "foo": {
+    "description": "",
+    "flowType": {
+      "elements": [
+        {
+          "name": "Foo",
+        },
+        {
+          "name": "Bar",
+        },
+      ],
+      "name": "intersection",
+      "raw": "Foo & Bar",
+    },
+    "required": true,
+  },
+}
+`;
+
+exports[`codeTypeHandler > class definition for flow <0.53 > detects types correctly 1`] = `
+{
+  "bar": {
+    "description": "",
+    "flowType": {
+      "name": "number",
+    },
+    "required": true,
+  },
+  "foo": {
+    "description": "",
+    "flowType": {
+      "name": "string",
+    },
+    "required": true,
+  },
+  "hal": {
+    "description": "",
+    "flowType": {
+      "name": "boolean",
+    },
+    "required": true,
+  },
+}
+`;
+
+exports[`codeTypeHandler > class definition for flow <0.53 > detects union types 1`] = `
+{
+  "bar": {
+    "description": "",
+    "flowType": {
+      "elements": [
+        {
+          "name": "literal",
+          "value": ""test"",
+        },
+        {
+          "name": "literal",
+          "value": "1",
+        },
+        {
+          "name": "literal",
+          "value": "true",
+        },
+      ],
+      "name": "union",
+      "raw": ""test" | 1 | true",
+    },
+    "required": true,
+  },
+  "foo": {
+    "description": "",
+    "flowType": {
+      "elements": [
+        {
+          "name": "string",
+        },
+        {
+          "name": "number",
+        },
+      ],
+      "name": "union",
+      "raw": "string | number",
+    },
+    "required": true,
+  },
+}
+`;
+
+exports[`codeTypeHandler > class definition for flow <0.53 > detects whether a prop is required 1`] = `
+{
+  "bar": {
+    "description": "",
+    "flowType": {
+      "name": "number",
+    },
+    "required": false,
+  },
+  "foo": {
+    "description": "",
+    "flowType": {
+      "name": "string",
+    },
+    "required": true,
+  },
+}
+`;
+
+exports[`codeTypeHandler > class definition for flow <0.53 > ignores hash map entry 1`] = `
+{
+  "bar": {
+    "description": "",
+    "flowType": {
+      "name": "number",
+    },
+    "required": false,
+  },
+}
+`;
+
+exports[`codeTypeHandler > class definition for flow <0.53 > special generic type annotations > unwraps $Exact<...> 1`] = `
+{
+  "foo": {
+    "description": "",
+    "flowType": {
+      "elements": [
+        {
+          "name": "string",
+        },
+        {
+          "name": "number",
+        },
+      ],
+      "name": "union",
+      "raw": "string | number",
+    },
+    "required": true,
+  },
+}
+`;
+
+exports[`codeTypeHandler > class definition for flow <0.53 > special generic type annotations > unwraps $ReadOnly<...> 1`] = `
+{
+  "foo": {
+    "description": "",
+    "flowType": {
+      "elements": [
+        {
+          "name": "string",
+        },
+        {
+          "name": "number",
+        },
+      ],
+      "name": "union",
+      "raw": "string | number",
+    },
+    "required": true,
+  },
+}
+`;
 
 exports[`codeTypeHandler > does support utility types inline 1`] = `
 {
@@ -1679,6 +1554,131 @@ exports[`codeTypeHandler > stateless TS component with 2 definitions 1`] = `
   },
 }
 `;
+
+exports[`codeTypeHandler > stateless TS component with Type > detects intersection types 1`] = `
+{
+  "foo": {
+    "description": "",
+    "required": true,
+    "tsType": {
+      "elements": [
+        {
+          "name": "Foo",
+        },
+        {
+          "name": "Bar",
+        },
+      ],
+      "name": "intersection",
+      "raw": "Foo & Bar",
+    },
+  },
+}
+`;
+
+exports[`codeTypeHandler > stateless TS component with Type > detects types correctly 1`] = `
+{
+  "bar": {
+    "description": "",
+    "required": true,
+    "tsType": {
+      "name": "number",
+    },
+  },
+  "foo": {
+    "description": "",
+    "required": true,
+    "tsType": {
+      "name": "string",
+    },
+  },
+  "hal": {
+    "description": "",
+    "required": true,
+    "tsType": {
+      "name": "boolean",
+    },
+  },
+}
+`;
+
+exports[`codeTypeHandler > stateless TS component with Type > detects union types 1`] = `
+{
+  "bar": {
+    "description": "",
+    "required": true,
+    "tsType": {
+      "elements": [
+        {
+          "name": "literal",
+          "value": ""test"",
+        },
+        {
+          "name": "literal",
+          "value": "1",
+        },
+        {
+          "name": "literal",
+          "value": "true",
+        },
+      ],
+      "name": "union",
+      "raw": ""test" | 1 | true",
+    },
+  },
+  "foo": {
+    "description": "",
+    "required": true,
+    "tsType": {
+      "elements": [
+        {
+          "name": "string",
+        },
+        {
+          "name": "number",
+        },
+      ],
+      "name": "union",
+      "raw": "string | number",
+    },
+  },
+}
+`;
+
+exports[`codeTypeHandler > stateless TS component with Type > detects whether a prop is required 1`] = `
+{
+  "bar": {
+    "description": "",
+    "required": false,
+    "tsType": {
+      "name": "number",
+    },
+  },
+  "foo": {
+    "description": "",
+    "required": true,
+    "tsType": {
+      "name": "string",
+    },
+  },
+}
+`;
+
+exports[`codeTypeHandler > stateless TS component with Type > ignores hash map entry 1`] = `
+{
+  "bar": {
+    "description": "",
+    "required": false,
+    "tsType": {
+      "name": "number",
+    },
+  },
+}
+`;
+
+exports[`codeTypeHandler > stateless TS component with Type > special generic type annotations > unwraps $Exact<...> 1`] = `{}`;
+
+exports[`codeTypeHandler > stateless TS component with Type > special generic type annotations > unwraps $ReadOnly<...> 1`] = `{}`;
 
 exports[`codeTypeHandler > supports intersection proptypes 1`] = `
 {
