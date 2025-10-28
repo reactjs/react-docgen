@@ -13,7 +13,7 @@ importers:
         version: 0.5.1
       '@changesets/cli':
         specifier: 2.29.7
-        version: 2.29.7(@types/node@20.19.23)
+        version: 2.29.7(@types/node@20.19.24)
       '@eslint/eslintrc':
         specifier: 3.3.1
         version: 3.3.1
@@ -21,11 +21,11 @@ importers:
         specifier: 9.38.0
         version: 9.38.0
       '@types/node':
-        specifier: 20.19.23
-        version: 20.19.23
+        specifier: 20.19.24
+        version: 20.19.24
       '@vitest/coverage-v8':
         specifier: 4.0.4
-        version: 4.0.4(vitest@4.0.4(@types/debug@4.1.12)(@types/node@20.19.23)(jiti@1.21.7)(lightningcss@1.30.2)(yaml@2.8.1))
+        version: 4.0.4(vitest@4.0.4(@types/debug@4.1.12)(@types/node@20.19.24)(jiti@1.21.7)(lightningcss@1.30.2)(yaml@2.8.1))
       cpy:
         specifier: 12.1.0
         version: 12.1.0
@@ -70,7 +70,7 @@ importers:
         version: 8.46.2(eslint@9.38.0(jiti@1.21.7))(typescript@5.9.3)
       vitest:
         specifier: 4.0.4
-        version: 4.0.4(@types/debug@4.1.12)(@types/node@20.19.23)(jiti@1.21.7)(lightningcss@1.30.2)(yaml@2.8.1)
+        version: 4.0.4(@types/debug@4.1.12)(@types/node@20.19.24)(jiti@1.21.7)(lightningcss@1.30.2)(yaml@2.8.1)
 
   benchmark:
     dependencies:
@@ -1484,8 +1484,8 @@ packages:
   '@types/node@12.20.55':
     resolution: {integrity: sha512-J8xLz7q2OFulZ2cyGTLE1TbbZcjpno7FaN6zdJNrgAdrJ+DZzh/uFR6YrTb4C+nXakvud8Q4+rbhoIWlYQbUFQ==}
 
-  '@types/node@20.19.23':
-    resolution: {integrity: sha512-yIdlVVVHXpmqRhtyovZAcSy0MiPcYWGkoO4CGe/+jpP0hmNuihm4XhHbADpK++MsiLHP5MVlv+bcgdF99kSiFQ==}
+  '@types/node@20.19.24':
+    resolution: {integrity: sha512-FE5u0ezmi6y9OZEzlJfg37mqqf6ZDSF2V/NLjUyGrR9uTZ7Sb9F7bLNZ03S4XVUNRWGA7Ck4c1kK+YnuWjl+DA==}
 
   '@types/react-dom@19.2.2':
     resolution: {integrity: sha512-9KQPoO6mZCi7jcIStSnlOWn2nEF3mNmyr3rIAsGnAbQKYbRLyqmeSc39EVgtxXVia+LMT8j3knZLAZAh+xLmrw==}
@@ -5365,7 +5365,7 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  '@changesets/cli@2.29.7(@types/node@20.19.23)':
+  '@changesets/cli@2.29.7(@types/node@20.19.24)':
     dependencies:
       '@changesets/apply-release-plan': 7.0.13
       '@changesets/assemble-release-plan': 6.0.9
@@ -5381,7 +5381,7 @@ snapshots:
       '@changesets/should-skip-package': 0.1.2
       '@changesets/types': 6.1.0
       '@changesets/write': 0.4.0
-      '@inquirer/external-editor': 1.0.2(@types/node@20.19.23)
+      '@inquirer/external-editor': 1.0.2(@types/node@20.19.24)
       '@manypkg/get-packages': 1.1.3
       ansi-colors: 4.1.3
       ci-info: 3.9.0
@@ -5863,12 +5863,12 @@ snapshots:
   '@img/sharp-win32-x64@0.34.4':
     optional: true
 
-  '@inquirer/external-editor@1.0.2(@types/node@20.19.23)':
+  '@inquirer/external-editor@1.0.2(@types/node@20.19.24)':
     dependencies:
       chardet: 2.1.0
       iconv-lite: 0.7.0
     optionalDependencies:
-      '@types/node': 20.19.23
+      '@types/node': 20.19.24
 
   '@isaacs/balanced-match@4.0.1': {}
 
@@ -6545,7 +6545,7 @@ snapshots:
 
   '@types/node@12.20.55': {}
 
-  '@types/node@20.19.23':
+  '@types/node@20.19.24':
     dependencies:
       undici-types: 6.21.0
 
@@ -6754,7 +6754,7 @@ snapshots:
   '@unrs/resolver-binding-win32-x64-msvc@1.11.1':
     optional: true
 
-  '@vitest/coverage-v8@4.0.4(vitest@4.0.4(@types/debug@4.1.12)(@types/node@20.19.23)(jiti@1.21.7)(lightningcss@1.30.2)(yaml@2.8.1))':
+  '@vitest/coverage-v8@4.0.4(vitest@4.0.4(@types/debug@4.1.12)(@types/node@20.19.24)(jiti@1.21.7)(lightningcss@1.30.2)(yaml@2.8.1))':
     dependencies:
       '@bcoe/v8-coverage': 1.0.2
       '@vitest/utils': 4.0.4
@@ -6767,7 +6767,7 @@ snapshots:
       magicast: 0.3.5
       std-env: 3.10.0
       tinyrainbow: 3.0.3
-      vitest: 4.0.4(@types/debug@4.1.12)(@types/node@20.19.23)(jiti@1.21.7)(lightningcss@1.30.2)(yaml@2.8.1)
+      vitest: 4.0.4(@types/debug@4.1.12)(@types/node@20.19.24)(jiti@1.21.7)(lightningcss@1.30.2)(yaml@2.8.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -6780,13 +6780,13 @@ snapshots:
       chai: 6.2.0
       tinyrainbow: 3.0.3
 
-  '@vitest/mocker@4.0.4(vite@7.1.12(@types/node@20.19.23)(jiti@1.21.7)(lightningcss@1.30.2)(yaml@2.8.1))':
+  '@vitest/mocker@4.0.4(vite@7.1.12(@types/node@20.19.24)(jiti@1.21.7)(lightningcss@1.30.2)(yaml@2.8.1))':
     dependencies:
       '@vitest/spy': 4.0.4
       estree-walker: 3.0.3
       magic-string: 0.30.21
     optionalDependencies:
-      vite: 7.1.12(@types/node@20.19.23)(jiti@1.21.7)(lightningcss@1.30.2)(yaml@2.8.1)
+      vite: 7.1.12(@types/node@20.19.24)(jiti@1.21.7)(lightningcss@1.30.2)(yaml@2.8.1)
 
   '@vitest/pretty-format@4.0.4':
     dependencies:
@@ -10982,7 +10982,7 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.3
 
-  vite@7.1.12(@types/node@20.19.23)(jiti@1.21.7)(lightningcss@1.30.2)(yaml@2.8.1):
+  vite@7.1.12(@types/node@20.19.24)(jiti@1.21.7)(lightningcss@1.30.2)(yaml@2.8.1):
     dependencies:
       esbuild: 0.25.11
       fdir: 6.5.0(picomatch@4.0.3)
@@ -10991,16 +10991,16 @@ snapshots:
       rollup: 4.52.5
       tinyglobby: 0.2.15
     optionalDependencies:
-      '@types/node': 20.19.23
+      '@types/node': 20.19.24
       fsevents: 2.3.3
       jiti: 1.21.7
       lightningcss: 1.30.2
       yaml: 2.8.1
 
-  vitest@4.0.4(@types/debug@4.1.12)(@types/node@20.19.23)(jiti@1.21.7)(lightningcss@1.30.2)(yaml@2.8.1):
+  vitest@4.0.4(@types/debug@4.1.12)(@types/node@20.19.24)(jiti@1.21.7)(lightningcss@1.30.2)(yaml@2.8.1):
     dependencies:
       '@vitest/expect': 4.0.4
-      '@vitest/mocker': 4.0.4(vite@7.1.12(@types/node@20.19.23)(jiti@1.21.7)(lightningcss@1.30.2)(yaml@2.8.1))
+      '@vitest/mocker': 4.0.4(vite@7.1.12(@types/node@20.19.24)(jiti@1.21.7)(lightningcss@1.30.2)(yaml@2.8.1))
       '@vitest/pretty-format': 4.0.4
       '@vitest/runner': 4.0.4
       '@vitest/snapshot': 4.0.4
@@ -11017,11 +11017,11 @@ snapshots:
       tinyexec: 0.3.2
       tinyglobby: 0.2.15
       tinyrainbow: 3.0.3
-      vite: 7.1.12(@types/node@20.19.23)(jiti@1.21.7)(lightningcss@1.30.2)(yaml@2.8.1)
+      vite: 7.1.12(@types/node@20.19.24)(jiti@1.21.7)(lightningcss@1.30.2)(yaml@2.8.1)
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/debug': 4.1.12
-      '@types/node': 20.19.23
+      '@types/node': 20.19.24
     transitivePeerDependencies:
       - jiti
       - less
