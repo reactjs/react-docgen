@@ -169,8 +169,8 @@ importers:
         specifier: 19.2.3
         version: 19.2.3
       '@types/react-dom':
-        specifier: 19.2.2
-        version: 19.2.2(@types/react@19.2.3)
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.3)
       '@uiw/react-codemirror':
         specifier: 4.25.3
         version: 4.25.3(@babel/runtime@7.28.4)(@codemirror/autocomplete@6.19.1)(@codemirror/language@6.11.3)(@codemirror/lint@6.9.2)(@codemirror/search@6.5.11)(@codemirror/state@6.5.2)(@codemirror/theme-one-dark@6.1.3)(@codemirror/view@6.38.6)(codemirror@6.0.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -1498,8 +1498,8 @@ packages:
   '@types/node@20.19.25':
     resolution: {integrity: sha512-ZsJzA5thDQMSQO788d7IocwwQbI8B5OPzmqNvpf3NY/+MHDAS759Wo0gd2WQeXYt5AAAQjzcrTVC6SKCuYgoCQ==}
 
-  '@types/react-dom@19.2.2':
-    resolution: {integrity: sha512-9KQPoO6mZCi7jcIStSnlOWn2nEF3mNmyr3rIAsGnAbQKYbRLyqmeSc39EVgtxXVia+LMT8j3knZLAZAh+xLmrw==}
+  '@types/react-dom@19.2.3':
+    resolution: {integrity: sha512-jp2L/eY6fn+KgVVQAOqYItbF0VY/YApe5Mz2F0aykSO8gx31bYCZyvSeYxCHKvzHG5eZjc+zyaS5BrBWya2+kQ==}
     peerDependencies:
       '@types/react': ^19.2.0
 
@@ -6628,7 +6628,7 @@ snapshots:
     dependencies:
       undici-types: 6.21.0
 
-  '@types/react-dom@19.2.2(@types/react@19.2.3)':
+  '@types/react-dom@19.2.3(@types/react@19.2.3)':
     dependencies:
       '@types/react': 19.2.3
 
