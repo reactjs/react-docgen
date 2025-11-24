@@ -35,7 +35,7 @@
     "rimraf": "6.1.2",
     "tempy": "3.1.0",
     "typescript": "5.9.3",
-    "typescript-eslint": "8.47.0",
+    "typescript-eslint": "8.48.0",
     "vitest": "4.0.13"
   },
   "packageManager": "pnpm@10.23.0"
