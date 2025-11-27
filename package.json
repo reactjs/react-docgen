@@ -6,8 +6,8 @@
   },
   "scripts": {
     "build": "nx run-many --target=build --exclude='@react-docgen-internal/*'",
-    "lint": "eslint . --flag unstable_config_lookup_from_file --report-unused-disable-directives --max-warnings=0",
-    "fix": "eslint . --flag unstable_config_lookup_from_file --fix --report-unused-disable-directives --max-warnings=0",
+    "lint": "eslint . --flag v10_config_lookup_from_file --report-unused-disable-directives --max-warnings=0",
+    "fix": "eslint . --flag v10_config_lookup_from_file --fix --report-unused-disable-directives --max-warnings=0",
     "test": "nx run-many --target=test --exclude='@react-docgen-internal/*' --output-style=stream",
     "copy:changelog:react-docgen": "cp ./packages/react-docgen/CHANGELOG.md ./packages/website/src/pages/docs/release-notes/react-docgen.mdx",
     "copy:changelog:cli": "cp ./packages/react-docgen-cli/CHANGELOG.md ./packages/website/src/pages/docs/release-notes/cli.mdx",
