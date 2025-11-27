@@ -112,8 +112,9 @@ export interface TSFunctionSignatureType extends FunctionSignatureType {
   };
 }
 
-export interface ObjectSignatureType<T = FunctionSignatureType>
-  extends BaseType {
+export interface ObjectSignatureType<
+  T = FunctionSignatureType,
+> extends BaseType {
   name: 'signature';
   type: 'object';
   raw: string;
