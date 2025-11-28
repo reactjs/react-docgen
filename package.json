@@ -18,7 +18,7 @@
   "devDependencies": {
     "@changesets/changelog-github": "0.5.2",
     "@changesets/cli": "2.29.8",
-    "@eslint/eslintrc": "3.3.1",
+    "@eslint/eslintrc": "3.3.3",
     "@eslint/js": "9.39.1",
     "@types/node": "20.19.25",
     "@vitest/coverage-v8": "4.0.14",
