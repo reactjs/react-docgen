@@ -43,7 +43,7 @@ export default function OptionPanel({
           </>
         }
         options={options}
-        onChange={(language) => onLanguageChange(language as Language)}
+        onChange={(lang) => onLanguageChange(lang as Language)}
       />
     </>
   );

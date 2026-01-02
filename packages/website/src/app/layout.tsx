@@ -1,7 +1,7 @@
 import { Footer, Layout, Navbar } from 'nextra-theme-docs';
 import { Head } from 'nextra/components';
 import { getPageMap } from 'nextra/page-map';
-import './globals.css'
+import './globals.css';
 import type { FC, ReactNode } from 'react';
 
 export const metadata = {
@@ -28,11 +28,13 @@ const navbar = (
     projectLink="https://github.com/reactjs/react-docgen"
   />
 );
-const footer = <Footer className="flex-col items-center md:items-start">
+const footer = (
+  <Footer className="flex-col items-center md:items-start">
     <p className="mt-6 text-xs">
       MIT License | © {new Date().getFullYear()} react-docgen.
     </p>
-  </Footer>;
+  </Footer>
+);
 
 const RootLayout: FC<{
   children: ReactNode;

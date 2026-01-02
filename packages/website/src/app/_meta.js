@@ -2,6 +2,12 @@ export default {
   index: {
     title: 'Home',
     type: 'page',
+    theme: {
+      copyPage: false,
+      sidebar: false,
+      toc: false,
+      timestamp: false,
+    },
   },
   docs: {
     title: 'Docs',
