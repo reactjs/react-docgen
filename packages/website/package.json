@@ -62,6 +62,6 @@
     }
   },
   "devDependencies": {
-    "pagefind": "^1.4.0"
+    "pagefind": "1.4.0"
   }
 }
