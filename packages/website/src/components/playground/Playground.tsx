@@ -1,3 +1,5 @@
+'use client';
+
 import { Component } from 'react';
 import Panel, { EditorMode } from './Panel';
 import OptionPanel, { Language } from './OptionPanel';

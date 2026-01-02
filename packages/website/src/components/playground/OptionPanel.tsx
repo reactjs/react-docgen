@@ -1,5 +1,6 @@
 import React from 'react';
-import { Select } from '../Select';
+import { Select } from 'nextra/components';
+import { CheckIcon } from 'nextra/icons';
 
 interface OptionPanelProps {
   language: Language;
@@ -13,35 +14,36 @@ export enum Language {
 }
 
 const options = [
-  { key: Language.TYPESCRIPT, name: 'TypeScript' },
-  { key: Language.JAVASCRIPT, name: 'JavaScript' },
-  { key: Language.FLOW, name: 'Flow' },
+  { id: Language.TYPESCRIPT, name: 'TypeScript' },
+  { id: Language.JAVASCRIPT, name: 'JavaScript' },
+  { id: Language.FLOW, name: 'Flow' },
 ];
 
 export default function OptionPanel({
   language,
   onLanguageChange,
 }: OptionPanelProps) {
-  const selectedOption = options.find((option) => option.key === language);
+  const selectedOption = options.find((option) => option.id === language);
 
   if (!selectedOption) {
     throw new Error(`Could not find language '${language}'`);
   }
+  //className={cn('x:flex x:items-center x:gap-2', className)}
 
   return (
     <>
       <Select
-        selected={{
-          key: selectedOption.key,
-          name: (
-            <div className="nx-flex nx-items-center nx-gap-2 nx-capitalize">
-              Language:
-              <span>{selectedOption.name}</span>
-            </div>
-          ),
-        }}
+        className="x:flex x:items-center x:gap-2"
+        value={selectedOption.id}
+        title="Change language"
+        selectedOption={
+          <>
+            <CheckIcon height="1em" />
+            {selectedOption.name}
+          </>
+        }
         options={options}
-        onChange={(option) => onLanguageChange(option.key as Language)}
+        onChange={(lang) => onLanguageChange(lang as Language)}
       />
     </>
   );

@@ -2,6 +2,12 @@ export default {
   index: {
     title: 'Home',
     type: 'page',
+    theme: {
+      copyPage: false,
+      sidebar: false,
+      toc: false,
+      timestamp: false,
+    },
   },
   docs: {
     title: 'Docs',
@@ -10,15 +16,16 @@ export default {
   playground: {
     title: 'Playground',
     type: 'page',
-    theme: {
-      layout: 'raw',
-    },
   },
   users: {
     title: 'Users',
     type: 'page',
     theme: {
       typesetting: 'article',
+      copyPage: false,
+      sidebar: false,
+      toc: false,
+      timestamp: false,
     },
   },
   about: {
@@ -26,6 +33,10 @@ export default {
     type: 'page',
     theme: {
       typesetting: 'article',
+      copyPage: false,
+      sidebar: false,
+      toc: false,
+      timestamp: false,
     },
   },
 };

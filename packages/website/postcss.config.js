@@ -1,7 +1,6 @@
 /** @type {import('postcss').Postcss} */
 module.exports = {
   plugins: {
-    tailwindcss: {},
-    'postcss-lightningcss': {},
+    '@tailwindcss/postcss': {},
   },
 };

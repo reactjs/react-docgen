@@ -12,7 +12,7 @@ const compat = new FlatCompat({
 });
 
 export default tseslint.config([
-  globalIgnores(['**/.next/']),
+  globalIgnores(['**/.next/', 'next-env.d.ts', '**/_pagefind/']),
   ...baseConfig,
   ...compat.config({
     extends: ['next/core-web-vitals'],
