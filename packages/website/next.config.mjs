@@ -1,9 +1,6 @@
 import nextra from 'nextra';
 
-const withNextra = nextra({
-  theme: 'nextra-theme-docs',
-  themeConfig: './src/theme.config.tsx',
-});
+const withNextra = nextra({});
 
 export default withNextra({
   webpack: (config) => {
@@ -13,5 +10,14 @@ export default withNextra({
     config.resolve.aliasFields = ['browser'];
 
     return config;
+  },
+  turbopack: {
+    resolveAlias: {
+      fs: {
+        browser: './src/empty.ts',
+      },
+      '@babel/preset-typescript/package.json': './src/empty.ts',
+      'next-mdx-import-source-file': './src/mdx-components.tsx',
+    },
   },
 });
