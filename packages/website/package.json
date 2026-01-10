@@ -17,7 +17,7 @@
     "@codemirror/view": "6.39.9",
     "@headlessui/react": "2.2.9",
     "@tailwindcss/postcss": "4.1.18",
-    "@types/react": "19.2.7",
+    "@types/react": "19.2.8",
     "@types/react-dom": "19.2.3",
     "@uiw/react-codemirror": "4.25.4",
     "clsx": "2.1.1",
