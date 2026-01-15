@@ -7,7 +7,7 @@
     "dev": "nx exec -- next dev",
     "build": "NODE_ENV=production nx exec -- next build --webpack",
     "start": "nx exec -- next start",
-    "postbuild": "pagefind --site .next/server/app --output-path public/_pagefind"
+    "postbuild": "next-sitemap && pagefind --site .next/server/app --output-path public/_pagefind"
   },
   "author": "Daniel Tschinder (http://github.com/danez)",
   "license": "MIT",
@@ -22,6 +22,7 @@
     "@uiw/react-codemirror": "4.25.4",
     "clsx": "2.1.1",
     "next": "16.1.2",
+    "next-sitemap": "4.2.3",
     "next-themes": "0.4.6",
     "nextra": "4.6.1",
     "nextra-theme-docs": "4.6.1",
