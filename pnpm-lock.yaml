@@ -60,8 +60,8 @@ importers:
         specifier: 6.1.2
         version: 6.1.2
       tempy:
-        specifier: 3.1.1
-        version: 3.1.1
+        specifier: 3.1.2
+        version: 3.1.2
       typescript:
         specifier: 5.9.3
         version: 5.9.3
@@ -4786,8 +4786,8 @@ packages:
     resolution: {integrity: sha512-nHc6S/bwIilKHNRgK/3jlhDoIHcp45YgyiwcAk46Tr0LfEqGBVpmiAyuiuxeVE44m3mXnEeVhaipLOEWmH+Njw==}
     engines: {node: '>=14.16'}
 
-  tempy@3.1.1:
-    resolution: {integrity: sha512-ozXJ+Z2YduKpJuuM07LNcIxpX+r8W4J84HrgqB/ay4skWfa5MhjsVn6e2fw+bRDa8cYO5jRJWnEMWL1HqCc2sQ==}
+  tempy@3.1.2:
+    resolution: {integrity: sha512-pD3+21EbFZFBKDnVztX32wU6IBwkalOduWdx1OKvB5y6y1f2Xn8HU/U6o9EmlfdSyUYe9IybirmYPj/7rilA6Q==}
     engines: {node: '>=14.16'}
 
   term-size@2.2.1:
@@ -10663,7 +10663,7 @@ snapshots:
 
   temp-dir@3.0.0: {}
 
-  tempy@3.1.1:
+  tempy@3.1.2:
     dependencies:
       is-stream: 3.0.0
       temp-dir: 3.0.0
