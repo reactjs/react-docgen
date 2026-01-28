@@ -70,6 +70,12 @@ const mockImporter = makeMockImporter({
       true,
     ).get('declaration') as NodePath<Declaration>,
 
+  MySecondType: (stmtLast) =>
+    stmtLast<ExportNamedDeclaration>(
+      `export type MySecondType = { a: number, b?: never };`,
+      true,
+    ).get('declaration') as NodePath<Declaration>,
+
   MyGenericType: (stmtLast) =>
     stmtLast<ExportNamedDeclaration>(
       `export type MyGenericType<T> = { a: T, b: Array<T> };`,
@@ -494,6 +500,20 @@ describe('getTSType', () => {
       `
       var x: typeof MyType = {};
       import { MyType } from 'MyType';
+    `,
+      mockImporter,
+    );
+
+    expect(getTSType(typePath)).toMatchSnapshot();
+  });
+
+  test('deep resolve intersection types', () => {
+    const typePath = typeAlias(
+      `
+      const x: SuperType = {};
+      import { MyType } from 'MyType';
+      import { MySecondType } from 'MySecondType';
+      type SuperType = { name: string } & (MyType | MySecondType);
     `,
       mockImporter,
     );
