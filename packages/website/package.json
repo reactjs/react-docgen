@@ -14,7 +14,7 @@
   "dependencies": {
     "@codemirror/lang-javascript": "6.2.4",
     "@codemirror/lang-json": "6.0.2",
-    "@codemirror/view": "6.39.11",
+    "@codemirror/view": "6.39.12",
     "@headlessui/react": "2.2.9",
     "@tailwindcss/postcss": "4.1.18",
     "@types/react": "19.2.10",
