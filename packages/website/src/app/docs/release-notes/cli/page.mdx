@@ -1,5 +1,14 @@
 # Release Notes
 
+## 3.0.5
+
+### Patch Changes
+
+- [#1058](https://github.com/reactjs/react-docgen/pull/1058)
+  [`43a04c3`](https://github.com/reactjs/react-docgen/commit/43a04c3080c6191e666612c20ad4d5acec38078f)
+  Thanks [@renovate](https://github.com/apps/renovate)! - update dependency
+  commander to v14.0.3
+
 ## 3.0.4
 
 ### Patch Changes
