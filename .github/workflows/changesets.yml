@@ -9,6 +9,7 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 permissions:
   id-token: write
+  contents: read
 
 jobs:
   release:
@@ -27,8 +28,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: 'lts/*'
-          cache: 'pnpm'
+          node-version: "lts/*"
+          cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -43,4 +44,3 @@ jobs:
           commit: Publish new versions
         env:
           GITHUB_TOKEN: ${{ secrets.CHANGESETS_TOKEN }}
-          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
