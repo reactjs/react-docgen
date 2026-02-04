@@ -1,28 +1,29 @@
-import path from 'node:path';
-import { globalIgnores } from 'eslint/config';
-import { fileURLToPath } from 'node:url';
-import { FlatCompat } from '@eslint/eslintrc';
-import tseslint from 'typescript-eslint';
-import baseConfig from '../../eslint.config.mjs';
+import { defineConfig, globalIgnores } from 'eslint/config';
+import nextVitals from 'eslint-config-next/core-web-vitals';
+import nextTs from 'eslint-config-next/typescript';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
-export default tseslint.config([
-  globalIgnores(['**/.next/', 'next-env.d.ts', '**/_pagefind/']),
-  ...baseConfig,
-  ...compat.config({
-    extends: ['next/core-web-vitals'],
+const eslintConfig = defineConfig([
+  ...nextVitals,
+  ...nextTs,
+  {
     settings: {
       next: {
-        rootDir: __dirname,
+        rootDir: 'packages/website/',
       },
     },
     rules: {
       'import/no-anonymous-default-export': 'off',
     },
-  }),
+  },
+  // Override default ignores of eslint-config-next.
+  globalIgnores([
+    // Default ignores of eslint-config-next:
+    '.next/**',
+    'out/**',
+    'build/**',
+    'next-env.d.ts',
+    'public/_pagefind/**',
+  ]),
 ]);
+
+export default eslintConfig;
