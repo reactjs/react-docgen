@@ -1,6 +1,5 @@
 import { rm, stat } from 'fs/promises';
 import { dirname, join } from 'path';
-import type { ExecaError, ExecaReturnValue } from 'execa';
 import { execaNode } from 'execa';
 import copy from 'cpy';
 import { temporaryDirectory } from 'tempy';
@@ -17,21 +16,17 @@ export default async function withFixture(
     dir: string;
     run: (
       args: readonly string[],
-    ) => Promise<{ stdout: string; stderr: string; exitCode: number }>;
+    ) => Promise<{ stdout: string; stderr: string; exitCode?: number }>;
   }) => Promise<void>,
 ): Promise<void> {
   const tempDir = temporaryDirectory();
 
-  async function run(
-    args: readonly string[],
-  ): Promise<ExecaError | ExecaReturnValue<string>> {
-    try {
-      return await execaNode(cliBinary, args, {
-        cwd: tempDir,
-      });
-    } catch (error) {
-      return error as ExecaError;
-    }
+  async function run(args: readonly string[]) {
+    return execaNode(cliBinary, args, {
+      cwd: tempDir,
+      lines: false,
+      reject: false,
+    });
   }
 
   await stat(join(fixtureDir, fixture));
