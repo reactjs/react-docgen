@@ -16,7 +16,7 @@
     "@codemirror/lang-json": "6.0.2",
     "@codemirror/view": "6.39.14",
     "@headlessui/react": "2.2.9",
-    "@tailwindcss/postcss": "4.1.18",
+    "@tailwindcss/postcss": "4.2.0",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "@uiw/react-codemirror": "4.25.4",
@@ -31,7 +31,7 @@
     "react": "19.2.4",
     "react-docgen": "workspace:8.0.2",
     "react-dom": "19.2.4",
-    "tailwindcss": "4.1.18"
+    "tailwindcss": "4.2.0"
   },
   "browserslist": [
     "chrome 64",
