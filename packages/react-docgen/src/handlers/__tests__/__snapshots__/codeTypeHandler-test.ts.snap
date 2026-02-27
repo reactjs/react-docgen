@@ -1530,7 +1530,7 @@ exports[`codeTypeHandler > stateless TS component and variable type takes preced
     "description": "",
     "required": true,
     "tsType": {
-      "name": "string",
+      "name": "number | string",
     },
   },
 }

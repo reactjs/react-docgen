@@ -183,9 +183,28 @@ export function applyToTypeProperties(
       (typesPath) =>
         applyToTypeProperties(documentation, typesPath, callback, typeParams),
     );
-  } else if (!path.isUnionTypeAnnotation()) {
-    // The react-docgen output format does not currently allow
-    // for the expression of union types
+  } else if (path.isParenthesizedExpression() || path.isTSParenthesizedType()) {
+    const typeAnnotation = path.get('typeAnnotation');
+    const typeAnnotationPath = Array.isArray(typeAnnotation)
+      ? typeAnnotation[0]
+      : typeAnnotation;
+
+    if (typeAnnotationPath) {
+      applyToTypeProperties(
+        documentation,
+        typeAnnotationPath,
+        callback,
+        typeParams,
+      );
+    }
+  } else if (path.isUnionTypeAnnotation() || path.isTSUnionType()) {
+    const typeNodes = path.get('types');
+    const types = Array.isArray(typeNodes) ? typeNodes : [typeNodes];
+
+    types.forEach((typesPath) =>
+      applyToTypeProperties(documentation, typesPath, callback, typeParams),
+    );
+  } else {
     const typePath = resolveGenericTypeAnnotation(path);
 
     if (typePath) {
