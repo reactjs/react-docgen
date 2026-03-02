@@ -12,9 +12,9 @@
   "author": "Daniel Tschinder (http://github.com/danez)",
   "license": "MIT",
   "dependencies": {
-    "@codemirror/lang-javascript": "6.2.4",
+    "@codemirror/lang-javascript": "6.2.5",
     "@codemirror/lang-json": "6.0.2",
-    "@codemirror/view": "6.39.15",
+    "@codemirror/view": "6.39.16",
     "@headlessui/react": "2.2.9",
     "@tailwindcss/postcss": "4.2.1",
     "@types/react": "19.2.14",
