@@ -21,7 +21,7 @@
     "@eslint/eslintrc": "3.3.5",
     "@eslint/js": "9.39.4",
     "@types/node": "20.19.37",
-    "@vitest/coverage-v8": "4.0.18",
+    "@vitest/coverage-v8": "4.1.0",
     "cpy": "13.2.1",
     "eslint": "9.39.4",
     "eslint-config-next": "16.1.6",
@@ -36,7 +36,7 @@
     "tempy": "3.2.0",
     "typescript": "5.9.3",
     "typescript-eslint": "8.57.0",
-    "vitest": "4.0.18"
+    "vitest": "4.1.0"
   },
   "packageManager": "pnpm@10.32.1"
 }
