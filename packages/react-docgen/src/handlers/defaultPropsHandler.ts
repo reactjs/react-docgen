@@ -23,7 +23,6 @@ import type { Handler } from './index.js';
 
 function getDefaultValue(path: NodePath): DefaultValueDescriptor | null {
   let defaultValue: string | undefined;
-  let resolvedPath = path;
   let valuePath = path;
 
   if (path.isBooleanLiteral()) {
@@ -33,6 +32,8 @@ function getDefaultValue(path: NodePath): DefaultValueDescriptor | null {
   } else if (path.isLiteral()) {
     defaultValue = path.node.extra?.raw as string;
   } else {
+    let resolvedPath: NodePath;
+
     if (path.isAssignmentPattern()) {
       resolvedPath = resolveToValue(path.get('right'));
     } else {
@@ -64,7 +65,13 @@ function getStatelessPropsPath(
   let value: NodePath = componentDefinition;
 
   if (isReactForwardRefCall(componentDefinition)) {
-    value = resolveToValue(componentDefinition.get('arguments')[0]!);
+    const [forwardRefArgument] = componentDefinition.get('arguments');
+
+    if (!forwardRefArgument) {
+      return undefined;
+    }
+
+    value = resolveToValue(forwardRefArgument);
   }
 
   if (!value.isFunction()) {

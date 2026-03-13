@@ -526,10 +526,16 @@ function getTSTypeWithResolvedTypes(
     visitedTypes[typeAliasName] = true;
   }
 
-  if (node.type in tsTypes) {
-    type = { name: tsTypes[node.type]! };
-  } else if (node.type in namedTypes) {
-    type = namedTypes[node.type]!(path, typeParams);
+  const primitiveTSType = tsTypes[node.type];
+
+  if (primitiveTSType) {
+    type = { name: primitiveTSType };
+  } else {
+    const typeHandler = namedTypes[node.type];
+
+    if (typeHandler) {
+      type = typeHandler(path, typeParams);
+    }
   }
 
   if (!type) {

@@ -141,9 +141,13 @@ function findStatelessComponentBody(
       return body;
     }
   } else if (isReactForwardRefCall(componentDefinition)) {
-    const inner = resolveToValue(componentDefinition.get('arguments')[0]!);
+    const [forwardRefArgument] = componentDefinition.get('arguments');
 
-    return findStatelessComponentBody(inner);
+    if (forwardRefArgument) {
+      const inner = resolveToValue(forwardRefArgument);
+
+      return findStatelessComponentBody(inner);
+    }
   }
 
   return undefined;

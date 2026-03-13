@@ -6,8 +6,10 @@ export default async function loadReactDocgenPlugin<T>(
   name: string,
   builtins?: Record<string, T>,
 ): Promise<T> {
-  if (builtins?.[input]) {
-    return builtins[input]!;
+  const builtin = builtins?.[input];
+
+  if (builtin !== undefined) {
+    return builtin;
   }
 
   const path = resolve(process.cwd(), input);

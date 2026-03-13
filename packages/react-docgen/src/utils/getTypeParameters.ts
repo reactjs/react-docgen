@@ -50,13 +50,12 @@ export default function getTypeParameters(
           typeName = resolvedTypePath.get('id');
         }
 
-        if (
-          typeName &&
-          inputParams &&
-          typeName.isIdentifier() &&
-          inputParams[typeName.node.name]
-        ) {
-          resolvedTypePath = inputParams[typeName.node.name]!;
+        if (typeName && inputParams && typeName.isIdentifier()) {
+          const inputParam = inputParams[typeName.node.name];
+
+          if (inputParam) {
+            resolvedTypePath = inputParam;
+          }
         }
 
         params[key] = resolvedTypePath;

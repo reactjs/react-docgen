@@ -182,15 +182,13 @@ function handleGenericTypeAnnotation(
     );
   }
 
-  if (
-    typeParams &&
-    typeParams[type.name] &&
-    typeParams[type.name]!.isGenericTypeAnnotation()
-  ) {
+  const resolvedTypeParam = typeParams?.[type.name];
+
+  if (resolvedTypeParam?.isGenericTypeAnnotation()) {
     return type;
   }
 
-  if (typeParams && typeParams[type.name]) {
+  if (resolvedTypeParam) {
     type = getFlowTypeWithResolvedTypes(
       resolvedPath as NodePath<FlowType>,
       typeParams,
@@ -482,8 +480,10 @@ function getFlowTypeWithResolvedTypes(
     visitedTypes[parent.node.id.name] = true;
   }
 
-  if (path.node.type in flowTypes) {
-    type = { name: flowTypes[path.node.type]! };
+  const primitiveFlowType = flowTypes[path.node.type];
+
+  if (primitiveFlowType) {
+    type = { name: primitiveFlowType };
   } else if (path.node.type in flowLiteralTypes) {
     type = {
       name: 'literal',
@@ -499,8 +499,12 @@ function getFlowTypeWithResolvedTypes(
           ).node.value
         }`,
     };
-  } else if (path.node.type in namedTypes) {
-    type = namedTypes[path.node.type]!(path, typeParams);
+  } else {
+    const typeHandler = namedTypes[path.node.type];
+
+    if (typeHandler) {
+      type = typeHandler(path, typeParams);
+    }
   }
 
   if (!type) {
