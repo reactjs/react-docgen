@@ -19,7 +19,11 @@ function getDocblockFromComponent(path: NodePath): string | null {
     // If we have a class declaration or expression, then the comment might be
     // attached to the last decorator instead as trailing comment.
     if (decorators && decorators.length > 0) {
-      description = getDocblock(decorators[decorators.length - 1]!, true);
+      const lastDecorator = decorators[decorators.length - 1];
+
+      if (lastDecorator) {
+        description = getDocblock(lastDecorator, true);
+      }
     }
   }
   if (description == null) {
@@ -41,9 +45,10 @@ function getDocblockFromComponent(path: NodePath): string | null {
     }
   }
   if (!description) {
-    const searchPath = isReactForwardRefCall(path)
-      ? path.get('arguments')[0]!
-      : path;
+    const [forwardRefArgument] = isReactForwardRefCall(path)
+      ? path.get('arguments')
+      : [];
+    const searchPath = forwardRefArgument ?? path;
     const inner = resolveToValue(searchPath);
 
     if (inner.node !== path.node) {

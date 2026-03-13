@@ -57,5 +57,11 @@ export default async function loadResolvers(
     });
   }
 
-  return loadResolver(input[0]!);
+  const [resolver] = input;
+
+  if (resolver === undefined) {
+    return;
+  }
+
+  return loadResolver(resolver);
 }

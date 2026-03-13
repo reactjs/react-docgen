@@ -98,7 +98,11 @@ export default (componentDefinition: NodePath): NodePath[] => {
       const params = superTypes.get('params');
 
       if (params.length >= 1) {
-        typePaths.push(params[params.length === 3 ? 1 : 0]!);
+        const propsTypePath = params[params.length === 3 ? 1 : 0];
+
+        if (propsTypePath) {
+          typePaths.push(propsTypePath);
+        }
       }
     } else {
       const propsMemberPath = getMemberValuePath(componentDefinition, 'props');
@@ -122,9 +126,11 @@ export default (componentDefinition: NodePath): NodePath[] => {
         typePaths.push(genericTypeAnnotation);
       }
 
-      componentDefinition = resolveToValue(
-        componentDefinition.get('arguments')[0]!,
-      );
+      const [forwardRefArgument] = componentDefinition.get('arguments');
+
+      if (forwardRefArgument) {
+        componentDefinition = resolveToValue(forwardRefArgument);
+      }
     }
 
     const propsParam = getStatelessPropsPath(componentDefinition);

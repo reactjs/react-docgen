@@ -15,27 +15,30 @@ export default function resolveHOC(path: NodePath): NodePath {
     !isReactCreateClassCall(path) &&
     !isReactForwardRefCall(path)
   ) {
-    const node = path.node;
-    const argumentLength = node.arguments.length;
+    const args = path.get('arguments');
+    const [firstArg] = args;
 
-    if (argumentLength && argumentLength > 0) {
-      const args = path.get('arguments');
-      const firstArg = args[0]!;
-
-      // If the first argument is one of these types then the component might be the last argument
-      // If there are all identifiers then we cannot figure out exactly and have to assume it is the first
-      if (
-        argumentLength > 1 &&
-        (firstArg.isLiteral() ||
-          firstArg.isObjectExpression() ||
-          firstArg.isArrayExpression() ||
-          firstArg.isSpreadElement())
-      ) {
-        return resolveHOC(resolveToValue(args[argumentLength - 1]!));
-      }
-
-      return resolveHOC(resolveToValue(firstArg));
+    if (!firstArg) {
+      return path;
     }
+
+    // If the first argument is one of these types then the component might be the last argument
+    // If there are all identifiers then we cannot figure out exactly and have to assume it is the first
+    if (
+      args.length > 1 &&
+      (firstArg.isLiteral() ||
+        firstArg.isObjectExpression() ||
+        firstArg.isArrayExpression() ||
+        firstArg.isSpreadElement())
+    ) {
+      const lastArg = args[args.length - 1];
+
+      if (lastArg) {
+        return resolveHOC(resolveToValue(lastArg));
+      }
+    }
+
+    return resolveHOC(resolveToValue(firstArg));
   }
 
   return path;

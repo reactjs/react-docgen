@@ -35,7 +35,11 @@ export function getDocblock(path: NodePath, trailing = false): string | null {
   }
 
   if (comments.length > 0) {
-    return parseDocblock(comments[comments.length - 1]!.value);
+    const lastComment = comments[comments.length - 1];
+
+    if (lastComment) {
+      return parseDocblock(lastComment.value);
+    }
   }
 
   return null;
@@ -50,7 +54,11 @@ export function getDoclets(str: string): Record<string, string> {
   let match: RegExpExecArray | null;
 
   while ((match = DOCLET_PATTERN.exec(str))) {
-    doclets[match[1]!] = match[2] || true;
+    const [, name, value] = match;
+
+    if (name) {
+      doclets[name] = value || true;
+    }
   }
 
   return doclets;

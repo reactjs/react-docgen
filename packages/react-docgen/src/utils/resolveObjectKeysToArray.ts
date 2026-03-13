@@ -142,11 +142,13 @@ export default function resolveObjectKeysToArray(
   path: NodePath,
 ): string[] | null {
   if (isObjectKeysCall(path)) {
-    const argument = path.get('arguments')[0];
-    const objectExpression = resolveToValue(
-      // isObjectKeysCall already asserts that there is at least one argument, hence the non-null-assertion
-      argument!,
-    );
+    const [argument] = path.get('arguments');
+
+    if (!argument) {
+      return null;
+    }
+
+    const objectExpression = resolveToValue(argument);
     const values = resolveObjectToNameArray(objectExpression);
 
     if (values) {
