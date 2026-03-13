@@ -1,5 +1,13 @@
 # Release Notes
 
+## 8.0.3
+
+### Patch Changes
+
+- [`a8a8bb8`](https://github.com/reactjs/react-docgen/commit/a8a8bb8dd25a7ebf0a23d68cc72eb4ec19523965)
+  Thanks [@renovate[bot]](https://github.com/renovate%5Bbot%5D)! - Added more
+  defensive checks throughout the codebase. No functional changes.
+
 ## 8.0.2
 
 ### Patch Changes
