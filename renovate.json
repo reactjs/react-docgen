@@ -5,7 +5,8 @@
   ],
   "extends": [
     "config:recommended",
-    ":pinOnlyDevDependencies"
+    ":pinOnlyDevDependencies",
+    "helpers:pinGitHubActionDigests"
   ],
   "enabled": true,
   "lockFileMaintenance": {
