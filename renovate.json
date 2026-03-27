@@ -1,8 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "labels": [
-    "dependencies"
-  ],
+  "labels": ["dependencies"],
   "extends": [
     "config:recommended",
     ":pinOnlyDevDependencies",
@@ -24,43 +22,25 @@
         "packages/website/package.json",
         "packages/react-docgen-cli/package.json"
       ],
-      "extends": [
-        ":pinAllExceptPeerDependencies"
-      ]
+      "extends": [":pinAllExceptPeerDependencies"]
     },
     {
-      "matchDepTypes": [
-        "devDependencies"
-      ],
+      "matchDepTypes": ["devDependencies"],
       "semanticCommitType": "chore"
     },
     {
-      "matchDepTypes": [
-        "devDependencies"
-      ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
+      "matchDepTypes": ["devDependencies"],
+      "matchUpdateTypes": ["minor", "patch"],
       "automerge": true
     },
     {
-      "matchPackageNames": [
-        "pnpm"
-      ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
+      "matchPackageNames": ["pnpm"],
+      "matchUpdateTypes": ["minor", "patch"],
       "automerge": true
     },
     {
-      "matchPackageNames": [
-        "@types/node"
-      ],
-      "matchUpdateTypes": [
-        "major"
-      ],
+      "matchPackageNames": ["@types/node"],
+      "matchUpdateTypes": ["major"],
       "enabled": false
     },
     {
@@ -68,10 +48,12 @@
         "benchmark/package.json",
         "packages/website/package.json"
       ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["digest"],
       "automerge": true
     },
     {
@@ -83,9 +65,7 @@
     },
     {
       "enabled": false,
-      "matchPackageNames": [
-        "/^react-docgen/"
-      ]
+      "matchPackageNames": ["/^react-docgen/"]
     }
   ]
 }
