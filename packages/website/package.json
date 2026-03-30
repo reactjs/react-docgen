@@ -27,7 +27,7 @@
     "nextra": "4.6.1",
     "nextra-theme-docs": "4.6.1",
     "postcss": "8.5.8",
-    "postcss-lightningcss": "1.0.2",
+    "postcss-lightningcss": "1.1.0",
     "react": "19.2.4",
     "react-docgen": "workspace:8.0.3",
     "react-dom": "19.2.4",

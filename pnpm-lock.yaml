@@ -202,8 +202,8 @@ importers:
         specifier: 8.5.8
         version: 8.5.8
       postcss-lightningcss:
-        specifier: 1.0.2
-        version: 1.0.2(postcss@8.5.8)
+        specifier: 1.1.0
+        version: 1.1.0(postcss@8.5.8)
       react:
         specifier: 19.2.4
         version: 19.2.4
@@ -4261,9 +4261,9 @@ packages:
     resolution: {integrity: sha512-/+5VFTchJDoVj3bhoqi6UeymcD00DAwb1nJwamzPvHEszJ4FpF6SNNbUbOS8yI56qHzdV8eK0qEfOSiodkTdxg==}
     engines: {node: '>= 0.4'}
 
-  postcss-lightningcss@1.0.2:
-    resolution: {integrity: sha512-jI9gBe/2/ZEDYGDAHEHKbGLA3Dfn2uUTUCVsP3mDxpvmX6ifDdFqYB00GNRdny676gTcfo7XUCQoc4OYz20/TA==}
-    engines: {node: ^18.0.0 || ^20.0.0 || >= 21}
+  postcss-lightningcss@1.1.0:
+    resolution: {integrity: sha512-DlxT3lLE4PK5v2JN0WV0r7wod8LGAuj20ZjJ9cnEwOWv9osgoajRqavaFoxinyZ8jeg4JYJi9M1qtkjHyqulKA==}
+    engines: {node: ^20.19.0 || ^22.12.0 || >= 24}
     peerDependencies:
       postcss: ^8.0.0
 
@@ -9955,7 +9955,7 @@ snapshots:
 
   possible-typed-array-names@1.1.0: {}
 
-  postcss-lightningcss@1.0.2(postcss@8.5.8):
+  postcss-lightningcss@1.1.0(postcss@8.5.8):
     dependencies:
       browserslist: 4.28.1
       lightningcss: 1.32.0
