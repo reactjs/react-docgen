@@ -4,6 +4,7 @@
     "node": "^20.9.0 || >=22",
     "pnpm": ">=10.6.2"
   },
+  "type": "module",
   "scripts": {
     "build": "nx run-many --target=build --exclude='@react-docgen-internal/*'",
     "lint": "eslint . --report-unused-disable-directives --max-warnings=0",

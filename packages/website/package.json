@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "description": "react-docgen website",
   "scripts": {
-    "dev": "nx exec -- next dev",
-    "build": "NODE_ENV=production nx exec -- next build --webpack",
+    "dev": "nx exec -- next dev --turbopack",
+    "build": "NODE_ENV=production nx exec -- next build --turbopack",
     "start": "nx exec -- next start",
     "postbuild": "next-sitemap && pagefind --site .next/server/app --output-path public/_pagefind"
   },

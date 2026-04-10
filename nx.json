@@ -20,5 +20,10 @@
       "{workspaceRoot}/tsconfig.base.json"
     ],
     "production": ["default"]
+  },
+  "analytics": false,
+  "tui": {
+    "autoExit": true,
+    "enabled": false
   }
 }
