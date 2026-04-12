@@ -29,7 +29,7 @@
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.5",
     "execa": "9.6.1",
-    "globals": "17.4.0",
+    "globals": "17.5.0",
     "nx": "22.6.5",
     "prettier": "3.8.2",
     "prettier-plugin-tailwindcss": "0.7.2",
