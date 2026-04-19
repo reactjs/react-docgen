@@ -24,7 +24,7 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
 
       - name: Run OSSAR
-        uses: github/ossar-action@v1
+        uses: github/ossar-action@4e96c4f6e591eb4b991abfd459e40b136a317aea # v2
         id: ossar
 
       - name: Upload OSSAR results
