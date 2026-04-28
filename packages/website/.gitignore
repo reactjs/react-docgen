@@ -2,3 +2,4 @@
 .netlify
 _pagefind/
 public/sitemap.xml
+next-env.d.ts
