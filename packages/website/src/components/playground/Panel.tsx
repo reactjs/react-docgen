@@ -1,4 +1,3 @@
-import { useCallback } from 'react';
 import { useTheme } from 'next-themes';
 import CodeMirror from '@uiw/react-codemirror';
 import { javascript } from '@codemirror/lang-javascript';
@@ -41,12 +40,6 @@ export default function Panel({
   value,
 }: PanelProps) {
   const { resolvedTheme } = useTheme();
-  let changeHandler;
-
-  if (onChange) {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    changeHandler = useCallback(onChange, []);
-  }
 
   return (
     <CodeMirror
@@ -54,7 +47,7 @@ export default function Panel({
       height="100%"
       minHeight="100%"
       extensions={[languageExtension(language), disableSpellcheck()]}
-      onChange={changeHandler}
+      onChange={onChange}
       theme={(resolvedTheme as Theme) || 'light'}
       readOnly={readOnly}
       basicSetup={{
