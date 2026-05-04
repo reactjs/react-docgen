@@ -1,3 +1,5 @@
 packages:
   - 'benchmark'
   - 'packages/*'
+overrides:
+  zod: 4.3.6
