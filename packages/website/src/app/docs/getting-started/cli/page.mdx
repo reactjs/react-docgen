@@ -1,4 +1,5 @@
 import { Tabs } from 'nextra/components';
+import { Callout } from 'nextra/components';
 
 # Getting started with the Command Line Interface (CLI)
 
@@ -70,8 +71,9 @@ react component. The result will be printed to the `stdout` and in case there
 are errors or warnings while analyzing the file, these will be printed to
 `stderr`.
 
-The result will be an array of [Documentation](../reference/documentation/basic.mdx)
-objects, stringified to JSON.
+The result will be an array of
+[Documentation](../reference/documentation/basic.mdx) objects, stringified to
+JSON.
 
 ```shell filename="Terminal" copy
 react-docgen ./src/components/Button.tsx
@@ -98,3 +100,10 @@ react-docgen -o output.json ./src/components/Button.tsx
 
 The CLI supports a lot more advanced options and for a full list checkout the
 [reference page](../reference/cli)
+
+<Callout type="warning" emoji="">
+  Options that load custom modules, such as `--handler`, `--resolver`, and
+  `--importer`, execute trusted JavaScript code in the current Node.js process.
+  Do not pass values from untrusted input, user-provided configuration, or
+  unreviewed shared configuration to these options.
+</Callout>

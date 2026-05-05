@@ -79,18 +79,18 @@ program
     '--resolver <resolvers>',
     `Built-in resolver config (${Object.values(ResolverConfigs).join(
       ', ',
-    )}), package name or path to a module that exports a resolver. Can also be used multiple times. When used, no default handlers will be added.`,
+    )}), package name or path to a trusted module that exports a resolver. Can also be used multiple times. When used, no default handlers will be added.`,
     collect,
     defaultResolvers,
   )
   .option(
     '--importer <importer>',
-    'Built-in importer name (fsImport, ignoreImporter), package name or path to a module that exports an importer.',
+    'Built-in importer name (fsImporter, ignoreImporter), package name or path to a trusted module that exports an importer.',
     'fsImporter',
   )
   .option(
     '--handler <handlers>',
-    'Comma separated list of handlers to use. Can also be used multiple times. When used, no default handlers will be added.',
+    'Comma separated list of trusted handlers to use. Can also be used multiple times. When used, no default handlers will be added.',
     collect,
     defaultHandlers,
   )
