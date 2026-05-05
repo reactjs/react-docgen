@@ -2,9 +2,15 @@
 
 import { Component } from 'react';
 import Panel, { EditorMode } from './Panel';
-import OptionPanel, { Language } from './OptionPanel';
-import type { Config } from 'react-docgen';
-import { parse, builtinResolvers } from 'react-docgen';
+import OptionPanel, {
+  HandlerId,
+  HandlerPreset,
+  Language,
+  ResolverPreset,
+  allHandlerIds,
+} from './OptionPanel';
+import type { Config, Handler, Resolver } from 'react-docgen';
+import { parse, builtinHandlers, builtinResolvers } from 'react-docgen';
 
 type Plugins = NonNullable<
   NonNullable<NonNullable<Config['babelOptions']>['parserOpts']>['plugins']
@@ -40,32 +46,70 @@ interface PlaygroundProps {
 interface PlaygroundState {
   value: string;
   content: string;
+  handlerPreset: HandlerPreset;
   language: Language;
   options: Config;
+  resolverPreset: ResolverPreset;
+  selectedHandlerIds: HandlerId[];
 }
 
 const {
-  ChainResolver,
   FindAllDefinitionsResolver,
   FindAnnotatedDefinitionsResolver,
+  FindExportedDefinitionsResolver,
 } = builtinResolvers;
 
-const resolver = new ChainResolver(
-  [new FindAnnotatedDefinitionsResolver(), new FindAllDefinitionsResolver()],
-  { chainingLogic: ChainResolver.Logic.ALL },
-);
+const handlerById: Record<HandlerId, Handler> = {
+  [HandlerId.CHILD_CONTEXT_TYPE]: builtinHandlers.childContextTypeHandler,
+  [HandlerId.CODE_TYPE]: builtinHandlers.codeTypeHandler,
+  [HandlerId.COMPONENT_DOCBLOCK]: builtinHandlers.componentDocblockHandler,
+  [HandlerId.COMPONENT_METHODS]: builtinHandlers.componentMethodsHandler,
+  [HandlerId.COMPONENT_METHODS_JS_DOC]:
+    builtinHandlers.componentMethodsJsDocHandler,
+  [HandlerId.CONTEXT_TYPE]: builtinHandlers.contextTypeHandler,
+  [HandlerId.DEFAULT_PROPS]: builtinHandlers.defaultPropsHandler,
+  [HandlerId.DISPLAY_NAME]: builtinHandlers.displayNameHandler,
+  [HandlerId.PROP_DOCBLOCK]: builtinHandlers.propDocblockHandler,
+  [HandlerId.PROP_TYPE]: builtinHandlers.propTypeHandler,
+  [HandlerId.PROP_TYPE_COMPOSITION]: builtinHandlers.propTypeCompositionHandler,
+};
+
+function createResolver(preset: ResolverPreset): Resolver {
+  switch (preset) {
+    case ResolverPreset.EXPORTED:
+      return new FindExportedDefinitionsResolver({ limit: 1 });
+    case ResolverPreset.ANNOTATED:
+      return new FindAnnotatedDefinitionsResolver();
+    case ResolverPreset.ALL_DEFINITIONS:
+      return new FindAllDefinitionsResolver();
+  }
+}
+
+function createHandlers(handlerIds: HandlerId[]): Handler[] {
+  return handlerIds.map((handlerId) => handlerById[handlerId]);
+}
 
 export default class App extends Component<PlaygroundProps, PlaygroundState> {
   constructor(props: PlaygroundProps) {
     super(props);
 
-    const options = this.buildOptions(props.initialLanguage);
+    const handlerPreset = HandlerPreset.ALL;
+    const resolverPreset = ResolverPreset.ALL_DEFINITIONS;
+    const selectedHandlerIds = allHandlerIds;
+    const options = this.buildOptions(
+      props.initialLanguage,
+      resolverPreset,
+      selectedHandlerIds,
+    );
 
     this.state = {
       value: this.compile(props.initialContent, options),
       content: props.initialContent,
+      handlerPreset,
       language: props.initialLanguage,
       options,
+      resolverPreset,
+      selectedHandlerIds,
     };
   }
 
@@ -84,9 +128,14 @@ export default class App extends Component<PlaygroundProps, PlaygroundState> {
     this.setState({ value: result, content: value });
   };
 
-  buildOptions(language: Language): Config {
+  buildOptions(
+    language: Language,
+    resolverPreset: ResolverPreset,
+    selectedHandlerIds: HandlerId[],
+  ): Config {
     const options = {
-      resolver,
+      handlers: createHandlers(selectedHandlerIds),
+      resolver: createResolver(resolverPreset),
       babelOptions: {
         babelrc: false,
         babelrcRoots: false,
@@ -111,20 +160,92 @@ export default class App extends Component<PlaygroundProps, PlaygroundState> {
     return options;
   }
 
-  handleLanguageChange = (language: Language) => {
-    this.setState({ language, options: this.buildOptions(language) }, () =>
+  updateOptions(
+    update: Pick<
+      PlaygroundState,
+      'handlerPreset' | 'language' | 'resolverPreset' | 'selectedHandlerIds'
+    >,
+  ) {
+    const options = this.buildOptions(
+      update.language,
+      update.resolverPreset,
+      update.selectedHandlerIds,
+    );
+
+    this.setState({ ...update, options }, () =>
       this.handleChange(this.state.content),
     );
+  }
+
+  handleLanguageChange = (language: Language) => {
+    this.updateOptions({
+      handlerPreset: this.state.handlerPreset,
+      language,
+      resolverPreset: this.state.resolverPreset,
+      selectedHandlerIds: this.state.selectedHandlerIds,
+    });
+  };
+
+  handleResolverPresetChange = (resolverPreset: ResolverPreset) => {
+    this.updateOptions({
+      handlerPreset: this.state.handlerPreset,
+      language: this.state.language,
+      resolverPreset,
+      selectedHandlerIds: this.state.selectedHandlerIds,
+    });
+  };
+
+  handleHandlerPresetChange = (handlerPreset: HandlerPreset) => {
+    const selectedHandlerIds =
+      handlerPreset === HandlerPreset.ALL
+        ? allHandlerIds
+        : handlerPreset === HandlerPreset.NONE
+          ? []
+          : this.state.selectedHandlerIds;
+
+    this.updateOptions({
+      handlerPreset,
+      language: this.state.language,
+      resolverPreset: this.state.resolverPreset,
+      selectedHandlerIds,
+    });
+  };
+
+  handleHandlerToggle = (handlerId: HandlerId) => {
+    const selectedHandlerIdsSet = new Set(this.state.selectedHandlerIds);
+
+    if (selectedHandlerIdsSet.has(handlerId)) {
+      selectedHandlerIdsSet.delete(handlerId);
+    } else {
+      selectedHandlerIdsSet.add(handlerId);
+    }
+
+    const selectedHandlerIds = allHandlerIds.filter((id) =>
+      selectedHandlerIdsSet.has(id),
+    );
+
+    this.updateOptions({
+      handlerPreset: HandlerPreset.CUSTOM,
+      language: this.state.language,
+      resolverPreset: this.state.resolverPreset,
+      selectedHandlerIds,
+    });
   };
 
   render() {
     return (
       <>
         <div className="content flex h-[calc(100vh-var(--nextra-navbar-height))] flex-row flex-nowrap items-start justify-start overflow-hidden">
-          <div className="w-48 flex-none self-auto p-5">
+          <div className="w-64 flex-none self-auto p-5">
             <OptionPanel
+              handlerPreset={this.state.handlerPreset}
               language={this.state.language}
+              resolverPreset={this.state.resolverPreset}
+              selectedHandlerIds={this.state.selectedHandlerIds}
+              onHandlerPresetChange={this.handleHandlerPresetChange}
+              onHandlerToggle={this.handleHandlerToggle}
               onLanguageChange={this.handleLanguageChange}
+              onResolverPresetChange={this.handleResolverPresetChange}
             />
           </div>
           <div className="h-full w-1/2 flex-auto self-auto overflow-hidden">
