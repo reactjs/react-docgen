@@ -1,5 +1,54 @@
-import ContentMissing from '@/components/ContentMissing';
-
 # Architecture
 
-<ContentMissing />
+react-docgen works in four steps:
+
+1. Parse the source code with Babel.
+2. Build a [`FileState`](../reference/file-state) object around the AST.
+3. Run a resolver to find React component definitions.
+4. Run handlers on each component definition and build the final documentation.
+
+## Parsing
+
+`parse()` accepts source code and a config object. The source is parsed with
+Babel. If no Babel config file is found, react-docgen applies default parser
+plugins for JSX and either TypeScript or Flow.
+
+TypeScript syntax is enabled by default for filenames ending in `.ts`, `.tsx`,
+`.mts`, or `.cts`. Other files use Flow syntax by default.
+
+## FileState
+
+`FileState` stores the AST, root program path, source code, parser options, and
+the configured importer. It also provides helpers used by resolvers, handlers,
+and utilities:
+
+- `file.traverse()` to walk the AST
+- `file.import()` to resolve imported values
+- `file.parse()` to parse another file with the same importer
+
+## Resolvers
+
+The resolver receives the `FileState` and returns component definition paths.
+
+The default parser config uses a chain of built-in resolvers to find exported
+components and annotated components. Custom resolvers can replace that behavior.
+
+## Handlers
+
+Handlers receive a `DocumentationBuilder` and one component definition. Each
+handler adds one kind of information, such as prop types, default props, display
+name, or component methods.
+
+When all handlers have run, the builder produces a `Documentation` object.
+
+## Importers
+
+Importers are used when react-docgen needs to follow imports. The default
+filesystem importer resolves imported source files from disk. The ignore
+importer disables cross-file resolution.
+
+## Output
+
+The JavaScript API returns an array of `Documentation` objects. The CLI returns
+a JSON object keyed by file path, where each value is an array of
+`Documentation` objects for that file.

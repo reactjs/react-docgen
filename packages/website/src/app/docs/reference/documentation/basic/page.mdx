@@ -1,5 +1,3 @@
-import { Callout } from 'nextra/components';
-
 # Basic
 
 This describes the return value of react-docgen either from the `parse()` method
@@ -24,6 +22,11 @@ interface Documentation {
 
 ### childContext
 
+**Type**: `Record<string, PropDescriptor> | undefined`
+
+If the [`childContextTypeHandler`](../handlers/child-context-type-handler) is
+active this property will contain legacy React child context descriptors.
+
 ### composes
 
 **Type**: `string[] | undefined`
@@ -31,11 +34,18 @@ interface Documentation {
 If the props of the React component are composed of props which react-docgen was
 unable to resolve, the name of types will be listed here.
 
-<Callout type="warning" emoji="🚧">
-  Create examples
-</Callout>
+```json filename="JSON"
+{
+  "composes": ["./sharedProps"]
+}
+```
 
 ### context
+
+**Type**: `Record<string, PropDescriptor> | undefined`
+
+If the [`contextTypeHandler`](../handlers/context-type-handler) is active this
+property will contain legacy React context descriptors.
 
 ### description
 
@@ -53,4 +63,71 @@ property will be set to the name of the React component.
 
 ### methods
 
+**Type**: `MethodDescriptor[] | undefined`
+
+If the [`componentMethodsHandler`](../handlers/component-methods-handler) or
+`componentMethodsJsDocHandler` is active this property will contain documented
+component methods.
+
 ### props
+
+**Type**: `Record<string, PropDescriptor> | undefined`
+
+Contains prop descriptors collected by handlers such as
+[`propTypeHandler`](../handlers/prop-type-handler),
+[`codeTypeHandler`](../handlers/code-type-handler),
+[`propDocblockHandler`](../handlers/prop-docblock-handler), and
+[`defaultPropsHandler`](../handlers/default-props-handler).
+
+## PropDescriptor
+
+```ts
+interface PropDescriptor {
+  type?: PropTypeDescriptor;
+  flowType?: TypeDescriptor<FunctionSignatureType>;
+  tsType?: TypeDescriptor<TSFunctionSignatureType>;
+  required?: boolean;
+  defaultValue?: DefaultValueDescriptor;
+  description?: string;
+}
+```
+
+### type
+
+**Type**: `PropTypeDescriptor | undefined`
+
+Set by PropTypes-based handlers. See the [PropTypes documentation](./prop-types)
+for details.
+
+### flowType
+
+**Type**: `TypeDescriptor<FunctionSignatureType> | undefined`
+
+Set by [`codeTypeHandler`](../handlers/code-type-handler) when Flow props are
+found.
+
+### tsType
+
+**Type**: `TypeDescriptor<TSFunctionSignatureType> | undefined`
+
+Set by [`codeTypeHandler`](../handlers/code-type-handler) when TypeScript props
+are found.
+
+### required
+
+**Type**: `boolean | undefined`
+
+Indicates whether the prop is required according to the handler that found it.
+
+### defaultValue
+
+**Type**: `DefaultValueDescriptor | undefined`
+
+Set by [`defaultPropsHandler`](../handlers/default-props-handler) when a default
+value is found.
+
+### description
+
+**Type**: `string | undefined`
+
+Set by docblock handlers or by comments in Flow and TypeScript prop definitions.

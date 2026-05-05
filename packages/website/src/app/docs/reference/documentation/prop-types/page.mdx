@@ -1,5 +1,107 @@
-import ContentMissing from '@/components/ContentMissing';
-
 # PropTypes
 
-<ContentMissing />
+When [`propTypeHandler`](../handlers/prop-type-handler) is active, PropTypes
+declarations are written to the `type` field of a prop, context, or child
+context descriptor.
+
+```ts
+interface PropTypeDescriptor {
+  name:
+    | 'any'
+    | 'array'
+    | 'arrayOf'
+    | 'bool'
+    | 'custom'
+    | 'element'
+    | 'elementType'
+    | 'enum'
+    | 'exact'
+    | 'func'
+    | 'instanceOf'
+    | 'node'
+    | 'number'
+    | 'object'
+    | 'objectOf'
+    | 'shape'
+    | 'string'
+    | 'symbol'
+    | 'union';
+  value?: unknown;
+  raw?: string;
+  computed?: boolean;
+  description?: string;
+  required?: boolean;
+}
+```
+
+## Simple types
+
+```ts filename="component.tsx"
+Button.propTypes = {
+  label: PropTypes.string,
+  disabled: PropTypes.bool.isRequired,
+};
+```
+
+```json filename="JSON"
+{
+  "label": {
+    "type": {
+      "name": "string"
+    },
+    "required": false
+  },
+  "disabled": {
+    "type": {
+      "name": "bool"
+    },
+    "required": true
+  }
+}
+```
+
+## Complex types
+
+Some PropTypes include nested values. For example, `oneOf()` produces an `enum`,
+`oneOfType()` produces a `union`, and `shape()` or `exact()` produce nested
+descriptors in `value`.
+
+```ts filename="component.tsx"
+Button.propTypes = {
+  size: PropTypes.oneOf(['small', 'large']),
+  icon: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+  }),
+};
+```
+
+```json filename="JSON"
+{
+  "size": {
+    "type": {
+      "name": "enum",
+      "value": [
+        { "value": "'small'", "computed": false },
+        { "value": "'large'", "computed": false }
+      ]
+    },
+    "required": false
+  },
+  "icon": {
+    "type": {
+      "name": "shape",
+      "value": {
+        "name": {
+          "name": "string",
+          "required": true
+        }
+      }
+    },
+    "required": false
+  }
+}
+```
+
+If a PropTypes expression cannot be recognized as a built-in PropType, the
+handler records it as a `custom` type and stores the printed expression in
+`raw`.

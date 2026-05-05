@@ -1,5 +1,102 @@
-import ContentMissing from '@/components/ContentMissing';
-
 # API
 
-<ContentMissing />
+The public API is exported from the `react-docgen` package.
+
+## parse
+
+```ts
+function parse(src: Buffer | string, config?: Config): Documentation[];
+```
+
+Parses JavaScript, TypeScript, JSX, or TSX source code and returns one
+documentation object for each component found by the configured resolver.
+
+```ts filename="parse.ts"
+import { parse } from 'react-docgen';
+
+const docs = parse(
+  `
+  /** Button component */
+  export function Button({ label }: { label: string }) {
+    return <button>{label}</button>;
+  }
+`,
+  { filename: 'Button.tsx' },
+);
+```
+
+The `filename` option is recommended. It lets react-docgen choose the right
+parser mode for TypeScript files and lets the default importer resolve relative
+imports.
+
+## builtinHandlers
+
+Contains all built-in handlers keyed by their export name.
+
+```ts
+import { builtinHandlers } from 'react-docgen';
+```
+
+These handlers can be passed to `parse()` with the `handlers` config option.
+
+## builtinImporters
+
+Contains the built-in importers:
+
+- `fsImporter`
+- `ignoreImporter`
+
+```ts
+import { builtinImporters } from 'react-docgen';
+```
+
+## builtinResolvers
+
+Contains the built-in resolver classes:
+
+- `ChainResolver`
+- `FindAllDefinitionsResolver`
+- `FindAnnotatedDefinitionsResolver`
+- `FindExportedDefinitionsResolver`
+
+```ts
+import { builtinResolvers } from 'react-docgen';
+```
+
+## defaultHandlers
+
+The list of handlers used when no `handlers` config option is provided.
+
+```ts
+import { defaultHandlers } from 'react-docgen';
+```
+
+## makeFsImporter
+
+Creates a filesystem importer. This is useful when you want separate importer
+caches, or when you want to provide a custom module lookup function.
+
+```ts
+import { makeFsImporter } from 'react-docgen';
+
+const importer = makeFsImporter();
+```
+
+## ERROR_CODES
+
+Contains the error code constants used by react-docgen errors:
+
+- `ERR_REACTDOCGEN_MISSING_DEFINITION`
+- `ERR_REACTDOCGEN_MULTIPLE_DEFINITIONS`
+
+## utils
+
+Exports internal utility functions used by the built-in handlers and resolvers.
+These are useful for custom extensions, but they are lower-level APIs than
+handlers, importers, and resolvers.
+
+## Types
+
+The package also exports the TypeScript types used by the public API, including
+`Config`, `Documentation`, `DocumentationBuilder`, `FileState`, `Handler`,
+`Importer`, `Resolver`, `ResolverClass`, and `ResolverFunction`.

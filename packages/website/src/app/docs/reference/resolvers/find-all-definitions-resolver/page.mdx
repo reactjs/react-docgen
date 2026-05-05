@@ -1,0 +1,38 @@
+# FindAllDefinitionsResolver
+
+Finds all React component definitions in a file, regardless of whether they are
+exported.
+
+It detects:
+
+- `React.createClass()` calls
+- Class components extending `React.Component` or `React.PureComponent`
+- Classes with a `render()` method
+- Function components that return JSX or `React.createElement()`
+- `React.forwardRef()` components
+
+The resolver can follow imported references with the configured importer.
+
+## Examples
+
+When the `FindAllDefinitionsResolver` is active, both components in this file
+are returned.
+
+```ts {3-5,7-9} filename="component.tsx"
+import React from 'react';
+
+function Button() {
+  return <button />;
+}
+
+class Link extends React.Component {
+  render() {
+    return <a />;
+  }
+}
+```
+
+## Source
+
+- [Implementation](https://github.com/reactjs/react-docgen/blob/main/packages/react-docgen/src/resolver/FindAllDefinitionsResolver.ts)
+- [Tests](https://github.com/reactjs/react-docgen/blob/main/packages/react-docgen/src/resolver/__tests__/FindAllDefinitionsResolver-test.ts)

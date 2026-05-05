@@ -1,3 +1,5 @@
+import { Callout } from 'nextra/components';
+
 # Command Line Interface (CLI) Reference
 
 This is the complete reference of all available options for the CLI. A basic
@@ -20,6 +22,14 @@ If you want to know more about glob patterns, check the documentation of
 [`fast-glob` ↗](https://github.com/mrmlnc/fast-glob#pattern-syntax)
 
 ## Options
+
+<Callout type="warning" emoji="">
+  The `--handler`, `--resolver`, and `--importer` options can load JavaScript
+  modules from paths or package names. These modules are executed as trusted
+  code with the same privileges as the current Node.js process. Do not populate
+  these options from untrusted input, user-provided configuration, or unreviewed
+  shared configuration.
+</Callout>
 
 ### `--failOnWarning`
 
@@ -65,12 +75,12 @@ The name of one of the
 
 A path can be specified to your handler. The path can be absolute (recommended)
 or relative and in the later case the path will be resolved from the current
-working directory.
+working directory. The handler module is executed as trusted JavaScript code.
 
 #### Module name of handler
 
 An npm module name can be specified. The default export of this module needs to
-be the handler function.
+be the handler function. Only use modules you trust.
 
 ### `--help`
 
@@ -92,7 +102,7 @@ files.
 
 Possible values are:
 
-#### Built-in resolvers
+#### Built-in importers
 
 - `ignoreImporter` (disable importing)
 - `fsImporter`
@@ -101,14 +111,14 @@ Possible values are:
 
 A path can be specified to your importer. The path can be absolute (recommended)
 or relative and in the later case the path will be resolved from the current
-working directory.
+working directory. The importer module is executed as trusted JavaScript code.
 
 #### Module name of importer
 
 An npm module name can be specified. The default export of this module needs to
-be the importer.
+be the importer. Only use modules you trust.
 
-### `--no-default-ignore`
+### `--no-default-ignores`
 
 **Default**: `false`
 
@@ -122,7 +132,9 @@ Store extracted information in the specified file instead of printing to
 
 **Examples**
 
-**TODO**
+```shell filename="Terminal"
+react-docgen -o output.json ./src/components/Button.tsx
+```
 
 ### `--pretty`
 
@@ -133,7 +145,7 @@ newlines.
 
 ### `--resolver <resolvers>`
 
-**Default**: `["find-exported-component", "find-all-annotated-components"]`
+**Default**: `["find-exported-component"]`
 
 Allows to specify the resolvers that find react components in the code. When
 multiple resolvers are specified they are all executed in order and all found
@@ -160,9 +172,9 @@ Possible values are:
 
 A path can be specified to your resolver. The path can be absolute (recommended)
 or relative and in the later case the path will be resolved from the current
-working directory.
+working directory. The resolver module is executed as trusted JavaScript code.
 
 #### Module name of resolver
 
 An npm module name can be specified. The default export of this module needs to
-be an instance of the resolver.
+be an instance of the resolver. Only use modules you trust.

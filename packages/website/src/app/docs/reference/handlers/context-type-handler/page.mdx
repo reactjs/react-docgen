@@ -1,5 +1,68 @@
-import ContentMissing from '@/components/ContentMissing';
-
 # contextTypeHandler
 
-<ContentMissing />
+Finds legacy React `contextTypes` declarations and adds them to the
+documentation under the `context` field.
+
+It uses the same PropTypes parsing logic as
+[`propTypeHandler`](./prop-type-handler.mdx), but writes descriptors to
+`context` instead of `props`.
+
+## Examples
+
+When the `contextTypeHandler` is active either of these components will result
+in the output below.
+
+```ts {1,4-7} filename="component.tsx"
+import PropTypes from 'prop-types';
+
+class MyComponent extends React.Component {
+  static contextTypes = {
+    theme: PropTypes.string,
+    disabled: PropTypes.bool.isRequired,
+  };
+  render() {
+    return <div />;
+  }
+}
+```
+
+```ts {1,7-10} filename="component.tsx"
+import PropTypes from 'prop-types';
+
+function MyComponent() {
+  return <div />;
+}
+
+MyComponent.contextTypes = {
+  theme: PropTypes.string,
+  disabled: PropTypes.bool.isRequired,
+};
+```
+
+## Output
+
+```json {3-16} filename="JSON"
+[
+  {
+    "context": {
+      "theme": {
+        "type": {
+          "name": "string"
+        },
+        "required": false
+      },
+      "disabled": {
+        "type": {
+          "name": "bool"
+        },
+        "required": true
+      }
+    }
+  }
+]
+```
+
+## Source
+
+- [Implementation](https://github.com/reactjs/react-docgen/blob/main/packages/react-docgen/src/handlers/propTypeHandler.ts)
+- [Tests](https://github.com/reactjs/react-docgen/blob/main/packages/react-docgen/src/handlers/__tests__/propTypeHandler-test.ts)

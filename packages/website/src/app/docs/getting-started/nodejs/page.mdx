@@ -39,10 +39,10 @@ import { parse } from 'react-docgen';
 
 const code = `
 /** My first component */
-export default ({ name }: { name: string }) => <div>{{name}}</div>;
+export default ({ name }: { name: string }) => <div>{name}</div>;
 `;
 
-const documentation = parse(code);
+const documentation = parse(code, { filename: 'index.tsx' });
 
 console.log(documentation);
 ```

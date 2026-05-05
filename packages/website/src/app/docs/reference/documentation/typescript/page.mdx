@@ -1,5 +1,69 @@
-import ContentMissing from '@/components/ContentMissing';
-
 # TypeScript
 
-<ContentMissing />
+When [`codeTypeHandler`](../handlers/code-type-handler) extracts TypeScript
+props, the type information is written to `tsType`.
+
+```ts
+interface PropDescriptor {
+  tsType?: TypeDescriptor<TSFunctionSignatureType>;
+  required?: boolean;
+  description?: string;
+  defaultValue?: DefaultValueDescriptor;
+}
+```
+
+## Example
+
+```ts filename="component.tsx"
+interface Props {
+  label: string;
+  disabled?: boolean;
+  size: 'small' | 'large';
+}
+
+export function Button(props: Props) {
+  return <button>{props.label}</button>;
+}
+```
+
+```json filename="JSON"
+{
+  "label": {
+    "required": true,
+    "tsType": {
+      "name": "string"
+    }
+  },
+  "disabled": {
+    "required": false,
+    "tsType": {
+      "name": "boolean"
+    }
+  },
+  "size": {
+    "required": true,
+    "tsType": {
+      "name": "union",
+      "raw": "'small' | 'large'",
+      "elements": [
+        { "name": "literal", "value": "'small'" },
+        { "name": "literal", "value": "'large'" }
+      ]
+    }
+  }
+}
+```
+
+## Type descriptors
+
+Most TypeScript values are represented with the shared
+`TypeDescriptor<TSFunctionSignatureType>` shape. Common descriptors are:
+
+- Simple descriptors, such as `{ "name": "string" }`
+- Literal descriptors, such as `{ "name": "literal", "value": "'small'" }`
+- Element descriptors, such as unions, intersections, arrays, and tuples
+- Function signatures with `type: "function"`
+- Object signatures with `type: "object"`
+
+Set `filename` to a TypeScript extension, such as `.ts` or `.tsx`, when calling
+`parse()` so the default parser enables TypeScript syntax.

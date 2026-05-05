@@ -1,5 +1,69 @@
-import ContentMissing from '@/components/ContentMissing';
-
 # Flow
 
-<ContentMissing />
+When [`codeTypeHandler`](../handlers/code-type-handler) extracts Flow props, the
+type information is written to `flowType`.
+
+```ts
+interface PropDescriptor {
+  flowType?: TypeDescriptor<FunctionSignatureType>;
+  required?: boolean;
+  description?: string;
+  defaultValue?: DefaultValueDescriptor;
+}
+```
+
+## Example
+
+```js filename="component.js"
+type Props = {
+  label: string,
+  disabled?: boolean,
+  size: 'small' | 'large',
+};
+
+export function Button(props: Props) {
+  return <button>{props.label}</button>;
+}
+```
+
+```json filename="JSON"
+{
+  "label": {
+    "required": true,
+    "flowType": {
+      "name": "string"
+    }
+  },
+  "disabled": {
+    "required": false,
+    "flowType": {
+      "name": "boolean"
+    }
+  },
+  "size": {
+    "required": true,
+    "flowType": {
+      "name": "union",
+      "raw": "'small' | 'large'",
+      "elements": [
+        { "name": "literal", "value": "'small'" },
+        { "name": "literal", "value": "'large'" }
+      ]
+    }
+  }
+}
+```
+
+## Type descriptors
+
+Most Flow values are represented with the shared
+`TypeDescriptor<FunctionSignatureType>` shape. Common descriptors are:
+
+- Simple descriptors, such as `{ "name": "string" }`
+- Literal descriptors, such as `{ "name": "literal", "value": "'small'" }`
+- Element descriptors, such as unions, intersections, arrays, and tuples
+- Function signatures with `type: "function"`
+- Object signatures with `type: "object"`
+
+Files that are not parsed as TypeScript use Flow syntax by default unless a
+Babel configuration changes the parser plugins.
