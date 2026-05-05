@@ -1,5 +1,72 @@
-import ContentMissing from '@/components/ContentMissing';
-
 # Config
 
-<ContentMissing />
+The `Config` object controls how `parse()` finds components, resolves imports,
+and extracts documentation.
+
+```ts
+interface Config {
+  handlers?: Handler[];
+  importer?: Importer;
+  resolver?: Resolver;
+  filename?: string;
+  babelOptions?: TransformOptions;
+}
+```
+
+## handlers
+
+**Default**: all built-in handlers
+
+An array of handlers that extract information from every component found by the
+resolver. If this option is provided, only the handlers in the array are used.
+
+```ts
+import { builtinHandlers, parse } from 'react-docgen';
+
+parse(code, {
+  handlers: [builtinHandlers.componentDocblockHandler],
+});
+```
+
+## importer
+
+**Default**: `fsImporter`
+
+The importer used when react-docgen needs to follow imports while resolving prop
+types or values. The default importer reads files from disk using Node.js
+resolution rules.
+
+Use `builtinImporters.ignoreImporter` when imported values should not be
+resolved.
+
+## resolver
+
+**Default**: exported components and annotated components
+
+The resolver decides which AST nodes are React component definitions. The
+default resolver combines:
+
+- `FindExportedDefinitionsResolver` with `limit: 1`
+- `FindAnnotatedDefinitionsResolver`
+
+This means `parse()` finds the exported component in a file and components
+marked with the default `@component` annotation.
+
+## filename
+
+Shortcut for `babelOptions.filename`.
+
+Set this to the absolute path of the file being parsed when possible. A relative
+path is resolved by Babel relative to `babelOptions.cwd`.
+
+The filename affects parser behavior. Files ending in `.ts`, `.tsx`, `.mts`, or
+`.cts` use the TypeScript parser plugin by default. Other files use the Flow
+parser plugin by default.
+
+## babelOptions
+
+Options passed to Babel while parsing. If Babel finds a filesystem config file,
+react-docgen uses that config instead of applying its default parser plugins.
+
+The `estree` parser plugin is always removed because react-docgen expects Babel
+AST nodes.

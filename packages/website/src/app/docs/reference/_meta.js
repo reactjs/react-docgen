@@ -4,4 +4,5 @@ export default {
   documentation: 'Documentation',
   'file-state': 'FileState',
   handlers: 'Handlers',
+  resolvers: 'Resolvers',
 };

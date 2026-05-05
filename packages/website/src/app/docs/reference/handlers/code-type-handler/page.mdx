@@ -1,5 +1,71 @@
-import ContentMissing from '@/components/ContentMissing';
-
 # codeTypeHandler
 
-<ContentMissing />
+Extracts Flow and TypeScript prop types from component type annotations.
+
+The handler writes Flow types to `flowType` and TypeScript types to `tsType`. It
+also sets `required` and extracts prop descriptions from comments inside the
+type definition.
+
+Supported component shapes include:
+
+- Class components with generic props, such as `React.Component<Props>`
+- Class components with a typed `props` member
+- Function components with a typed first argument
+- `React.FC<Props>`, `React.FunctionComponent<Props>`, `React.VFC<Props>`, and
+  `React.VoidFunctionComponent<Props>` variable annotations
+- `forwardRef()` calls with typed props
+
+## Examples
+
+When the `codeTypeHandler` is active this TypeScript component will result in
+the output below.
+
+```ts {3-7,9} filename="component.tsx"
+import React from 'react';
+
+interface Props {
+  /** Text shown inside the button. */
+  label: string;
+  disabled?: boolean;
+}
+
+export function Button(props: Props) {
+  return <button>{props.label}</button>;
+}
+```
+
+## Output
+
+```json {5-9,12-16} filename="JSON"
+[
+  {
+    "props": {
+      "label": {
+        "required": true,
+        "tsType": {
+          "name": "string"
+        },
+        "description": "Text shown inside the button."
+      },
+      "disabled": {
+        "required": false,
+        "tsType": {
+          "name": "boolean"
+        },
+        "description": ""
+      }
+    }
+  }
+]
+```
+
+## Notes
+
+Intersection types are expanded when their members can be resolved. Union types
+at the props-object level are not expanded because the documentation format does
+not describe alternate prop object shapes.
+
+## Source
+
+- [Implementation](https://github.com/reactjs/react-docgen/blob/main/packages/react-docgen/src/handlers/codeTypeHandler.ts)
+- [Tests](https://github.com/reactjs/react-docgen/blob/main/packages/react-docgen/src/handlers/__tests__/codeTypeHandler-test.ts)

@@ -1,0 +1,44 @@
+# FindAnnotatedDefinitionsResolver
+
+Finds components that have a leading annotation comment.
+
+By default the annotation is `@component`. The annotation can be in a line
+comment or a block comment.
+
+## Options
+
+```ts
+new FindAnnotatedDefinitionsResolver({ annotation?: string });
+```
+
+### annotation
+
+**Default**: `@component`
+
+The text to search for in leading comments.
+
+## Examples
+
+```ts {1} filename="component.tsx"
+// @component
+function Button() {
+  return <button />;
+}
+```
+
+```ts {1} filename="component.tsx"
+/* @component */
+const Button = () => <button />;
+```
+
+The resolver can also find annotated components wrapped in calls.
+
+```ts {1} filename="component.tsx"
+// @component
+const Button = React.memo(() => <button />);
+```
+
+## Source
+
+- [Implementation](https://github.com/reactjs/react-docgen/blob/main/packages/react-docgen/src/resolver/FindAnnotatedDefinitionsResolver.ts)
+- [Tests](https://github.com/reactjs/react-docgen/blob/main/packages/react-docgen/src/resolver/__tests__/FindAnnotatedDefinitionsResolver-test.ts)

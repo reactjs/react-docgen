@@ -1,5 +1,65 @@
-import ContentMissing from '@/components/ContentMissing';
-
 # Importer
 
-<ContentMissing />
+Importers resolve imported values for handlers and utilities that need to follow
+references across files.
+
+## Signature
+
+```ts
+import type { Importer } from 'react-docgen';
+
+const importer: Importer = (path, name, file) => {
+  return null;
+};
+```
+
+The importer receives:
+
+- `path`: the import or export declaration being resolved
+- `name`: the imported or exported name to find
+- `file`: the current [`FileState`](../reference/file-state)
+
+It returns a Babel `NodePath` for the resolved value, or `null` when the value
+cannot be resolved.
+
+## Built-in importers
+
+### fsImporter
+
+The default importer. It resolves modules from disk using Node.js resolution
+rules, reads the resolved file, parses it, and looks for the requested exported
+value.
+
+It supports JavaScript and TypeScript source extensions, including `.js`, `.ts`,
+`.tsx`, `.mjs`, `.cjs`, `.mts`, `.cts`, and `.jsx`.
+
+### ignoreImporter
+
+Always returns `null`. Use this when imported values should not be followed.
+
+## makeFsImporter
+
+`makeFsImporter()` creates a new filesystem importer. You can use it to provide
+separate caches or a custom module lookup function.
+
+```ts
+import { makeFsImporter, parse } from 'react-docgen';
+
+const importer = makeFsImporter();
+
+parse(code, {
+  filename: '/absolute/path/Button.tsx',
+  importer,
+});
+```
+
+## CLI
+
+The CLI can load an importer by built-in name, package name, or path.
+
+```shell filename="Terminal"
+react-docgen --importer ignoreImporter ./src/Button.tsx
+```
+
+Custom importer modules are executed as JavaScript in the current Node.js
+process. Only load importers you trust.

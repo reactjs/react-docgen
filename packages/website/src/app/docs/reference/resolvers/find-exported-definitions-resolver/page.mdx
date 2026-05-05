@@ -1,0 +1,51 @@
+# FindExportedDefinitionsResolver
+
+Finds React component definitions that are exported from a file.
+
+It supports ES module exports and CommonJS assignments such as:
+
+- `export default Component`
+- `export function Component() {}`
+- `export const Component = () => <div />`
+- `module.exports = Component`
+- `exports.Component = Component`
+
+The resolver follows references with the configured importer, so exported values
+can be declared locally or imported from another file.
+
+## Options
+
+```ts
+new FindExportedDefinitionsResolver({ limit?: number });
+```
+
+### limit
+
+**Default**: `0`
+
+When `limit` is greater than `0`, the resolver throws an
+`ERR_REACTDOCGEN_MULTIPLE_DEFINITIONS` error after more than one exported
+component is found.
+
+## Examples
+
+```ts {3} filename="component.tsx"
+import React from 'react';
+
+export default function Button() {
+  return <button />;
+}
+```
+
+```ts {5} filename="component.tsx"
+import React from 'react';
+
+const Button = () => <button />;
+
+module.exports = Button;
+```
+
+## Source
+
+- [Implementation](https://github.com/reactjs/react-docgen/blob/main/packages/react-docgen/src/resolver/FindExportedDefinitionsResolver.ts)
+- [Tests](https://github.com/reactjs/react-docgen/blob/main/packages/react-docgen/src/resolver/__tests__/FindExportedDefinitionsResolver-test.ts)

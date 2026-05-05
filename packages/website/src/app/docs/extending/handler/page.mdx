@@ -1,5 +1,69 @@
-import ContentMissing from '@/components/ContentMissing';
-
 # Handler
 
-<ContentMissing />
+Handlers extract information from every component found by the resolver. A
+handler receives a `DocumentationBuilder` and the Babel `NodePath` for the
+component definition.
+
+```ts
+import type { Handler } from 'react-docgen';
+
+const handler: Handler = (documentation, componentDefinition) => {
+  documentation.set('customValue', componentDefinition.node.type);
+};
+```
+
+## Signature
+
+```ts
+type Handler = (
+  documentation: DocumentationBuilder,
+  componentDefinition: NodePath<ComponentNode>,
+) => void;
+```
+
+## Writing data
+
+Use the methods on `DocumentationBuilder` to add data.
+
+```ts
+documentation.set('displayName', 'Button');
+documentation.addComposes('./otherProps');
+
+const prop = documentation.getPropDescriptor('label');
+prop.description = 'Text shown inside the button.';
+```
+
+For context-related handlers, use:
+
+```ts
+documentation.getContextDescriptor('theme');
+documentation.getChildContextDescriptor('theme');
+```
+
+## Using a custom handler
+
+Pass handlers directly to `parse()`.
+
+```ts
+import { defaultHandlers, parse } from 'react-docgen';
+import myHandler from './myHandler.js';
+
+const docs = parse(code, {
+  filename: 'Button.tsx',
+  handlers: [...defaultHandlers, myHandler],
+});
+```
+
+When `handlers` is provided, the default handlers are not added automatically.
+Include `defaultHandlers` yourself if you want to extend the default behavior.
+
+## CLI
+
+The CLI can load a handler by built-in name, package name, or path.
+
+```shell filename="Terminal"
+react-docgen --handler ./myHandler.js ./src/Button.tsx
+```
+
+Custom handler modules are executed as JavaScript in the current Node.js
+process. Only load handlers you trust.

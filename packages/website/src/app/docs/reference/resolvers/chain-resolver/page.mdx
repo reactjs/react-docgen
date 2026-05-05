@@ -1,0 +1,56 @@
+# ChainResolver
+
+Runs multiple resolvers as one resolver.
+
+This is useful when more than one strategy should be used to find components in
+the same file.
+
+## Options
+
+```ts
+new ChainResolver(resolvers, {
+  chainingLogic?: ChainResolver.Logic;
+});
+```
+
+### resolvers
+
+**Type**: `Resolver[]`
+
+The resolvers to run.
+
+### chainingLogic
+
+**Default**: `ChainResolver.Logic.ALL`
+
+Controls how resolver results are combined.
+
+- `ChainResolver.Logic.ALL` runs every resolver and returns all unique
+  components.
+- `ChainResolver.Logic.FIRST_FOUND` runs resolvers in order and returns the
+  first non-empty result.
+
+## Example
+
+```ts filename="resolver.ts"
+import { builtinResolvers } from 'react-docgen';
+
+const {
+  ChainResolver,
+  FindAnnotatedDefinitionsResolver,
+  FindExportedDefinitionsResolver,
+} = builtinResolvers;
+
+const resolver = new ChainResolver(
+  [
+    new FindExportedDefinitionsResolver({ limit: 1 }),
+    new FindAnnotatedDefinitionsResolver(),
+  ],
+  { chainingLogic: ChainResolver.Logic.ALL },
+);
+```
+
+## Source
+
+- [Implementation](https://github.com/reactjs/react-docgen/blob/main/packages/react-docgen/src/resolver/ChainResolver.ts)
+- [Tests](https://github.com/reactjs/react-docgen/blob/main/packages/react-docgen/src/resolver/__tests__/ChainResolver-test.ts)

@@ -1,5 +1,68 @@
-import ContentMissing from '@/components/ContentMissing';
-
 # Resolver
 
-<ContentMissing />
+Resolvers decide which AST nodes are React component definitions. Handlers are
+then run for each node returned by the resolver.
+
+## Signature
+
+A resolver can be a function:
+
+```ts
+import type { ResolverFunction } from 'react-docgen';
+
+const resolver: ResolverFunction = (file) => {
+  return [];
+};
+```
+
+Or an object with a `resolve()` method:
+
+```ts
+import type { ResolverClass } from 'react-docgen';
+
+const resolver: ResolverClass = {
+  resolve(file) {
+    return [];
+  },
+};
+```
+
+Both forms return an array of `NodePath<ComponentNode>`.
+
+## FileState
+
+Resolvers receive a [`FileState`](../reference/file-state) object. The resolver
+can inspect `file.path`, traverse the AST with `file.traverse()`, or parse and
+import related files through the configured importer.
+
+## Built-in resolvers
+
+react-docgen exports these resolver classes through `builtinResolvers`:
+
+- `FindExportedDefinitionsResolver`
+- `FindAllDefinitionsResolver`
+- `FindAnnotatedDefinitionsResolver`
+- `ChainResolver`
+
+## Using a custom resolver
+
+```ts
+import { parse } from 'react-docgen';
+import myResolver from './myResolver.js';
+
+const docs = parse(code, {
+  filename: 'Button.tsx',
+  resolver: myResolver,
+});
+```
+
+## CLI
+
+The CLI can load a resolver by built-in config name, package name, or path.
+
+```shell filename="Terminal"
+react-docgen --resolver ./myResolver.js ./src/Button.tsx
+```
+
+Custom resolver modules are executed as JavaScript in the current Node.js
+process. Only load resolvers you trust.
