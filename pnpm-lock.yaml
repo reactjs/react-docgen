@@ -30,8 +30,8 @@ importers:
         specifier: 4.1.5
         version: 4.1.5(vitest@4.1.5)
       cpy:
-        specifier: 13.2.1
-        version: 13.2.1
+        specifier: 13.2.2
+        version: 13.2.2
       eslint:
         specifier: 10.3.0
         version: 10.3.0(jiti@2.6.1)
@@ -2291,8 +2291,8 @@ packages:
   cose-base@2.2.0:
     resolution: {integrity: sha512-AzlgcsCbUMymkADOJtQm3wO9S3ltPfYOFD5033keQn9NJzIbtnZj+UdBJe7DYml/8TdbtHJW3j58SOnKhWY/5g==}
 
-  cpy@13.2.1:
-    resolution: {integrity: sha512-/H2B3WW9gccZJKjKoDZsIrDU3MkkHlxgheT82hUbInC5fEdi4+54zyYpFueZT9pLfr5ObrtgN4MsYYrmTmHzeg==}
+  cpy@13.2.2:
+    resolution: {integrity: sha512-FEc7gmNSj4mDQCWNt3mByVn3qZX3EjMvggiqgCQPF1yJAFfyX6Ai/emN89w18TRp+QcFmdTLgX3hfNnIVgYHcw==}
     engines: {node: '>=20'}
 
   crelt@1.0.6:
@@ -7318,7 +7318,7 @@ snapshots:
     dependencies:
       layout-base: 2.0.1
 
-  cpy@13.2.1:
+  cpy@13.2.2:
     dependencies:
       copy-file: 11.1.0
       globby: 16.2.0
