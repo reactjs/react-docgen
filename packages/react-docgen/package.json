@@ -2,6 +2,10 @@
   "name": "react-docgen",
   "version": "8.0.3",
   "description": "A library to extract information from React components for documentation generation.",
+  "publishConfig": {
+    "provenance": true,
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/reactjs/react-docgen.git",

@@ -1,5 +1,12 @@
 packages:
   - 'benchmark'
   - 'packages/*'
+allowBuilds:
+  esbuild: false
+  microtime: false
+  nx: false
+  sharp: false
+  unrs-resolver: false
 overrides:
   zod: 4.3.6
+linkWorkspacePackages: true
