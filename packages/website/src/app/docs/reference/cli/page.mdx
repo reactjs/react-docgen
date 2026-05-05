@@ -102,7 +102,7 @@ files.
 
 Possible values are:
 
-#### Built-in resolvers
+#### Built-in importers
 
 - `ignoreImporter` (disable importing)
 - `fsImporter`
@@ -118,7 +118,7 @@ working directory. The importer module is executed as trusted JavaScript code.
 An npm module name can be specified. The default export of this module needs to
 be the importer. Only use modules you trust.
 
-### `--no-default-ignore`
+### `--no-default-ignores`
 
 **Default**: `false`
 
@@ -143,7 +143,7 @@ newlines.
 
 ### `--resolver <resolvers>`
 
-**Default**: `["find-exported-component", "find-all-annotated-components"]`
+**Default**: `["find-exported-component"]`
 
 Allows to specify the resolvers that find react components in the code. When
 multiple resolvers are specified they are all executed in order and all found

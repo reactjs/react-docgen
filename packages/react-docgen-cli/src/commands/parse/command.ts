@@ -79,7 +79,7 @@ program
     '--resolver <resolvers>',
     `Built-in resolver config (${Object.values(ResolverConfigs).join(
       ', ',
-    )}), package name or path to a trusted module that exports a resolver. Can also be used multiple times. When used, no default handlers will be added.`,
+    )}), package name or path to a trusted module that exports a resolver. Can also be used multiple times. When used, no default resolvers will be added.`,
     collect,
     defaultResolvers,
   )
@@ -109,7 +109,7 @@ program
 
     let finalIgnores = ignore;
 
-    // Push the default ignores unless the --no-default-ignore is set
+    // Push the default ignores unless the --no-default-ignores is set
     if (defaultIgnores === true && ignore !== defaultIgnoreGlobs) {
       finalIgnores.push(...defaultIgnoreGlobs);
     } else if (defaultIgnores === false && ignore === defaultIgnoreGlobs) {
