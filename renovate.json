@@ -4,7 +4,8 @@
   "extends": [
     "config:recommended",
     ":pinOnlyDevDependencies",
-    "helpers:pinGitHubActionDigests"
+    "helpers:pinGitHubActionDigests",
+    "security:minimumReleaseAgeNpm"
   ],
   "enabled": true,
   "lockFileMaintenance": {
