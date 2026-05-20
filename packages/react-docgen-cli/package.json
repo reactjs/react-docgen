@@ -19,7 +19,7 @@
     "dist"
   ],
   "engines": {
-    "node": "^20.9.0 || >=22"
+    "node": "^22.13.0 || >=24"
   },
   "scripts": {
     "build": "rimraf dist/ && tsc",

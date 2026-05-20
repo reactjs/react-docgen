@@ -1,7 +1,7 @@
 {
   "private": true,
   "engines": {
-    "node": "^20.9.0 || >=22",
+    "node": "^22.13.0 || >=24",
     "pnpm": ">=10.6.2"
   },
   "type": "module",
@@ -21,7 +21,7 @@
     "@changesets/cli": "2.31.0",
     "@eslint/eslintrc": "3.3.5",
     "@eslint/js": "10.0.1",
-    "@types/node": "20.19.41",
+    "@types/node": "22.19.19",
     "@vitest/coverage-v8": "4.1.6",
     "cpy": "13.2.2",
     "eslint": "10.4.0",

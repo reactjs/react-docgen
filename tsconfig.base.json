@@ -2,9 +2,9 @@
   "compilerOptions": {
     "jsx": "react",
     "declaration": true,
-    "lib": ["es2021"],
-    "target": "es2021",
-    "module": "node16",
+    "lib": ["es2024", "ESNext.Array", "ESNext.Collection", "ESNext.Iterator"],
+    "target": "es2022",
+    "module": "nodenext",
     "moduleResolution": "node16",
     "strict": true,
     "noImplicitAny": true,
