@@ -17,6 +17,6 @@ jobs:
   action:
     runs-on: ubuntu-latest
     steps:
-      - uses: dessant/lock-threads@851cffe46851ddd2051ea7147ebdc995113241c3 # v6
+      - uses: dessant/lock-threads@89ae32b08ed1a541efecbab17912962a5e38981c # v6
         with:
           log-output: true
