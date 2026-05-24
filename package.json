@@ -37,7 +37,7 @@
     "tempy": "3.2.0",
     "typescript": "6.0.3",
     "typescript-eslint": "8.59.4",
-    "vite": "8.0.13",
+    "vite": "8.0.14",
     "vitest": "4.1.7"
   },
   "packageManager": "pnpm@11.2.1"
