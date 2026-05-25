@@ -1,4 +1,5 @@
 import { writeFile } from 'fs/promises';
+import { resolve } from 'path';
 import type { Documentation } from 'react-docgen';
 
 export default async function outputResult(
@@ -12,7 +13,12 @@ export default async function outputResult(
   );
 
   if (output) {
-    await writeFile(output, result, 'utf-8');
+    const resolvedOutput = resolve(output);
+    const cwd = resolve('.');
+    if (!resolvedOutput.startsWith(cwd)) {
+      throw new Error('Output path must be within the current working directory');
+    }
+    await writeFile(resolvedOutput, result, 'utf-8');
   } else {
     process.stdout.write(result + '\n');
   }
