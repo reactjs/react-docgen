@@ -98,6 +98,11 @@ Warnings and errors will still be written to `stderr`.
 react-docgen -o output.json ./src/components/Button.tsx
 ```
 
+<Callout type="warning" emoji="">
+  The output path is used as provided and may overwrite an existing file, so
+  only pass trusted paths to this option.
+</Callout>
+
 The CLI supports a lot more advanced options and for a full list checkout the
 [reference page](../reference/cli)
 
