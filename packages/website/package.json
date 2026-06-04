@@ -17,7 +17,7 @@
     "@codemirror/view": "6.43.0",
     "@headlessui/react": "2.2.10",
     "@tailwindcss/postcss": "4.3.0",
-    "@types/react": "19.2.15",
+    "@types/react": "19.2.16",
     "@types/react-dom": "19.2.3",
     "@uiw/react-codemirror": "4.25.10",
     "clsx": "2.1.1",
@@ -28,9 +28,9 @@
     "nextra-theme-docs": "4.6.1",
     "postcss": "8.5.15",
     "postcss-lightningcss": "1.1.0",
-    "react": "19.2.6",
+    "react": "19.2.7",
     "react-docgen": "workspace:8.0.3",
-    "react-dom": "19.2.6",
+    "react-dom": "19.2.7",
     "tailwindcss": "4.3.0"
   },
   "browserslist": [
