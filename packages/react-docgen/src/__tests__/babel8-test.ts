@@ -36,3 +36,20 @@ test('parses TypeScript function props with Babel 8', () => {
     },
   });
 });
+
+test('parses generic arrow functions in TypeScript files with Babel 8', () => {
+  const result = parse(
+    `import React from 'react';
+
+    export const mockDomain = <Entity>(
+      entities: Record<string, Entity> = {},
+    ) => ({ entities });
+
+    export function Button() {
+      return React.createElement('button');
+    }`,
+    { filename: 'store.ts' },
+  );
+
+  expect(result).toHaveLength(1);
+});
