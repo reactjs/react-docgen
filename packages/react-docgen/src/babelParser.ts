@@ -16,11 +16,11 @@ const IS_BABEL_8 = Number.parseInt(version, 10) >= 8;
 function getDefaultPlugins(
   options: TransformOptions,
 ): NonNullable<ParserOptions['plugins']> {
+  const extension = options.filename ? extname(options.filename) : '';
+  const isTypeScript = TYPESCRIPT_EXTS.has(extension);
   const plugins: NonNullable<ParserOptions['plugins']> = [
-    'jsx',
-    options.filename && TYPESCRIPT_EXTS.has(extname(options.filename))
-      ? 'typescript'
-      : 'flow',
+    ...(isTypeScript && extension !== '.tsx' ? [] : ['jsx' as const]),
+    isTypeScript ? 'typescript' : 'flow',
     'asyncDoExpressions',
   ];
 
