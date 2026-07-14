@@ -53,3 +53,23 @@ test('parses generic arrow functions in TypeScript files with Babel 8', () => {
 
   expect(result).toHaveLength(1);
 });
+
+test('parses mapped TypeScript props with Babel 8', () => {
+  const result = parse(
+    `export type StatusFiltersProps<K extends string = string> = {
+      statuses?: { readonly [Key in K]: number };
+    };
+
+    export function StatusFilters<K extends string = string>(
+      _props: StatusFiltersProps<K>,
+    ) {
+      return <div />;
+    }`,
+    { filename: 'index.tsx' },
+  );
+
+  expect(result[0]?.props?.statuses?.tsType).toMatchObject({
+    name: 'signature',
+    type: 'object',
+  });
+});
