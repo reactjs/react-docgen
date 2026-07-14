@@ -321,8 +321,11 @@ function handleTSFunctionType(
   typeParams: TypeParameters | null,
 ): TSFunctionSignatureType {
   let returnType: TypeDescriptor<TSFunctionSignatureType> | undefined;
+  const usesBabel8Fields = 'params' in path.node;
 
-  const annotation = path.get('typeAnnotation');
+  const annotation = path.get(
+    usesBabel8Fields ? 'returnType' : 'typeAnnotation',
+  ) as NodePath<TSTypeAnnotation | null | undefined>;
 
   if (annotation.hasNode()) {
     returnType = getTSTypeWithResolvedTypes(annotation, typeParams);
@@ -338,7 +341,11 @@ function handleTSFunctionType(
     },
   };
 
-  path.get('parameters').forEach((param) => {
+  const parameters = path.get(
+    usesBabel8Fields ? 'params' : 'parameters',
+  ) as Array<NodePath<TSFunctionType['parameters'][number]>>;
+
+  parameters.forEach((param) => {
     const typeAnnotation = getTypeAnnotation<TSType>(param);
 
     const arg: FunctionArgumentType<TSFunctionSignatureType> = {
