@@ -285,10 +285,12 @@ function handleTSMappedType(
   path: NodePath<TSMappedType>,
   typeParams: TypeParameters | null,
 ): ObjectSignatureType<TSFunctionSignatureType> {
-  const key = getTSTypeWithResolvedTypes(
-    path.get('typeParameter').get('constraint') as NodePath<TSType>,
-    typeParams,
-  );
+  const constraint = (
+    'constraint' in path.node
+      ? path.get('constraint')
+      : path.get('typeParameter').get('constraint')
+  ) as NodePath<TSType>;
+  const key = getTSTypeWithResolvedTypes(constraint, typeParams);
 
   key.required = !path.node.optional;
 
