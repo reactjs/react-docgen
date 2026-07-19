@@ -202,11 +202,11 @@ importers:
         specifier: 4.6.1
         version: 4.6.1(@types/react@19.2.17)(next@16.2.9(@babel/core@7.29.7)(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(nextra@4.6.1(next@16.2.9(@babel/core@7.29.7)(react-dom@19.2.7(react@19.2.7))(react@19.2.7))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(typescript@6.0.3))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
       postcss:
-        specifier: 8.5.15
-        version: 8.5.15
+        specifier: 8.5.19
+        version: 8.5.19
       postcss-lightningcss:
         specifier: 1.1.0
-        version: 1.1.0(postcss@8.5.15)
+        version: 1.1.0(postcss@8.5.19)
       react:
         specifier: 19.2.7
         version: 19.2.7
@@ -4054,6 +4054,10 @@ packages:
 
   postcss@8.5.15:
     resolution: {integrity: sha512-FfR8sjd4em2T6fb3I2MwAJU7HWVMr9zba+enmQeeWFfCbm+UOC/0X4DS8XtpUTMwWMGbjKYP7xjfNekzyGmB3A==}
+    engines: {node: ^10 || ^12 || >=14}
+
+  postcss@8.5.19:
+    resolution: {integrity: sha512-Mz8SaolMd8nB+G13WkORcxQKHZ/NE4xXevtkJHVuG+guo9/wYKlIMTKAqGdEmYOXR2ijPjTYNHssizdaVSUNdQ==}
     engines: {node: ^10 || ^12 || >=14}
 
   prelude-ls@1.2.1:
@@ -9627,11 +9631,11 @@ snapshots:
 
   possible-typed-array-names@1.1.0: {}
 
-  postcss-lightningcss@1.1.0(postcss@8.5.15):
+  postcss-lightningcss@1.1.0(postcss@8.5.19):
     dependencies:
       browserslist: 4.28.2
       lightningcss: 1.32.0
-      postcss: 8.5.15
+      postcss: 8.5.19
 
   postcss@8.4.31:
     dependencies:
@@ -9640,6 +9644,12 @@ snapshots:
       source-map-js: 1.2.1
 
   postcss@8.5.15:
+    dependencies:
+      nanoid: 3.3.12
+      picocolors: 1.1.1
+      source-map-js: 1.2.1
+
+  postcss@8.5.19:
     dependencies:
       nanoid: 3.3.12
       picocolors: 1.1.1
