@@ -144,20 +144,8 @@ async function getAffectedPackages(
 
   for (const changedFile of changedFiles) {
     const normalizedPath = changedFile.replace(/\\/g, '/');
-    const rootChanges = [
-      'package.json',
-      'pnpm-workspace.yaml',
-      'nx.json',
-      'tsconfig.base.json',
-      'pnpm-lock.yaml',
-    ];
 
-    if (rootChanges.includes(normalizedPath)) {
-      for (const workspacePackage of workspacePackagesList) {
-        if (!ignoredPackages.has(workspacePackage.name)) {
-          affectedPackageNames.add(workspacePackage.name);
-        }
-      }
+    if (!normalizedPath.startsWith('packages/')) {
       continue;
     }
 
