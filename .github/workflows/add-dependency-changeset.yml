@@ -1,0 +1,27 @@
+name: Add changeset to dependency updates
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - synchronize
+      - labeled
+
+permissions: {}
+
+jobs:
+  add-changeset:
+    if: >-
+      contains(github.event.pull_request.labels.*.name, 'dependencies') &&
+      github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Add dependency changeset
+        uses: mscharley/dependency-changesets-action@f96232368519695969bea8a8cfff7cca32b1e56a # v1.2.4
+        with:
+          token: ${{ secrets.CHANGESETS_TOKEN }}
+          use-conventional-commits: true
+          commit-message: "chore(deps): add changeset"
+          author-name: "danez[bot]"
+          author-email: "120286224+danez-bot@users.noreply.github.com"
