@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - name: Add dependency changeset
-        uses: mscharley/dependency-changesets-action@f96232368519695969bea8a8cfff7cca32b1e56a # v1.2.4
+        uses: mscharley/dependency-changesets-action@874dac2372a085cb94f750e8bdf5b1173a838a75 # v1.2.5
         with:
           token: ${{ secrets.CHANGESETS_TOKEN }}
           use-conventional-commits: true
