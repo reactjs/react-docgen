@@ -20,7 +20,9 @@ if (!prTitle) {
 }
 
 if (!['add-changeset', 'add-changeset-major'].includes(labelName)) {
-  console.log(`Skipping changeset creation because label ${labelName || 'unknown'} was not handled.`);
+  console.log(
+    `Skipping changeset creation because label ${labelName || 'unknown'} was not handled.`,
+  );
   process.exit(0);
 }
 
@@ -32,7 +34,11 @@ if (labelName === 'add-changeset-major') {
   releaseType = 'major';
 } else if (/^(feat|feature)(\([^)]+\))?!?:/i.test(message)) {
   releaseType = 'minor';
-} else if (/^(fix|perf|refactor|build|ci|chore|docs|style|test|revert)(\([^)]+\))?!?:/i.test(message)) {
+} else if (
+  /^(fix|perf|refactor|build|ci|chore|docs|style|test|revert)(\([^)]+\))?!?:/i.test(
+    message,
+  )
+) {
   releaseType = 'patch';
 } else if (/\bbreaking change\b|!:/i.test(message)) {
   releaseType = 'major';
@@ -42,17 +48,22 @@ const fileName = `pr-${prNumber}.md`;
 const filePath = path.join(changesetDir, fileName);
 
 const existingFiles = await readdir(changesetDir);
+
 await Promise.all(
   existingFiles
     .filter((name) => name.startsWith(`pr-${prNumber}`) && name.endsWith('.md'))
-    .map((name) => rm(path.join(changesetDir, name), { force: true }))
+    .map((name) => rm(path.join(changesetDir, name), { force: true })),
 );
 
-const packages = ["react-docgen", "react-docgen-cli"];
-const frontmatter = packages.map((pkg) => `"${pkg}": ${releaseType}`).join('\n');
+const packages = ['react-docgen', 'react-docgen-cli'];
+const frontmatter = packages
+  .map((pkg) => `"${pkg}": ${releaseType}`)
+  .join('\n');
 const content = `---\n${frontmatter}\n---\n\n${prTitle}\n`;
 
 await mkdir(changesetDir, { recursive: true });
 await writeFile(filePath, content, 'utf8');
 
-console.log(`Created changeset ${path.relative(repoRoot, filePath)} with release type ${releaseType}.`);
+console.log(
+  `Created changeset ${path.relative(repoRoot, filePath)} with release type ${releaseType}.`,
+);
