@@ -1,0 +1,48 @@
+name: Add changeset from PR label
+
+on:
+  pull_request_target:
+    types:
+      - labeled
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  create-changeset:
+    if: github.event.label.name == 'add-changeset' || github.event.label.name == 'add-changeset-major'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4
+        with:
+          node-version: 22
+
+      - name: Create changeset file
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+          LABEL_NAME: ${{ github.event.label.name }}
+        run: node .github/scripts/create-changeset-from-pr.mjs
+
+      - name: Commit changeset
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .changeset
+          if git diff --cached --quiet; then
+            echo "No changeset changes to commit."
+            exit 0
+          fi
+          git commit -m "Add changeset for PR #${{ github.event.pull_request.number }}"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
