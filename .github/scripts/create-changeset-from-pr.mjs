@@ -10,7 +10,6 @@ const __dirname = path.dirname(__filename);
 const repoRoot = path.resolve(__dirname, '..', '..');
 const changesetDir = path.join(repoRoot, '.changeset');
 
-const prNumber = process.env.PR_NUMBER?.trim() ?? 'unknown';
 const prTitle = process.env.PR_TITLE?.trim() ?? '';
 const prBody = process.env.PR_BODY?.trim() ?? '';
 const labelName = process.env.LABEL_NAME?.trim().toLowerCase() ?? '';
@@ -229,9 +228,9 @@ async function listChangesetFiles(changesetDirectory) {
     .sort();
 }
 
-async function getNewestChangesetFile(changesetDirectory, existingFiles) {
+async function getNewestChangesetFile(changesetDirectory, previousFiles) {
   const currentFiles = await listChangesetFiles(changesetDirectory);
-  const newFiles = currentFiles.filter((file) => !existingFiles.includes(file));
+  const newFiles = currentFiles.filter((file) => !previousFiles.includes(file));
 
   if (newFiles.length === 0) {
     return null;
