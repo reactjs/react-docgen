@@ -56,19 +56,29 @@ const affectedPackages = await getAffectedPackages(
 );
 
 if (affectedPackages.length === 0) {
-  console.log('No workspace packages were detected from the PR diff; skipping changeset creation.');
+  console.log(
+    'No workspace packages were detected from the PR diff; skipping changeset creation.',
+  );
   process.exit(0);
 }
 
 await mkdir(changesetDir, { recursive: true });
 const existingFiles = await listChangesetFiles(changesetDir);
 
-execFileSync('pnpm', ['exec', 'changeset', 'add', '--empty', '--message', prTitle], {
-  cwd: repoRoot,
-  stdio: 'pipe',
-});
+execFileSync(
+  'pnpm',
+  ['exec', 'changeset', 'add', '--empty', '--message', prTitle],
+  {
+    cwd: repoRoot,
+    stdio: 'pipe',
+  },
+);
 
-const createdChangesetFile = await getNewestChangesetFile(changesetDir, existingFiles);
+const createdChangesetFile = await getNewestChangesetFile(
+  changesetDir,
+  existingFiles,
+);
+
 if (!createdChangesetFile) {
   console.error('Changesets CLI did not create a changeset file.');
   process.exit(1);
@@ -79,6 +89,7 @@ const frontmatter = affectedPackages
   .map((pkg) => `"${pkg}": ${releaseType}`)
   .join('\n');
 const content = `---\n${frontmatter}\n---\n\n${prTitle}\n`;
+
 await writeFile(filePath, content, 'utf8');
 
 console.log(
@@ -94,11 +105,19 @@ async function getWorkspacePackages(repoRootPath) {
       entries
         .filter((entry) => entry.isDirectory())
         .map(async (entry) => {
-          const packageJsonPath = path.join(packagesDir, entry.name, 'package.json');
+          const packageJsonPath = path.join(
+            packagesDir,
+            entry.name,
+            'package.json',
+          );
+
           try {
             const packageJsonContent = await readFile(packageJsonPath, 'utf8');
             const packageJson = JSON.parse(packageJsonContent);
-            return packageJson.name ? { name: packageJson.name, dirName: entry.name } : null;
+
+            return packageJson.name
+              ? { name: packageJson.name, dirName: entry.name }
+              : null;
           } catch {
             return null;
           }
@@ -107,14 +126,32 @@ async function getWorkspacePackages(repoRootPath) {
   ).filter(Boolean);
 }
 
-async function getAffectedPackages(repoRootPath, workspacePackagesList, baseShaValue, headShaValue) {
-  const changedFiles = await getChangedFiles(repoRootPath, baseShaValue, headShaValue);
+async function getAffectedPackages(
+  repoRootPath,
+  workspacePackagesList,
+  baseShaValue,
+  headShaValue,
+) {
+  const changedFiles = await getChangedFiles(
+    repoRootPath,
+    baseShaValue,
+    headShaValue,
+  );
   const affectedPackageNames = new Set();
-  const ignoredPackages = new Set(['@react-docgen-internal/benchmark', '@react-docgen-internal/website']);
+  const ignoredPackages = new Set([
+    '@react-docgen-internal/benchmark',
+    '@react-docgen-internal/website',
+  ]);
 
   for (const changedFile of changedFiles) {
     const normalizedPath = changedFile.replace(/\\/g, '/');
-    const rootChanges = ['package.json', 'pnpm-workspace.yaml', 'nx.json', 'tsconfig.base.json', 'pnpm-lock.yaml'];
+    const rootChanges = [
+      'package.json',
+      'pnpm-workspace.yaml',
+      'nx.json',
+      'tsconfig.base.json',
+      'pnpm-lock.yaml',
+    ];
 
     if (rootChanges.includes(normalizedPath)) {
       for (const workspacePackage of workspacePackagesList) {
@@ -127,9 +164,11 @@ async function getAffectedPackages(repoRootPath, workspacePackagesList, baseShaV
 
     for (const workspacePackage of workspacePackagesList) {
       const packagePrefix = `packages/${workspacePackage.dirName}/`;
+
       if (
         !ignoredPackages.has(workspacePackage.name) &&
-        (normalizedPath === `packages/${workspacePackage.dirName}` || normalizedPath.startsWith(packagePrefix))
+        (normalizedPath === `packages/${workspacePackage.dirName}` ||
+          normalizedPath.startsWith(packagePrefix))
       ) {
         affectedPackageNames.add(workspacePackage.name);
       }
@@ -144,14 +183,19 @@ async function getChangedFiles(repoRootPath, baseShaValue, headShaValue) {
   const headRef = headShaValue || 'HEAD';
 
   try {
-    const diffOutput = execFileSync('git', ['diff', '--name-only', baseRef, headRef], {
-      cwd: repoRootPath,
-      encoding: 'utf8',
-    });
+    const diffOutput = execFileSync(
+      'git',
+      ['diff', '--name-only', baseRef, headRef],
+      {
+        cwd: repoRootPath,
+        encoding: 'utf8',
+      },
+    );
     const files = diffOutput
       .split(/\r?\n/)
       .map((line) => line.trim())
       .filter(Boolean);
+
     if (files.length > 0) {
       return files;
     }
@@ -164,6 +208,7 @@ async function getChangedFiles(repoRootPath, baseShaValue, headShaValue) {
       cwd: repoRootPath,
       encoding: 'utf8',
     });
+
     return statusOutput
       .split(/\r?\n/)
       .map((line) => line.trim())
@@ -177,6 +222,7 @@ async function getChangedFiles(repoRootPath, baseShaValue, headShaValue) {
 
 async function listChangesetFiles(changesetDirectory) {
   const entries = await readdir(changesetDirectory, { withFileTypes: true });
+
   return entries
     .filter((entry) => entry.isFile() && entry.name.endsWith('.md'))
     .map((entry) => entry.name)
@@ -199,5 +245,6 @@ async function getNewestChangesetFile(changesetDirectory, existingFiles) {
   );
 
   filesWithStats.sort((left, right) => right.mtimeMs - left.mtimeMs);
+
   return filesWithStats[0]?.name ?? null;
 }
