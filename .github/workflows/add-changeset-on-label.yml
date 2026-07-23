@@ -18,9 +18,9 @@ jobs:
       - name: Checkout PR branch
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.event.pull_request.head.ref }}
           fetch-depth: 0
+          token: ${{ secrets.CHANGESETS_TOKEN }}
 
       - name: Install pnpm
         uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6
@@ -46,8 +46,8 @@ jobs:
 
       - name: Commit changeset
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "danez[bot]"
+          git config user.email "120286224+danez-bot@users.noreply.github.com"
           git add .changeset
           if git diff --cached --quiet; then
             echo "No changeset changes to commit."
