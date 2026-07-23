@@ -11,3 +11,15 @@ overrides:
   zod: 4.3.6
 linkWorkspacePackages: true
 minimumReleaseAge: 4320
+minimumReleaseAgeExclude:
+  # Renovate security update: next@16.2.11
+  - next@16.2.11
+  - '@next/env@16.2.11'
+  - '@next/swc-darwin-arm64@16.2.11'
+  - '@next/swc-darwin-x64@16.2.11'
+  - '@next/swc-linux-arm64-gnu@16.2.11'
+  - '@next/swc-linux-arm64-musl@16.2.11'
+  - '@next/swc-linux-x64-gnu@16.2.11'
+  - '@next/swc-linux-x64-musl@16.2.11'
+  - '@next/swc-win32-arm64-msvc@16.2.11'
+  - '@next/swc-win32-x64-msvc@16.2.11'
