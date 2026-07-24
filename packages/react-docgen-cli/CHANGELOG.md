@@ -1,5 +1,27 @@
 # Release Notes
 
+## 4.0.0
+
+### Major Changes
+
+- [#1095](https://github.com/reactjs/react-docgen/pull/1095)
+  [`798e73d`](https://github.com/reactjs/react-docgen/commit/798e73dd4a73574c66dbee9dffb8e4af507b1059)
+  Thanks [@danez](https://github.com/danez)! - Drop support for Node.js 20, 21
+  and 23
+
+  Minimum Supported Node.js version is now 22.13.0
+
+- [#1100](https://github.com/reactjs/react-docgen/pull/1100)
+  [`70cb468`](https://github.com/reactjs/react-docgen/commit/70cb468c90ad85ccf0275e75f9287d744dad62f0)
+  Thanks [@renovate](https://github.com/apps/renovate)! - fix(deps): update
+  dependency commander to v15
+
+### Patch Changes
+
+- Updated dependencies
+  [[`798e73d`](https://github.com/reactjs/react-docgen/commit/798e73dd4a73574c66dbee9dffb8e4af507b1059)]:
+  - react-docgen@9.0.0
+
 ## 3.0.6
 
 ### Patch Changes
