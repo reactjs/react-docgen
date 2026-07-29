@@ -8,7 +8,7 @@ import outputResult from './output/outputResult.js';
 import loadOptions from './options/loadOptions.js';
 import outputError from './output/outputError.js';
 import { resolve } from 'path';
-import slash from 'slash';
+import slash from '../../utils/slash.js';
 import type { Documentation } from 'react-docgen';
 import { ResolverConfigs } from './options/loadResolvers.js';
 
