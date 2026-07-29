@@ -146,9 +146,6 @@ importers:
       react-docgen:
         specifier: workspace:8.0.3
         version: link:../react-docgen
-      slash:
-        specifier: 5.1.0
-        version: 5.1.0
     devDependencies:
       '@types/debug':
         specifier: 4.1.13
