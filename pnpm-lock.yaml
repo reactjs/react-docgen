@@ -134,9 +134,6 @@ importers:
 
   packages/react-docgen-cli:
     dependencies:
-      chalk:
-        specifier: 5.6.2
-        version: 5.6.2
       commander:
         specifier: 15.0.0
         version: 15.0.0
