@@ -42,8 +42,7 @@
     },
     {
       "matchPackageNames": ["@types/node"],
-      "matchUpdateTypes": ["major"],
-      "enabled": false
+      "allowedVersions": "<23"
     },
     {
       "matchFileNames": [
