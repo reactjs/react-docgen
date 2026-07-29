@@ -50,7 +50,7 @@ describe('parse', () => {
           importer: noopImporter,
           babelOptions: {},
         }),
-      ).toThrowError(
+      ).toThrow(
         expect.objectContaining({
           code: ERROR_CODES.MISSING_DEFINITION,
         }),
@@ -66,7 +66,7 @@ describe('parse', () => {
           importer: noopImporter,
           babelOptions: {},
         }),
-      ).toThrowError(
+      ).toThrow(
         expect.objectContaining({
           code: ERROR_CODES.MISSING_DEFINITION,
         }),
@@ -93,7 +93,7 @@ describe('parse', () => {
               filename: `${dir}/component.js`,
             },
           }),
-        ).toThrowError(
+        ).toThrow(
           /.*Support for the experimental syntax 'pipelineOperator' isn't currently enabled.*/,
         );
       } finally {
@@ -117,7 +117,7 @@ describe('parse', () => {
             },
           },
         }),
-      ).toThrowError(/.*\(1:13\).*/);
+      ).toThrow(/.*\(1:13\).*/);
     });
 
     test('supports custom parserOptions without plugins', () => {
@@ -132,7 +132,7 @@ describe('parse', () => {
             },
           },
         }),
-      ).toThrowError(
+      ).toThrow(
         expect.objectContaining({
           code: ERROR_CODES.MISSING_DEFINITION,
         }),

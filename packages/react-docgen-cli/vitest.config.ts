@@ -9,7 +9,6 @@ export default defineConfig({
       interopDefault: false,
     },
     coverage: {
-      all: true,
       include: ['src/**'],
       provider: 'v8',
       reporter: ['text', 'lcov'],

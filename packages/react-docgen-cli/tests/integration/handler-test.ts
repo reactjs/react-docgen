@@ -14,7 +14,7 @@ describe('handler', () => {
 
         expect(stderr).toBe('');
         expect(stdout).toContain('Component');
-        expect(() => JSON.parse(stdout)).not.toThrowError();
+        expect(() => JSON.parse(stdout)).not.toThrow();
       });
     });
   });
@@ -33,7 +33,7 @@ describe('handler', () => {
         expect(stdout).toContain('"displayName":"Component"');
         expect(stdout).toContain('"description":""');
         expect(stdout).toContain('"name":"otherMethod"');
-        expect(() => JSON.parse(stdout)).not.toThrowError();
+        expect(() => JSON.parse(stdout)).not.toThrow();
       });
     });
 
@@ -48,7 +48,7 @@ describe('handler', () => {
         expect(stdout).toContain('"displayName":"Component"');
         expect(stdout).toContain('"description":""');
         expect(stdout).toContain('"name":"otherMethod"');
-        expect(() => JSON.parse(stdout)).not.toThrowError();
+        expect(() => JSON.parse(stdout)).not.toThrow();
       });
     });
   });
@@ -63,7 +63,7 @@ describe('handler', () => {
 
         expect(stderr).toBe('');
         expect(stdout).toContain('"displayName":"testhandler"');
-        expect(() => JSON.parse(stdout)).not.toThrowError();
+        expect(() => JSON.parse(stdout)).not.toThrow();
       });
     });
 
@@ -77,7 +77,7 @@ describe('handler', () => {
 
         expect(stderr).toBe('');
         expect(stdout).toContain('"displayName":"testhandler"');
-        expect(() => JSON.parse(stdout)).not.toThrowError();
+        expect(() => JSON.parse(stdout)).not.toThrow();
       });
     });
 
@@ -90,7 +90,7 @@ describe('handler', () => {
 
         expect(stderr).toBe('');
         expect(stdout).toContain('"displayName":"testhandler"');
-        expect(() => JSON.parse(stdout)).not.toThrowError();
+        expect(() => JSON.parse(stdout)).not.toThrow();
       });
     });
 
@@ -104,7 +104,7 @@ describe('handler', () => {
 
         expect(stderr).toBe('');
         expect(stdout).toContain('"displayName":"testhandler"');
-        expect(() => JSON.parse(stdout)).not.toThrowError();
+        expect(() => JSON.parse(stdout)).not.toThrow();
       });
     });
 
@@ -117,7 +117,7 @@ describe('handler', () => {
 
         expect(stderr).toBe('');
         expect(stdout).toContain('"displayName":"testhandler"');
-        expect(() => JSON.parse(stdout)).not.toThrowError();
+        expect(() => JSON.parse(stdout)).not.toThrow();
       });
     });
 

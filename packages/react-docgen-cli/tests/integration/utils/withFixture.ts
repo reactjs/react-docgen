@@ -1,7 +1,6 @@
-import { rm, stat } from 'fs/promises';
+import { rm, cp } from 'fs/promises';
 import { dirname, join } from 'path';
 import { execaNode } from 'execa';
-import copy from 'cpy';
 import { temporaryDirectory } from 'tempy';
 import { fileURLToPath } from 'url';
 
@@ -29,9 +28,7 @@ export default async function withFixture(
     });
   }
 
-  await stat(join(fixtureDir, fixture));
-
-  await copy(join(fixtureDir, fixture, '**/*'), tempDir, {});
+  await cp(join(fixtureDir, fixture), tempDir, { recursive: true });
   await callback({ dir: tempDir, run });
   await rm(tempDir, { force: true, recursive: true });
 }

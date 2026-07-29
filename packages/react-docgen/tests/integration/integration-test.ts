@@ -32,7 +32,7 @@ describe('integration', () => {
               babelrc: false,
             },
           });
-        }).not.toThrowError();
+        }).not.toThrow();
         expect(result).toMatchSnapshot();
       });
     }

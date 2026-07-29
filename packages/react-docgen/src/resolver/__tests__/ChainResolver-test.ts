@@ -104,6 +104,6 @@ describe('ChainResolver', () => {
       chainingLogic: ChainResolver.Logic.ALL,
     });
 
-    expect(() => chainResolver.resolve(fileStateMock)).toThrowError(error);
+    expect(() => chainResolver.resolve(fileStateMock)).toThrow(error);
   });
 });
