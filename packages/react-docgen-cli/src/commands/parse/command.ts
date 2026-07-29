@@ -1,7 +1,6 @@
-#!/usr/bin/env node
 import glob from 'fast-glob';
 import debugFactory from 'debug';
-import { program } from 'commander';
+import { Command } from 'commander';
 import { builtinHandlers, parse } from 'react-docgen';
 import { readFile } from 'fs/promises';
 import outputResult from './output/outputResult.js';
@@ -49,119 +48,120 @@ interface CLIOptions {
   resolver?: string[];
 }
 
-program
-  .name('react-docgen-parse')
-  .description(
-    'Extract meta information from React components.\n' +
-      'Either specify a paths to files or a glob pattern that matches multiple files.',
-  )
-  .option(
-    '-o, --out <file>',
-    'Store extracted information in the specified file instead of printing to stdout. If the file exists it will be overwritten.',
-  )
-  .option(
-    '-i, --ignore <glob>',
-    'Comma separated list of glob patterns which will ignore the paths that match. Can also be used multiple times.',
-    collect,
-    defaultIgnoreGlobs,
-  )
-  .option(
-    '--no-default-ignores',
-    'Do not ignore the node_modules, __tests__, and __mocks__ directories.',
-  )
-  .option('--pretty', 'Print the output JSON pretty', false)
-  .option(
-    '--failOnWarning',
-    'Fail with exit code 2 on react-docgen component warnings. This includes "no component found" and "multiple components found" warnings.',
-    false,
-  )
-  .option(
-    '--resolver <resolvers>',
-    `Built-in resolver config (${Object.values(ResolverConfigs).join(
-      ', ',
-    )}), package name or path to a trusted module that exports a resolver. Can also be used multiple times. When used, no default resolvers will be added.`,
-    collect,
-    defaultResolvers,
-  )
-  .option(
-    '--importer <importer>',
-    'Built-in importer name (fsImporter, ignoreImporter), package name or path to a trusted module that exports an importer.',
-    'fsImporter',
-  )
-  .option(
-    '--handler <handlers>',
-    'Comma separated list of trusted handlers to use. Can also be used multiple times. When used, no default handlers will be added.',
-    collect,
-    defaultHandlers,
-  )
-  .argument('<globs...>', 'Can be globs or paths to files')
-  .action(async (globs: string[], input: CLIOptions) => {
-    const {
-      defaultIgnores,
-      failOnWarning,
-      handler,
-      ignore,
-      importer,
-      out: output,
-      pretty,
-      resolver,
-    } = input;
+export default function createParseCommand(): Command {
+  return new Command('parse')
+    .description(
+      'Extract meta information from React components.\n' +
+        'Either specify a paths to files or a glob pattern that matches multiple files.',
+    )
+    .option(
+      '-o, --out <file>',
+      'Store extracted information in the specified file instead of printing to stdout. If the file exists it will be overwritten.',
+    )
+    .option(
+      '-i, --ignore <glob>',
+      'Comma separated list of glob patterns which will ignore the paths that match. Can also be used multiple times.',
+      collect,
+      defaultIgnoreGlobs,
+    )
+    .option(
+      '--no-default-ignores',
+      'Do not ignore the node_modules, __tests__, and __mocks__ directories.',
+    )
+    .option('--pretty', 'Print the output JSON pretty', false)
+    .option(
+      '--failOnWarning',
+      'Fail with exit code 2 on react-docgen component warnings. This includes "no component found" and "multiple components found" warnings.',
+      false,
+    )
+    .option(
+      '--resolver <resolvers>',
+      `Built-in resolver config (${Object.values(ResolverConfigs).join(
+        ', ',
+      )}), package name or path to a trusted module that exports a resolver. Can also be used multiple times. When used, no default resolvers will be added.`,
+      collect,
+      defaultResolvers,
+    )
+    .option(
+      '--importer <importer>',
+      'Built-in importer name (fsImporter, ignoreImporter), package name or path to a trusted module that exports an importer.',
+      'fsImporter',
+    )
+    .option(
+      '--handler <handlers>',
+      'Comma separated list of trusted handlers to use. Can also be used multiple times. When used, no default handlers will be added.',
+      collect,
+      defaultHandlers,
+    )
+    .argument('<globs...>', 'Can be globs or paths to files')
+    .action(async (globs: string[], input: CLIOptions) => {
+      const {
+        defaultIgnores,
+        failOnWarning,
+        handler,
+        ignore,
+        importer,
+        out: output,
+        pretty,
+        resolver,
+      } = input;
 
-    let finalIgnores = ignore;
+      let finalIgnores = ignore;
 
-    // Push the default ignores unless the --no-default-ignores is set
-    if (defaultIgnores === true && ignore !== defaultIgnoreGlobs) {
-      finalIgnores.push(...defaultIgnoreGlobs);
-    } else if (defaultIgnores === false && ignore === defaultIgnoreGlobs) {
-      finalIgnores = [];
-    }
+      // Push the default ignores unless the --no-default-ignores is set
+      if (defaultIgnores === true && ignore !== defaultIgnoreGlobs) {
+        finalIgnores.push(...defaultIgnoreGlobs);
+      } else if (defaultIgnores === false && ignore === defaultIgnoreGlobs) {
+        finalIgnores = [];
+      }
 
-    const options = await loadOptions({
-      handler,
-      importer,
-      resolver,
-    });
-    // we use slash to convert windows backslashes to unix format so fast-glob works
-    const files = await glob(globs.map(slash), {
-      ignore: finalIgnores?.map((ignorePath) => {
-        ignorePath = ignorePath.trim();
-        // If the ignore glob starts with a dot we need to resolve the path to an
-        // absolute path in order for it to work
-        if (ignorePath.startsWith('.')) {
-          ignorePath = resolve(process.cwd(), ignorePath);
-        }
-
-        // we use slash to convert windows backslashes to unix format so fast-glob works
-        return slash(ignorePath);
-      }),
-    });
-    const result: Record<string, Documentation[]> = {};
-    let errorEncountered = false;
-
-    await Promise.all(
-      files.map(async (path) => {
-        debug(`Reading file ${path}`);
-        const content = await readFile(path, 'utf-8');
-
-        try {
-          result[path] = parse(content, {
-            filename: path,
-            handlers: options.handlers,
-            importer: options.importer,
-            resolver: options.resolver,
-          });
-        } catch (error) {
-          const isError = outputError(error as Error, path, { failOnWarning });
-
-          if (isError) {
-            errorEncountered = true;
+      const options = await loadOptions({
+        handler,
+        importer,
+        resolver,
+      });
+      // we use slash to convert windows backslashes to unix format so fast-glob works
+      const files = await glob(globs.map(slash), {
+        ignore: finalIgnores?.map((ignorePath) => {
+          ignorePath = ignorePath.trim();
+          // If the ignore glob starts with a dot we need to resolve the path to an
+          // absolute path in order for it to work
+          if (ignorePath.startsWith('.')) {
+            ignorePath = resolve(process.cwd(), ignorePath);
           }
-        }
-      }),
-    );
-    if (!errorEncountered) {
-      await outputResult(result, { pretty, output });
-    }
-  });
 
-program.parse();
+          // we use slash to convert windows backslashes to unix format so fast-glob works
+          return slash(ignorePath);
+        }),
+      });
+      const result: Record<string, Documentation[]> = {};
+      let errorEncountered = false;
+
+      await Promise.all(
+        files.map(async (path) => {
+          debug(`Reading file ${path}`);
+          const content = await readFile(path, 'utf-8');
+
+          try {
+            result[path] = parse(content, {
+              filename: path,
+              handlers: options.handlers,
+              importer: options.importer,
+              resolver: options.resolver,
+            });
+          } catch (error) {
+            const isError = outputError(error as Error, path, {
+              failOnWarning,
+            });
+
+            if (isError) {
+              errorEncountered = true;
+            }
+          }
+        }),
+      );
+      if (!errorEncountered) {
+        await outputResult(result, { pretty, output });
+      }
+    });
+}
