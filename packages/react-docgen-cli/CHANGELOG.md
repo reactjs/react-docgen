@@ -1,5 +1,42 @@
 # Release Notes
 
+## 4.0.0
+
+### Major Changes
+
+- [#1095](https://github.com/reactjs/react-docgen/pull/1095)
+  [`798e73d`](https://github.com/reactjs/react-docgen/commit/798e73dd4a73574c66dbee9dffb8e4af507b1059)
+  Thanks [@danez](https://github.com/danez)! - Drop support for Node.js 20, 21
+  and 23
+
+  Minimum Supported Node.js version is now 22.13.0
+
+- [#1100](https://github.com/reactjs/react-docgen/pull/1100)
+  [`70cb468`](https://github.com/reactjs/react-docgen/commit/70cb468c90ad85ccf0275e75f9287d744dad62f0)
+  Thanks [@renovate](https://github.com/apps/renovate)! - fix(deps): update
+  dependency commander to v15
+
+### Minor Changes
+
+- [`d34f28d`](https://github.com/reactjs/react-docgen/commit/d34f28d2e170ffd0000a3dca55ed556315f6c877)
+  Thanks [@danez](https://github.com/danez)! - Replace subcommand structure with
+  in-process commands for performance
+
+### Patch Changes
+
+- [#1121](https://github.com/reactjs/react-docgen/pull/1121)
+  [`2409437`](https://github.com/reactjs/react-docgen/commit/240943704167e5fa8308b36ad65f5176682f55b3)
+  Thanks [@danez](https://github.com/danez)! - Remove chalk dependency and
+  replace with builtin Node.js `styleText`
+
+- [#1120](https://github.com/reactjs/react-docgen/pull/1120)
+  [`2f01acf`](https://github.com/reactjs/react-docgen/commit/2f01acf3fe12f52bd4bc1b51617263f42383580c)
+  Thanks [@danez](https://github.com/danez)! - Remove slash dependency
+
+- Updated dependencies
+  [[`798e73d`](https://github.com/reactjs/react-docgen/commit/798e73dd4a73574c66dbee9dffb8e4af507b1059)]:
+  - react-docgen@9.0.0
+
 ## 3.0.6
 
 ### Patch Changes

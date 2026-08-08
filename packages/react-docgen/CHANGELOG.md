@@ -1,5 +1,16 @@
 # Release Notes
 
+## 9.0.0
+
+### Major Changes
+
+- [#1095](https://github.com/reactjs/react-docgen/pull/1095)
+  [`798e73d`](https://github.com/reactjs/react-docgen/commit/798e73dd4a73574c66dbee9dffb8e4af507b1059)
+  Thanks [@danez](https://github.com/danez)! - Drop support for Node.js 20, 21
+  and 23
+
+  Minimum Supported Node.js version is now 22.13.0
+
 ## 8.0.3
 
 ### Patch Changes
