@@ -37,7 +37,7 @@ jobs:
 
       - name: Run Changesets
         id: changesets
-        uses: changesets/action@v1
+        uses: changesets/action@198f833dd7d863100ea6e28967bc9a9fdefadb0a # v2.1.0
         with:
           publish: pnpm changesets-release
           version: pnpm changesets-version
