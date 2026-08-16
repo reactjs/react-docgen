@@ -1,12 +1,13 @@
-import type { ParserOptions, TransformOptions } from '@babel/core';
-import { loadPartialConfig, parseSync } from '@babel/core';
+import type { InputOptions } from '@babel/core';
+import { loadPartialConfigSync, parseSync } from '@babel/core';
+import type { ParserOptions } from '@babel/parser';
 import type { File } from '@babel/types';
 import { extname } from 'path';
 
 const TYPESCRIPT_EXTS = new Set(['.cts', '.mts', '.ts', '.tsx']);
 
 function getDefaultPlugins(
-  options: TransformOptions,
+  options: InputOptions,
 ): NonNullable<ParserOptions['plugins']> {
   return [
     'jsx',
@@ -14,25 +15,22 @@ function getDefaultPlugins(
       ? 'typescript'
       : 'flow',
     'asyncDoExpressions',
-    'decimal',
     ['decorators', { decoratorsBeforeExport: false }],
     'decoratorAutoAccessors',
     'destructuringPrivate',
     'doExpressions',
     'exportDefaultFrom',
     'functionBind',
-    'importAssertions',
     'moduleBlocks',
     'partialApplication',
-    ['pipelineOperator', { proposal: 'minimal' }],
-    ['recordAndTuple', { syntaxType: 'bar' }],
+    ['pipelineOperator', { proposal: 'fsharp' }],
     'regexpUnicodeSets',
     'throwExpressions',
   ];
 }
 
 function buildPluginList(
-  options: TransformOptions,
+  options: InputOptions,
 ): NonNullable<ParserOptions['plugins']> {
   let plugins: NonNullable<ParserOptions['plugins']> = [];
 
@@ -42,7 +40,7 @@ function buildPluginList(
 
   // Let's check if babel finds a config file for this source file
   // If babel does find a config file we do not apply our defaults
-  const partialConfig = loadPartialConfig(options);
+  const partialConfig = loadPartialConfigSync(options);
 
   if (
     plugins.length === 0 &&
@@ -57,7 +55,7 @@ function buildPluginList(
   return plugins.filter((plugin) => plugin !== 'estree');
 }
 
-function buildParserOptions(options: TransformOptions): ParserOptions {
+function buildParserOptions(options: InputOptions): ParserOptions {
   const plugins = buildPluginList(options);
 
   return {
@@ -70,10 +68,10 @@ function buildParserOptions(options: TransformOptions): ParserOptions {
 
 export default function babelParser(
   src: string,
-  options: TransformOptions = {},
+  options: InputOptions = {},
 ): File {
   const parserOpts = buildParserOptions(options);
-  const opts: TransformOptions = {
+  const opts: InputOptions = {
     ...options,
     parserOpts,
   };
