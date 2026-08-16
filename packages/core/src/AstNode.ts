@@ -3,7 +3,7 @@ export interface AstNode {
   readonly [key: string]: unknown;
 }
 
-export type VisitorKeys = Readonly<Record<string, readonly string[]>>;
+export type VisitorKeys = Readonly<Partial<Record<string, readonly string[]>>>;
 
 export function isAstNode(value: unknown): value is AstNode {
   return (

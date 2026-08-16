@@ -308,6 +308,18 @@ importers:
         specifier: 4.1.13
         version: 4.1.13
 
+  packages/typescript:
+    dependencies:
+      '@react-docgen/core':
+        specifier: workspace:*
+        version: link:../core
+      '@typescript-eslint/typescript-estree':
+        specifier: 8.67.0
+        version: 8.67.0(supports-color@7.2.0)(typescript@6.0.3)
+      '@typescript-eslint/visitor-keys':
+        specifier: 8.67.0
+        version: 8.67.0
+
   packages/website:
     dependencies:
       '@codemirror/lang-javascript':

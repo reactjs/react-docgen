@@ -5,9 +5,11 @@ describe('ProjectContext', () => {
   test('selects a parser for every imported file', () => {
     const typescript: Parser = {
       parse: ({ filename }) => ({ type: 'TypeScriptFile', filename }),
+      visitorKeys: {},
     };
     const hermes: Parser = {
       parse: ({ filename }) => ({ type: 'HermesFile', filename }),
+      visitorKeys: {},
     };
     const selectParser = vi.fn((filename: string) =>
       filename.endsWith('.tsx') ? typescript : hermes,

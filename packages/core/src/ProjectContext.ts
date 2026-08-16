@@ -1,4 +1,7 @@
 import type { AstNode } from './AstNode.js';
+import AstPath from './AstPath.js';
+import type { VisitorKeys } from './AstNode.js';
+import traverse, { type Visitor } from './traverse.js';
 
 export interface SourceFile {
   readonly code: string;
@@ -6,6 +9,7 @@ export interface SourceFile {
 }
 
 export interface Parser {
+  readonly visitorKeys: VisitorKeys;
   parse(source: SourceFile): AstNode;
 }
 
@@ -14,18 +18,31 @@ export type Importer = (specifier: string, fromFilename: string) => SourceFile;
 
 export class FileState {
   readonly ast: AstNode;
+  readonly path: AstPath;
   readonly source: SourceFile;
+  readonly visitorKeys: VisitorKeys;
 
   readonly #project: ProjectContext;
 
-  constructor(project: ProjectContext, source: SourceFile, ast: AstNode) {
+  constructor(
+    project: ProjectContext,
+    source: SourceFile,
+    ast: AstNode,
+    visitorKeys: VisitorKeys,
+  ) {
     this.#project = project;
     this.source = source;
     this.ast = ast;
+    this.path = new AstPath({ node: ast });
+    this.visitorKeys = visitorKeys;
   }
 
   import(specifier: string): FileState {
     return this.#project.import(specifier, this.source.filename);
+  }
+
+  traverse<State>(visitor: Visitor<State>, state: State): void {
+    traverse(this.ast, this.visitorKeys, visitor, state);
   }
 }
 
@@ -44,9 +61,10 @@ export default class ProjectContext {
   }
 
   parse(source: SourceFile): FileState {
-    const ast = this.#selectParser(source.filename).parse(source);
+    const parser = this.#selectParser(source.filename);
+    const ast = parser.parse(source);
 
-    return new FileState(this, source, ast);
+    return new FileState(this, source, ast, parser.visitorKeys);
   }
 
   import(specifier: string, fromFilename: string): FileState {

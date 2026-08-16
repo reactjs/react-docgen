@@ -1,8 +1,16 @@
 {
   "name": "@react-docgen/core",
   "version": "0.0.0",
-  "private": true,
   "description": "Parser-neutral foundations for react-docgen.",
+  "publishConfig": {
+    "provenance": true,
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/reactjs/react-docgen.git",
+    "directory": "packages/core"
+  },
   "type": "module",
   "files": [
     "dist"
@@ -15,5 +23,6 @@
   "scripts": {
     "build": "rimraf dist/ && tsc",
     "test": "vitest run"
-  }
+  },
+  "license": "MIT"
 }
