@@ -36,6 +36,7 @@ export interface PropTypeDescriptor {
     | 'any'
     | 'array'
     | 'arrayOf'
+    | 'bigint'
     | 'bool'
     | 'custom'
     | 'element'

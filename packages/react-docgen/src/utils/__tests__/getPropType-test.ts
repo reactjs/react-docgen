@@ -8,6 +8,7 @@ describe('getPropType', () => {
   test('detects simple prop types', () => {
     const simplePropTypes = [
       'array',
+      'bigint',
       'bool',
       'func',
       'number',
