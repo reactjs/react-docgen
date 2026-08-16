@@ -1,0 +1,23 @@
+{
+  "name": "@react-docgen-internal/integration-tests",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Shared integration fixtures for react-docgen parsers.",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "cases",
+    "dist"
+  ],
+  "scripts": {
+    "build": "rimraf dist/ && tsc"
+  },
+  "license": "MIT"
+}

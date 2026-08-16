@@ -1,0 +1,23 @@
+[
+  {
+    "description": "This is a Flow component with imported prop types",
+    "displayName": "ImportedExtendedComponent",
+    "methods": [],
+    "props": {
+      "foo": {
+        "required": true,
+        "flowType": {
+          "name": "string"
+        },
+        "description": ""
+      },
+      "bar": {
+        "required": true,
+        "flowType": {
+          "name": "number"
+        },
+        "description": ""
+      }
+    }
+  }
+]

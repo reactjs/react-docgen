@@ -1,0 +1,63 @@
+[
+  {
+    "description": "This is a typescript class component",
+    "displayName": "TSComponent",
+    "methods": [],
+    "props": {
+      "foo": {
+        "required": false,
+        "tsType": {
+          "name": "string"
+        },
+        "description": "Optional prop"
+      },
+      "bar": {
+        "required": true,
+        "tsType": {
+          "name": "number"
+        },
+        "description": "Required prop"
+      },
+      "baz": {
+        "required": true,
+        "tsType": {
+          "name": "union",
+          "raw": "number | { enter?: number, exit?: number } | 'auto'",
+          "elements": [
+            {
+              "name": "number"
+            },
+            {
+              "name": "signature",
+              "type": "object",
+              "raw": "{ enter?: number, exit?: number }",
+              "signature": {
+                "properties": [
+                  {
+                    "key": "enter",
+                    "value": {
+                      "name": "number",
+                      "required": false
+                    }
+                  },
+                  {
+                    "key": "exit",
+                    "value": {
+                      "name": "number",
+                      "required": false
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "name": "literal",
+              "value": "'auto'"
+            }
+          ]
+        },
+        "description": "Complex union prop"
+      }
+    }
+  }
+]

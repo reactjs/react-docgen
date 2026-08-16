@@ -43,11 +43,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Unit tests with coverage
+      - name: Tests with coverage
         if: "${{ matrix.node == env.NODE_VERSION }}"
         run: pnpm test -- --coverage
 
-      - name: Unit tests
+      - name: Tests
         if: "${{ matrix.node != env.NODE_VERSION }}"
         run: pnpm test
 

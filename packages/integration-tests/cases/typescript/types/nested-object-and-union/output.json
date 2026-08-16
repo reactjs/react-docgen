@@ -1,0 +1,92 @@
+[
+  {
+    "description": "This is a TypeScript function component",
+    "displayName": "TSFunctionComponent",
+    "methods": [],
+    "props": {
+      "align": {
+        "required": false,
+        "tsType": {
+          "name": "union",
+          "raw": "\"left\" | \"center\" | \"right\" | \"justify\"",
+          "elements": [
+            {
+              "name": "literal",
+              "value": "\"left\""
+            },
+            {
+              "name": "literal",
+              "value": "\"center\""
+            },
+            {
+              "name": "literal",
+              "value": "\"right\""
+            },
+            {
+              "name": "literal",
+              "value": "\"justify\""
+            }
+          ]
+        },
+        "description": ""
+      },
+      "left": {
+        "required": false,
+        "tsType": {
+          "name": "boolean"
+        },
+        "description": ""
+      },
+      "center": {
+        "required": false,
+        "tsType": {
+          "name": "boolean"
+        },
+        "description": ""
+      },
+      "right": {
+        "required": false,
+        "tsType": {
+          "name": "boolean"
+        },
+        "description": ""
+      },
+      "justify": {
+        "required": false,
+        "tsType": {
+          "name": "boolean"
+        },
+        "description": ""
+      },
+      "position": {
+        "required": true,
+        "tsType": {
+          "name": "signature",
+          "type": "object",
+          "raw": "{\n  /**\n   * x coordinate doc\n   */\n  x: number,\n  /**\n   * y coordinate doc\n   */\n  y: number\n}",
+          "signature": {
+            "properties": [
+              {
+                "key": "x",
+                "value": {
+                  "name": "number",
+                  "required": true
+                },
+                "description": "x coordinate doc"
+              },
+              {
+                "key": "y",
+                "value": {
+                  "name": "number",
+                  "required": true
+                },
+                "description": "y coordinate doc"
+              }
+            ]
+          }
+        },
+        "description": "position doc"
+      }
+    }
+  }
+]

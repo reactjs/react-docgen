@@ -29,5 +29,8 @@
     "@typescript-eslint/typescript-estree": "8.67.0",
     "@typescript-eslint/visitor-keys": "8.67.0"
   },
+  "devDependencies": {
+    "@react-docgen-internal/integration-tests": "workspace:*"
+  },
   "license": "MIT"
 }

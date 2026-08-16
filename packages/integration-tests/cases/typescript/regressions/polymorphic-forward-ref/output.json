@@ -1,0 +1,37 @@
+[
+  {
+    "description": "",
+    "displayName": "MenuItem",
+    "methods": [],
+    "props": {
+      "children": {
+        "type": {
+          "name": "node"
+        },
+        "required": false,
+        "description": "Menu item contents."
+      },
+      "classes": {
+        "type": {
+          "name": "object"
+        },
+        "required": false,
+        "description": "Override or extend the styles applied to the component. See CSS API below for more details."
+      },
+      "component": {
+        "defaultValue": {
+          "value": "'li'",
+          "computed": false
+        },
+        "required": false
+      },
+      "disableGutters": {
+        "defaultValue": {
+          "value": "false",
+          "computed": false
+        },
+        "required": false
+      }
+    }
+  }
+]

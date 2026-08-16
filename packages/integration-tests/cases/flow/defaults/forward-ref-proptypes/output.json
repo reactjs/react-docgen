@@ -1,0 +1,31 @@
+[
+  {
+    "description": "",
+    "displayName": "UncoloredView",
+    "methods": [],
+    "props": {
+      "color": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "",
+        "flowType": {
+          "name": "string",
+          "nullable": true
+        }
+      },
+      "id": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "'test-forward-ref-default'",
+          "computed": false
+        }
+      }
+    }
+  }
+]

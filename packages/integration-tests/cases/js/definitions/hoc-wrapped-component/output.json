@@ -1,0 +1,16 @@
+[
+  {
+    "description": "",
+    "displayName": "Test",
+    "methods": [],
+    "props": {
+      "style": {
+        "type": {
+          "name": "object"
+        },
+        "required": false,
+        "description": ""
+      }
+    }
+  }
+]

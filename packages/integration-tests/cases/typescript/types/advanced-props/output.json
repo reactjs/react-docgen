@@ -1,0 +1,231 @@
+[
+  {
+    "description": "Exercises advanced TypeScript prop type extraction.",
+    "displayName": "AdvancedTypeScriptTypes",
+    "methods": [],
+    "props": {
+      "keys": {
+        "required": true,
+        "tsType": {
+          "name": "values"
+        },
+        "description": ""
+      },
+      "value": {
+        "required": true,
+        "tsType": {
+          "name": "values[values]",
+          "raw": "Values[keyof Values]"
+        },
+        "description": ""
+      },
+      "mapped": {
+        "required": true,
+        "tsType": {
+          "name": "signature",
+          "type": "object",
+          "raw": "{ [Key in keyof Values]?: Values[Key] }",
+          "signature": {
+            "properties": [
+              {
+                "key": {
+                  "name": "values",
+                  "required": false
+                },
+                "value": {
+                  "name": "values[Key]",
+                  "raw": "Values[Key]"
+                }
+              }
+            ]
+          }
+        },
+        "description": ""
+      },
+      "children": {
+        "required": true,
+        "tsType": {
+          "name": "ReactReactNode",
+          "raw": "React.ReactNode"
+        },
+        "description": ""
+      },
+      "component": {
+        "required": true,
+        "tsType": {
+          "name": "ReactComponentType",
+          "raw": "React.ComponentType<{ enabled: boolean }>",
+          "elements": [
+            {
+              "name": "signature",
+              "type": "object",
+              "raw": "{ enabled: boolean }",
+              "signature": {
+                "properties": [
+                  {
+                    "key": "enabled",
+                    "value": {
+                      "name": "boolean",
+                      "required": true
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "description": ""
+      },
+      "callable": {
+        "required": true,
+        "tsType": {
+          "name": "Callable"
+        },
+        "description": ""
+      },
+      "rest": {
+        "required": true,
+        "tsType": {
+          "name": "signature",
+          "type": "function",
+          "raw": "(...values: string[]) => void",
+          "signature": {
+            "arguments": [
+              {
+                "type": {
+                  "name": "Array",
+                  "elements": [
+                    {
+                      "name": "string"
+                    }
+                  ],
+                  "raw": "string[]"
+                },
+                "name": "values",
+                "rest": true
+              }
+            ],
+            "return": {
+              "name": "void"
+            }
+          }
+        },
+        "description": ""
+      },
+      "neverValue": {
+        "required": true,
+        "tsType": {
+          "name": "never"
+        },
+        "description": ""
+      },
+      "nullValue": {
+        "required": true,
+        "tsType": {
+          "name": "null"
+        },
+        "description": ""
+      },
+      "undefinedValue": {
+        "required": true,
+        "tsType": {
+          "name": "undefined"
+        },
+        "description": ""
+      },
+      "symbolValue": {
+        "required": true,
+        "tsType": {
+          "name": "symbol"
+        },
+        "description": ""
+      },
+      "objectValue": {
+        "required": true,
+        "tsType": {
+          "name": "object"
+        },
+        "description": ""
+      },
+      "action": {
+        "required": true,
+        "tsType": {
+          "name": "signature",
+          "type": "object",
+          "raw": "{ subAction?: Action }",
+          "signature": {
+            "properties": [
+              {
+                "key": "subAction",
+                "value": {
+                  "name": "Action",
+                  "required": false
+                }
+              }
+            ]
+          }
+        },
+        "description": ""
+      },
+      "interfaceIndex": {
+        "required": true,
+        "tsType": {
+          "name": "IndexedInterface['x']",
+          "raw": "IndexedInterface['x']"
+        },
+        "description": ""
+      },
+      "qualifiedTypeof": {
+        "required": true,
+        "tsType": {
+          "name": "values.first"
+        },
+        "description": ""
+      },
+      "inlineKeys": {
+        "required": true,
+        "tsType": {
+          "name": "union",
+          "raw": "keyof { apple: string; banana: string }",
+          "elements": [
+            {
+              "name": "literal",
+              "value": "apple"
+            },
+            {
+              "name": "literal",
+              "value": "banana"
+            }
+          ]
+        },
+        "description": ""
+      },
+      "ref": {
+        "required": true,
+        "tsType": {
+          "name": "ReactRef",
+          "raw": "React.Ref<typeof AdvancedTypeScriptTypes>",
+          "elements": [
+            {
+              "name": "AdvancedTypeScriptTypes"
+            }
+          ]
+        },
+        "description": ""
+      },
+      "childrenArray": {
+        "required": true,
+        "tsType": {
+          "name": "ReactChildrenArray",
+          "raw": "React.ChildrenArray<string>",
+          "elements": [
+            {
+              "name": "string"
+            }
+          ]
+        },
+        "description": ""
+      }
+    }
+  }
+]

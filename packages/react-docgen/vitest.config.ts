@@ -10,9 +10,20 @@ export default defineConfig({
     },
     coverage: {
       include: ['src/**'],
-      exclude: ['**/__mocks__/**', '**/__tests__/**'],
+      exclude: [
+        '**/__mocks__/**',
+        '**/__snapshots__/**',
+        '**/__tests__/**',
+        '**/*-test.ts',
+      ],
       provider: 'v8',
       reporter: ['text', 'lcov'],
+      thresholds: {
+        statements: 84,
+        branches: 74,
+        functions: 94,
+        lines: 84,
+      },
     },
   },
 });

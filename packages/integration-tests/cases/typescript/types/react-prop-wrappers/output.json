@@ -1,0 +1,16 @@
+[
+  {
+    "description": "Exercises nested built-in React prop wrappers.",
+    "displayName": "WrappedPropsComponent",
+    "methods": [],
+    "props": {
+      "label": {
+        "description": "Required label.",
+        "required": true,
+        "tsType": {
+          "name": "string"
+        }
+      }
+    }
+  }
+]

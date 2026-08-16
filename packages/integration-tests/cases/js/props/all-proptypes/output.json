@@ -1,0 +1,144 @@
+[
+  {
+    "description": "",
+    "displayName": "PropTypeShowcase",
+    "methods": [],
+    "props": {
+      "anything": {
+        "type": {
+          "name": "any"
+        },
+        "required": false,
+        "description": ""
+      },
+      "list": {
+        "type": {
+          "name": "arrayOf",
+          "value": {
+            "name": "string"
+          }
+        },
+        "required": true,
+        "description": ""
+      },
+      "enabled": {
+        "type": {
+          "name": "bool"
+        },
+        "required": false,
+        "description": ""
+      },
+      "callback": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": ""
+      },
+      "count": {
+        "type": {
+          "name": "number"
+        },
+        "required": false,
+        "description": ""
+      },
+      "model": {
+        "type": {
+          "name": "instanceOf",
+          "value": "Model"
+        },
+        "required": false,
+        "description": ""
+      },
+      "choice": {
+        "type": {
+          "name": "enum",
+          "value": [
+            {
+              "value": "'small'",
+              "computed": false
+            },
+            {
+              "value": "'large'",
+              "computed": false
+            }
+          ]
+        },
+        "required": false,
+        "description": ""
+      },
+      "value": {
+        "type": {
+          "name": "union",
+          "value": [
+            {
+              "name": "string"
+            },
+            {
+              "name": "number"
+            }
+          ]
+        },
+        "required": false,
+        "description": ""
+      },
+      "values": {
+        "type": {
+          "name": "objectOf",
+          "value": {
+            "name": "number"
+          }
+        },
+        "required": false,
+        "description": ""
+      },
+      "node": {
+        "type": {
+          "name": "node"
+        },
+        "required": false,
+        "description": ""
+      },
+      "element": {
+        "type": {
+          "name": "element"
+        },
+        "required": false,
+        "description": ""
+      },
+      "elementType": {
+        "type": {
+          "name": "elementType"
+        },
+        "required": false,
+        "description": ""
+      },
+      "shape": {
+        "type": {
+          "name": "shape",
+          "value": {
+            "nested": {
+              "name": "bool",
+              "required": true
+            }
+          }
+        },
+        "required": false,
+        "description": ""
+      },
+      "exact": {
+        "type": {
+          "name": "exact",
+          "value": {
+            "id": {
+              "name": "number",
+              "required": false
+            }
+          }
+        },
+        "required": false,
+        "description": ""
+      }
+    }
+  }
+]

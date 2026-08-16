@@ -1,0 +1,30 @@
+[
+  {
+    "description": "",
+    "displayName": "SuperCustomButton",
+    "methods": [],
+    "props": {
+      "children": {
+        "type": {
+          "name": "string"
+        },
+        "required": true,
+        "description": ""
+      },
+      "onClick": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": ""
+      },
+      "style": {
+        "type": {
+          "name": "object"
+        },
+        "required": false,
+        "description": ""
+      }
+    }
+  }
+]

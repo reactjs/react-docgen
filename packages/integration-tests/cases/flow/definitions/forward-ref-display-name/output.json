@@ -1,0 +1,17 @@
+[
+  {
+    "description": "",
+    "displayName": "UncoloredView",
+    "methods": [],
+    "props": {
+      "color": {
+        "required": false,
+        "flowType": {
+          "name": "string",
+          "nullable": true
+        },
+        "description": ""
+      }
+    }
+  }
+]

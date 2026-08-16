@@ -1,5 +1,3 @@
-import fs from 'fs';
-import { fileURLToPath } from 'url';
 import { describe, expect, test } from 'vitest';
 import {
   isIdentifier,
@@ -7,12 +5,7 @@ import {
   traverse,
   type AstNode,
 } from '@react-docgen/core';
-import { parse, parser } from '../index.js';
-
-const filename = fileURLToPath(
-  new URL('../__fixtures__/function-component.tsx', import.meta.url),
-);
-const source = fs.readFileSync(filename, 'utf8');
+import { parser } from '../index.js';
 
 describe('@react-docgen/typescript', () => {
   test.each([
@@ -62,46 +55,5 @@ describe('@react-docgen/typescript', () => {
       ?.id as AstNode;
 
     expect(isIdentifier(identifier, { name: 'answer' })).toBe(true);
-  });
-
-  test('extracts an exported function component', () => {
-    expect(parse(source, { filename })).toEqual([
-      {
-        description: 'Renders a button.',
-        displayName: 'Button',
-        methods: [],
-        props: {
-          disabled: {
-            defaultValue: {
-              computed: false,
-              value: 'false',
-            },
-            description: 'Prevents interaction.',
-            required: false,
-            tsType: { name: 'boolean' },
-          },
-          label: {
-            description: 'Text shown inside the button.',
-            required: true,
-            tsType: { name: 'string' },
-          },
-        },
-      },
-    ]);
-  });
-
-  test('extracts a JavaScript function component', () => {
-    expect(
-      parse(
-        '/** Greets the user. */ export function Greeting() { return <div />; }',
-        { filename: 'component.jsx' },
-      ),
-    ).toEqual([
-      {
-        description: 'Greets the user.',
-        displayName: 'Greeting',
-        methods: [],
-      },
-    ]);
   });
 });

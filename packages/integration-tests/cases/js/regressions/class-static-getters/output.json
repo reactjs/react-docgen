@@ -1,0 +1,37 @@
+[
+  {
+    "description": "",
+    "displayName": "button",
+    "methods": [
+      {
+        "name": "displayName",
+        "docblock": null,
+        "modifiers": [
+          "static",
+          "get"
+        ],
+        "params": [],
+        "returns": null
+      },
+      {
+        "name": "defaultProps",
+        "docblock": null,
+        "modifiers": [
+          "static",
+          "get"
+        ],
+        "params": [],
+        "returns": null
+      }
+    ],
+    "props": {
+      "type": {
+        "defaultValue": {
+          "value": "\"primary\"",
+          "computed": false
+        },
+        "required": false
+      }
+    }
+  }
+]

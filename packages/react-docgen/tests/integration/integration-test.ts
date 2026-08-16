@@ -1,43 +1,26 @@
-import fs from 'fs';
-import { dirname, join } from 'path';
 import { describe, expect, test } from 'vitest';
+import { loadIntegrationCases } from '@react-docgen-internal/integration-tests';
 import { parse, makeFsImporter } from '../../src/main';
-import { fileURLToPath } from 'url';
-import { assertFixtureIsClassified } from './fixtureCapabilities';
 
 describe('integration', () => {
-  describe('fixtures', () => {
-    const fixturePath = join(
-      dirname(fileURLToPath(import.meta.url)),
-      '__fixtures__',
-    );
-    const fileNames = fs.readdirSync(fixturePath, { withFileTypes: true });
+  for (const integrationCase of loadIntegrationCases()) {
+    test(integrationCase.id, () => {
+      const run = () =>
+        parse(integrationCase.source, {
+          importer: makeFsImporter(),
+          babelOptions: {
+            filename: integrationCase.filename,
+            babelrc: false,
+          },
+        });
 
-    for (const entry of fileNames) {
-      if (entry.isDirectory()) {
-        continue;
+      if (integrationCase.error) {
+        expect(run).toThrow(
+          expect.objectContaining({ code: integrationCase.error.code }),
+        );
+      } else {
+        expect(run()).toEqual(integrationCase.output);
       }
-      const name = entry.name;
-
-      assertFixtureIsClassified(name);
-
-      const filePath = join(fixturePath, name);
-      const fileContent = fs.readFileSync(filePath, 'utf8');
-
-      test(`processes component "${name}" without errors`, () => {
-        let result;
-
-        expect(() => {
-          result = parse(fileContent, {
-            importer: makeFsImporter(),
-            babelOptions: {
-              filename: filePath,
-              babelrc: false,
-            },
-          });
-        }).not.toThrow();
-        expect(result).toMatchSnapshot();
-      });
-    }
-  });
+    });
+  }
 });

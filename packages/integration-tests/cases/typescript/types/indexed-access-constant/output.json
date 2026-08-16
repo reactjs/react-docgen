@@ -1,0 +1,17 @@
+[
+  {
+    "description": "",
+    "displayName": "MyComponent",
+    "methods": [],
+    "props": {
+      "value": {
+        "required": false,
+        "tsType": {
+          "name": "STRING_VALS[number]",
+          "raw": "typeof STRING_VALS[number]"
+        },
+        "description": "String value of a number"
+      }
+    }
+  }
+]

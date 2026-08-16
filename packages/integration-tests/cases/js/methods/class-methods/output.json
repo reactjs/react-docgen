@@ -1,0 +1,21 @@
+[
+  {
+    "description": "",
+    "displayName": "Parent",
+    "methods": [
+      {
+        "name": "onChangeSlider",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "[min, max]",
+            "optional": false,
+            "type": null
+          }
+        ],
+        "returns": null
+      }
+    ]
+  }
+]

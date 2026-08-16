@@ -1,0 +1,180 @@
+[
+  {
+    "description": "",
+    "displayName": "Paper",
+    "methods": [],
+    "props": {
+      "classes": {
+        "required": false,
+        "flowType": {
+          "name": "Object"
+        },
+        "description": "Useful to extend the style applied to components."
+      },
+      "anchorOrigin": {
+        "required": false,
+        "flowType": {
+          "name": "signature",
+          "type": "object",
+          "raw": "{\n  horizontal: 'left' | 'center' | 'right' | number,\n  vertical: 'top' | 'center' | 'bottom' | number,\n}",
+          "signature": {
+            "properties": [
+              {
+                "key": "horizontal",
+                "value": {
+                  "name": "union",
+                  "raw": "'left' | 'center' | 'right' | number",
+                  "elements": [
+                    {
+                      "name": "literal",
+                      "value": "'left'"
+                    },
+                    {
+                      "name": "literal",
+                      "value": "'center'"
+                    },
+                    {
+                      "name": "literal",
+                      "value": "'right'"
+                    },
+                    {
+                      "name": "number"
+                    }
+                  ],
+                  "required": true
+                }
+              },
+              {
+                "key": "vertical",
+                "value": {
+                  "name": "union",
+                  "raw": "'top' | 'center' | 'bottom' | number",
+                  "elements": [
+                    {
+                      "name": "literal",
+                      "value": "'top'"
+                    },
+                    {
+                      "name": "literal",
+                      "value": "'center'"
+                    },
+                    {
+                      "name": "literal",
+                      "value": "'bottom'"
+                    },
+                    {
+                      "name": "number"
+                    }
+                  ],
+                  "required": true
+                }
+              }
+            ]
+          }
+        },
+        "description": "This is the point on the anchor where the popover's\n`anchorEl` will attach to. This is not used when the\nanchorReference is 'anchorPosition'.\n\nOptions:\nvertical: [top, center, bottom];\nhorizontal: [left, center, right].",
+        "defaultValue": {
+          "value": "{\n  vertical: 'top',\n  horizontal: 'left',\n}",
+          "computed": false
+        }
+      },
+      "children": {
+        "required": false,
+        "flowType": {
+          "name": "Node"
+        },
+        "description": "@ignore"
+      },
+      "component": {
+        "required": false,
+        "flowType": {
+          "name": "ElementType"
+        },
+        "description": "The component used for the root node.\nThis currently has to be flow cast in defaultProps as of flow 0.59.0",
+        "defaultValue": {
+          "value": "'div'",
+          "computed": false
+        }
+      },
+      "elevation": {
+        "required": false,
+        "flowType": {
+          "name": "number"
+        },
+        "description": "Shadow depth, corresponds to `dp` in the spec.\nIt's accepting values between 0 and 24 inclusive.",
+        "defaultValue": {
+          "value": "2",
+          "computed": false
+        }
+      },
+      "labelRowsPerPage": {
+        "required": false,
+        "flowType": {
+          "name": "Node"
+        },
+        "description": "Useful to customize the rows per page label. Invoked with a `{ from, to, count, page }`\nobject.",
+        "defaultValue": {
+          "value": "'Rows per page:'",
+          "computed": false
+        }
+      },
+      "transition": {
+        "required": true,
+        "flowType": {
+          "name": "ComponentType",
+          "elements": [
+            {
+              "name": "unknown"
+            }
+          ],
+          "raw": "ComponentType<*>"
+        },
+        "description": "Transition component."
+      },
+      "timeout": {
+        "required": false,
+        "flowType": {
+          "name": "union",
+          "raw": "number | { enter?: number, exit?: number } | 'auto'",
+          "elements": [
+            {
+              "name": "number"
+            },
+            {
+              "name": "signature",
+              "type": "object",
+              "raw": "{ enter?: number, exit?: number }",
+              "signature": {
+                "properties": [
+                  {
+                    "key": "enter",
+                    "value": {
+                      "name": "number",
+                      "required": false
+                    }
+                  },
+                  {
+                    "key": "exit",
+                    "value": {
+                      "name": "number",
+                      "required": false
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "name": "literal",
+              "value": "'auto'"
+            }
+          ]
+        },
+        "description": "The duration for the transition, in milliseconds.\nYou may specify a single timeout for all transitions, or individually with an object.\n\nSet to 'auto' to automatically calculate transition time based on height.",
+        "defaultValue": {
+          "value": "300",
+          "computed": false
+        }
+      }
+    }
+  }
+]

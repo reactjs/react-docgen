@@ -233,7 +233,7 @@ importers:
         specifier: 5.0.5
         version: 5.0.5(@types/node@22.20.5)(@vitest/coverage-v8@5.0.5)(vite@8.3.5(@types/node@22.20.5)(jiti@2.7.0)(yaml@2.9.1))
 
-  benchmark:
+  packages/benchmark:
     dependencies:
       benchmark:
         specifier: 2.1.4
@@ -255,6 +255,8 @@ importers:
         version: react-docgen@6.0.0(supports-color@7.2.0)
 
   packages/core: {}
+
+  packages/integration-tests: {}
 
   packages/react-docgen:
     dependencies:
@@ -288,6 +290,10 @@ importers:
       strip-indent:
         specifier: ^4.0.0
         version: 4.1.1
+    devDependencies:
+      '@react-docgen-internal/integration-tests':
+        specifier: workspace:*
+        version: link:../integration-tests
 
   packages/react-docgen-cli:
     dependencies:
@@ -319,6 +325,10 @@ importers:
       '@typescript-eslint/visitor-keys':
         specifier: 8.67.0
         version: 8.67.0
+    devDependencies:
+      '@react-docgen-internal/integration-tests':
+        specifier: workspace:*
+        version: link:../integration-tests
 
   packages/website:
     dependencies:

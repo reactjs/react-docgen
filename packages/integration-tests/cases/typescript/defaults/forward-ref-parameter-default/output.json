@@ -1,0 +1,20 @@
+[
+  {
+    "description": "Example component description",
+    "displayName": "ABC",
+    "methods": [],
+    "props": {
+      "foo": {
+        "required": false,
+        "tsType": {
+          "name": "boolean"
+        },
+        "description": "Example prop description",
+        "defaultValue": {
+          "value": "true",
+          "computed": false
+        }
+      }
+    }
+  }
+]

@@ -88,6 +88,22 @@ ready for an explicitly requested release.
 Exit criteria: all applicable `common` and `typescript` fixtures match legacy
 output; no Babel types leak from new APIs.
 
+## Sidestep — Portable integration fixture corpus
+
+- [x] Move legacy fixtures into a private parser-free workspace package.
+- [x] Organize cases by language, behavior, and descriptive case ID.
+- [x] Replace the monolithic snapshot with one JSON outcome per case.
+- [x] Run all cases through legacy `react-docgen` and a temporary supported-case
+      allowlist through `@react-docgen/typescript`.
+- [x] Map disabled unit-test behaviors to portable fixtures or narrow, evidenced exclusions.
+- [x] Add coverage-driven fixtures without production changes or coverage hints.
+- [x] Record the integration-only plateau and enforce its integer-floor coverage
+      thresholds.
+
+Exit criteria: migrated output remains unchanged; all public behavior represented
+by disabled unit tests is covered or classified; legacy integration coverage
+cannot silently regress.
+
 ## Milestone 4 — Hermes and Flow
 
 - [ ] Add `@react-docgen/hermes` and normalize Hermes ESTree and Flow nodes.
@@ -198,3 +214,56 @@ Record every material plan change here before or with implementation.
   separate explicit action.
 - Reason: publishing is an external, irreversible release decision and is not
   implied by implementing the milestone.
+
+### 2026-08-16 — Hardened portable integration corpus before Milestone 3
+
+- Paused Milestone 3 to move 49 legacy fixtures and golden outputs into
+  `@react-docgen-internal/integration-tests`, grouped by language and behavior.
+- Replaced parser capability metadata with language directories and added a
+  validating dependency-free loader.
+- Added coverage-driven public behavior cases and a TypeScript adapter allowlist;
+  the legacy package remains the complete reference runner.
+- Started disabled unit-test dispositions in the corpus audit and expanded
+  integration-only coverage from 71.33% to 79.28% statements.
+- Reason: parser implementations need one portable observable-output contract;
+  unit tests tied to Babel paths cannot provide that contract.
+
+### 2026-08-16 — Reopened coverage expansion
+
+- Removed the initial 79/68/89/79 thresholds and withdrew the claimed behavioral
+  plateau.
+- Kept 92% coverage from the complete unit-and-integration suite as the practical
+  reachability benchmark for the integration corpus.
+- Reason: the earlier audit classified broad utility groups too aggressively;
+  the existing unit suite proves substantially more production code is reachable.
+
+### 2026-08-16 — Established default-parse coverage plateau
+
+- Expanded the corpus to 79 cases and reached 84.05% statements, 74.06%
+  branches, 94.62% functions, and 84.61% lines without production changes.
+- Set integer-floor thresholds at 84/74/94/84 after the final batch gained only
+  0.20 statement points and remaining regions were classified by reachability.
+- Explained the difference from the former 92% combined suite: unit tests cover
+  custom resolvers, directly exported helpers, and synthetic invalid AST states
+  excluded from the default parser corpus.
+
+### 2026-08-16 — Converted internal tooling packages
+
+- Converted `@react-docgen-internal/integration-tests` from handwritten MJS plus
+  declarations to a compiled TypeScript package.
+- Moved `@react-docgen-internal/benchmark` from the workspace root to
+  `packages/benchmark` and updated workspace, Renovate, lint, lockfile, and
+  runtime paths.
+- Reason: internal packages now follow the same workspace layout and TypeScript
+  build conventions as the parser packages.
+
+### 2026-08-16 — Recorded separate coverage contracts
+
+- Recorded 84.05/74.06/94.62/84.61 as the portable default-parse integration
+  baseline and 95.03/88.78/98.41/95.45 as the complete unit-and-integration
+  baseline.
+- Kept integration thresholds tied to the portable corpus rather than raising
+  them to complete-suite values.
+- Reason: unit tests additionally cover Babel-specific internals, public helper
+  APIs, custom resolvers, and synthetic AST states that parser adapters should
+  not need to reproduce through integration fixtures.

@@ -1,0 +1,254 @@
+[
+  {
+    "description": "",
+    "displayName": "Foo",
+    "methods": [],
+    "props": {
+      "align": {
+        "required": false,
+        "flowType": {
+          "name": "union",
+          "raw": "\"left\" | \"center\" | \"right\" | \"justify\"",
+          "elements": [
+            {
+              "name": "literal",
+              "value": "\"left\""
+            },
+            {
+              "name": "literal",
+              "value": "\"center\""
+            },
+            {
+              "name": "literal",
+              "value": "\"right\""
+            },
+            {
+              "name": "literal",
+              "value": "\"justify\""
+            }
+          ]
+        },
+        "description": ""
+      },
+      "left": {
+        "required": false,
+        "flowType": {
+          "name": "boolean"
+        },
+        "description": ""
+      },
+      "center": {
+        "required": false,
+        "flowType": {
+          "name": "boolean"
+        },
+        "description": ""
+      },
+      "right": {
+        "required": false,
+        "flowType": {
+          "name": "boolean"
+        },
+        "description": ""
+      },
+      "justify": {
+        "required": false,
+        "flowType": {
+          "name": "boolean"
+        },
+        "description": ""
+      },
+      "transform": {
+        "required": false,
+        "flowType": {
+          "name": "union",
+          "raw": "\"lowercase\" | \"uppercase\" | \"capitalize\"",
+          "elements": [
+            {
+              "name": "literal",
+              "value": "\"lowercase\""
+            },
+            {
+              "name": "literal",
+              "value": "\"uppercase\""
+            },
+            {
+              "name": "literal",
+              "value": "\"capitalize\""
+            }
+          ]
+        },
+        "description": ""
+      },
+      "lowercase": {
+        "required": false,
+        "flowType": {
+          "name": "boolean"
+        },
+        "description": ""
+      },
+      "uppercase": {
+        "required": false,
+        "flowType": {
+          "name": "boolean"
+        },
+        "description": ""
+      },
+      "capitalize": {
+        "required": false,
+        "flowType": {
+          "name": "boolean"
+        },
+        "description": ""
+      },
+      "tracking": {
+        "required": false,
+        "flowType": {
+          "name": "union",
+          "raw": "\"tight\" | \"normal\" | \"wide\"",
+          "elements": [
+            {
+              "name": "literal",
+              "value": "\"tight\""
+            },
+            {
+              "name": "literal",
+              "value": "\"normal\""
+            },
+            {
+              "name": "literal",
+              "value": "\"wide\""
+            }
+          ]
+        },
+        "description": ""
+      },
+      "trackingTight": {
+        "required": false,
+        "flowType": {
+          "name": "boolean"
+        },
+        "description": ""
+      },
+      "trackingNormal": {
+        "required": false,
+        "flowType": {
+          "name": "boolean"
+        },
+        "description": ""
+      },
+      "trackingWide": {
+        "required": false,
+        "flowType": {
+          "name": "boolean"
+        },
+        "description": ""
+      },
+      "leading": {
+        "required": false,
+        "flowType": {
+          "name": "union",
+          "raw": "\"none\" | \"tight\" | \"normal\" | \"loose\"",
+          "elements": [
+            {
+              "name": "literal",
+              "value": "\"none\""
+            },
+            {
+              "name": "literal",
+              "value": "\"tight\""
+            },
+            {
+              "name": "literal",
+              "value": "\"normal\""
+            },
+            {
+              "name": "literal",
+              "value": "\"loose\""
+            }
+          ]
+        },
+        "description": ""
+      },
+      "leadingNone": {
+        "required": false,
+        "flowType": {
+          "name": "boolean"
+        },
+        "description": ""
+      },
+      "leadingTight": {
+        "required": false,
+        "flowType": {
+          "name": "boolean"
+        },
+        "description": ""
+      },
+      "leadingNormal": {
+        "required": false,
+        "flowType": {
+          "name": "boolean"
+        },
+        "description": ""
+      },
+      "leadingLoose": {
+        "required": false,
+        "flowType": {
+          "name": "boolean"
+        },
+        "description": ""
+      },
+      "children": {
+        "required": false,
+        "flowType": {
+          "name": "ReactNode",
+          "raw": "React.Node"
+        },
+        "description": ""
+      },
+      "className": {
+        "required": false,
+        "flowType": {
+          "name": "string"
+        },
+        "description": ""
+      },
+      "RootComponent": {
+        "required": false,
+        "flowType": {
+          "name": "ReactElementType",
+          "raw": "React.ElementType"
+        },
+        "description": ""
+      },
+      "color": {
+        "required": false,
+        "flowType": {
+          "name": "string"
+        },
+        "description": ""
+      },
+      "size": {
+        "required": false,
+        "flowType": {
+          "name": "string"
+        },
+        "description": ""
+      },
+      "wrap": {
+        "required": false,
+        "flowType": {
+          "name": "boolean"
+        },
+        "description": ""
+      },
+      "muted": {
+        "required": false,
+        "flowType": {
+          "name": "boolean"
+        },
+        "description": ""
+      }
+    }
+  }
+]

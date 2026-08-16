@@ -1,0 +1,55 @@
+[
+  {
+    "description": "This is a Flow class component",
+    "displayName": "FlowComponent",
+    "methods": [
+      {
+        "name": "foo",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "a",
+            "optional": false,
+            "type": {
+              "name": "string"
+            }
+          }
+        ],
+        "returns": {
+          "type": {
+            "name": "string"
+          }
+        }
+      },
+      {
+        "name": "bar",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "a",
+            "optional": false,
+            "type": {
+              "name": "string"
+            }
+          }
+        ],
+        "returns": {
+          "type": {
+            "name": "string"
+          }
+        }
+      }
+    ],
+    "props": {
+      "foo": {
+        "required": true,
+        "flowType": {
+          "name": "string"
+        },
+        "description": ""
+      }
+    }
+  }
+]

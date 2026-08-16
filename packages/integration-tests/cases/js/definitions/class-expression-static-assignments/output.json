@@ -1,0 +1,20 @@
+[
+  {
+    "description": "",
+    "displayName": "AssignedClassDisplayName",
+    "methods": [],
+    "props": {
+      "label": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "Visible text.",
+        "defaultValue": {
+          "value": "'default'",
+          "computed": false
+        }
+      }
+    }
+  }
+]

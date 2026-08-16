@@ -1,0 +1,46 @@
+[
+  {
+    "description": "React component that display current time at current location.",
+    "displayName": "Clock",
+    "methods": [
+      {
+        "name": "updateClock",
+        "docblock": "Update clock state with new time",
+        "modifiers": [],
+        "params": [],
+        "returns": null,
+        "description": "Update clock state with new time"
+      },
+      {
+        "name": "getTime",
+        "docblock": "Parse current Date object\n\n@returns {Object} currentTime\n   @returns {int} currentTime.hour\n   @returns {int} currentTime.minutes\n   @returns {string} currentTime.ampm \"am\" or \"pm\"\n   @returns {string} currentTime.dayOfWeek\n   @returns {string} currentTime.month\n   @returns {int} currentTime.date",
+        "modifiers": [],
+        "params": [],
+        "returns": {
+          "description": "currentTime",
+          "type": {
+            "name": "Object"
+          }
+        },
+        "description": "Parse current Date object"
+      },
+      {
+        "name": "setTimer",
+        "docblock": "Update current clock for every 1 second",
+        "modifiers": [],
+        "params": [],
+        "returns": null,
+        "description": "Update current clock for every 1 second"
+      }
+    ],
+    "props": {
+      "title": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "A text display current's user identity,\n \"Nobody\" if no one is detected in the background,\n \"Hi, ..name\" if an user is detected"
+      }
+    }
+  }
+]

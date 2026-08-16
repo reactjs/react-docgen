@@ -1,0 +1,20 @@
+[
+  {
+    "description": "",
+    "displayName": "Button",
+    "methods": [],
+    "props": {
+      "@computed#children": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "This is a test",
+        "defaultValue": {
+          "value": "\"default\"",
+          "computed": false
+        }
+      }
+    }
+  }
+]

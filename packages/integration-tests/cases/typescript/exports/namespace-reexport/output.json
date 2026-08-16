@@ -1,0 +1,15 @@
+[
+  {
+    "description": "",
+    "methods": [],
+    "props": {
+      "value": {
+        "required": true,
+        "tsType": {
+          "name": "string"
+        },
+        "description": ""
+      }
+    }
+  }
+]

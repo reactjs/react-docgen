@@ -6,8 +6,9 @@ import tseslint from 'typescript-eslint';
 
 export default tseslint.config([
   globalIgnores([
-    'benchmark/suites/',
+    'packages/benchmark/suites/',
     '**/__fixtures__/',
+    'packages/integration-tests/cases/',
     '**/dist/',
     '**/.nx/',
     '**/coverage',

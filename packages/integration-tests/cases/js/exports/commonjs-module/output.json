@@ -1,0 +1,16 @@
+[
+  {
+    "description": "",
+    "displayName": "CommonJsButton",
+    "methods": [],
+    "props": {
+      "label": {
+        "type": {
+          "name": "string"
+        },
+        "required": true,
+        "description": ""
+      }
+    }
+  }
+]
