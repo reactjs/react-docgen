@@ -5,4 +5,4 @@
 
 Drop support for Node.js 20, 21 and 23
 
-Minimum Supported Node.js version is now 22.13.0
+Minimum Supported Node.js version is now 22.18.0

@@ -1,7 +1,7 @@
 {
   "private": true,
   "engines": {
-    "node": "^22.13.0 || >=24",
+    "node": "^22.18.0 || >=24",
     "pnpm": ">=10.6.2"
   },
   "type": "module",
@@ -10,6 +10,7 @@
     "lint": "eslint . --report-unused-disable-directives --max-warnings=0",
     "fix": "eslint . --fix --report-unused-disable-directives --max-warnings=0",
     "test": "nx run-many --target=test --exclude='@react-docgen-internal/*' --output-style=stream",
+    "test:babel7": "cross-env BABEL_VERSION=7 nx run-many --target=test --exclude='@react-docgen-internal/*' --output-style=stream",
     "copy:changelog:react-docgen": "cp ./packages/react-docgen/CHANGELOG.md ./packages/website/src/app/docs/release-notes/react-docgen/page.mdx",
     "copy:changelog:cli": "cp ./packages/react-docgen-cli/CHANGELOG.md ./packages/website/src/app/docs/release-notes/cli/page.mdx",
     "changesets-release": "pnpm build && changeset publish",
@@ -23,6 +24,10 @@
     "@eslint/js": "10.0.1",
     "@types/node": "22.20.1",
     "@vitest/coverage-v8": "4.1.10",
+    "babel7-core": "npm:@babel/core@^7.29.7",
+    "babel7-traverse": "npm:@babel/traverse@^7.29.8",
+    "babel7-types": "npm:@babel/types@^7.29.8",
+    "cross-env": "10.1.0",
     "eslint": "10.8.1",
     "eslint-config-next": "16.2.12",
     "eslint-config-prettier": "10.1.8",

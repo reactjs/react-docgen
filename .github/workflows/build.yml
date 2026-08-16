@@ -16,7 +16,7 @@ jobs:
   tests:
     strategy:
       matrix:
-        node: ["22.13.0", "24", "25", "26"]
+        node: ["22.18.0", "24", "25", "26"]
         os: ["ubuntu"]
         include:
           - os: macos
@@ -69,6 +69,29 @@ jobs:
         uses: coverallsapp/github-action@8d6379e14d29928660c4ba802d8e85393440b329 # v2
         with:
           parallel-finished: true
+
+  babel7-tests:
+    name: Tests (Babel 7, Node.js v24, ubuntu)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: "24"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Unit tests
+        run: pnpm run test:babel7
 
   lint:
     name: Lint
