@@ -254,6 +254,8 @@ importers:
         specifier: npm:react-docgen@6.0.0
         version: react-docgen@6.0.0(supports-color@7.2.0)
 
+  packages/core: {}
+
   packages/react-docgen:
     dependencies:
       '@babel/core':

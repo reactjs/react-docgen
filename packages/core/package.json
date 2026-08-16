@@ -1,0 +1,19 @@
+{
+  "name": "@react-docgen/core",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Parser-neutral foundations for react-docgen.",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": "^22.13.0 || >=24"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rimraf dist/ && tsc",
+    "test": "vitest run"
+  }
+}
