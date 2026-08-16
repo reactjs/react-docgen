@@ -3,6 +3,7 @@ import { dirname, join } from 'path';
 import { describe, expect, test } from 'vitest';
 import { parse, makeFsImporter } from '../../src/main';
 import { fileURLToPath } from 'url';
+import { assertFixtureIsClassified } from './fixtureCapabilities';
 
 describe('integration', () => {
   describe('fixtures', () => {
@@ -17,6 +18,8 @@ describe('integration', () => {
         continue;
       }
       const name = entry.name;
+
+      assertFixtureIsClassified(name);
 
       const filePath = join(fixturePath, name);
       const fileContent = fs.readFileSync(filePath, 'utf8');
