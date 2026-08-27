@@ -23,7 +23,7 @@
     "@eslint/js": "10.0.1",
     "@types/node": "22.20.1",
     "@vitest/coverage-v8": "4.1.11",
-    "eslint": "10.9.0",
+    "eslint": "10.9.1",
     "eslint-config-next": "16.3.2",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.6",
