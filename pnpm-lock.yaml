@@ -141,7 +141,7 @@ importers:
         specifier: 3.3.3
         version: 3.3.3
       react-docgen:
-        specifier: workspace:8.0.3
+        specifier: workspace:9.0.0
         version: link:../react-docgen
     devDependencies:
       '@types/debug':
@@ -202,7 +202,7 @@ importers:
         specifier: 19.2.8
         version: 19.2.8
       react-docgen:
-        specifier: workspace:8.0.3
+        specifier: workspace:9.0.0
         version: link:../react-docgen
       react-dom:
         specifier: 19.2.8
