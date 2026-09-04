@@ -5,7 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  zod: 4.3.6
+  zod: 4.5.4
 
 importers:
 
@@ -4975,8 +4975,8 @@ packages:
     peerDependencies:
       zod: 4.3.6
 
-  zod@4.3.6:
-    resolution: {integrity: sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg==}
+  zod@4.5.4:
+    resolution: {integrity: sha512-sC95tT5iHHH9gtpj6A81kh+NEaRAUFN+qlUPDUbRfOMvNf5QCBqsb3WgvnpVtK5Y+4UfA6KqufotuTvMGiTlsA==}
 
   zustand@5.0.15:
     resolution: {integrity: sha512-MpSEjRiBkA9crSYeOUH32rJC7SVqAbm0Fqcqge/bUi2PPoLcBWKOsG+C8mevmpr8TwXHBVkChbbJiyvkE+i/3A==}
@@ -7489,7 +7489,7 @@ snapshots:
       '@babel/parser': 7.29.8
       eslint: 10.9.1(jiti@2.7.0)(supports-color@7.2.0)
       hermes-parser: 0.25.1
-      zod: 4.3.6
+      zod: 4.5.4
       zod-validation-error: 4.0.2(zod@4.3.6)
     transitivePeerDependencies:
       - supports-color
@@ -9112,7 +9112,7 @@ snapshots:
       react-compiler-runtime: 19.1.0-rc.3(react@19.2.8)
       react-dom: 19.2.8(react@19.2.8)
       scroll-into-view-if-needed: 3.1.0
-      zod: 4.3.6
+      zod: 4.5.4
       zustand: 5.0.15(@types/react@19.2.18)(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8))
     transitivePeerDependencies:
       - '@types/react'
@@ -9162,7 +9162,7 @@ snapshots:
       unist-util-visit: 5.1.0
       unist-util-visit-children: 3.0.0
       yaml: 2.9.0
-      zod: 4.3.6
+      zod: 4.5.4
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -10664,9 +10664,9 @@ snapshots:
 
   zod-validation-error@4.0.2(zod@4.3.6):
     dependencies:
-      zod: 4.3.6
+      zod: 4.5.4
 
-  zod@4.3.6: {}
+  zod@4.5.4: {}
 
   zustand@5.0.15(@types/react@19.2.18)(react@19.2.8)(use-sync-external-store@1.6.0(react@19.2.8)):
     optionalDependencies:
