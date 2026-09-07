@@ -17,7 +17,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@changesets/changelog-github": "1.0.0",
+    "@changesets/changelog-github": "1.0.1",
     "@changesets/cli": "3.0.1",
     "@eslint/eslintrc": "3.3.7",
     "@eslint/js": "10.0.1",
