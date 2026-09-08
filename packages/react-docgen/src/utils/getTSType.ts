@@ -1,3 +1,4 @@
+import getTypeArguments from './getTypeArguments.js';
 import getPropertyName from './getPropertyName.js';
 import printValue from './printValue.js';
 import getTypeAnnotation from '../utils/getTypeAnnotation.js';
@@ -130,12 +131,15 @@ function handleTSTypeReference(
     (typeParams && typeParams[type.name]) ||
     resolveToValue(path.get('typeName'));
 
-  const typeParameters = path.get('typeParameters');
+  const typeParameters = getTypeArguments(path);
   const resolvedTypeParameters = resolvedPath.get('typeParameters') as NodePath<
     TSTypeParameterDeclaration | null | undefined
   >;
 
-  if (typeParameters.hasNode() && resolvedTypeParameters.hasNode()) {
+  if (
+    typeParameters.isTSTypeParameterInstantiation() &&
+    resolvedTypeParameters.hasNode()
+  ) {
     typeParams = getTypeParameters(
       resolvedTypeParameters,
       typeParameters,
@@ -157,7 +161,7 @@ function handleTSTypeReference(
 
   if (resolvedTypeAnnotation.hasNode()) {
     type = getTSTypeWithResolvedTypes(resolvedTypeAnnotation, typeParams);
-  } else if (typeParameters.hasNode()) {
+  } else if (typeParameters.isTSTypeParameterInstantiation()) {
     const params = typeParameters.get('params');
 
     type = {
@@ -408,7 +412,10 @@ function handleTSTypeQuery(
   if (exprName.isIdentifier()) {
     const resolvedPath = resolveToValue(path.get('exprName'));
 
-    if (resolvedPath.has('typeAnnotation')) {
+    if (
+      'typeAnnotation' in resolvedPath.node &&
+      resolvedPath.node.typeAnnotation
+    ) {
       return getTSTypeWithResolvedTypes(
         resolvedPath.get('typeAnnotation') as NodePath<TypeScript>,
         typeParams,
