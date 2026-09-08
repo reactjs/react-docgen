@@ -1,3 +1,4 @@
+import getTypeArguments from './getTypeArguments.js';
 import type { NodePath } from '@babel/traverse';
 import isReactBuiltinReference from './isReactBuiltinReference.js';
 
@@ -15,7 +16,7 @@ export default function unwrapBuiltinTSPropTypes(typePath: NodePath): NodePath {
       isReactBuiltinReference(typeName, 'PropsWithRef') ||
       isReactBuiltinReference(typeName, 'PropsWithChildren')
     ) {
-      const typeParameters = typePath.get('typeParameters');
+      const typeParameters = getTypeArguments(typePath);
 
       if (typeParameters.hasNode()) {
         const innerType = typeParameters.get('params')[0];

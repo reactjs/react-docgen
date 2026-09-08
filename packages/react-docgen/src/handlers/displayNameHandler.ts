@@ -24,7 +24,7 @@ const displayNameHandler: Handler = function (
     if (
       (componentDefinition.isClassDeclaration() ||
         componentDefinition.isFunctionDeclaration()) &&
-      componentDefinition.has('id')
+      componentDefinition.node.id
     ) {
       documentation.set(
         'displayName',
