@@ -1,15 +1,13 @@
 import { parse } from '../main.js';
-import { expect, test, vi } from 'vitest';
+import { expect, test } from 'vitest';
 
-vi.mock('@babel/core', () => import('babel-core-8'));
-
-test('parses components with Babel 8', () => {
+test('parses components', () => {
   const result = parse('export function Button() { return <button />; }');
 
   expect(result).toHaveLength(1);
 });
 
-test('parses TypeScript function props with Babel 8', () => {
+test('parses TypeScript function props', () => {
   const result = parse(
     `export type MenuProps = {
       onOpenChange?: (open: boolean) => void;
@@ -37,7 +35,7 @@ test('parses TypeScript function props with Babel 8', () => {
   });
 });
 
-test('parses generic arrow functions in TypeScript files with Babel 8', () => {
+test('parses generic arrow functions in TypeScript files', () => {
   const result = parse(
     `import React from 'react';
 
@@ -54,7 +52,7 @@ test('parses generic arrow functions in TypeScript files with Babel 8', () => {
   expect(result).toHaveLength(1);
 });
 
-test('parses mapped TypeScript props with Babel 8', () => {
+test('parses mapped TypeScript props', () => {
   const result = parse(
     `export type StatusFiltersProps<K extends string = string> = {
       statuses?: { readonly [Key in K]: number };
