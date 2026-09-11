@@ -299,7 +299,7 @@ importers:
         specifier: 3.3.3
         version: 3.3.3
       react-docgen:
-        specifier: workspace:8.0.3
+        specifier: workspace:9.0.0
         version: link:../react-docgen
     devDependencies:
       '@types/debug':
@@ -360,7 +360,7 @@ importers:
         specifier: 19.2.8
         version: 19.2.8
       react-docgen:
-        specifier: workspace:8.0.3
+        specifier: workspace:9.0.0
         version: link:../react-docgen
       react-dom:
         specifier: 19.2.8
@@ -6564,8 +6564,8 @@ snapshots:
 
   '@typescript-eslint/project-service@8.69.0(supports-color@7.2.0)(typescript@6.0.3)':
     dependencies:
-      '@typescript-eslint/tsconfig-utils': 8.69.0(typescript@6.0.3)
-      '@typescript-eslint/types': 8.69.0
+      '@typescript-eslint/tsconfig-utils': 8.70.0(typescript@6.0.3)
+      '@typescript-eslint/types': 8.70.0
       debug: 4.4.3(supports-color@7.2.0)
       typescript: 6.0.3
     transitivePeerDependencies:

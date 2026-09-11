@@ -1,5 +1,23 @@
 # Release Notes
 
+## 9.0.0
+
+### Major Changes
+
+- [#1095](https://github.com/reactjs/react-docgen/pull/1095)
+  [`798e73d`](https://github.com/reactjs/react-docgen/commit/798e73dd4a73574c66dbee9dffb8e4af507b1059)
+  Thanks [@danez](https://github.com/danez)! - Drop support for Node.js 20, 21
+  and 23
+
+  Minimum Supported Node.js version is now 22.13.0
+
+### Patch Changes
+
+- [#1130](https://github.com/reactjs/react-docgen/pull/1130)
+  [`bca6a64`](https://github.com/reactjs/react-docgen/commit/bca6a6463c44d44bf35183d4183070eb83568cf0)
+  Thanks [@danez](https://github.com/danez)! - Fix recognition of
+  PropTypes.bigint as a built-in prop type
+
 ## 8.0.3
 
 ### Patch Changes
