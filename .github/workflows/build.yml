@@ -15,16 +15,33 @@ env:
 jobs:
   tests:
     strategy:
+      fail-fast: false
       matrix:
+        babel: ["7", "8"]
         node: ["22.13.0", "24", "25", "26"]
         os: ["ubuntu"]
+        exclude:
+          # Babel 8 requires Node.js 22.18.0 or newer on the 22.x line.
+          - babel: "8"
+            node: "22.13.0"
         include:
+          - os: ubuntu
+            node: "22.18.0"
+            babel: "8"
           - os: macos
             node: "24"
+            babel: "7"
+          - os: macos
+            node: "24"
+            babel: "8"
           - os: windows
             node: "24"
+            babel: "7"
+          - os: windows
+            node: "24"
+            babel: "8"
 
-    name: Tests (Node.js v${{ matrix.node }}, ${{ matrix.os }})
+    name: Tests (Babel ${{ matrix.babel }}, Node.js v${{ matrix.node }}, ${{ matrix.os }})
     runs-on: ${{ matrix.os }}-latest
 
     steps:
@@ -43,13 +60,21 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # Compile against the declared Babel 7 types before testing each runtime.
+      - name: Build packages
+        run: pnpm build
+
+      - name: Install Babel 8 runtime
+        if: "${{ matrix.babel == '8' }}"
+        run: pnpm --filter react-docgen add --save-exact @babel/core@8.0.1 @babel/traverse@8.0.4 @babel/types@8.0.4
+
       - name: Unit tests with coverage
         if: "${{ matrix.node == env.NODE_VERSION }}"
-        run: pnpm test -- --coverage
+        run: pnpm --filter react-docgen --filter @react-docgen/cli --parallel --no-bail test --coverage
 
       - name: Unit tests
         if: "${{ matrix.node != env.NODE_VERSION }}"
-        run: pnpm test
+        run: pnpm --filter react-docgen --filter @react-docgen/cli --parallel --no-bail test
 
       - name: Upload coverage
         if: "${{ matrix.node == env.NODE_VERSION }}"
@@ -57,7 +82,7 @@ jobs:
         uses: coverallsapp/github-action@8d6379e14d29928660c4ba802d8e85393440b329 # v2
         with:
           parallel: true
-          flag-name: test-${{ matrix.os }}
+          flag-name: test-babel-${{ matrix.babel }}-${{ matrix.os }}
 
   finish:
     needs: tests

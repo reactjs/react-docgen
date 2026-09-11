@@ -174,7 +174,11 @@ function handleGenericTypeAnnotation(
   const resolvedPath =
     (typeParams && typeParams[type.name]) || resolveToValue(path.get('id'));
 
-  if (typeParameters.hasNode() && resolvedPath.has('typeParameters')) {
+  if (
+    typeParameters.hasNode() &&
+    'typeParameters' in resolvedPath.node &&
+    resolvedPath.node.typeParameters
+  ) {
     typeParams = getTypeParameters(
       resolvedPath.get('typeParameters') as NodePath<TypeParameterDeclaration>,
       typeParameters,
@@ -195,7 +199,7 @@ function handleGenericTypeAnnotation(
     );
   }
 
-  if (resolvedPath && resolvedPath.has('right')) {
+  if (resolvedPath && 'right' in resolvedPath.node && resolvedPath.node.right) {
     type = getFlowTypeWithResolvedTypes(
       resolvedPath.get('right') as NodePath<FlowType>,
       typeParams,
