@@ -29,7 +29,8 @@ export default function getTypeParameters(
   declaration
     .get('params')
     .forEach((paramPath: NodePath<TSTypeParameter | TypeParameter>) => {
-      const key = paramPath.node.name;
+      const name = paramPath.node.name as Identifier | string;
+      const key = typeof name === 'string' ? name : name.name;
       const defaultProp = paramPath.get('default');
       const defaultTypePath = defaultProp.hasNode() ? defaultProp : null;
       const typePath =

@@ -1,3 +1,4 @@
+import getTypeArguments from '../getTypeArguments.js';
 import type {
   TSTypeAliasDeclaration,
   TSTypeParameterDeclaration,
@@ -20,9 +21,9 @@ describe('getTypeParameters', () => {
       expect(
         getTypeParameters(
           path.get('typeParameters') as NodePath<TSTypeParameterDeclaration>,
-          path
-            .get('typeAnnotation')
-            .get('typeParameters') as NodePath<TSTypeParameterInstantiation>,
+          getTypeArguments(
+            path.get('typeAnnotation'),
+          ) as NodePath<TSTypeParameterInstantiation>,
           null,
         ),
       ).toMatchSnapshot();
@@ -35,9 +36,9 @@ describe('getTypeParameters', () => {
       expect(
         getTypeParameters(
           path.get('typeParameters') as NodePath<TSTypeParameterDeclaration>,
-          path
-            .get('typeAnnotation')
-            .get('typeParameters') as NodePath<TSTypeParameterInstantiation>,
+          getTypeArguments(
+            path.get('typeAnnotation'),
+          ) as NodePath<TSTypeParameterInstantiation>,
           null,
         ),
       ).toMatchSnapshot();
