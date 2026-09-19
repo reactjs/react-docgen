@@ -167,6 +167,26 @@ describe('componentMethodsHandler useImperativeHandle callbacks', () => {
     },
   );
 
+  test('extracts a zero-parameter callback with no return annotation', () => {
+    const definition = parse.statementLast<FunctionDeclaration>(`
+      import { useCallback, useImperativeHandle } from 'react';
+      function Component() {
+        const method = useCallback(() => {}, []);
+        useImperativeHandle(ref, () => ({ method }));
+        return <div />;
+      }
+    `);
+
+    componentMethodsHandler(documentation, definition);
+
+    expect(documentation.methods).toHaveLength(1);
+    expect(documentation.methods[0]).toMatchObject({
+      name: 'method',
+      params: [],
+      returns: null,
+    });
+  });
+
   test('extracts a callback method on an ObjectExpression component', () => {
     const definition = parse.expressionLast<ObjectExpression>(`
       import { useCallback } from 'react';
