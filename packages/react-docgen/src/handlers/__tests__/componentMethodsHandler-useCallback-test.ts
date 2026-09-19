@@ -15,19 +15,45 @@ describe('componentMethodsHandler useImperativeHandle callbacks', () => {
       DocumentationMock;
   });
 
-  test('extracts a method wrapped with useCallback', () => {
-    const definition = parse.statementLast<FunctionDeclaration>(`
-      import { useCallback, useImperativeHandle } from 'react';
-      function Component() {
-        const method = useCallback((argument: string): number => 1, []);
-        useImperativeHandle(ref, () => ({ method }));
-        return <div />;
-      }
-    `);
+  test.each([
+    {
+      name: 'a directly-declared callback',
+      imports: "import { useCallback, useImperativeHandle } from 'react';",
+      setup: '',
+      value: 'useCallback((argument: string): number => 1, [])',
+      imperativeHandle: 'useImperativeHandle',
+    },
+    {
+      name: 'a callback identifier',
+      imports: "import { useCallback, useImperativeHandle } from 'react';",
+      setup: 'const callback = (argument: string): number => 1;',
+      value: 'useCallback(callback, [])',
+      imperativeHandle: 'useImperativeHandle',
+    },
+    {
+      name: 'a React namespace callback',
+      imports: "import * as React from 'react';",
+      setup: '',
+      value: 'React.useCallback((argument: string): number => 1, [])',
+      imperativeHandle: 'React.useImperativeHandle',
+    },
+  ])(
+    'extracts a method wrapped with $name',
+    ({ imports, setup, value, imperativeHandle }) => {
+      const definition = parse.statementLast<FunctionDeclaration>(`
+        ${imports}
+        function Component() {
+          ${setup}
+          const method = ${value};
+          ${imperativeHandle}(ref, () => ({ method }));
+          return <div />;
+        }
+      `);
 
-    componentMethodsHandler(documentation, definition);
+      componentMethodsHandler(documentation, definition);
 
-    expect(documentation.methods).toHaveLength(1);
-    expect(documentation.methods[0]?.name).toBe('method');
-  });
+      expect(documentation.methods).toHaveLength(1);
+      expect(documentation.methods[0]?.name).toBe('method');
+    },
+  );
 });
