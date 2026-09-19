@@ -41,8 +41,18 @@ function isMethod(path: NodePath): path is MethodNodePath {
     (path.isClassProperty() || path.isObjectProperty())
   ) {
     const value = resolveToValue(path.get('value') as NodePath);
+    const callback =
+      value.isCallExpression() && isReactBuiltinCall(value, 'useCallback')
+        ? value.get('arguments')[0]
+        : undefined;
 
-    isProbablyMethod = value.isFunction();
+    isProbablyMethod =
+      value.isFunction() ||
+      Boolean(
+        callback &&
+        !Array.isArray(callback) &&
+        resolveToValue(callback).isFunction(),
+      );
   }
 
   return isProbablyMethod && !isReactComponentMethod(path);
