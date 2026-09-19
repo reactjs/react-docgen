@@ -1,3 +1,4 @@
+import getTypeArguments from './getTypeArguments.js';
 import type { NodePath } from '@babel/traverse';
 import type Documentation from '../Documentation.js';
 import getMemberValuePath from './getMemberValuePath.js';
@@ -36,11 +37,9 @@ function getStatelessPropsPath(
 function getForwardRefGenericsType(
   componentDefinition: NodePath,
 ): NodePath<TSType> | null {
-  const typeParameters = componentDefinition.get('typeParameters') as NodePath<
-    TSTypeParameterInstantiation | null | undefined
-  >;
+  const typeParameters = getTypeArguments(componentDefinition);
 
-  if (typeParameters && typeParameters.hasNode()) {
+  if (typeParameters.isTSTypeParameterInstantiation()) {
     const params = typeParameters.get('params');
 
     return params[1] ?? null;
@@ -71,9 +70,9 @@ function findAssignedVariableType(
       isReactBuiltinReference(typeName, 'VoidFunctionComponent') ||
       isReactBuiltinReference(typeName, 'VFC')
     ) {
-      const typeParameters = typeAnnotation.get('typeParameters');
+      const typeParameters = getTypeArguments(typeAnnotation);
 
-      if (typeParameters.hasNode()) {
+      if (typeParameters.isTSTypeParameterInstantiation()) {
         return typeParameters.get('params')[0] ?? null;
       }
     }
@@ -92,7 +91,16 @@ export default (componentDefinition: NodePath): NodePath[] => {
   const typePaths: NodePath[] = [];
 
   if (isReactComponentClass(componentDefinition)) {
-    const superTypes = componentDefinition.get('superTypeParameters');
+    const superTypes = componentDefinition.get(
+      'superTypeArguments' in componentDefinition.node
+        ? 'superTypeArguments'
+        : 'superTypeParameters',
+    ) as NodePath<
+      | TSTypeParameterInstantiation
+      | TypeParameterInstantiation
+      | null
+      | undefined
+    >;
 
     if (superTypes.hasNode()) {
       const params = superTypes.get('params');
@@ -219,17 +227,18 @@ function applyExtends(
       const resolvedPath = resolveGenericTypeAnnotation(extendsPath);
 
       if (resolvedPath) {
-        if (
-          resolvedPath.has('typeParameters') &&
-          extendsPath.node.typeParameters
-        ) {
+        const typeArguments = getTypeArguments(extendsPath);
+        const typeParameters = resolvedPath.get('typeParameters') as NodePath<
+          | TSTypeParameterDeclaration
+          | TypeParameterDeclaration
+          | null
+          | undefined
+        >;
+
+        if (typeParameters.hasNode() && typeArguments.hasNode()) {
           typeParams = getTypeParameters(
-            resolvedPath.get('typeParameters') as NodePath<
-              TSTypeParameterDeclaration | TypeParameterDeclaration
-            >,
-            extendsPath.get('typeParameters') as NodePath<
-              TSTypeParameterInstantiation | TypeParameterInstantiation
-            >,
+            typeParameters,
+            typeArguments,
             typeParams,
           );
         }
