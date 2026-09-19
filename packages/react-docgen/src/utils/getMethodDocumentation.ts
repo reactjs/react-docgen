@@ -14,6 +14,7 @@ import getTSType from './getTSType.js';
 import getParameterName from './getParameterName.js';
 import getPropertyName from './getPropertyName.js';
 import getTypeAnnotation from './getTypeAnnotation.js';
+import isReactBuiltinCall from './isReactBuiltinCall.js';
 import resolveToValue from './resolveToValue.js';
 import printValue from './printValue.js';
 import type {
@@ -32,6 +33,34 @@ export type MethodNodePath =
   | NodePath<ObjectMethod>
   | NodePath<ObjectProperty>;
 
+/**
+ * Resolves a value to the function it documents: the value itself, or the
+ * function a React `useCallback` call wraps. Null when it is neither.
+ */
+export function resolveToMethodFunction(
+  path: NodePath,
+): NodePath<FunctionType> | null {
+  const value = resolveToValue(path);
+
+  if (value.isFunction()) {
+    return value;
+  }
+
+  if (value.isCallExpression() && isReactBuiltinCall(value, 'useCallback')) {
+    const callback = value.get('arguments')[0];
+
+    if (callback && !Array.isArray(callback)) {
+      const wrapped = resolveToValue(callback);
+
+      if (wrapped.isFunction()) {
+        return wrapped;
+      }
+    }
+  }
+
+  return null;
+}
+
 function getMethodFunctionExpression(
   methodPath: MethodNodePath,
 ): NodePath<FunctionType> | null {
@@ -43,13 +72,7 @@ function getMethodFunctionExpression(
     ? methodPath.get('right')
     : (methodPath.get('value') as NodePath);
 
-  const functionExpression = resolveToValue(potentialFunctionExpression);
-
-  if (functionExpression.isFunction()) {
-    return functionExpression;
-  }
-
-  return null;
+  return resolveToMethodFunction(potentialFunctionExpression);
 }
 
 function getMethodParamOptional(

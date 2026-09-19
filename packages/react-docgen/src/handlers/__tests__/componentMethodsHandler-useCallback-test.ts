@@ -52,8 +52,53 @@ describe('componentMethodsHandler useImperativeHandle callbacks', () => {
 
       componentMethodsHandler(documentation, definition);
 
+      // The wrapped function's own signature is what gets documented, not
+      // the useCallback call around it.
       expect(documentation.methods).toHaveLength(1);
-      expect(documentation.methods[0]?.name).toBe('method');
+      expect(documentation.methods[0]).toMatchObject({
+        name: 'method',
+        params: [
+          { name: 'argument', optional: false, type: { name: 'string' } },
+        ],
+        returns: { type: { name: 'number' } },
+      });
     },
   );
+
+  test.each([
+    {
+      name: 'a local function named useCallback',
+      imports: "import { useImperativeHandle } from 'react';",
+      setup:
+        'function useCallback(fn: unknown, deps: unknown[]) { return fn; }',
+      value: 'useCallback((argument: string): number => 1, [])',
+    },
+    {
+      name: 'a useCallback call with no arguments',
+      imports: "import { useCallback, useImperativeHandle } from 'react';",
+      setup: '',
+      value: 'useCallback()',
+    },
+    {
+      name: 'a useCallback call whose first argument is not a function',
+      imports: "import { useCallback, useImperativeHandle } from 'react';",
+      setup: '',
+      value: 'useCallback(42, [])',
+    },
+  ])('does not document $name', ({ imports, setup, value }) => {
+    const definition = parse.statementLast<FunctionDeclaration>(`
+      ${imports}
+      function Component() {
+        ${setup}
+        const method = ${value};
+        useImperativeHandle(ref, () => ({ method }));
+        return <div />;
+      }
+    `);
+
+    expect(() =>
+      componentMethodsHandler(documentation, definition),
+    ).not.toThrow();
+    expect(documentation.methods).toHaveLength(0);
+  });
 });

@@ -1,6 +1,8 @@
 import getMemberValuePath from '../utils/getMemberValuePath.js';
 import type { MethodNodePath } from '../utils/getMethodDocumentation.js';
-import getMethodDocumentation from '../utils/getMethodDocumentation.js';
+import getMethodDocumentation, {
+  resolveToMethodFunction,
+} from '../utils/getMethodDocumentation.js';
 import isReactComponentClass from '../utils/isReactComponentClass.js';
 import isReactComponentMethod from '../utils/isReactComponentMethod.js';
 import type Documentation from '../Documentation.js';
@@ -40,19 +42,8 @@ function isMethod(path: NodePath): path is MethodNodePath {
     !isProbablyMethod &&
     (path.isClassProperty() || path.isObjectProperty())
   ) {
-    const value = resolveToValue(path.get('value') as NodePath);
-    const callback =
-      value.isCallExpression() && isReactBuiltinCall(value, 'useCallback')
-        ? value.get('arguments')[0]
-        : undefined;
-
     isProbablyMethod =
-      value.isFunction() ||
-      Boolean(
-        callback &&
-        !Array.isArray(callback) &&
-        resolveToValue(callback).isFunction(),
-      );
+      resolveToMethodFunction(path.get('value') as NodePath) !== null;
   }
 
   return isProbablyMethod && !isReactComponentMethod(path);
