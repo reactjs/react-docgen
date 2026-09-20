@@ -249,6 +249,20 @@ describe('codeTypeHandler', () => {
     expect(documentation.descriptors).toMatchSnapshot();
   });
 
+  test('handles circular interface inheritance', () => {
+    const definition = parseTypescript
+      .statement(
+        `(props: A) => null;
+         interface A extends B { a: number }
+         interface B extends A { b: number }`,
+      )
+      .get('expression') as NodePath<ArrowFunctionExpression>;
+
+    codeTypeHandler(documentation, definition);
+
+    expect(Object.keys(documentation.descriptors)).toEqual(['b', 'a']);
+  });
+
   test('does support utility types inline', () => {
     const definition = parse
       .statement(
