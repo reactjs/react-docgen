@@ -3,6 +3,7 @@ import type { FileState } from './ProjectContext.js';
 
 export interface TypeDescriptor {
   readonly name: string;
+  readonly [key: string]: unknown;
 }
 
 export interface DefaultValueDescriptor {
@@ -12,14 +13,18 @@ export interface DefaultValueDescriptor {
 
 export interface PropDescriptor {
   defaultValue?: DefaultValueDescriptor;
-  description: string;
+  description?: string;
   required: boolean;
-  tsType: TypeDescriptor;
+  tsType?: TypeDescriptor;
+  type?: TypeDescriptor;
 }
 
 export interface ComponentDocumentation {
+  composes?: string[];
+  childContext?: Record<string, Omit<PropDescriptor, 'description'>>;
+  context?: Record<string, Omit<PropDescriptor, 'description'>>;
   description: string;
-  displayName: string;
+  displayName?: number | string;
   methods: unknown[];
   props?: Record<string, PropDescriptor>;
 }
@@ -39,7 +44,6 @@ export default function extract(
   return resolver(file).map((path) => {
     const documentation: ComponentDocumentation = {
       description: '',
-      displayName: '',
       methods: [],
     };
 

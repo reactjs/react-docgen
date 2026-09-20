@@ -1,0 +1,38 @@
+{
+  "name": "@react-docgen/babel",
+  "version": "0.0.0",
+  "description": "Normalized Babel parser adapter for react-docgen.",
+  "publishConfig": {
+    "provenance": true,
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/reactjs/react-docgen.git",
+    "directory": "packages/babel"
+  },
+  "type": "module",
+  "files": ["dist"],
+  "engines": {
+    "node": "^22.13.0 || >=24"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rimraf dist/ && tsc",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@react-docgen/core": "workspace:*"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.28.0 || ^8.0.0",
+    "@babel/types": "^7.28.2 || ^8.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "7.29.7",
+    "@babel/types": "7.29.8",
+    "@types/babel__core": "7.20.5"
+  },
+  "license": "MIT"
+}

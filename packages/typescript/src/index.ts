@@ -1,28 +1,41 @@
 import {
-  extract,
-  ProjectContext,
+  componentHandler,
+  contextHandler,
+  createDocgen,
+  createMethodHandler,
+  defaultPropsHandler,
+  propTypesHandler,
+  resolveComponentDefinitions,
   type ComponentDocumentation,
+  type Importer,
 } from '@react-docgen/core';
-import { handler, resolver } from './extractFunctionComponent.js';
+import typescriptPropsHandler from './handlers/typescriptPropsHandler.js';
 import parser from './parser.js';
+import getTSType from './utils/getTSType.js';
 
 export { default as parser, visitorKeys } from './parser.js';
 
 export interface ParseOptions {
   filename?: string;
+  importer?: Importer;
 }
+
+const docgen = createDocgen({
+  handlers: [
+    componentHandler,
+    typescriptPropsHandler,
+    propTypesHandler,
+    defaultPropsHandler,
+    contextHandler,
+    createMethodHandler(getTSType),
+  ],
+  parser,
+  resolver: resolveComponentDefinitions,
+});
 
 export function parse(
   code: string,
-  { filename = 'component.tsx' }: ParseOptions = {},
+  { filename = 'component.tsx', importer }: ParseOptions = {},
 ): ComponentDocumentation[] {
-  const project = new ProjectContext({
-    importer() {
-      throw new Error('Imports are not supported by this vertical slice.');
-    },
-    selectParser: () => parser,
-  });
-  const file = project.parse({ code, filename });
-
-  return extract(file, resolver, [handler]);
+  return docgen(code, { filename, importer });
 }

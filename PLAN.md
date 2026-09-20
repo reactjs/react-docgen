@@ -2,8 +2,8 @@
 
 ## Status
 
-- Current milestone: 3 — JavaScript and TypeScript parity
-- Overall status: in progress
+- Current milestone: 4 — Hermes and Flow
+- Overall status: Milestone 3.1 complete; Milestone 4 not started
 - Last updated: 2026-08-16
 
 ## Decisions
@@ -79,10 +79,10 @@ ready for an explicitly requested release.
 
 ## Milestone 3 — JavaScript and TypeScript parity
 
-- [ ] Port resolvers, imports, value resolution, PropTypes, defaults, classes,
+- [x] Port resolvers, imports, value resolution, PropTypes, defaults, classes,
       methods, docblocks, and TypeScript type extraction.
-- [ ] Add normalized Babel adapter for differential testing.
-- [ ] Define public neutral extension APIs and compile-test custom handlers,
+- [x] Add normalized Babel adapter for differential testing.
+- [x] Define public neutral extension APIs and compile-test custom handlers,
       resolvers, and importers.
 
 Exit criteria: all applicable `common` and `typescript` fixtures match legacy
@@ -113,6 +113,22 @@ cannot silently regress.
 
 Exit criteria: common JS/JSX output agrees across adapters and Flow output
 matches the legacy implementation.
+
+## Milestone 3.1 — Shared React extraction
+
+- [x] Move parser-neutral resolvers, handlers, and value/documentation helpers
+      from `@react-docgen/typescript` into `@react-docgen/core`.
+- [x] Split shared component metadata extraction from TypeScript prop/type
+      extraction.
+- [x] Keep TypeScript-only type helpers and handler composition in
+      `@react-docgen/typescript`.
+- [x] Expose preconfigured `parse()` from `@react-docgen/babel` using only
+      Babel plus shared core extraction.
+- [x] Keep focused utility tests and JavaScript differential fixtures green.
+
+Exit criteria: Babel and TypeScript adapters share React extraction without
+depending on each other; only TypeScript semantics remain in the TypeScript
+package; all applicable JavaScript output remains identical.
 
 ## Milestone 5 — Mixed-parser projects
 
@@ -173,6 +189,30 @@ import { parse } from '@react-docgen/typescript';
 ## Plan change log
 
 Record every material plan change here before or with implementation.
+
+### 2026-08-16 — Added shared React extraction milestone
+
+- Inserted Milestone 3.1 before Hermes work and temporarily made it current.
+- Moved parser-neutral React behavior toward `@react-docgen/core`; parser
+  packages will compose that behavior with parser/language-specific handlers.
+- Reason: Milestone 3 proved Babel could reuse normalized ASTs, but its
+  differential runner depended on TypeScript-owned handlers. That dependency
+  direction would duplicate behavior for Babel and Hermes.
+
+### 2026-08-16 — Completed shared React extraction milestone
+
+- Moved shared React handlers, exported-definition resolution, and
+  value/documentation helpers into `@react-docgen/core` while preserving their
+  one-purpose-file layout.
+- Split TypeScript prop extraction into `typescriptPropsHandler`; kept only
+  composed-type, props-member, TypeScript-type, and TypeScript-name helpers in
+  `@react-docgen/typescript`.
+- Made method extraction accept an optional type resolver, allowing core and
+  Babel to handle JavaScript/JSDoc while TypeScript supplies `getTSType`.
+- Added Babel's preconfigured `parse()` and changed differential tests to use
+  public Babel and TypeScript APIs, removing their implementation dependency.
+- Reason: parser adapters now select syntax while core owns shared observable
+  React behavior; new adapters need only contribute language-specific logic.
 
 ### 2026-08-16 — Initial roadmap
 
@@ -267,3 +307,27 @@ Record every material plan change here before or with implementation.
 - Reason: unit tests additionally cover Babel-specific internals, public helper
   APIs, custom resolvers, and synthetic AST states that parser adapters should
   not need to reproduce through integration fixtures.
+
+### 2026-08-16 — Completed JavaScript and TypeScript parity milestone
+
+- Expanded `@react-docgen/typescript` from the vertical slice to the complete
+  applicable JavaScript and TypeScript corpus: exports, stable resolver errors,
+  local/imported values and types, PropTypes, contexts, defaults, classes,
+  methods, docblocks, HOCs, imperative handles, and TypeScript type shapes.
+- Kept extraction utilities in one-purpose files and added focused tests for
+  new resolution, type, docblock, class, enum, expression, and method helpers.
+- Added parser-neutral `createDocgen()` composition to `@react-docgen/core` and
+  compile/runtime-tested custom `Parser`, `Resolver`, `Handler`, and `Importer`
+  contracts without Babel types.
+- Added `@react-docgen/babel`, which normalizes Babel 7/8 AST node names into
+  the shared representation and declares both Babel majors as peer ranges.
+  Differential tests now require all 40 portable JavaScript golden outputs to
+  agree between normalized Babel and TypeScript ESTree.
+- Excluded only `typescript/imports/reexported-default-values` from the
+  TypeScript adapter. Its support file uses Babel's nonstandard
+  `export defaultFrom` proposal, which TypeScript ESTree rejects before an
+  importer can expose its values; the same observable import/value behavior is
+  covered by standard-syntax import fixtures.
+- Reason: Milestone 3's contract is observable output parity for syntax a
+  selected parser supports, plus explicit parser boundaries—not emulation of
+  another parser's proposal syntax.

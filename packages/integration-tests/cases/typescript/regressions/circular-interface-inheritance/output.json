@@ -1,0 +1,23 @@
+[
+  {
+    "description": "",
+    "displayName": "Component",
+    "methods": [],
+    "props": {
+      "b": {
+        "required": true,
+        "tsType": {
+          "name": "number"
+        },
+        "description": ""
+      },
+      "a": {
+        "required": true,
+        "tsType": {
+          "name": "number"
+        },
+        "description": ""
+      }
+    }
+  }
+]
