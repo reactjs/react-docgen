@@ -8,7 +8,7 @@
   "fixed": [],
   "linked": [],
   "access": "public",
-  "baseBranch": "main",
+  "baseBranch": "8.x",
   "updateInternalDependencies": "patch",
   "ignore": [
     "@react-docgen-internal/benchmark",

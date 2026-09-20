@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - 8.x
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
@@ -41,7 +42,7 @@ jobs:
         with:
           publish: pnpm changesets-release
           version: pnpm changesets-version
-          title: Packages ready to publish
+          title: 8.x Packages ready to publish
           commit: Publish new versions
         env:
           GITHUB_TOKEN: ${{ secrets.CHANGESETS_TOKEN }}
