@@ -158,7 +158,11 @@ export function applyToTypeProperties(
   path: NodePath,
   callback: (propertyPath: NodePath, params: TypeParameters | null) => void,
   typeParams: TypeParameters | null,
+  visited = new WeakSet<object>(),
 ): void {
+  if (visited.has(path.node)) return;
+  visited.add(path.node);
+
   if (path.isObjectTypeAnnotation()) {
     path
       .get('properties')
@@ -168,14 +172,14 @@ export function applyToTypeProperties(
       .get('members')
       .forEach((propertyPath) => callback(propertyPath, typeParams));
   } else if (path.isInterfaceDeclaration()) {
-    applyExtends(documentation, path, callback, typeParams);
+    applyExtends(documentation, path, callback, typeParams, visited);
 
     path
       .get('body')
       .get('properties')
       .forEach((propertyPath) => callback(propertyPath, typeParams));
   } else if (path.isTSInterfaceDeclaration()) {
-    applyExtends(documentation, path, callback, typeParams);
+    applyExtends(documentation, path, callback, typeParams, visited);
 
     path
       .get('body')
@@ -187,7 +191,13 @@ export function applyToTypeProperties(
   ) {
     (path.get('types') as Array<NodePath<FlowType | TSType>>).forEach(
       (typesPath) =>
-        applyToTypeProperties(documentation, typesPath, callback, typeParams),
+        applyToTypeProperties(
+          documentation,
+          typesPath,
+          callback,
+          typeParams,
+          visited,
+        ),
     );
   } else if (!path.isUnionTypeAnnotation()) {
     // The react-docgen output format does not currently allow
@@ -195,7 +205,13 @@ export function applyToTypeProperties(
     const typePath = resolveGenericTypeAnnotation(path);
 
     if (typePath) {
-      applyToTypeProperties(documentation, typePath, callback, typeParams);
+      applyToTypeProperties(
+        documentation,
+        typePath,
+        callback,
+        typeParams,
+        visited,
+      );
     }
   }
 }
@@ -205,6 +221,7 @@ function applyExtends(
   path: NodePath<InterfaceDeclaration | TSInterfaceDeclaration>,
   callback: (propertyPath: NodePath, params: TypeParameters | null) => void,
   typeParams: TypeParameters | null,
+  visited: WeakSet<object>,
 ): void {
   const classExtends = path.get('extends');
 
@@ -238,6 +255,7 @@ function applyExtends(
           resolvedPath,
           callback,
           typeParams,
+          visited,
         );
       } else {
         const idPath = getTypeIdentifier(extendsPath);

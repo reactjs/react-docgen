@@ -20,4 +20,23 @@ describe('resolveGenericTypeAnnotation', () => {
       ),
     ).toMatchSnapshot();
   });
+
+  test('does not resolve circular type aliases', () => {
+    const code = `
+      type Foo<T> = Bar<T>;
+      type Bar<T> = Foo<T>;
+      var x: Foo<string>;
+    `;
+
+    expect(
+      resolveGenericTypeAnnotation(
+        parse
+          .statement(code, -1)
+          .get('declarations')[0]
+          .get('id')
+          .get('typeAnnotation')
+          .get('typeAnnotation'),
+      ),
+    ).toBeUndefined();
+  });
 });
