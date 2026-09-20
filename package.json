@@ -2,7 +2,7 @@
   "private": true,
   "engines": {
     "node": "^20.9.0 || >=22",
-    "pnpm": ">=10.6.2"
+    "pnpm": "10.33.3"
   },
   "type": "module",
   "scripts": {
