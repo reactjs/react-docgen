@@ -4,20 +4,28 @@ import resolveToValue from '../utils/resolveToValue.js';
 import { unwrapUtilityType } from './flowUtilityTypes.js';
 import getTypeIdentifier from './getTypeIdentifier.js';
 
-function tryResolveGenericTypeAnnotation(path: NodePath): NodePath | undefined {
+function tryResolveGenericTypeAnnotation(
+  path: NodePath,
+  seen = new WeakSet<object>(),
+): NodePath | undefined {
   let typePath = unwrapUtilityType(path);
   const idPath = getTypeIdentifier(typePath);
 
   if (idPath) {
     typePath = resolveToValue(idPath);
-    if (isUnreachableFlowType(typePath)) {
+    if (isUnreachableFlowType(typePath) || seen.has(typePath.node)) {
       return;
     }
 
+    seen.add(typePath.node);
+
     if (typePath.isTypeAlias()) {
-      return tryResolveGenericTypeAnnotation(typePath.get('right'));
+      return tryResolveGenericTypeAnnotation(typePath.get('right'), seen);
     } else if (typePath.isTSTypeAliasDeclaration()) {
-      return tryResolveGenericTypeAnnotation(typePath.get('typeAnnotation'));
+      return tryResolveGenericTypeAnnotation(
+        typePath.get('typeAnnotation'),
+        seen,
+      );
     }
 
     return typePath;
