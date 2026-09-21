@@ -206,6 +206,23 @@ describe('componentMethodsHandler useImperativeHandle callbacks', () => {
     expect(documentation.methods[0]).toMatchObject(wrappedSignature);
   });
 
+  test('does not document a lifecycle name exposed as a callback (control)', () => {
+    // The React lifecycle filter still applies to an unwrapped callback, the
+    // same way it applies to a plain function property.
+    const definition = parse.statementLast<FunctionDeclaration>(`
+      import { useCallback, useImperativeHandle } from 'react';
+      function Component() {
+        const render = useCallback((argument: string): number => 1, []);
+        useImperativeHandle(ref, () => ({ render }));
+        return <div />;
+      }
+    `);
+
+    componentMethodsHandler(documentation, definition);
+
+    expect(documentation.methods).toHaveLength(0);
+  });
+
   // Hooks are only valid inside a function component, so the unwrapping stays
   // on the imperative handle path: these surfaces document plain functions and
   // keep ignoring useCallback calls.
