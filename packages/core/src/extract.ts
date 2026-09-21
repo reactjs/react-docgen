@@ -14,6 +14,7 @@ export interface DefaultValueDescriptor {
 export interface PropDescriptor {
   defaultValue?: DefaultValueDescriptor;
   description?: string;
+  flowType?: TypeDescriptor;
   required: boolean;
   tsType?: TypeDescriptor;
   type?: TypeDescriptor;

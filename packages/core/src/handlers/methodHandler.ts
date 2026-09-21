@@ -86,6 +86,7 @@ export default function createMethodHandler(getType?: TypeResolver): Handler {
         !fn ||
         name === 'constructor' ||
         name === 'render' ||
+        name === 'UNSAFE_componentWillReceiveProps' ||
         name === 'componentDidMount' ||
         name === 'componentWillUnmount'
       )

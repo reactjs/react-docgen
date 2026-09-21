@@ -272,6 +272,22 @@ importers:
 
   packages/core: {}
 
+  packages/hermes:
+    dependencies:
+      '@react-docgen/core':
+        specifier: workspace:*
+        version: link:../core
+      hermes-parser:
+        specifier: 0.25.1
+        version: 0.25.1
+    devDependencies:
+      '@react-docgen-internal/integration-tests':
+        specifier: workspace:*
+        version: link:../integration-tests
+      '@react-docgen/babel':
+        specifier: workspace:*
+        version: link:../babel
+
   packages/integration-tests: {}
 
   packages/react-docgen:

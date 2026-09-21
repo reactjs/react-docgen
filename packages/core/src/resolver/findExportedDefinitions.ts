@@ -100,7 +100,8 @@ const findExportedDefinitions: Resolver = (file) => {
       assignment.operator !== '=' ||
       !isMemberExpression(assignment.left) ||
       assignment.left.computed ||
-      !isIdentifier(assignment.right)
+      (!isIdentifier(assignment.right) &&
+        assignment.right.type !== 'CallExpression')
     ) {
       continue;
     }
@@ -116,7 +117,14 @@ const findExportedDefinitions: Resolver = (file) => {
       continue;
     }
 
-    const definition = findTopLevelDefinition(file, assignment.right.name);
+    const expression = path.get('expression');
+    const right =
+      expression && !Array.isArray(expression) ? expression.get('right') : null;
+    const definition = isIdentifier(assignment.right)
+      ? findTopLevelDefinition(file, assignment.right.name)
+      : right && !Array.isArray(right)
+        ? resolveComponentDefinition(file, right)
+        : null;
 
     if (definition) {
       definitions.add(definition);

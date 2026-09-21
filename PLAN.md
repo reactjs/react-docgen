@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current milestone: 4 — Hermes and Flow
-- Overall status: Milestone 3.1 complete; Milestone 4 not started
-- Last updated: 2026-08-16
+- Current milestone: 5 — Mixed-parser projects
+- Overall status: Milestone 4 complete
+- Last updated: 2026-09-21
 
 ## Decisions
 
@@ -106,10 +106,10 @@ cannot silently regress.
 
 ## Milestone 4 — Hermes and Flow
 
-- [ ] Add `@react-docgen/hermes` and normalize Hermes ESTree and Flow nodes.
-- [ ] Port Flow extraction and component patterns.
-- [ ] Run common fixtures through TypeScript, Hermes, and Babel adapters.
-- [ ] Report unsupported syntax as explicit parser capability errors.
+- [x] Add `@react-docgen/hermes` and normalize Hermes ESTree and Flow nodes.
+- [x] Port Flow extraction and component patterns.
+- [x] Run common fixtures through TypeScript, Hermes, and Babel adapters.
+- [x] Report unsupported syntax as explicit parser capability errors.
 
 Exit criteria: common JS/JSX output agrees across adapters and Flow output
 matches the legacy implementation.
@@ -189,6 +189,18 @@ import { parse } from '@react-docgen/typescript';
 ## Plan change log
 
 Record every material plan change here before or with implementation.
+
+### 2026-09-21 — Completed Hermes and Flow milestone
+
+- Added `@react-docgen/hermes` as a thin Hermes parser adapter over shared core
+  extraction, with normalization for Hermes ESTree and Flow nodes.
+- Ported Flow props and type extraction, including aliases, interfaces,
+  utilities, imports, generics, and recursive type protection.
+- Added file-based Flow/JavaScript corpus coverage and Babel differential tests;
+  unsupported TypeScript-family files now produce an explicit parser capability
+  error.
+- Reason: Hermes now matches legacy Flow output while common JavaScript output
+  remains consistent across parser adapters.
 
 ### 2026-08-16 — Added shared React extraction milestone
 

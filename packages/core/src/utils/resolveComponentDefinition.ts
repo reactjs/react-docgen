@@ -21,6 +21,7 @@ export default function resolveComponentDefinition(
 ): AstPath | null {
   if (
     path.node.type === 'ChainExpression' ||
+    path.node.type === 'TypeCastExpression' ||
     path.node.type === 'TSAsExpression' ||
     path.node.type === 'TSNonNullExpression' ||
     path.node.type === 'TSSatisfiesExpression' ||

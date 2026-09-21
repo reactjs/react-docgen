@@ -2,6 +2,7 @@ import type { AstNode } from '../internal.js';
 
 const wrappers = new Set([
   'ChainExpression',
+  'TypeCastExpression',
   'TSAsExpression',
   'TSNonNullExpression',
   'TSSatisfiesExpression',

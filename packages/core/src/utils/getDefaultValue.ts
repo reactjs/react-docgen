@@ -5,21 +5,25 @@ import type {
 } from '../internal.js';
 import { isIdentifier, isMemberExpression } from '../internal.js';
 import resolveValue, { getValueFile } from './resolveValue.js';
+import unwrapExpression from './unwrapExpression.js';
 
 export default function getDefaultValue(
   file: FileState,
   node: AstNode,
 ): DefaultValueDescriptor {
+  const wasTypeCast = node.type === 'TypeCastExpression';
+
+  node = unwrapExpression(node);
   if (isIdentifier(node) || isMemberExpression(node)) {
-    const original = node;
     const resolved = resolveValue(file, node);
     const resolvedFile = getValueFile(file, resolved);
 
-    if (resolvedFile.source.filename !== file.source.filename) {
+    if (
+      resolved !== node &&
+      (wasTypeCast || resolvedFile.source.filename !== file.source.filename)
+    ) {
       node = resolved;
       file = resolvedFile;
-    } else {
-      node = original;
     }
   }
   file = getValueFile(file, node);
@@ -33,9 +37,19 @@ export default function getDefaultValue(
     return { computed: true, value: '' };
   }
 
+  let value = file.source.code.slice(range[0], range[1]);
+
+  if (wasTypeCast && node.type === 'ObjectExpression') {
+    const closingIndent = value.match(/\n([ \t]*)}$/)?.[1];
+
+    if (closingIndent) {
+      value = value.replaceAll(`\n${closingIndent}`, '\n');
+    }
+  }
+
   return {
     computed:
       node.type === 'CallExpression' || node.type === 'MemberExpression',
-    value: file.source.code.slice(range[0], range[1]),
+    value,
   };
 }
