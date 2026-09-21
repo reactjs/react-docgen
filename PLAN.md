@@ -2,8 +2,8 @@
 
 ## Status
 
-- Current milestone: 5 — Mixed-parser projects
-- Overall status: Milestone 4 complete
+- Current milestone: 6 — Stable release and migration
+- Overall status: Milestone 5 complete
 - Last updated: 2026-09-21
 
 ## Decisions
@@ -132,12 +132,12 @@ package; all applicable JavaScript output remains identical.
 
 ## Milestone 5 — Mixed-parser projects
 
-- [ ] Add ordered `createParserRouter()` rules using filename, glob, or a custom
+- [x] Add ordered `createParserRouter()` rules using filename, glob, or a custom
       selector.
-- [ ] Require filenames when multiple parsers are configured.
-- [ ] Route every imported file independently.
-- [ ] Support parser-specific options per route and explicit no-match errors.
-- [ ] Add CLI config for single-parser and mixed-parser projects.
+- [x] Require filenames when multiple parsers are configured.
+- [x] Route every imported file independently.
+- [x] Support parser-specific options per route and explicit no-match errors.
+- [x] Add CLI config for single-parser and mixed-parser projects.
 
 Exit criteria: TypeScript and Hermes files can import each other while
 preserving exports, bindings, descriptions, and props.
@@ -189,6 +189,18 @@ import { parse } from '@react-docgen/typescript';
 ## Plan change log
 
 Record every material plan change here before or with implementation.
+
+### 2026-09-21 — Completed mixed-parser projects milestone
+
+- Added ordered parser routing for exact filenames, globs, regular expressions,
+  and custom selectors, including per-route parser options and explicit no-match
+  errors.
+- Required entry filenames when a router has multiple routes and kept imported
+  files on the same independent routing path.
+- Added CLI config modules that can supply a preconfigured single-parser or
+  mixed-parser parse function.
+- Reason: parser choice now follows each file through the whole project instead
+  of being fixed by the entry point.
 
 ### 2026-09-21 — Completed Hermes and Flow milestone
 

@@ -1,3 +1,5 @@
+import { parse } from 'comment-parser';
+import { stringify, tryParse, type RootResult } from 'jsdoc-type-pratt-parser';
 import type { TypeDescriptor } from '../internal.js';
 
 export interface DocblockParam {
@@ -13,67 +15,80 @@ export interface ParsedMethodDocblock {
   returns: { description?: string; type?: TypeDescriptor } | null;
 }
 
+function typeDescriptor(type: RootResult): TypeDescriptor {
+  switch (type.type) {
+    case 'JsdocTypeAny':
+      return { name: 'mixed' };
+    case 'JsdocTypeName':
+      return { name: type.value };
+    case 'JsdocTypeGeneric':
+      return {
+        name: typeDescriptor(type.left).name,
+        elements: type.elements.map(typeDescriptor),
+      };
+    case 'JsdocTypeTuple':
+      return {
+        name: 'tuple',
+        elements: type.elements.map((element) =>
+          element.type === 'JsdocTypeKeyValue'
+            ? element.right
+              ? typeDescriptor(element.right)
+              : { name: element.key }
+            : typeDescriptor(element),
+        ),
+      };
+    case 'JsdocTypeUnion':
+      return { name: 'union', elements: type.elements.map(typeDescriptor) };
+    case 'JsdocTypeNotNullable':
+    case 'JsdocTypeNullable':
+    case 'JsdocTypeOptional':
+    case 'JsdocTypeParenthesis':
+      return typeDescriptor(type.element);
+    case 'JsdocTypeVariadic':
+      return type.element
+        ? typeDescriptor(type.element)
+        : { name: stringify(type) };
+    default:
+      return { name: stringify(type) };
+  }
+}
+
 function parseType(raw: string): TypeDescriptor {
-  const value = raw.replace(/=$/, '');
+  const parsed = tryParse(raw, ['typescript', 'jsdoc']);
 
-  if (value === '*') return { name: 'mixed' };
-  if (value.startsWith('[') && value.endsWith(']')) {
-    return {
-      name: 'tuple',
-      elements: value
-        .slice(1, -1)
-        .split(',')
-        .map((part) => parseType(part.trim())),
-    };
-  }
-  if (value.includes('|')) {
-    return { name: 'union', elements: value.split('|').map(parseType) };
-  }
-  if (value.endsWith('[]')) {
-    return { name: 'Array', elements: [parseType(value.slice(0, -2))] };
-  }
-
-  return { name: value };
+  return parsed ? typeDescriptor(parsed) : { name: raw };
 }
 
 export default function parseMethodDocblock(
   docblock: string,
 ): ParsedMethodDocblock {
+  const source = `/**\n${docblock
+    .split('\n')
+    .map((line) => ` * ${line}`)
+    .join('\n')}\n */`;
+  const block = parse(source)[0];
   const params = new Map<string, DocblockParam>();
   let returns: ParsedMethodDocblock['returns'] = null;
-  const description: string[] = [];
 
-  for (const line of docblock.split('\n')) {
-    const trimmed = line.trim();
-    const param = /^@param\s+\{([^}]+)\}\s+(\S+)(?:\s+(.*))?$/.exec(trimmed);
-
-    if (param) {
-      const [, rawType = '', rawName = '', text] = param;
-      const name = rawName.replace(/^\.\.\./, '').replace(/^\[|\]$/g, '');
+  for (const tag of block?.tags ?? []) {
+    if (tag.tag === 'param') {
+      const name = tag.name.replace(/^\.\.\./, '');
 
       params.set(name, {
         name,
-        optional: rawType.endsWith('=') || /^\[/.test(rawName),
-        type: parseType(rawType),
-        ...(text ? { description: text } : {}),
+        optional: tag.optional || tag.type.endsWith('='),
+        ...(tag.type ? { type: parseType(tag.type) } : {}),
+        ...(tag.description ? { description: tag.description } : {}),
       });
-      continue;
-    }
-    const returned = /^@returns?\s*(?:\{([^}]+)\})?\s*(.*)$/.exec(trimmed);
-
-    if (returned && !returns) {
-      const [, rawType, text] = returned;
+    } else if ((tag.tag === 'return' || tag.tag === 'returns') && !returns) {
+      const description = [tag.name, tag.description].filter(Boolean).join(' ');
 
       returns = {
-        ...(rawType ? { type: parseType(rawType) } : {}),
-        ...(text ? { description: text } : {}),
+        ...(tag.type ? { type: parseType(tag.type) } : {}),
+        ...(description ? { description } : {}),
       };
-      continue;
-    }
-    if (!trimmed.startsWith('@') && (description.length > 0 || trimmed)) {
-      description.push(trimmed);
     }
   }
 
-  return { description: description.join('\n').trim(), params, returns };
+  return { description: block?.description ?? '', params, returns };
 }

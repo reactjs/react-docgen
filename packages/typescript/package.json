@@ -16,7 +16,7 @@
     "dist"
   ],
   "engines": {
-    "node": "^22.13.0 || >=24"
+    "node": "^22.13.0 || ^24.11.0 || >=26"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

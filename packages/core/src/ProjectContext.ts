@@ -10,10 +10,15 @@ export interface SourceFile {
 
 export interface Parser {
   readonly visitorKeys: VisitorKeys;
-  parse(source: SourceFile): AstNode;
+  parse(source: SourceFile, options?: unknown): AstNode;
 }
 
-export type ParserSelector = (filename: string) => Parser;
+export interface ParserSelection {
+  readonly options?: unknown;
+  readonly parser: Parser;
+}
+
+export type ParserSelector = (filename: string) => Parser | ParserSelection;
 export type Importer = (specifier: string, fromFilename: string) => SourceFile;
 
 export class FileState {
@@ -61,8 +66,10 @@ export default class ProjectContext {
   }
 
   parse(source: SourceFile): FileState {
-    const parser = this.#selectParser(source.filename);
-    const ast = parser.parse(source);
+    const selection = this.#selectParser(source.filename);
+    const { options, parser } =
+      'parser' in selection ? selection : { parser: selection };
+    const ast = parser.parse(source, options);
 
     return new FileState(this, source, ast, parser.visitorKeys);
   }

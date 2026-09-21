@@ -13,7 +13,11 @@ import typescriptPropsHandler from './handlers/typescriptPropsHandler.js';
 import parser from './parser.js';
 import getTSType from './utils/getTSType.js';
 
-export { default as parser, visitorKeys } from './parser.js';
+export {
+  default as parser,
+  visitorKeys,
+  type ParserOptions,
+} from './parser.js';
 
 export interface ParseOptions {
   filename?: string;

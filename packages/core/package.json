@@ -16,7 +16,7 @@
     "dist"
   ],
   "engines": {
-    "node": "^22.13.0 || >=24"
+    "node": "^22.13.0 || ^24.11.0 || >=26"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -24,5 +24,9 @@
     "build": "rimraf dist/ && tsc",
     "test": "vitest run"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "comment-parser": "^1.4.9",
+    "jsdoc-type-pratt-parser": "8.0.0"
+  }
 }

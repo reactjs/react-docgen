@@ -5,6 +5,21 @@ import { describe, expect, test } from 'vitest';
 import withFixture from './utils/withFixture';
 
 describe('cli', () => {
+  test('loads a single-parser or mixed-parser config module', async () => {
+    await withFixture('config', async ({ dir, run }) => {
+      const { stdout, stderr } = await run([
+        '--config',
+        join(dir, 'react-docgen.config.mjs'),
+        join(dir, 'Component.js'),
+      ]);
+
+      expect(stderr).toBe('');
+      expect(JSON.parse(stdout)).toEqual({
+        [join(dir, 'Component.js')]: [{ displayName: 'Configured' }],
+      });
+    });
+  });
+
   describe('glob', () => {
     test('reads files provided as command line arguments', async () => {
       await withFixture('basic', async ({ dir, run }) => {

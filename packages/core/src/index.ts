@@ -1,5 +1,6 @@
 export { default as AstPath } from './AstPath.js';
 export { default as createDocgen } from './createDocgen.js';
+export { default as createParserRouter } from './createParserRouter.js';
 export { isAstNode } from './AstNode.js';
 export { default as extract } from './extract.js';
 export * from './guards.js';
@@ -48,6 +49,7 @@ export type * from './nodes.js';
 export type {
   Importer,
   Parser,
+  ParserSelection,
   ParserSelector,
   SourceFile,
 } from './ProjectContext.js';
@@ -55,6 +57,11 @@ export type {
   CreateDocgenOptions,
   DocgenParseOptions,
 } from './createDocgen.js';
+export type {
+  ParserRoute,
+  ParserRouter,
+  ParserRouteTest,
+} from './createParserRouter.js';
 export type { Binding, BindingKind } from './Scope.js';
 export type { TypeResolver } from './handlers/methodHandler.js';
 export type {

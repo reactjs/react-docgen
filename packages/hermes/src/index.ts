@@ -17,7 +17,11 @@ import parser from './parser.js';
 import getFlowType from './utils/getFlowType.js';
 import { child, typeName } from './utils/ast.js';
 
-export { default as parser, visitorKeys } from './parser.js';
+export {
+  default as parser,
+  visitorKeys,
+  type ParserOptions,
+} from './parser.js';
 
 export interface ParseOptions {
   filename?: string;

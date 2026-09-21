@@ -1,4 +1,4 @@
-import { parseSync } from '@babel/core';
+import { parseSync, type TransformOptions } from '@babel/core';
 import { VISITOR_KEYS } from '@babel/types';
 import {
   createDocgen,
@@ -20,14 +20,15 @@ export const visitorKeys: VisitorKeys = {
 };
 
 const parser: Parser = {
-  parse(source) {
+  parse(source, options) {
     const ast = parseSync(source.code, {
       ast: true,
       code: false,
       filename: source.filename,
       parserOpts: {
-        plugins: ['jsx', 'typescript'],
+        plugins: ['jsx', 'typescript', 'estree'],
       },
+      ...(options as TransformOptions | undefined),
     });
 
     if (!ast) throw new TypeError('Babel did not return an AST.');

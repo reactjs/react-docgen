@@ -1,21 +1,10 @@
 import { isAstNode, type AstNode } from '@react-docgen/core';
 
 const typeNames: Record<string, string> = {
-  BigIntLiteral: 'Literal',
-  BooleanLiteral: 'Literal',
-  ClassMethod: 'MethodDefinition',
-  ClassPrivateMethod: 'MethodDefinition',
   ClassPrivateProperty: 'PropertyDefinition',
   ClassProperty: 'PropertyDefinition',
   CommentBlock: 'Block',
   CommentLine: 'Line',
-  DecimalLiteral: 'Literal',
-  NullLiteral: 'Literal',
-  NumericLiteral: 'Literal',
-  ObjectMethod: 'Property',
-  ObjectProperty: 'Property',
-  RegExpLiteral: 'Literal',
-  StringLiteral: 'Literal',
 };
 
 function normalizeValue(value: unknown): unknown {
@@ -47,40 +36,6 @@ function normalizeValue(value: unknown): unknown {
   output.type = typeNames[originalType] ?? originalType;
   if (typeof input.start === 'number' && typeof input.end === 'number') {
     output.range = [input.start, input.end];
-  }
-
-  if (output.type === 'Literal') {
-    output.raw =
-      input.extra && typeof input.extra === 'object' && 'raw' in input.extra
-        ? (input.extra as { raw: unknown }).raw
-        : originalType === 'NullLiteral'
-          ? 'null'
-          : input.value;
-    if (originalType === 'NullLiteral') output.value = null;
-  }
-
-  if (originalType === 'ObjectMethod') {
-    output.value = {
-      type: 'FunctionExpression',
-      range: output.range,
-      params: output.params,
-      body: output.body,
-      async: output.async,
-      generator: output.generator,
-      returnType: output.returnType,
-    };
-  }
-
-  if (originalType === 'ClassMethod' || originalType === 'ClassPrivateMethod') {
-    output.value = {
-      type: 'FunctionExpression',
-      range: output.range,
-      params: output.params,
-      body: output.body,
-      async: output.async,
-      generator: output.generator,
-      returnType: output.returnType,
-    };
   }
 
   return output;
