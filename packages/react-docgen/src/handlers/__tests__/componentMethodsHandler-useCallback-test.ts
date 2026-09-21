@@ -187,7 +187,29 @@ describe('componentMethodsHandler useImperativeHandle callbacks', () => {
     });
   });
 
-  test('extracts a callback method on an ObjectExpression component', () => {
+  test('documents a plain function exposed through the handle (control)', () => {
+    // Controls for the imperative handle surface itself: it documented plain
+    // function values before this change, so the callback cases above fail on
+    // the unwrapping, not on the handle.
+    const definition = parse.statementLast<FunctionDeclaration>(`
+      import { useImperativeHandle } from 'react';
+      function Component() {
+        const method = (argument: string): number => 1;
+        useImperativeHandle(ref, () => ({ method }));
+        return <div />;
+      }
+    `);
+
+    componentMethodsHandler(documentation, definition);
+
+    expect(documentation.methods).toHaveLength(1);
+    expect(documentation.methods[0]).toMatchObject(wrappedSignature);
+  });
+
+  // Hooks are only valid inside a function component, so the unwrapping stays
+  // on the imperative handle path: these surfaces document plain functions and
+  // keep ignoring useCallback calls.
+  test('does not document a callback method on an ObjectExpression component (control)', () => {
     const definition = parse.expressionLast<ObjectExpression>(`
       import { useCallback } from 'react';
       ({
@@ -197,11 +219,10 @@ describe('componentMethodsHandler useImperativeHandle callbacks', () => {
 
     componentMethodsHandler(documentation, definition);
 
-    expect(documentation.methods).toHaveLength(1);
-    expect(documentation.methods[0]).toMatchObject(wrappedSignature);
+    expect(documentation.methods).toHaveLength(0);
   });
 
-  test('extracts a callback method in a statics object', () => {
+  test('does not document a callback method in a statics object (control)', () => {
     const definition = parse.expressionLast<ObjectExpression>(`
       import { useCallback } from 'react';
       ({
@@ -213,14 +234,10 @@ describe('componentMethodsHandler useImperativeHandle callbacks', () => {
 
     componentMethodsHandler(documentation, definition);
 
-    expect(documentation.methods).toHaveLength(1);
-    expect(documentation.methods[0]).toMatchObject({
-      ...wrappedSignature,
-      modifiers: ['static'],
-    });
+    expect(documentation.methods).toHaveLength(0);
   });
 
-  test('extracts a callback class property', () => {
+  test('does not document a callback class property (control)', () => {
     const definition = parse.statementLast<ClassDeclaration>(`
       import React, { useCallback } from 'react';
       class Test extends React.Component {
@@ -231,14 +248,13 @@ describe('componentMethodsHandler useImperativeHandle callbacks', () => {
 
     componentMethodsHandler(documentation, definition);
 
-    expect(documentation.methods).toHaveLength(1);
-    expect(documentation.methods[0]).toMatchObject(wrappedSignature);
+    expect(documentation.methods).toHaveLength(0);
   });
 
   test('documents a plain function class property (control)', () => {
-    // Controls for the class-property surface itself: it documented plain
-    // function values before this change, so the callback case above fails
-    // on the unwrapping, not on the surface.
+    // Controls for the class-property surface: it still documents plain
+    // function values, so the callback class property above is undocumented
+    // because of the scoping and not because the surface stopped working.
     const definition = parse.statementLast<ClassDeclaration>(`
       import React from 'react';
       class Test extends React.Component {
