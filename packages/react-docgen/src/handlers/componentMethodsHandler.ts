@@ -1,6 +1,8 @@
 import getMemberValuePath from '../utils/getMemberValuePath.js';
 import type { MethodNodePath } from '../utils/getMethodDocumentation.js';
-import getMethodDocumentation from '../utils/getMethodDocumentation.js';
+import getMethodDocumentation, {
+  resolveToUseCallbackFunction,
+} from '../utils/getMethodDocumentation.js';
 import isReactComponentClass from '../utils/isReactComponentClass.js';
 import isReactComponentMethod from '../utils/isReactComponentMethod.js';
 import type Documentation from '../Documentation.js';
@@ -48,6 +50,22 @@ function isMethod(path: NodePath): path is MethodNodePath {
   return isProbablyMethod && !isReactComponentMethod(path);
 }
 
+/**
+ * A method exposed through `useImperativeHandle` is also a method when it is
+ * wrapped in `useCallback`, which is how such methods are usually memoized.
+ */
+function isImperativeHandleMethod(path: NodePath): path is MethodNodePath {
+  if (isMethod(path)) {
+    return true;
+  }
+
+  return (
+    path.isObjectProperty() &&
+    resolveToUseCallbackFunction(path.get('value') as NodePath) !== null &&
+    !isReactComponentMethod(path)
+  );
+}
+
 interface TraverseState {
   readonly scope: Scope | undefined;
   readonly name: string;
@@ -79,6 +97,7 @@ const explodedVisitors = visitors.explode<TraverseState>({
 
 interface MethodDefinition {
   path: MethodNodePath;
+  isImperativeHandle?: boolean;
   isStatic?: boolean;
 }
 
@@ -121,7 +140,7 @@ const explodedImperativeHandleVisitors =
 
         // We found the object body, now add all of the properties as methods.
         definition?.get('properties').forEach((p) => {
-          if (isMethod(p)) {
+          if (isImperativeHandleMethod(p)) {
             state.results.push(p);
           }
         });
@@ -166,7 +185,7 @@ function findImperativeHandleMethods(
 
   body.traverse(explodedImperativeHandleVisitors, state);
 
-  return state.results.map((p) => ({ path: p }));
+  return state.results.map((p) => ({ path: p, isImperativeHandle: true }));
 }
 
 function findAssignedMethods(
@@ -267,7 +286,9 @@ const componentMethodsHandler: Handler = function (
   documentation.set(
     'methods',
     methodPaths
-      .map(({ path: p, isStatic }) => getMethodDocumentation(p, { isStatic }))
+      .map(({ path: p, isImperativeHandle, isStatic }) =>
+        getMethodDocumentation(p, { isImperativeHandle, isStatic }),
+      )
       .filter(Boolean),
   );
 };
