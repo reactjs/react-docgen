@@ -55,7 +55,9 @@ function setPropDescriptor(
         },
         typeParams,
       );
-    } else if (!argument.has('typeParameters')) {
+    } else if (!(
+      'typeParameters' in argument.node && argument.node.typeParameters
+    )) {
       documentation.addComposes(id.node.name);
     }
   } else if (path.isObjectTypeProperty()) {
