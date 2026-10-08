@@ -14,6 +14,7 @@ import getTSType from './getTSType.js';
 import getParameterName from './getParameterName.js';
 import getPropertyName from './getPropertyName.js';
 import getTypeAnnotation from './getTypeAnnotation.js';
+import isReactBuiltinCall from './isReactBuiltinCall.js';
 import resolveToValue from './resolveToValue.js';
 import printValue from './printValue.js';
 import type {
@@ -32,8 +33,42 @@ export type MethodNodePath =
   | NodePath<ObjectMethod>
   | NodePath<ObjectProperty>;
 
+export interface MethodOptions {
+  /**
+   * Set for methods exposed through `useImperativeHandle`, which are allowed
+   * to be wrapped in `useCallback`.
+   */
+  isImperativeHandle?: boolean;
+  isStatic?: boolean;
+}
+
+/**
+ * Returns the function that a React `useCallback` call wraps, or null when
+ * the path is not such a call or does not wrap a function.
+ */
+export function resolveToUseCallbackFunction(
+  path: NodePath,
+): NodePath<FunctionType> | null {
+  const value = resolveToValue(path);
+
+  if (value.isCallExpression() && isReactBuiltinCall(value, 'useCallback')) {
+    const callback = value.get('arguments')[0];
+
+    if (callback && !Array.isArray(callback)) {
+      const wrapped = resolveToValue(callback);
+
+      if (wrapped.isFunction()) {
+        return wrapped;
+      }
+    }
+  }
+
+  return null;
+}
+
 function getMethodFunctionExpression(
   methodPath: MethodNodePath,
+  options: MethodOptions,
 ): NodePath<FunctionType> | null {
   if (methodPath.isClassMethod() || methodPath.isObjectMethod()) {
     return methodPath;
@@ -47,6 +82,12 @@ function getMethodFunctionExpression(
 
   if (functionExpression.isFunction()) {
     return functionExpression;
+  }
+
+  // An imperative handle method is documented through the function its
+  // `useCallback` wraps, because that is where its signature is declared.
+  if (options.isImperativeHandle) {
+    return resolveToUseCallbackFunction(potentialFunctionExpression);
   }
 
   return null;
@@ -68,9 +109,12 @@ function getMethodParamOptional(
   return identifier.isIdentifier() ? Boolean(identifier.node.optional) : false;
 }
 
-function getMethodParamsDoc(methodPath: MethodNodePath): MethodParameter[] {
+function getMethodParamsDoc(
+  methodPath: MethodNodePath,
+  options: MethodOptions,
+): MethodParameter[] {
   const params: MethodParameter[] = [];
-  const functionExpression = getMethodFunctionExpression(methodPath);
+  const functionExpression = getMethodFunctionExpression(methodPath, options);
 
   if (functionExpression) {
     // Extract param types.
@@ -106,8 +150,11 @@ function getMethodParamsDoc(methodPath: MethodNodePath): MethodParameter[] {
 }
 
 // Extract flow return type.
-function getMethodReturnDoc(methodPath: MethodNodePath): MethodReturn | null {
-  const functionExpression = getMethodFunctionExpression(methodPath);
+function getMethodReturnDoc(
+  methodPath: MethodNodePath,
+  options: MethodOptions,
+): MethodReturn | null {
+  const functionExpression = getMethodFunctionExpression(methodPath, options);
 
   if (functionExpression && functionExpression.node.returnType) {
     const returnType = getTypeAnnotation(functionExpression.get('returnType'));
@@ -128,7 +175,7 @@ function getMethodReturnDoc(methodPath: MethodNodePath): MethodReturn | null {
 
 function getMethodModifiers(
   methodPath: MethodNodePath,
-  options: { isStatic?: boolean },
+  options: MethodOptions,
 ): MethodModifier[] {
   if (methodPath.isAssignmentExpression()) {
     return ['static'];
@@ -146,7 +193,7 @@ function getMethodModifiers(
     modifiers.push('static');
   }
 
-  const functionExpression = getMethodFunctionExpression(methodPath);
+  const functionExpression = getMethodFunctionExpression(methodPath, options);
 
   if (functionExpression) {
     if (
@@ -230,7 +277,7 @@ function getMethodDocblock(methodPath: MethodNodePath): string | null {
 // or as assignment expression of the form `Component.foo = function() {}`
 export default function getMethodDocumentation(
   methodPath: MethodNodePath,
-  options: { isStatic?: boolean } = {},
+  options: MethodOptions = {},
 ): MethodDescriptor | null {
   if (
     getMethodAccessibility(methodPath) === 'private' ||
@@ -247,7 +294,7 @@ export default function getMethodDocumentation(
     name,
     docblock: getMethodDocblock(methodPath),
     modifiers: getMethodModifiers(methodPath, options),
-    params: getMethodParamsDoc(methodPath),
-    returns: getMethodReturnDoc(methodPath),
+    params: getMethodParamsDoc(methodPath, options),
+    returns: getMethodReturnDoc(methodPath, options),
   };
 }
