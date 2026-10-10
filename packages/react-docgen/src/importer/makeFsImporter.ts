@@ -196,13 +196,14 @@ export default function makeFsImporter(
           }
         } else if (
           declaration.hasNode() &&
-          declaration.has('id') &&
+          'id' in declaration.node &&
+          declaration.node.id &&
           (declaration.get('id') as NodePath).isIdentifier({ name })
         ) {
           // export function/class/type/interface/enum ...
 
           state.resultPath = declaration;
-        } else if (path.has('specifiers')) {
+        } else if (path.node.specifiers.length > 0) {
           // export { ... } or export x from ... or export * as x from ...
 
           for (const specifierPath of path.get('specifiers')) {
@@ -213,7 +214,7 @@ export default function makeFsImporter(
 
             if (exported.isIdentifier({ name })) {
               // export ... from ''
-              if (path.has('source')) {
+              if (path.node.source) {
                 const local = specifierPath.isExportSpecifier()
                   ? specifierPath.node.local.name
                   : 'default';

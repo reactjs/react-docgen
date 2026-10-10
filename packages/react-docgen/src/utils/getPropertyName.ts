@@ -42,7 +42,7 @@ export default function getPropertyName(
     }
 
     return null;
-  } else if (propertyPath.has('computed')) {
+  } else if ('computed' in propertyPath.node && propertyPath.node.computed) {
     const key = propertyPath.get('key') as NodePath<Expression>;
 
     // Try to resolve variables and member expressions
