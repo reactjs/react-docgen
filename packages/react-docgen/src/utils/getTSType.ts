@@ -1,3 +1,4 @@
+import getTypeArguments from './getTypeArguments.js';
 import getPropertyName from './getPropertyName.js';
 import printValue from './printValue.js';
 import getTypeAnnotation from '../utils/getTypeAnnotation.js';
@@ -130,12 +131,15 @@ function handleTSTypeReference(
     (typeParams && typeParams[type.name]) ||
     resolveToValue(path.get('typeName'));
 
-  const typeParameters = path.get('typeParameters');
+  const typeParameters = getTypeArguments(path);
   const resolvedTypeParameters = resolvedPath.get('typeParameters') as NodePath<
     TSTypeParameterDeclaration | null | undefined
   >;
 
-  if (typeParameters.hasNode() && resolvedTypeParameters.hasNode()) {
+  if (
+    typeParameters.isTSTypeParameterInstantiation() &&
+    resolvedTypeParameters.hasNode()
+  ) {
     typeParams = getTypeParameters(
       resolvedTypeParameters,
       typeParameters,
@@ -157,7 +161,7 @@ function handleTSTypeReference(
 
   if (resolvedTypeAnnotation.hasNode()) {
     type = getTSTypeWithResolvedTypes(resolvedTypeAnnotation, typeParams);
-  } else if (typeParameters.hasNode()) {
+  } else if (typeParameters.isTSTypeParameterInstantiation()) {
     const params = typeParameters.get('params');
 
     type = {
@@ -285,10 +289,12 @@ function handleTSMappedType(
   path: NodePath<TSMappedType>,
   typeParams: TypeParameters | null,
 ): ObjectSignatureType<TSFunctionSignatureType> {
-  const key = getTSTypeWithResolvedTypes(
-    path.get('typeParameter').get('constraint') as NodePath<TSType>,
-    typeParams,
-  );
+  const constraint = (
+    'constraint' in path.node
+      ? path.get('constraint')
+      : path.get('typeParameter').get('constraint')
+  ) as NodePath<TSType>;
+  const key = getTSTypeWithResolvedTypes(constraint, typeParams);
 
   key.required = !path.node.optional;
 
@@ -321,8 +327,11 @@ function handleTSFunctionType(
   typeParams: TypeParameters | null,
 ): TSFunctionSignatureType {
   let returnType: TypeDescriptor<TSFunctionSignatureType> | undefined;
+  const usesBabel8Fields = 'params' in path.node;
 
-  const annotation = path.get('typeAnnotation');
+  const annotation = path.get(
+    usesBabel8Fields ? 'returnType' : 'typeAnnotation',
+  ) as NodePath<TSTypeAnnotation | null | undefined>;
 
   if (annotation.hasNode()) {
     returnType = getTSTypeWithResolvedTypes(annotation, typeParams);
@@ -338,7 +347,11 @@ function handleTSFunctionType(
     },
   };
 
-  path.get('parameters').forEach((param) => {
+  const parameters = path.get(
+    usesBabel8Fields ? 'params' : 'parameters',
+  ) as Array<NodePath<TSFunctionType['parameters'][number]>>;
+
+  parameters.forEach((param) => {
     const typeAnnotation = getTypeAnnotation<TSType>(param);
 
     const arg: FunctionArgumentType<TSFunctionSignatureType> = {
@@ -399,7 +412,10 @@ function handleTSTypeQuery(
   if (exprName.isIdentifier()) {
     const resolvedPath = resolveToValue(path.get('exprName'));
 
-    if (resolvedPath.has('typeAnnotation')) {
+    if (
+      'typeAnnotation' in resolvedPath.node &&
+      resolvedPath.node.typeAnnotation
+    ) {
       return getTSTypeWithResolvedTypes(
         resolvedPath.get('typeAnnotation') as NodePath<TypeScript>,
         typeParams,
