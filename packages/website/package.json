@@ -28,9 +28,9 @@
     "nextra-theme-docs": "4.6.1",
     "postcss": "8.5.30",
     "postcss-lightningcss": "1.1.1",
-    "react": "19.3.0",
+    "react": "19.3.1",
     "react-docgen": "workspace:8.0.3",
-    "react-dom": "19.3.0",
+    "react-dom": "19.3.1",
     "tailwindcss": "4.3.3"
   },
   "browserslist": [
