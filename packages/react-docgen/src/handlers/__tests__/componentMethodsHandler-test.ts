@@ -94,13 +94,14 @@ describe('componentMethodsHandler', () => {
       'direct ObjectExpression': '({ method: () => {} })',
       'regular ReturnStatement': '{x; return { method: () => {} };}',
       'assigned ReturnStatement': '{const r = { method: () => {} }; return r;}',
+      'useCallback ObjectExpression': '({ method: useCallback(() => {}, []) })',
     };
 
     Object.entries(methodDefinitions).forEach(([name, code]) => {
       describe(name, () => {
         test('FunctionExpression Component', () => {
           const definition = parse.expressionLast<FunctionExpression>(
-            `import { useImperativeHandle } from 'react';
+            `import { useImperativeHandle, useCallback } from 'react';
          (function () {
            useImperativeHandle(ref, () => ${code});
            return <div />;
@@ -115,7 +116,7 @@ describe('componentMethodsHandler', () => {
 
         test('FunctionDeclaration Component', () => {
           const definition = parse.statementLast<FunctionDeclaration>(
-            `import { useImperativeHandle } from 'react';
+            `import { useImperativeHandle, useCallback } from 'react';
          function Component() {
            useImperativeHandle(ref, () => ${code});
            return <div />;
@@ -130,7 +131,7 @@ describe('componentMethodsHandler', () => {
 
         test('ArrowFunctionExpression Component', () => {
           const definition = parse.expressionLast<FunctionExpression>(
-            `import { useImperativeHandle } from 'react';
+            `import { useImperativeHandle, useCallback } from 'react';
          (() => {
            useImperativeHandle(ref, () => ${code});
            return <div />;
@@ -143,6 +144,32 @@ describe('componentMethodsHandler', () => {
           expect(documentation.methods).toMatchSnapshot();
         });
       });
+    });
+
+    test('useCallback referenced from useImperativeHandle', () => {
+      const definition = parse.statementLast<FunctionDeclaration>(
+        `import { useImperativeHandle, useCallback } from 'react';
+         function Component() {
+           const method = useCallback((a: string): number => 1, []);
+           useImperativeHandle(ref, () => ({
+             /** method description */
+             method,
+           }));
+           return <div />;
+         }`,
+      );
+
+      componentMethodsHandler(documentation, definition);
+
+      expect(documentation.methods).toEqual([
+        {
+          name: 'method',
+          docblock: 'method description',
+          modifiers: [],
+          params: [{ name: 'a', optional: false, type: { name: 'string' } }],
+          returns: { type: { name: 'number' } },
+        },
+      ]);
     });
 
     test('AssignmentExpression and useImperativeHandle', () => {
