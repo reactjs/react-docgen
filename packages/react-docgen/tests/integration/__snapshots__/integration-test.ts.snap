@@ -2163,3 +2163,22 @@ exports[`integration > fixtures > processes component "test-all-imports.tsx" wit
   },
 ]
 `;
+
+exports[`integration > fixtures > processes component "ts-extends-mixin.tsx" without errors 1`] = `
+[
+  {
+    "description": "",
+    "displayName": "MyComponent",
+    "methods": [],
+    "props": {
+      "value": {
+        "description": "description of value",
+        "required": true,
+        "tsType": {
+          "name": "string",
+        },
+      },
+    },
+  },
+]
+`;

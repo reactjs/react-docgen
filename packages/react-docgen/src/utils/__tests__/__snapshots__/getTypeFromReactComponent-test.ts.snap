@@ -83,6 +83,18 @@ exports[`getTypeFromReactComponent > Flow > stateless > finds param type annotat
 ]
 `;
 
+exports[`getTypeFromReactComponent > TypeScript > classes > finds props type in mixin base class params 1`] = `
+[
+  Node {
+    "type": "TSTypeReference",
+    "typeName": Node {
+      "name": "Props",
+      "type": "Identifier",
+    },
+  },
+]
+`;
+
 exports[`getTypeFromReactComponent > TypeScript > classes > finds props type in params 1`] = `
 [
   Node {
@@ -96,6 +108,18 @@ exports[`getTypeFromReactComponent > TypeScript > classes > finds props type in 
 `;
 
 exports[`getTypeFromReactComponent > TypeScript > classes > finds props type in properties 1`] = `
+[
+  Node {
+    "type": "TSTypeReference",
+    "typeName": Node {
+      "name": "Props",
+      "type": "Identifier",
+    },
+  },
+]
+`;
+
+exports[`getTypeFromReactComponent > TypeScript > classes > finds props type in properties when extending a mixin without params 1`] = `
 [
   Node {
     "type": "TSTypeReference",
