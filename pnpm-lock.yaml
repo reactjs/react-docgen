@@ -200,8 +200,8 @@ importers:
         specifier: 5.5.7
         version: 5.5.7(eslint-config-prettier@10.1.8(eslint@10.13.0(jiti@2.7.0)(supports-color@7.2.0)))(eslint@10.13.0(jiti@2.7.0)(supports-color@7.2.0))(prettier@3.9.10)
       execa:
-        specifier: 10.1.1
-        version: 10.1.1
+        specifier: 10.2.0
+        version: 10.2.0
       globals:
         specifier: 17.13.0
         version: 17.13.0
@@ -2808,8 +2808,8 @@ packages:
     resolution: {integrity: sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==}
     engines: {node: '>=0.10.0'}
 
-  execa@10.1.1:
-    resolution: {integrity: sha512-yJAC9ulsE6fU0K6wzJBIH+wI+KAtMeu6Ck8rs23OVzvEhqXjGADdI6K+YNIDAjcQQ6AwXTD96cKExJo6xFJXyg==}
+  execa@10.2.0:
+    resolution: {integrity: sha512-j1pFOVxaybMVCTNHSBuISL2KQcDS3KIE1wBmUp4n2X+1FgaQI2ZDJVy9TYxDyMCzYojRIMh9O8X/UoWZtxTJdw==}
     engines: {node: '>=22'}
 
   execa@8.0.1:
@@ -7751,7 +7751,7 @@ snapshots:
 
   esutils@2.0.3: {}
 
-  execa@10.1.1:
+  execa@10.2.0:
     dependencies:
       '@sindresorhus/merge-streams': 4.0.0
       figures: 6.1.0
