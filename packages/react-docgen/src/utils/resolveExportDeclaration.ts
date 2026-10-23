@@ -13,7 +13,7 @@ export default function resolveExportDeclaration(
   if (path.isExportDefaultDeclaration()) {
     definitions.push(path.get('declaration'));
   } else if (path.isExportNamedDeclaration()) {
-    if (path.has('declaration')) {
+    if (path.node.declaration) {
       const declaration = path.get('declaration');
 
       if (declaration.isVariableDeclaration()) {
@@ -23,7 +23,7 @@ export default function resolveExportDeclaration(
       } else if (declaration.isDeclaration()) {
         definitions.push(declaration);
       }
-    } else if (path.has('specifiers')) {
+    } else if (path.node.specifiers.length > 0) {
       path.get('specifiers').forEach((specifier) => {
         if (specifier.isExportSpecifier()) {
           definitions.push(specifier.get('local'));
