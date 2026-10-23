@@ -5,6 +5,29 @@ import { parse, makeFsImporter } from '../../src/main';
 import { fileURLToPath } from 'url';
 
 describe('integration', () => {
+  test('extracts props from the builtin Readonly wrapper', () => {
+    const result = parse(
+      `interface Props {
+        /** The displayed label. */
+        label: string;
+        disabled?: boolean;
+      }
+      export default function Example(props: Readonly<Props>) {
+        return <div>{props.label}</div>;
+      }`,
+      { babelOptions: { filename: 'readonly.tsx', babelrc: false } },
+    );
+
+    expect(result[0]?.props).toMatchObject({
+      label: {
+        required: true,
+        tsType: { name: 'string' },
+        description: 'The displayed label.',
+      },
+      disabled: { required: false, tsType: { name: 'boolean' } },
+    });
+  });
+
   describe('fixtures', () => {
     const fixturePath = join(
       dirname(fileURLToPath(import.meta.url)),
