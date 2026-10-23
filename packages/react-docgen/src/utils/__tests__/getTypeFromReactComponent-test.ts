@@ -154,6 +154,29 @@ describe('getTypeFromReactComponent', () => {
 
         expect(getTypeFromReactComponent(path)).toMatchSnapshot();
       });
+
+      test('finds props type in mixin base class params', () => {
+        const path = parseTypescript.statementLast<ClassDeclaration>(
+          `import React from 'react';
+           class X extends withFoo(React.Component<Props, State>) {
+             render() {}
+           }`,
+        );
+
+        expect(getTypeFromReactComponent(path)).toMatchSnapshot();
+      });
+
+      test('finds props type in properties when extending a mixin without params', () => {
+        const path = parseTypescript.statementLast<ClassDeclaration>(
+          `import React from 'react';
+           class X extends withFoo(React.Component) {
+             props: Props;
+             render() {}
+           }`,
+        );
+
+        expect(getTypeFromReactComponent(path)).toMatchSnapshot();
+      });
     });
   });
 
