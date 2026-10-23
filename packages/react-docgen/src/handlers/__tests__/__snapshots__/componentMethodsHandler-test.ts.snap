@@ -308,3 +308,39 @@ exports[`componentMethodsHandler > useImperativeHandle > regular ReturnStatement
   },
 ]
 `;
+
+exports[`componentMethodsHandler > useImperativeHandle > useCallback ObjectExpression > ArrowFunctionExpression Component 1`] = `
+[
+  {
+    "docblock": null,
+    "modifiers": [],
+    "name": "method",
+    "params": [],
+    "returns": null,
+  },
+]
+`;
+
+exports[`componentMethodsHandler > useImperativeHandle > useCallback ObjectExpression > FunctionDeclaration Component 1`] = `
+[
+  {
+    "docblock": null,
+    "modifiers": [],
+    "name": "method",
+    "params": [],
+    "returns": null,
+  },
+]
+`;
+
+exports[`componentMethodsHandler > useImperativeHandle > useCallback ObjectExpression > FunctionExpression Component 1`] = `
+[
+  {
+    "docblock": null,
+    "modifiers": [],
+    "name": "method",
+    "params": [],
+    "returns": null,
+  },
+]
+`;

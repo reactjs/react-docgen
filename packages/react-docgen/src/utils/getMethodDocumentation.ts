@@ -14,6 +14,7 @@ import getTSType from './getTSType.js';
 import getParameterName from './getParameterName.js';
 import getPropertyName from './getPropertyName.js';
 import getTypeAnnotation from './getTypeAnnotation.js';
+import isReactBuiltinCall from './isReactBuiltinCall.js';
 import resolveToValue from './resolveToValue.js';
 import printValue from './printValue.js';
 import type {
@@ -32,6 +33,23 @@ export type MethodNodePath =
   | NodePath<ObjectMethod>
   | NodePath<ObjectProperty>;
 
+/**
+ * Resolves the value of a method, unwrapping `useCallback(fn, deps)` to `fn`.
+ */
+export function resolveMethodValue(path: NodePath): NodePath {
+  const value = resolveToValue(path);
+
+  if (isReactBuiltinCall(value, 'useCallback')) {
+    const callback = value.get('arguments')[0];
+
+    if (callback) {
+      return resolveToValue(callback);
+    }
+  }
+
+  return value;
+}
+
 function getMethodFunctionExpression(
   methodPath: MethodNodePath,
 ): NodePath<FunctionType> | null {
@@ -43,7 +61,7 @@ function getMethodFunctionExpression(
     ? methodPath.get('right')
     : (methodPath.get('value') as NodePath);
 
-  const functionExpression = resolveToValue(potentialFunctionExpression);
+  const functionExpression = resolveMethodValue(potentialFunctionExpression);
 
   if (functionExpression.isFunction()) {
     return functionExpression;
