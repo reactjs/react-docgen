@@ -18,6 +18,7 @@ import type { NodePath } from '@babel/traverse';
 import type {
   TSUnionType,
   TSFunctionType,
+  TSMethodSignature,
   TSIntersectionType,
   TSMappedType,
   TSTupleType,
@@ -216,9 +217,18 @@ function handleTSTypeLiteral(
         doc = { description: docblock };
       }
 
+      let value: TypeDescriptor<TSFunctionSignatureType>;
+
+      if (param.isTSMethodSignature()) {
+        value = handleTSFunctionType(param, typeParams);
+        value.required = !param.node.optional;
+      } else {
+        value = getTSTypeWithRequirements(typeAnnotation, typeParams);
+      }
+
       type.signature.properties.push({
         key: propName,
-        value: getTSTypeWithRequirements(typeAnnotation, typeParams),
+        value,
         ...doc,
       });
     } else if (param.isTSCallSignatureDeclaration()) {
@@ -317,7 +327,9 @@ function handleTSMappedType(
 }
 
 function handleTSFunctionType(
-  path: NodePath<TSCallSignatureDeclaration | TSFunctionType>,
+  path: NodePath<
+    TSCallSignatureDeclaration | TSFunctionType | TSMethodSignature
+  >,
   typeParams: TypeParameters | null,
 ): TSFunctionSignatureType {
   let returnType: TypeDescriptor<TSFunctionSignatureType> | undefined;
