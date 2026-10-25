@@ -206,8 +206,8 @@ importers:
         specifier: 17.13.0
         version: 17.13.0
       nx:
-        specifier: 23.3.0
-        version: 23.3.0
+        specifier: 24.0.0
+        version: 24.0.0
       prettier:
         specifier: 3.9.10
         version: 3.9.10
@@ -1150,57 +1150,57 @@ packages:
     resolution: {integrity: sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA==}
     engines: {node: '>=12.4.0'}
 
-  '@nx/nx-darwin-arm64@23.3.0':
-    resolution: {integrity: sha512-g06RId2Tn99ICwDFisZfDZ2vpM2bXvoCZeNtTWgwLm5mpJ4A7+akI7iXCe50CbzgE4waVRQCOAYpD1zPsKoUVQ==}
+  '@nx/nx-darwin-arm64@24.0.0':
+    resolution: {integrity: sha512-ZHXmqkMVF7aA6QShvc5lVkCU6JHjGV19m8eplw0pL06AFgNdQ9u16013HJPm+Ys6fKnltYDWl/Ef7meQjT+u3Q==}
     cpu: [arm64]
     os: [darwin]
 
-  '@nx/nx-darwin-x64@23.3.0':
-    resolution: {integrity: sha512-6t9P5ZQ3LPuCf+HBDMTGtpKHjVvINL9/blpY4PucKjdC+vnNSL7uTZwng1ePenlNF0WFtLHqxUx/H1XgohRq0w==}
+  '@nx/nx-darwin-x64@24.0.0':
+    resolution: {integrity: sha512-a+cpg/VQvD/vF7BJsl70vulc1GxCamtU0XwzkGOzzDATn3JcKBNpBFx0Iqp5frJYN0X00Supz4zhgCEe9LpCow==}
     cpu: [x64]
     os: [darwin]
 
-  '@nx/nx-freebsd-x64@23.3.0':
-    resolution: {integrity: sha512-B8Xuh36ZdMJ2SxpFfUITUvCZQTKoGOFHpSactxCx3ymFBUc24Z0B/hQRIYPv43icugcnp71dIwu6IvI66/aqtQ==}
+  '@nx/nx-freebsd-x64@24.0.0':
+    resolution: {integrity: sha512-PAGVaLbJxEzBXSQvg82g/8mDoqoMQFIX/EchuJbJGekIiz3BM2Xgyiy5qAD2/2meLVOTFtbkBQR+4ZSymgqGWw==}
     cpu: [x64]
     os: [freebsd]
 
-  '@nx/nx-linux-arm-gnueabihf@23.3.0':
-    resolution: {integrity: sha512-piMlCEI0tbHt1+QSgL8J1szlqBSGKV27nax8uvhTxleR2Evl3Kxa80BDIEObrUU3lz+AS4oKrcUHUeyJGPdCsQ==}
+  '@nx/nx-linux-arm-gnueabihf@24.0.0':
+    resolution: {integrity: sha512-WOWBIlTb+1FNP86GcodUF4BHdjVyGCwrVH/lqUvNAmT/FPopirCzVLdoj1P5kfWC/F0II/qAu7X698yKzIu71A==}
     cpu: [arm]
     os: [linux]
 
-  '@nx/nx-linux-arm64-gnu@23.3.0':
-    resolution: {integrity: sha512-SljVcZYwD4qpwseAUsEQmrXxE0vcPdDMEtvKlpkTProofAMeQFNEh4imw458TylOq7YeFVnNQdZcBnTO+1FeIw==}
+  '@nx/nx-linux-arm64-gnu@24.0.0':
+    resolution: {integrity: sha512-vASWIfOijXd5cdOn0Z6Wcd2iwtFxlBoBre6w+c8wuLLLPN3r4SRQyL+jAEB+eHkUHz39mMxSwa8DY+VlS9luVw==}
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
 
-  '@nx/nx-linux-arm64-musl@23.3.0':
-    resolution: {integrity: sha512-UwzWPtcWxkAE8IOZl4M1eiqsa1yci+zlZ7Vv5ogozhm9jD9EHZVsgeWLrftW22OtU2u+ude/fzBeacuqUDOMtg==}
+  '@nx/nx-linux-arm64-musl@24.0.0':
+    resolution: {integrity: sha512-ZiG9Kjq1AvYmFK3p03OOjCcYXwiBpF2Z7Ih/QnKsRMcnT7GbjDpfuO3FkSMtuE0OWoAdAt9Kb2yXBP3L9IZc6w==}
     cpu: [arm64]
     os: [linux]
     libc: [musl]
 
-  '@nx/nx-linux-x64-gnu@23.3.0':
-    resolution: {integrity: sha512-PJerI1Ag/wkPh8XMBKO4Cx6Ao01QJsSk/ycFNmM7vzW19Db3OvsTSKqiql/z96zINI69MqLDZH2iwHMZXbJupQ==}
+  '@nx/nx-linux-x64-gnu@24.0.0':
+    resolution: {integrity: sha512-FstnaQtRkxD0RGYtCJb7QYq9Sgzu+vCKYO+p3/uq+q2kKLwlu4ovvzUeDctTuCIjx1tFamp/Uu8n+bHavUE7KQ==}
     cpu: [x64]
     os: [linux]
     libc: [glibc]
 
-  '@nx/nx-linux-x64-musl@23.3.0':
-    resolution: {integrity: sha512-CGete35FhqkdlBZM/Oq6Ddu+yQ7UHMRV/ZYCoKeNU4/YIDIWze8VblF7PGKLU4k5JN4bRY1MmDmryHqVIMXMBA==}
+  '@nx/nx-linux-x64-musl@24.0.0':
+    resolution: {integrity: sha512-dBFcWaSOhl17ZzZ+ybi9ctPlYPwDTlJjGgkpV5e/O6D7V9MFziJ4xZG/mVgacYbW3f5HS6QRVno9yPtSyLj2MA==}
     cpu: [x64]
     os: [linux]
     libc: [musl]
 
-  '@nx/nx-win32-arm64-msvc@23.3.0':
-    resolution: {integrity: sha512-T/ChrK9uzt9/29TQzc8FGkRGDJC130ltM77eKI3Z67OjyD4SKHhsiTu5GameH1BU72jcF4QEKFf74PoI9JzbuA==}
+  '@nx/nx-win32-arm64-msvc@24.0.0':
+    resolution: {integrity: sha512-u2t4v71qCT7Nj4QbxuJ8X3iii881goaXJ7fjTcYw4EhSk1FemF6lh7mlSaHSczQ+/JFbiVppu649NYaVlIxGcw==}
     cpu: [arm64]
     os: [win32]
 
-  '@nx/nx-win32-x64-msvc@23.3.0':
-    resolution: {integrity: sha512-ermx8Qy8qf0ZIEDiGPqIXxQ0OPEL8VVUOyvAsxDec8aft3pCFjX8LrFhlfnAfM6MBFs5Bnc9Xl9D8TMzFBgo9w==}
+  '@nx/nx-win32-x64-msvc@24.0.0':
+    resolution: {integrity: sha512-Rv464/mLVw3lKdsxhFJXk3WI2KyaCoGbTNUzLi8nlzEuZ0ZcBK4VKxAxlvVCAVrxPIZkbUFDYE7vRvdZ2DGikg==}
     cpu: [x64]
     os: [win32]
 
@@ -2112,10 +2112,6 @@ packages:
   buffer@5.7.1:
     resolution: {integrity: sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ==}
 
-  bundle-name@4.1.0:
-    resolution: {integrity: sha512-tjwM5exMg6BGRI+kNmTntNsvdZS1X8BFYS6tnJ2hdH0kVxM6/eVZ2xy+FqStSWvYmtfFMDLIxurorHwDKfDz5Q==}
-    engines: {node: '>=18'}
-
   c8@7.14.0:
     resolution: {integrity: sha512-i04rtkkcNcCf7zsQcSv/T9EbUn4RXQ6mropeMcjFOsQXQ0iGLAr/xT6TImQg4+U9hmNpN9XdvPkjUL1IzbgxJw==}
     engines: {node: '>=10.12.0'}
@@ -2483,24 +2479,12 @@ packages:
   deep-is@0.1.4:
     resolution: {integrity: sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==}
 
-  default-browser-id@5.0.0:
-    resolution: {integrity: sha512-A6p/pu/6fyBcA1TRz/GqWYPViplrftcW2gZC9q79ngNCKAeR/X3gcEdXQHl4KNXV+3wgIJ1CPkJQ3IHM6lcsyA==}
-    engines: {node: '>=18'}
-
-  default-browser@5.2.1:
-    resolution: {integrity: sha512-WY/3TUME0x3KPYdRRxEJJvXRHV4PyPoUsxtZa78lwItwRQRHhd2U9xOscaT/YTf8uCXIAjeJOFBVEh/7FtD8Xg==}
-    engines: {node: '>=18'}
-
   defaults@1.0.4:
     resolution: {integrity: sha512-eFuaLoy/Rxalv2kr+lqMlUnrDWV+3j4pljOIJgLIhI058IQfWJ7vXhyEIHu+HtC738klGALYxOKDO0bQP3tg8A==}
 
   define-data-property@1.1.4:
     resolution: {integrity: sha512-rBMvIzlpA8v6E+SJZoo++HAYqsLrkg7MSfIinMPFhmkorw7X+dOXVJQs+QT69zGkzMyfDnIMN2Wid1+NbL3T+A==}
     engines: {node: '>= 0.4'}
-
-  define-lazy-prop@3.0.0:
-    resolution: {integrity: sha512-N+MeXYoqr3pOgn8xfyRPREN7gHakLYjhsHhWGT3fWAiL4IkAt0iDw14QiiEm2bE30c5XX5q0FtAA3CK5f9/BUg==}
-    engines: {node: '>=12'}
 
   define-properties@1.2.1:
     resolution: {integrity: sha512-8QmQKqEASLd5nx0U1B1okLElbUuuttJ/AnYmRXbbbGDWh6uS208EjD4Xqq/I9wK7u0v6O08XhTWnt5XtEbR6Dg==}
@@ -3132,10 +3116,6 @@ packages:
     resolution: {integrity: sha512-/8UvqAPU9DGTI9k4mxtf49U37Isfwr8Uts96+SBHIkFxPJnHS0Ew4f00sM4Scd8V8EjM0jUNtVDdv1kPdt35lg==}
     engines: {node: '>= 4'}
 
-  ignore@7.0.6:
-    resolution: {integrity: sha512-BAg6QkE8W+TuQLrrw0Ugr7HegXduRuuj8/ti2kSOc+jz1dmx8/WNcjr6XGnq5YpDWxFwwaavqD0+jIUOKelTsw==}
-    engines: {node: '>= 4'}
-
   import-fresh@3.3.1:
     resolution: {integrity: sha512-TR3KfrTZTYLPB6jUjfx6MF9WcWrHL9su5TObK4ZkYgBdWKPOFoSoQIdEuTuR82pmtxH2spWG9h6etwfr1pLBqQ==}
     engines: {node: '>=6'}
@@ -3324,10 +3304,6 @@ packages:
   is-weakset@2.0.4:
     resolution: {integrity: sha512-mfcwb6IzQyOKTs84CQMrOwW4gQcaTOAWJ0zzJCl2WSPDrWk/OzDaImWFH3djXhb24g4eudZfLRozAvPGw4d9hQ==}
     engines: {node: '>= 0.4'}
-
-  is-wsl@3.1.0:
-    resolution: {integrity: sha512-UcVfVfaK4Sc4m7X3dUSoHoozQGBEFeDC+zVo06t98xe8CzHSZZBekNXH+tu0NalHolcJ/QAGqS46Hef7QXBIMw==}
-    engines: {node: '>=16'}
 
   is-wsl@3.1.1:
     resolution: {integrity: sha512-e6rvdUCiQCAuumZslxRJWR/Doq4VpPR82kqclvcS0efgt430SlGIk05vdCN58+VrzgtIcfNODjozVielycD4Sw==}
@@ -3979,8 +3955,8 @@ packages:
     resolution: {integrity: sha512-K1HmQeZT2HrjpsR6KgqbN2FAXL2NrJJmNUSD9ck7HGTVu1JKXox8n9SB+tjbU8m8JGLF4OscrroPepew/L7/Xw==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
 
-  nx@23.3.0:
-    resolution: {integrity: sha512-R7Kl+hURSGiG9uEjc19Cg3o+vGCDHqCVp6mioiBMEsOSol/LgzP+K8TVF06TnnSC8uzxMeB0ymu+LGMJGXnbbw==}
+  nx@24.0.0:
+    resolution: {integrity: sha512-LchM3SyEUYL6qjHUneiSuyYlUscv8t6qpAYWUqnUY5OoSQSLIOLT/xrerLCKUTTcu7Yq1o/TDo9TiwhaBLvM4Q==}
     hasBin: true
     peerDependencies:
       '@swc-node/register': ^1.11.1
@@ -4043,10 +4019,6 @@ packages:
 
   oniguruma-to-es@4.3.6:
     resolution: {integrity: sha512-csuQ9x3Yr0cEIs/Zgx/OEt9iBw9vqIunAPQkx19R/fiMq2oGVTgcMqO/V3Ybqefr1TBvosI6jU539ksaBULJyA==}
-
-  open@10.1.0:
-    resolution: {integrity: sha512-mnkeQ1qP5Ue2wd+aivTD3NHd/lZ96Lu0jgf0pwktLPtx6cTZiH7tyeGRRHs0zX0rbrahXPnXlUnbeXyaBBuIaw==}
-    engines: {node: '>=18'}
 
   optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==}
@@ -4446,10 +4418,6 @@ packages:
 
   roughjs@4.6.6:
     resolution: {integrity: sha512-ZUz/69+SYpFN/g/lUlo2FXcIjRkSu3nDarreVdGGndHEBJ6cXPdKguS8JGxwj5HA5xIbVKSmLgr5b3AWxtRfvQ==}
-
-  run-applescript@7.0.0:
-    resolution: {integrity: sha512-9by4Ij99JUr/MCFBUkDKLWK3G9HVXmabKz9U5MlIAIuvuzkiOicRYs8XJLxX+xahD+mLiiCYDqF9dKAgtzKP1A==}
-    engines: {node: '>=18'}
 
   run-parallel@1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
@@ -5971,34 +5939,34 @@ snapshots:
 
   '@nolyfill/is-core-module@1.0.39': {}
 
-  '@nx/nx-darwin-arm64@23.3.0':
+  '@nx/nx-darwin-arm64@24.0.0':
     optional: true
 
-  '@nx/nx-darwin-x64@23.3.0':
+  '@nx/nx-darwin-x64@24.0.0':
     optional: true
 
-  '@nx/nx-freebsd-x64@23.3.0':
+  '@nx/nx-freebsd-x64@24.0.0':
     optional: true
 
-  '@nx/nx-linux-arm-gnueabihf@23.3.0':
+  '@nx/nx-linux-arm-gnueabihf@24.0.0':
     optional: true
 
-  '@nx/nx-linux-arm64-gnu@23.3.0':
+  '@nx/nx-linux-arm64-gnu@24.0.0':
     optional: true
 
-  '@nx/nx-linux-arm64-musl@23.3.0':
+  '@nx/nx-linux-arm64-musl@24.0.0':
     optional: true
 
-  '@nx/nx-linux-x64-gnu@23.3.0':
+  '@nx/nx-linux-x64-gnu@24.0.0':
     optional: true
 
-  '@nx/nx-linux-x64-musl@23.3.0':
+  '@nx/nx-linux-x64-musl@24.0.0':
     optional: true
 
-  '@nx/nx-win32-arm64-msvc@23.3.0':
+  '@nx/nx-win32-arm64-msvc@24.0.0':
     optional: true
 
-  '@nx/nx-win32-x64-msvc@23.3.0':
+  '@nx/nx-win32-x64-msvc@24.0.0':
     optional: true
 
   '@oxc-project/types@0.154.0': {}
@@ -6872,10 +6840,6 @@ snapshots:
       base64-js: 1.5.1
       ieee754: 1.2.1
 
-  bundle-name@4.1.0:
-    dependencies:
-      run-applescript: 7.0.0
-
   c8@7.14.0:
     dependencies:
       '@bcoe/v8-coverage': 0.2.3
@@ -7265,13 +7229,6 @@ snapshots:
 
   deep-is@0.1.4: {}
 
-  default-browser-id@5.0.0: {}
-
-  default-browser@5.2.1:
-    dependencies:
-      bundle-name: 4.1.0
-      default-browser-id: 5.0.0
-
   defaults@1.0.4:
     dependencies:
       clone: 1.0.4
@@ -7281,8 +7238,6 @@ snapshots:
       es-define-property: 1.0.1
       es-errors: 1.3.0
       gopd: 1.2.0
-
-  define-lazy-prop@3.0.0: {}
 
   define-properties@1.2.1:
     dependencies:
@@ -8183,8 +8138,6 @@ snapshots:
 
   ignore@7.0.12: {}
 
-  ignore@7.0.6: {}
-
   import-fresh@3.3.1:
     dependencies:
       parent-module: 1.0.1
@@ -8359,10 +8312,6 @@ snapshots:
     dependencies:
       call-bound: 1.0.4
       get-intrinsic: 1.3.0
-
-  is-wsl@3.1.0:
-    dependencies:
-      is-inside-container: 1.0.0
 
   is-wsl@3.1.1:
     dependencies:
@@ -9313,7 +9262,7 @@ snapshots:
 
   npm-to-yarn@3.2.0: {}
 
-  nx@23.3.0:
+  nx@24.0.0:
     dependencies:
       '@clack/core': 1.4.3
       '@clack/prompts': 1.7.0
@@ -9333,7 +9282,6 @@ snapshots:
       bl: 4.1.0
       brace-expansion: 5.0.12
       buffer: 5.7.1
-      bundle-name: 4.1.0
       chalk: 4.1.2
       cli-cursor: 3.1.0
       cli-spinners: 2.6.1
@@ -9341,10 +9289,7 @@ snapshots:
       clone: 1.0.4
       color-convert: 2.0.1
       color-name: 1.1.4
-      default-browser: 5.2.1
-      default-browser-id: 5.0.0
       defaults: 1.0.4
-      define-lazy-prop: 3.0.0
       dotenv: 16.4.7
       dotenv-expand: 12.0.3
       ejs: 5.0.1
@@ -9360,14 +9305,11 @@ snapshots:
       get-caller-file: 2.0.5
       has-flag: 4.0.0
       ieee754: 1.2.1
-      ignore: 7.0.6
+      ignore: 7.0.12
       inherits: 2.0.4
-      is-docker: 3.0.0
       is-fullwidth-code-point: 3.0.0
-      is-inside-container: 1.0.0
       is-interactive: 1.0.0
       is-unicode-supported: 0.1.0
-      is-wsl: 3.1.0
       isexe: 2.0.0
       json5: 2.2.3
       jsonc-parser: 3.3.1
@@ -9379,7 +9321,6 @@ snapshots:
       npm-run-path: 4.0.1
       once: 1.4.0
       onetime: 5.1.2
-      open: 10.1.0
       ora: 5.4.1
       path-key: 3.1.1
       picocolors: 1.1.1
@@ -9387,7 +9328,6 @@ snapshots:
       require-directory: 2.1.1
       resolve.exports: 2.0.3
       restore-cursor: 3.1.0
-      run-applescript: 7.0.0
       safe-buffer: 5.2.1
       semver: 7.8.5
       signal-exit: 3.0.7
@@ -9413,16 +9353,16 @@ snapshots:
       yargs: 17.7.2
       yargs-parser: 21.1.1
     optionalDependencies:
-      '@nx/nx-darwin-arm64': 23.3.0
-      '@nx/nx-darwin-x64': 23.3.0
-      '@nx/nx-freebsd-x64': 23.3.0
-      '@nx/nx-linux-arm-gnueabihf': 23.3.0
-      '@nx/nx-linux-arm64-gnu': 23.3.0
-      '@nx/nx-linux-arm64-musl': 23.3.0
-      '@nx/nx-linux-x64-gnu': 23.3.0
-      '@nx/nx-linux-x64-musl': 23.3.0
-      '@nx/nx-win32-arm64-msvc': 23.3.0
-      '@nx/nx-win32-x64-msvc': 23.3.0
+      '@nx/nx-darwin-arm64': 24.0.0
+      '@nx/nx-darwin-x64': 24.0.0
+      '@nx/nx-freebsd-x64': 24.0.0
+      '@nx/nx-linux-arm-gnueabihf': 24.0.0
+      '@nx/nx-linux-arm64-gnu': 24.0.0
+      '@nx/nx-linux-arm64-musl': 24.0.0
+      '@nx/nx-linux-x64-gnu': 24.0.0
+      '@nx/nx-linux-x64-musl': 24.0.0
+      '@nx/nx-win32-arm64-msvc': 24.0.0
+      '@nx/nx-win32-x64-msvc': 24.0.0
 
   object-assign@4.1.1: {}
 
@@ -9487,13 +9427,6 @@ snapshots:
       oniguruma-parser: 0.12.2
       regex: 6.1.0
       regex-recursion: 6.0.2
-
-  open@10.1.0:
-    dependencies:
-      default-browser: 5.2.1
-      define-lazy-prop: 3.0.0
-      is-inside-container: 1.0.0
-      is-wsl: 3.1.0
 
   optionator@0.9.4:
     dependencies:
@@ -10008,8 +9941,6 @@ snapshots:
       path-data-parser: 0.1.0
       points-on-curve: 0.2.0
       points-on-path: 0.2.1
-
-  run-applescript@7.0.0: {}
 
   run-parallel@1.2.0:
     dependencies:
