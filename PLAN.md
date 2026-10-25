@@ -3,8 +3,25 @@
 ## Status
 
 - Current milestone: 6 — Stable release and migration
-- Overall status: Milestone 5 complete
+- Overall status: Default extraction parity complete; public API and release
+  hardening remain
 - Last updated: 2026-09-21
+
+## Release-readiness summary
+
+- Default JavaScript and PropTypes behavior is covered across the TypeScript,
+  Hermes, and Babel adapters.
+- TypeScript behavior is covered except for one fixture that uses Babel-only
+  `export defaultFrom from` syntax and must be reclassified.
+- Flow behavior is covered through Hermes.
+- Defaults, descriptions, methods, imports, exports, and parser-neutral error
+  output are represented by portable fixtures.
+- Neutral handler, resolver, importer, and parser contracts exist, but not every
+  legacy public extension point has a stable replacement yet.
+- Parser routing is implemented per file, but the mixed TypeScript/Hermes exit
+  criterion still needs a real cross-parser integration fixture.
+- The parser-neutral `react-docgen` facade, native CLI parser configuration,
+  migration documentation, and package release validation are not complete.
 
 ## Decisions
 
@@ -95,14 +112,15 @@ output; no Babel types leak from new APIs.
 - [x] Replace the monolithic snapshot with one JSON outcome per case.
 - [x] Run all cases through legacy `react-docgen` and a temporary supported-case
       allowlist through `@react-docgen/typescript`.
-- [x] Map disabled unit-test behaviors to portable fixtures or narrow, evidenced exclusions.
+- [x] Map disabled unit-test behaviors to portable fixtures or narrow, evidenced
+      exclusions.
 - [x] Add coverage-driven fixtures without production changes or coverage hints.
 - [x] Record the integration-only plateau and enforce its integer-floor coverage
       thresholds.
 
-Exit criteria: migrated output remains unchanged; all public behavior represented
-by disabled unit tests is covered or classified; legacy integration coverage
-cannot silently regress.
+Exit criteria: migrated output remains unchanged; all public behavior
+represented by disabled unit tests is covered or classified; legacy integration
+coverage cannot silently regress.
 
 ## Milestone 4 — Hermes and Flow
 
@@ -122,8 +140,8 @@ matches the legacy implementation.
       extraction.
 - [x] Keep TypeScript-only type helpers and handler composition in
       `@react-docgen/typescript`.
-- [x] Expose preconfigured `parse()` from `@react-docgen/babel` using only
-      Babel plus shared core extraction.
+- [x] Expose preconfigured `parse()` from `@react-docgen/babel` using only Babel
+      plus shared core extraction.
 - [x] Keep focused utility tests and JavaScript differential fixtures green.
 
 Exit criteria: Babel and TypeScript adapters share React extraction without
@@ -144,12 +162,34 @@ preserving exports, bindings, descriptions, and props.
 
 ## Milestone 6 — Stable release and migration
 
-- [ ] Stabilize scoped packages after parity and extension API validation.
+- [ ] Decide the final package boundary before freezing APIs: keep shared React
+      extraction in core or move it to `@react-docgen/react`, and decide whether
+      method JSDoc parsing becomes an optional composition package.
+- [ ] Reconcile the intended convenience API with the current composition API:
+      either make `createDocgen({ parser })` supply standard React behavior or
+      document the required handlers and resolver explicitly.
+- [ ] Add a real mixed-parser integration fixture in which TypeScript and Hermes
+      files import each other while preserving exports, bindings, descriptions,
+      defaults, and props.
+- [ ] Reclassify `typescript/imports/reexported-default-values`, whose
+      `export defaultFrom from` syntax is Babel-specific, or assert an explicit
+      parser capability error.
+- [ ] Stabilize scoped packages after parity and extension API validation,
+      including exported types and parser-specific options.
 - [ ] Release the next `react-docgen` major as a parser-neutral facade with no
       implicit `parse()` backend.
 - [ ] Remove Babel-specific extension contracts from the new major.
-- [ ] Publish migration guide, README guidance, release notes, and CLI
-      documentation.
+- [ ] Inventory every legacy public handler, resolver, importer, utility, error,
+      `FileState`, and Babel `NodePath` export; implement or document its
+      neutral replacement.
+- [ ] Update the CLI to configure scoped single-parser and mixed-parser projects
+      directly instead of relying only on a custom `parse` function escape
+      hatch.
+- [ ] Publish package READMEs, a migration guide, release notes, and CLI
+      configuration documentation.
+- [ ] Validate packed tarballs, clean consumer installs, declaration output,
+      package exports, changesets, and the supported Node matrix before
+      versioning.
 - [ ] Keep `react-docgen@8` available for legacy Babel behavior.
 
 Exit criteria: users must explicitly install/select a parser, and every legacy
@@ -167,6 +207,8 @@ const parser = createParserRouter([
   { test: /\.(?:js|jsx|mjs|cjs)$/, parser: hermes },
 ]);
 
+// Final milestone 6 decision: either this convenience form supplies the
+// standard React resolver/handlers, or callers compose them explicitly.
 const docgen = createDocgen({ parser });
 ```
 
@@ -189,6 +231,19 @@ import { parse } from '@react-docgen/typescript';
 ## Plan change log
 
 Record every material plan change here before or with implementation.
+
+### 2026-09-21 — Audited release readiness after mixed-parser implementation
+
+- Confirmed default JavaScript, TypeScript, and Flow extraction parity across
+  the portable corpus, apart from one Babel-only export-syntax fixture currently
+  classified as TypeScript.
+- Distinguished implemented parser routing from the still-missing real
+  TypeScript/Hermes cross-import integration proof.
+- Expanded Milestone 6 to cover package boundaries, facade/API stabilization,
+  legacy extension migration, native CLI configuration, documentation, and
+  packed-package validation.
+- Reason: the extraction engine is largely complete, but the stable public
+  product surface requires more than publishing the scoped packages.
 
 ### 2026-09-21 — Completed mixed-parser projects milestone
 
@@ -285,8 +340,8 @@ Record every material plan change here before or with implementation.
   `@react-docgen-internal/integration-tests`, grouped by language and behavior.
 - Replaced parser capability metadata with language directories and added a
   validating dependency-free loader.
-- Added coverage-driven public behavior cases and a TypeScript adapter allowlist;
-  the legacy package remains the complete reference runner.
+- Added coverage-driven public behavior cases and a TypeScript adapter
+  allowlist; the legacy package remains the complete reference runner.
 - Started disabled unit-test dispositions in the corpus audit and expanded
   integration-only coverage from 71.33% to 79.28% statements.
 - Reason: parser implementations need one portable observable-output contract;
@@ -296,10 +351,11 @@ Record every material plan change here before or with implementation.
 
 - Removed the initial 79/68/89/79 thresholds and withdrew the claimed behavioral
   plateau.
-- Kept 92% coverage from the complete unit-and-integration suite as the practical
-  reachability benchmark for the integration corpus.
+- Kept 92% coverage from the complete unit-and-integration suite as the
+  practical reachability benchmark for the integration corpus.
 - Reason: the earlier audit classified broad utility groups too aggressively;
-  the existing unit suite proves substantially more production code is reachable.
+  the existing unit suite proves substantially more production code is
+  reachable.
 
 ### 2026-08-16 — Established default-parse coverage plateau
 
@@ -338,8 +394,8 @@ Record every material plan change here before or with implementation.
   applicable JavaScript and TypeScript corpus: exports, stable resolver errors,
   local/imported values and types, PropTypes, contexts, defaults, classes,
   methods, docblocks, HOCs, imperative handles, and TypeScript type shapes.
-- Kept extraction utilities in one-purpose files and added focused tests for
-  new resolution, type, docblock, class, enum, expression, and method helpers.
+- Kept extraction utilities in one-purpose files and added focused tests for new
+  resolution, type, docblock, class, enum, expression, and method helpers.
 - Added parser-neutral `createDocgen()` composition to `@react-docgen/core` and
   compile/runtime-tested custom `Parser`, `Resolver`, `Handler`, and `Importer`
   contracts without Babel types.
