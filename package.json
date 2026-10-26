@@ -24,7 +24,7 @@
     "@types/node": "22.20.5",
     "@vitest/coverage-v8": "5.0.5",
     "eslint": "10.13.0",
-    "eslint-config-next": "16.4.2",
+    "eslint-config-next": "16.4.3",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.7",
     "execa": "10.2.1",
