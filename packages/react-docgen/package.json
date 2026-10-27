@@ -43,9 +43,9 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "@babel/core": "^7.28.0",
-    "@babel/traverse": "^7.28.0",
-    "@babel/types": "^7.28.2",
+    "@babel/core": "^8.0.0",
+    "@babel/traverse": "^8.0.0",
+    "@babel/types": "^8.0.0",
     "@types/babel__core": "^7.20.5",
     "@types/babel__traverse": "^7.20.7",
     "@types/doctrine": "^0.0.9",
