@@ -33,6 +33,7 @@ import type {
   TSTypeOperator,
   Identifier,
   TSTypeParameterDeclaration,
+  TSParenthesizedType,
   TypeScript,
   TSQualifiedName,
   TSLiteralType,
@@ -68,6 +69,7 @@ const namedTypes: Record<
   TSInterfaceDeclaration: handleTSInterfaceDeclaration,
   TSUnionType: handleTSUnionType,
   TSFunctionType: handleTSFunctionType,
+  TSParenthesizedType: handleTSParenthesizedType,
   TSIntersectionType: handleTSIntersectionType,
   TSMappedType: handleTSMappedType,
   TSTupleType: handleTSTupleType,
@@ -371,6 +373,13 @@ function handleTSFunctionType(
   });
 
   return type;
+}
+
+function handleTSParenthesizedType(
+  path: NodePath<TSParenthesizedType>,
+  typeParams: TypeParameters | null,
+): TypeDescriptor<TSFunctionSignatureType> {
+  return getTSTypeWithResolvedTypes(path.get('typeAnnotation'), typeParams);
 }
 
 function handleTSTupleType(
