@@ -19,7 +19,9 @@ function getDefaultPlugins(
   const extension = options.filename ? extname(options.filename) : '';
   const isTypeScript = TYPESCRIPT_EXTS.has(extension);
   const plugins: NonNullable<ParserOptions['plugins']> = [
-    ...(isTypeScript && extension !== '.tsx' ? [] : ['jsx' as const]),
+    ...(IS_BABEL_8 && isTypeScript && extension !== '.tsx'
+      ? []
+      : ['jsx' as const]),
     isTypeScript ? 'typescript' : 'flow',
     'asyncDoExpressions',
   ];

@@ -1,3 +1,4 @@
+import { version } from '@babel/core';
 import { parse } from '../main.js';
 import { expect, test } from 'vitest';
 
@@ -71,3 +72,15 @@ test('parses mapped TypeScript props', () => {
     type: 'object',
   });
 });
+
+// Babel 7 has historically accepted JSX in every TypeScript extension.
+test.skipIf(Number.parseInt(version, 10) >= 8).each(['ts', 'cts', 'mts'])(
+  'preserves Babel 7 JSX parsing in .%s files',
+  (extension) => {
+    const result = parse('export function Button() { return <button />; }', {
+      filename: `component.${extension}`,
+    });
+
+    expect(result[0]?.displayName).toBe('Button');
+  },
+);
