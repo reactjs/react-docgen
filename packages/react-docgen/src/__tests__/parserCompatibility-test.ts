@@ -104,3 +104,19 @@ test('preserves nested TypeScript method return types', () => {
     },
   });
 });
+
+test.each(['`size-${number}`', '`row-${number}-${string}`'])(
+  'preserves the template literal type %s',
+  (type) => {
+    const result = parse(
+      `interface Props { value: ${type} }
+      export function Button(_props: Props) { return <button />; }`,
+      { filename: 'component.tsx' },
+    );
+
+    expect(result[0]?.props?.value?.tsType).toEqual({
+      name: 'literal',
+      value: type,
+    });
+  },
+);

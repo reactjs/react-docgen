@@ -78,6 +78,10 @@ const namedTypes: Record<
   TSTypeOperator: handleTSTypeOperator,
   TSIndexedAccessType: handleTSIndexedAccessType,
   TSLiteralType: handleTSLiteralType,
+  TSTemplateLiteralType: (path) => ({
+    name: 'literal',
+    value: printValue(path),
+  }),
 };
 
 function handleTSQualifiedName(
