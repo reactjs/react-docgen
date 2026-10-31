@@ -15,7 +15,7 @@ Specify at least one glob pattern which will be used to search for files.
 react-docgen ./src/components/Button.tsx
 
 # All .ts or .tsx files in src/ or any .js files in components/
-react-docgen "src/**/*.ts?(x) components/**/*.js"
+react-docgen "src/**/*.ts?(x)" "components/**/*.js"
 ```
 
 If you want to know more about glob patterns, check the documentation of
@@ -91,7 +91,24 @@ Displays the help for the command with the current default values.
 **Default**: `["**/node_modules/**", "**/__tests__/**", "**/__mocks__/**"]`
 
 Specify glob patterns of path or files, which should not be used to search for
-react components.
+react components. Pass a comma-separated list or repeat the option:
+
+```shell filename="Examples"
+react-docgen "src/**/*.tsx" --ignore "**/*.test.tsx,**/*.stories.tsx"
+
+react-docgen "src/**/*.tsx" --ignore "**/*.test.tsx" --ignore "**/*.stories.tsx"
+```
+
+Commas are always treated as separators, even inside a quoted pattern. For
+example, `--ignore "**/*.{test,stories}.tsx"` is split into two incomplete
+patterns. Use the separate patterns above or an extglob without commas:
+
+```shell filename="Example"
+react-docgen "src/**/*.tsx" --ignore "**/*.@(test|stories).tsx"
+```
+
+Quote glob patterns so the shell passes them to the CLI without expanding them.
+The comma separator applies to `--ignore` values, not positional glob arguments.
 
 ### `--importer <importer>`
 
