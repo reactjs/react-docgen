@@ -1,5 +1,4 @@
 import { describe, expect, test } from 'vitest';
-
 import { parse } from '../../src/main';
 
 describe('TypeScript parenthesized function types', () => {
