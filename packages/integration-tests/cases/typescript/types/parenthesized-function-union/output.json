@@ -1,0 +1,33 @@
+[
+  {
+    "description": "",
+    "displayName": "MyComponent",
+    "methods": [],
+    "props": {
+      "name": {
+        "required": true,
+        "tsType": {
+          "name": "union",
+          "raw": "(() => string) | undefined",
+          "elements": [
+            {
+              "name": "signature",
+              "type": "function",
+              "raw": "() => string",
+              "signature": {
+                "arguments": [],
+                "return": {
+                  "name": "string"
+                }
+              }
+            },
+            {
+              "name": "undefined"
+            }
+          ]
+        },
+        "description": ""
+      }
+    }
+  }
+]
