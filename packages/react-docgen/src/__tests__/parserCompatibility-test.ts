@@ -120,3 +120,20 @@ test.each(['`size-${number}`', '`row-${number}-${string}`'])(
     });
   },
 );
+
+test.each([undefined, true])(
+  'marks dynamic import defaults as computed (createImportExpressions: %s)',
+  (createImportExpressions) => {
+    const result = parse(
+      `export function Button({ lazy = import('./thing.js') }) {
+        return <button />;
+      }`,
+      { babelOptions: { parserOpts: { createImportExpressions } } },
+    );
+
+    expect(result[0]?.props?.lazy?.defaultValue).toEqual({
+      value: "import('./thing.js')",
+      computed: true,
+    });
+  },
+);
