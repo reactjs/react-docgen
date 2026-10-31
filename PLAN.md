@@ -5,7 +5,7 @@
 - Current milestone: 6 — Stable release and migration
 - Overall status: Default extraction parity complete; public API and release
   hardening remain
-- Last updated: 2026-09-21
+- Last updated: 2026-10-31
 
 ## Release-readiness summary
 
@@ -231,6 +231,15 @@ import { parse } from '@react-docgen/typescript';
 ## Plan change log
 
 Record every material plan change here before or with implementation.
+
+### 2026-10-31 — Ported mixin class props from the maintained legacy line
+
+- Carried #1145/#1157 into the legacy reference and TypeScript adapter,
+  preserving React base validation, wrapped props, aliased imports, and
+  declared-props fallback.
+- Added portable golden cases and composed the TypeScript handler with the Babel
+  adapter to check the same output across parser representations.
+- Credited the original contribution by @mfazekas in the changeset.
 
 ### 2026-09-21 — Audited release readiness after mixed-parser implementation
 

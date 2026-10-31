@@ -14,6 +14,7 @@ import {
   type Handler,
 } from '@react-docgen/core';
 import getComposedTypeNames from '../utils/getComposedTypeNames.js';
+import getClassPropsType from '../utils/getClassPropsType.js';
 import getPropsMembers from '../utils/getPropsMembers.js';
 import getTSType from '../utils/getTSType.js';
 
@@ -31,7 +32,7 @@ const typescriptPropsHandler: Handler = (documentation, path, file) => {
       ? parameter.typeAnnotation.typeAnnotation
       : null
     : isClassDeclaration(path.node) || isClassExpression(path.node)
-      ? (path.node.superTypeArguments?.params[0] ?? null)
+      ? getClassPropsType(file, path.node)
       : null;
   const propsMembers = getPropsMembers(file, annotation);
   const composes = getComposedTypeNames(file, annotation);

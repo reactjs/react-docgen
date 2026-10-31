@@ -1,7 +1,13 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { describe, expect, test } from 'vitest';
-import { parse as parseBabel } from '@react-docgen/babel';
+import babelParser, { parse as parseBabel } from '@react-docgen/babel';
+import {
+  componentHandler,
+  createDocgen,
+  resolveComponentDefinitions,
+} from '@react-docgen/core';
+import typescriptPropsHandler from '../../src/handlers/typescriptPropsHandler.js';
 import { loadIntegrationCases } from '@react-docgen-internal/integration-tests';
 import { parse as parseTypeScript } from '../../src/index.js';
 
@@ -32,6 +38,28 @@ describe('Babel differential', () => {
 
       expect(babelOutput).toEqual(typescriptOutput);
       expect(typescriptOutput).toEqual(integrationCase.output);
+    });
+  }
+});
+
+describe('Babel mixin differential', () => {
+  const parse = createDocgen({
+    handlers: [componentHandler, typescriptPropsHandler],
+    parser: babelParser,
+    resolver: resolveComponentDefinitions,
+  });
+
+  for (const integrationCase of loadIntegrationCases({
+    languages: ['typescript'],
+  })) {
+    if (!integrationCase.id.startsWith('typescript/definitions/mixin-')) {
+      continue;
+    }
+
+    test(integrationCase.id, () => {
+      expect(
+        parse(integrationCase.source, { filename: integrationCase.filename }),
+      ).toEqual(integrationCase.output);
     });
   }
 });
