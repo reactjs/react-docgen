@@ -1,6 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "labels": ["dependencies"],
+  "baseBranchPatterns": ["main", "8.x"],
   "extends": [
     "config:recommended",
     ":pinOnlyDevDependencies",
