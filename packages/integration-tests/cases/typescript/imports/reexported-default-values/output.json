@@ -1,0 +1,23 @@
+[
+  {
+    "description": "This is a TS component with imported stuff",
+    "displayName": "ImportedExtendedComponent",
+    "methods": [],
+    "props": {
+      "x": {
+        "defaultValue": {
+          "value": "\"string\"",
+          "computed": false
+        },
+        "required": false
+      },
+      "y": {
+        "defaultValue": {
+          "value": "'otherstring'",
+          "computed": false
+        },
+        "required": false
+      }
+    }
+  }
+]

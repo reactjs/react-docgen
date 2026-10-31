@@ -1,0 +1,57 @@
+[
+  {
+    "description": "This is a typescript class component",
+    "displayName": "TSComponent",
+    "methods": [
+      {
+        "name": "foo",
+        "docblock": "This is a method",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "a",
+            "optional": false,
+            "type": {
+              "name": "string"
+            }
+          }
+        ],
+        "returns": {
+          "type": {
+            "name": "string"
+          }
+        },
+        "description": "This is a method"
+      },
+      {
+        "name": "bar",
+        "docblock": "This is a public method",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "a",
+            "optional": false,
+            "type": {
+              "name": "string"
+            }
+          }
+        ],
+        "returns": {
+          "type": {
+            "name": "string"
+          }
+        },
+        "description": "This is a public method"
+      }
+    ],
+    "props": {
+      "foo": {
+        "required": true,
+        "tsType": {
+          "name": "string"
+        },
+        "description": ""
+      }
+    }
+  }
+]

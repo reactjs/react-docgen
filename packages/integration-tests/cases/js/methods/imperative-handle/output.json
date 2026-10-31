@@ -1,0 +1,24 @@
+[
+  {
+    "description": "",
+    "displayName": "Input",
+    "methods": [
+      {
+        "name": "focus",
+        "docblock": "Focus the input.",
+        "modifiers": [],
+        "params": [],
+        "returns": null,
+        "description": "Focus the input."
+      },
+      {
+        "name": "reset",
+        "docblock": "Reset its value.",
+        "modifiers": [],
+        "params": [],
+        "returns": null,
+        "description": "Reset its value."
+      }
+    ]
+  }
+]

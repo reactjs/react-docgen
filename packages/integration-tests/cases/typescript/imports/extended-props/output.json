@@ -1,0 +1,23 @@
+[
+  {
+    "description": "This is a typescript component with imported prop types",
+    "displayName": "ImportedExtendedComponent",
+    "methods": [],
+    "props": {
+      "foo": {
+        "required": true,
+        "tsType": {
+          "name": "string"
+        },
+        "description": ""
+      },
+      "bar": {
+        "required": true,
+        "tsType": {
+          "name": "number"
+        },
+        "description": ""
+      }
+    }
+  }
+]

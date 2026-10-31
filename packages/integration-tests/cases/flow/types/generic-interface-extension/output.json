@@ -1,0 +1,36 @@
+[
+  {
+    "description": "This is a typescript class component",
+    "displayName": "FlowComponent",
+    "methods": [],
+    "props": {
+      "foo": {
+        "required": false,
+        "flowType": {
+          "name": "Child"
+        },
+        "description": "Optional prop"
+      },
+      "bar": {
+        "required": true,
+        "flowType": {
+          "name": "Array",
+          "elements": [
+            {
+              "name": "Child"
+            }
+          ],
+          "raw": "Array<X>"
+        },
+        "description": "Required prop"
+      },
+      "baz": {
+        "required": true,
+        "flowType": {
+          "name": "number"
+        },
+        "description": "Complex union prop"
+      }
+    }
+  }
+]

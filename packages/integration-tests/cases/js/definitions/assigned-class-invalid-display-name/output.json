@@ -1,0 +1,15 @@
+[
+  {
+    "description": "",
+    "methods": [],
+    "props": {
+      "value": {
+        "type": {
+          "name": "number"
+        },
+        "required": false,
+        "description": ""
+      }
+    }
+  }
+]

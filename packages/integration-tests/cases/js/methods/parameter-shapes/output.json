@@ -1,0 +1,42 @@
+[
+  {
+    "description": "",
+    "displayName": "ParameterShapes",
+    "methods": [
+      {
+        "name": "format",
+        "docblock": "Exercise every public method parameter shape.\n\n@param {number} count Item count.\n@param {object} options Named options.\n@param {Array} pair Tuple-like input.\n@param {...string} labels Remaining labels.\n@returns {string} Combined value.",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "count",
+            "description": "Item count.",
+            "type": {
+              "name": "number"
+            },
+            "optional": true
+          },
+          {
+            "name": "{ enabled }",
+            "optional": false
+          },
+          {
+            "name": "[first]",
+            "optional": false
+          },
+          {
+            "name": "...labels",
+            "optional": false
+          }
+        ],
+        "returns": {
+          "description": "Combined value.",
+          "type": {
+            "name": "string"
+          }
+        },
+        "description": "Exercise every public method parameter shape."
+      }
+    ]
+  }
+]

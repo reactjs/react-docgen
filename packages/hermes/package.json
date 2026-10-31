@@ -1,0 +1,36 @@
+{
+  "name": "@react-docgen/hermes",
+  "version": "0.0.0",
+  "description": "Hermes and Flow parser adapter for react-docgen.",
+  "publishConfig": {
+    "provenance": true,
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/reactjs/react-docgen.git",
+    "directory": "packages/hermes"
+  },
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": "^22.13.0 || ^24.11.0 || >=26.13.0"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rimraf dist/ && tsc",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@react-docgen/core": "workspace:*",
+    "hermes-parser": "0.25.1"
+  },
+  "devDependencies": {
+    "@react-docgen/babel": "workspace:*",
+    "@react-docgen-internal/integration-tests": "workspace:*"
+  },
+  "license": "MIT"
+}

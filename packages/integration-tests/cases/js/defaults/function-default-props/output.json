@@ -1,0 +1,21 @@
+[
+  {
+    "description": "",
+    "displayName": "Foo",
+    "methods": [],
+    "props": {
+      "bar": {
+        "type": {
+          "name": "custom",
+          "raw": "PropTypes.node"
+        },
+        "required": false,
+        "description": "This does something.",
+        "defaultValue": {
+          "value": "null",
+          "computed": false
+        }
+      }
+    }
+  }
+]

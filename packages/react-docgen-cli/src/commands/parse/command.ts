@@ -10,6 +10,7 @@ import { resolve } from 'path';
 import slash from '../../utils/slash.js';
 import type { Documentation } from 'react-docgen';
 import { ResolverConfigs } from './options/loadResolvers.js';
+import importFile from '../../utils/importFile.js';
 
 const debug = debugFactory('react-docgen:cli');
 
@@ -38,6 +39,7 @@ function collect(value: string, previous: string[]): string[] {
 }
 
 interface CLIOptions {
+  config?: string;
   defaultIgnores: boolean;
   failOnWarning: boolean;
   handler?: string[];
@@ -53,6 +55,10 @@ export default function createParseCommand(): Command {
     .description(
       'Extract meta information from React components.\n' +
         'Either specify a paths to files or a glob pattern that matches multiple files.',
+    )
+    .option(
+      '-c, --config <file>',
+      'Trusted module exporting a parse function, or an object with a parse function, for single-parser or mixed-parser projects.',
     )
     .option(
       '-o, --out <file>',
@@ -96,6 +102,7 @@ export default function createParseCommand(): Command {
     .argument('<globs...>', 'Can be globs or paths to files')
     .action(async (globs: string[], input: CLIOptions) => {
       const {
+        config,
         defaultIgnores,
         failOnWarning,
         handler,
@@ -115,11 +122,24 @@ export default function createParseCommand(): Command {
         finalIgnores = [];
       }
 
-      const options = await loadOptions({
-        handler,
-        importer,
-        resolver,
-      });
+      const configured = config
+        ? await importFile<typeof parse | { parse: typeof parse }>(config)
+        : undefined;
+
+      if (config && !configured) {
+        throw new TypeError(`Could not load config '${config}'.`);
+      }
+      const configuredParse =
+        typeof configured === 'function' ? configured : configured?.parse;
+
+      if (configured && typeof configuredParse !== 'function') {
+        throw new TypeError(
+          `Config '${config}' must export a parse function or an object with a parse function.`,
+        );
+      }
+      const options = configuredParse
+        ? undefined
+        : await loadOptions({ handler, importer, resolver });
       // we use slash to convert windows backslashes to unix format so fast-glob works
       const files = await glob(globs.map(slash), {
         ignore: finalIgnores?.map((ignorePath) => {
@@ -143,12 +163,14 @@ export default function createParseCommand(): Command {
           const content = await readFile(path, 'utf-8');
 
           try {
-            result[path] = parse(content, {
-              filename: path,
-              handlers: options.handlers,
-              importer: options.importer,
-              resolver: options.resolver,
-            });
+            result[path] = configuredParse
+              ? configuredParse(content, { filename: path })
+              : parse(content, {
+                  filename: path,
+                  handlers: options?.handlers,
+                  importer: options?.importer,
+                  resolver: options?.resolver,
+                });
           } catch (error) {
             const isError = outputError(error as Error, path, {
               failOnWarning,

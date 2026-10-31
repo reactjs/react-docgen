@@ -1,0 +1,51 @@
+[
+  {
+    "description": "",
+    "displayName": "ObjectEnums",
+    "methods": [],
+    "props": {
+      "key": {
+        "type": {
+          "name": "enum",
+          "value": [
+            {
+              "value": "\"alpha\"",
+              "computed": false
+            },
+            {
+              "value": "\"2\"",
+              "computed": false
+            },
+            {
+              "value": "\"gamma\"",
+              "computed": false
+            }
+          ]
+        },
+        "required": false,
+        "description": ""
+      },
+      "value": {
+        "type": {
+          "name": "enum",
+          "value": [
+            {
+              "value": "\"alpha\"",
+              "computed": false
+            },
+            {
+              "value": "2",
+              "computed": false
+            },
+            {
+              "value": "null",
+              "computed": false
+            }
+          ]
+        },
+        "required": false,
+        "description": ""
+      }
+    }
+  }
+]

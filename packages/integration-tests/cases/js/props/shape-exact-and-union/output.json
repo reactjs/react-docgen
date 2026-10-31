@@ -1,0 +1,61 @@
+[
+  {
+    "description": "",
+    "displayName": "Foo",
+    "methods": [],
+    "props": {
+      "shapeProp": {
+        "type": {
+          "name": "shape",
+          "value": {
+            "a": {
+              "name": "string",
+              "description": "Comment for property a",
+              "required": false
+            },
+            "b": {
+              "name": "number",
+              "required": false
+            }
+          }
+        },
+        "required": false,
+        "description": ""
+      },
+      "exactProp": {
+        "type": {
+          "name": "exact",
+          "value": {
+            "c": {
+              "name": "string",
+              "description": "Comment for property c",
+              "required": false
+            },
+            "d": {
+              "name": "number",
+              "required": false
+            }
+          }
+        },
+        "required": false,
+        "description": ""
+      },
+      "oneOfTypeProp": {
+        "type": {
+          "name": "union",
+          "value": [
+            {
+              "name": "string",
+              "description": "Comment for type string"
+            },
+            {
+              "name": "number"
+            }
+          ]
+        },
+        "required": false,
+        "description": ""
+      }
+    }
+  }
+]

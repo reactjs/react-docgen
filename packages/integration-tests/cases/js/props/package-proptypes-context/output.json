@@ -1,0 +1,50 @@
+[
+  {
+    "description": "",
+    "displayName": "Button",
+    "methods": [],
+    "props": {
+      "children": {
+        "type": {
+          "name": "string"
+        },
+        "required": true,
+        "description": ""
+      },
+      "onClick": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": ""
+      },
+      "style": {
+        "type": {
+          "name": "object"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "{}",
+          "computed": false
+        }
+      }
+    },
+    "context": {
+      "config": {
+        "type": {
+          "name": "object"
+        },
+        "required": false
+      }
+    },
+    "childContext": {
+      "color": {
+        "type": {
+          "name": "string"
+        },
+        "required": false
+      }
+    }
+  }
+]

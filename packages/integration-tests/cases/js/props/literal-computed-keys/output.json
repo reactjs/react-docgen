@@ -1,0 +1,23 @@
+[
+  {
+    "description": "",
+    "displayName": "LiteralComputedKeys",
+    "methods": [],
+    "props": {
+      "2": {
+        "type": {
+          "name": "number"
+        },
+        "required": false,
+        "description": ""
+      },
+      "text": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": ""
+      }
+    }
+  }
+]

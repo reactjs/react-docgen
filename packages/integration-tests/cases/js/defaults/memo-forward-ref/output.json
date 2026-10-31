@@ -1,0 +1,15 @@
+[
+  {
+    "description": "",
+    "methods": [],
+    "props": {
+      "foo": {
+        "defaultValue": {
+          "value": "'bar'",
+          "computed": false
+        },
+        "required": false
+      }
+    }
+  }
+]

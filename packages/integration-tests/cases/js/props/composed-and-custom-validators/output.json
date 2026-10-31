@@ -1,0 +1,65 @@
+[
+  {
+    "description": "",
+    "displayName": "ComposedValidators",
+    "methods": [],
+    "props": {
+      "shared": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": ""
+      },
+      "requiredShared": {
+        "type": {
+          "name": "number"
+        },
+        "required": true,
+        "description": ""
+      },
+      "custom": {
+        "type": {
+          "name": "custom",
+          "raw": "() => null"
+        },
+        "required": false,
+        "description": ""
+      },
+      "nested": {
+        "type": {
+          "name": "exact",
+          "value": {
+            "shape": {
+              "name": "shape",
+              "value": {
+                "enabled": {
+                  "name": "bool",
+                  "required": true
+                },
+                "values": {
+                  "name": "arrayOf",
+                  "value": {
+                    "name": "union",
+                    "value": [
+                      {
+                        "name": "string"
+                      },
+                      {
+                        "name": "number"
+                      }
+                    ]
+                  },
+                  "required": false
+                }
+              },
+              "required": true
+            }
+          }
+        },
+        "required": false,
+        "description": ""
+      }
+    }
+  }
+]

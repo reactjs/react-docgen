@@ -1,0 +1,58 @@
+[
+  {
+    "description": "",
+    "displayName": "Segments",
+    "methods": [
+      {
+        "name": "foo",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "props",
+            "optional": false,
+            "type": {
+              "name": "signature",
+              "type": "object",
+              "raw": "{\n  segments: Array<T>,\n}",
+              "signature": {
+                "properties": [
+                  {
+                    "key": "segments",
+                    "value": {
+                      "name": "Array",
+                      "elements": [
+                        {
+                          "name": "T"
+                        }
+                      ],
+                      "raw": "Array<T>",
+                      "required": true
+                    }
+                  }
+                ]
+              },
+              "alias": "Props"
+            }
+          }
+        ],
+        "returns": null
+      }
+    ],
+    "props": {
+      "segments": {
+        "required": true,
+        "flowType": {
+          "name": "Array",
+          "elements": [
+            {
+              "name": "T"
+            }
+          ],
+          "raw": "Array<T>"
+        },
+        "description": ""
+      }
+    }
+  }
+]

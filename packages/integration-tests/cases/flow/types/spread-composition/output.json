@@ -1,0 +1,62 @@
+[
+  {
+    "description": "",
+    "displayName": "Foo",
+    "methods": [],
+    "props": {
+      "other": {
+        "required": true,
+        "flowType": {
+          "name": "literal",
+          "value": "'a'"
+        },
+        "description": ""
+      },
+      "other2": {
+        "required": true,
+        "flowType": {
+          "name": "literal",
+          "value": "'b'"
+        },
+        "description": ""
+      },
+      "other3": {
+        "required": true,
+        "flowType": {
+          "name": "literal",
+          "value": "'c'"
+        },
+        "description": ""
+      },
+      "other4": {
+        "required": true,
+        "flowType": {
+          "name": "literal",
+          "value": "'g'"
+        },
+        "description": ""
+      },
+      "other5": {
+        "required": true,
+        "flowType": {
+          "name": "literal",
+          "value": "'f'"
+        },
+        "description": ""
+      },
+      "somePropOverride": {
+        "required": true,
+        "flowType": {
+          "name": "literal",
+          "value": "'baz'"
+        },
+        "description": ""
+      }
+    },
+    "composes": [
+      "BarProps",
+      "BarProps2",
+      "BarProps3"
+    ]
+  }
+]

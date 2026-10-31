@@ -1,0 +1,36 @@
+[
+  {
+    "description": "This is a typescript class component",
+    "displayName": "TSComponent",
+    "methods": [],
+    "props": {
+      "foo": {
+        "required": false,
+        "tsType": {
+          "name": "Child"
+        },
+        "description": "Optional prop"
+      },
+      "bar": {
+        "required": true,
+        "tsType": {
+          "name": "Array",
+          "elements": [
+            {
+              "name": "Child"
+            }
+          ],
+          "raw": "Array<X>"
+        },
+        "description": "Required prop"
+      },
+      "baz": {
+        "required": true,
+        "tsType": {
+          "name": "number"
+        },
+        "description": "Complex union prop"
+      }
+    }
+  }
+]

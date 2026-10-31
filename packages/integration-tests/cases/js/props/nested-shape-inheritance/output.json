@@ -1,0 +1,60 @@
+[
+  {
+    "description": "",
+    "displayName": "Parent",
+    "methods": [],
+    "props": {
+      "something": {
+        "type": {
+          "name": "string"
+        },
+        "required": true,
+        "description": ""
+      },
+      "child": {
+        "type": {
+          "name": "shape",
+          "value": "Child.propTypes",
+          "computed": true
+        },
+        "required": true,
+        "description": ""
+      },
+      "extendedChild": {
+        "type": {
+          "name": "shape",
+          "value": {
+            "adopted": {
+              "name": "bool",
+              "required": true
+            }
+          }
+        },
+        "required": true,
+        "description": ""
+      },
+      "childExact": {
+        "type": {
+          "name": "exact",
+          "value": "Child.propTypes",
+          "computed": true
+        },
+        "required": true,
+        "description": ""
+      },
+      "extendedChildExact": {
+        "type": {
+          "name": "exact",
+          "value": {
+            "adopted": {
+              "name": "bool",
+              "required": true
+            }
+          }
+        },
+        "required": true,
+        "description": ""
+      }
+    }
+  }
+]

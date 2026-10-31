@@ -1,0 +1,111 @@
+[
+  {
+    "description": "",
+    "displayName": "JsDocVariants",
+    "methods": [
+      {
+        "name": "convert",
+        "docblock": "Converts flexible input.\n\n@param {string|Object|number[]} value Value to convert.\n@param {string=} prefix Optional prefix.\n@return Converted value.",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "value",
+            "description": "Value to convert.",
+            "type": {
+              "name": "union",
+              "elements": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "Object"
+                },
+                {
+                  "name": "Array",
+                  "elements": [
+                    {
+                      "name": "number"
+                    }
+                  ]
+                }
+              ]
+            },
+            "optional": false
+          },
+          {
+            "name": "prefix",
+            "description": "Optional prefix.",
+            "type": {
+              "name": "string"
+            },
+            "optional": true
+          }
+        ],
+        "returns": {
+          "description": "Converted value."
+        },
+        "description": "Converts flexible input."
+      },
+      {
+        "name": "reverse",
+        "docblock": "Accepts a typed tuple.\n\n@param {[string, number]} pair Tuple input.\n@returns {[number, string]} Reversed tuple.",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "pair",
+            "description": "Tuple input.",
+            "type": {
+              "name": "tuple",
+              "elements": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ]
+            },
+            "optional": false
+          }
+        ],
+        "returns": {
+          "description": "Reversed tuple.",
+          "type": {
+            "name": "tuple",
+            "elements": [
+              {
+                "name": "number"
+              },
+              {
+                "name": "string"
+              }
+            ]
+          }
+        },
+        "description": "Accepts a typed tuple."
+      },
+      {
+        "name": "identity",
+        "docblock": "Accepts any value.\n\n@param {*} value Any input.\n@returns {*} Same value.",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "value",
+            "description": "Any input.",
+            "type": {
+              "name": "mixed"
+            },
+            "optional": false
+          }
+        ],
+        "returns": {
+          "description": "Same value.",
+          "type": {
+            "name": "mixed"
+          }
+        },
+        "description": "Accepts any value."
+      }
+    ]
+  }
+]

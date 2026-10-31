@@ -1,0 +1,16 @@
+[
+  {
+    "description": "",
+    "displayName": "NestedHocBase",
+    "methods": [],
+    "props": {
+      "value": {
+        "type": {
+          "name": "string"
+        },
+        "required": true,
+        "description": "Base value."
+      }
+    }
+  }
+]

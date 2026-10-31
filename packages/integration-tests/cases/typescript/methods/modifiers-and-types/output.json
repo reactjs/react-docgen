@@ -1,0 +1,135 @@
+[
+  {
+    "description": "",
+    "displayName": "TypedMethods",
+    "methods": [
+      {
+        "name": "utility",
+        "docblock": "Static helper.",
+        "modifiers": [
+          "static"
+        ],
+        "params": [
+          {
+            "name": "value",
+            "optional": false,
+            "type": {
+              "name": "number"
+            }
+          }
+        ],
+        "returns": {
+          "type": {
+            "name": "string"
+          }
+        },
+        "description": "Static helper."
+      },
+      {
+        "name": "load",
+        "docblock": "Loads one value.",
+        "modifiers": [
+          "async"
+        ],
+        "params": [
+          {
+            "name": "value",
+            "optional": false,
+            "type": {
+              "name": "string"
+            }
+          }
+        ],
+        "returns": {
+          "type": {
+            "name": "Promise",
+            "elements": [
+              {
+                "name": "string"
+              }
+            ],
+            "raw": "Promise<string>"
+          }
+        },
+        "description": "Loads one value."
+      },
+      {
+        "name": "items",
+        "docblock": "Produces values.",
+        "modifiers": [
+          "generator"
+        ],
+        "params": [
+          {
+            "name": "count",
+            "optional": false,
+            "type": {
+              "name": "number"
+            }
+          }
+        ],
+        "returns": {
+          "type": {
+            "name": "Generator",
+            "elements": [
+              {
+                "name": "number"
+              }
+            ],
+            "raw": "Generator<number>"
+          }
+        },
+        "description": "Produces values."
+      },
+      {
+        "name": "computed",
+        "docblock": "Computed method.",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "enabled",
+            "optional": true,
+            "type": {
+              "name": "boolean"
+            }
+          }
+        ],
+        "returns": {
+          "type": {
+            "name": "boolean"
+          }
+        },
+        "description": "Computed method."
+      },
+      {
+        "name": "arrow",
+        "docblock": "Arrow property.",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "value",
+            "optional": false,
+            "type": {
+              "name": "number"
+            }
+          }
+        ],
+        "returns": {
+          "type": {
+            "name": "string"
+          }
+        },
+        "description": "Arrow property."
+      }
+    ],
+    "props": {
+      "value": {
+        "required": true,
+        "tsType": {
+          "name": "string"
+        },
+        "description": ""
+      }
+    }
+  }
+]

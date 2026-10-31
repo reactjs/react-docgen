@@ -1,0 +1,32 @@
+{
+  "name": "@react-docgen/core",
+  "version": "0.0.0",
+  "description": "Parser-neutral foundations for react-docgen.",
+  "publishConfig": {
+    "provenance": true,
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/reactjs/react-docgen.git",
+    "directory": "packages/core"
+  },
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": "^22.13.0 || ^24.11.0 || >=26.13.0"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rimraf dist/ && tsc",
+    "test": "vitest run"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "comment-parser": "^1.4.9",
+    "jsdoc-type-pratt-parser": "8.0.0"
+  }
+}

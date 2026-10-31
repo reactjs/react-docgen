@@ -1,0 +1,311 @@
+[
+  {
+    "description": "Exercises advanced Flow prop type extraction.",
+    "displayName": "AdvancedFlowTypes",
+    "methods": [],
+    "props": {
+      "namedFunction": {
+        "required": true,
+        "flowType": {
+          "name": "signature",
+          "type": "function",
+          "raw": "(\n  count: number,\n  label: ?string,\n  ...rest: Array<string>\n) => boolean",
+          "signature": {
+            "arguments": [
+              {
+                "name": "count",
+                "type": {
+                  "name": "number"
+                }
+              },
+              {
+                "name": "label",
+                "type": {
+                  "name": "string",
+                  "nullable": true
+                }
+              },
+              {
+                "name": "rest",
+                "type": {
+                  "name": "Array",
+                  "elements": [
+                    {
+                      "name": "string"
+                    }
+                  ],
+                  "raw": "Array<string>"
+                },
+                "rest": true
+              }
+            ],
+            "return": {
+              "name": "boolean"
+            }
+          }
+        },
+        "description": ""
+      },
+      "unnamedFunction": {
+        "required": true,
+        "flowType": {
+          "name": "signature",
+          "type": "function",
+          "raw": "(number, ?string) => boolean",
+          "signature": {
+            "arguments": [
+              {
+                "name": "",
+                "type": {
+                  "name": "number"
+                }
+              },
+              {
+                "name": "",
+                "type": {
+                  "name": "string",
+                  "nullable": true
+                }
+              }
+            ],
+            "return": {
+              "name": "boolean"
+            }
+          }
+        },
+        "description": ""
+      },
+      "singleFunction": {
+        "required": true,
+        "flowType": {
+          "name": "signature",
+          "type": "function",
+          "raw": "string => boolean",
+          "signature": {
+            "arguments": [
+              {
+                "name": "",
+                "type": {
+                  "name": "string"
+                }
+              }
+            ],
+            "return": {
+              "name": "boolean"
+            }
+          }
+        },
+        "description": ""
+      },
+      "callable": {
+        "required": true,
+        "flowType": {
+          "name": "signature",
+          "type": "object",
+          "raw": "{\n  (value: string): number,\n  /** Values stored by key. */\n  [key: string]: number,\n  token: 'a' | 'b',\n}",
+          "signature": {
+            "properties": [
+              {
+                "key": {
+                  "name": "string"
+                },
+                "value": {
+                  "name": "number",
+                  "required": true
+                },
+                "description": "Values stored by key."
+              },
+              {
+                "key": "token",
+                "value": {
+                  "name": "union",
+                  "raw": "'a' | 'b'",
+                  "elements": [
+                    {
+                      "name": "literal",
+                      "value": "'a'"
+                    },
+                    {
+                      "name": "literal",
+                      "value": "'b'"
+                    }
+                  ],
+                  "required": true
+                }
+              }
+            ],
+            "constructor": {
+              "name": "signature",
+              "type": "function",
+              "raw": "(value: string): number",
+              "signature": {
+                "arguments": [
+                  {
+                    "name": "value",
+                    "type": {
+                      "name": "string"
+                    }
+                  }
+                ],
+                "return": {
+                  "name": "number"
+                }
+              }
+            }
+          }
+        },
+        "description": ""
+      },
+      "tupleUnion": {
+        "required": true,
+        "flowType": {
+          "name": "union",
+          "raw": "[string, number] | [number, string]",
+          "elements": [
+            {
+              "name": "tuple",
+              "raw": "[string, number]",
+              "elements": [
+                {
+                  "name": "string"
+                },
+                {
+                  "name": "number"
+                }
+              ]
+            },
+            {
+              "name": "tuple",
+              "raw": "[number, string]",
+              "elements": [
+                {
+                  "name": "number"
+                },
+                {
+                  "name": "string"
+                }
+              ]
+            }
+          ]
+        },
+        "description": ""
+      },
+      "intersection": {
+        "required": true,
+        "flowType": {
+          "name": "intersection",
+          "raw": "{ left: string } & { right: number }",
+          "elements": [
+            {
+              "name": "signature",
+              "type": "object",
+              "raw": "{ left: string }",
+              "signature": {
+                "properties": [
+                  {
+                    "key": "left",
+                    "value": {
+                      "name": "string",
+                      "required": true
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "name": "signature",
+              "type": "object",
+              "raw": "{ right: number }",
+              "signature": {
+                "properties": [
+                  {
+                    "key": "right",
+                    "value": {
+                      "name": "number",
+                      "required": true
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "description": ""
+      },
+      "classType": {
+        "required": true,
+        "flowType": {
+          "name": "Class",
+          "elements": [
+            {
+              "name": "boolean"
+            }
+          ],
+          "raw": "Class<boolean>"
+        },
+        "description": ""
+      },
+      "optionalArray": {
+        "required": false,
+        "flowType": {
+          "name": "Array",
+          "elements": [
+            {
+              "name": "string"
+            }
+          ],
+          "raw": "string[]"
+        },
+        "description": ""
+      },
+      "keys": {
+        "required": true,
+        "flowType": {
+          "name": "union",
+          "raw": "$Keys<typeof sizes>",
+          "elements": [
+            {
+              "name": "literal",
+              "value": "small"
+            },
+            {
+              "name": "literal",
+              "value": "large"
+            }
+          ]
+        },
+        "description": ""
+      },
+      "qualified": {
+        "required": true,
+        "flowType": {
+          "name": "ReactNode",
+          "raw": "React.Node"
+        },
+        "description": ""
+      },
+      "objectType": {
+        "required": true,
+        "flowType": {
+          "name": "sizes"
+        },
+        "description": ""
+      },
+      "indexed": {
+        "required": true,
+        "flowType": {
+          "name": "string",
+          "raw": "Shape['left']"
+        },
+        "description": ""
+      },
+      "missingIndex": {
+        "required": true,
+        "flowType": {
+          "name": "unknown"
+        },
+        "description": ""
+      }
+    }
+  }
+]

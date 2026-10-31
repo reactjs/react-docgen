@@ -1,0 +1,16 @@
+[
+  {
+    "description": "",
+    "displayName": "MyComponent",
+    "methods": [],
+    "props": {
+      "prop": {
+        "required": true,
+        "flowType": {
+          "name": "T"
+        },
+        "description": ""
+      }
+    }
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "description": "",
+    "displayName": "Component",
+    "methods": [],
+    "props": {
+      "data": {
+        "required": false,
+        "flowType": {
+          "name": "Array",
+          "elements": [
+            {
+              "name": "mixed"
+            }
+          ],
+          "raw": "Array<mixed>"
+        },
+        "description": ""
+      }
+    }
+  }
+]

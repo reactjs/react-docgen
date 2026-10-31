@@ -1,0 +1,154 @@
+[
+  {
+    "description": "Exercises Flow prop type extraction.",
+    "displayName": "FlowTypes",
+    "methods": [],
+    "props": {
+      "anything": {
+        "required": true,
+        "flowType": {
+          "name": "any"
+        },
+        "description": ""
+      },
+      "mixedValue": {
+        "required": true,
+        "flowType": {
+          "name": "mixed"
+        },
+        "description": ""
+      },
+      "text": {
+        "required": true,
+        "flowType": {
+          "name": "string"
+        },
+        "description": ""
+      },
+      "count": {
+        "required": true,
+        "flowType": {
+          "name": "number"
+        },
+        "description": ""
+      },
+      "enabled": {
+        "required": true,
+        "flowType": {
+          "name": "boolean"
+        },
+        "description": ""
+      },
+      "literal": {
+        "required": true,
+        "flowType": {
+          "name": "literal",
+          "value": "'small'"
+        },
+        "description": ""
+      },
+      "union": {
+        "required": true,
+        "flowType": {
+          "name": "union",
+          "raw": "string | number",
+          "elements": [
+            {
+              "name": "string"
+            },
+            {
+              "name": "number"
+            }
+          ]
+        },
+        "description": ""
+      },
+      "maybe": {
+        "required": true,
+        "flowType": {
+          "name": "string",
+          "nullable": true
+        },
+        "description": ""
+      },
+      "list": {
+        "required": true,
+        "flowType": {
+          "name": "Array",
+          "elements": [
+            {
+              "name": "string"
+            }
+          ],
+          "raw": "Array<string>"
+        },
+        "description": ""
+      },
+      "pair": {
+        "required": true,
+        "flowType": {
+          "name": "tuple",
+          "raw": "[string, number]",
+          "elements": [
+            {
+              "name": "string"
+            },
+            {
+              "name": "number"
+            }
+          ]
+        },
+        "description": ""
+      },
+      "callback": {
+        "required": true,
+        "flowType": {
+          "name": "signature",
+          "type": "function",
+          "raw": "(value: string) => boolean",
+          "signature": {
+            "arguments": [
+              {
+                "name": "value",
+                "type": {
+                  "name": "string"
+                }
+              }
+            ],
+            "return": {
+              "name": "boolean"
+            }
+          }
+        },
+        "description": ""
+      },
+      "nested": {
+        "required": true,
+        "flowType": {
+          "name": "signature",
+          "type": "object",
+          "raw": "{ value?: string }",
+          "signature": {
+            "properties": [
+              {
+                "key": "value",
+                "value": {
+                  "name": "string",
+                  "required": false
+                }
+              }
+            ]
+          }
+        },
+        "description": ""
+      },
+      "optional": {
+        "required": false,
+        "flowType": {
+          "name": "string"
+        },
+        "description": ""
+      }
+    }
+  }
+]

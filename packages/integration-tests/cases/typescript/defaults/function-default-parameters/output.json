@@ -1,0 +1,27 @@
+[
+  {
+    "description": "Renders a button.",
+    "displayName": "Button",
+    "methods": [],
+    "props": {
+      "label": {
+        "description": "Text shown inside the button.",
+        "required": true,
+        "tsType": {
+          "name": "string"
+        }
+      },
+      "disabled": {
+        "description": "Prevents interaction.",
+        "required": false,
+        "tsType": {
+          "name": "boolean"
+        },
+        "defaultValue": {
+          "value": "false",
+          "computed": false
+        }
+      }
+    }
+  }
+]

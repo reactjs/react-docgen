@@ -1,0 +1,52 @@
+[
+  {
+    "description": "",
+    "displayName": "ImportedDefaultsAndEnums",
+    "methods": [],
+    "props": {
+      "label": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "'imported'",
+          "computed": false
+        }
+      },
+      "count": {
+        "type": {
+          "name": "number"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "3",
+          "computed": false
+        }
+      },
+      "choice": {
+        "type": {
+          "name": "enum",
+          "value": [
+            {
+              "value": "\"primary\"",
+              "computed": false
+            },
+            {
+              "value": "\"secondary\"",
+              "computed": false
+            }
+          ]
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "'primary'",
+          "computed": false
+        }
+      }
+    }
+  }
+]

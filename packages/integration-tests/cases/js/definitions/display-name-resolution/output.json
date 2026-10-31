@@ -1,0 +1,18 @@
+[
+  {
+    "description": "Component with a resolved static display name.",
+    "displayName": "ResolvedDisplayName",
+    "methods": [
+      {
+        "name": "displayName",
+        "docblock": null,
+        "modifiers": [
+          "static",
+          "get"
+        ],
+        "params": [],
+        "returns": null
+      }
+    ]
+  }
+]

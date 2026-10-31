@@ -1,0 +1,131 @@
+[
+  {
+    "description": "",
+    "displayName": "ValueSerialization",
+    "methods": [],
+    "props": {
+      "text": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "'value'",
+          "computed": false
+        }
+      },
+      "count": {
+        "type": {
+          "name": "number"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "-2",
+          "computed": false
+        }
+      },
+      "disabled": {
+        "type": {
+          "name": "bool"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "false",
+          "computed": false
+        }
+      },
+      "empty": {
+        "type": {
+          "name": "any"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "null",
+          "computed": false
+        }
+      },
+      "pattern": {
+        "type": {
+          "name": "instanceOf",
+          "value": "RegExp"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "/value/gi",
+          "computed": false
+        }
+      },
+      "big": {
+        "type": {
+          "name": "any"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "2n",
+          "computed": false
+        }
+      },
+      "list": {
+        "type": {
+          "name": "array"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "['one', 2, null]",
+          "computed": false
+        }
+      },
+      "object": {
+        "type": {
+          "name": "object"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "{ nested: true, method() {} }",
+          "computed": false
+        }
+      },
+      "member": {
+        "type": {
+          "name": "any"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "globalThis.location",
+          "computed": true
+        }
+      },
+      "called": {
+        "type": {
+          "name": "any"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "String(42)",
+          "computed": true
+        }
+      },
+      "spreadValue": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "'shared'",
+          "computed": false
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,31 @@
+[
+  {
+    "description": "",
+    "displayName": "DestructuredBindings",
+    "methods": [],
+    "props": {
+      "label": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "label",
+          "computed": false
+        }
+      },
+      "count": {
+        "type": {
+          "name": "number"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "count",
+          "computed": false
+        }
+      }
+    }
+  }
+]

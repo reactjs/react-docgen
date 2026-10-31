@@ -1,0 +1,22 @@
+[
+  {
+    "description": "",
+    "displayName": "SuperDuperCustomButton",
+    "methods": [],
+    "props": {
+      "size": {
+        "type": {
+          "name": "enum",
+          "computed": true,
+          "value": "Object.values(Sizes)"
+        },
+        "required": false,
+        "description": "",
+        "defaultValue": {
+          "value": "Sizes.EXTRA_LARGE",
+          "computed": true
+        }
+      }
+    }
+  }
+]

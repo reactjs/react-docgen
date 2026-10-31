@@ -1,0 +1,28 @@
+[
+  {
+    "description": "",
+    "displayName": "MyComponent",
+    "methods": [
+      {
+        "name": "_myMethod",
+        "docblock": "myMethod description",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "argument",
+            "optional": false,
+            "type": {
+              "name": "string"
+            }
+          }
+        ],
+        "returns": {
+          "type": {
+            "name": "number"
+          }
+        },
+        "description": "myMethod description"
+      }
+    ]
+  }
+]

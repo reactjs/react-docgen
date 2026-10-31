@@ -1,0 +1,33 @@
+[
+  {
+    "description": "",
+    "displayName": "MyComponent",
+    "methods": [],
+    "props": {
+      "fooProp": {
+        "required": false,
+        "flowType": {
+          "name": "string"
+        },
+        "description": "fooProp is spread in from a locally resolved type"
+      },
+      "prop1": {
+        "required": true,
+        "flowType": {
+          "name": "string"
+        },
+        "description": "The first prop"
+      },
+      "prop2": {
+        "required": true,
+        "flowType": {
+          "name": "number"
+        },
+        "description": "The second, covariant prop"
+      }
+    },
+    "composes": [
+      "OtherProps"
+    ]
+  }
+]

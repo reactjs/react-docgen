@@ -1,0 +1,16 @@
+[
+  {
+    "description": "This is a Flow component with imported prop types",
+    "displayName": "ImportedComponent",
+    "methods": [],
+    "props": {
+      "foo": {
+        "required": true,
+        "flowType": {
+          "name": "string"
+        },
+        "description": ""
+      }
+    }
+  }
+]

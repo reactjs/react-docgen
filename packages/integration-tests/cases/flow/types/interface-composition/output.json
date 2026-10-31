@@ -1,0 +1,66 @@
+[
+  {
+    "description": "This is a flow class component with an interface as props",
+    "displayName": "FlowComponent",
+    "methods": [],
+    "props": {
+      "foo": {
+        "required": false,
+        "flowType": {
+          "name": "string"
+        },
+        "description": "Optional prop"
+      },
+      "bar": {
+        "required": true,
+        "flowType": {
+          "name": "number"
+        },
+        "description": "Required prop"
+      },
+      "baz": {
+        "required": true,
+        "flowType": {
+          "name": "union",
+          "raw": "number | { enter?: number, exit?: number } | 'auto'",
+          "elements": [
+            {
+              "name": "number"
+            },
+            {
+              "name": "signature",
+              "type": "object",
+              "raw": "{ enter?: number, exit?: number }",
+              "signature": {
+                "properties": [
+                  {
+                    "key": "enter",
+                    "value": {
+                      "name": "number",
+                      "required": false
+                    }
+                  },
+                  {
+                    "key": "exit",
+                    "value": {
+                      "name": "number",
+                      "required": false
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "name": "literal",
+              "value": "'auto'"
+            }
+          ]
+        },
+        "description": "Complex union prop"
+      }
+    },
+    "composes": [
+      "OtherProps"
+    ]
+  }
+]
