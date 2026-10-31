@@ -2,10 +2,12 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "labels": ["dependencies"],
   "baseBranchPatterns": ["main", "8.x"],
+  "gitIgnoredAuthors": ["120286224+danez-bot@users.noreply.github.com"],
   "extends": [
     "config:recommended",
     ":pinOnlyDevDependencies",
-    "helpers:pinGitHubActionDigests"
+    "helpers:pinGitHubActionDigests",
+    "security:minimumReleaseAgeNpm"
   ],
   "enabled": true,
   "lockFileMaintenance": {
@@ -41,8 +43,7 @@
     },
     {
       "matchPackageNames": ["@types/node"],
-      "matchUpdateTypes": ["major"],
-      "enabled": false
+      "allowedVersions": "<23"
     },
     {
       "matchFileNames": [
