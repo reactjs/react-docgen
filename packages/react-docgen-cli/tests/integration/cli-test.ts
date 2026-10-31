@@ -3,6 +3,7 @@ import { join } from 'path';
 import { temporaryFile } from 'tempy';
 import { describe, expect, test } from 'vitest';
 import withFixture from './utils/withFixture';
+import slash from '../../src/utils/slash.js';
 
 describe('cli', () => {
   test('loads a single-parser or mixed-parser config module', async () => {
@@ -15,7 +16,7 @@ describe('cli', () => {
 
       expect(stderr).toBe('');
       expect(JSON.parse(stdout)).toEqual({
-        [join(dir, 'Component.js')]: [{ displayName: 'Configured' }],
+        [slash(join(dir, 'Component.js'))]: [{ displayName: 'Configured' }],
       });
     });
   });

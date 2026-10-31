@@ -1,0 +1,2 @@
+# Portable fixtures have one canonical source representation on every platform.
+packages/integration-tests/cases/** text eol=lf
