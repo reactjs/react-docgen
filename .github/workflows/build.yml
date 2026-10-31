@@ -17,45 +17,47 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        babel: ["7", "8"]
-        node: ["22.13.0", "24", "25", "26"]
-        os: ["ubuntu"]
+        babel: ['7', '8']
+        node: ['20.9.0', '22', '24', '25']
+        os: ['ubuntu']
         exclude:
-          # Babel 8 requires Node.js 22.18.0 or newer on the 22.x line.
-          - babel: "8"
-            node: "22.13.0"
+          # Keep Node.js 20 support for Babel 7; Babel 8 requires a newer Node.js.
+          - babel: '8'
+            node: '20.9.0'
         include:
           - os: ubuntu
-            node: "22.18.0"
-            babel: "8"
+            node: '22.18.0'
+            babel: '8'
           - os: macos
-            node: "24"
-            babel: "7"
+            node: '24'
+            babel: '7'
           - os: macos
-            node: "24"
-            babel: "8"
+            node: '24'
+            babel: '8'
           - os: windows
-            node: "24"
-            babel: "7"
+            node: '24'
+            babel: '7'
           - os: windows
-            node: "24"
-            babel: "8"
+            node: '24'
+            babel: '8'
 
-    name: Tests (Babel ${{ matrix.babel }}, Node.js v${{ matrix.node }}, ${{ matrix.os }})
+    name:
+      Tests (Babel ${{ matrix.babel }}, Node.js v${{ matrix.node }}, ${{
+      matrix.os }})
     runs-on: ${{ matrix.os }}-latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
 
       - name: Install pnpm
         uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: ${{ matrix.node }}
-          cache: "pnpm"
+          cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -66,20 +68,26 @@ jobs:
 
       - name: Install Babel 8 runtime
         if: "${{ matrix.babel == '8' }}"
-        run: pnpm --filter react-docgen add --save-exact @babel/core@8.0.1 @babel/traverse@8.0.4 @babel/types@8.0.4
+        run:
+          pnpm --filter react-docgen add --save-exact @babel/core@8.0.1
+          @babel/traverse@8.0.4 @babel/types@8.0.4
 
       - name: Unit tests with coverage
-        if: "${{ matrix.node == env.NODE_VERSION }}"
-        run: pnpm --filter react-docgen --filter @react-docgen/cli --parallel --no-bail test --coverage
+        if: '${{ matrix.node == env.NODE_VERSION }}'
+        run:
+          pnpm --filter react-docgen --filter @react-docgen/cli --parallel
+          --no-bail test --coverage
 
       - name: Unit tests
-        if: "${{ matrix.node != env.NODE_VERSION }}"
-        run: pnpm --filter react-docgen --filter @react-docgen/cli --parallel --no-bail test
+        if: '${{ matrix.node != env.NODE_VERSION }}'
+        run:
+          pnpm --filter react-docgen --filter @react-docgen/cli --parallel
+          --no-bail test
 
       - name: Upload coverage
-        if: "${{ matrix.node == env.NODE_VERSION }}"
+        if: '${{ matrix.node == env.NODE_VERSION }}'
         continue-on-error: true
-        uses: coverallsapp/github-action@8d6379e14d29928660c4ba802d8e85393440b329 # v2
+        uses: coverallsapp/github-action@5cbfd81b66ca5d10c19b062c04de0199c215fb6e # v2
         with:
           parallel: true
           flag-name: test-babel-${{ matrix.babel }}-${{ matrix.os }}
@@ -91,7 +99,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Close parallel build
-        uses: coverallsapp/github-action@8d6379e14d29928660c4ba802d8e85393440b329 # v2
+        uses: coverallsapp/github-action@5cbfd81b66ca5d10c19b062c04de0199c215fb6e # v2
         with:
           parallel-finished: true
 
@@ -101,16 +109,16 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
 
       - name: Install pnpm
         uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: lts/*
-          cache: "pnpm"
+          cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -124,16 +132,16 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
 
       - name: Install pnpm
         uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: lts/*
-          cache: "pnpm"
+          cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile

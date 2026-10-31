@@ -1,12 +1,13 @@
 #!/usr/bin/env node
-import { Command } from 'commander';
-import createParseCommand from './commands/parse/command.js';
+import { program } from 'commander';
 
-const program = new Command()
+program
   .name('react-docgen')
   .helpOption(false)
-  .addCommand(createParseCommand(), {
+  .executableDir('./commands/')
+  .command('parse', 'Extract meta information from React components.', {
     isDefault: true,
+    executableFile: 'parse/command.js',
   });
 
-await program.parseAsync();
+program.parse();

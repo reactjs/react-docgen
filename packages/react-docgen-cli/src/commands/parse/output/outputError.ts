@@ -1,5 +1,5 @@
-import { relative } from 'node:path';
-import { styleText } from 'node:util';
+import { relative } from 'path';
+import chalk from 'chalk';
 
 function isReactDocgenError(error: NodeJS.ErrnoException): boolean {
   return Boolean(
@@ -13,7 +13,7 @@ function outputReactDocgenError(
   { failOnWarning }: { failOnWarning: boolean },
 ): boolean {
   let label = 'WARNING';
-  let format: 'red' | 'yellow' = 'yellow';
+  let color = chalk.yellow;
   let log = console.warn;
   let isError = false;
 
@@ -21,21 +21,15 @@ function outputReactDocgenError(
     process.exitCode = 2;
     isError = true;
     label = 'ERROR';
-    format = 'red';
+    color = chalk.red;
     log = console.error;
   }
 
-  const relativePath = styleText(
-    'underline',
-    relative(process.cwd(), filePath),
-    { stream: process.stderr },
-  );
-
   log(
-    styleText(
-      format,
-      `▶ ${label}: ${error.message} 👀\n  in ${relativePath}\n`,
-      { stream: process.stderr },
+    color(
+      `▶ ${label}: ${error.message} 👀\n  in ${chalk.underline(
+        relative(process.cwd(), filePath),
+      )}\n`,
     ),
   );
 
@@ -49,10 +43,10 @@ export default function outputError(
 ): boolean {
   if (isReactDocgenError(error)) {
     return outputReactDocgenError(error, filePath, options);
+  } else {
+    process.exitCode = 1;
+    console.error(error);
+
+    return true;
   }
-
-  process.exitCode = 1;
-  console.error(error);
-
-  return true;
 }

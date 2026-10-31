@@ -217,7 +217,6 @@ function getPropTypeInstanceOf(
 
 const simplePropTypes = [
   'array',
-  'bigint',
   'bool',
   'func',
   'number',

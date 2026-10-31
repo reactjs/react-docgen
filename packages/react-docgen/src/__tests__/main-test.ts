@@ -188,7 +188,7 @@ describe('main', () => {
         export default NotAComponent;
       `;
 
-      expect(() => parse(source)).toThrow(
+      expect(() => parse(source)).toThrowError(
         expect.objectContaining({
           code: ERROR_CODES.MISSING_DEFINITION,
         }),

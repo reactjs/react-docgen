@@ -15,7 +15,7 @@ describe('cli', () => {
 
         expect(stderr).toContain('NoComponent.js');
         expect(stdout).toContain('Component.js');
-        expect(() => JSON.parse(stdout)).not.toThrow();
+        expect(() => JSON.parse(stdout)).not.toThrowError();
       });
     });
 
@@ -25,7 +25,7 @@ describe('cli', () => {
 
         expect(stderr).toContain('NoComponent.js');
         expect(stdout).toContain('Component.js');
-        expect(() => JSON.parse(stdout)).not.toThrow();
+        expect(() => JSON.parse(stdout)).not.toThrowError();
       });
     });
 
@@ -35,7 +35,7 @@ describe('cli', () => {
 
         expect(stderr).toContain('NoComponent.js');
         expect(stdout).toContain('Component.js');
-        expect(() => JSON.parse(stdout)).not.toThrow();
+        expect(() => JSON.parse(stdout)).not.toThrowError();
       });
     });
   });
@@ -50,7 +50,7 @@ describe('cli', () => {
         expect(stdout).not.toContain('TestComponent.js');
         expect(stdout).not.toContain('NodeModulesComponent.js');
         expect(stdout).toContain('FooComponent.js');
-        expect(() => JSON.parse(stdout)).not.toThrow();
+        expect(() => JSON.parse(stdout)).not.toThrowError();
       });
     });
 
@@ -66,7 +66,7 @@ describe('cli', () => {
         expect(stdout).toContain('TestComponent.js');
         expect(stdout).toContain('NodeModulesComponent.js');
         expect(stdout).toContain('FooComponent.js');
-        expect(() => JSON.parse(stdout)).not.toThrow();
+        expect(() => JSON.parse(stdout)).not.toThrowError();
       });
     });
 
@@ -82,7 +82,7 @@ describe('cli', () => {
         expect(stdout).not.toContain('TestComponent.js');
         expect(stdout).not.toContain('NodeModulesComponent.js');
         expect(stdout).not.toContain('FooComponent.js');
-        expect(() => JSON.parse(stdout)).not.toThrow();
+        expect(() => JSON.parse(stdout)).not.toThrowError();
       });
     });
 
@@ -99,7 +99,7 @@ describe('cli', () => {
         expect(stdout).not.toContain('TestComponent.js');
         expect(stdout).not.toContain('NodeModulesComponent.js');
         expect(stdout).not.toContain('FooComponent.js');
-        expect(() => JSON.parse(stdout)).not.toThrow();
+        expect(() => JSON.parse(stdout)).not.toThrowError();
       });
     });
 
@@ -116,7 +116,7 @@ describe('cli', () => {
         expect(stdout).not.toContain('TestComponent.js');
         expect(stdout).not.toContain('NodeModulesComponent.js');
         expect(stdout).not.toContain('FooComponent.js');
-        expect(() => JSON.parse(stdout)).not.toThrow();
+        expect(() => JSON.parse(stdout)).not.toThrowError();
       });
     });
 
@@ -129,7 +129,7 @@ describe('cli', () => {
         expect(stdout).not.toContain('TestComponent.js');
         expect(stdout).not.toContain('NodeModulesComponent.js');
         expect(stdout).not.toContain('FooComponent.js');
-        expect(() => JSON.parse(stdout)).not.toThrow();
+        expect(() => JSON.parse(stdout)).not.toThrowError();
       });
     });
   });
@@ -147,7 +147,7 @@ describe('cli', () => {
 
         expect(stderr).toBe('');
         expect(writtenResult.length).toBeGreaterThan(4);
-        expect(() => JSON.parse(writtenResult)).not.toThrow();
+        expect(() => JSON.parse(writtenResult)).not.toThrowError();
         expect(stdout).toBe('');
       });
     });
@@ -165,7 +165,7 @@ describe('cli', () => {
 
         expect(stderr).toBe('');
         expect(writtenResult.length).toBeGreaterThan(4);
-        expect(() => JSON.parse(writtenResult)).not.toThrow();
+        expect(() => JSON.parse(writtenResult)).not.toThrowError();
         expect(stdout).toBe('');
       });
     });
@@ -178,7 +178,7 @@ describe('cli', () => {
 
         expect(stderr).toBe('');
         expect(stdout).not.toContain('\n');
-        expect(() => JSON.parse(stdout)).not.toThrow();
+        expect(() => JSON.parse(stdout)).not.toThrowError();
       });
     });
 
@@ -191,7 +191,7 @@ describe('cli', () => {
 
         expect(stderr).toBe('');
         expect(stdout).toContain('\n');
-        expect(() => JSON.parse(stdout)).not.toThrow();
+        expect(() => JSON.parse(stdout)).not.toThrowError();
       });
     });
   });

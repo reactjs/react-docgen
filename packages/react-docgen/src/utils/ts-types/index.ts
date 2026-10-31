@@ -8,7 +8,9 @@ import type {
 } from '@babel/types';
 
 type BindingNode =
-  TSEnumDeclaration | TSInterfaceDeclaration | TSTypeAliasDeclaration;
+  | TSEnumDeclaration
+  | TSInterfaceDeclaration
+  | TSTypeAliasDeclaration;
 
 type TypeKind = 'alias' | 'enum' | 'interface';
 

@@ -1,6 +1,7 @@
-import { rm, cp } from 'fs/promises';
+import { rm, stat } from 'fs/promises';
 import { dirname, join } from 'path';
 import { execaNode } from 'execa';
+import copy from 'cpy';
 import { temporaryDirectory } from 'tempy';
 import { fileURLToPath } from 'url';
 
@@ -23,12 +24,16 @@ export default async function withFixture(
   async function run(args: readonly string[]) {
     return execaNode(cliBinary, args, {
       cwd: tempDir,
+      // Pinned browser data ages independently of the CLI behavior under test.
+      env: { BROWSERSLIST_IGNORE_OLD_DATA: 'true' },
       lines: false,
       reject: false,
     });
   }
 
-  await cp(join(fixtureDir, fixture), tempDir, { recursive: true });
+  await stat(join(fixtureDir, fixture));
+
+  await copy(join(fixtureDir, fixture, '**/*'), tempDir, {});
   await callback({ dir: tempDir, run });
   await rm(tempDir, { force: true, recursive: true });
 }

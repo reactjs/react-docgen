@@ -9,8 +9,8 @@ export default defineConfig({
       interopDefault: false,
     },
     coverage: {
+      all: true,
       include: ['src/**'],
-      exclude: ['**/__mocks__/**', '**/__tests__/**'],
       provider: 'v8',
       reporter: ['text', 'lcov'],
     },

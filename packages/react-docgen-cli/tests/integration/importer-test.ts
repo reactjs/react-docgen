@@ -14,7 +14,7 @@ describe('importer', () => {
 
         expect(stderr).toBe('');
         expect(stdout).toContain('Component');
-        expect(() => JSON.parse(stdout)).not.toThrow();
+        expect(() => JSON.parse(stdout)).not.toThrowError();
       });
     });
   });
@@ -29,7 +29,7 @@ describe('importer', () => {
 
         expect(stderr).toBe('');
         expect(stdout).toContain('"displayName":"importer"');
-        expect(() => JSON.parse(stdout)).not.toThrow();
+        expect(() => JSON.parse(stdout)).not.toThrowError();
       });
     });
 
@@ -43,7 +43,7 @@ describe('importer', () => {
 
         expect(stderr).toBe('');
         expect(stdout).toContain('"displayName":"importer"');
-        expect(() => JSON.parse(stdout)).not.toThrow();
+        expect(() => JSON.parse(stdout)).not.toThrowError();
       });
     });
 
@@ -56,7 +56,7 @@ describe('importer', () => {
 
         expect(stderr).toBe('');
         expect(stdout).toContain('"displayName":"importer"');
-        expect(() => JSON.parse(stdout)).not.toThrow();
+        expect(() => JSON.parse(stdout)).not.toThrowError();
       });
     });
 
@@ -70,7 +70,7 @@ describe('importer', () => {
 
         expect(stderr).toBe('');
         expect(stdout).toContain('"displayName":"importer"');
-        expect(() => JSON.parse(stdout)).not.toThrow();
+        expect(() => JSON.parse(stdout)).not.toThrowError();
       });
     });
 
@@ -83,7 +83,7 @@ describe('importer', () => {
 
         expect(stderr).toBe('');
         expect(stdout).toContain('"displayName":"importer"');
-        expect(() => JSON.parse(stdout)).not.toThrow();
+        expect(() => JSON.parse(stdout)).not.toThrowError();
       });
     });
 

@@ -1,5 +1,15 @@
 # Release Notes
 
+## 8.0.4
+
+### Patch Changes
+
+- [#1141](https://github.com/reactjs/react-docgen/pull/1141)
+  [`f037f20`](https://github.com/reactjs/react-docgen/commit/f037f20285ab55d27fa6a873d487d3b8e7133699)
+  Thanks [@danez-bot](https://github.com/danez-bot)! - Prevent stack overflows
+  caused by circular interface inheritance and type aliases. Thanks
+  [@router0mail](https://github.com/router0mail) for reporting this issue.
+
 ## 8.0.3
 
 ### Patch Changes

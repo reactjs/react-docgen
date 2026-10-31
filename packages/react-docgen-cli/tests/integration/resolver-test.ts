@@ -14,7 +14,7 @@ describe('resolver', () => {
 
         expect(stderr).toBe('');
         expect(stdout).toContain('Component');
-        expect(() => JSON.parse(stdout)).not.toThrow();
+        expect(() => JSON.parse(stdout)).not.toThrowError();
       });
     });
   });
@@ -30,7 +30,7 @@ describe('resolver', () => {
 
           expect(stderr).toBe('');
           expect(stdout).toContain('Custom');
-          expect(() => JSON.parse(stdout)).not.toThrow();
+          expect(() => JSON.parse(stdout)).not.toThrowError();
         });
       });
 
@@ -44,7 +44,7 @@ describe('resolver', () => {
 
           expect(stderr).toBe('');
           expect(stdout).toContain('Custom');
-          expect(() => JSON.parse(stdout)).not.toThrow();
+          expect(() => JSON.parse(stdout)).not.toThrowError();
         });
       });
 
@@ -57,7 +57,7 @@ describe('resolver', () => {
 
           expect(stderr).toBe('');
           expect(stdout).toContain('Custom');
-          expect(() => JSON.parse(stdout)).not.toThrow();
+          expect(() => JSON.parse(stdout)).not.toThrowError();
         });
       });
 
@@ -71,7 +71,7 @@ describe('resolver', () => {
 
           expect(stderr).toBe('');
           expect(stdout).toContain('Custom');
-          expect(() => JSON.parse(stdout)).not.toThrow();
+          expect(() => JSON.parse(stdout)).not.toThrowError();
         });
       });
 
@@ -84,7 +84,7 @@ describe('resolver', () => {
 
           expect(stderr).toBe('');
           expect(stdout).toContain('Custom');
-          expect(() => JSON.parse(stdout)).not.toThrow();
+          expect(() => JSON.parse(stdout)).not.toThrowError();
         });
       });
     });
@@ -98,7 +98,7 @@ describe('resolver', () => {
 
           expect(stderr).toBe('');
           expect(stdout).toContain('Custom');
-          expect(() => JSON.parse(stdout)).not.toThrow();
+          expect(() => JSON.parse(stdout)).not.toThrowError();
         });
       });
 
@@ -112,7 +112,7 @@ describe('resolver', () => {
 
           expect(stderr).toBe('');
           expect(stdout).toContain('Custom');
-          expect(() => JSON.parse(stdout)).not.toThrow();
+          expect(() => JSON.parse(stdout)).not.toThrowError();
         });
       });
 
@@ -125,7 +125,7 @@ describe('resolver', () => {
 
           expect(stderr).toBe('');
           expect(stdout).toContain('Custom');
-          expect(() => JSON.parse(stdout)).not.toThrow();
+          expect(() => JSON.parse(stdout)).not.toThrowError();
         });
       });
 
@@ -139,7 +139,7 @@ describe('resolver', () => {
 
           expect(stderr).toBe('');
           expect(stdout).toContain('Custom');
-          expect(() => JSON.parse(stdout)).not.toThrow();
+          expect(() => JSON.parse(stdout)).not.toThrowError();
         });
       });
 
@@ -152,7 +152,7 @@ describe('resolver', () => {
 
           expect(stderr).toBe('');
           expect(stdout).toContain('Custom');
-          expect(() => JSON.parse(stdout)).not.toThrow();
+          expect(() => JSON.parse(stdout)).not.toThrowError();
         });
       });
 
