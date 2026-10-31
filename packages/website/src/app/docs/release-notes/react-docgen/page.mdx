@@ -1,5 +1,59 @@
 # Release Notes
 
+## 9.0.0-alpha.0
+
+### Major Changes
+
+- [#1095](https://github.com/reactjs/react-docgen/pull/1095)
+  [`798e73d`](https://github.com/reactjs/react-docgen/commit/798e73dd4a73574c66dbee9dffb8e4af507b1059)
+  Thanks [@danez](https://github.com/danez)! - Drop support for Node.js 20, 21,
+  23, 25 and pre-LTS Node.js 26 releases.
+
+  Supported Node.js versions are now:
+
+  - Node.js 22.13.0 or newer 22.x releases
+  - Node.js 24.11.0 or newer 24.x releases
+  - Node.js 26.13.0 (the first Node.js 26 LTS release) or newer stable releases
+
+### Patch Changes
+
+- [#1156](https://github.com/reactjs/react-docgen/pull/1156)
+  [`97bcba3`](https://github.com/reactjs/react-docgen/commit/97bcba327641ef6b83be1ac3a48f7eb2e122841b)
+  Thanks [@danez](https://github.com/danez)! - Preserve function types wrapped
+  in parentheses when parsing TypeScript unions.
+
+  Thanks [@sean0407](https://github.com/sean0407) for
+  [#1142](https://github.com/reactjs/react-docgen/pull/1142).
+
+- [#1140](https://github.com/reactjs/react-docgen/pull/1140)
+  [`d797ca7`](https://github.com/reactjs/react-docgen/commit/d797ca74de190c5c75caa1ac6cb8bc109a2752ca)
+  Thanks [@danez](https://github.com/danez)! - Prevent stack overflows caused by
+  circular interface inheritance and type aliases. Thanks
+  [@router0mail](https://github.com/router0mail) for reporting this issue.
+
+- [#1130](https://github.com/reactjs/react-docgen/pull/1130)
+  [`bca6a64`](https://github.com/reactjs/react-docgen/commit/bca6a6463c44d44bf35183d4183070eb83568cf0)
+  Thanks [@danez](https://github.com/danez)! - Fix recognition of
+  PropTypes.bigint as a built-in prop type
+
+- [#1156](https://github.com/reactjs/react-docgen/pull/1156)
+  [`c96cc79`](https://github.com/reactjs/react-docgen/commit/c96cc79c45591f1e53b38f2f82a1ccce61e26c6c)
+  Thanks [@danez](https://github.com/danez)! - Extract TypeScript props from
+  React class components extending mixin calls, including aliased component
+  bases and wrapped props. Preserve declared props when a mixin receives
+  unrelated generic arguments.
+
+  Ported from [#1145](https://github.com/reactjs/react-docgen/pull/1145) by
+  [@mfazekas](https://github.com/mfazekas), merged with follow-up fixes in
+  [#1157](https://github.com/reactjs/react-docgen/pull/1157). Shared regression
+  fixtures cover the legacy parser, TypeScript adapter, and TypeScript handlers
+  composed with the normalized Babel adapter.
+
+- [#1156](https://github.com/reactjs/react-docgen/pull/1156)
+  [`5e4e0a9`](https://github.com/reactjs/react-docgen/commit/5e4e0a9d10bbe80012675f81b2ac4c55c017bce3)
+  Thanks [@danez](https://github.com/danez)! - Document methods declared with
+  `useCallback` and exposed through `useImperativeHandle`
+
 ## 8.0.3
 
 ### Patch Changes

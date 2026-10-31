@@ -29,7 +29,7 @@
     "postcss": "8.5.32",
     "postcss-lightningcss": "1.1.2",
     "react": "19.3.1",
-    "react-docgen": "workspace:8.0.3",
+    "react-docgen": "workspace:9.0.0-alpha.0",
     "react-dom": "19.3.1",
     "tailwindcss": "4.3.3"
   },
