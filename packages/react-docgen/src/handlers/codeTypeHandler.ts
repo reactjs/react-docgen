@@ -10,14 +10,40 @@ import type { TypeParameters } from '../utils/getTypeParameters.js';
 import resolveToValue from '../utils/resolveToValue.js';
 import setPropDescription from '../utils/setPropDescription.js';
 import type { NodePath } from '@babel/traverse';
-import type { FlowType } from '@babel/types';
+import type {
+  FlowType,
+  ObjectTypeProperty,
+  TSPropertySignature,
+} from '@babel/types';
+import { getDocblock } from '../utils/docblock.js';
 import type { ComponentNode } from '../resolver/index.js';
 import type { Handler } from './index.js';
+
+function setTypePropDescription(
+  documentation: Documentation,
+  path: NodePath<ObjectTypeProperty | TSPropertySignature>,
+  describedProps: Set<string>,
+): void {
+  const propName = getPropertyName(path);
+
+  if (!propName) return;
+  const descriptor = documentation.getPropDescriptor(propName);
+
+  // Only replace descriptions produced by this handler, never higher-priority handlers.
+  if (describedProps.has(propName) && getDocblock(path)) {
+    descriptor.description = '';
+  }
+  const hadDescription = Boolean(descriptor.description);
+
+  setPropDescription(documentation, path);
+  if (!hadDescription) describedProps.add(propName);
+}
 
 function setPropDescriptor(
   documentation: Documentation,
   path: NodePath,
   typeParams: TypeParameters | null,
+  describedProps: Set<string>,
 ): void {
   if (path.isObjectTypeSpreadProperty()) {
     const argument = unwrapUtilityType(
@@ -29,7 +55,12 @@ function setPropDescriptor(
         documentation,
         argument,
         (propertyPath, innerTypeParams) => {
-          setPropDescriptor(documentation, propertyPath, innerTypeParams);
+          setPropDescriptor(
+            documentation,
+            propertyPath,
+            innerTypeParams,
+            describedProps,
+          );
         },
         typeParams,
       );
@@ -51,7 +82,12 @@ function setPropDescriptor(
         documentation,
         right,
         (propertyPath, innerTypeParams) => {
-          setPropDescriptor(documentation, propertyPath, innerTypeParams);
+          setPropDescriptor(
+            documentation,
+            propertyPath,
+            innerTypeParams,
+            describedProps,
+          );
         },
         typeParams,
       );
@@ -72,7 +108,7 @@ function setPropDescriptor(
     // We are doing this here instead of in a different handler
     // to not need to duplicate the logic for checking for
     // imported types that are spread in to props.
-    setPropDescription(documentation, path);
+    setTypePropDescription(documentation, path, describedProps);
   } else if (path.isTSPropertySignature()) {
     const typeAnnotation = path.get('typeAnnotation');
 
@@ -93,7 +129,7 @@ function setPropDescriptor(
     // We are doing this here instead of in a different handler
     // to not need to duplicate the logic for checking for
     // imported types that are spread in to props.
-    setPropDescription(documentation, path);
+    setTypePropDescription(documentation, path, describedProps);
   }
 }
 
@@ -112,12 +148,19 @@ const codeTypeHandler: Handler = function (
     return;
   }
 
+  const describedProps = new Set<string>();
+
   for (const typePath of typePaths) {
     applyToTypeProperties(
       documentation,
       typePath,
       (propertyPath, typeParams) => {
-        setPropDescriptor(documentation, propertyPath, typeParams);
+        setPropDescriptor(
+          documentation,
+          propertyPath,
+          typeParams,
+          describedProps,
+        );
       },
       null,
     );
