@@ -1,8 +1,11 @@
 import {
   isAssignmentExpression,
+  isCallExpression,
   isExpressionStatement,
   isIdentifier,
+  isLiteral,
   isMemberExpression,
+  type FileState,
   type Handler,
 } from '../internal.js';
 import getBody from '../utils/getBody.js';
@@ -16,6 +19,55 @@ import resolveValue from '../utils/resolveValue.js';
 import getClassStaticValue from '../utils/getClassStaticValue.js';
 import getResolvedEnumValues from '../utils/getResolvedEnumValues.js';
 import unwrapExpression from '../utils/unwrapExpression.js';
+
+function hasPropTypesImport(file: FileState): boolean {
+  let found = false;
+
+  file.traverse(
+    {
+      ImportDeclaration(path) {
+        const source = path.get('source');
+
+        if (!source || Array.isArray(source) || !isLiteral(source.node)) return;
+        if (source.node.value === 'prop-types') {
+          found = true;
+        } else if (source.node.value === 'react') {
+          const specifiers = path.get('specifiers');
+
+          found =
+            Array.isArray(specifiers) &&
+            specifiers.some((specifier) => {
+              if (specifier.node.type !== 'ImportSpecifier') return false;
+              const imported = specifier.get('imported');
+
+              return Boolean(
+                imported &&
+                !Array.isArray(imported) &&
+                isIdentifier(imported.node, { name: 'PropTypes' }),
+              );
+            });
+        }
+        if (found) path.stop();
+      },
+      CallExpression(path) {
+        if (
+          !isCallExpression(path.node) ||
+          !isIdentifier(path.node.callee, { name: 'require' })
+        )
+          return;
+        const [source] = path.node.arguments;
+
+        if (source && isLiteral(source) && source.value === 'prop-types') {
+          found = true;
+          path.stop();
+        }
+      },
+    },
+    undefined,
+  );
+
+  return found;
+}
 
 const propTypesHandler: Handler = (documentation, path, file) => {
   const componentName = getComponentName(path);
@@ -49,6 +101,9 @@ const propTypesHandler: Handler = (documentation, path, file) => {
 
     propTypesObjects.push(assignment.right);
   }
+
+  if (propTypesObjects.length === 0) return;
+  const importedPropTypes = hasPropTypesImport(file);
 
   for (const propTypesObject of propTypesObjects) {
     for (const property of getObjectProperties(file, propTypesObject)) {
@@ -89,10 +144,7 @@ const propTypesHandler: Handler = (documentation, path, file) => {
       const enumValues = getResolvedEnumValues(file, property.value);
       const type = enumValues
         ? { name: 'enum', value: enumValues }
-        : memberName?.startsWith('PropTypes.') &&
-            !/(?:\bfrom\s+['"]prop-types['"]|require\(['"]prop-types['"]\)|import\s+[^;]*\bPropTypes\b[^;]*\bfrom\s+['"]react['"])/.test(
-              file.source.code,
-            )
+        : memberName?.startsWith('PropTypes.') && !importedPropTypes
           ? {
               name: 'custom',
               raw,
