@@ -43,6 +43,12 @@
     },
     {
       "matchPackageNames": ["@types/node"],
+      "matchBaseBranches": ["8.x"],
+      "allowedVersions": "<21"
+    },
+    {
+      "matchPackageNames": ["@types/node"],
+      "matchBaseBranches": ["main"],
       "allowedVersions": "<23"
     },
     {
