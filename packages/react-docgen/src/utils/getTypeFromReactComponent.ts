@@ -107,7 +107,7 @@ function getMixinSuperClassPropsPath(
     return null;
   }
 
-  const typeParameters = baseClass.get('typeParameters');
+  const typeParameters = getTypeArguments(baseClass);
 
   if (!typeParameters.hasNode()) return null;
 

@@ -167,6 +167,38 @@ describe('getTypeFromReactComponent', () => {
         expect(getTypeFromReactComponent(path)).toMatchSnapshot();
       });
 
+      test('finds mixin props using Babel 8 type argument fields', () => {
+        const path = parseTypescript.statementLast<ClassDeclaration>(
+          `import React from 'react';
+           class X extends withFoo(React.Component<Props>) {
+             render() {}
+           }`,
+        );
+        const superClass = path.get('superClass');
+
+        if (!superClass.isCallExpression()) {
+          throw new Error('Expected a mixin call');
+        }
+        const [baseClass] = superClass.get('arguments');
+
+        if (!baseClass?.isTSInstantiationExpression()) {
+          throw new Error('Expected an instantiated base class');
+        }
+
+        // Exercise Babel 8's AST shape even when running with Babel 7.
+        if (!('typeArguments' in baseClass.node)) {
+          Object.assign(baseClass.node, {
+            typeArguments: baseClass.node.typeParameters,
+          });
+          Reflect.deleteProperty(baseClass.node, 'typeParameters');
+        }
+
+        expect(getTypeFromReactComponent(path)[0]?.node).toMatchObject({
+          type: 'TSTypeReference',
+          typeName: { type: 'Identifier', name: 'Props' },
+        });
+      });
+
       test.each(['configure<Options>', 'Other.Component<Options>'])(
         'preserves declared props when the mixin argument is %s',
         (argument) => {
