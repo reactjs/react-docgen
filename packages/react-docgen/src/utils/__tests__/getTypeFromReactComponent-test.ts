@@ -5,6 +5,7 @@ import type {
 } from '@babel/types';
 import { parse, parseTypescript } from '../../../tests/utils';
 import getTypeFromReactComponent from '../getTypeFromReactComponent.js';
+import { parse as parseComponent } from '../../main.js';
 import { describe, expect, test } from 'vitest';
 import type { NodePath } from '@babel/traverse';
 
@@ -165,6 +166,29 @@ describe('getTypeFromReactComponent', () => {
 
         expect(getTypeFromReactComponent(path)).toMatchSnapshot();
       });
+
+      test.each(['PropsWithChildren', 'PropsWithRef', 'PropsWithoutRef'])(
+        'unwraps %s in mixin base class props',
+        (wrapper) => {
+          const result = parseComponent(
+            `import React from 'react';
+             interface Props { value: string }
+             export class Button extends withFoo(React.Component<React.${wrapper}<Props>>) {
+               props: Props;
+               render() { return <button />; }
+             }`,
+            { filename: 'component.tsx' },
+          );
+
+          expect(result[0]?.props).toEqual({
+            value: {
+              required: true,
+              tsType: { name: 'string' },
+              description: '',
+            },
+          });
+        },
+      );
 
       test('finds props type in properties when extending a mixin without params', () => {
         const path = parseTypescript.statementLast<ClassDeclaration>(

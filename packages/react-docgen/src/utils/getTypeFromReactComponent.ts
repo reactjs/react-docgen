@@ -141,20 +141,21 @@ export default (componentDefinition: NodePath): NodePath[] => {
 
       if (mixinPropsPath) {
         typePaths.push(mixinPropsPath);
+      } else {
+        const propsMemberPath = getMemberValuePath(
+          componentDefinition,
+          'props',
+        );
 
-        return typePaths;
-      }
+        if (!propsMemberPath) {
+          return [];
+        }
 
-      const propsMemberPath = getMemberValuePath(componentDefinition, 'props');
+        const typeAnnotation = getTypeAnnotation(propsMemberPath.parentPath);
 
-      if (!propsMemberPath) {
-        return [];
-      }
-
-      const typeAnnotation = getTypeAnnotation(propsMemberPath.parentPath);
-
-      if (typeAnnotation) {
-        typePaths.push(typeAnnotation);
+        if (typeAnnotation) {
+          typePaths.push(typeAnnotation);
+        }
       }
     }
   } else {
