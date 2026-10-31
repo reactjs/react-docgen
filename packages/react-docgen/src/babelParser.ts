@@ -1,38 +1,67 @@
-import type { ParserOptions, TransformOptions } from '@babel/core';
-import { loadPartialConfig, parseSync } from '@babel/core';
+import type { ParserOptions } from '@babel/core';
+import type { Config } from './config.js';
+import * as babel from '@babel/core';
 import type { File } from '@babel/types';
 import { extname } from 'path';
 
+type BabelOptions = NonNullable<Config['babelOptions']>;
+
 const TYPESCRIPT_EXTS = new Set(['.cts', '.mts', '.ts', '.tsx']);
+const { parseSync, version } = babel;
+// Babel 7 exports this at runtime, but its DefinitelyTyped definitions omit it.
+const loadPartialConfigSync = (
+  babel as typeof babel & {
+    loadPartialConfigSync: typeof babel.loadPartialConfig;
+  }
+).loadPartialConfigSync;
+const IS_BABEL_8 = Number.parseInt(version, 10) >= 8;
 
 function getDefaultPlugins(
-  options: TransformOptions,
+  options: BabelOptions,
 ): NonNullable<ParserOptions['plugins']> {
-  return [
-    'jsx',
-    options.filename && TYPESCRIPT_EXTS.has(extname(options.filename))
-      ? 'typescript'
-      : 'flow',
+  const extension = options.filename ? extname(options.filename) : '';
+  const isTypeScript = TYPESCRIPT_EXTS.has(extension);
+  const plugins: NonNullable<ParserOptions['plugins']> = [
+    ...(IS_BABEL_8 && isTypeScript && extension !== '.tsx'
+      ? []
+      : ['jsx' as const]),
+    isTypeScript ? 'typescript' : 'flow',
     'asyncDoExpressions',
-    'decimal',
+  ];
+
+  if (!IS_BABEL_8) {
+    plugins.push('decimal');
+  }
+
+  plugins.push(
     ['decorators', { decoratorsBeforeExport: false }],
     'decoratorAutoAccessors',
     'destructuringPrivate',
     'doExpressions',
     'exportDefaultFrom',
     'functionBind',
-    'importAssertions',
-    'moduleBlocks',
-    'partialApplication',
-    ['pipelineOperator', { proposal: 'minimal' }],
-    ['recordAndTuple', { syntaxType: 'bar' }],
-    'regexpUnicodeSets',
-    'throwExpressions',
-  ];
+  );
+
+  if (!IS_BABEL_8) {
+    plugins.push('importAssertions');
+  }
+
+  plugins.push('moduleBlocks', 'partialApplication', [
+    'pipelineOperator',
+    { proposal: IS_BABEL_8 ? 'fsharp' : 'minimal' },
+  ]);
+
+  if (!IS_BABEL_8) {
+    plugins.push(['recordAndTuple', { syntaxType: 'bar' }]);
+  }
+
+  plugins.push('regexpUnicodeSets', 'throwExpressions');
+
+  return plugins;
 }
 
 function buildPluginList(
-  options: TransformOptions,
+  options: BabelOptions,
 ): NonNullable<ParserOptions['plugins']> {
   let plugins: NonNullable<ParserOptions['plugins']> = [];
 
@@ -42,7 +71,7 @@ function buildPluginList(
 
   // Let's check if babel finds a config file for this source file
   // If babel does find a config file we do not apply our defaults
-  const partialConfig = loadPartialConfig(options);
+  const partialConfig = loadPartialConfigSync(options);
 
   if (
     plugins.length === 0 &&
@@ -57,7 +86,7 @@ function buildPluginList(
   return plugins.filter((plugin) => plugin !== 'estree');
 }
 
-function buildParserOptions(options: TransformOptions): ParserOptions {
+function buildParserOptions(options: BabelOptions): ParserOptions {
   const plugins = buildPluginList(options);
 
   return {
@@ -70,10 +99,10 @@ function buildParserOptions(options: TransformOptions): ParserOptions {
 
 export default function babelParser(
   src: string,
-  options: TransformOptions = {},
+  options: BabelOptions = {},
 ): File {
   const parserOpts = buildParserOptions(options);
-  const opts: TransformOptions = {
+  const opts: BabelOptions = {
     ...options,
     parserOpts,
   };

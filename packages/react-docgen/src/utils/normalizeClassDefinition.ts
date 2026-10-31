@@ -30,7 +30,7 @@ const explodedVisitors = visitors.explode<TraverseState>({
 
         if (
           member &&
-          !member.path.has('computed') &&
+          !('computed' in member.path.node && member.path.node.computed) &&
           !member.path.isPrivateName()
         ) {
           const property = classProperty(

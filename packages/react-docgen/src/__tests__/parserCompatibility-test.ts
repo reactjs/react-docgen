@@ -1,0 +1,139 @@
+import { version } from '@babel/core';
+import { parse } from '../main.js';
+import { expect, test } from 'vitest';
+
+test('parses components', () => {
+  const result = parse('export function Button() { return <button />; }');
+
+  expect(result).toHaveLength(1);
+});
+
+test('parses TypeScript function props', () => {
+  const result = parse(
+    `export type MenuProps = {
+      onOpenChange?: (open: boolean) => void;
+    };
+
+    export function Menu(_props: MenuProps) {
+      return <div />;
+    }`,
+    { filename: 'index.tsx' },
+  );
+
+  expect(result[0]?.props?.onOpenChange?.tsType).toEqual({
+    name: 'signature',
+    type: 'function',
+    raw: '(open: boolean) => void',
+    signature: {
+      arguments: [
+        {
+          name: 'open',
+          type: { name: 'boolean' },
+        },
+      ],
+      return: { name: 'void' },
+    },
+  });
+});
+
+test('parses generic arrow functions in TypeScript files', () => {
+  const result = parse(
+    `import React from 'react';
+
+    export const mockDomain = <Entity>(
+      entities: Record<string, Entity> = {},
+    ) => ({ entities });
+
+    export function Button() {
+      return React.createElement('button');
+    }`,
+    { filename: 'store.ts' },
+  );
+
+  expect(result).toHaveLength(1);
+});
+
+test('parses mapped TypeScript props', () => {
+  const result = parse(
+    `export type StatusFiltersProps<K extends string = string> = {
+      statuses?: { readonly [Key in K]: number };
+    };
+
+    export function StatusFilters<K extends string = string>(
+      _props: StatusFiltersProps<K>,
+    ) {
+      return <div />;
+    }`,
+    { filename: 'index.tsx' },
+  );
+
+  expect(result[0]?.props?.statuses?.tsType).toMatchObject({
+    name: 'signature',
+    type: 'object',
+  });
+});
+
+// Babel 7 has historically accepted JSX in every TypeScript extension.
+test.skipIf(Number.parseInt(version, 10) >= 8).each(['ts', 'cts', 'mts'])(
+  'preserves Babel 7 JSX parsing in .%s files',
+  (extension) => {
+    const result = parse('export function Button() { return <button />; }', {
+      filename: `component.${extension}`,
+    });
+
+    expect(result[0]?.displayName).toBe('Button');
+  },
+);
+
+test('preserves nested TypeScript method return types', () => {
+  const result = parse(
+    `interface Props {
+      config: { run(value: string): number; stop?(): void };
+    }
+
+    export function Button(_props: Props) { return <button />; }`,
+    { filename: 'component.tsx' },
+  );
+
+  expect(result[0]?.props?.config?.tsType).toMatchObject({
+    signature: {
+      properties: [
+        { key: 'run', value: { name: 'number', required: true } },
+        { key: 'stop', value: { name: 'void', required: false } },
+      ],
+    },
+  });
+});
+
+test.each(['`size-${number}`', '`row-${number}-${string}`'])(
+  'preserves the template literal type %s',
+  (type) => {
+    const result = parse(
+      `interface Props { value: ${type} }
+      export function Button(_props: Props) { return <button />; }`,
+      { filename: 'component.tsx' },
+    );
+
+    expect(result[0]?.props?.value?.tsType).toEqual({
+      name: 'literal',
+      value: type,
+    });
+  },
+);
+
+test.each([undefined, true])(
+  'marks dynamic import defaults as computed (createImportExpressions: %s)',
+  (createImportExpressions) => {
+    const result = parse(
+      `export function Button({ lazy = import('./thing.js') }) {
+        return <button />;
+      }`,
+      { babelOptions: { parserOpts: { createImportExpressions } } },
+    );
+
+    expect(result[0]?.props?.lazy?.defaultValue).toEqual({
+      value: "import('./thing.js')",
+      computed: true,
+    });
+  },
+);

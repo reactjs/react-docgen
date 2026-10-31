@@ -1,4 +1,4 @@
-import type { TransformOptions } from '@babel/core';
+import type { parseSync } from '@babel/core';
 import type { Handler } from './handlers/index.js';
 import {
   childContextTypeHandler,
@@ -32,7 +32,7 @@ export interface Config {
    * to an relative path that is relative to the `babelOptions.cwd`.
    */
   filename?: string;
-  babelOptions?: TransformOptions;
+  babelOptions?: NonNullable<Parameters<typeof parseSync>[1]>;
 }
 export type InternalConfig = Omit<Required<Config>, 'filename'>;
 

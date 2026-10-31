@@ -24,6 +24,8 @@ export default async function withFixture(
   async function run(args: readonly string[]) {
     return execaNode(cliBinary, args, {
       cwd: tempDir,
+      // Pinned browser data ages independently of the CLI behavior under test.
+      env: { BROWSERSLIST_IGNORE_OLD_DATA: 'true' },
       lines: false,
       reject: false,
     });

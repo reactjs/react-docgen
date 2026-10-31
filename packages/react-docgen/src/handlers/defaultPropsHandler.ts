@@ -51,6 +51,7 @@ function getDefaultValue(path: NodePath): DefaultValueDescriptor | null {
       value: defaultValue,
       computed:
         valuePath.isCallExpression() ||
+        valuePath.isImportExpression() ||
         valuePath.isMemberExpression() ||
         valuePath.isIdentifier(),
     };

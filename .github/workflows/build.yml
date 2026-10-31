@@ -15,16 +15,35 @@ env:
 jobs:
   tests:
     strategy:
+      fail-fast: false
       matrix:
-        node: ["20.9.0", "22", "24", "25"]
-        os: ["ubuntu"]
+        babel: ['7', '8']
+        node: ['20.9.0', '22', '24', '25']
+        os: ['ubuntu']
+        exclude:
+          # Keep Node.js 20 support for Babel 7; Babel 8 requires a newer Node.js.
+          - babel: '8'
+            node: '20.9.0'
         include:
+          - os: ubuntu
+            node: '22.18.0'
+            babel: '8'
           - os: macos
-            node: "24"
+            node: '24'
+            babel: '7'
+          - os: macos
+            node: '24'
+            babel: '8'
           - os: windows
-            node: "24"
+            node: '24'
+            babel: '7'
+          - os: windows
+            node: '24'
+            babel: '8'
 
-    name: Tests (Node.js v${{ matrix.node }}, ${{ matrix.os }})
+    name:
+      Tests (Babel ${{ matrix.babel }}, Node.js v${{ matrix.node }}, ${{
+      matrix.os }})
     runs-on: ${{ matrix.os }}-latest
 
     steps:
@@ -38,26 +57,43 @@ jobs:
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: ${{ matrix.node }}
-          cache: "pnpm"
+          cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # Compile against the declared Babel 7 types before testing each runtime.
+      - name: Build packages
+        run: pnpm build
+
+      - name: Install Babel 8 runtime
+        if: "${{ matrix.babel == '8' }}"
+        run:
+          pnpm --filter react-docgen add --save-exact @babel/core@8.0.1
+          @babel/traverse@8.0.4 @babel/types@8.0.4
+
+      - name: Check consumer declarations
+        run: pnpm --filter react-docgen exec tsc -p tests/types/tsconfig.json
+
       - name: Unit tests with coverage
-        if: "${{ matrix.node == env.NODE_VERSION }}"
-        run: pnpm test -- --coverage
+        if: '${{ matrix.node == env.NODE_VERSION }}'
+        run:
+          pnpm --filter react-docgen --filter @react-docgen/cli --parallel
+          --no-bail test --coverage
 
       - name: Unit tests
-        if: "${{ matrix.node != env.NODE_VERSION }}"
-        run: pnpm test
+        if: '${{ matrix.node != env.NODE_VERSION }}'
+        run:
+          pnpm --filter react-docgen --filter @react-docgen/cli --parallel
+          --no-bail test
 
       - name: Upload coverage
-        if: "${{ matrix.node == env.NODE_VERSION }}"
+        if: '${{ matrix.node == env.NODE_VERSION }}'
         continue-on-error: true
         uses: coverallsapp/github-action@5cbfd81b66ca5d10c19b062c04de0199c215fb6e # v2
         with:
           parallel: true
-          flag-name: test-${{ matrix.os }}
+          flag-name: test-babel-${{ matrix.babel }}-${{ matrix.os }}
 
   finish:
     needs: tests
@@ -85,7 +121,7 @@ jobs:
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: lts/*
-          cache: "pnpm"
+          cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -108,7 +144,7 @@ jobs:
         uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6
         with:
           node-version: lts/*
-          cache: "pnpm"
+          cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
