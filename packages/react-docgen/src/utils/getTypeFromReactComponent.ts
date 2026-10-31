@@ -98,6 +98,15 @@ function getMixinSuperClassPropsPath(
 
   if (!baseClass?.isTSInstantiationExpression()) return null;
 
+  const expression = baseClass.get('expression');
+
+  if (
+    !isReactBuiltinReference(expression, 'Component') &&
+    !isReactBuiltinReference(expression, 'PureComponent')
+  ) {
+    return null;
+  }
+
   const typeParameters = baseClass.get('typeParameters');
 
   if (!typeParameters.hasNode()) return null;

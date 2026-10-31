@@ -167,6 +167,47 @@ describe('getTypeFromReactComponent', () => {
         expect(getTypeFromReactComponent(path)).toMatchSnapshot();
       });
 
+      test.each(['configure<Options>', 'Other.Component<Options>'])(
+        'preserves declared props when the mixin argument is %s',
+        (argument) => {
+          const result = parseComponent(
+            `import Other from 'other';
+             interface Props { value: string }
+             interface Options { unrelated: number }
+             function configure<T>() {}
+             export class Button extends makeComponent(${argument}) {
+               props: Props;
+               render() { return <button />; }
+             }`,
+            { filename: 'component.tsx' },
+          );
+
+          expect(result[0]?.props).toEqual({
+            value: {
+              required: true,
+              tsType: { name: 'string' },
+              description: '',
+            },
+          });
+        },
+      );
+
+      test.each(['Component', 'PureComponent'])(
+        'finds mixin props from an aliased React %s import',
+        (component) => {
+          const result = parseComponent(
+            `import { ${component} as Base } from 'react';
+             interface Props { value: string }
+             export class Button extends withFoo(Base<Props>) {
+               render() { return <button />; }
+             }`,
+            { filename: 'component.tsx' },
+          );
+
+          expect(result[0]?.props?.value?.tsType).toEqual({ name: 'string' });
+        },
+      );
+
       test.each(['PropsWithChildren', 'PropsWithRef', 'PropsWithoutRef'])(
         'unwraps %s in mixin base class props',
         (wrapper) => {
