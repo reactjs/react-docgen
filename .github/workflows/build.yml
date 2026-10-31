@@ -72,6 +72,9 @@ jobs:
           pnpm --filter react-docgen add --save-exact @babel/core@8.0.1
           @babel/traverse@8.0.4 @babel/types@8.0.4
 
+      - name: Check consumer declarations
+        run: pnpm --filter react-docgen exec tsc -p tests/types/tsconfig.json
+
       - name: Unit tests with coverage
         if: '${{ matrix.node == env.NODE_VERSION }}'
         run:

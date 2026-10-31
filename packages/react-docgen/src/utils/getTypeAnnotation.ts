@@ -6,7 +6,10 @@ import type { FlowType, Node, TSType } from '@babel/types';
  * can be found null is returned
  */
 export default function getTypeAnnotation<T extends Node = FlowType | TSType>(
-  path: NodePath<Node | null | undefined>,
+  // Babel 7 permits undefined paths; Babel 8 constrains them to nodes or null.
+  path: NodePath<
+    InstanceType<typeof NodePath>['node'] & (Node | null | undefined)
+  >,
 ): NodePath<T> | null {
   if (
     !path.node ||

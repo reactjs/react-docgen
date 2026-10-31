@@ -1,6 +1,8 @@
 import type { NodePath } from '@babel/traverse';
 
-export function ignore<T>(path: NodePath<T>): void {
+export function ignore<T extends InstanceType<typeof NodePath>['node']>(
+  path: NodePath | NodePath<T>,
+): void {
   path.skip();
 }
 

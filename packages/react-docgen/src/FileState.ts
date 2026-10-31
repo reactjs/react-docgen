@@ -3,13 +3,13 @@ import babelTraverse, { NodePath } from '@babel/traverse';
 import type { File, Node, Program } from '@babel/types';
 import type { Importer, ImportPath } from './importer/index.js';
 import babelParse from './babelParser.js';
-import type { TransformOptions } from '@babel/core';
+import type { Config } from './config.js';
 
 // Workaround while babel is not a proper ES module
 const traverse = babelTraverse.default ?? (babelTraverse as never);
 
 export default class FileState {
-  opts: TransformOptions;
+  opts: NonNullable<Config['babelOptions']>;
   path: NodePath<Program>;
   ast: File;
   scope: Scope;
@@ -39,7 +39,7 @@ export default class FileState {
   };
 
   constructor(
-    options: TransformOptions,
+    options: NonNullable<Config['babelOptions']>,
     { code, ast, importer }: { code: string; ast: File; importer: Importer },
   ) {
     this.opts = options;

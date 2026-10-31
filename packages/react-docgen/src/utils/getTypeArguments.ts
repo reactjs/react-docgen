@@ -8,11 +8,23 @@ import type {
 export default function getTypeArguments(
   path: NodePath,
 ): NodePath<
-  TSTypeParameterInstantiation | TypeParameterInstantiation | null | undefined
+  InstanceType<typeof NodePath>['node'] &
+    (
+      | TSTypeParameterInstantiation
+      | TypeParameterInstantiation
+      | null
+      | undefined
+    )
 > {
   return path.get(
     'typeArguments' in path.node ? 'typeArguments' : 'typeParameters',
   ) as NodePath<
-    TSTypeParameterInstantiation | TypeParameterInstantiation | null | undefined
+    InstanceType<typeof NodePath>['node'] &
+      (
+        | TSTypeParameterInstantiation
+        | TypeParameterInstantiation
+        | null
+        | undefined
+      )
   >;
 }

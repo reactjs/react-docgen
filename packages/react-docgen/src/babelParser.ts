@@ -1,7 +1,10 @@
-import type { ParserOptions, TransformOptions } from '@babel/core';
+import type { ParserOptions } from '@babel/core';
+import type { Config } from './config.js';
 import * as babel from '@babel/core';
 import type { File } from '@babel/types';
 import { extname } from 'path';
+
+type BabelOptions = NonNullable<Config['babelOptions']>;
 
 const TYPESCRIPT_EXTS = new Set(['.cts', '.mts', '.ts', '.tsx']);
 const { parseSync, version } = babel;
@@ -14,7 +17,7 @@ const loadPartialConfigSync = (
 const IS_BABEL_8 = Number.parseInt(version, 10) >= 8;
 
 function getDefaultPlugins(
-  options: TransformOptions,
+  options: BabelOptions,
 ): NonNullable<ParserOptions['plugins']> {
   const extension = options.filename ? extname(options.filename) : '';
   const isTypeScript = TYPESCRIPT_EXTS.has(extension);
@@ -58,7 +61,7 @@ function getDefaultPlugins(
 }
 
 function buildPluginList(
-  options: TransformOptions,
+  options: BabelOptions,
 ): NonNullable<ParserOptions['plugins']> {
   let plugins: NonNullable<ParserOptions['plugins']> = [];
 
@@ -83,7 +86,7 @@ function buildPluginList(
   return plugins.filter((plugin) => plugin !== 'estree');
 }
 
-function buildParserOptions(options: TransformOptions): ParserOptions {
+function buildParserOptions(options: BabelOptions): ParserOptions {
   const plugins = buildPluginList(options);
 
   return {
@@ -96,10 +99,10 @@ function buildParserOptions(options: TransformOptions): ParserOptions {
 
 export default function babelParser(
   src: string,
-  options: TransformOptions = {},
+  options: BabelOptions = {},
 ): File {
   const parserOpts = buildParserOptions(options);
-  const opts: TransformOptions = {
+  const opts: BabelOptions = {
     ...options,
     parserOpts,
   };
