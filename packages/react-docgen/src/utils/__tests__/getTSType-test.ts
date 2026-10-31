@@ -426,6 +426,36 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
+  test('preserves union members in indexed access', () => {
+    const typePath = typeAlias(`
+      var x: Base["size"];
+      type Base = { size: "small" | "large" };
+    `);
+
+    expect(getTSType(typePath)).toMatchObject({
+      name: 'union',
+      raw: 'Base["size"]',
+      elements: [
+        { name: 'literal', value: '"small"' },
+        { name: 'literal', value: '"large"' },
+      ],
+    });
+  });
+
+  test('preserves object signatures in indexed access', () => {
+    const typePath = typeAlias(`
+      var x: Base["options"];
+      type Base = { options: { enabled: boolean } };
+    `);
+
+    expect(getTSType(typePath)).toMatchObject({
+      name: 'signature',
+      signature: {
+        properties: [{ key: 'enabled', value: { name: 'boolean' } }],
+      },
+    });
+  });
+
   test('resolves indexed access of array', () => {
     const typePath = parseTypescript
       .statement(

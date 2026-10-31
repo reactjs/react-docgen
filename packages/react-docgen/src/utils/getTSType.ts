@@ -491,8 +491,16 @@ function handleTSIndexedAccessType(
     return { name: 'unknown' };
   }
 
+  const valueType: TypeDescriptor<TSFunctionSignatureType> & {
+    required?: boolean;
+  } = {
+    ...resolvedType.value,
+  };
+
+  delete valueType.required;
+
   return {
-    name: resolvedType.value.name,
+    ...valueType,
     raw: printValue(path),
   };
 }
