@@ -22,7 +22,7 @@
     "dist"
   ],
   "engines": {
-    "node": "^22.13.0 || ^24.11.0 || >=26"
+    "node": "^22.13.0 || ^24.11.0 || >=26.13.0"
   },
   "main": "dist/main.js",
   "typings": "dist/main.d.ts",
