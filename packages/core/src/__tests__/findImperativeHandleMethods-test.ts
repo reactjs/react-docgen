@@ -23,11 +23,13 @@ function findMethods({
   params = [],
   source = 'react',
   value = call('useCb', [fn()]),
+  factories,
 }: {
   declarations?: AstNode[];
   params?: AstNode[];
   source?: string;
   value?: AstNode;
+  factories?: AstNode[];
 } = {}) {
   const property = { type: 'Property', key: id('focus'), value: id('method') };
   const ast: AstNode = {
@@ -53,17 +55,18 @@ function findMethods({
           body: [
             ...declarations,
             variable('method', value),
-            {
-              type: 'ExpressionStatement',
-              expression: call('useImperativeHandle', [
-                id('ref'),
+            ...(
+              factories ?? [
                 {
                   type: 'ArrowFunctionExpression',
                   params: [],
                   body: { type: 'ObjectExpression', properties: [property] },
                 },
-              ]),
-            },
+              ]
+            ).map((factory) => ({
+              type: 'ExpressionStatement',
+              expression: call('useImperativeHandle', [id('ref'), factory]),
+            })),
           ],
         },
       },
@@ -121,4 +124,36 @@ test('stops resolving circular callback aliases', () => {
       value: call('useCb', [id('first')]),
     }),
   ).toEqual([]);
+});
+
+test('keeps visitor state separate across factories and extractions', () => {
+  const first = fn();
+  const second = fn();
+  const factories: AstNode[] = [first, second].map((callback) => ({
+    type: 'ArrowFunctionExpression',
+    params: [],
+    body: {
+      type: 'BlockStatement',
+      body: [
+        variable('handle', {
+          type: 'ObjectExpression',
+          properties: [
+            {
+              type: 'Property',
+              key: id('focus'),
+              value: call('useCb', [callback]),
+            },
+          ],
+        }),
+        { type: 'ReturnStatement', argument: id('handle') },
+      ],
+    },
+  }));
+
+  expect(findMethods({ factories }).map((method) => method.fn)).toEqual([
+    first,
+    second,
+  ]);
+  expect(findMethods({ source: 'other-library' })).toEqual([]);
+  expect(findMethods()).toHaveLength(1);
 });

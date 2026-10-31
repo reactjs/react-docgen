@@ -153,86 +153,105 @@ export interface ImperativeHandleMethod {
   fn: AstNode;
 }
 
+interface MethodState {
+  file: FileState;
+  methods: ImperativeHandleMethod[];
+}
+
+interface ReturnState {
+  file: FileState;
+  object: AstPath;
+}
+
+function visit<State extends { file: FileState }>(
+  path: AstPath,
+  visitor: (path: AstPath, state: State) => boolean,
+  state: State,
+): void {
+  if (
+    visitor(path, state) ||
+    isFunction(path.node) ||
+    path.node.type === 'ClassDeclaration' ||
+    path.node.type === 'ClassExpression'
+  )
+    return;
+  for (const key of state.file.visitorKeys[path.node.type] ?? []) {
+    const value = path.get(key);
+
+    for (const nested of Array.isArray(value) ? value : value ? [value] : []) {
+      visit(nested, visitor, state);
+    }
+  }
+}
+
+function returnVisitor(path: AstPath, state: ReturnState): boolean {
+  if (path.node.type !== 'ReturnStatement') return false;
+  const argument = child(path, 'argument');
+
+  if (argument) {
+    const object = resolve(argument);
+
+    if (isObjectExpression(object.node)) state.object = object;
+  }
+
+  return true;
+}
+
+function methodVisitor(path: AstPath, state: MethodState): boolean {
+  if (!isCallExpression(path.node)) return false;
+  const callee = child(path, 'callee');
+  const factory = children(path, 'arguments')[1];
+
+  if (
+    !callee ||
+    !isReactHook(callee, 'useImperativeHandle') ||
+    !factory ||
+    !isFunction(factory.node)
+  )
+    return true;
+  const factoryBody = child(factory, 'body');
+
+  if (!factoryBody) return true;
+  let object = resolve(factoryBody);
+
+  if (!isObjectExpression(object.node)) {
+    const returnState: ReturnState = { file: state.file, object };
+
+    visit(factoryBody, returnVisitor, returnState);
+    object = returnState.object;
+  }
+  if (!isObjectExpression(object.node)) return true;
+
+  for (const property of children(object, 'properties')) {
+    if (!isProperty(property.node)) continue;
+    const value = child(property, 'value');
+
+    if (!value) continue;
+    let fn = resolve(value);
+
+    if (isCallExpression(fn.node)) {
+      const hook = child(fn, 'callee');
+      const callback = children(fn, 'arguments')[0];
+
+      if (!hook || !isReactHook(hook, 'useCallback') || !callback) continue;
+      fn = resolve(callback);
+    }
+    if (isFunction(fn.node)) {
+      state.methods.push({ property: property.node, fn: fn.node });
+    }
+  }
+
+  return true;
+}
+
 export default function findImperativeHandleMethods(
   file: FileState,
   component: AstPath,
 ): ImperativeHandleMethod[] {
-  const methods: ImperativeHandleMethod[] = [];
-
-  function visit(path: AstPath, visitor: (path: AstPath) => boolean): void {
-    if (
-      visitor(path) ||
-      isFunction(path.node) ||
-      path.node.type === 'ClassDeclaration' ||
-      path.node.type === 'ClassExpression'
-    )
-      return;
-    for (const key of file.visitorKeys[path.node.type] ?? []) {
-      const value = path.get(key);
-
-      for (const nested of Array.isArray(value)
-        ? value
-        : value
-          ? [value]
-          : []) {
-        visit(nested, visitor);
-      }
-    }
-  }
-
+  const state: MethodState = { file, methods: [] };
   const body = child(component, 'body');
 
-  if (!body) return methods;
-  visit(body, (path) => {
-    if (!isCallExpression(path.node)) return false;
-    const callee = child(path, 'callee');
-    const factory = children(path, 'arguments')[1];
+  if (body) visit(body, methodVisitor, state);
 
-    if (
-      !callee ||
-      !isReactHook(callee, 'useImperativeHandle') ||
-      !factory ||
-      !isFunction(factory.node)
-    )
-      return true;
-    const factoryBody = child(factory, 'body');
-
-    if (!factoryBody) return true;
-    let object = resolve(factoryBody);
-
-    if (!isObjectExpression(object.node)) {
-      visit(factoryBody, (returned) => {
-        if (returned.node.type !== 'ReturnStatement') return false;
-        const argument = child(returned, 'argument');
-
-        if (argument && isObjectExpression(resolve(argument).node))
-          object = resolve(argument);
-
-        return true;
-      });
-    }
-    if (!isObjectExpression(object.node)) return true;
-
-    for (const property of children(object, 'properties')) {
-      if (!isProperty(property.node)) continue;
-      const value = child(property, 'value');
-
-      if (!value) continue;
-      let fn = resolve(value);
-
-      if (isCallExpression(fn.node)) {
-        const hook = child(fn, 'callee');
-        const callback = children(fn, 'arguments')[0];
-
-        if (!hook || !isReactHook(hook, 'useCallback') || !callback) continue;
-        fn = resolve(callback);
-      }
-      if (isFunction(fn.node))
-        methods.push({ property: property.node, fn: fn.node });
-    }
-
-    return true;
-  });
-
-  return methods;
+  return state.methods;
 }
