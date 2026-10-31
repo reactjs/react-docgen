@@ -202,9 +202,9 @@ function handleTSTypeLiteral(
   };
 
   path.get('members').forEach((param) => {
-    const typeAnnotation = param.get('typeAnnotation') as NodePath<
-      TSTypeAnnotation | null | undefined
-    >;
+    const typeAnnotation = param.get(
+      'returnType' in param.node ? 'returnType' : 'typeAnnotation',
+    ) as NodePath<TSTypeAnnotation | null | undefined>;
 
     if (
       (param.isTSPropertySignature() || param.isTSMethodSignature()) &&

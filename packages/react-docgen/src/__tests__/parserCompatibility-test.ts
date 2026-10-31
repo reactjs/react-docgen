@@ -84,3 +84,23 @@ test.skipIf(Number.parseInt(version, 10) >= 8).each(['ts', 'cts', 'mts'])(
     expect(result[0]?.displayName).toBe('Button');
   },
 );
+
+test('preserves nested TypeScript method return types', () => {
+  const result = parse(
+    `interface Props {
+      config: { run(value: string): number; stop?(): void };
+    }
+
+    export function Button(_props: Props) { return <button />; }`,
+    { filename: 'component.tsx' },
+  );
+
+  expect(result[0]?.props?.config?.tsType).toMatchObject({
+    signature: {
+      properties: [
+        { key: 'run', value: { name: 'number', required: true } },
+        { key: 'stop', value: { name: 'void', required: false } },
+      ],
+    },
+  });
+});
