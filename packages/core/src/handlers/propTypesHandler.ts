@@ -19,54 +19,58 @@ import resolveValue from '../utils/resolveValue.js';
 import getClassStaticValue from '../utils/getClassStaticValue.js';
 import getResolvedEnumValues from '../utils/getResolvedEnumValues.js';
 import unwrapExpression from '../utils/unwrapExpression.js';
+import type { Visitor } from '../traverse.js';
+
+interface PropTypesImportState {
+  found: boolean;
+}
+
+const propTypesImportVisitor: Visitor<PropTypesImportState> = {
+  ImportDeclaration(path, state) {
+    const source = path.get('source');
+
+    if (!source || Array.isArray(source) || !isLiteral(source.node)) return;
+    if (source.node.value === 'prop-types') {
+      state.found = true;
+    } else if (source.node.value === 'react') {
+      const specifiers = path.get('specifiers');
+
+      state.found =
+        Array.isArray(specifiers) &&
+        specifiers.some((specifier) => {
+          if (specifier.node.type !== 'ImportSpecifier') return false;
+          const imported = specifier.get('imported');
+
+          return Boolean(
+            imported &&
+            !Array.isArray(imported) &&
+            isIdentifier(imported.node, { name: 'PropTypes' }),
+          );
+        });
+    }
+    if (state.found) path.stop();
+  },
+  CallExpression(path, state) {
+    if (
+      !isCallExpression(path.node) ||
+      !isIdentifier(path.node.callee, { name: 'require' })
+    )
+      return;
+    const [source] = path.node.arguments;
+
+    if (source && isLiteral(source) && source.value === 'prop-types') {
+      state.found = true;
+      path.stop();
+    }
+  },
+};
 
 function hasPropTypesImport(file: FileState): boolean {
-  let found = false;
+  const state: PropTypesImportState = { found: false };
 
-  file.traverse(
-    {
-      ImportDeclaration(path) {
-        const source = path.get('source');
+  file.traverse(propTypesImportVisitor, state);
 
-        if (!source || Array.isArray(source) || !isLiteral(source.node)) return;
-        if (source.node.value === 'prop-types') {
-          found = true;
-        } else if (source.node.value === 'react') {
-          const specifiers = path.get('specifiers');
-
-          found =
-            Array.isArray(specifiers) &&
-            specifiers.some((specifier) => {
-              if (specifier.node.type !== 'ImportSpecifier') return false;
-              const imported = specifier.get('imported');
-
-              return Boolean(
-                imported &&
-                !Array.isArray(imported) &&
-                isIdentifier(imported.node, { name: 'PropTypes' }),
-              );
-            });
-        }
-        if (found) path.stop();
-      },
-      CallExpression(path) {
-        if (
-          !isCallExpression(path.node) ||
-          !isIdentifier(path.node.callee, { name: 'require' })
-        )
-          return;
-        const [source] = path.node.arguments;
-
-        if (source && isLiteral(source) && source.value === 'prop-types') {
-          found = true;
-          path.stop();
-        }
-      },
-    },
-    undefined,
-  );
-
-  return found;
+  return state.found;
 }
 
 const propTypesHandler: Handler = (documentation, path, file) => {
