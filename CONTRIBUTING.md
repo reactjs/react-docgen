@@ -14,6 +14,14 @@ We actively welcome your pull requests.
 4. Ensure the test suite passes.
 5. Make sure your code lints and typechecks.
 
+## Tests and coverage
+
+Run `pnpm test` for the package suites. Run `pnpm test:coverage` for the CI
+coverage report at `coverage/lcov.info`. Coverage runs all package projects in
+one Vitest process and resolves parser packages to their sources, so shared core
+code exercised by adapter tests is included. The legacy coverage thresholds
+remain enforced.
+
 ## Issues
 We use GitHub issues to track public bugs. Please ensure your description is
 clear and has sufficient instructions to be able to reproduce the issue.

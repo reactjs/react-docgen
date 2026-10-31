@@ -232,6 +232,15 @@ import { parse } from '@react-docgen/typescript';
 
 Record every material plan change here before or with implementation.
 
+### 2026-10-31 — Made CI fixtures portable and unified coverage reporting
+
+- Pin shared fixture line endings to LF and compare CLI paths in their existing
+  slash-normalized form on Windows.
+- Collect one source-based coverage report across all package projects, so
+  adapter integration tests contribute to shared core coverage.
+- Keep the existing legacy coverage thresholds and let every CI platform finish
+  even when another matrix job fails.
+
 ### 2026-10-31 — Ported mixin class props from the maintained legacy line
 
 - Carried #1145/#1157 into the legacy reference and TypeScript adapter,

@@ -46,7 +46,7 @@ jobs:
 
       - name: Tests with coverage
         if: "${{ matrix.node == env.NODE_VERSION }}"
-        run: pnpm test -- --coverage
+        run: pnpm test:coverage
 
       - name: Tests
         if: "${{ matrix.node != env.NODE_VERSION }}"
@@ -58,6 +58,7 @@ jobs:
         uses: coverallsapp/github-action@8d6379e14d29928660c4ba802d8e85393440b329 # v2
         with:
           parallel: true
+          file: coverage/lcov.info
           flag-name: test-${{ matrix.os }}
 
   finish:
