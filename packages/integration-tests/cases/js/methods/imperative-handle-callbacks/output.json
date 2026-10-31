@@ -1,0 +1,48 @@
+[
+  {
+    "description": "",
+    "displayName": "Input",
+    "methods": [
+      {
+        "name": "focus",
+        "docblock": "Focus the input.",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "value",
+            "optional": true
+          }
+        ],
+        "returns": null,
+        "description": "Focus the input."
+      },
+      {
+        "name": "reset",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": null
+      },
+      {
+        "name": "save",
+        "docblock": null,
+        "modifiers": ["async"],
+        "params": [
+          {
+            "name": "value",
+            "optional": false,
+            "type": null
+          }
+        ],
+        "returns": null
+      },
+      {
+        "name": "values",
+        "docblock": null,
+        "modifiers": ["generator"],
+        "params": [],
+        "returns": null
+      }
+    ]
+  }
+]

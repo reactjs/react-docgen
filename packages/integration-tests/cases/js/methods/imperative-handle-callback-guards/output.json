@@ -1,0 +1,15 @@
+[
+  {
+    "description": "",
+    "displayName": "Input",
+    "methods": [
+      {
+        "name": "plain",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": null
+      }
+    ]
+  }
+]

@@ -1,0 +1,28 @@
+[
+  {
+    "description": "",
+    "displayName": "Input",
+    "methods": [
+      {
+        "name": "focus",
+        "docblock": "Focus the input.",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "value",
+            "optional": false,
+            "type": {
+              "name": "string"
+            }
+          }
+        ],
+        "returns": {
+          "type": {
+            "name": "number"
+          }
+        },
+        "description": "Focus the input."
+      }
+    ]
+  }
+]

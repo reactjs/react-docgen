@@ -1,46 +1,238 @@
 import {
   isArrowFunctionExpression,
   isCallExpression,
+  isFunctionDeclaration,
+  isFunctionExpression,
+  isIdentifier,
+  isLiteral,
+  isMemberExpression,
   isObjectExpression,
   isProperty,
   type AstNode,
+  type AstPath,
+  type FileState,
   type Property,
 } from '../internal.js';
-import getMemberName from './getMemberName.js';
 
-export default function findImperativeHandleMethods(node: AstNode): Property[] {
-  const methods: Property[] = [];
+function child(path: AstPath, key: string): AstPath | null {
+  const value = path.get(key);
 
-  function visit(current: AstNode): void {
-    if (
-      isCallExpression(current) &&
-      getMemberName(current.callee)?.split('.').at(-1) === 'useImperativeHandle'
-    ) {
-      const factory = current.arguments[1];
+  return Array.isArray(value) ? null : value;
+}
 
-      if (
-        factory &&
-        isArrowFunctionExpression(factory) &&
-        isObjectExpression(factory.body)
-      ) {
-        methods.push(...factory.body.properties.filter(isProperty));
-      }
+function children(path: AstPath, key: string): AstPath[] {
+  const value = path.get(key);
+
+  return Array.isArray(value) ? value : [];
+}
+
+function isFunction(node: AstNode): boolean {
+  return (
+    isArrowFunctionExpression(node) ||
+    isFunctionExpression(node) ||
+    isFunctionDeclaration(node)
+  );
+}
+
+function binds(path: AstPath, name: string): boolean {
+  if (isIdentifier(path.node)) return path.node.name === name;
+  if (path.node.type === 'AssignmentPattern') {
+    const left = child(path, 'left');
+
+    return Boolean(left && binds(left, name));
+  }
+  if (path.node.type === 'RestElement') {
+    const argument = child(path, 'argument');
+
+    return Boolean(argument && binds(argument, name));
+  }
+  if (path.node.type === 'ObjectPattern') {
+    return children(path, 'properties').some((property) => {
+      const value = child(property, 'value') ?? child(property, 'argument');
+
+      return Boolean(value && binds(value, name));
+    });
+  }
+
+  return children(path, 'elements').some((element) => binds(element, name));
+}
+
+function binding(path: AstPath, name: string): AstPath | null {
+  for (let scope = path.parentPath; scope; scope = scope.parentPath) {
+    if (isFunction(scope.node)) {
+      const id = child(scope, 'id');
+
+      if (id && binds(id, name)) return scope;
+      const parameter = children(scope, 'params').find((param) =>
+        binds(param, name),
+      );
+
+      if (parameter) return parameter;
     }
+    if (scope.node.type === 'CatchClause') {
+      const parameter = child(scope, 'param');
 
-    for (const value of Object.values(current)) {
-      if (Array.isArray(value)) {
-        for (const child of value) {
-          if (child && typeof child === 'object' && 'type' in child) {
-            visit(child as AstNode);
-          }
+      if (parameter && binds(parameter, name)) return parameter;
+    }
+    if (scope.node.type !== 'Program' && scope.node.type !== 'BlockStatement')
+      continue;
+
+    for (const statement of children(scope, 'body')) {
+      const declaration = child(statement, 'declaration') ?? statement;
+      const id = child(declaration, 'id');
+
+      if (id && binds(id, name)) return declaration;
+      for (const variable of children(declaration, 'declarations')) {
+        const variableId = child(variable, 'id');
+
+        if (variableId && binds(variableId, name)) {
+          return isIdentifier(variableId.node)
+            ? (child(variable, 'init') ?? variableId)
+            : variableId;
         }
-      } else if (value && typeof value === 'object' && 'type' in value) {
-        visit(value as AstNode);
+      }
+      for (const specifier of children(declaration, 'specifiers')) {
+        const local = child(specifier, 'local');
+
+        if (local && binds(local, name)) return specifier;
       }
     }
   }
 
-  visit(node);
+  return null;
+}
+
+function resolve(path: AstPath, seen = new Set<AstNode>()): AstPath {
+  if (!isIdentifier(path.node) || seen.has(path.node)) return path;
+  seen.add(path.node);
+  const value = binding(path, path.node.name);
+
+  return value ? resolve(value, seen) : path;
+}
+
+function isReactImport(path: AstPath): boolean {
+  const source = path.parentPath && child(path.parentPath, 'source');
+
+  return Boolean(
+    source &&
+    isLiteral(source.node) &&
+    ['react', 'react/addons', 'react-native'].includes(
+      String(source.node.value),
+    ),
+  );
+}
+
+function isReactHook(path: AstPath, name: string): boolean {
+  const value = resolve(path);
+
+  if (isMemberExpression(value.node) && !value.node.computed) {
+    if (!isIdentifier(value.node.property, { name })) return false;
+    const object = child(value, 'object');
+
+    if (!object) return false;
+    const imported = resolve(object);
+
+    return (
+      ['ImportDefaultSpecifier', 'ImportNamespaceSpecifier'].includes(
+        imported.node.type,
+      ) && isReactImport(imported)
+    );
+  }
+  const imported = child(value, 'imported');
+
+  return Boolean(
+    value.node.type === 'ImportSpecifier' &&
+    imported &&
+    isIdentifier(imported.node, { name }) &&
+    isReactImport(value),
+  );
+}
+
+export interface ImperativeHandleMethod {
+  property: Property;
+  fn: AstNode;
+}
+
+export default function findImperativeHandleMethods(
+  file: FileState,
+  component: AstPath,
+): ImperativeHandleMethod[] {
+  const methods: ImperativeHandleMethod[] = [];
+
+  function visit(path: AstPath, visitor: (path: AstPath) => boolean): void {
+    if (
+      visitor(path) ||
+      isFunction(path.node) ||
+      path.node.type === 'ClassDeclaration' ||
+      path.node.type === 'ClassExpression'
+    )
+      return;
+    for (const key of file.visitorKeys[path.node.type] ?? []) {
+      const value = path.get(key);
+
+      for (const nested of Array.isArray(value)
+        ? value
+        : value
+          ? [value]
+          : []) {
+        visit(nested, visitor);
+      }
+    }
+  }
+
+  const body = child(component, 'body');
+
+  if (!body) return methods;
+  visit(body, (path) => {
+    if (!isCallExpression(path.node)) return false;
+    const callee = child(path, 'callee');
+    const factory = children(path, 'arguments')[1];
+
+    if (
+      !callee ||
+      !isReactHook(callee, 'useImperativeHandle') ||
+      !factory ||
+      !isFunction(factory.node)
+    )
+      return true;
+    const factoryBody = child(factory, 'body');
+
+    if (!factoryBody) return true;
+    let object = resolve(factoryBody);
+
+    if (!isObjectExpression(object.node)) {
+      visit(factoryBody, (returned) => {
+        if (returned.node.type !== 'ReturnStatement') return false;
+        const argument = child(returned, 'argument');
+
+        if (argument && isObjectExpression(resolve(argument).node))
+          object = resolve(argument);
+
+        return true;
+      });
+    }
+    if (!isObjectExpression(object.node)) return true;
+
+    for (const property of children(object, 'properties')) {
+      if (!isProperty(property.node)) continue;
+      const value = child(property, 'value');
+
+      if (!value) continue;
+      let fn = resolve(value);
+
+      if (isCallExpression(fn.node)) {
+        const hook = child(fn, 'callee');
+        const callback = children(fn, 'arguments')[0];
+
+        if (!hook || !isReactHook(hook, 'useCallback') || !callback) continue;
+        fn = resolve(callback);
+      }
+      if (isFunction(fn.node))
+        methods.push({ property: property.node, fn: fn.node });
+    }
+
+    return true;
+  });
 
   return methods;
 }

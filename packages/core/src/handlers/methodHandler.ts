@@ -17,10 +17,33 @@ import getPropertyName from '../utils/getPropertyName.js';
 import parseMethodDocblock from '../utils/parseMethodDocblock.js';
 import findImperativeHandleMethods from '../utils/findImperativeHandleMethods.js';
 
+const reactMethods = new Set([
+  'componentDidMount',
+  'componentDidReceiveProps',
+  'componentDidUpdate',
+  'componentWillMount',
+  'UNSAFE_componentWillMount',
+  'componentWillReceiveProps',
+  'UNSAFE_componentWillReceiveProps',
+  'componentWillUnmount',
+  'componentWillUpdate',
+  'UNSAFE_componentWillUpdate',
+  'getChildContext',
+  'getDefaultProps',
+  'getInitialState',
+  'render',
+  'shouldComponentUpdate',
+  'getDerivedStateFromProps',
+  'getDerivedStateFromError',
+  'getSnapshotBeforeUpdate',
+  'componentDidCatch',
+]);
+
 function addImperativeMethods(
   documentation: Parameters<Handler>[0],
   path: Parameters<Handler>[1],
   file: Parameters<Handler>[2],
+  getType?: TypeResolver,
 ): void {
   if (
     !isFunctionDeclaration(path.node) &&
@@ -28,20 +51,17 @@ function addImperativeMethods(
     !isArrowFunctionExpression(path.node)
   )
     return;
-  for (const property of findImperativeHandleMethods(path.node)) {
+  for (const { property, fn } of findImperativeHandleMethods(file, path)) {
     const name = getPropertyName(property.key);
 
-    if (!name) continue;
-    const description = getDescription(file, property);
+    if (!name || reactMethods.has(name)) continue;
+    const modifiers: string[] = [];
 
-    documentation.methods.push({
-      name,
-      docblock: description || null,
-      modifiers: [],
-      params: [],
-      returns: null,
-      ...(description ? { description } : {}),
-    });
+    if (fn.generator) modifiers.push('generator');
+    if (fn.async) modifiers.push('async');
+    documentation.methods.push(
+      methodDocumentation(file, property, fn, name, modifiers, getType),
+    );
   }
 }
 
@@ -50,9 +70,81 @@ export type TypeResolver = (
   annotation: AstNode,
 ) => TypeDescriptor | null;
 
+function methodDocumentation(
+  file: FileState,
+  member: AstNode,
+  fn: AstNode,
+  name: string,
+  modifiers: string[],
+  getType?: TypeResolver,
+) {
+  const params = Array.isArray(fn.params) ? (fn.params as AstNode[]) : [];
+  const returnType =
+    fn.returnType &&
+    typeof fn.returnType === 'object' &&
+    'type' in fn.returnType
+      ? (fn.returnType as AstNode)
+      : null;
+  const description = getDescription(file, member);
+  const parsedDocblock = parseMethodDocblock(description);
+
+  return {
+    name,
+    docblock: description || null,
+    modifiers,
+    params: params.map((parameter) => {
+      const annotation =
+        parameter.typeAnnotation &&
+        typeof parameter.typeAnnotation === 'object' &&
+        'type' in parameter.typeAnnotation
+          ? (parameter.typeAnnotation as AstNode)
+          : null;
+      const rawName = Array.isArray(parameter.range)
+        ? file.source.code
+            .slice(parameter.range[0], parameter.range[1])
+            .replace(/\??:\s*[\s\S]*$/, '')
+        : isIdentifier(parameter)
+          ? parameter.name
+          : '';
+      const normalizedName = rawName
+        .replace(/^\.\.\./, '')
+        .replace(/\s*=.*$/, '');
+      const documented =
+        parameter.type === 'Identifier' ||
+        parameter.type === 'AssignmentPattern'
+          ? parsedDocblock.params.get(normalizedName)
+          : undefined;
+      const type =
+        documented?.type ??
+        (annotation && getType ? getType(file, annotation) : null);
+
+      return {
+        name: rawName.replace(/\s*=.*$/, ''),
+        optional: Boolean(
+          documented?.optional ||
+          parameter.optional ||
+          parameter.type === 'AssignmentPattern',
+        ),
+        ...(!description || documented || parameter.type === 'Identifier'
+          ? { type }
+          : {}),
+        ...(documented?.description
+          ? { description: documented.description }
+          : {}),
+      };
+    }),
+    returns:
+      parsedDocblock.returns ??
+      (returnType && getType ? { type: getType(file, returnType) } : null),
+    ...(parsedDocblock.description
+      ? { description: parsedDocblock.description }
+      : {}),
+  };
+}
+
 export default function createMethodHandler(getType?: TypeResolver): Handler {
   return (documentation, path, file) => {
-    addImperativeMethods(documentation, path, file);
+    addImperativeMethods(documentation, path, file, getType);
     if (!isClassDeclaration(path.node) && !isClassExpression(path.node)) return;
 
     for (const member of path.node.body.body) {
@@ -92,68 +184,9 @@ export default function createMethodHandler(getType?: TypeResolver): Handler {
       )
         continue;
 
-      const params = Array.isArray(fn.params) ? (fn.params as AstNode[]) : [];
-      const returnType =
-        fn.returnType &&
-        typeof fn.returnType === 'object' &&
-        'type' in fn.returnType
-          ? (fn.returnType as AstNode)
-          : null;
-      const description = getDescription(file, member);
-      const parsedDocblock = parseMethodDocblock(description);
-
-      documentation.methods.push({
-        name,
-        docblock: description || null,
-        modifiers,
-        params: params.map((parameter) => {
-          const annotation =
-            parameter.typeAnnotation &&
-            typeof parameter.typeAnnotation === 'object' &&
-            'type' in parameter.typeAnnotation
-              ? (parameter.typeAnnotation as AstNode)
-              : null;
-          const rawName = Array.isArray(parameter.range)
-            ? file.source.code
-                .slice(parameter.range[0], parameter.range[1])
-                .replace(/\??:\s*[\s\S]*$/, '')
-            : isIdentifier(parameter)
-              ? parameter.name
-              : '';
-          const normalizedName = rawName
-            .replace(/^\.\.\./, '')
-            .replace(/\s*=.*$/, '');
-          const documented =
-            parameter.type === 'Identifier' ||
-            parameter.type === 'AssignmentPattern'
-              ? parsedDocblock.params.get(normalizedName)
-              : undefined;
-          const type =
-            documented?.type ??
-            (annotation && getType ? getType(file, annotation) : null);
-
-          return {
-            name: rawName.replace(/\s*=.*$/, ''),
-            optional: Boolean(
-              documented?.optional ||
-              parameter.optional ||
-              parameter.type === 'AssignmentPattern',
-            ),
-            ...(!description || documented || parameter.type === 'Identifier'
-              ? { type }
-              : {}),
-            ...(documented?.description
-              ? { description: documented.description }
-              : {}),
-          };
-        }),
-        returns:
-          parsedDocblock.returns ??
-          (returnType && getType ? { type: getType(file, returnType) } : null),
-        ...(parsedDocblock.description
-          ? { description: parsedDocblock.description }
-          : {}),
-      });
+      documentation.methods.push(
+        methodDocumentation(file, member, fn, name, modifiers, getType),
+      );
     }
   };
 }
