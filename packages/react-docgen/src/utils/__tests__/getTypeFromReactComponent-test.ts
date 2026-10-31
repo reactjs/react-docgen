@@ -5,6 +5,7 @@ import type {
 } from '@babel/types';
 import { parse, parseTypescript } from '../../../tests/utils';
 import getTypeFromReactComponent from '../getTypeFromReactComponent.js';
+import { parse as parseComponent } from '../../main.js';
 import { describe, expect, test } from 'vitest';
 import type { NodePath } from '@babel/traverse';
 
@@ -147,6 +148,125 @@ describe('getTypeFromReactComponent', () => {
         const path = parseTypescript.statementLast<ClassDeclaration>(
           `import React from 'react';
            class X extends React.Component {
+             props: Props;
+             render() {}
+           }`,
+        );
+
+        expect(getTypeFromReactComponent(path)).toMatchSnapshot();
+      });
+
+      test('finds props type in mixin base class params', () => {
+        const path = parseTypescript.statementLast<ClassDeclaration>(
+          `import React from 'react';
+           class X extends withFoo(React.Component<Props, State>) {
+             render() {}
+           }`,
+        );
+
+        expect(getTypeFromReactComponent(path)).toMatchSnapshot();
+      });
+
+      test('finds mixin props using Babel 8 type argument fields', () => {
+        const path = parseTypescript.statementLast<ClassDeclaration>(
+          `import React from 'react';
+           class X extends withFoo(React.Component<Props>) {
+             render() {}
+           }`,
+        );
+        const superClass = path.get('superClass');
+
+        if (!superClass.isCallExpression()) {
+          throw new Error('Expected a mixin call');
+        }
+        const [baseClass] = superClass.get('arguments');
+
+        if (!baseClass?.isTSInstantiationExpression()) {
+          throw new Error('Expected an instantiated base class');
+        }
+
+        // Exercise Babel 8's AST shape even when running with Babel 7.
+        if (!('typeArguments' in baseClass.node)) {
+          Object.assign(baseClass.node, {
+            typeArguments: baseClass.node.typeParameters,
+          });
+          Reflect.deleteProperty(baseClass.node, 'typeParameters');
+        }
+
+        expect(getTypeFromReactComponent(path)[0]?.node).toMatchObject({
+          type: 'TSTypeReference',
+          typeName: { type: 'Identifier', name: 'Props' },
+        });
+      });
+
+      test.each(['configure<Options>', 'Other.Component<Options>'])(
+        'preserves declared props when the mixin argument is %s',
+        (argument) => {
+          const result = parseComponent(
+            `import Other from 'other';
+             interface Props { value: string }
+             interface Options { unrelated: number }
+             function configure<T>() {}
+             export class Button extends makeComponent(${argument}) {
+               props: Props;
+               render() { return <button />; }
+             }`,
+            { filename: 'component.tsx' },
+          );
+
+          expect(result[0]?.props).toEqual({
+            value: {
+              required: true,
+              tsType: { name: 'string' },
+              description: '',
+            },
+          });
+        },
+      );
+
+      test.each(['Component', 'PureComponent'])(
+        'finds mixin props from an aliased React %s import',
+        (component) => {
+          const result = parseComponent(
+            `import { ${component} as Base } from 'react';
+             interface Props { value: string }
+             export class Button extends withFoo(Base<Props>) {
+               render() { return <button />; }
+             }`,
+            { filename: 'component.tsx' },
+          );
+
+          expect(result[0]?.props?.value?.tsType).toEqual({ name: 'string' });
+        },
+      );
+
+      test.each(['PropsWithChildren', 'PropsWithRef', 'PropsWithoutRef'])(
+        'unwraps %s in mixin base class props',
+        (wrapper) => {
+          const result = parseComponent(
+            `import React from 'react';
+             interface Props { value: string }
+             export class Button extends withFoo(React.Component<React.${wrapper}<Props>>) {
+               props: Props;
+               render() { return <button />; }
+             }`,
+            { filename: 'component.tsx' },
+          );
+
+          expect(result[0]?.props).toEqual({
+            value: {
+              required: true,
+              tsType: { name: 'string' },
+              description: '',
+            },
+          });
+        },
+      );
+
+      test('finds props type in properties when extending a mixin without params', () => {
+        const path = parseTypescript.statementLast<ClassDeclaration>(
+          `import React from 'react';
+           class X extends withFoo(React.Component) {
              props: Props;
              render() {}
            }`,

@@ -19,6 +19,8 @@ import type {
   TSTypeParameterDeclaration,
   TSTypeParameterInstantiation,
   TypeParameterDeclaration,
+  ClassDeclaration,
+  ClassExpression,
   TypeParameterInstantiation,
   VariableDeclarator,
 } from '@babel/types';
@@ -82,6 +84,37 @@ function findAssignedVariableType(
 }
 
 /**
+ * Finds the props type of a class extending a mixin call, e.g.
+ * `class X extends withFoo(React.Component<Props>) {}`.
+ */
+function getMixinSuperClassPropsPath(
+  classDefinition: NodePath<ClassDeclaration | ClassExpression>,
+): NodePath | null {
+  const superClass = classDefinition.get('superClass');
+
+  if (!superClass.isCallExpression()) return null;
+
+  const [baseClass] = superClass.get('arguments');
+
+  if (!baseClass?.isTSInstantiationExpression()) return null;
+
+  const expression = baseClass.get('expression');
+
+  if (
+    !isReactBuiltinReference(expression, 'Component') &&
+    !isReactBuiltinReference(expression, 'PureComponent')
+  ) {
+    return null;
+  }
+
+  const typeParameters = getTypeArguments(baseClass);
+
+  if (!typeParameters.hasNode()) return null;
+
+  return typeParameters.get('params')[0] ?? null;
+}
+
+/**
  * Given an React component (stateless or class) tries to find
  * flow or TS types for the props. It may find multiple types.
  * If not found or it is not one of the supported component types,
@@ -113,16 +146,25 @@ export default (componentDefinition: NodePath): NodePath[] => {
         }
       }
     } else {
-      const propsMemberPath = getMemberValuePath(componentDefinition, 'props');
+      const mixinPropsPath = getMixinSuperClassPropsPath(componentDefinition);
 
-      if (!propsMemberPath) {
-        return [];
-      }
+      if (mixinPropsPath) {
+        typePaths.push(mixinPropsPath);
+      } else {
+        const propsMemberPath = getMemberValuePath(
+          componentDefinition,
+          'props',
+        );
 
-      const typeAnnotation = getTypeAnnotation(propsMemberPath.parentPath);
+        if (!propsMemberPath) {
+          return [];
+        }
 
-      if (typeAnnotation) {
-        typePaths.push(typeAnnotation);
+        const typeAnnotation = getTypeAnnotation(propsMemberPath.parentPath);
+
+        if (typeAnnotation) {
+          typePaths.push(typeAnnotation);
+        }
       }
     }
   } else {
