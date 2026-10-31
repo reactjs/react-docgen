@@ -25,5 +25,8 @@
   "tui": {
     "autoExit": true,
     "enabled": false
+  },
+  "affected": {
+    "legacy": true
   }
 }
