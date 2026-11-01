@@ -15,9 +15,12 @@ const primitiveTypes: Record<string, string> = {
   BooleanTypeAnnotation: 'boolean',
   EmptyTypeAnnotation: 'empty',
   MixedTypeAnnotation: 'mixed',
+  NeverTypeAnnotation: 'never',
   NullLiteralTypeAnnotation: 'null',
   NumberTypeAnnotation: 'number',
   StringTypeAnnotation: 'string',
+  UndefinedTypeAnnotation: 'undefined',
+  UnknownTypeAnnotation: 'unknown',
   VoidTypeAnnotation: 'void',
 };
 
@@ -275,7 +278,7 @@ function resolve(
     return {
       name: 'tuple',
       raw: raw(file, node),
-      elements: nodes(node, 'types').map((item) =>
+      elements: nodes(node, 'elementTypes').map((item) =>
         resolve(file, item, parameters, seen),
       ),
     };

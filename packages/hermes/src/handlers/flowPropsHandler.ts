@@ -33,7 +33,7 @@ function annotationFor(node: AstNode): AstNode | null {
   }
 
   if (isClassDeclaration(node) || isClassExpression(node)) {
-    const superTypes = child(node, 'superTypeParameters');
+    const superTypes = child(node, 'superTypeArguments');
     const params = superTypes ? nodes(superTypes, 'params') : [];
 
     return params[params.length === 3 ? 1 : 0] ?? null;
