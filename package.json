@@ -21,7 +21,7 @@
     "@changesets/cli": "2.31.1",
     "@eslint/eslintrc": "3.3.7",
     "@eslint/js": "10.0.1",
-    "@types/node": "20.19.39",
+    "@types/node": "20.19.43",
     "@vitest/coverage-v8": "5.0.5",
     "cpy": "13.2.2",
     "eslint": "10.3.0",
