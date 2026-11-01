@@ -26,7 +26,7 @@
   },
   "dependencies": {
     "@react-docgen/core": "workspace:*",
-    "hermes-parser": "0.25.1"
+    "hermes-parser": "0.37.0"
   },
   "devDependencies": {
     "@react-docgen/babel": "workspace:*",

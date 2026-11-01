@@ -285,8 +285,8 @@ importers:
         specifier: workspace:*
         version: link:../core
       hermes-parser:
-        specifier: 0.25.1
-        version: 0.25.1
+        specifier: 0.37.0
+        version: 0.37.0
     devDependencies:
       '@react-docgen-internal/integration-tests':
         specifier: workspace:*
@@ -3152,8 +3152,14 @@ packages:
   hermes-estree@0.25.1:
     resolution: {integrity: sha512-0wUoCcLp+5Ev5pDW2OriHC2MJCbwLwuRx+gAqMTOkGKJJiBCLjtrvy4PWUGn6MIVefecRpzoOZ/UV6iGdOr+Cw==}
 
+  hermes-estree@0.37.0:
+    resolution: {integrity: sha512-Frp4+A518C4zZgB2+Qo1srlM3y6nbrFbNNzBF3g7tEuQXHXTb2h39V25JQLNHotxclkD+AZTN/JCCpiTFlhIGg==}
+
   hermes-parser@0.25.1:
     resolution: {integrity: sha512-6pEjquH3rqaI6cYAXYPcz9MS4rY6R4ngRgrgfDshRptUZIc3lw0MCIJIGDj9++mfySOuPTHB4nrSW99BCvOPIA==}
+
+  hermes-parser@0.37.0:
+    resolution: {integrity: sha512-8PuWcyaF6VHQHL2dbU+QEIkbtHYQrTX/6+ep4VcBLJ3f/ehevowr5Zj8LQfYXQQGFG2O+df7hIMtt4PkkhfK3Q==}
 
   hookified@1.15.1:
     resolution: {integrity: sha512-MvG/clsADq1GPM2KGo2nyfaWVyn9naPiXrqIe4jYjXNZQt238kWyOGrsyc/DmRAQ+Re6yeo6yX/yoNCG5KAEVg==}
@@ -8205,9 +8211,15 @@ snapshots:
 
   hermes-estree@0.25.1: {}
 
+  hermes-estree@0.37.0: {}
+
   hermes-parser@0.25.1:
     dependencies:
       hermes-estree: 0.25.1
+
+  hermes-parser@0.37.0:
+    dependencies:
+      hermes-estree: 0.37.0
 
   hookified@1.15.1: {}
 
