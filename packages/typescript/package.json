@@ -26,8 +26,8 @@
   },
   "dependencies": {
     "@react-docgen/core": "workspace:*",
-    "@typescript-eslint/typescript-estree": "8.67.0",
-    "@typescript-eslint/visitor-keys": "8.67.0"
+    "@typescript-eslint/typescript-estree": "8.72.1",
+    "@typescript-eslint/visitor-keys": "8.72.1"
   },
   "devDependencies": {
     "@react-docgen/babel": "workspace:*",
