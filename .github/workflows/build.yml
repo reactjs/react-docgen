@@ -10,7 +10,7 @@ on:
 permissions: {}
 
 env:
-  NODE_VERSION: 24
+  NODE_VERSION: 26.13.0
 
 jobs:
   tests:
@@ -18,7 +18,7 @@ jobs:
       fail-fast: false
       matrix:
         babel: ['7', '8']
-        node: ['20.9.0', '22', '24', '25']
+        node: ['20.9.0', '22', '24', '26.13.0', '^27.0.0-0']
         os: ['ubuntu']
         exclude:
           # Keep Node.js 20 support for Babel 7; Babel 8 requires a newer Node.js.
@@ -29,16 +29,16 @@ jobs:
             node: '22.18.0'
             babel: '8'
           - os: macos
-            node: '24'
+            node: '26.13.0'
             babel: '7'
           - os: macos
-            node: '24'
+            node: '26.13.0'
             babel: '8'
           - os: windows
-            node: '24'
+            node: '26.13.0'
             babel: '7'
           - os: windows
-            node: '24'
+            node: '26.13.0'
             babel: '8'
 
     name:
@@ -57,6 +57,7 @@ jobs:
         uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: ${{ matrix.node }}
+          check-latest: ${{ startsWith(matrix.node, '^') }}
           cache: 'pnpm'
 
       - name: Install dependencies
