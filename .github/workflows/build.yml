@@ -10,20 +10,20 @@ on:
 permissions: {}
 
 env:
-  NODE_VERSION: 26.13.0
+  NODE_VERSION: "26"
 
 jobs:
   tests:
     strategy:
       fail-fast: false
       matrix:
-        node: ["22.13.0", "24.11.0", "26.13.0", "^27.0.0-0"]
+        node: ["22.13.0", "24", "26", "^27.0.0-0"]
         os: ["ubuntu"]
         include:
           - os: macos
-            node: "26.13.0"
+            node: "26"
           - os: windows
-            node: "26.13.0"
+            node: "26"
 
     name: Tests (Node.js v${{ matrix.node }}, ${{ matrix.os }})
     runs-on: ${{ matrix.os }}-latest
