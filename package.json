@@ -2,7 +2,7 @@
   "private": true,
   "engines": {
     "node": "^20.9.0 || >=22",
-    "pnpm": "10.33.3"
+    "pnpm": "10.34.9"
   },
   "type": "module",
   "scripts": {
@@ -40,5 +40,5 @@
     "vite": "7.3.7",
     "vitest": "5.0.5"
   },
-  "packageManager": "pnpm@10.33.3"
+  "packageManager": "pnpm@10.34.9"
 }
