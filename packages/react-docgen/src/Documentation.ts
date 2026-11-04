@@ -129,11 +129,7 @@ export interface ObjectSignatureType<
 }
 
 export type TypeDescriptor<T = FunctionSignatureType> =
-  | ElementsType<T>
-  | LiteralType
-  | ObjectSignatureType<T>
-  | SimpleType
-  | T;
+  ElementsType<T> | LiteralType | ObjectSignatureType<T> | SimpleType | T;
 
 export interface PropDescriptor {
   type?: PropTypeDescriptor;

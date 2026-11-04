@@ -12,9 +12,7 @@ function getDocblockFromComponent(path: NodePath): string | null {
 
   if (path.isClassDeclaration() || path.isClassExpression()) {
     const decorators = path.get('decorators') as
-      | Array<NodePath<Decorator>>
-      | null
-      | undefined;
+      Array<NodePath<Decorator>> | null | undefined;
 
     // If we have a class declaration or expression, then the comment might be
     // attached to the last decorator instead as trailing comment.

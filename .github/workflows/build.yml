@@ -4,13 +4,14 @@ on:
   push:
     branches:
       - main
+      - 8.x
       - renovate/**
   pull_request:
 
 permissions: {}
 
 env:
-  NODE_VERSION: 26.13.0
+  NODE_VERSION: '26'
 
 jobs:
   tests:
@@ -18,27 +19,29 @@ jobs:
       fail-fast: false
       matrix:
         babel: ['7', '8']
-        node: ['20.9.0', '22', '24', '26.13.0', '^27.0.0-0']
+        node: ['20.9.0', '22', '24', '26', '^27.0.0-0']
         os: ['ubuntu']
         exclude:
           # Keep Node.js 20 support for Babel 7; Babel 8 requires a newer Node.js.
           - babel: '8'
             node: '20.9.0'
+          - babel: '8'
+            node: '22'
         include:
           - os: ubuntu
             node: '22.18.0'
             babel: '8'
           - os: macos
-            node: '26.13.0'
+            node: '26'
             babel: '7'
           - os: macos
-            node: '26.13.0'
+            node: '26'
             babel: '8'
           - os: windows
-            node: '26.13.0'
+            node: '26'
             babel: '7'
           - os: windows
-            node: '26.13.0'
+            node: '26'
             babel: '8'
 
     name:
