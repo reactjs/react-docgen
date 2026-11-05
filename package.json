@@ -25,7 +25,7 @@
     "@vitest/coverage-v8": "5.0.5",
     "cpy": "13.2.3",
     "eslint": "10.14.0",
-    "eslint-config-next": "16.4.3",
+    "eslint-config-next": "16.4.4",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.7",
     "execa": "9.6.1",
