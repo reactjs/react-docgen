@@ -1,0 +1,2 @@
+# Nx 22's multi-document lockfile parser requires LF separators.
+pnpm-lock.yaml text eol=lf
