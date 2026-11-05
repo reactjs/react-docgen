@@ -20,8 +20,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
-          # Do not persist credentials so changesets can use the provided token
-          persist-credentials: false
+          fetch-depth: 0
 
       - name: Install pnpm
         uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6
@@ -31,7 +30,6 @@ jobs:
         with:
           node-version: "lts/*"
           cache: "pnpm"
-          registry-url: "https://registry.npmjs.org"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -40,9 +38,8 @@ jobs:
         id: changesets
         uses: changesets/action@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
         with:
-          publish: pnpm changesets-release
-          version: pnpm changesets-version
-          title: 8.x Packages ready to publish
-          commit: Publish new versions
-        env:
-          GITHUB_TOKEN: ${{ secrets.CHANGESETS_TOKEN }}
+          publish-script: pnpm changesets-release
+          version-script: pnpm changesets-version
+          pr-title: 8.x Packages ready to publish
+          commit-message: Publish new versions
+          github-token: ${{ secrets.CHANGESETS_TOKEN }}
