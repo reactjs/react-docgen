@@ -5,6 +5,45 @@ import { describe, expect, test } from 'vitest';
 import type { NodePath } from '@babel/traverse';
 
 describe('unwrapBuiltinTSPropTypes', () => {
+  test.each(['Readonly<Props>', 'Readonly<Readonly<Props>>'])(
+    'unwraps the builtin %s',
+    (type) => {
+      const path = parseTypescript
+        .statementLast<VariableDeclaration>(`var foo: ${type}`)
+        .get('declarations.0.id.typeAnnotation.typeAnnotation');
+      const result = unwrapBuiltinTSPropTypes(path);
+
+      expect(result.isTSTypeReference()).toBe(true);
+      if (result.isTSTypeReference()) {
+        expect(result.get('typeName').isIdentifier({ name: 'Props' })).toBe(
+          true,
+        );
+      }
+    },
+  );
+
+  test.each([
+    'type Readonly<T> = { local: T };',
+    'interface Readonly<T> { local: T }',
+    "import { Readonly } from './types';",
+  ])('preserves a locally declared Readonly: %s', (declaration) => {
+    const path = parseTypescript
+      .statementLast<VariableDeclaration>(
+        `${declaration} var foo: Readonly<Props>`,
+      )
+      .get('declarations.0.id.typeAnnotation.typeAnnotation');
+
+    expect(unwrapBuiltinTSPropTypes(path)).toBe(path);
+  });
+
+  test('preserves Readonly without type parameters', () => {
+    const path = parseTypescript
+      .statementLast<VariableDeclaration>('var foo: Readonly')
+      .get('declarations.0.id.typeAnnotation.typeAnnotation');
+
+    expect(unwrapBuiltinTSPropTypes(path)).toBe(path);
+  });
+
   test('React.PropsWithChildren', () => {
     const path = parseTypescript
       .statementLast<VariableDeclaration>(
