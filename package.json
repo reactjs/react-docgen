@@ -28,7 +28,7 @@
     "eslint-config-next": "16.4.3",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-prettier": "5.5.7",
-    "execa": "9.6.1",
+    "execa": "10.2.1",
     "globals": "17.14.0",
     "nx": "22.7.12",
     "prettier": "3.9.10",
