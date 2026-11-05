@@ -1,5 +1,10 @@
 packages:
   - 'benchmark'
   - 'packages/*'
+allowBuilds:
+  esbuild: false
+  microtime: false
+  nx: false
+  unrs-resolver: false
 overrides:
   zod: 4.3.6
