@@ -23,7 +23,7 @@
     "@eslint/eslintrc": "3.3.7",
     "@eslint/js": "10.0.1",
     "@types/node": "22.20.5",
-    "@vitest/coverage-v8": "5.0.5",
+    "@vitest/coverage-v8": "5.1.0",
     "eslint": "10.14.0",
     "eslint-config-next": "16.4.4",
     "eslint-config-prettier": "10.1.8",
@@ -38,7 +38,7 @@
     "typescript": "6.0.3",
     "typescript-eslint": "8.72.1",
     "vite": "8.3.5",
-    "vitest": "5.0.5"
+    "vitest": "5.1.0"
   },
   "packageManager": "pnpm@12.17.0"
 }
