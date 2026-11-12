@@ -304,6 +304,32 @@ describe('getTSType', () => {
     expect(getTSType(typePath)).toMatchSnapshot();
   });
 
+  test.each([
+    ['run(value: string): number', true],
+    ['run?(value: string): number', false],
+  ])('detects nested method signatures: %s', (method, required) => {
+    const typePath = typeAlias(`let x: { ${method} };`);
+
+    expect(getTSType(typePath)).toMatchObject({
+      signature: {
+        properties: [
+          {
+            key: 'run',
+            value: {
+              name: 'signature',
+              type: 'function',
+              required,
+              signature: {
+                arguments: [{ name: 'value', type: { name: 'string' } }],
+                return: { name: 'number' },
+              },
+            },
+          },
+        ],
+      },
+    });
+  });
+
   test('detects callable signature type', () => {
     const typePath = typeAlias(
       'let x: { (str: string): string, token: string };',
