@@ -1,9 +1,10 @@
 import type { NodePath } from '@babel/traverse';
 import isReactBuiltinReference from './isReactBuiltinReference.js';
+import resolveToValue from './resolveToValue.js';
 
 /**
  * Unwraps NodePaths from the builtin TS types `PropsWithoutRef`,
- * `PropsWithRef` and `PropsWithChildren` and returns the inner type param.
+ * `PropsWithRef`, `PropsWithChildren` and the global `Readonly` utility.
  * If none of the builtin types is detected the path is returned as-is
  */
 export default function unwrapBuiltinTSPropTypes(typePath: NodePath): NodePath {
@@ -11,6 +12,8 @@ export default function unwrapBuiltinTSPropTypes(typePath: NodePath): NodePath {
     const typeName = typePath.get('typeName');
 
     if (
+      (typeName.isIdentifier({ name: 'Readonly' }) &&
+        resolveToValue(typeName) === typeName) ||
       isReactBuiltinReference(typeName, 'PropsWithoutRef') ||
       isReactBuiltinReference(typeName, 'PropsWithRef') ||
       isReactBuiltinReference(typeName, 'PropsWithChildren')
