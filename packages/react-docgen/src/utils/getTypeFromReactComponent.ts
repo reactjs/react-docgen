@@ -27,6 +27,8 @@ import type {
 import getTypeIdentifier from './getTypeIdentifier.js';
 import isReactBuiltinReference from './isReactBuiltinReference.js';
 import unwrapBuiltinTSPropTypes from './unwrapBuiltinTSPropTypes.js';
+import getTSPickOrOmit from './getTSPickOrOmit.js';
+import getPropertyName from './getPropertyName.js';
 
 function getStatelessPropsPath(
   componentDefinition: NodePath,
@@ -196,15 +198,74 @@ export default (componentDefinition: NodePath): NodePath[] => {
   return typePaths.map((typePath) => unwrapBuiltinTSPropTypes(typePath));
 };
 
+/**
+ * Returns the name of a TypeScript property or method signature, or null when
+ * the member has no static name.
+ */
+function getTSMemberName(path: NodePath): string | null {
+  if (!path.isTSPropertySignature() && !path.isTSMethodSignature()) {
+    return null;
+  }
+
+  return getPropertyName(path);
+}
+
+/**
+ * Binds the type arguments of a reference such as `Base<string>` to the type
+ * parameters of the declaration it resolves to.
+ */
+function bindTypeArguments(
+  referencePath: NodePath,
+  resolvedPath: NodePath,
+  typeParams: TypeParameters | null,
+): TypeParameters | null {
+  const typeArguments = getTypeArguments(referencePath);
+  const typeParameters = resolvedPath.get('typeParameters') as NodePath<
+    TSTypeParameterDeclaration | TypeParameterDeclaration | null | undefined
+  >;
+
+  if (typeParameters.hasNode() && typeArguments.hasNode()) {
+    return getTypeParameters(typeParameters, typeArguments, typeParams);
+  }
+
+  return typeParams;
+}
+
 export function applyToTypeProperties(
   documentation: Documentation,
   path: NodePath,
   callback: (propertyPath: NodePath, params: TypeParameters | null) => void,
   typeParams: TypeParameters | null,
   visited = new WeakSet<object>(),
+  ancestors = new WeakSet<object>(),
 ): void {
-  if (visited.has(path.node)) return;
+  if (visited.has(path.node) || ancestors.has(path.node)) return;
   visited.add(path.node);
+  ancestors.add(path.node);
+
+  try {
+    applyToTypePropertiesOf(
+      documentation,
+      path,
+      callback,
+      typeParams,
+      visited,
+      ancestors,
+    );
+  } finally {
+    ancestors.delete(path.node);
+  }
+}
+
+function applyToTypePropertiesOf(
+  documentation: Documentation,
+  path: NodePath,
+  callback: (propertyPath: NodePath, params: TypeParameters | null) => void,
+  typeParams: TypeParameters | null,
+  visited: WeakSet<object>,
+  ancestors: WeakSet<object>,
+): void {
+  const pickOrOmit = getTSPickOrOmit(path);
 
   if (path.isObjectTypeAnnotation()) {
     path
@@ -215,14 +276,14 @@ export function applyToTypeProperties(
       .get('members')
       .forEach((propertyPath) => callback(propertyPath, typeParams));
   } else if (path.isInterfaceDeclaration()) {
-    applyExtends(documentation, path, callback, typeParams, visited);
+    applyExtends(documentation, path, callback, typeParams, visited, ancestors);
 
     path
       .get('body')
       .get('properties')
       .forEach((propertyPath) => callback(propertyPath, typeParams));
   } else if (path.isTSInterfaceDeclaration()) {
-    applyExtends(documentation, path, callback, typeParams, visited);
+    applyExtends(documentation, path, callback, typeParams, visited, ancestors);
 
     path
       .get('body')
@@ -240,7 +301,34 @@ export function applyToTypeProperties(
           callback,
           typeParams,
           visited,
+          ancestors,
         ),
+    );
+  } else if (pickOrOmit) {
+    const { name, source, keys } = pickOrOmit;
+    const resolvedSource = source.isTSTypeReference()
+      ? resolveGenericTypeAnnotation(source)
+      : undefined;
+
+    // The source gets a new visited set, so that a type that is also used
+    // elsewhere, as in `Pick<T, 'a'> & Omit<T, 'a'>`, is read again. Cycles
+    // still stop at the types on the current path.
+    applyToTypeProperties(
+      documentation,
+      resolvedSource ?? source,
+      (propertyPath, params) => {
+        const key = getTSMemberName(propertyPath);
+        const selected = key !== null && keys.has(key);
+
+        if (name === 'Pick' ? selected : !selected) {
+          callback(propertyPath, params);
+        }
+      },
+      resolvedSource?.isTSInterfaceDeclaration()
+        ? bindTypeArguments(source, resolvedSource, typeParams)
+        : typeParams,
+      new WeakSet<object>(),
+      ancestors,
     );
   } else if (!path.isUnionTypeAnnotation()) {
     // The react-docgen output format does not currently allow
@@ -254,6 +342,7 @@ export function applyToTypeProperties(
         callback,
         typeParams,
         visited,
+        ancestors,
       );
     }
   }
@@ -265,6 +354,7 @@ function applyExtends(
   callback: (propertyPath: NodePath, params: TypeParameters | null) => void,
   typeParams: TypeParameters | null,
   visited: WeakSet<object>,
+  ancestors: WeakSet<object>,
 ): void {
   const classExtends = path.get('extends');
 
@@ -276,6 +366,36 @@ function applyExtends(
     (
       extendsPath: NodePath<InterfaceExtends | TSExpressionWithTypeArguments>,
     ) => {
+      const pickOrOmit = getTSPickOrOmit(extendsPath);
+
+      if (pickOrOmit) {
+        const { source } = pickOrOmit;
+
+        if (
+          source.isTSTypeReference() &&
+          !resolveGenericTypeAnnotation(source)
+        ) {
+          // The picked type is not available, for example because it is
+          // imported from another package.
+          const idPath = getTypeIdentifier(source);
+
+          if (idPath && idPath.isIdentifier()) {
+            documentation.addComposes(idPath.node.name);
+          }
+        } else {
+          applyToTypeProperties(
+            documentation,
+            extendsPath,
+            callback,
+            typeParams,
+            visited,
+            ancestors,
+          );
+        }
+
+        return;
+      }
+
       const resolvedPath = resolveGenericTypeAnnotation(extendsPath);
 
       if (resolvedPath) {
@@ -299,6 +419,7 @@ function applyExtends(
           callback,
           typeParams,
           visited,
+          ancestors,
         );
       } else {
         const idPath = getTypeIdentifier(extendsPath);
