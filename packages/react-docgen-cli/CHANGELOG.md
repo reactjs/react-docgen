@@ -1,5 +1,16 @@
 # Release Notes
 
+## 3.0.8
+
+### Patch Changes
+
+- Updated dependencies
+  [[`a27d723`](https://github.com/reactjs/react-docgen/commit/a27d723633c6ef49c4c7e92b344fa18a7f119638),
+  [`18c902b`](https://github.com/reactjs/react-docgen/commit/18c902b60ccbf1c9209ebb40455dc53515e5e88f),
+  [`3a12e4f`](https://github.com/reactjs/react-docgen/commit/3a12e4f59e8447da2af752590b3c266f93d53d3e),
+  [`27167ae`](https://github.com/reactjs/react-docgen/commit/27167ae52b3f623780c65292182849acbe41ce6f)]:
+  - react-docgen@8.0.5
+
 ## 3.0.7
 
 ### Patch Changes
