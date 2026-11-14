@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@babel/core": "7.29.13",
-    "@babel/types": "7.29.11",
+    "@babel/types": "7.29.14",
     "@types/babel__core": "7.20.5"
   },
   "license": "MIT"
