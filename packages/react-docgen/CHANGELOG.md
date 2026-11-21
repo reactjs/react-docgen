@@ -1,5 +1,30 @@
 # Release Notes
 
+## 8.0.5
+
+### Patch Changes
+
+- [`a27d723`](https://github.com/reactjs/react-docgen/commit/a27d723633c6ef49c4c7e92b344fa18a7f119638)
+  Thanks [@sean0407](https://github.com/sean0407)! - Preserve function types
+  wrapped in parentheses when parsing TypeScript unions.
+
+- [#1157](https://github.com/reactjs/react-docgen/pull/1157)
+  [`18c902b`](https://github.com/reactjs/react-docgen/commit/18c902b60ccbf1c9209ebb40455dc53515e5e88f)
+  Thanks [@danez](https://github.com/danez)! - Find TypeScript props of class
+  components extending a mixin call such as
+  `class X extends withFoo(React.Component<Props>)`.
+
+- [`3a12e4f`](https://github.com/reactjs/react-docgen/commit/3a12e4f59e8447da2af752590b3c266f93d53d3e)
+  Thanks [@askalf](https://github.com/askalf)! - Document methods declared with
+  `useCallback` and exposed through `useImperativeHandle`
+
+- [#1103](https://github.com/reactjs/react-docgen/pull/1103)
+  [`27167ae`](https://github.com/reactjs/react-docgen/commit/27167ae52b3f623780c65292182849acbe41ce6f)
+  Thanks [@Stanzilla](https://github.com/Stanzilla)! - Support Babel 8
+  dependency overrides for parsing and traversal, including TypeScript generic
+  props, inherited interfaces, function types, and mapped types. Preserve Babel
+  7 compatibility.
+
 ## 8.0.4
 
 ### Patch Changes
