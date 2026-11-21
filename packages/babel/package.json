@@ -1,6 +1,6 @@
 {
   "name": "@react-docgen/babel",
-  "version": "0.0.0",
+  "version": "1.0.0-alpha.0",
   "description": "Normalized Babel parser adapter for react-docgen.",
   "publishConfig": {
     "provenance": true,
