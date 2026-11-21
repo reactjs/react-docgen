@@ -83,6 +83,71 @@ exports[`getTypeFromReactComponent > Flow > stateless > finds param type annotat
 ]
 `;
 
+exports[`getTypeFromReactComponent > Flow > stateless > finds variable type annotation (FC) 1`] = `
+[
+  Node {
+    "id": Node {
+      "name": "Props",
+      "type": "Identifier",
+    },
+    "type": "GenericTypeAnnotation",
+    "typeParameters": null,
+  },
+]
+`;
+
+exports[`getTypeFromReactComponent > Flow > stateless > finds variable type annotation (FunctionComponent) 1`] = `
+[
+  Node {
+    "id": Node {
+      "name": "Props",
+      "type": "Identifier",
+    },
+    "type": "GenericTypeAnnotation",
+    "typeParameters": null,
+  },
+]
+`;
+
+exports[`getTypeFromReactComponent > Flow > stateless > finds variable type annotation (SFC) 1`] = `
+[
+  Node {
+    "id": Node {
+      "name": "Props",
+      "type": "Identifier",
+    },
+    "type": "GenericTypeAnnotation",
+    "typeParameters": null,
+  },
+]
+`;
+
+exports[`getTypeFromReactComponent > Flow > stateless > finds variable type annotation (StatelessComponent) 1`] = `
+[
+  Node {
+    "id": Node {
+      "name": "Props",
+      "type": "Identifier",
+    },
+    "type": "GenericTypeAnnotation",
+    "typeParameters": null,
+  },
+]
+`;
+
+exports[`getTypeFromReactComponent > Flow > stateless > unwraps React.PropsWithChildren in variable type annotation 1`] = `
+[
+  Node {
+    "id": Node {
+      "name": "Props",
+      "type": "Identifier",
+    },
+    "type": "GenericTypeAnnotation",
+    "typeParameters": null,
+  },
+]
+`;
+
 exports[`getTypeFromReactComponent > TypeScript > classes > finds props type in mixin base class params 1`] = `
 [
   Node {
@@ -200,6 +265,42 @@ exports[`getTypeFromReactComponent > TypeScript > stateless > finds param type a
 ]
 `;
 
+exports[`getTypeFromReactComponent > TypeScript > stateless > finds props type in React.memo generics 1`] = `
+[
+  Node {
+    "type": "TSTypeReference",
+    "typeName": Node {
+      "name": "Props",
+      "type": "Identifier",
+    },
+  },
+]
+`;
+
+exports[`getTypeFromReactComponent > TypeScript > stateless > finds props type in React.memo generics without param annotation 1`] = `
+[
+  Node {
+    "type": "TSTypeReference",
+    "typeName": Node {
+      "name": "Props",
+      "type": "Identifier",
+    },
+  },
+]
+`;
+
+exports[`getTypeFromReactComponent > TypeScript > stateless > finds props type when the component is assigned to an annotated variable 1`] = `
+[
+  Node {
+    "type": "TSTypeReference",
+    "typeName": Node {
+      "name": "Props",
+      "type": "Identifier",
+    },
+  },
+]
+`;
+
 exports[`getTypeFromReactComponent > TypeScript > stateless > finds variable type annotation (FC) > with MemberExpression 1`] = `
 [
   Node {
@@ -237,6 +338,30 @@ exports[`getTypeFromReactComponent > TypeScript > stateless > finds variable typ
 `;
 
 exports[`getTypeFromReactComponent > TypeScript > stateless > finds variable type annotation (FunctionComponent) > with named import 1`] = `
+[
+  Node {
+    "type": "TSTypeReference",
+    "typeName": Node {
+      "name": "Props",
+      "type": "Identifier",
+    },
+  },
+]
+`;
+
+exports[`getTypeFromReactComponent > TypeScript > stateless > finds variable type annotation (SFC) 1`] = `
+[
+  Node {
+    "type": "TSTypeReference",
+    "typeName": Node {
+      "name": "Props",
+      "type": "Identifier",
+    },
+  },
+]
+`;
+
+exports[`getTypeFromReactComponent > TypeScript > stateless > finds variable type annotation (StatelessComponent) 1`] = `
 [
   Node {
     "type": "TSTypeReference",

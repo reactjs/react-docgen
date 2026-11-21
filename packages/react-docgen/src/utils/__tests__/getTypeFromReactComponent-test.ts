@@ -1,6 +1,7 @@
 import type {
   ArrowFunctionExpression,
   ClassDeclaration,
+  FunctionDeclaration,
   VariableDeclaration,
 } from '@babel/types';
 import { parse, parseTypescript } from '../../../tests/utils';
@@ -129,6 +130,62 @@ describe('getTypeFromReactComponent', () => {
           .get('init') as NodePath<ArrowFunctionExpression>;
 
         expect(getTypeFromReactComponent(path)).toMatchSnapshot();
+      });
+
+      test.each(['SFC', 'StatelessComponent'])(
+        'finds variable type annotation (%s)',
+        (name) => {
+          const path = parseTypescript
+            .statementLast<VariableDeclaration>(
+              `import React from 'react';
+               const x: React.${name}<Props> = (props) => {}`,
+            )
+            .get('declarations')[0]
+            .get('init') as NodePath<ArrowFunctionExpression>;
+
+          expect(getTypeFromReactComponent(path)).toMatchSnapshot();
+        },
+      );
+
+      test('finds props type when the component is assigned to an annotated variable', () => {
+        const path = parseTypescript.statement<FunctionDeclaration>(
+          `import React from 'react';
+           function inner() { return null; }
+           const x: React.FC<Props> = inner;`,
+          1,
+        );
+
+        expect(getTypeFromReactComponent(path)).toMatchSnapshot();
+      });
+
+      test('finds props type in React.memo generics', () => {
+        const path = parseTypescript
+          .statementLast<VariableDeclaration>(
+            `import React from 'react';
+             const x = React.memo<Props>((props) => {});`,
+          )
+          .get('declarations')[0]
+          .get('init') as NodePath;
+
+        const argument = path.get(
+          'arguments',
+        )[0] as NodePath<ArrowFunctionExpression>;
+
+        expect(getTypeFromReactComponent(argument)).toMatchSnapshot();
+      });
+
+      test('finds props type in React.memo generics without param annotation', () => {
+        const path = parseTypescript
+          .statementLast<VariableDeclaration>(
+            `import React from 'react';
+             const x = React.memo<Props>(function () { return null; });`,
+          )
+          .get('declarations')[0]
+          .get('init') as NodePath;
+
+        const argument = path.get('arguments')[0] as NodePath;
+
+        expect(getTypeFromReactComponent(argument)).toMatchSnapshot();
       });
     });
 
@@ -292,6 +349,33 @@ describe('getTypeFromReactComponent', () => {
         const path = parse
           .statementLast<VariableDeclaration>(
             `const x = (props: { prop: string }) => {}`,
+          )
+          .get('declarations')[0]
+          .get('init') as NodePath<ArrowFunctionExpression>;
+
+        expect(getTypeFromReactComponent(path)).toMatchSnapshot();
+      });
+
+      test.each(['FunctionComponent', 'FC', 'SFC', 'StatelessComponent'])(
+        'finds variable type annotation (%s)',
+        (name) => {
+          const path = parse
+            .statementLast<VariableDeclaration>(
+              `import React from 'react';
+               const x: React.${name}<Props> = (props) => {}`,
+            )
+            .get('declarations')[0]
+            .get('init') as NodePath<ArrowFunctionExpression>;
+
+          expect(getTypeFromReactComponent(path)).toMatchSnapshot();
+        },
+      );
+
+      test('unwraps React.PropsWithChildren in variable type annotation', () => {
+        const path = parse
+          .statementLast<VariableDeclaration>(
+            `import React from 'react';
+             const x: React.FC<React.PropsWithChildren<Props>> = (props) => {}`,
           )
           .get('declarations')[0]
           .get('init') as NodePath<ArrowFunctionExpression>;
