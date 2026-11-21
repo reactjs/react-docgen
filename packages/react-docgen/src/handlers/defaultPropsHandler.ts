@@ -29,6 +29,10 @@ function getDefaultValue(path: NodePath): DefaultValueDescriptor | null {
     defaultValue = `${path.node.value}`;
   } else if (path.isNullLiteral()) {
     defaultValue = 'null';
+  } else if (path.isTemplateLiteral()) {
+    // TemplateLiteral is part of Babel's Literal alias but has no extra.raw.
+    // Use the exact source: whitespace inside it is part of the string value.
+    defaultValue = path.getSource();
   } else if (path.isLiteral()) {
     defaultValue = path.node.extra?.raw as string;
   } else {
