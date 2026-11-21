@@ -1,6 +1,6 @@
 {
   "name": "@react-docgen/typescript",
-  "version": "0.0.0",
+  "version": "1.0.0-alpha.0",
   "description": "TypeScript parser adapter for react-docgen.",
   "publishConfig": {
     "provenance": true,
