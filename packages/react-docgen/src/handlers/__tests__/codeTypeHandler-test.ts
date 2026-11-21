@@ -457,4 +457,107 @@ describe('codeTypeHandler', () => {
 
     expect(documentation.descriptors).toMatchSnapshot();
   });
+
+  describe('function type of the component variable', () => {
+    function getProps(src: string) {
+      const definition = parseTypescript
+        .statement<VariableDeclaration>(src)
+        .get('declarations')[0]
+        .get('init') as NodePath<ArrowFunctionExpression>;
+
+      codeTypeHandler(documentation, definition);
+
+      return documentation.descriptors;
+    }
+
+    test('reads props from a type alias of a function type', () => {
+      expect(
+        getProps(`
+          const MyComponent: FnType = (props) => null;
+          type FnType = (props: Props) => null;
+          type Props = {
+            /** The foo prop */
+            foo: string;
+          };
+        `),
+      ).toEqual({
+        foo: {
+          required: true,
+          tsType: { name: 'string' },
+          description: 'The foo prop',
+        },
+      });
+    });
+
+    test('reads props from an interface with a call signature', () => {
+      expect(
+        Object.keys(
+          getProps(`
+            const MyComponent: Fn = (props) => null;
+            interface Fn {
+              (props: Props): null;
+              displayName?: string;
+            }
+            type Props = { foo: string };
+          `),
+        ),
+      ).toEqual(['foo']);
+    });
+
+    test('reads props from a type literal with a call signature', () => {
+      expect(
+        Object.keys(
+          getProps(`
+            const MyComponent: Fn = (props) => null;
+            type Fn = { (props: Props): null };
+            type Props = { foo: string };
+          `),
+        ),
+      ).toEqual(['foo']);
+    });
+
+    test('reads props from an inline function type', () => {
+      expect(
+        Object.keys(
+          getProps(`
+            const MyComponent: (props: Props) => null = (props) => null;
+            type Props = { foo: string };
+          `),
+        ),
+      ).toEqual(['foo']);
+    });
+
+    test('reads props from a generic type alias of a function type', () => {
+      expect(
+        Object.keys(
+          getProps(`
+            const MyComponent: Component<Props> = (props) => null;
+            type Component<P> = (props: P) => null;
+            type Props = { foo: string };
+          `),
+        ),
+      ).toEqual(['foo']);
+    });
+
+    test('reads props from a generic interface with a call signature', () => {
+      expect(
+        Object.keys(
+          getProps(`
+            const MyComponent: Component<Props> = (props) => null;
+            interface Component<P> { (props: P): null }
+            interface Props { foo: string }
+          `),
+        ),
+      ).toEqual(['foo']);
+    });
+
+    test('ignores a type that is not a function type', () => {
+      expect(
+        getProps(`
+          const MyComponent: Fn = (props) => null;
+          type Fn = string;
+        `),
+      ).toEqual({});
+    });
+  });
 });
