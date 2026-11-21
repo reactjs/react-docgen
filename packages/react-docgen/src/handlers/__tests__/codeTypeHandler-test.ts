@@ -263,6 +263,145 @@ describe('codeTypeHandler', () => {
     expect(Object.keys(documentation.descriptors)).toEqual(['b', 'a']);
   });
 
+  describe('Pick and Omit', () => {
+    function getPropNames(code: string): string[] {
+      const definition = parseTypescript
+        .statement(code)
+        .get('expression') as NodePath<ArrowFunctionExpression>;
+
+      codeTypeHandler(documentation, definition);
+
+      return Object.keys(documentation.descriptors);
+    }
+
+    test('picks props', () => {
+      expect(
+        getPropNames(
+          `(props: Pick<Props, 'a' | 'b'>) => null;
+           interface Props { a: string; b: number; c: boolean }`,
+        ),
+      ).toEqual(['a', 'b']);
+    });
+
+    test('omits props', () => {
+      expect(
+        getPropNames(
+          `(props: Omit<Props, 'b'>) => null;
+           interface Props { a: string; b: number; c: boolean }`,
+        ),
+      ).toEqual(['a', 'c']);
+    });
+
+    test('reads the docs of picked props', () => {
+      getPropNames(
+        `(props: Pick<Props, 'a'>) => null;
+         interface Props {
+           /** The a prop */
+           a?: string;
+           b: number;
+         }`,
+      );
+
+      expect(documentation.descriptors).toEqual({
+        a: {
+          required: false,
+          tsType: { name: 'string' },
+          description: 'The a prop',
+        },
+      });
+    });
+
+    test('supports Pick and Omit in type aliases and intersections', () => {
+      expect(
+        getPropNames(
+          `(props: Props) => null;
+           interface Base { a: string; b: number; c: boolean }
+           type Props = Omit<Base, 'c'> & { d: string };`,
+        ),
+      ).toEqual(['a', 'b', 'd']);
+    });
+
+    test('supports Pick and Omit in interface extends', () => {
+      expect(
+        getPropNames(
+          `(props: Props) => null;
+           interface Base { a: string; b: number }
+           interface Props extends Pick<Base, 'a'> { c: boolean }`,
+        ),
+      ).toEqual(['a', 'c']);
+      expect(documentation.composes).toEqual([]);
+    });
+
+    test('supports nested Pick and Omit', () => {
+      expect(
+        getPropNames(
+          `(props: Omit<Pick<Base, 'a' | 'b'>, 'b'>) => null;
+           interface Base { a: string; b: number; c: boolean }`,
+        ),
+      ).toEqual(['a']);
+    });
+
+    test('reads a type again when it is used twice', () => {
+      expect(
+        getPropNames(
+          `(props: Pick<Base, 'a'> & Omit<Base, 'a'>) => null;
+           interface Base { a: string; b: number }`,
+        ),
+      ).toEqual(['a', 'b']);
+    });
+
+    test('handles a Pick of the type that extends it', () => {
+      expect(
+        getPropNames(
+          `(props: A) => null;
+           interface A extends Pick<A, 'a'> { a: string; b: number }`,
+        ),
+      ).toEqual(['a', 'b']);
+    });
+
+    test('binds type arguments of the picked type', () => {
+      getPropNames(
+        `(props: Props) => null;
+         interface Base<T> { value: T; other: number }
+         interface Props extends Pick<Base<string>, 'value'> {}`,
+      );
+
+      expect(documentation.descriptors).toEqual({
+        value: { required: true, tsType: { name: 'string' }, description: '' },
+      });
+    });
+
+    test('supports number keys', () => {
+      expect(
+        getPropNames(
+          `(props: Omit<Props, 0>) => null;
+           interface Props { 0: string; a: number }`,
+        ),
+      ).toEqual(['a']);
+    });
+
+    test('ignores locally declared Pick types', () => {
+      expect(
+        getPropNames(
+          `(props: Pick<Base, 'a'>) => null;
+           type Pick<T, K> = { local: string };
+           interface Base { a: string }`,
+        ),
+      ).toEqual(['local']);
+    });
+
+    test('adds composes for an unresolved source in extends', () => {
+      expect(
+        getPropNames(
+          `(props: Props) => null;
+           import type { LinkProps } from 'next/link';
+           interface Props extends Pick<LinkProps, 'href'> { a: string }`,
+        ),
+      ).toEqual(['a']);
+      expect(documentation.composes).toEqual(['LinkProps']);
+    });
+  });
+
   test('does support utility types inline', () => {
     const definition = parse
       .statement(

@@ -3,12 +3,19 @@ import isUnreachableFlowType from '../utils/isUnreachableFlowType.js';
 import resolveToValue from '../utils/resolveToValue.js';
 import { unwrapUtilityType } from './flowUtilityTypes.js';
 import getTypeIdentifier from './getTypeIdentifier.js';
+import getTSPickOrOmit from './getTSPickOrOmit.js';
 
 function tryResolveGenericTypeAnnotation(
   path: NodePath,
   seen = new WeakSet<object>(),
 ): NodePath | undefined {
   let typePath = unwrapUtilityType(path);
+
+  // Keep `Pick<T, K>` and `Omit<T, K>` so that callers can select the keys.
+  if (getTSPickOrOmit(typePath)) {
+    return typePath;
+  }
+
   const idPath = getTypeIdentifier(typePath);
 
   if (idPath) {
