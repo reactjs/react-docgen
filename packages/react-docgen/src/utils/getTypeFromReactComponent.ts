@@ -4,6 +4,7 @@ import type Documentation from '../Documentation.js';
 import getMemberValuePath from './getMemberValuePath.js';
 import getTypeAnnotation from './getTypeAnnotation.js';
 import getTypeParameters from './getTypeParameters.js';
+import isReactBuiltinCall from './isReactBuiltinCall.js';
 import isReactComponentClass from './isReactComponentClass.js';
 import isReactForwardRefCall from './isReactForwardRefCall.js';
 import resolveGenericTypeAnnotation from './resolveGenericTypeAnnotation.js';
@@ -13,6 +14,7 @@ import type {
   FlowType,
   InterfaceDeclaration,
   InterfaceExtends,
+  Program,
   TSExpressionWithTypeArguments,
   TSInterfaceDeclaration,
   TSType,
@@ -27,6 +29,21 @@ import type {
 import getTypeIdentifier from './getTypeIdentifier.js';
 import isReactBuiltinReference from './isReactBuiltinReference.js';
 import unwrapBuiltinTSPropTypes from './unwrapBuiltinTSPropTypes.js';
+
+/**
+ * Names of the React types that describe a function component and take the
+ * props type as their first type argument, e.g. `React.FC<Props>`.
+ * Covers both the TypeScript (`React.FC`) and the Flow (`React.FC`) world,
+ * including the deprecated aliases.
+ */
+const FUNCTION_COMPONENT_TYPE_NAMES = [
+  'FunctionComponent',
+  'FC',
+  'VoidFunctionComponent',
+  'VFC',
+  'StatelessComponent',
+  'SFC',
+];
 
 function getStatelessPropsPath(
   componentDefinition: NodePath,
@@ -50,6 +67,90 @@ function getForwardRefGenericsType(
   return null;
 }
 
+/**
+ * If the given type annotation is a React function component type, e.g.
+ * `React.FC<Props>` or `FunctionComponent<Props>` (in TypeScript as a
+ * `TSTypeReference` and in Flow as a `GenericTypeAnnotation`), this returns
+ * the path of the props type argument (`Props`). Otherwise `null` is
+ * returned.
+ */
+function getFunctionComponentPropsType(
+  typeAnnotation: NodePath,
+): NodePath | null {
+  const isSupportedReference =
+    typeAnnotation.isTSTypeReference() ||
+    typeAnnotation.isGenericTypeAnnotation();
+
+  if (!isSupportedReference) return null;
+
+  const typeName = getTypeIdentifier(typeAnnotation);
+
+  if (!typeName) return null;
+
+  const isFunctionComponentType = FUNCTION_COMPONENT_TYPE_NAMES.some((name) =>
+    isReactBuiltinReference(typeName, name),
+  );
+
+  if (!isFunctionComponentType) return null;
+
+  const typeParameters = getTypeArguments(typeAnnotation);
+
+  if (
+    typeParameters.isTSTypeParameterInstantiation() ||
+    typeParameters.isTypeParameterInstantiation()
+  ) {
+    const params = typeParameters.get('params') as NodePath[];
+
+    return params[0] ?? null;
+  }
+
+  return null;
+}
+
+/**
+ * Finds the props type of a component that is assigned to a variable with a
+ * React function component type annotation, e.g.
+ * `const MyComponent: React.FC<Props> = InnerComponent;`.
+ */
+function findReferencedVariableType(
+  componentDefinition: NodePath,
+): NodePath | null {
+  if (!componentDefinition.isFunction()) return null;
+
+  const program = componentDefinition.findParent((path) =>
+    path.isProgram(),
+  ) as NodePath<Program> | null;
+
+  if (!program) return null;
+
+  let result: NodePath | null = null;
+
+  program.traverse({
+    VariableDeclarator(declaratorPath: NodePath<VariableDeclarator>) {
+      if (result) return;
+
+      const init = declaratorPath.get('init');
+
+      if (!init.hasNode()) return;
+
+      // Is this variable assigned our component?
+      if (resolveToValue(init).node !== componentDefinition.node) return;
+
+      const typeAnnotation = getTypeAnnotation(declaratorPath.get('id'));
+
+      if (!typeAnnotation) return;
+
+      const propsType = getFunctionComponentPropsType(typeAnnotation);
+
+      if (propsType) {
+        result = propsType;
+      }
+    },
+  });
+
+  return result;
+}
+
 function findAssignedVariableType(
   componentDefinition: NodePath,
 ): NodePath | null {
@@ -57,26 +158,42 @@ function findAssignedVariableType(
     path.isVariableDeclarator(),
   ) as NodePath<VariableDeclarator> | null;
 
-  if (!variableDeclarator) return null;
+  if (variableDeclarator) {
+    const typeAnnotation = getTypeAnnotation(variableDeclarator.get('id'));
 
-  const typeAnnotation = getTypeAnnotation(variableDeclarator.get('id'));
+    if (typeAnnotation) {
+      const propsType = getFunctionComponentPropsType(typeAnnotation);
 
-  if (!typeAnnotation) return null;
+      if (propsType) {
+        return propsType;
+      }
+    }
+  }
 
-  if (typeAnnotation.isTSTypeReference()) {
-    const typeName = typeAnnotation.get('typeName');
+  // The component might be a named function that is assigned to an
+  // annotated variable elsewhere in the file, e.g.
+  // `function Inner() {...}; const C: React.FC<Props> = Inner;`
+  return findReferencedVariableType(componentDefinition);
+}
+
+/**
+ * Finds the props type of a component wrapped in `React.memo<Props>(...)`,
+ * where the props are only expressed through the generic type argument of
+ * the `memo` call.
+ */
+function getMemoPropsType(componentDefinition: NodePath): NodePath | null {
+  const parent = componentDefinition.parentPath;
+
+  if (parent && isReactBuiltinCall(parent, 'memo')) {
+    const typeParameters = getTypeArguments(parent);
 
     if (
-      isReactBuiltinReference(typeName, 'FunctionComponent') ||
-      isReactBuiltinReference(typeName, 'FC') ||
-      isReactBuiltinReference(typeName, 'VoidFunctionComponent') ||
-      isReactBuiltinReference(typeName, 'VFC')
+      typeParameters.isTSTypeParameterInstantiation() ||
+      typeParameters.isTypeParameterInstantiation()
     ) {
-      const typeParameters = getTypeArguments(typeAnnotation);
+      const params = typeParameters.get('params') as NodePath[];
 
-      if (typeParameters.isTSTypeParameterInstantiation()) {
-        return typeParameters.get('params')[0] ?? null;
-      }
+      return params[0] ?? null;
     }
   }
 
@@ -191,6 +308,12 @@ export default (componentDefinition: NodePath): NodePath[] => {
       if (typeAnnotation) {
         typePaths.push(typeAnnotation);
       }
+    }
+
+    const memoPropsType = getMemoPropsType(componentDefinition);
+
+    if (memoPropsType) {
+      typePaths.push(memoPropsType);
     }
 
     const assignedVariableType = findAssignedVariableType(componentDefinition);

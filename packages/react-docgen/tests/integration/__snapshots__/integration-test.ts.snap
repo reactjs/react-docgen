@@ -2017,6 +2017,112 @@ exports[`integration > fixtures > processes component "component_43.tsx" without
 ]
 `;
 
+exports[`integration > fixtures > processes component "component_44.tsx" without errors 1`] = `
+[
+  {
+    "description": "Props are only defined through the React.FC type annotation,
+not through the props argument (issue #387).",
+    "displayName": "MyComponent",
+    "methods": [],
+    "props": {
+      "bar": {
+        "description": "",
+        "required": false,
+        "tsType": {
+          "name": "number",
+        },
+      },
+      "baseProp": {
+        "description": "inherited from the base interface",
+        "required": true,
+        "tsType": {
+          "name": "string",
+        },
+      },
+      "foo": {
+        "description": "description of foo",
+        "required": true,
+        "tsType": {
+          "name": "string",
+        },
+      },
+    },
+  },
+]
+`;
+
+exports[`integration > fixtures > processes component "component_45.tsx" without errors 1`] = `
+[
+  {
+    "description": "Props are only defined through the generic type argument of React.memo.",
+    "displayName": "MyComponent",
+    "methods": [],
+    "props": {
+      "bar": {
+        "description": "",
+        "required": false,
+        "tsType": {
+          "name": "number",
+        },
+      },
+      "foo": {
+        "description": "description of foo",
+        "required": true,
+        "tsType": {
+          "name": "string",
+        },
+      },
+    },
+  },
+]
+`;
+
+exports[`integration > fixtures > processes component "component_46.tsx" without errors 1`] = `
+[
+  {
+    "description": "",
+    "displayName": "InnerComponent",
+    "methods": [],
+    "props": {
+      "foo": {
+        "description": "description of foo",
+        "required": true,
+        "tsType": {
+          "name": "string",
+        },
+      },
+    },
+  },
+]
+`;
+
+exports[`integration > fixtures > processes component "component_47.js" without errors 1`] = `
+[
+  {
+    "description": "Props are only defined through the React.FC type annotation
+in flow-parsed code (issue #387).",
+    "displayName": "MyComponent",
+    "methods": [],
+    "props": {
+      "bar": {
+        "description": "",
+        "flowType": {
+          "name": "number",
+        },
+        "required": false,
+      },
+      "foo": {
+        "description": "description of foo",
+        "flowType": {
+          "name": "string",
+        },
+        "required": true,
+      },
+    },
+  },
+]
+`;
+
 exports[`integration > fixtures > processes component "flow-export-type.js" without errors 1`] = `
 [
   {

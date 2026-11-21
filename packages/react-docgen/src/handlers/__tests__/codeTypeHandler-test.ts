@@ -167,6 +167,138 @@ describe('codeTypeHandler', () => {
     );
   });
 
+  describe('stateless component with props only in React.FC<Props> (issue #387)', () => {
+    test('flow: resolves props from an interface referenced by React.FC', () => {
+      const definition = parse
+        .statement(
+          `const MyComponent: React.FC<Props> = (props) => null;
+           var React = require('react');
+           interface Props {
+             foo: string,
+             bar?: number,
+           }`,
+        )
+        .get('declarations')[0]
+        .get('init') as NodePath<ArrowFunctionExpression>;
+
+      codeTypeHandler(documentation, definition);
+
+      expect(documentation.descriptors).toEqual({
+        foo: {
+          description: '',
+          flowType: { name: 'string' },
+          required: true,
+        },
+        bar: {
+          description: '',
+          flowType: { name: 'number' },
+          required: false,
+        },
+      });
+    });
+
+    test('ts: resolves props from an interface referenced by React.FC', () => {
+      const definition = parseTypescript
+        .statement(
+          `const MyComponent: React.FC<Props> = (props) => null;
+           import React from 'react';
+           interface Props {
+             foo: string;
+             bar?: number;
+           }`,
+        )
+        .get('declarations')[0]
+        .get('init') as NodePath<ArrowFunctionExpression>;
+
+      codeTypeHandler(documentation, definition);
+
+      expect(documentation.descriptors).toEqual({
+        foo: {
+          description: '',
+          tsType: { name: 'string' },
+          required: true,
+        },
+        bar: {
+          description: '',
+          tsType: { name: 'number' },
+          required: false,
+        },
+      });
+    });
+
+    test('ts: resolves props from an interface extending another interface', () => {
+      const definition = parseTypescript
+        .statement(
+          `const MyComponent: React.FC<Props> = () => null;
+           import React from 'react';
+           interface Base {
+             baseProp: string;
+           }
+           interface Props extends Base {
+             foo: string;
+           }`,
+        )
+        .get('declarations')[0]
+        .get('init') as NodePath<ArrowFunctionExpression>;
+
+      codeTypeHandler(documentation, definition);
+
+      expect(Object.keys(documentation.descriptors).sort()).toEqual([
+        'baseProp',
+        'foo',
+      ]);
+    });
+
+    test('ts: resolves props from React.memo generics', () => {
+      const definition = parseTypescript
+        .statement(
+          `const MyComponent = React.memo<Props>((props) => null);
+           import React from 'react';
+           interface Props {
+             foo: string;
+           }`,
+        )
+        .get('declarations')[0]
+        .get('init') as NodePath<CallExpression>;
+
+      const argument = definition.get(
+        'arguments',
+      )[0] as NodePath<ArrowFunctionExpression>;
+
+      codeTypeHandler(documentation, argument);
+
+      expect(documentation.descriptors).toEqual({
+        foo: {
+          description: '',
+          tsType: { name: 'string' },
+          required: true,
+        },
+      });
+    });
+
+    test('ts: resolves props when a named function is assigned to an annotated variable', () => {
+      const definition = parseTypescript.statement(
+        `function MyComponent() { return null; }
+         const Alias: React.FC<Props> = MyComponent;
+         import React from 'react';
+         interface Props {
+           foo: string;
+         }`,
+        0,
+      );
+
+      codeTypeHandler(documentation, definition);
+
+      expect(documentation.descriptors).toEqual({
+        foo: {
+          description: '',
+          tsType: { name: 'string' },
+          required: true,
+        },
+      });
+    });
+  });
+
   describe.each([
     ['flow', parse],
     ['ts', parseTypescript],
