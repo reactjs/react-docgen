@@ -27,6 +27,6 @@
   "license": "MIT",
   "dependencies": {
     "comment-parser": "^1.4.9",
-    "jsdoc-type-pratt-parser": "8.0.0"
+    "jsdoc-type-pratt-parser": "9.5.0"
   }
 }
