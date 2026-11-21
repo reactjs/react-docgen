@@ -7,4 +7,4 @@ allowBuilds:
   nx: false
   unrs-resolver: false
 overrides:
-  zod: 4.3.6
+  zod: 4.6.7
