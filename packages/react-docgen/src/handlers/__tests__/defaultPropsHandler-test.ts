@@ -7,7 +7,7 @@ import type {
   ObjectExpression,
   VariableDeclaration,
 } from '@babel/types';
-import { parse, makeMockImporter } from '../../../tests/utils';
+import { parse, parseTypescript, makeMockImporter } from '../../../tests/utils';
 import DocumentationBuilder from '../../Documentation';
 import type DocumentationMock from '../../__mocks__/Documentation';
 import defaultPropsHandler from '../defaultPropsHandler.js';
@@ -697,6 +697,114 @@ describe('defaultPropsHandler', () => {
         parse.expressionLast<CallExpression>(src, mockImporter),
       );
       expect(documentation.descriptors).toMatchSnapshot();
+    });
+  });
+
+  describe('template literals', () => {
+    test('finds template literal defaults in destructured params', () => {
+      const src = `
+        function A({ a = 1, tpl = \`Save\` }) {
+          return <div />;
+        }
+      `;
+
+      defaultPropsHandler(documentation, parse.statement(src));
+      expect(documentation.descriptors).toEqual({
+        a: { defaultValue: { value: '1', computed: false } },
+        tpl: { defaultValue: { value: '`Save`', computed: false } },
+      });
+    });
+
+    test('finds template literal defaults for typed props', () => {
+      const src = `
+        type Props = { tpl?: string; n?: number };
+        function A({ tpl = \`Save\`, n = 1 }: Props) {
+          return null;
+        }
+      `;
+
+      defaultPropsHandler(documentation, parseTypescript.statementLast(src));
+      expect(documentation.descriptors).toEqual({
+        tpl: { defaultValue: { value: '`Save`', computed: false } },
+        n: { defaultValue: { value: '1', computed: false } },
+      });
+    });
+
+    test('finds template literal defaults in class defaultProps', () => {
+      const src = `
+        class Foo {
+          static defaultProps = {
+            tpl: \`Save\`,
+          };
+        }
+      `;
+
+      defaultPropsHandler(
+        documentation,
+        parse.statement<ClassDeclaration>(src),
+      );
+      expect(documentation.descriptors).toEqual({
+        tpl: { defaultValue: { value: '`Save`', computed: false } },
+      });
+    });
+
+    test('finds template literal defaults in function component defaultProps', () => {
+      const src = `
+        var Foo = (props) => <div />
+        Foo.defaultProps = { tpl: \`Save\` };
+      `;
+
+      defaultPropsHandler(
+        documentation,
+        parse
+          .statement(src)
+          .get('declarations.0.init') as NodePath<ArrowFunctionExpression>,
+      );
+      expect(documentation.descriptors).toEqual({
+        tpl: { defaultValue: { value: '`Save`', computed: false } },
+      });
+    });
+
+    test('treats template literals with expressions like other composite expressions (not computed)', () => {
+      const src = `
+        ({
+          tpl = \`Hi \${name}\`,
+          concat = 'Hi ' + name,
+        }) => <div />
+      `;
+
+      defaultPropsHandler(
+        documentation,
+        parse.expressionLast<ArrowFunctionExpression>(src),
+      );
+      expect(documentation.descriptors).toEqual({
+        tpl: { defaultValue: { value: '`Hi ${name}`', computed: false } },
+        concat: { defaultValue: { value: "'Hi ' + name", computed: false } },
+      });
+    });
+
+    test('preserves whitespace in multi-line template literal defaults', () => {
+      // Built line by line so the significant indentation is explicit
+      const src = [
+        '({',
+        '  tpl = `line1',
+        '    line2',
+        '  line3`,',
+        '}) => <div />',
+      ].join('\n');
+
+      defaultPropsHandler(
+        documentation,
+        parse.expressionLast<ArrowFunctionExpression>(src),
+      );
+      expect(documentation.descriptors).toEqual({
+        tpl: {
+          defaultValue: {
+            value: '`line1\n    line2\n  line3`',
+            computed: false,
+          },
+        },
+      });
     });
   });
 });
