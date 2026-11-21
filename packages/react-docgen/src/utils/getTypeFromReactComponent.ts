@@ -13,7 +13,9 @@ import type {
   FlowType,
   InterfaceDeclaration,
   InterfaceExtends,
+  TSCallSignatureDeclaration,
   TSExpressionWithTypeArguments,
+  TSFunctionType,
   TSInterfaceDeclaration,
   TSType,
   TSTypeParameterDeclaration,
@@ -79,10 +81,83 @@ function findAssignedVariableType(
       if (typeParameters.hasNode()) {
         return typeParameters.get('params')[0] ?? null;
       }
+
+      return null;
     }
   }
 
-  return null;
+  return getFunctionTypePropsType(typeAnnotation);
+}
+
+/**
+ * Finds the type of the first parameter of a function type, such as
+ * `(props: Props) => ReactNode`, or of the first call signature of a
+ * type literal or interface, such as `{ (props: Props): ReactNode }`.
+ * Type references to such types are resolved, and a parameter typed with a
+ * type parameter of a generic type, such as `P` in
+ * `type Component<P> = (props: P) => ReactNode`, gets the type argument.
+ */
+function getFunctionTypePropsType(path: NodePath): NodePath | null {
+  let typePath = path;
+  let typeParams: TypeParameters | null = null;
+
+  if (typePath.isTSTypeReference()) {
+    const typeName = typePath.get('typeName');
+    const declaration = typeName.isIdentifier()
+      ? resolveToValue(typeName)
+      : null;
+    const typeArguments = getTypeArguments(typePath);
+
+    if (
+      typeArguments.hasNode() &&
+      (declaration?.isTSTypeAliasDeclaration() ||
+        declaration?.isTSInterfaceDeclaration())
+    ) {
+      const typeParameters = declaration.get('typeParameters') as NodePath<
+        TSTypeParameterDeclaration | null | undefined
+      >;
+
+      if (typeParameters.hasNode()) {
+        typeParams = getTypeParameters(typeParameters, typeArguments, null);
+      }
+    }
+
+    typePath = resolveGenericTypeAnnotation(typePath) ?? typePath;
+  }
+
+  let signature: NodePath<TSCallSignatureDeclaration | TSFunctionType> | null =
+    null;
+
+  if (typePath.isTSFunctionType()) {
+    signature = typePath;
+  } else if (
+    typePath.isTSTypeLiteral() ||
+    typePath.isTSInterfaceDeclaration()
+  ) {
+    const members = typePath.isTSTypeLiteral()
+      ? typePath.get('members')
+      : typePath.get('body').get('body');
+
+    signature =
+      members.find((member): member is NodePath<TSCallSignatureDeclaration> =>
+        member.isTSCallSignatureDeclaration(),
+      ) ?? null;
+  }
+
+  if (!signature) return null;
+
+  const [propsParam] = signature.get('parameters');
+  const propsType = propsParam ? getTypeAnnotation(propsParam) : null;
+
+  if (typeParams && propsType?.isTSTypeReference()) {
+    const propsTypeName = propsType.get('typeName');
+
+    if (propsTypeName.isIdentifier()) {
+      return typeParams[propsTypeName.node.name] ?? propsType;
+    }
+  }
+
+  return propsType;
 }
 
 /**
